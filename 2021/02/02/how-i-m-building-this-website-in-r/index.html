@@ -105,7 +105,7 @@
 <li><p>Set up a local directory for the website. Let’s suppose you create it here <code>~/Documents/myAwesomeWebsite</code>.</p></li>
 <li><p>In R, navigate to the directory and simply run <code>blogdown::newsite()</code>.</p></li>
 </ol>
-<p>This will set up a basic template which you can develop. Changing the theme and playing with the basic structure of the website is relatively straight-forward. Personally I have so far managed to work things out based on a working knowledge of HTML and CSS that I’ve developed through the development of R Shiny apps.</p>
+<p>This will set up a basic template which you can develop. Changing the theme and playing with the basic structure of the website is relatively straight-forward. Personally I have so far managed to work things out based on a working knowledge of HTML and CSS that I’ve developed in the past through my work with R Shiny.</p>
 </div>
 <div id="deploying-your-website" class="section level2">
 <h2>Deploying your website</h2>
@@ -128,9 +128,9 @@ patalt.github.io/
 </div>
 <div id="why-all-the-trouble" class="section level2">
 <h2>Why all the trouble?</h2>
-<p>There are certainly easier ways to build a website. But if like me you do pretty much all your work in R Markdown and want to share some of it, then you will love <code>blogown</code>. The beauty of it is that once the basic infrastructure is set up, adding content is as simple as running the following wrapper function</p>
+<p>There are certainly easier ways to build a website. But if like me you do pretty much all your work in R Markdown and want to share some of it, then you will love <code>blogdown</code>. The beauty of it is that once the basic infrastructure is set up, adding content is as simple as running the following wrapper function</p>
 <pre class="r"><code>blogdown::new_post(&quot;Your new post&quot;, ext = &quot;.Rmd&quot;)</code></pre>
-<p>where the first argument is just the title of you post and the <code>ext</code> argument can be used to specify that you want to create an R Markdown document that can include code chucks. The wrapper function will automatically set up a directory for your post under <code>/post/</code> and R Studio will redirect you to the relevant <code>.Rmd</code> file that you can fill with content. By default that folder will look like this:</p>
+<p>where the first argument is just the title of your post and the <code>ext</code> argument can be used to specify that you want to create an R Markdown document that can include code chucks. The wrapper function will automatically set up a directory for your post under <code>/post/</code>. R Studio will redirect you to the relevant <code>.Rmd</code> file that you can then fill with content. By default that folder will look roughly like this:</p>
 <pre><code>├── index.Rmd
 ├── index.html
 └── index_files
@@ -139,7 +139,8 @@ patalt.github.io/
 </div>
 <div id="a-coding-simple-example" class="section level2">
 <h2>A coding simple example</h2>
-<p>As you can probably tell from the code chunks above this post was created just like that, so I might as well go ahead with a simple coding example to add some flavour. Suppose you have built some function that you think is worth sharing with the world or simply learned something new and interesting. As a case in point, I recently had a look at the <code>Rcpp</code> package and wrote a small program in C++ to be used in R. Since R Markdown supports <code>Rcpp</code> code chunks (along with Python, bash, SQL, …) it is straight-forward to show-case that code on here. The program can be used to simulate data from a categorical distribution. This distribution describes the possible results of a random variable that can take on one of <span class="math inline">\(K\)</span> possible categories with different probabilities. In base R we could use <code>rmultinom(n=1000,1,p=c(0.5,0.1,0.4))</code> to simulate draws from one such distribution with three different categories. Alternatively, we could write the program in C++ as follows:</p>
+<p>As you can probably tell from the code chunks above this post was created just in the way I described. So I thought I might as well go ahead with a simple coding example to add some flavour. Suppose you have built some function that you think is worth sharing with the world or simply learned something new and interesting. As a case in point, I recently had a look at the <code>Rcpp</code> package and wrote a small program in C++ to be used in R. Since R Markdown supports <code>Rcpp</code> code chunks (along with Python, bash, SQL, …) it is straight-forward to show-case that code on this website.</p>
+<p>The program can be used to simulate data from a categorical distribution. This distribution describes the possible results of a random variable that can take on one of <span class="math inline">\(K\)</span> possible categories with different probabilities. In base R we could use <code>rmultinom(n=1000,1,p=c(0.5,0.1,0.4))</code> to simulate draws from one such distribution with three different categories. Alternatively, we could write the program in C++ as follows:</p>
 <pre class="cpp"><code>#include &lt;Rcpp.h&gt;
 using namespace Rcpp;
 
@@ -185,7 +186,7 @@ autoplot(mb)</code></pre>
 </div>
 <div id="embedding-existing-work" class="section level2">
 <h2>Embedding existing work</h2>
-<p>If you have some existing work that you would like to share you can just use it to overwrite the <code>index.Rmd</code> file. <code>blogdown</code> supports any kind of R Markdown documents so you can use all your favourite markdown packages (<code>bookdown</code>, <code>pagedown</code>, …). Just make sure to specify HTML output in the YAML header.</p>
+<p>If you have some existing work that you would like to share you can just use it to overwrite the <code>index.Rmd</code> file. <code>blogdown</code> supports any kind of R Markdown documents so you can use all of your favourite markdown packages (<code>bookdown</code>, <code>pagedown</code>, …). Just make sure to specify HTML output in the YAML header.</p>
 </div>
 <div id="resources" class="section level2">
 <h2>Resources</h2>
@@ -206,7 +207,7 @@ autoplot(mb)</code></pre>
         
         
         <hr/>
-        © <a href="https://pat-alt.github.io/">Patrick Altmeyer</a> 2021- | <a href="https://github.com/pat-alt">Github</a> | <a href="https://www.linkedin.com/in/patrick-altmeyer-a2a25494/">LinkedIn</a>
+        © <a href="https://pat-alt.github.io/">Patrick Altmeyer</a> 2021- | <a href="https://github.com/pat-alt">Github</a> | <a href="https://www.linkedin.com/in/patrick-altmeyer-a2a25494/">LinkedIn</a> | <a href="https://pat-alt.github.io/fromScratch/">From Scratch</a>
         
       </footer>
     </div>
