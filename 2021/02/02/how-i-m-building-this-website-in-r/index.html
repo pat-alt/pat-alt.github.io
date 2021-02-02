@@ -137,8 +137,8 @@ patalt.github.io/
     └── header-attrs
         └── header-attrs.js</code></pre>
 </div>
-<div id="a-coding-simple-example" class="section level2">
-<h2>A coding simple example</h2>
+<div id="a-simple-coding-example" class="section level2">
+<h2>A simple coding example</h2>
 <p>As you can probably tell from the code chunks above this post was created just in the way I described. So I thought I might as well go ahead with a simple coding example to add some flavour. Suppose you have built some function that you think is worth sharing with the world or simply learned something new and interesting. As a case in point, I recently had a look at the <code>Rcpp</code> package and wrote a small program in C++ to be used in R. Since R Markdown supports <code>Rcpp</code> code chunks (along with Python, bash, SQL, …) it is straight-forward to show-case that code on this website.</p>
 <p>The program can be used to simulate data from a categorical distribution. This distribution describes the possible results of a random variable that can take on one of <span class="math inline">\(K\)</span> possible categories with different probabilities. In base R we could use <code>rmultinom(n=1000,1,p=c(0.5,0.1,0.4))</code> to simulate draws from one such distribution with three different categories. Alternatively, we could write the program in C++ as follows:</p>
 <pre class="cpp"><code>#include &lt;Rcpp.h&gt;
