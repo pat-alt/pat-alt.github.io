@@ -119,20 +119,20 @@
 Figure 1: Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty’s attribute values.
 </p>
 </div>
-<p>To her dismay, Kitty has been recognized as a cat by a linear classifier <span class="math inline">\(g_n(X)\)</span> that we trained through stochastic gradient descent (once again interested readers may find technical details and code in the annex below). Figure <a href="#fig:class">2</a> shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty’s location indicated through a red circle. Can we provide individual recourse for Kitty?</p>
+<p>Much to her dismay, Kitty has been recognized as a cat by a linear classifier <span class="math inline">\(g_n(X)\)</span> that we trained through stochastic gradient descent (once again interested readers may find technical details and code in the annex below). Figure <a href="#fig:class">2</a> shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty’s location indicated by a red circle. Can we provide individual recourse to Kitty?</p>
 <div class="figure" style="text-align: center"><span id="fig:class"></span>
-<img src="https://pat-alt.github.io/2021/04/26/individual-recourse-for-black-box-models/index_files/figure-html/class-1.png" alt="Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty's location is indicated through the red circle." width="672" />
+<img src="https://pat-alt.github.io/2021/04/26/individual-recourse-for-black-box-models/index_files/figure-html/class-1.png" alt="Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty's location is indicated by a red circle." width="672" />
 <p class="caption">
-Figure 2: Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty’s location is indicated through the red circle.
+Figure 2: Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty’s location is indicated by a red circle.
 </p>
 </div>
 <p>Let’s see if and how we can apply <code>REVISE</code> to Kitty’s problem. The following summary should give you some flavour of how the algorithm works:</p>
 <ol style="list-style-type: decimal">
-<li>Initialize <span class="math inline">\(\mathbf{x}_i&#39;^{(0)}\)</span> - the attributes that will be revised recursively. Kitty’s original attributes seem like a reasonable place to start.</li>
+<li>Initialize <span class="math inline">\(\mathbf{x}_i&#39;^{(0)}\)</span>, that is the attributes that will be revised recursively. Kitty’s original attributes seem like a reasonable place to start.</li>
 <li>Through gradient descent recursively revise <span class="math inline">\(\mathbf{x}_i&#39;^{(t)}\)</span> until <span class="math inline">\(g_n(\mathbf{x}_i&#39;^{(T)})=\)</span>🐶. At this point <span class="math inline">\(T\)</span> the descent terminates since for these revised attributes the classifier labels Kitty as a dog.</li>
-<li>Return <span class="math inline">\(\delta=\mathbf{x}_i&#39;^{(0)}-\mathbf{x}_i\)</span>, that is the individual recourse for Kitty.</li>
+<li>Return <span class="math inline">\(\delta=\mathbf{x}_i&#39;^{(T)}-\mathbf{x}_i\)</span>, that is the individual recourse for Kitty.</li>
 </ol>
-<p>Figure <a href="#fig:revise">3</a> illustrates what happens when this approach is applied to Kitty’s problem. The different panels show the results for different values of a regularization parameter <span class="math inline">\(\lambda\)</span>, that governs the trade-off between achieving the desired label switch and keeping the distance between the original (<span class="math inline">\(\mathbf{x}_i\)</span>) and revised (<span class="math inline">\(\mathbf{x}_i&#39;\)</span>) attributes small. In all but one case, <code>REVISE</code> converges: a decrease in tail length along with an increase in height eventually allows Kitty to cross the decision boundary. In other words, we have successfully turned Kitty into a dog - at least in the eyes of the linear classifier!</p>
+<p>Figure <a href="#fig:revise">3</a> illustrates what happens when this approach is applied to Kitty’s problem. The different panels show the results for different values of a regularization parameter <span class="math inline">\(\lambda\)</span> that governs the trade-off between achieving the desired label switch and keeping the distance between the original (<span class="math inline">\(\mathbf{x}_i\)</span>) and revised (<span class="math inline">\(\mathbf{x}_i&#39;\)</span>) attributes small. In all but one case, <code>REVISE</code> converges: a decrease in tail length along with an increase in height eventually allows Kitty to cross the decision boundary. In other words, we have successfully turned Kitty into a dog - at least in the eyes of the linear classifier!</p>
 <p>We also observe that as we increase <span class="math inline">\(\lambda\)</span> for a fixed learning rate, <code>REVISE</code> takes longer to converge. This should come as no surprise, since higher values of <span class="math inline">\(\lambda\)</span> lead to greater regularization with respect to the penalty we place on the distance that Kitty has to travel. When we penalize too much (<span class="math inline">\(\lambda=10\)</span>), Kitty never reaches the decision boundary, because she is reluctant to change her characteristics beyond a certain point. While not visible to the naked eye, in this particular example <span class="math inline">\(\lambda=0.001\)</span> corresponds to the best choice among the candidate values.</p>
 <div class="figure" style="text-align: center"><span id="fig:revise"></span>
 <img src="www/revise.gif" alt="The simplified `REVISE` algorithm in action: how Kitty crosses the decision boundary by changing her attributes. Regularization with respect to the distance penalty increases from top left to bottom right."  />
@@ -143,10 +143,10 @@ Figure 3: The simplified <code>REVISE</code> algorithm in action: how Kitty cros
 </div>
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
-<p>While hopefully Kitty’s journey has provided you with some useful intuition, the story is of course very silly. Even if your cat ever seems to signal that she wants to be dog, helping her cross that decision boundary will be very tricky. Some attributes are simply immutable or very difficult to change, which Joshi et al. (2019) do not fail to account for in their approach. Their proposed methodology offers a simple and ingenious approach towards providing individual recourse. Instead of bothering with Black-Box interpretability, why not simply provide a quick remedy in case things go wrong?</p>
-<p>That idea certainly has its merit. As this post has hopefully shown, <code>REVISE</code> is easily understood and readily applicable. It could be a very useful tool to provide individual recourse in many real-world applications. As the implementation of our simplified version of <code>REVISE</code> demonstrates, researchers should find it relatively easy to develop the methodology further and tailor it to specific use cases. The simpler version here, for example, may be useful in settings where the dimensionality is relatively small and one can reasonably model the distribution of attributes without the need for generative models.</p>
-<p>Still, you may be wondering: if the original classifier is based on poorly defined rules and proxies, then what good does <code>REVISE</code> really do? Going back to the example of high-school teacher Sarah Wysocki, one of the key attributes determining teachers’ evaluations was their students’ performance. Realizing this, some teachers took the shortest route to success by artificially inflating their students’ test scores. That same course of action may well have been suggested by <code>REVISE</code>. As a matter of fact, Joshi et al. (2019) show that this very property of <code>REVISE</code> may be useful in detecting weaknesses of decision making systems before setting them loose (key contribution 3).</p>
-<p>Nonetheless, the example of Sarah Wysocki demonstrates that approaches like <code>REVISE</code>, useful as they are, tend to provide solutions for very particular problems. In reality there are many such problems and research on trustworthy AI will therefore need to tackle the issue from various angles. A few places to start include the question of dealing with data that is inherently biased, improving ad-hoc and post-hoc model interpretability and continuing efforts around causality-inspired AI.</p>
+<p>While hopefully Kitty’s journey has provided you with some useful intuition, the story is of course very silly. Even if your cat ever seems to signal that she wants to be dog, helping her cross that decision boundary will be tricky. Some attributes are simply immutable or very difficult to change, which <span class="citation"><a href="#ref-joshi2019towards" role="doc-biblioref">Joshi et al.</a> (<a href="#ref-joshi2019towards" role="doc-biblioref">2019</a>)</span> do not fail to account for in their framework. Their proposed methodology offers a simple and ingenious approach towards providing individual recourse. Instead of concerning ourselves with Black Box interpretability, why not simply provide remedy in case things go wrong?</p>
+<p>To some extent that idea has its merit. As this post has hopefully shown, <code>REVISE</code> is straight-forward to understood and readily applicable. It could be a very useful tool to provide individual recourse in many real-world applications. As the implementation of our simplified version of <code>REVISE</code> demonstrates, researchers should also find it relatively easy to develop the methodology further and tailor it to specific use cases. The simpler version here, for example, may be useful in settings where the dimensionality is relatively small and one can reasonably model the distribution of attributes without the need for generative models.</p>
+<p>Still, you may be wondering: if the original classifier is based on poorly defined rules and proxies, then what good does <code>REVISE</code> really do? Going back to the example of high-school teacher Sarah Wysocki, one of the key attributes determining teachers’ evaluations was their students’ performance. Realizing this, some teachers took the shortest route to success by artificially inflating their students’ test scores. That same course of action may well have been suggested by <code>REVISE</code>. As <span class="citation"><a href="#ref-joshi2019towards" role="doc-biblioref">Joshi et al.</a> (<a href="#ref-joshi2019towards" role="doc-biblioref">2019</a>)</span> demonstrate, this very property of <code>REVISE</code> may actually proof useful in detecting weaknesses of decision making systems before setting them loose (key contribution 3).</p>
+<p>Nonetheless, the example above also demonstrates that approaches like <code>REVISE</code>, useful as they may be, tend to provide solutions for very particular problems. In reality data-driven decision making is often subject to many different problems and hence research on trustworthy AI will need to tackle the issue from various angles. A few places to start include the question of dealing with data that is inherently biased, improving ad-hoc and post-hoc model interpretability and continuing efforts around causality-inspired AI.</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
@@ -164,115 +164,16 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 </div>
 <div id="annex" class="section level2">
 <h2>Annex</h2>
-<p>In my blog posts I aim to implement interesting ideas from scratch even if that usually means that things need to undergo some sort of simplification. The benefit of this approach is that experience is educationally very rewarding - both for myself and hopefully my readers. The two sections of this annex show how <code>REVISE</code> and linear classification can be implemented in R.</p>
-<div id="revise-simplified" class="section level3">
-<h3><code>REVISE</code> (simplified)</h3>
-<p>As flagged above, we use a slightly simplified version of algorithm presented in <span class="citation"><a href="#ref-joshi2019towards" role="doc-biblioref">Joshi et al.</a> (<a href="#ref-joshi2019towards" role="doc-biblioref">2019</a>)</span>. In particular, we do not incorporate the threshold on the likelihood, which the authors implement through generative models. We will also pretend here that all attributes are mutable.</p>
-<p>Let <span class="math inline">\(y\in\{-1,1\}\)</span> be a binary outcome variable, <span class="math inline">\(X\in\mathbb{R}^d\)</span> a feature matrix containing individuals’ attributes and <span class="math inline">\(g_n(X)\)</span> a corresponding data-dependent classifier. Suppose <span class="math inline">\(y_i=-1\)</span> - the negative outcome - for some individual characterized by attributes <span class="math inline">\(\mathbf{x}_i\)</span>. Then we want to find <span class="math inline">\(\mathbf{x}_i&#39;\)</span> closest to <span class="math inline">\(\mathbf{x}_i\)</span> such that the classifier assigns the positive outcome (primary constraint) and the likelihood of the sample <span class="math inline">\(p(\mathbf{x}_i&#39;)\)</span> exceeds some threshold <span class="math inline">\(\gamma\)</span> (secondary constraint).</p>
-<p>In order to identify the smallest set of changes <span class="math inline">\(\delta_i=\mathbf{x}_i^{&#39;}-\mathbf{x}_i\)</span> necessary for individual <span class="math inline">\(i\)</span> to achieve a label switch from <span class="math inline">\(g(\mathbf{x}_i^{&#39;})=1\)</span>, we use gradient descent with Hinge loss <span class="math inline">\(\ell\)</span> to minimize the following function</p>
-<p><span class="math display">\[
-\begin{aligned}
-&amp;&amp; \min_{\mathbf{x}_i^{&#39;}}&amp; \ \ell(g_n(\mathbf{x}_i^{&#39;}),1) + \lambda d(\mathbf{x}_i^{&#39;},\mathbf{x}_i) \\
-\end{aligned}
-\]</span></p>
-<p>where <span class="math inline">\(d=||\mathbf{x}_i^{&#39;}-\mathbf{x}_i||\)</span> denotes the Euclidean distance. Note that this time we take the coefficient vector defining <span class="math inline">\(g_n\)</span> as given and instead vary the attributes. In particular, we will perform gradient descent steps as follows</p>
-<p><span class="math display">\[
-\begin{aligned}
-&amp;&amp; {\mathbf{x}_i^{&#39;}}^t&amp;\leftarrow {\mathbf{x}_i^{&#39;}}^{t-1} + \eta \nabla_{{\mathbf{x}_i^{&#39;}}} \left( \ell(g_n(\mathbf{x}_i^{&#39;}),1) + \lambda d(\mathbf{x}_i^{&#39;},\mathbf{x}_i)  \right)  \\
-\end{aligned}
-\]</span></p>
-<p>where <span class="math inline">\(\eta\)</span> is the learning rate. The descent step is almost equivalent to the one described in <span class="citation"><a href="#ref-joshi2019towards" role="doc-biblioref">Joshi et al.</a> (<a href="#ref-joshi2019towards" role="doc-biblioref">2019</a>)</span>, but here we greatly simplify things by optimizing directly in the attribute space instead of a latent space. The gradient of the loss function looks very similar to <a href="#eq:hinge">(1)</a>. With respect to the Euclidean distance partial derivatives are of the following form:</p>
-<p><span class="math display">\[
-\begin{aligned}
-&amp;&amp;  \frac{\partial ||\mathbf{x}_i^{&#39;}-\mathbf{x}_i||}{\partial {x_i&#39;}^{(d)}}  &amp;= \frac{{x_i&#39;}^{(d)}-{x_i}^{(d)}}{||\mathbf{x}_i^{&#39;}-\mathbf{x}_i||} \\
-\end{aligned}
-\]</span></p>
-<p>The code that implements this optimization follows below.</p>
-<pre class="r"><code>#&#39; REVISE algoritm - a simplified version
-#&#39;
-#&#39; @param classifier The fitted classifier.
-#&#39; @param x_star Attributes of individual seeking individual recourse.
-#&#39; @param eta Learning rate.
-#&#39; @param lambda Regularization parameter.
-#&#39; @param n_iter Maximum number of operations.
-#&#39; @param save_steps Boolean indicating if intermediate steps should be saved.
-#&#39;
-#&#39; @return
-#&#39; @export
-#&#39;
-#&#39; @author Patrick Altmeyer
-revise.classifier &lt;- function(classifier,x_star,eta=1,lambda=0.01,n_iter=1000,save_steps=FALSE) {
-  # Initialization: ----
-  d &lt;- length(x_star) # number of dimensions
-  if (!is.null(names(x_star))) {
-    d_names &lt;- names(x_star) # names of attributes, if provided
-  } else {
-    d_names &lt;- sprintf(&quot;X%i&quot;, 1:d)
-  }
-  w &lt;- classifier$coefficients # coefficient vector
-  x &lt;- x_star # initialization of revised attributes
-  distance &lt;- 0 # initial distance from starting point
-  converged &lt;- predict(classifier, newdata = x)[1,1]==1 # positive outcome?
-  iter &lt;- 1 # counter
-  if (save_steps) {
-    steps &lt;- data.table(iter=1, x=x, d=d_names) # save intermediate steps, if desired
-  } else {
-    steps &lt;- NA
-  }
-  # Gradients:
-  grad &lt;- function(x,y,w) {
-    w %*% ifelse(crossprod(x,w) * y&lt;=1,-y,0) # gradient of Hinge loss with respect to X
-  }
-  grad_dist &lt;- function(x,x_star) {
-    d &lt;- length(x_star)
-    distance &lt;- dist(matrix(cbind(x_star,x),nrow=d,byrow = T))
-    matrix((x-x_star) / distance) # gradient of Euclidean distance with respect to X
-  }
-  # Gradient descent: ----
-  while(!converged &amp; iter&lt;n_iter) {
-    if (distance!=0) {
-      x &lt;- c(x - eta * (grad(x=matrix(x),y=1,w) + lambda * grad_dist(x,x_star))) # gradient descent step
-    } else {
-      x &lt;- c(x - eta * grad(x=matrix(x),y=1,w)) # gradient with respect to distance not defined at zero
-    }
-    converged &lt;- predict(classifier, newdata = x)[1,1]==1 # positive outcome?
-    iter &lt;- iter + 1 # update counter
-    if (save_steps) {
-      steps &lt;- rbind(steps, data.table(iter=iter, x=x, d=d_names))
-    }
-    distance &lt;- dist(matrix(cbind(x_star,x),nrow=d,byrow = T)) # update distance
-  }
-  # Output: ----
-  if (converged) {
-    revise &lt;- x - x_star
-  } else {
-    revise &lt;- NA
-  }
-  output &lt;- list(
-    x_star = x_star,
-    revise = revise,
-    classifier = classifier,
-    steps = steps,
-    lambda = lambda,
-    distance = distance,
-    mean_distance = mean(abs(revise))
-  )
-  return(output)
-}
-
-revise &lt;- function(classifier,x_star,eta=1,lambda=0.01,n_iter=1000,save_steps=FALSE) {
-  UseMethod(&quot;revise&quot;)
-}</code></pre>
-</div>
+<p>In my blog posts I aim to implement interesting ideas from scratch even if that sometimes means that things need to undergo some sort of simplification. The benefit of this approach is that the experience is educationally rewarding - both for myself and hopefully also for readers. The two sections of this annex show how <code>REVISE</code> and linear classification can be implemented in R.</p>
 <div id="linear-classifier" class="section level3">
 <h3>Linear classifier</h3>
-<p>Linear classification is implemented through stochastic gradient descent (SGD) under Hinge loss</p>
+<p>Linear classification is implemented through stochastic gradient descent (SGD) with Hinge loss</p>
 <p><span class="math display">\[
 \begin{aligned}
 &amp;&amp; \ell(-\mathbf{w}^T\mathbf{x}_i y_i)&amp;=(1-\mathbf{w}^T\mathbf{x}_i y_i)_+ \\
 \end{aligned}
 \]</span></p>
-<p>where <span class="math inline">\(\mathbf{w}\)</span> is a coefficient vector, <span class="math inline">\(\mathbf{x}_i\)</span> is the attribute vector of individual <span class="math inline">\(i\)</span> and <span class="math inline">\(y_i\)</span> is individual’s outcome. Since we apply SGD in order to minimize the loss function <span class="math inline">\(\ell\)</span> by varying <span class="math inline">\(\mathbf{w}\)</span>, we need an expression for its gradient with respect to <span class="math inline">\(\mathbf{w}\)</span>:</p>
+<p>where <span class="math inline">\(\mathbf{w}\)</span> is a coefficient vector, <span class="math inline">\(\mathbf{x}_i\)</span> is the attribute vector of individual <span class="math inline">\(i\)</span> and <span class="math inline">\(y_i\)</span> is the individual’s outcome. Since we apply SGD in order to minimize the loss function <span class="math inline">\(\ell\)</span> by varying <span class="math inline">\(\mathbf{w}\)</span>, we need an expression for its gradient with respect to <span class="math inline">\(\mathbf{w}\)</span>, which is given by:</p>
 <p><span class="math display" id="eq:hinge">\[\begin{equation} 
 \begin{aligned}
 &amp;&amp; \nabla_{\mathbf{W}} \left( \ell(-\mathbf{w}^T\mathbf{x}_i y_i) \right) &amp;= \begin{cases} -\mathbf{x}_i y_i &amp; \text{if} \ \ \ \mathbf{w}^T\mathbf{x}_i y_i \le 1\\ 0 &amp; \text{otherwise} \end{cases} \\
@@ -370,6 +271,104 @@ predict.classifier &lt;- function(classifier, newdata=NULL, discrete=TRUE) {
 }
 predict &lt;- function(classifier, newdata=NULL, discrete=TRUE) {
   UseMethod(&quot;predict&quot;)
+}</code></pre>
+</div>
+<div id="revise-simplified" class="section level3">
+<h3><code>REVISE</code> (simplified)</h3>
+<p>As flagged above, we are looking at a slightly simplified version of the algorithm presented in <span class="citation"><a href="#ref-joshi2019towards" role="doc-biblioref">Joshi et al.</a> (<a href="#ref-joshi2019towards" role="doc-biblioref">2019</a>)</span>. In particular, the approach here does not incorporate the threshold on the likelihood nor does it account for immutable attributes.</p>
+<p>Let <span class="math inline">\(y\in\{-1,1\}\)</span> be a binary outcome variable, <span class="math inline">\(X\in\mathbb{R}^d\)</span> a feature matrix containing individuals’ attributes and <span class="math inline">\(g_n(X)\)</span> a corresponding data-dependent classifier. Suppose <span class="math inline">\(y_i=-1\)</span> (the negative outcome) for some individual characterized by attributes <span class="math inline">\(\mathbf{x}_i\)</span>. Then we want to find <span class="math inline">\(\mathbf{x}_i&#39;\)</span> closest to <span class="math inline">\(\mathbf{x}_i\)</span> such that the classifier assigns the positive outcome <span class="math inline">\(g(\mathbf{x}_i^{&#39;})=1\)</span>. In order to do so, we use gradient descent with Hinge loss <span class="math inline">\(\ell\)</span> to minimize the following function</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;&amp; \min_{\mathbf{x}_i^{&#39;}}&amp; \ \ell(g_n(\mathbf{x}_i^{&#39;}),1) + \lambda d(\mathbf{x}_i^{&#39;},\mathbf{x}_i) \\
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(d=||\mathbf{x}_i^{&#39;}-\mathbf{x}_i||\)</span> denotes the Euclidean distance. Note that this time we take the coefficient vector defining <span class="math inline">\(g_n\)</span> as given and instead vary the attributes. In particular, we will perform gradient descent steps as follows</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;&amp; {\mathbf{x}_i^{&#39;}}^t&amp;\leftarrow {\mathbf{x}_i^{&#39;}}^{t-1} + \eta \nabla_{{\mathbf{x}_i^{&#39;}}} \left( \ell(g_n(\mathbf{x}_i^{&#39;}),1) + \lambda d(\mathbf{x}_i^{&#39;},\mathbf{x}_i)  \right)  \\
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(\eta\)</span> is the learning rate. The descent step is almost equivalent to the one described in <span class="citation"><a href="#ref-joshi2019towards" role="doc-biblioref">Joshi et al.</a> (<a href="#ref-joshi2019towards" role="doc-biblioref">2019</a>)</span>, but here we greatly simplify things by optimizing directly in the attribute space instead of a latent space. The gradient of the loss function looks very similar to <a href="#eq:hinge">(1)</a>. With respect to the Euclidean distance partial derivatives are of the following form:</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;&amp;  \frac{\partial ||\mathbf{x}_i^{&#39;}-\mathbf{x}_i||}{\partial {x_i&#39;}^{(d)}}  &amp;= \frac{{x_i&#39;}^{(d)}-{x_i}^{(d)}}{||\mathbf{x}_i^{&#39;}-\mathbf{x}_i||} \\
+\end{aligned}
+\]</span></p>
+<p>The code that implements this optimization follows below.</p>
+<pre class="r"><code>#&#39; REVISE algoritm - a simplified version
+#&#39;
+#&#39; @param classifier The fitted classifier.
+#&#39; @param x_star Attributes of individual seeking individual recourse.
+#&#39; @param eta Learning rate.
+#&#39; @param lambda Regularization parameter.
+#&#39; @param n_iter Maximum number of operations.
+#&#39; @param save_steps Boolean indicating if intermediate steps should be saved.
+#&#39;
+#&#39; @return
+#&#39; @export
+#&#39;
+#&#39; @author Patrick Altmeyer
+revise.classifier &lt;- function(classifier,x_star,eta=1,lambda=0.01,n_iter=1000,save_steps=FALSE) {
+  # Initialization: ----
+  d &lt;- length(x_star) # number of dimensions
+  if (!is.null(names(x_star))) {
+    d_names &lt;- names(x_star) # names of attributes, if provided
+  } else {
+    d_names &lt;- sprintf(&quot;X%i&quot;, 1:d)
+  }
+  w &lt;- classifier$coefficients # coefficient vector
+  x &lt;- x_star # initialization of revised attributes
+  distance &lt;- 0 # initial distance from starting point
+  converged &lt;- predict(classifier, newdata = x)[1,1]==1 # positive outcome?
+  iter &lt;- 1 # counter
+  if (save_steps) {
+    steps &lt;- data.table(iter=1, x=x, d=d_names) # save intermediate steps, if desired
+  } else {
+    steps &lt;- NA
+  }
+  # Gradients:
+  grad &lt;- function(x,y,w) {
+    w %*% ifelse(crossprod(x,w) * y&lt;=1,-y,0) # gradient of Hinge loss with respect to X
+  }
+  grad_dist &lt;- function(x,x_star) {
+    d &lt;- length(x_star)
+    distance &lt;- dist(matrix(cbind(x_star,x),nrow=d,byrow = T))
+    matrix((x-x_star) / distance) # gradient of Euclidean distance with respect to X
+  }
+  # Gradient descent: ----
+  while(!converged &amp; iter&lt;n_iter) {
+    if (distance!=0) {
+      x &lt;- c(x - eta * (grad(x=matrix(x),y=1,w) + lambda * grad_dist(x,x_star))) # gradient descent step
+    } else {
+      x &lt;- c(x - eta * grad(x=matrix(x),y=1,w)) # gradient with respect to distance not defined at zero
+    }
+    converged &lt;- predict(classifier, newdata = x)[1,1]==1 # positive outcome?
+    iter &lt;- iter + 1 # update counter
+    if (save_steps) {
+      steps &lt;- rbind(steps, data.table(iter=iter, x=x, d=d_names))
+    }
+    distance &lt;- dist(matrix(cbind(x_star,x),nrow=d,byrow = T)) # update distance
+  }
+  # Output: ----
+  if (converged) {
+    revise &lt;- x - x_star
+  } else {
+    revise &lt;- NA
+  }
+  output &lt;- list(
+    x_star = x_star,
+    revise = revise,
+    classifier = classifier,
+    steps = steps,
+    lambda = lambda,
+    distance = distance,
+    mean_distance = mean(abs(revise))
+  )
+  return(output)
+}
+
+revise &lt;- function(classifier,x_star,eta=1,lambda=0.01,n_iter=1000,save_steps=FALSE) {
+  UseMethod(&quot;revise&quot;)
 }</code></pre>
 </div>
 </div>
