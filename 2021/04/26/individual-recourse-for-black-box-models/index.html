@@ -103,16 +103,16 @@
 </blockquote>
 <p><img src ="www/toy.gif" style="float:right; margin-left: auto; margin-right: auto; width:200px; height:200px;"></p>
 <p>In her popular book <a href="https://en.wikipedia.org/wiki/Weapons_of_Math_Destruction">Weapons of Math Destruction</a> Cathy O’Neil presents the example of public school teacher Sarah Wysocki, who lost her job after a teacher evaluation algorithm had rendered her redundant <span class="citation">(<a href="#ref-o2016weapons" role="doc-biblioref">O’neil 2016</a>)</span>. Sarah was highly popular among her peers, supervisors and students.</p>
-<p>This post looks at a novel algorithmic solution to the problem that individuals like Sarah who are faced with an undesirable outcome should be provided with means to revise that outcome. The literature commonly refers to this as <em>individual recourse</em>. One of the first approaches towards individual recourse was proposed by <span class="citation"><a href="#ref-ustun2019actionable" role="doc-biblioref">Ustun, Spangher, and Liu</a> (<a href="#ref-ustun2019actionable" role="doc-biblioref">2019</a>)</span>. In a recent follow-up paper, <span class="citation"><a href="#ref-joshi2019towards" role="doc-biblioref">Joshi et al.</a> (<a href="#ref-joshi2019towards" role="doc-biblioref">2019</a>)</span> propose a methodology coined <code>REVISE</code>, which extends the earlier approach in at least three key ways:</p>
+<p>This post looks at a novel algorithmic solution to the problem that individuals like Sarah, who are faced with an undesirable outcome, should be provided with means to revise that outcome. The literature commonly refers to this as <em>individual recourse</em>. One of the first approaches towards individual recourse was proposed by <span class="citation"><a href="#ref-ustun2019actionable" role="doc-biblioref">Ustun, Spangher, and Liu</a> (<a href="#ref-ustun2019actionable" role="doc-biblioref">2019</a>)</span>. In a recent follow-up paper, <span class="citation"><a href="#ref-joshi2019towards" role="doc-biblioref">Joshi et al.</a> (<a href="#ref-joshi2019towards" role="doc-biblioref">2019</a>)</span> propose a methodology coined <code>REVISE</code>, which extends the earlier approach in at least three key ways:</p>
 <ol style="list-style-type: decimal">
 <li><code>REVISE</code> provides a framework that avoids suggesting an unrealistic set of changes by imposing a threshold likelihood on the revised attributes.</li>
 <li>It is applicable to a broader class of models including Black Box classifiers and structural causal models.</li>
 <li>It can be used to detect poorly defined proxies and biases.</li>
 </ol>
-<p>For a detailed discussion of these points you may check out this <a href="paper_presentation.pdf">slide deck</a> or consult the paper directly (freely available on <a href="https://deepai.org/publication/towards-realistic-individual-recourse-and-actionable-explanations-in-black-box-decision-making-systems">DeepAI</a>). Here, we will abstract from some of these complications and instead look at an application of a slightly simplified version of <code>REVISE</code>. This should help you to first build a solid intuition. Readers interested in the technicalities and code may find all of this in the annex below.</p>
+<p>For a detailed discussion of these points you may check out this <a href="paper_presentation.pdf">slide deck</a> or consult the paper directly (freely available on <a href="https://deepai.org/publication/towards-realistic-individual-recourse-and-actionable-explanations-in-black-box-decision-making-systems">DeepAI</a>). Here, we will abstract from some of these complications and instead look at an application of a slightly simplified version of <code>REVISE</code>. This should help us to first build a good intuition. Readers interested in the technicalities and code may find all of this in the annex below.</p>
 <div id="from-to" class="section level2">
 <h2>From 🐱 to 🐶</h2>
-<p>We will explain <code>REVISE</code> through a short tale of cats and dogs. The protagonist of our story is Kitty 🐱, a young cat that identifies as a dog. Unfortunately though, she is not very tall and her tail, though short for a cat, is longer than that of the average dog (Figure <a href="#fig:density">1</a>).</p>
+<p>We will explain <code>REVISE</code> through a short tale of cats and dogs. The protagonist of this tale is Kitty 🐱, a young cat that identifies as a dog. Unfortunately, Kitty is not very tall and her tail, though short for a cat, is longer than that of the average dog (Figure <a href="#fig:density">1</a>).</p>
 <div class="figure" style="text-align: center"><span id="fig:density"></span>
 <img src="https://pat-alt.github.io/2021/04/26/individual-recourse-for-black-box-models/index_files/figure-html/density-1.png" alt="Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty's attribute values." width="864" />
 <p class="caption">
@@ -130,7 +130,7 @@ Figure 2: Linear separation of cats and dogs in the 2-dimensional attribute spac
 <ol style="list-style-type: decimal">
 <li>Initialize <span class="math inline">\(\mathbf{x}_i&#39;^{(0)}\)</span>, that is the attributes that will be revised recursively. Kitty’s original attributes seem like a reasonable place to start.</li>
 <li>Through gradient descent recursively revise <span class="math inline">\(\mathbf{x}_i&#39;^{(t)}\)</span> until <span class="math inline">\(g_n(\mathbf{x}_i&#39;^{(T)})=\)</span>🐶. At this point <span class="math inline">\(T\)</span> the descent terminates since for these revised attributes the classifier labels Kitty as a dog.</li>
-<li>Return <span class="math inline">\(\delta=\mathbf{x}_i&#39;^{(T)}-\mathbf{x}_i\)</span>, that is the individual recourse for Kitty.</li>
+<li>Return <span class="math inline">\(\delta_i=\mathbf{x}_i&#39;^{(T)}-\mathbf{x}_i\)</span>, that is the individual recourse for Kitty.</li>
 </ol>
 <p>Figure <a href="#fig:revise">3</a> illustrates what happens when this approach is applied to Kitty’s problem. The different panels show the results for different values of a regularization parameter <span class="math inline">\(\lambda\)</span> that governs the trade-off between achieving the desired label switch and keeping the distance between the original (<span class="math inline">\(\mathbf{x}_i\)</span>) and revised (<span class="math inline">\(\mathbf{x}_i&#39;\)</span>) attributes small. In all but one case, <code>REVISE</code> converges: a decrease in tail length along with an increase in height eventually allows Kitty to cross the decision boundary. In other words, we have successfully turned Kitty into a dog - at least in the eyes of the linear classifier!</p>
 <p>We also observe that as we increase <span class="math inline">\(\lambda\)</span> for a fixed learning rate, <code>REVISE</code> takes longer to converge. This should come as no surprise, since higher values of <span class="math inline">\(\lambda\)</span> lead to greater regularization with respect to the penalty we place on the distance that Kitty has to travel. When we penalize too much (<span class="math inline">\(\lambda=10\)</span>), Kitty never reaches the decision boundary, because she is reluctant to change her characteristics beyond a certain point. While not visible to the naked eye, in this particular example <span class="math inline">\(\lambda=0.001\)</span> corresponds to the best choice among the candidate values.</p>
@@ -144,9 +144,9 @@ Figure 3: The simplified <code>REVISE</code> algorithm in action: how Kitty cros
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
 <p>While hopefully Kitty’s journey has provided you with some useful intuition, the story is of course very silly. Even if your cat ever seems to signal that she wants to be dog, helping her cross that decision boundary will be tricky. Some attributes are simply immutable or very difficult to change, which <span class="citation"><a href="#ref-joshi2019towards" role="doc-biblioref">Joshi et al.</a> (<a href="#ref-joshi2019towards" role="doc-biblioref">2019</a>)</span> do not fail to account for in their framework. Their proposed methodology offers a simple and ingenious approach towards providing individual recourse. Instead of concerning ourselves with Black Box interpretability, why not simply provide remedy in case things go wrong?</p>
-<p>To some extent that idea has its merit. As this post has hopefully shown, <code>REVISE</code> is straight-forward to understood and readily applicable. It could be a very useful tool to provide individual recourse in many real-world applications. As the implementation of our simplified version of <code>REVISE</code> demonstrates, researchers should also find it relatively easy to develop the methodology further and tailor it to specific use cases. The simpler version here, for example, may be useful in settings where the dimensionality is relatively small and one can reasonably model the distribution of attributes without the need for generative models.</p>
+<p>To some extent that idea has its merit. As this post has hopefully shown, <code>REVISE</code> is straight-forward to understand and readily applicable. It could be a very useful tool to provide individual recourse in many real-world applications. As the implementation of our simplified version of <code>REVISE</code> demonstrates, researchers should also find it relatively easy to develop the methodology further and tailor it to specific use cases. The simpler version here, for example, may be useful in settings where the dimensionality is relatively small and one can reasonably model the distribution of attributes without the need for generative models.</p>
 <p>Still, you may be wondering: if the original classifier is based on poorly defined rules and proxies, then what good does <code>REVISE</code> really do? Going back to the example of high-school teacher Sarah Wysocki, one of the key attributes determining teachers’ evaluations was their students’ performance. Realizing this, some teachers took the shortest route to success by artificially inflating their students’ test scores. That same course of action may well have been suggested by <code>REVISE</code>. As <span class="citation"><a href="#ref-joshi2019towards" role="doc-biblioref">Joshi et al.</a> (<a href="#ref-joshi2019towards" role="doc-biblioref">2019</a>)</span> demonstrate, this very property of <code>REVISE</code> may actually proof useful in detecting weaknesses of decision making systems before setting them loose (key contribution 3).</p>
-<p>Nonetheless, the example above also demonstrates that approaches like <code>REVISE</code>, useful as they may be, tend to provide solutions for very particular problems. In reality data-driven decision making is often subject to many different problems and hence research on trustworthy AI will need to tackle the issue from various angles. A few places to start include the question of dealing with data that is inherently biased, improving ad-hoc and post-hoc model interpretability and continuing efforts around causality-inspired AI.</p>
+<p>Nonetheless, the example above also demonstrates that approaches like <code>REVISE</code>, useful as they may be, tend to provide solutions for very particular problems. In reality data-driven decision making systems are often subject to many different problems and hence research on trustworthy AI will need to tackle the issue from various angles. A few places to start include the question of dealing with data that is inherently biased, improving ad-hoc and post-hoc model interpretability and continuing efforts around causality-inspired AI.</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
@@ -164,7 +164,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 </div>
 <div id="annex" class="section level2">
 <h2>Annex</h2>
-<p>In my blog posts I aim to implement interesting ideas from scratch even if that sometimes means that things need to undergo some sort of simplification. The benefit of this approach is that the experience is educationally rewarding - both for myself and hopefully also for readers. The two sections of this annex show how <code>REVISE</code> and linear classification can be implemented in R.</p>
+<p>In my blog posts I aim to implement interesting ideas from scratch even if that sometimes means that things need to undergo some sort of simplification. The benefit of this approach is that the experience is educationally rewarding - both for myself and hopefully also for readers. The first two sections of this annex show how <code>REVISE</code> and linear classification can be implemented in R. The final section just shows how the synthetic data was generated. To also inspect the code that generates the visualizations and everything else, you can find the source code of this file on <a href="https://github.com/pat-alt/patalt/blob/master/content/post/2021-04-26-individual-recourse-for-black-box-models/index.Rmd">GitHub</a>.</p>
 <div id="linear-classifier" class="section level3">
 <h3>Linear classifier</h3>
 <p>Linear classification is implemented through stochastic gradient descent (SGD) with Hinge loss</p>
@@ -369,6 +369,22 @@ revise.classifier &lt;- function(classifier,x_star,eta=1,lambda=0.01,n_iter=1000
 
 revise &lt;- function(classifier,x_star,eta=1,lambda=0.01,n_iter=1000,save_steps=FALSE) {
   UseMethod(&quot;revise&quot;)
+}</code></pre>
+</div>
+<div id="simulated-data" class="section level3">
+<h3>Simulated data</h3>
+<p>The synthetic data describing cats and dogs was generated as follows:</p>
+<pre class="r"><code>sim_data &lt;- function(n=100,averages,noise=0.1) {
+  d &lt;- ncol(averages)
+  y &lt;- 2*(rbinom(n,1,0.5)-0.5) # generate binary outcome: 1=dog, -1=cat
+  X &lt;- as.matrix(averages[(y+1)/2+1,]) # generate attributes conditional on y
+  dogs &lt;- y==1 # boolean index for dogs
+  cats &lt;- y==-1 # boolean index for cats
+  X[cats,] &lt;- X[cats,] + 
+    matrix(rnorm(sum(cats)*d),nrow=sum(cats)) %*% diag(noise*averages[2,]) # add noise for y=1 (cats)
+  X[dogs,] &lt;- X[dogs,] + 
+    matrix(rnorm(sum(dogs)*d),nrow=sum(dogs)) %*% diag(noise*averages[2,]) # add noise for y=1 (dogs)
+  return(list(X=X,y=y))
 }</code></pre>
 </div>
 </div>
