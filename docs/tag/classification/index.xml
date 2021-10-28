@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>classification | Patrick Altmeyer</title>
+    <link>https://www.paltmeyer.com/tag/classification/</link>
+      <atom:link href="https://www.paltmeyer.com/tag/classification/index.xml" rel="self" type="application/rss+xml" />
+    <description>classification</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Patrick Altmeyer</copyright><lastBuildDate>Tue, 27 Apr 2021 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://www.paltmeyer.com/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_512x512_fill_lanczos_center_3.png</url>
+      <title>classification</title>
+      <link>https://www.paltmeyer.com/tag/classification/</link>
+    </image>
+    
+    <item>
+      <title>Individual recourse for Black Box Models</title>
+      <link>https://www.paltmeyer.com/post/2021-04-26-individual-recourse-for-black-box-models/</link>
+      <pubDate>Tue, 27 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>https://www.paltmeyer.com/post/2021-04-26-individual-recourse-for-black-box-models/</guid>
+      <description>
+&lt;script src=&#34;https://www.paltmeyer.com/post/2021-04-26-individual-recourse-for-black-box-models/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;blockquote&gt;
+&lt;p&gt;“You cannot appeal to [algorithms]. They do not listen. Nor do they bend.”&lt;/p&gt;
+&lt;p&gt;— Cathy O’Neil&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src =&#34;www/toy.gif&#34; style=&#34;float:right; margin-left: auto; margin-right: auto; width:200px; height:200px;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;In her popular book &lt;a href=&#34;https://en.wikipedia.org/wiki/Weapons_of_Math_Destruction&#34;&gt;Weapons of Math Destruction&lt;/a&gt; Cathy O’Neil presents the example of public school teacher Sarah Wysocki, who lost her job after a teacher evaluation algorithm had rendered her redundant &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-o2016weapons&#34; role=&#34;doc-biblioref&#34;&gt;O’neil 2016&lt;/a&gt;)&lt;/span&gt;. Sarah was highly popular among her peers, supervisors and students.&lt;/p&gt;
+&lt;p&gt;This post looks at a novel algorithmic solution to the problem that individuals like Sarah, who are faced with an undesirable outcome, should be provided with means to revise that outcome. The literature commonly refers to this as &lt;em&gt;individual recourse&lt;/em&gt;. One of the first approaches towards individual recourse was proposed by &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-ustun2019actionable&#34; role=&#34;doc-biblioref&#34;&gt;Ustun, Spangher, and Liu&lt;/a&gt; (&lt;a href=&#34;#ref-ustun2019actionable&#34; role=&#34;doc-biblioref&#34;&gt;2019&lt;/a&gt;)&lt;/span&gt;. In a recent follow-up paper, &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-joshi2019towards&#34; role=&#34;doc-biblioref&#34;&gt;Joshi et al.&lt;/a&gt; (&lt;a href=&#34;#ref-joshi2019towards&#34; role=&#34;doc-biblioref&#34;&gt;2019&lt;/a&gt;)&lt;/span&gt; propose a methodology coined &lt;code&gt;REVISE&lt;/code&gt;, which extends the earlier approach in at least three key ways:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;code&gt;REVISE&lt;/code&gt; provides a framework that avoids suggesting an unrealistic set of changes by imposing a threshold likelihood on the revised attributes.&lt;/li&gt;
+&lt;li&gt;It is applicable to a broader class of models including Black Box classifiers and structural causal models.&lt;/li&gt;
+&lt;li&gt;It can be used to detect poorly defined proxies and biases.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;For a detailed discussion of these points you may check out this &lt;a href=&#34;paper_presentation.pdf&#34;&gt;slide deck&lt;/a&gt; or consult the paper directly (freely available on &lt;a href=&#34;https://deepai.org/publication/towards-realistic-individual-recourse-and-actionable-explanations-in-black-box-decision-making-systems&#34;&gt;DeepAI&lt;/a&gt;). Here, we will abstract from some of these complications and instead look at an application of a slightly simplified version of &lt;code&gt;REVISE&lt;/code&gt;. This should help us to first build a good intuition. Readers interested in the technicalities and code may find all of this in the annex below.&lt;/p&gt;
+&lt;div id=&#34;from-to&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;From 🐱 to 🐶&lt;/h2&gt;
+&lt;p&gt;We will explain &lt;code&gt;REVISE&lt;/code&gt; through a short tale of cats and dogs. The protagonist of this tale is Kitty 🐱, a young cat that identifies as a dog. Unfortunately, Kitty is not very tall and her tail, though short for a cat, is longer than that of the average dog (Figure &lt;a href=&#34;#fig:density&#34;&gt;1&lt;/a&gt;).&lt;/p&gt;
+&lt;div class=&#34;figure&#34; style=&#34;text-align: center&#34;&gt;&lt;span id=&#34;fig:density&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://www.paltmeyer.com/post/2021-04-26-individual-recourse-for-black-box-models/index_files/figure-html/density-1.png&#34; alt=&#34;Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty&#39;s attribute values.&#34; width=&#34;864&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 1: Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty’s attribute values.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Much to her dismay, Kitty has been recognized as a cat by a linear classifier &lt;span class=&#34;math inline&#34;&gt;\(g_n(X)\)&lt;/span&gt; that we trained through stochastic gradient descent using the data on animals’ height and tail length. Once again interested readers may find technical details and code in the annex below. Figure &lt;a href=&#34;#fig:class&#34;&gt;2&lt;/a&gt; shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty’s location indicated by a red circle. Can we provide individual recourse to Kitty?&lt;/p&gt;
+&lt;div class=&#34;figure&#34; style=&#34;text-align: center&#34;&gt;&lt;span id=&#34;fig:class&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://www.paltmeyer.com/post/2021-04-26-individual-recourse-for-black-box-models/index_files/figure-html/class-1.png&#34; alt=&#34;Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty&#39;s location is indicated by a red circle.&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 2: Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty’s location is indicated by a red circle.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Let’s see if and how we can apply &lt;code&gt;REVISE&lt;/code&gt; to Kitty’s problem. The following summary should give you some flavour of how the algorithm works:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Initialize &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{x}_i&amp;#39;^{(0)}\)&lt;/span&gt;, that is the attributes that will be revised recursively. Kitty’s original attributes seem like a reasonable place to start.&lt;/li&gt;
+&lt;li&gt;Through gradient descent recursively revise &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{x}_i&amp;#39;^{(t)}\)&lt;/span&gt; until &lt;span class=&#34;math inline&#34;&gt;\(g_n(\mathbf{x}_i&amp;#39;^{(T)})=\)&lt;/span&gt;🐶. At this point &lt;span class=&#34;math inline&#34;&gt;\(T\)&lt;/span&gt; the descent terminates since for these revised attributes the classifier labels Kitty as a dog.&lt;/li&gt;
+&lt;li&gt;Return &lt;span class=&#34;math inline&#34;&gt;\(\delta_i=\mathbf{x}_i&amp;#39;^{(T)}-\mathbf{x}_i\)&lt;/span&gt;, that is the individual recourse for Kitty.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Figure &lt;a href=&#34;#fig:revise&#34;&gt;3&lt;/a&gt; illustrates what happens when this approach is applied to Kitty’s problem. The different panels show the results for different values of a regularization parameter &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; that governs the trade-off between achieving the desired label switch and keeping the distance between the original (&lt;span class=&#34;math inline&#34;&gt;\(\mathbf{x}_i\)&lt;/span&gt;) and revised (&lt;span class=&#34;math inline&#34;&gt;\(\mathbf{x}_i&amp;#39;\)&lt;/span&gt;) attributes small. In all but one case, &lt;code&gt;REVISE&lt;/code&gt; converges: a decrease in tail length along with an increase in height eventually allows Kitty to cross the decision boundary. In other words, we have successfully turned Kitty into a dog - at least in the eyes of the linear classifier!&lt;/p&gt;
+&lt;p&gt;We also observe that as we increase &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; for a fixed learning rate, &lt;code&gt;REVISE&lt;/code&gt; takes longer to converge. This should come as no surprise, since higher values of &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; lead to greater regularization with respect to the penalty we place on the distance that Kitty has to travel. When we penalize too much (&lt;span class=&#34;math inline&#34;&gt;\(\lambda=10\)&lt;/span&gt;), Kitty never reaches the decision boundary, because she is reluctant to change her characteristics beyond a certain point. While not visible to the naked eye, in this particular example &lt;span class=&#34;math inline&#34;&gt;\(\lambda=0.001\)&lt;/span&gt; corresponds to the best choice among the candidate values.&lt;/p&gt;
+&lt;div class=&#34;figure&#34; style=&#34;text-align: center&#34;&gt;&lt;span id=&#34;fig:revise&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;www/revise.gif&#34; alt=&#34;The simplified `REVISE` algorithm in action: how Kitty crosses the decision boundary by changing her attributes. Regularization with respect to the distance penalty increases from top left to bottom right.&#34;  /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 3: The simplified &lt;code&gt;REVISE&lt;/code&gt; algorithm in action: how Kitty crosses the decision boundary by changing her attributes. Regularization with respect to the distance penalty increases from top left to bottom right.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;discussion&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Discussion&lt;/h2&gt;
+&lt;p&gt;While hopefully Kitty’s journey has provided you with some useful intuition, the story is of course very silly. Even if your cat ever seems to signal that she wants to be a dog, helping her cross that decision boundary will be tricky. Some attributes are simply immutable or very difficult to change, which &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-joshi2019towards&#34; role=&#34;doc-biblioref&#34;&gt;Joshi et al.&lt;/a&gt; (&lt;a href=&#34;#ref-joshi2019towards&#34; role=&#34;doc-biblioref&#34;&gt;2019&lt;/a&gt;)&lt;/span&gt; do not fail to account for in their framework. Their proposed methodology offers a simple and ingenious approach towards providing individual recourse. Instead of concerning ourselves with Black Box interpretability, why not simply provide remedy in case things go wrong?&lt;/p&gt;
+&lt;p&gt;To some extent that idea has its merit. As this post has hopefully shown, &lt;code&gt;REVISE&lt;/code&gt; is straight-forward to understand and readily applicable. It could be a very useful tool to provide individual recourse in many real-world applications. As the implementation of our simplified version of &lt;code&gt;REVISE&lt;/code&gt; demonstrates, researchers should also find it relatively easy to develop the methodology further and tailor it to specific use cases. The simpler version here, for example, may be useful in settings where the dimensionality is relatively small and one can reasonably model the distribution of attributes without the need for generative models.&lt;/p&gt;
+&lt;p&gt;Still, you may be wondering: if the original classifier is based on poorly defined rules and proxies, then what good does &lt;code&gt;REVISE&lt;/code&gt; really do? Going back to the example of high-school teacher Sarah Wysocki, one of the key attributes determining teachers’ evaluations was their students’ performance. Realizing this, some teachers took the shortest route to success by artificially inflating their students’ test scores. That same course of action may well have been suggested by &lt;code&gt;REVISE&lt;/code&gt;. As &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-joshi2019towards&#34; role=&#34;doc-biblioref&#34;&gt;Joshi et al.&lt;/a&gt; (&lt;a href=&#34;#ref-joshi2019towards&#34; role=&#34;doc-biblioref&#34;&gt;2019&lt;/a&gt;)&lt;/span&gt; demonstrate, this very property of &lt;code&gt;REVISE&lt;/code&gt; may actually proof useful in detecting weaknesses of decision making systems before setting them loose (key contribution 3).&lt;/p&gt;
+&lt;p&gt;Nonetheless, the example above also demonstrates that approaches like &lt;code&gt;REVISE&lt;/code&gt;, useful as they may be, tend to provide solutions for very particular problems. In reality data-driven decision making systems are often subject to many different problems and hence research on trustworthy AI will need to tackle the issue from various angles. A few places to start include the question of dealing with data that is inherently biased, improving ad-hoc and post-hoc model interpretability and continuing efforts around causality-inspired AI.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;references&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references csl-bib-body hanging-indent&#34;&gt;
+&lt;div id=&#34;ref-joshi2019towards&#34; class=&#34;csl-entry&#34;&gt;
+Joshi, Shalmali, Oluwasanmi Koyejo, Warut Vijitbenjaronk, Been Kim, and Joydeep Ghosh. 2019. &lt;span&gt;“Towards Realistic Individual Recourse and Actionable Explanations in Black-Box Decision Making Systems.”&lt;/span&gt; &lt;em&gt;arXiv Preprint arXiv:1907.09615&lt;/em&gt;.
+&lt;/div&gt;
+&lt;div id=&#34;ref-o2016weapons&#34; class=&#34;csl-entry&#34;&gt;
+O’neil, Cathy. 2016. &lt;em&gt;Weapons of Math Destruction: How Big Data Increases Inequality and Threatens Democracy&lt;/em&gt;. Crown.
+&lt;/div&gt;
+&lt;div id=&#34;ref-ustun2019actionable&#34; class=&#34;csl-entry&#34;&gt;
+Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. &lt;span&gt;“Actionable Recourse in Linear Classification.”&lt;/span&gt; In &lt;em&gt;Proceedings of the Conference on Fairness, Accountability, and Transparency&lt;/em&gt;, 10–19.
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;annex&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Annex&lt;/h2&gt;
+&lt;p&gt;In my blog posts I aim to implement interesting ideas from scratch even if that sometimes means that things need to undergo some sort of simplification. The benefit of this approach is that the experience is educationally rewarding - both for myself and hopefully also for readers. The first two sections of this annex show how &lt;code&gt;REVISE&lt;/code&gt; and linear classification can be implemented in R. The final section just shows how the synthetic data was generated. To also inspect the code that generates the visualizations and everything else, you can find the source code of this file on &lt;a href=&#34;https://github.com/pat-alt/patalt/blob/master/content/post/2021-04-26-individual-recourse-for-black-box-models/index.Rmd&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;div id=&#34;linear-classifier&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Linear classifier&lt;/h3&gt;
+&lt;p&gt;Linear classification is implemented through stochastic gradient descent (SGD) with Hinge loss&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\begin{aligned}
+&amp;amp;&amp;amp; \ell(-\mathbf{w}^T\mathbf{x}_i y_i)&amp;amp;=(1-\mathbf{w}^T\mathbf{x}_i y_i)_+ \\
+\end{aligned}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{w}\)&lt;/span&gt; is a coefficient vector, &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{x}_i\)&lt;/span&gt; is the attribute vector of individual &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(y_i\)&lt;/span&gt; is the individual’s outcome. Since we apply SGD in order to minimize the loss function &lt;span class=&#34;math inline&#34;&gt;\(\ell\)&lt;/span&gt; by varying &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{w}\)&lt;/span&gt;, we need an expression for its gradient with respect to &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{w}\)&lt;/span&gt;, which is given by:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34; id=&#34;eq:hinge&#34;&gt;\[\begin{equation} 
+\begin{aligned}
+&amp;amp;&amp;amp; \nabla_{\mathbf{W}} \left( \ell(-\mathbf{w}^T\mathbf{x}_i y_i) \right) &amp;amp;= \begin{cases} -\mathbf{x}_i y_i &amp;amp; \text{if} \ \ \ \mathbf{w}^T\mathbf{x}_i y_i \le 1\\ 0 &amp;amp; \text{otherwise} \end{cases} \\
+\end{aligned}
+\tag{1}
+\end{equation}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The code below uses this analytical solution to perform SGD over &lt;span class=&#34;math inline&#34;&gt;\(T\)&lt;/span&gt; iterations or as long as updates yield feasible parameter values. As the final vector of coefficients the function returns &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{\bar{w}}= \frac{1}{T} \sum_{t=1}^{T} \mathbf{w}_t\)&lt;/span&gt;. Denoting the optimal coefficient vector as &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{w}^*\)&lt;/span&gt;, it can be shown that under certain conditions &lt;span class=&#34;math inline&#34;&gt;\(\ell(\mathbf{\bar{w}})\rightarrow\ell(\mathbf{w}^*)\)&lt;/span&gt; as &lt;span class=&#34;math inline&#34;&gt;\(T\rightarrow\infty\)&lt;/span&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#&amp;#39; Stochastic gradient descent
+#&amp;#39;
+#&amp;#39; @param X Feature matrix.
+#&amp;#39; @param y Vector containing training labels.
+#&amp;#39; @param eta Learning rate.
+#&amp;#39; @param n_iter Maximum number of iterations.
+#&amp;#39; @param w_init Initial parameter values.
+#&amp;#39; @param save_steps Boolean checking if coefficients should be saved at each step.
+#&amp;#39;
+#&amp;#39; @return
+#&amp;#39; @export
+#&amp;#39;
+#&amp;#39; @author Patrick Altmeyer
+linear_classifier &amp;lt;- function(X,y,eta=0.001,n_iter=1000,w_init=NULL,save_steps=FALSE) {
+  # Initialization: ----
+  n &amp;lt;- nrow(X) # number of observations
+  d &amp;lt;- ncol(X) # number of dimensions
+  if (is.null(w_init)) {
+    w &amp;lt;- matrix(rep(0,d)) # initialize coefficients as zero...
+  } else {
+    w &amp;lt;- matrix(w_init) # ...unless initial values have been provided.
+  }
+  w_avg &amp;lt;- 1/n_iter * w # initialize average coefficients
+  iter &amp;lt;- 1 # iteration count
+  if (save_steps) {
+    steps &amp;lt;- data.table(iter=0, w=c(w), d=1:d) # if desired, save coefficient at each step
+  } else {
+    steps &amp;lt;- NA
+  }
+  feasible_w &amp;lt;- TRUE # to check if coefficients are finite, non-nan, ...
+  # Surrogate loss:
+  l &amp;lt;- function(X,y,w) {
+    x &amp;lt;- (-1) * crossprod(X,w) * y
+    pmax(0,1 + x) # Hinge loss
+  }
+  grad &amp;lt;- function(X,y,w) {
+    X %*% ifelse(crossprod(X,w) * y&amp;lt;=1,-y,0) # Gradient of Hinge loss
+  }
+  # Stochastic gradient descent: ----
+  while (feasible_w &amp;amp; iter&amp;lt;n_iter) {
+    t &amp;lt;- sample(1:n,1) # random draw
+    X_t &amp;lt;- matrix(X[t,])
+    y_t &amp;lt;- matrix(y[t])
+    v_t &amp;lt;- grad(X_t,y_t,w) # compute estimate of gradient
+    # Update:
+    w &amp;lt;- w - eta * v_t # update coefficient vector
+    feasible_w &amp;lt;- all(sapply(w, function(i) !is.na(i) &amp;amp; is.finite(i))) # check if feasible
+    if (feasible_w) {
+      w_avg &amp;lt;- w_avg + 1/n_iter * w # update average
+    }
+    if (save_steps) {
+      steps &amp;lt;- rbind(steps, data.table(iter=iter, w=c(w), d=1:d))
+    }
+    iter &amp;lt;- iter + 1 # increase counter
+  }
+  # Output: ----
+  output &amp;lt;- list(
+    X = X,
+    y = matrix(y),
+    coefficients = w_avg,
+    eta = eta,
+    n_iter = n_iter,
+    steps = steps
+  )
+  class(output) &amp;lt;- &amp;quot;classifier&amp;quot; # assign S3 class
+  return(output)
+}
+
+# Methods: ----
+print.classifier &amp;lt;- function(classifier) {
+  print(&amp;quot;Coefficients:&amp;quot;)
+  print(classifier$coefficients)
+}
+print &amp;lt;- function(classifier) {
+  UseMethod(&amp;quot;print&amp;quot;)
+}
+
+predict.classifier &amp;lt;- function(classifier, newdata=NULL, discrete=TRUE) {
+  if (!is.null(newdata)) {
+    fitted &amp;lt;- newdata %*% classifier$coefficients # out-of-sampple prediction
+  } else {
+    fitted &amp;lt;- classifier$X %*% classifier$coefficients # in-sample fit
+  }
+  if (discrete) {
+    fitted &amp;lt;- sign(fitted) # map to {-1,1}
+  }
+  return(fitted)
+}
+predict &amp;lt;- function(classifier, newdata=NULL, discrete=TRUE) {
+  UseMethod(&amp;quot;predict&amp;quot;)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;revise-simplified&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;&lt;code&gt;REVISE&lt;/code&gt; (simplified)&lt;/h3&gt;
+&lt;p&gt;As flagged above, we are looking at a slightly simplified version of the algorithm presented in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-joshi2019towards&#34; role=&#34;doc-biblioref&#34;&gt;Joshi et al.&lt;/a&gt; (&lt;a href=&#34;#ref-joshi2019towards&#34; role=&#34;doc-biblioref&#34;&gt;2019&lt;/a&gt;)&lt;/span&gt;. In particular, the approach here does not incorporate the threshold on the likelihood nor does it account for immutable attributes.&lt;/p&gt;
+&lt;p&gt;Let &lt;span class=&#34;math inline&#34;&gt;\(y\in\{-1,1\}\)&lt;/span&gt; be a binary outcome variable, &lt;span class=&#34;math inline&#34;&gt;\(X\in\mathbb{R}^d\)&lt;/span&gt; a feature matrix containing individuals’ attributes and &lt;span class=&#34;math inline&#34;&gt;\(g_n(X)\)&lt;/span&gt; a corresponding data-dependent classifier. Suppose &lt;span class=&#34;math inline&#34;&gt;\(y_i=-1\)&lt;/span&gt; (the negative outcome) for some individual characterized by attributes &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{x}_i\)&lt;/span&gt;. Then we want to find &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{x}_i&amp;#39;\)&lt;/span&gt; closest to &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{x}_i\)&lt;/span&gt; such that the classifier assigns the positive outcome &lt;span class=&#34;math inline&#34;&gt;\(g(\mathbf{x}_i^{&amp;#39;})=1\)&lt;/span&gt;. In order to do so, we use gradient descent with Hinge loss &lt;span class=&#34;math inline&#34;&gt;\(\ell\)&lt;/span&gt; to minimize the following function&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\begin{aligned}
+&amp;amp;&amp;amp; \min_{\mathbf{x}_i^{&amp;#39;}}&amp;amp; \ \ell(g_n(\mathbf{x}_i^{&amp;#39;}),1) + \lambda d(\mathbf{x}_i^{&amp;#39;},\mathbf{x}_i) \\
+\end{aligned}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(d=||\mathbf{x}_i^{&amp;#39;}-\mathbf{x}_i||\)&lt;/span&gt; denotes the Euclidean distance. Note that this time we take the coefficient vector defining &lt;span class=&#34;math inline&#34;&gt;\(g_n\)&lt;/span&gt; as given and instead vary the attributes. In particular, we will perform gradient descent steps as follows&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\begin{aligned}
+&amp;amp;&amp;amp; {\mathbf{x}_i^{&amp;#39;}}^t&amp;amp;\leftarrow {\mathbf{x}_i^{&amp;#39;}}^{t-1} + \eta \nabla_{{\mathbf{x}_i^{&amp;#39;}}} \left( \ell(g_n(\mathbf{x}_i^{&amp;#39;}),1) + \lambda d(\mathbf{x}_i^{&amp;#39;},\mathbf{x}_i)  \right)  \\
+\end{aligned}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(\eta\)&lt;/span&gt; is the learning rate. The descent step is almost equivalent to the one described in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-joshi2019towards&#34; role=&#34;doc-biblioref&#34;&gt;Joshi et al.&lt;/a&gt; (&lt;a href=&#34;#ref-joshi2019towards&#34; role=&#34;doc-biblioref&#34;&gt;2019&lt;/a&gt;)&lt;/span&gt;, but here we greatly simplify things by optimizing directly in the attribute space instead of a latent space. The gradient of the loss function looks very similar to &lt;a href=&#34;#eq:hinge&#34;&gt;(1)&lt;/a&gt;. With respect to the Euclidean distance partial derivatives are of the following form:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\begin{aligned}
+&amp;amp;&amp;amp;  \frac{\partial ||\mathbf{x}_i^{&amp;#39;}-\mathbf{x}_i||}{\partial {x_i&amp;#39;}^{(d)}}  &amp;amp;= \frac{{x_i&amp;#39;}^{(d)}-{x_i}^{(d)}}{||\mathbf{x}_i^{&amp;#39;}-\mathbf{x}_i||} \\
+\end{aligned}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The code that implements this optimization follows below.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#&amp;#39; REVISE algoritm - a simplified version
+#&amp;#39;
+#&amp;#39; @param classifier The fitted classifier.
+#&amp;#39; @param x_star Attributes of individual seeking individual recourse.
+#&amp;#39; @param eta Learning rate.
+#&amp;#39; @param lambda Regularization parameter.
+#&amp;#39; @param n_iter Maximum number of operations.
+#&amp;#39; @param save_steps Boolean indicating if intermediate steps should be saved.
+#&amp;#39;
+#&amp;#39; @return
+#&amp;#39; @export
+#&amp;#39;
+#&amp;#39; @author Patrick Altmeyer
+revise.classifier &amp;lt;- function(classifier,x_star,eta=1,lambda=0.01,n_iter=1000,save_steps=FALSE) {
+  # Initialization: ----
+  d &amp;lt;- length(x_star) # number of dimensions
+  if (!is.null(names(x_star))) {
+    d_names &amp;lt;- names(x_star) # names of attributes, if provided
+  } else {
+    d_names &amp;lt;- sprintf(&amp;quot;X%i&amp;quot;, 1:d)
+  }
+  w &amp;lt;- classifier$coefficients # coefficient vector
+  x &amp;lt;- x_star # initialization of revised attributes
+  distance &amp;lt;- 0 # initial distance from starting point
+  converged &amp;lt;- predict(classifier, newdata = x)[1,1]==1 # positive outcome?
+  iter &amp;lt;- 1 # counter
+  if (save_steps) {
+    steps &amp;lt;- data.table(iter=1, x=x, d=d_names) # save intermediate steps, if desired
+  } else {
+    steps &amp;lt;- NA
+  }
+  # Gradients:
+  grad &amp;lt;- function(x,y,w) {
+    w %*% ifelse(crossprod(x,w) * y&amp;lt;=1,-y,0) # gradient of Hinge loss with respect to X
+  }
+  grad_dist &amp;lt;- function(x,x_star) {
+    d &amp;lt;- length(x_star)
+    distance &amp;lt;- dist(matrix(cbind(x_star,x),nrow=d,byrow = T))
+    matrix((x-x_star) / distance) # gradient of Euclidean distance with respect to X
+  }
+  # Gradient descent: ----
+  while(!converged &amp;amp; iter&amp;lt;n_iter) {
+    if (distance!=0) {
+      x &amp;lt;- c(x - eta * (grad(x=matrix(x),y=1,w) + lambda * grad_dist(x,x_star))) # gradient descent step
+    } else {
+      x &amp;lt;- c(x - eta * grad(x=matrix(x),y=1,w)) # gradient with respect to distance not defined at zero
+    }
+    converged &amp;lt;- predict(classifier, newdata = x)[1,1]==1 # positive outcome?
+    iter &amp;lt;- iter + 1 # update counter
+    if (save_steps) {
+      steps &amp;lt;- rbind(steps, data.table(iter=iter, x=x, d=d_names))
+    }
+    distance &amp;lt;- dist(matrix(cbind(x_star,x),nrow=d,byrow = T)) # update distance
+  }
+  # Output: ----
+  if (converged) {
+    revise &amp;lt;- x - x_star
+  } else {
+    revise &amp;lt;- NA
+  }
+  output &amp;lt;- list(
+    x_star = x_star,
+    revise = revise,
+    classifier = classifier,
+    steps = steps,
+    lambda = lambda,
+    distance = distance,
+    mean_distance = mean(abs(revise))
+  )
+  return(output)
+}
+
+revise &amp;lt;- function(classifier,x_star,eta=1,lambda=0.01,n_iter=1000,save_steps=FALSE) {
+  UseMethod(&amp;quot;revise&amp;quot;)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;simulated-data&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Simulated data&lt;/h3&gt;
+&lt;p&gt;The synthetic data describing cats and dogs was generated as follows:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sim_data &amp;lt;- function(n=100,averages,noise=0.1) {
+  d &amp;lt;- ncol(averages)
+  y &amp;lt;- 2*(rbinom(n,1,0.5)-0.5) # generate binary outcome: 1=dog, -1=cat
+  X &amp;lt;- as.matrix(averages[(y+1)/2+1,]) # generate attributes conditional on y
+  dogs &amp;lt;- y==1 # boolean index for dogs
+  cats &amp;lt;- y==-1 # boolean index for cats
+  X[cats,] &amp;lt;- X[cats,] + 
+    matrix(rnorm(sum(cats)*d),nrow=sum(cats)) %*% diag(noise*averages[2,]) # add noise for y=1 (cats)
+  X[dogs,] &amp;lt;- X[dogs,] + 
+    matrix(rnorm(sum(dogs)*d),nrow=sum(dogs)) %*% diag(noise*averages[2,]) # add noise for y=1 (dogs)
+  return(list(X=X,y=y))
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

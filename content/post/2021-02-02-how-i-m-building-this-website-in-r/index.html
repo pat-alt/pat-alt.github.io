@@ -1,0 +1,120 @@
+---
+title: How I'm building this website in R
+author: Patrick Altmeyer
+date: '2021-02-02'
+slug: how-i-m-building-this-website-in-r
+categories: [Coding]
+tags: [blogdown, rmarkdown, C++]
+output:
+  blogdown::html_page:
+      toc: true
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#getting-started">Getting started</a></li>
+<li><a href="#deploying-your-website">Deploying your website</a></li>
+<li><a href="#why-all-the-trouble">Why all the trouble?</a></li>
+<li><a href="#a-simple-coding-example">A simple coding example</a></li>
+<li><a href="#embedding-existing-work">Embedding existing work</a></li>
+<li><a href="#resources">Resources</a></li>
+</ul>
+</div>
+
+<div id="getting-started" class="section level2">
+<h2>Getting started</h2>
+<p>It turns out building a static website in R is remarkably easy, as long as you know your way around R Markdown. Knowledge of HTML and CSS helps, but is not strictly necessary and can be acquired along the way. My package of choice for this website is <code>blogdown</code> by <a href="https://yihui.org/">Yihui Xie</a> who has had a major impact on the R community through his many package contributions (<code>knitr</code>, <code>bookdown</code>, <code>pagedown</code>, …) and certainly made my life a lot easier on many occasions.</p>
+<p>To get started just follow the instructions on <code>blogdown</code>’s <a href="https://github.com/rstudio/blogdown">GitHub repository</a> or keep reading here for a high-level overview. Setting up a basic website in R requires exactly two steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Set up a local directory for the website. Let’s suppose you create it here <code>~/Documents/myAwesomeWebsite</code>.</p></li>
+<li><p>In R, navigate to the directory and simply run <code>blogdown::newsite()</code>.</p></li>
+</ol>
+<p>This will set up a basic template which you can develop. Changing the theme and playing with the basic structure of the website is relatively straight-forward. Personally I have so far managed to work things out based on a working knowledge of HTML and CSS that I’ve developed in the past through my work with R Shiny.</p>
+</div>
+<div id="deploying-your-website" class="section level2">
+<h2>Deploying your website</h2>
+<p>There are various ways to deploy your website, i.e. make it accessible to the public. This website is deployed through GitHub pages. Detailed instructions on how to do this can be found <a href="https://bookdown.org/yihui/blogdown/github-pages.html">here</a>. Since I already had an existing local clone of my <code>pat-alt.github.io</code> repo, I just dropped it in the source directory of the website:</p>
+<pre><code>source/
+│
+├── config.yaml
+├── content/
+├── themes/
+└── ...
+
+patalt.github.io/
+│
+├── .git/
+├── .nojekyll
+├── index.html
+├── about/
+└── ...</code></pre>
+<p>After adding <code>publishDir: pat-alt.github.io</code> to my <code>config.yaml</code> and then running <code>blogdown::hugo_build()</code> the website was built inside the clone. All that was left to do was to commit changes from the local clone to the <code>pat-alt.github.io</code> remote repo. A few moments later the website was already up and running.</p>
+</div>
+<div id="why-all-the-trouble" class="section level2">
+<h2>Why all the trouble?</h2>
+<p>There are certainly easier ways to build a website. But if like me you do pretty much all your work in R Markdown and want to share some of it, then you will love <code>blogdown</code>. The beauty of it is that once the basic infrastructure is set up, adding content is as simple as running the following wrapper function</p>
+<pre class="r"><code>blogdown::new_post(&quot;Your new post&quot;, ext = &quot;.Rmd&quot;)</code></pre>
+<p>where the first argument is just the title of your post and the <code>ext</code> argument can be used to specify that you want to create an R Markdown document that can include code chucks. The wrapper function will automatically set up a directory for your post under <code>/post/</code>. R Studio will redirect you to the relevant <code>.Rmd</code> file that you can then fill with content. By default that folder will look roughly like this:</p>
+<pre><code>├── index.Rmd
+├── index.html
+└── index_files
+    └── header-attrs
+        └── header-attrs.js</code></pre>
+</div>
+<div id="a-simple-coding-example" class="section level2">
+<h2>A simple coding example</h2>
+<p>As you can probably tell from the code chunks above this post was created just in the way I described. So I thought I might as well go ahead with a simple coding example to add some flavour. Suppose you have built some function that you think is worth sharing with the world or simply learned something new and interesting. As a case in point, I recently had a look at the <code>Rcpp</code> package and wrote a small program in C++ to be used in R. Since R Markdown supports <code>Rcpp</code> code chunks (along with Python, bash, SQL, …) it is straight-forward to show-case that code on this website.</p>
+<p>The program can be used to simulate data from a categorical distribution. This distribution describes the possible results of a random variable that can take on one of <span class="math inline">\(K\)</span> possible categories with different probabilities. In base R we could use <code>rmultinom(n=1000,1,p=c(0.5,0.1,0.4))</code> to simulate draws from one such distribution with three different categories. Alternatively, we could write the program in C++ as follows:</p>
+<pre class="cpp"><code>#include &lt;Rcpp.h&gt;
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+NumericMatrix simCategorical(int n, NumericVector p) {
+  int k = p.size();
+  NumericMatrix mat(k, n);
+  // Normalise prob if necessary:
+  if (sum(p)!=1) {
+    p = p/sum(p);
+  }
+  NumericVector emp_cdf = cumsum(p);
+  NumericVector u = Rcpp::runif(n, 0, 1);
+  // Matrix for 1-hot-encoding:
+  for (int j = 0; j &lt; n; j++) {
+    // Perform binary search:
+    int l = 0;
+    int r = k;
+    double target = u[j];
+    while (l &lt; r) {
+      int m = floor((l+r)/2);
+      if (emp_cdf[m] &gt; target) {
+        r = m;
+      } else {
+        l = m+1;
+      }
+    }
+    mat(r,j) = 1;
+  }
+  return mat;
+}</code></pre>
+<p>In terms of performance it turns out that the simple C++ program actually does somewhat better than the base R alternative:</p>
+<pre class="r"><code>library(microbenchmark)
+library(ggplot2)
+n &lt;- 1000
+p &lt;- c(0.5,0.1,0.4)
+mb &lt;- microbenchmark(
+    &quot;rmultinom&quot; = {rmultinom(n, 1, p)},
+    &quot;Rcpp&quot; = {simCategorical(n, p)}
+)
+autoplot(mb)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="embedding-existing-work" class="section level2">
+<h2>Embedding existing work</h2>
+<p>If you have some existing work that you would like to share you can just use it to overwrite the <code>index.Rmd</code> file. <code>blogdown</code> supports any kind of R Markdown documents so you can use all of your favourite markdown packages (<code>bookdown</code>, <code>pagedown</code>, …). Just make sure to specify HTML output in the YAML header.</p>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>For more information about <code>blogdown</code> see <a href="https://bookdown.org/yihui/blogdown/">here</a>. To inspect the code that builds this website check out my <a href="https://github.com/pat-alt/patalt">GitHub repository</a>.</p>
+</div>

@@ -1,0 +1,1332 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.3.0 for Hugo" />
+  
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Patrick Altmeyer" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Motivation Interpretable DL - a whistle-stop tour An entropy-based approach to variable importance Application to Bayesian neural networks Conclusion References   Motivation Propelled by advancements in modern computer technology, deep learning has re-emerged as perhaps the most promising artificial intelligence (AI) technology of the last two decades." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://www.paltmeyer.com/post/2021-02-01-a-peek-inside-the-black-box-interpreting-neural-networks/" />
+
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#D6EAF8" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.f1ecf783c14edc00c9320c205831ad8e.css" media="print" onload="this.media='all'">
+
+  
+  
+  
+    
+    
+
+    
+    
+    
+    
+      
+      
+    
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.00bd16d61b26ac021c2845abd42653cc.css" />
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/manifest.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="https://www.paltmeyer.com/post/2021-02-01-a-peek-inside-the-black-box-interpreting-neural-networks/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary" />
+  
+    <meta property="twitter:site" content="@`r Sys.getenv(&#34;TWITTER_NAME&#34;)`" />
+    <meta property="twitter:creator" content="@`r Sys.getenv(&#34;TWITTER_NAME&#34;)`" />
+  
+  <meta property="og:site_name" content="Patrick Altmeyer" />
+  <meta property="og:url" content="https://www.paltmeyer.com/post/2021-02-01-a-peek-inside-the-black-box-interpreting-neural-networks/" />
+  <meta property="og:title" content="A peek inside the &#39;Black Box&#39; - interpreting neural networks | Patrick Altmeyer" />
+  <meta property="og:description" content="Motivation Interpretable DL - a whistle-stop tour An entropy-based approach to variable importance Application to Bayesian neural networks Conclusion References   Motivation Propelled by advancements in modern computer technology, deep learning has re-emerged as perhaps the most promising artificial intelligence (AI) technology of the last two decades." /><meta property="og:image" content="https://www.paltmeyer.com/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_512x512_fill_lanczos_center_3.png" />
+    <meta property="twitter:image" content="https://www.paltmeyer.com/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2021-02-07T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2021-02-07T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.paltmeyer.com/post/2021-02-01-a-peek-inside-the-black-box-interpreting-neural-networks/"
+  },
+  "headline": "A peek inside the 'Black Box' - interpreting neural networks",
+  
+  "datePublished": "2021-02-07T00:00:00Z",
+  "dateModified": "2021-02-07T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Patrick Altmeyer"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Patrick Altmeyer",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.paltmeyer.com/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "Motivation Interpretable DL - a whistle-stop tour An entropy-based approach to variable importance Application to Bayesian neural networks Conclusion References   Motivation Propelled by advancements in modern computer technology, deep learning has re-emerged as perhaps the most promising artificial intelligence (AI) technology of the last two decades."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>A peek inside the &#39;Black Box&#39; - interpreting neural networks | Patrick Altmeyer</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="cc5ba12a4d6b1583862c168183715ef1" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.8988fb2a4bba758785868cfcb5244555.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">Patrick Altmeyer</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">Patrick Altmeyer</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#hero"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/work/"><span>Work and Outreach</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/about/"><span>About me</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+          
+          <li class="nav-item d-none d-lg-inline-flex">
+            <a class="nav-link" href="https://twitter.com/paltmey" data-toggle="tooltip" data-placement="bottom" title="Follow me on Twitter" target="_blank" rel="noopener" aria-label="Follow me on Twitter">
+              <i class="fab fa-twitter" aria-hidden="true"></i>
+            </a>
+          </li>
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>A peek inside the &#39;Black Box&#39; - interpreting neural networks</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Feb 7, 2021
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    12 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/post/2021-02-01-a-peek-inside-the-black-box-interpreting-neural-networks/#disqus_thread"></a>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/data-science/">Data Science</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+<script src="https://www.paltmeyer.com/post/2021-02-01-a-peek-inside-the-black-box-interpreting-neural-networks/index_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#motivation">Motivation</a></li>
+<li><a href="#interpretable-dl">Interpretable DL - a whistle-stop tour</a></li>
+<li><a href="#rate">An entropy-based approach to variable importance</a></li>
+<li><a href="#interpreting-bnns">Application to Bayesian neural networks</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<div id="motivation" class="section level1">
+<h1>Motivation</h1>
+<p>Propelled by advancements in modern computer technology, deep learning has re-emerged as perhaps the most promising artificial intelligence (AI) technology of the last two decades. By treating problems as a nested, hierarchy of hidden layers deep artificial neural networks achieve the power and flexibility necessary for AI systems to navigate complex real-world environments. Unfortunately, their very nature has earned them a reputation as <em>Black Box</em> algorithms and their lack of interpretability remains a major impediment to their more wide-spread application.</p>
+<p>In science, research questions usually demand not just answers but also explanations and variable selection is often as important as prediction <span class="citation">(<a href="#ref-ish2019interpreting" role="doc-biblioref">Ish-Horowicz et al. 2019</a>)</span>. Economists, for example, recognise the undeniable potential of deep learning, but are rightly hesitant to employ novel tools that are not fully transparent and ultimately cannot be trusted. Similarly, real-world applications of AI have come under increasing scrutiny with regulators imposing that individuals influenced by algorithms should have the right to obtain explanations <span class="citation">(<a href="#ref-fan2020interpretability" role="doc-biblioref">Fan, Xiong, and Wang 2020</a>)</span>. In high-risk decision-making fields such as AI systems that drive autonomous vehicles the need for explanations is self-evident <span class="citation">(<a href="#ref-ish2019interpreting" role="doc-biblioref">Ish-Horowicz et al. 2019</a>)</span>.</p>
+<p>In light of these challenges it is not surprising that research on explainable AI has recently gained considerable momentum <span class="citation">(<a href="#ref-arrieta2020explainable" role="doc-biblioref">Arrieta et al. 2020</a>)</span>. While in this short essay we will focus on deep learning in particular, it should be noted that this growing body of literature is concerned with a broader realm of machine learning models. The rest of this note is structured as follows: the first section provides a brief overview of recent advancements towards interpreting deep neural networks largely drawing on <span class="citation"><a href="#ref-fan2020interpretability" role="doc-biblioref">Fan, Xiong, and Wang</a> (<a href="#ref-fan2020interpretability" role="doc-biblioref">2020</a>)</span>; the second section considers a novel entropy-based approach towards interpretability proposed by <span class="citation"><a href="#ref-crawford2019variable" role="doc-biblioref">Crawford et al.</a> (<a href="#ref-crawford2019variable" role="doc-biblioref">2019</a>)</span>; finally, in the last section we will see how this approach can be applied to deep neural networks as proposed in <span class="citation"><a href="#ref-ish2019interpreting" role="doc-biblioref">Ish-Horowicz et al.</a> (<a href="#ref-ish2019interpreting" role="doc-biblioref">2019</a>)</span>.</p>
+</div>
+<div id="interpretable-dl" class="section level1">
+<h1>Interpretable DL - a whistle-stop tour</h1>
+<p>Before delving further into <em>how</em> the intrinsics of deep neural networks can be disentangled we should first clarify <em>what</em> interpretability in the context of algorithms actually means. <span class="citation"><a href="#ref-fan2020interpretability" role="doc-biblioref">Fan, Xiong, and Wang</a> (<a href="#ref-fan2020interpretability" role="doc-biblioref">2020</a>)</span> describes model interpretability simply as the extent to which humans can “understand and reason” the model. This may concern an understanding of both the <em>ad-hoc</em> workings of the algorithm as well as the <em>post-hoc</em> interpretability of its output. In the context of linear regression, for example, <em>ad-hoc</em> workings of the model are often described through the intuitive idea of linearly projecting the outcome variable <span class="math inline">\(\mathbf{y}\)</span> onto the column space of <span class="math inline">\(\mathbf{X}\)</span>. <em>Post-hoc</em> interpretations usually center around variable importance – the main focus of the following sections. Various recent advancements tackle interpretability of DNNs from different angles depending on whether the focus is on <em>ad-hoc</em> or <em>post-hoc</em> interpretability. <span class="citation"><a href="#ref-fan2020interpretability" role="doc-biblioref">Fan, Xiong, and Wang</a> (<a href="#ref-fan2020interpretability" role="doc-biblioref">2020</a>)</span> further asses that model interpretability hinges on three main aspects of <em>simulatability</em>, <em>decomposability</em> and <em>algorithmic transparency</em>, but for the purpose of this short note the <em>ad-hoc</em> vs. <em>post-hoc</em> taxonomy provides a simpler more natural framework.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>Understanding the <em>ad-hoc</em> intrinsic mechanisms of a DNN is inherently difficult. While generally transparency may be preserved in the presence of nonlinearity (e.g. decision trees), multiple hidden layers of networks (each of them) involving nonlinear operations are usually out of the realm of human comprehension <span class="citation">(<a href="#ref-fan2020interpretability" role="doc-biblioref">Fan, Xiong, and Wang 2020</a>)</span>. Training also generally involves optimization of non-convex functions that involve an increasing number of saddle points as the dimensionality increases <span class="citation">(<a href="#ref-fan2020interpretability" role="doc-biblioref">Fan, Xiong, and Wang 2020</a>)</span>. Methods to circumvent this problematic usually boil down to decreasing the overall complexity, either by regularizing the model or through proxy methods. Regularization – while traditionally done to avoid overfitting – has been found to be useful to create more interpretable representations. Monotonicity constraints, for example, impose that as the value of a specified covariate increases model predictions either monotonically decrease or increase. Proxy methods construct simpler representations of a learned DNN, such as a rule-based decision tree. This essentially involves repeatedly querying the trained network while varying the inputs and then deriving decision rules based on the model output.</p>
+<p>Post-hoc interpretability usually revolves around the understanding of feature importance. A greedy approach to this issue involves simply removing features one by one and checking how model predictions change. A more sophisticated approach along these lines is <em>Shapley</em> value, which draws on cooperative game theory. The Shapley value assigns varying payouts to players depending on their contribution to overall payout. In the context of neural networks input covariate <span class="math inline">\(\mathbf{X}_p\)</span> represents a player while overall payout is represented by the difference between average and individual outcome predictions.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> Exact computations of Shapley values are prohibitive as the dimensionality increases, though approximate methods have recently been developed <span class="citation">(<a href="#ref-fan2020interpretability" role="doc-biblioref">Fan, Xiong, and Wang 2020</a>)</span>.</p>
+<p>The remainder of this note focuses on a novel approach to feature extraction that measures entropy shifts in a learned probabilistic neural network in response to model inputs <span class="math inline">\(\mathbf{X_1},...,\mathbf{X}_P\)</span>. We will first introduce this methodology in the context of Gaussian Process regression in the following section before finally turning to its application to Bayesian neural networks.</p>
+</div>
+<div id="rate" class="section level1">
+<h1>An entropy-based approach to variable importance</h1>
+<p><span class="citation"><a href="#ref-ish2019interpreting" role="doc-biblioref">Ish-Horowicz et al.</a> (<a href="#ref-ish2019interpreting" role="doc-biblioref">2019</a>)</span> motivate their methodology for interpreting neural networks through Gaussian Process regression. Consider the following Bayesian regression model with Gaussian priors:</p>
+<span class="math display" id="eq:bayes">\[\begin{equation}
+\begin{aligned}
+&amp;&amp; f(\mathbf{X}|\mathbf{w})&amp;=\phi(\mathbf{X})^T\mathbf{w} + \varepsilon, &amp;&amp;\varepsilon \sim \mathcal{N}(0,\mathbf{I}) \\
+&amp;&amp; \mathbf{w}&amp; \sim \mathcal{N}(0,{1\over{\lambda}} \mathbf{I})\\
+\end{aligned}
+\tag{1}
+\end{equation}\]</span>
+<p>This naturally gives rise to a particular example of a Gaussian Process (GP). In particular, since <span class="math inline">\(\mathbf{u}(\mathbf{X})=\Phi(\mathbf{X})^T\mathbf{w}\)</span> is just a linear combination fo Gaussian random variables it follows a Gaussian Process itself</p>
+<span class="math display" id="eq:khbs">\[\begin{equation}
+\begin{aligned}
+&amp;&amp; \mathbf{u}(\mathbf{X})=\Phi(\mathbf{X})^T\mathbf{w}&amp; \sim \mathcal{N}(\mathbf{0}, \mathbf{K}) \\
+\end{aligned}
+\tag{2}
+\end{equation}\]</span>
+<p>where <span class="math inline">\(\mathbf{K}\)</span> is the Kernel (or Gram) matrix and <span class="math inline">\(K_{i,j}=k(\mathbf{X_i,\mathbf{X}_j})={1\over{\lambda}}\phi(\mathbf{X_i})^T\phi(\mathbf{X_m})\)</span> is the kernel function <span class="citation">(<a href="#ref-bishop2006pattern" role="doc-biblioref">Bishop 2006</a>)</span>. In other words, the prior distribution over <span class="math inline">\(\mathbf{w}\)</span> induces a probability distribution over random functions <span class="math inline">\(\mathbf{u}(\mathbf{X})\)</span>. Similarly, the GP can be understood as a prior distribution over a an infinite-dimensional reproducible kernel Hilbert space (RKHS) <span class="citation">(<a href="#ref-crawford2019variable" role="doc-biblioref">Crawford et al. 2019</a>)</span>, which in a finite-dimensional setting becomes multivariate Gaussian.</p>
+<p>In a standard linear regression model coefficients characterize the projection of the outcome variable <span class="math inline">\(\mathbf{y}\)</span> onto the column space of the regressors <span class="math inline">\(\mathbf{X}\)</span>. In particular, with ordinary least square we define:</p>
+<span class="math display" id="eq:ols">\[\begin{equation}
+\begin{aligned}
+&amp;&amp; \beta&amp;=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y} \\
+\end{aligned}
+\tag{3}
+\end{equation}\]</span>
+<p>The primary focus here is to learn the mapping from input to output. The key differentiating feature between this approach and the non-parametric model in <a href="#eq:bayes">(1)</a> is the fact that in case of the latter we are interested in learning not only the mapping from inputs to outputs, but also the representation (<span class="math inline">\(\mathbf{u}(\mathbf{X})\)</span>) of the inputs (see for example <span class="citation">(<a href="#ref-goodfellow2016deep" role="doc-biblioref">Goodfellow, Bengio, and Courville 2016</a>)</span>). To be even more specific, treating the feature representation itself as random as in <a href="#eq:bayes">(1)</a> allows us to learn non-linear relationships between the covariates <span class="math inline">\(\mathbf{X}\)</span>, since they are implicitly captured by the RKHS <span class="citation">(<a href="#ref-crawford2019variable" role="doc-biblioref">Crawford et al. 2019</a>)</span>. Neural networks share this architecture and hence it is worth dwelling on it a bit further: the fact that the learned model inherently incorporates variable interactions leads to the observation that an individual feature is rarely important on its own with respect to the mapping from <span class="math inline">\(\mathbf{X}\)</span> to <span class="math inline">\(\mathbf{y}\)</span> <span class="citation">(<a href="#ref-ish2019interpreting" role="doc-biblioref">Ish-Horowicz et al. 2019</a>)</span>. Hence, in order to gain an understanding of individual variable importance, one should aim to understand what role feature <span class="math inline">\(\mathbf{X}_j\)</span> plays <em>within</em> the learned model, thereby taking into account its interactions with other covariates. Formally, <span class="citation"><a href="#ref-crawford2019variable" role="doc-biblioref">Crawford et al.</a> (<a href="#ref-crawford2019variable" role="doc-biblioref">2019</a>)</span> and define the <em>effect size analogue</em> as the equivalent of the familiar regression coefficient in the non-parametric setting</p>
+<span class="math display" id="eq:effect-size">\[\begin{equation}
+\begin{aligned}
+&amp;&amp; \tilde\beta&amp;=\mathbf{X}^+\Phi^T\mathbf{w}=\mathbf{X}^+\mathbf{u} \\
+\end{aligned}
+\tag{4}
+\end{equation}\]</span>
+<p>where <span class="math inline">\(\mathbf{X}^+=\lim_{\alpha} (\mathbf{X}^T\mathbf{X}+\alpha \mathbf{I})^{-1}\mathbf{X}^T\)</span> denotes the Moore-Penrose pseudo-inverse (see for example <span class="citation"><a href="#ref-goodfellow2016deep" role="doc-biblioref">Goodfellow, Bengio, and Courville</a> (<a href="#ref-goodfellow2016deep" role="doc-biblioref">2016</a>)</span>). Intuitively the effect size analogue can be thought of as the resulting coefficients from regressing the fitted values <span class="math inline">\(\hat{\mathbf{u}}\)</span> from the learned probabilistic model on the covariates <span class="math inline">\(\mathbf{X}\)</span>. It can be interpreted in the same way as linear regression coefficients, in the sense that <span class="math inline">\(\tilde\beta_j\)</span> describes the marginal change in <span class="math inline">\(\mathbf{u}\)</span> given a unit increase in <span class="math inline">\(\mathbf{X}_j\)</span> holding all else constant. Note here the subtle, but crucial difference between <a href="#eq:ols">(3)</a> – a projection from the outcome variable onto the column space of <span class="math inline">\(\mathbf{X}\)</span> – and <a href="#eq:effect-size">(4)</a> – a projection from the learned model to <span class="math inline">\(\mathbf{X}\)</span>. In other words, looking at <span class="math inline">\(\tilde\beta\)</span> can be thought of peeking directly into the <em>Block Box</em>. Unfortunately, as <span class="citation"><a href="#ref-crawford2019variable" role="doc-biblioref">Crawford et al.</a> (<a href="#ref-crawford2019variable" role="doc-biblioref">2019</a>)</span> point out, working with <a href="#eq:effect-size">(4)</a> is usually not straight-forward. From a practitioner’s point of view, it may also not be obvious how to interpret a coefficient that describes marginal effects of input variables on a learned model. A more useful indicator in this context would provide a measure of how much individual variables contribute to the overall variation in the learned model. For this purpose <span class="citation"><a href="#ref-crawford2019variable" role="doc-biblioref">Crawford et al.</a> (<a href="#ref-crawford2019variable" role="doc-biblioref">2019</a>)</span> propose to work with a distributional centrality measure based on <span class="math inline">\(\tilde\beta\)</span>, which we shall turn to next.</p>
+<p>The proposed methodology in <span class="citation"><a href="#ref-crawford2019variable" role="doc-biblioref">Crawford et al.</a> (<a href="#ref-crawford2019variable" role="doc-biblioref">2019</a>)</span> and <span class="citation"><a href="#ref-ish2019interpreting" role="doc-biblioref">Ish-Horowicz et al.</a> (<a href="#ref-ish2019interpreting" role="doc-biblioref">2019</a>)</span> depends on the availability of a posterior distribution over <span class="math inline">\(\tilde\beta\)</span> in that it measures its entropic shifts in response to the introduction of covariates. The intuition is straight-forward: within the context of the learned probabilistic model is covariate <span class="math inline">\(\mathbf{X}_j\)</span> informative or not? More formally this boils down to determining if the posterior distribution of <span class="math inline">\(p(\tilde\beta_{-j})\)</span> is dependent on the effect of <span class="math inline">\(\tilde\beta_j\)</span>. This can be quantified through the Kullback-Leibler divergence (KLD) between <span class="math inline">\(p(\tilde\beta_{-j})\)</span> and the conditional posterior <span class="math inline">\(p(\tilde\beta_{-j}|\tilde\beta_j)\)</span>:</p>
+<span class="math display" id="eq:kld">\[\begin{equation} 
+\begin{aligned}
+&amp;&amp; \text{KLD}_j&amp;=\text{KL}\left(p(\tilde\beta_{-j}) || p(\tilde\beta_{-j}|\tilde\beta_j)\right) \\
+\end{aligned}
+\tag{5}
+\end{equation}\]</span>
+<p>Covariates that contribute significant information to the model will have <span class="math inline">\(\text{KLD}&gt;0\)</span>, while for insignificant covariates <span class="math inline">\(\text{KLD}\approx0\)</span>. The measure of induced entropy change gives rise to a ranking of the covariates in terms of their relative importance in the model. The RATE criterion of variable <span class="math inline">\(\mathbf{X}_j\)</span> is then simply defined as</p>
+<span class="math display" id="eq:rate">\[\begin{equation} 
+\begin{aligned}
+&amp;&amp; \gamma_j&amp;=\frac{\text{KLD}_j}{\sum_{p=1}^{P}\text{KLD}_p}\in[0,1] \\
+\end{aligned}
+\tag{6}
+\end{equation}\]</span>
+<p>which in light of its bounds can naturally be interpreted as <span class="math inline">\(\mathbf{X}_j\)</span>`s percentage contribution to the learned model. It is worth noting that <span class="math inline">\(p(\tilde\beta_{-j}|\tilde\beta_j)\)</span> of course depends on the value of the conditioning variable. A natural choice is <span class="math inline">\(\tilde\beta_j=0\)</span> which usually corresponds to the null hypothesis.</p>
+</div>
+<div id="interpreting-bnns" class="section level1">
+<h1>Application to Bayesian neural networks</h1>
+<p>In order to use the RATE criterion in the context of deep learning we need to work in the Bayesian setting. Contrary to standard artificial neural networks which work under the assumption that weights have some true latent value, Bayesian neural networks place a prior distribution over network parameters and hence treat weights as random variables <span class="citation">(<a href="#ref-goan2020bayesian" role="doc-biblioref">Goan and Fookes 2020</a>)</span>. Not only does it perhaps seem more natural to treat unobserved weights as random, but the Bayesian setting also naturally gives rise to reason about uncertainty in predictions, which can ultimately help us develop more trustworthy models <span class="citation">(<a href="#ref-goan2020bayesian" role="doc-biblioref">Goan and Fookes 2020</a>)</span>. A drawback of BNNs is that exact computation of posteriors is computationally challenging and often intractable (a non-trivial issue that we will turn back to in a moment).</p>
+<p>When the prior placed over parameters is Gaussian, the output of the BNN approaches a Gaussian Process as the width of the network grows, in line with the discussion in the previous section. This is exactly the assumption that <span class="citation"><a href="#ref-ish2019interpreting" role="doc-biblioref">Ish-Horowicz et al.</a> (<a href="#ref-ish2019interpreting" role="doc-biblioref">2019</a>)</span> work with. They propose an architecture for a multi-layer perceptron (MLP) composed of (1) an input layer collecting covariates <span class="math inline">\(\mathbf{X}_1,...,\mathbf{X}_p\)</span>, (2) a single deterministic, hidden layer and (3) an outer layer producing predictions from a probabilistic model <span class="math inline">\(\mathbf{u}(\mathbf{X})\)</span>. Let <span class="math inline">\(\mathbf{X}\)</span> be a <span class="math inline">\((N \times P)\)</span> matrix of covariates. Then formally, we have</p>
+<span class="math display" id="eq:bnn">\[\begin{equation} 
+\begin{aligned}
+&amp;&amp; \hat{\mathbf{y}}&amp;=\sigma(\mathbf{u}) \\
+&amp;&amp; \mathbf{u}(\mathbf{Z})&amp;=\mathbf{Z}(\mathbf{X})\mathbf{w}^{(L+1)}, &amp;&amp; \mathbf{w}^{(L+1)} \sim \mathcal{N}(\mathbf{m}, \mathbf{V}) \\
+&amp;&amp; \mathbf{Z}(\mathbf{X})&amp;=f(\mathbf{X}\mathbf{w}^{(L)}) \\
+\end{aligned}
+\tag{7}
+\end{equation}\]</span>
+<p>where <span class="math inline">\(\sigma(.)\)</span> is a link function and <span class="math inline">\(\mathbf{u}(\mathbf{X})\)</span> represents the probabilistic model learned in the outer layer with weights <span class="math inline">\(\mathbf{w}^{(L+1)}\)</span> assumed to be Gaussian random variables.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> Finally, <span class="math inline">\(\mathbf{Z}(\mathbf{X})\)</span> denotes the inner (or more generally penultimate) layer, an <span class="math inline">\((N \times P)\)</span> matrix of neural activations through <span class="math inline">\(f:(\mathbf{X}\mathbf{w}^{(L)})\mapsto \mathbf{Z}\)</span>. <span class="citation"><a href="#ref-ish2019interpreting" role="doc-biblioref">Ish-Horowicz et al.</a> (<a href="#ref-ish2019interpreting" role="doc-biblioref">2019</a>)</span> work with a simple single-layer MLP, but it should be evident that this be extended to arbitrary depth and complexity, while still maintaining the high-level structure imposed by <a href="#eq:bnn">(7)</a>. This flexibility allows RATE to be applied to a wide range of Bayesian network architectures, since all that is really required is the posterior distribution over weights <span class="math inline">\(\mathbf{w}^{(L+1)}\)</span>, which arises from the probabilistic outer layer. The fact that only the outer layer needs to be probabilistic has the additional benefit of mitigating the computational burden that comes with Bayesian inference, which was mentioned earlier.</p>
+<!-- ![An MLP with a single, deterministic hidden layer and probabilistic outer layer.](www/bnn.png){#fig:bnn width="500"} -->
+<p>Having established this basic, flexible set-up the <span class="citation"><a href="#ref-ish2019interpreting" role="doc-biblioref">Ish-Horowicz et al.</a> (<a href="#ref-ish2019interpreting" role="doc-biblioref">2019</a>)</span> go on to derive closed-form expressions for RATE in this setting. The details are omitted here since the logic is largely analogous to what we learned above, but can be found in <span class="citation"><a href="#ref-ish2019interpreting" role="doc-biblioref">Ish-Horowicz et al.</a> (<a href="#ref-ish2019interpreting" role="doc-biblioref">2019</a>)</span>.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>The RATE criterion originally proposed by <span class="citation"><a href="#ref-crawford2019variable" role="doc-biblioref">Crawford et al.</a> (<a href="#ref-crawford2019variable" role="doc-biblioref">2019</a>)</span> and shown to be applicable to Bayesian neural networks in <span class="citation"><a href="#ref-ish2019interpreting" role="doc-biblioref">Ish-Horowicz et al.</a> (<a href="#ref-ish2019interpreting" role="doc-biblioref">2019</a>)</span> offers an intuitive way to measure variable importance in the context of deep learning. By defining variable importance as the contribution inputs make to a probabilistic model, it implicitly incorporates the interactions between covariates and nonlinearities that the model has learned. In other words, it allows researchers to peek directly into the <em>Black Box</em>. This opens up interesting avenues for future research, as the approach can be readily applied in academic disciplines and real-world applications that rely heavily on explainability of outcomes.</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-arrieta2020explainable" class="csl-entry">
+Arrieta, Alejandro Barredo, Natalia Diaz-Rodriguez, Javier Del Ser, Adrien Bennetot, Siham Tabik, Alberto Barbado, Salvador Garcia, et al. 2020. <span>“Explainable Artificial Intelligence (XAI): Concepts, Taxonomies, Opportunities and Challenges Toward Responsible AI.”</span> <em>Information Fusion</em> 58: 82–115.
+</div>
+<div id="ref-bishop2006pattern" class="csl-entry">
+Bishop, Christopher M. 2006. <em>Pattern Recognition and Machine Learning</em>. springer.
+</div>
+<div id="ref-crawford2019variable" class="csl-entry">
+Crawford, Lorin, Seth R Flaxman, Daniel E Runcie, and Mike West. 2019. <span>“Variable Prioritization in Nonlinear Black Box Methods: A Genetic Association Case Study.”</span> <em>The Annals of Applied Statistics</em> 13 (2): 958.
+</div>
+<div id="ref-fan2020interpretability" class="csl-entry">
+Fan, Fenglei, Jinjun Xiong, and Ge Wang. 2020. <span>“On Interpretability of Artificial Neural Networks.”</span> <em>Preprint at Https://Arxiv. Org/Abs/2001.02522</em>.
+</div>
+<div id="ref-goan2020bayesian" class="csl-entry">
+Goan, Ethan, and Clinton Fookes. 2020. <span>“Bayesian Neural Networks: An Introduction and Survey.”</span> In <em>Case Studies in Applied Bayesian Data Science</em>, 45–87. Springer.
+</div>
+<div id="ref-goodfellow2016deep" class="csl-entry">
+Goodfellow, Ian, Yoshua Bengio, and Aaron Courville. 2016. <em>Deep Learning</em>. MIT Press.
+</div>
+<div id="ref-ish2019interpreting" class="csl-entry">
+Ish-Horowicz, Jonathan, Dana Udwin, Seth Flaxman, Sarah Filippi, and Lorin Crawford. 2019. <span>“Interpreting Deep Neural Networks Through Variable Importance.”</span> <em>arXiv Preprint arXiv:1901.09839</em>.
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Simulatability describes the overall, high-level understandability of the mechanisms underlying the model – put simply, the less complex the model, the higher its simulatability. Decomposability concerns the extent to which the model can be taken apart into smaller pieces – neural networks by there very nature are compositions of multiple layers. Finally, algorithmic transparency refers to the extent to which the training of the algorithm is well-understood and to some extent observable – since DNNs generally deal with optimization of non-convex functions and often lack unique solution they are inherently intransparent.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>For more detail see for example <a href="https://christophm.github.io/interpretable-ml-book/shapley.html">here</a>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>For simplicity I have omitted the deterministic bias term.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/deeplearning/">deeplearning</a>
+  
+  <a class="badge badge-light" href="/tag/interpretableai/">interpretableai</a>
+  
+  <a class="badge badge-light" href="/tag/neuralnets/">neuralnets</a>
+  
+  <a class="badge badge-light" href="/tag/bayes/">bayes</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://www.paltmeyer.com/post/2021-02-01-a-peek-inside-the-black-box-interpreting-neural-networks/&amp;text=A%20peek%20inside%20the%20&amp;#39;Black%20Box&amp;#39;%20-%20interpreting%20neural%20networks" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://www.paltmeyer.com/post/2021-02-01-a-peek-inside-the-black-box-interpreting-neural-networks/&amp;t=A%20peek%20inside%20the%20&amp;#39;Black%20Box&amp;#39;%20-%20interpreting%20neural%20networks" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=A%20peek%20inside%20the%20&amp;#39;Black%20Box&amp;#39;%20-%20interpreting%20neural%20networks&amp;body=https://www.paltmeyer.com/post/2021-02-01-a-peek-inside-the-black-box-interpreting-neural-networks/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://www.paltmeyer.com/post/2021-02-01-a-peek-inside-the-black-box-interpreting-neural-networks/&amp;title=A%20peek%20inside%20the%20&amp;#39;Black%20Box&amp;#39;%20-%20interpreting%20neural%20networks" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=A%20peek%20inside%20the%20&amp;#39;Black%20Box&amp;#39;%20-%20interpreting%20neural%20networks%20https://www.paltmeyer.com/post/2021-02-01-a-peek-inside-the-black-box-interpreting-neural-networks/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://www.paltmeyer.com/post/2021-02-01-a-peek-inside-the-black-box-interpreting-neural-networks/&amp;title=A%20peek%20inside%20the%20&amp;#39;Black%20Box&amp;#39;%20-%20interpreting%20neural%20networks" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="https://www.paltmeyer.com/"><img class="avatar mr-3 avatar-circle" src="/author/patrick-altmeyer/avatar_hu3cfca0813412e5d3acdebb52b60777cc_515532_270x270_fill_q75_lanczos_center.jpg" alt="Patrick Altmeyer"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a></h5>
+      <h6 class="card-subtitle">PhD Candidate</h6>
+      <p class="card-text">My research interests include Causal Inference, Probabilistic Machine Learning and Algorithmic Recourse.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/paltmey" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=e7KRRa8AAAAJ&amp;hl=en" target="_blank" rel="noopener">
+        <i class="fas fa-graduation-cap"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/pat-alt" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/patrick-altmeyer-a2a25494/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://medium.com/@patrick.altmeyer" target="_blank" rel="noopener">
+        <i class="fab fa-medium"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+  
+  
+
+  
+  <section id="comments">
+    
+<div id="disqus_thread"></div>
+<script>
+  var disqus_config = function () {
+    
+    
+    
+  };
+  (function() {
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+      return;
+    }
+    var d = document, s = d.createElement('script'); s.async = true;
+    s.src = 'https://' + "patalt" + '.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </section>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2021 Patrick Altmeyer
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-modules" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    <script src="/js/vendor-bundle.min.b73dfaac3b6499dc997741748a7c3fe2.js"></script>
+
+    
+    
+    
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/python.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/latex.min.js" crossorigin="anonymous"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+      <script id="dsq-count-scr" src="https://patalt.disqus.com/count.js" async></script>
+    
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.d68ecd57c0ec1f1f61d65fd568f1c3a0.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>
