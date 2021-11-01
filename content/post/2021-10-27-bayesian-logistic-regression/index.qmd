@@ -1,0 +1,180 @@
+---
+title: Bayesian Logistic Regression
+author: Patrick Altmeyer
+date: '2021-10-27'
+slug: bayesian-logistic-regression
+categories: [Data Science]
+tags: [bayes, logit]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-10-27T08:57:47+02:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+```{r setup, include=FALSE}
+rm(list=ls())
+knitr::opts_chunk$set(
+  echo = FALSE, 
+  message = FALSE, 
+  fig.align='center'
+)
+library(data.table)
+library(ggplot2)
+library(gganimate)
+library(ggimage)
+seed <- 2021
+theme_set(theme_minimal())
+
+# Get helper functions:
+utils <- list.files("../utils/")
+invisible(
+  lapply(
+    utils,
+    function(i) {
+      source(file = file.path("../utils",i))
+    }
+  )
+)
+```
+
+## Ground truth
+
+```{r}
+w <- as.matrix(c(0,0.5,-1))
+seed <- 2021
+```
+
+We assume the following model 
+
+$$
+\begin{aligned}
+&& p(\mathbf{y}|\mathbf{X};\theta)&=\text{Ber}(\mathbf{y}|\sigma(\mathbf{X}\mathbf{w})) \\
+\end{aligned}
+$$
+
+where $\mathbf{X}=(\mathbf{1}^T, \mathbf{x}_{\text{Height}}^T,\mathbf{x}_{\text{Tail}}^T)^T$ and $\sigma$ is the **sigmoid** or **logit** function [@murphy2022probabilistic]. We let $\mathbf{w}=`r matrix2latex(w)`$ define the true coefficients. 
+
+```{r}
+logit <- function(w,X) {
+  
+  if (dim(X)[2]!=dim(w)[1]) {
+    X <- cbind(1,as.matrix(X)) # add 1 for constant/bias
+  } else {
+    X <- as.matrix(X)
+  }
+  
+  logit <- 1 / (1 + exp(-1 * (X %*% w)))
+  
+  return(logit)
+}
+```
+
+
+```{r gauss-mix}
+gauss_mix <- function(n, mu, sigma, weights) {
+  u <- runif(n) # to determine which distribution to sample from
+  d <- ncol(mu) # how many variables
+  X <- t(
+    sapply(
+      u,
+      function(u) {
+        idx_dist <- which(cumsum(weights) > u)[1]
+        X <- sapply(
+          1:d, 
+          function(i) {
+            rnorm(1,mu[idx_dist,i],sigma[idx_dist,i])
+          }
+        )
+        matrix(X,ncol=d)
+      }
+    )
+  )
+  return(X)
+}
+```
+
+
+```{r mixture}
+# Parameters
+n <- 1000
+weights <- c(0.5,0.5)
+mu <- rbind(c(50,50),c(100,20))
+noise <- 0.25
+sigma <- noise * mu
+# Generate mixture:
+X <- gauss_mix(n,mu,sigma,weights)
+```
+
+```{r}
+# True Bernoulli probabilities based on synthetic features and true coefficients:
+p <- logit(w,X)
+# True labels based on synthetic features and true coefficients:
+y <- rbinom(n,1,p)
+```
+
+```{r density, fig.height=4, fig.width=9, fig.cap="Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty's attribute values."}
+dt <- data.table(y,X)
+dt <- melt(dt, id.vars = "y")
+dt[,y:=as.factor(y)]
+levels(dt$y) <- c("Cat", "Dog")
+dt_plot <- copy(dt)
+levels(dt_plot$variable) <- c("Height", "Tail")
+ggplot(data=dt_plot, aes(x=value)) +
+  geom_density(alpha=0.25, aes(fill=factor(y))) +
+  facet_wrap(~variable,scales="free") +
+  scale_fill_manual("Outcome:", values = c("orange","brown")) +
+  labs(
+    x=NULL,
+    y="Conditional density"
+  )
+
+```
+
+
+## Methodology
+
+### Using `rstan`
+
+```{r, echo=FALSE}
+library(rstan)
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+```
+
+```{r, message=FALSE}
+n_iter <- 100 # default is 2000
+model_data <- list(
+  N = nrow(X),
+  K = ncol(X),
+  X = as.matrix(X),
+  y = y
+)
+fit <- stan(
+  file = 'logit.stan', 
+  data = model_data,
+  iter = n_iter,
+  seed = seed
+)
+```
+
+```{r}
+plot(fit)
+```
+
+
+## References
+
+For a great reference regarding the theory covered in this post see @murphy2022probabilistic, in particular chapters 4 and 10. The section on `rstan` draws heavily on another great [blog post](https://www.r-bloggers.com/2020/02/bayesian-logistic-regression-with-stan/) and also the [Stan User's Guide](https://mc-stan.org/docs/2_21/stan-users-guide/index.html#overview). 
+
+<div id="refs"></div>
+
+
+
+
+
