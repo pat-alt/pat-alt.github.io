@@ -6,6 +6,11 @@ using LinearAlgebra
 
 # Sigmoid function:
 function sigmoid(w,X)
+    if !isa(X, Matrix)
+        if length(size(X))>1
+            X = X'
+        end
+    end
     return 1 ./ (1 .+ exp.(-X'w))
 end
 
@@ -35,9 +40,7 @@ function sgd(X,y,∇,∇∇,w_0,H_0,ρ_0=1.0,T=1000,λ=1.0,ε=0.0001)
     t = 0 # iteration count
     while t<T
         n_t = rand(1:N)
-        println(n_t)
         ρ = ρ * exp(-ε*t) # exponential decay
-        println(∇(w,w_0,X[n_t,:]',y[n_t],H_0,λ))
         w = w - ρ .* ∇(w,w_0,X[n_t,:]',y[n_t],H_0,λ)
         t += 1
     end
