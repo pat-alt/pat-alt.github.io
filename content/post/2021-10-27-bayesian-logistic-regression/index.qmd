@@ -127,6 +127,7 @@ y <- rbinom(n,1,p)
 
 ```{r density, fig.height=4, fig.width=9, fig.cap="Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty's attribute values."}
 dt <- data.table(y,X)
+fwrite(dt, "data/cats_dogs.csv")
 dt <- melt(dt, id.vars = "y")
 dt[,y:=as.factor(y)]
 levels(dt$y) <- c("Cat", "Dog")
@@ -140,7 +141,6 @@ ggplot(data=dt_plot, aes(x=value)) +
     x=NULL,
     y="Conditional density"
   )
-
 ```
 
 
@@ -190,10 +190,32 @@ With the posterior distribution over parameters $p(\mathbf{w}|\mathcal{D})$ at h
 
 #### Implementation in Julia (from scratch)
 
-```{julia, eval=FALSE, echo=TRUE}
-
+```{r}
+library(JuliaCall)
 ```
 
+
+```{julia}
+include("julia/bayes_logreg.jl");
+using CSV
+using DataFrames
+df = CSV.read("data/cats_dogs.csv", DataFrame);
+```
+
+```{julia}
+y = df[:,:y];
+N = length(y);
+X = Matrix(df[:,Not(:y)]);
+X = [ones(N) X]; # add for constant
+d = size(X)[2]; # number of features
+σ = 10; # noise
+w_0 = zeros(d);
+H_0 = UniformScaling(1/(σ^2));
+```
+
+```{julia}
+w_map = sgd(X,y,∇,∇∇,w_0,H_0,1.0,10000,1.0,0.001)
+```
 
 ### MCMC using `rstan`
 
