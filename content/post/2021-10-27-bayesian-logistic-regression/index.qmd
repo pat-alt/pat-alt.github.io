@@ -128,10 +128,10 @@ y <- rbinom(n,1,p)
 ```{r density, fig.height=4, fig.width=9, fig.cap="Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty's attribute values."}
 dt <- data.table(y,X)
 fwrite(dt, "data/cats_dogs.csv")
-dt <- melt(dt, id.vars = "y")
-dt[,y:=as.factor(y)]
-levels(dt$y) <- c("Cat", "Dog")
 dt_plot <- copy(dt)
+dt_plot <- melt(dt_plot, id.vars = "y")
+dt_plot[,y:=as.factor(y)]
+levels(dt_plot$y) <- c("Cat", "Dog")
 levels(dt_plot$variable) <- c("Height", "Tail")
 ggplot(data=dt_plot, aes(x=value)) +
   geom_density(alpha=0.25, aes(fill=factor(y))) +
@@ -143,6 +143,15 @@ ggplot(data=dt_plot, aes(x=value)) +
   )
 ```
 
+```{r}
+ggplot(data=dt, aes(x = V1, y=V2, colour=factor(y))) +
+  geom_point() +
+  scale_color_manual(name="Ground truth label:", values = c("orange","brown")) +
+  labs(
+    x="Tail length",
+    y="Height"
+  )
+```
 
 ## Background
 
@@ -190,11 +199,6 @@ With the posterior distribution over parameters $p(\mathbf{w}|\mathcal{D})$ at h
 
 #### Implementation in Julia (from scratch)
 
-```{r}
-library(JuliaCall)
-```
-
-
 ```{julia}
 include("julia/bayes_logreg.jl");
 using CSV
@@ -208,14 +212,20 @@ N = length(y);
 X = Matrix(df[:,Not(:y)]);
 X = [ones(N) X]; # add for constant
 d = size(X)[2]; # number of features
-σ = 10; # noise
+σ = 1; # prior uncertainty
 w_0 = zeros(d);
 H_0 = UniformScaling(1/(σ^2));
 ```
 
 ```{julia}
-w_map = sgd(X,y,∇,∇∇,w_0,H_0,1.0,10000,1.0,0.001)
+w_map = sgd(X,y,∇,∇∇,w_0,H_0,1.0,100000,1.0,0.001)
 ```
+
+```{julia}
+y_hat=round.(1 ./(1 .+ exp.(-X*w_map)));
+sum([y[n]==y_hat[n] for n=1:length(y)])/N
+```
+
 
 ### MCMC using `rstan`
 
