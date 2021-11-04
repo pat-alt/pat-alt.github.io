@@ -10,6 +10,9 @@ summary: ''
 authors: []
 lastmod: '2021-10-27T08:57:47+02:00'
 featured: no
+output:
+  blogdown::html_page:
+      toc: false
 image:
   caption: ''
   focal_point: ''
@@ -183,9 +186,18 @@ $$
 
 #### Step 3
 
+With the posterior distribution over parameters $p(\mathbf{w}|\mathcal{D})$ at hand we have the necessary ingredients to estimate the posterior predictive distribution $p(y|\mathbf{x}, \mathcal{D})$. This estimated distribution can then be used to quantify the uncertainty around our predictions. ...
+
+#### Implementation in Julia (from scratch)
+
+```{julia, eval=FALSE, echo=TRUE}
+
+```
 
 
 ### MCMC using `rstan`
+
+Now let us see if wee can improve upon the Laplace Approximation by instead relying on Monte Carlo methods. 
 
 ```{r, echo=FALSE}
 library(rstan)
@@ -194,12 +206,14 @@ rstan_options(auto_write = TRUE)
 ```
 
 ```{r, message=FALSE, eval=FALSE}
+sigma <- 10 # uncertainty around prior
 n_iter <- 100 # default is 2000
 model_data <- list(
   N = nrow(X),
   K = ncol(X),
   X = as.matrix(X),
-  y = y
+  y = y,
+  sigma = sigma
 )
 fit <- stan(
   file = 'logit.stan', 

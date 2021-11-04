@@ -19,7 +19,10 @@ function ∇(w,w_0,X,y,H_0,λ)
     N = length(y)
     μ = sigmoid(w,X)
     Δw = w-w_0
-    return 1/N * ∑((μ[n]-y[n]) * X[n,:] for n=1:N) .+ H_0'Δw .+ 2 * λ * w
+    g = 1/N * ∑((μ[n]-y[n]) * X[n,:] for n=1:N) .+ H_0'Δw .+ 2 * λ * w
+    # Normalalize gradient to length 1:
+    # g = g / sqrt(g'g)
+    return g
 end
 
 # Hessian:
@@ -31,7 +34,7 @@ function ∇∇(X,y,H_0,λ)
 end
 
 # Stochastic Gradient Descent:
-function sgd(X,y,∇,∇∇,w_0,H_0,ρ_0=1.0,T=1000,λ=1.0,ε=0.0001)
+function sgd(X,y,∇,∇∇,w_0,H_0,ρ_0=1.0,T=1000,λ=1.0,ε=0.001)
     # Initialization:
     N = length(y)
     w = w_0
