@@ -161,9 +161,9 @@ How then, can we estimate uncertainty aorund model parameters and predictions? F
 
 Unlike with linear regression there are no closed-form analytical solutions - not for our point estimate $\hat{\mathbf{w}}$ and much less for its posterior distribution $p(\mathbf{w}|\mathcal{D})$ [@murphy2022probabilistic]. Fortunately though, there are many approximate solutions to this problem, some of which we will treat here.
 
-### Laplace Approximation
+## Laplace Approximation
 
-One of the simplest approaches called **Laplace Approximation** is straight-forward to implement and can be summarized as follows:
+One of the simplest approaches called **Laplace Approximation** is straight-forward to implement. It can be summarized as follows:
 
 #### Step 1
 
@@ -180,14 +180,14 @@ $$
 
 #### Step 2
 
-Use an optimization algorithm to compute the **maximum a posterior** (MAP) estimate $\hat{\mathbf{w}}$ as well as an estimate of the posterior uncertainty. The latter is our main quantity of interest after all and in the Gaussian setting corresponds to inverse Hessian of the posterior likelihood. Since maximising the likelihood (or equivalently minimizing the negative log likelihood) in this setting is a convex optimization problem [@murphy2022probabilistic] we have many efficient algorithms to choose from. Here we will implement one of the simplest: stochastic gradient descent (SGD). To avoid overfitting, we will also add a Ridge penalty that penalizes the $\ell^2$-norm of our estimated parameters, i.e. $||\mathbf{w}||_2^2=\mathbf{w}^T\mathbf{w}$. Let $\lambda$ denote a hyperparameter that governs how strictly we regularize and let $\mu_n=\sigma(\mathbf{w}^T\mathbf{x}_n)$. Then all the important ingredients for our optimization problem can be summarized as follows:
+Use an optimization algorithm to compute the **maximum a posterior** (MAP) estimate $\hat{\mathbf{w}}$ as well as an estimate of the posterior uncertainty. The latter is our main quantity of interest after all and in the Gaussian setting corresponds to inverse Hessian of the posterior likelihood. Since maximising the likelihood (or equivalently minimizing the negative log likelihood) in this setting is a convex optimization problem [@murphy2022probabilistic] we have many efficient algorithms to choose from. Here we will implement one of the simplest: stochastic gradient descent (SGD). Then all the important ingredients for our optimization problem can be summarized as follows:
 
 $$
 \begin{equation} 
 \begin{aligned}
-&& \mathcal{L}(\mathbf{w})&=- \frac{1}{N} \sum_{n=1}^{N} [y_n \log \mu_n + (1-y_n)\log (1-\mu_n)] + \lambda\mathbf{w}^T\mathbf{w} \\
-&& \nabla_{\mathbf{w}}\mathcal{L}(\mathbf{w})&= \frac{1}{N} \sum_{n=1}^{N} (\mu_n-y_n) \mathbf{x}_n + \mathbf{H}_0^T(\mathbf{w}-\mathbf{w}_0)+2\lambda \mathbf{w} \\
-&& \nabla^2_{\mathbf{w}}\mathcal{L}(\mathbf{w})&= \frac{1}{N} \sum_{n=1}^{N} \left[ \mu_n(1-\mu_n) \mathbf{x}_n \mathbf{x}_n^T \right]   + \mathbf{H}_0+2\lambda \mathbf{I} \\
+&& \mathcal{L}(\mathbf{w})&=- \frac{1}{N} \sum_{n=1}^{N} [y_n \log \mu_n + (1-y_n)\log (1-\mu_n)] + ... \\
+&& \nabla_{\mathbf{w}}\mathcal{L}(\mathbf{w})&= \frac{1}{N} \sum_{n=1}^{N} (\mu_n-y_n) \mathbf{x}_n + \mathbf{H}_0^T(\mathbf{w}-\mathbf{w}_0) \\
+&& \nabla^2_{\mathbf{w}}\mathcal{L}(\mathbf{w})&= \frac{1}{N} \sum_{n=1}^{N} \left[ \mu_n(1-\mu_n) \mathbf{x}_n \mathbf{x}_n^T \right]   + \mathbf{H}_0\\
 \end{aligned}
 (\#eq:likeli)
 \end{equation}
@@ -197,7 +197,7 @@ $$
 
 With the posterior distribution over parameters $p(\mathbf{w}|\mathcal{D})$ at hand we have the necessary ingredients to estimate the posterior predictive distribution $p(y|\mathbf{x}, \mathcal{D})$. This estimated distribution can then be used to quantify the uncertainty around our predictions. ...
 
-#### Implementation in Julia (from scratch)
+### Implementation in Julia (from scratch)
 
 ```{julia}
 include("julia/bayes_logreg.jl");
@@ -212,13 +212,13 @@ N = length(y);
 X = Matrix(df[:,Not(:y)]);
 X = [ones(N) X]; # add for constant
 d = size(X)[2]; # number of features
-σ = 1; # prior uncertainty
+σ = 1.0; # prior uncertainty
 w_0 = zeros(d);
 H_0 = UniformScaling(1/(σ^2));
 ```
 
 ```{julia}
-w_map = sgd(X,y,∇,∇∇,w_0,H_0,1.0,100000,1.0,0.001)
+w_map = sgd(X,y,∇,w_0,H_0,1.0,100000,0.00001)
 ```
 
 ```{julia}
@@ -226,6 +226,12 @@ y_hat=round.(1 ./(1 .+ exp.(-X*w_map)));
 sum([y[n]==y_hat[n] for n=1:length(y)])/N
 ```
 
+```{julia}
+mod = bayes_logreg(X,y,w_0,H_0);
+μ(mod)
+Σ(mod)
+sample_posterior(mod, 10)
+```
 
 ### MCMC using `rstan`
 
