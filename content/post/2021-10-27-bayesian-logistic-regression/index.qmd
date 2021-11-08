@@ -5,7 +5,7 @@ date: '2021-10-27'
 slug: bayesian-logistic-regression
 categories: [Data Science]
 tags: [bayes, logit]
-subtitle: ''
+subtitle: 
 summary: ''
 authors: []
 lastmod: '2021-10-27T08:57:47+02:00'
@@ -50,7 +50,7 @@ invisible(
 ## Ground truth
 
 ```{r}
-w <- as.matrix(c(0,0.5,-1))
+w <- as.matrix(c(0,0.5,-0.5))
 seed <- 2021
 ```
 
@@ -218,20 +218,13 @@ H_0 = UniformScaling(1/(σ^2));
 ```
 
 ```{julia}
-w_map = sgd(X,y,∇,w_0,H_0,1.0,100000,0.00001)
-```
-
-```{julia}
-y_hat=round.(1 ./(1 .+ exp.(-X*w_map)));
-sum([y[n]==y_hat[n] for n=1:length(y)])/N
-```
-
-```{julia}
 mod = bayes_logreg(X,y,w_0,H_0);
 μ(mod)
 Σ(mod)
 sample_posterior(mod, 10)
+DataFrame(y=y,y_post=posterior_predictive(mod, X),y_plug=sigmoid(mod.μ,X))
 ```
+
 
 ### MCMC using `rstan`
 

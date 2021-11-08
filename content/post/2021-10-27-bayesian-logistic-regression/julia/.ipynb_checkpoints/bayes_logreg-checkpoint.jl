@@ -66,7 +66,7 @@ function bayes_logreg(X,y,w_0,H_0)
     # Model:
     w_map = sgd(X,y,∇,w_0,H_0) # fit the model (find mode of posterior distribution)
     Σ_map = inv(∇∇(X,y,w_map,H_0)) # inverse Hessian at the mode
-    Σ_map = Symmetric(Σ_map)
+    Σ_map = Symmetric(Σ_map) # to ensure matrix is Hermitian (i.e. avoid rounding issues)
     # Output:
     mod = BayesLogreg(w_map, Σ_map)
     return mod
@@ -76,8 +76,28 @@ end
 μ(mod::BayesLogreg) = mod.μ
 Σ(mod::BayesLogreg) = mod.Σ
 using Distributions
+# Sampling from posterior distribution:
 function sample_posterior(mod::BayesLogreg, n)
     rand(MvNormal(mod.μ, mod.Σ),n)
 end
+# Posterior predictions:
 function posterior_predictive(mod::BayesLogreg, X)
+    μ = mod.μ # MAP mean vector
+    Σ = mod.Σ # MAP covariance matrix
+    κ = inv(sqrt(1 .+ π/8 .* mod.Σ)) # probit approximation
+    # Inner product:
+    if !isa(X, Matrix)
+        if length(size(X))>1
+            X = X'
+        end
+        z = X'κ*μ
+    else
+        z = X*κ*μ
+    end
+    # Truncation to avoid numerical over/underflow:
+    trunc = 8.0 
+    z = clamp.(z,-trunc,trunc)
+    p = exp.(z)
+    p = p ./ (1 .+ p)
+    return p
 end

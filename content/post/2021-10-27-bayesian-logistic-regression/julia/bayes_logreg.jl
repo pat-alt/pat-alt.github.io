@@ -76,9 +76,28 @@ end
 μ(mod::BayesLogreg) = mod.μ
 Σ(mod::BayesLogreg) = mod.Σ
 using Distributions
+# Sampling from posterior distribution:
 function sample_posterior(mod::BayesLogreg, n)
     rand(MvNormal(mod.μ, mod.Σ),n)
 end
+# Posterior predictions:
 function posterior_predictive(mod::BayesLogreg, X)
-    
+    μ = mod.μ # MAP mean vector
+    Σ = mod.Σ # MAP covariance matrix
+    κ = inv(sqrt(1 .+ π/8 .* mod.Σ)) # probit approximation
+    # Inner product:
+    if !isa(X, Matrix)
+        if length(size(X))>1
+            X = X'
+        end
+        z = X'κ*μ
+    else
+        z = X*κ*μ
+    end
+    # Truncation to avoid numerical over/underflow:
+    trunc = 8.0 
+    z = clamp.(z,-trunc,trunc)
+    p = exp.(z)
+    p = p ./ (1 .+ p)
+    return p
 end
