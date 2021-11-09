@@ -27,6 +27,7 @@ function sigmoid(w,X)
     else
         z = X*w
     end
+
     z = clamp.(z,-trunc,trunc)
     p = exp.(z)
     p = p ./ (1 .+ p)
@@ -39,7 +40,17 @@ function nll(w,w_0,X,y,H_0)
     D = size(X)[2]
     μ = sigmoid(w,X)
     Δw = w-w_0
-    return ∑( y[n] * log(μ[n]) + (1-y[n]) * log(1-μ[n]) for n=1:N) + 1/2 * Δw'H_0*Δw
+    return - ∑( y[n] * log(μ[n]) + (1-y[n]) * log(1-μ[n]) for n=1:N) + 1/2 * Δw'H_0*Δw
+end
+
+# Negative log likelihood (unconstrained)
+function nll_(w,w_0,X,y,H_0)
+    N = length(y)
+    D = size(X)[2]
+    #a = clamp.(X*w, -8.0, 8.0)
+    a = X*w
+    Δw = w-w_0
+    return a'y .- log.(1 .+ exp.(a')) * ones(N) .+ 1/2 * Δw'H_0*Δw
 end
 
 # Gradient:
