@@ -1,358 +1,148 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
-  <meta charset="utf-8">
-  <meta name="generator" content="quarto-0.2.232">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <meta name="author" content="Patrick Altmeyer">
-  <meta name="dcterms.date" content="2021-10-27">
-  <title>Bayesian Logistic Regression</title>
-  <style>
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      {   }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-    code span.at { color: #7d9029; } /* Attribute */
-    code span.bn { color: #40a070; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #4070a0; } /* Char */
-    code span.cn { color: #880000; } /* Constant */
-    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-    code span.dt { color: #902000; } /* DataType */
-    code span.dv { color: #40a070; } /* DecVal */
-    code span.er { color: #ff0000; font-weight: bold; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #40a070; } /* Float */
-    code span.fu { color: #06287e; } /* Function */
-    code span.im { } /* Import */
-    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-    code span.op { color: #666666; } /* Operator */
-    code span.ot { color: #007020; } /* Other */
-    code span.pp { color: #bc7a00; } /* Preprocessor */
-    code span.sc { color: #4070a0; } /* SpecialChar */
-    code span.ss { color: #bb6688; } /* SpecialString */
-    code span.st { color: #4070a0; } /* String */
-    code span.va { color: #19177c; } /* Variable */
-    code span.vs { color: #4070a0; } /* VerbatimString */
-    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-    div.csl-bib-body { }
-    div.csl-entry {
-      clear: both;
-    }
-    .hanging div.csl-entry {
-      margin-left:2em;
-      text-indent:-2em;
-    }
-    div.csl-left-margin {
-      min-width:2em;
-      float:left;
-    }
-    div.csl-right-inline {
-      margin-left:2em;
-      padding-left:1em;
-    }
-    div.csl-indent {
-      margin-left: 2em;
-    }
-  </style>
+---
+title: Bayesian Logistic Regression
+author: Patrick Altmeyer
+date: '2021-10-27'
+slug: bayesian-logistic-regression
+categories: [Data Science]
+tags: [bayes, logit]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-10-27T08:57:47+02:00'
+featured: no
+output:
+  blogdown::html_page:
+      toc: false
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+bibliography: ../../../bib.bib
+---
 
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
-  <script src="index_files/libs/clipboard/clipboard.min.js"></script>
-  <script src="index_files/libs/quarto-html/quarto.js"></script>
-  <script src="index_files/libs/quarto-html/popper.min.js"></script>
-  <script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
-  <script src="index_files/libs/quarto-html/anchor.min.js"></script>
-  <link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
-  <link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-  <script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
-  <link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-  <link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-<div id="quarto-content" class="container-fluid page-layout-article">
-<div class="row">
-<div class="col mx-auto col-sm-12 col-md-9 col-lg-7">
-<main>
-<header id="title-block-header">
-<h1 class="title display-7">Bayesian Logistic Regression</h1>
-<p class="author">Patrick Altmeyer</p>
-<p class="date">2021-10-27</p>
-</header>
-<section id="ground-truth" class="level2">
-<h2 class="anchored" data-anchor-id="ground-truth">Ground truth</h2>
-<div class="cell" data-layout-align="center">
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
 
-</div>
-<p>In this post we will work with a synthetic data set <span class="math inline">\(\mathcal{D}\)</span> composed of <span class="math inline">\(N\)</span> binary labels <span class="math inline">\(y_n\)</span> and feature samples <span class="math inline">\(\mathbf{x}_n\)</span>. Working with synthetic data has the benefit that we have control over the <strong>ground truth</strong> that generates our data. In particular, we will assume that the binary labels <span class="math inline">\(y_n\)</span> are generated by a logistic regression model</p>
-<p><span class="math display">\[
+
+<div id="ground-truth" class="section level2">
+<h2>Ground truth</h2>
+<p>In this post we will work with a synthetic data set <span class="math inline">\(\mathcal{D}\)</span> composed of <span class="math inline">\(N\)</span> binary labels <span class="math inline">\(y_n\in\{0,1\}\)</span> and corresponding feature vectors <span class="math inline">\(\mathbf{x}_n\in \mathbb{R}^D\)</span>. Working with synthetic data has the benefit that we have control over the <strong>ground truth</strong> that generates our data. In particular, we will assume that the binary labels <span class="math inline">\(y_n\)</span> are generated by a logistic regression model</p>
+<p><span class="math display" id="eq:logreg">\[
 \begin{equation} 
 \begin{aligned}
-&amp;&amp; p(y|\mathbf{x};\mathbf{w})&amp;=\text{Ber}(y|\sigma(\mathbf{w}^T\mathbf{x})) \\
+&amp;&amp; p(y_n|\mathbf{x}_n;\mathbf{w})&amp;\sim\text{Ber}(y_n|\sigma(\mathbf{w}^T\mathbf{x}_n)) \\
 \end{aligned}
-(\#eq:logreg)
+\tag{1}
 \end{equation}
 \]</span></p>
-<p>where <span class="math inline">\(\sigma(a)=1/(1+e^a)\)</span> is the <strong>sigmoid</strong> or <strong>logit</strong> function <span class="citation" data-cites="murphy2022probabilistic">(<a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy 2022</a>)</span>. We let <span class="math inline">\(\mathbf{w}=\begin{bmatrix} 0 \\ 0.5 \\ -1 \\ \end{bmatrix}\)</span> define the true coefficients.</p>
-<div class="cell" data-layout-align="center">
-
+<p>where <span class="math inline">\(\sigma(a)=1/(1+e^{-a})\)</span> is the <strong>sigmoid</strong> or <strong>logit</strong> function <span class="citation">(<a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy 2022</a>)</span>. We let <span class="math inline">\(\mathbf{w}=\begin{bmatrix} 2 \\ -4 \\ \end{bmatrix}\)</span> define the true coefficients.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:density"></span>
+<img src="{{< blogdown/postref >}}index_files/figure-html/density-1.png" alt="Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty's attribute values." width="864" />
+<p class="caption">
+Figure 1: Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty’s attribute values.
+</p>
 </div>
-<div class="cell" data-layout-align="center">
-
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div class="cell" data-layout-align="center">
-
-</div>
-<div class="cell" data-layout-align="center">
-
-</div>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center" width="864">
-<figure class="figure">
-<p><img src="index_files/figure-html/density-1.png" class="img-fluid figure-img" width="864"></p>
-<p></p><figcaption aria-hidden="true" class="figure-caption">Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty’s attribute values.</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="background" class="level2">
-<h2 class="anchored" data-anchor-id="background">Background</h2>
-<p>Using the synthetic data <span class="math inline">\(\mathcal{D}\)</span> we will now estimate the logistic regression model @ref(eq:logreg) that generates them. Estimation essentially boils down to finding the vector of parameters <span class="math inline">\(\hat{\mathbf{w}}\)</span> that maximizes the likelihood of observing <span class="math inline">\(\mathcal{D}\)</span> under the assumed model. That estimate can then be used to compute predictions for some new unlabelled data set <span class="math inline">\(\mathcal{D}=\{x_m:m=1,...,M\}\)</span>. We are then typically interested in how accurate these model predictions are. This sums up how many automated decision-making systems operate in practice these days: for example, a company that is interested speeding up its recruitment process could train a binary classifier on historical data to automatically assign labels (<span class="math inline">\(\hat{y}_m \in \{\text{short-listed, rejected}\}\)</span>) to new applications <span class="math inline">\(\mathbf{x}_m\)</span>. Does this seem like a sound approach to automated decision-making? Haven’t we forgot anything? While I have mentioned prediction <strong>accuracy</strong> above, there was no mentioning of assessing the classifier’s <strong>uncertainty</strong> around its predictions. The predicted labels <span class="math inline">\(y_m\)</span> are merely point estimates based on the learned model parameters, which are random variables! Focusing merely on prediction accuracy and ignoring uncertainty altogether installs a false confidence in automated decision-making systems. Any <strong>trustworthy</strong> approach to learning from data should at the very least be transparent about its own uncertainty.</p>
-<p>How then, can we estimate uncertainty aorund model parameters and predictions? Frequentist methods for uncertainty quantification generally involve either closed-form solutions based on asymptotic theory or bootstrapping (see for example <a href="https://web.stanford.edu/class/archive/stats/stats200/stats200.1172/Lecture26.pdf">here</a> for the case of logistic regression). In Bayesian statistics and machine learning we instead use the <strong>posterior distribution</strong> over model parameters to quantify uncertainty. This approach to uncertainty quantification is known as <strong>Bayesian Inference</strong> because we treat model parameters in a Bayesian way: we make assumptions about their distribution based on <strong>prior</strong> knowledge or beliefs and update these beliefs in light of new evidence. The frequentist approach avoids the need for being explicit about prior beliefs, which in the past has sometimes been considered as <em>un</em>scientific. However, frequentist methods come with their own assumption and pitfalls (see for example <span class="citation" data-cites="murphy2012machine">(<a href="#ref-murphy2012machine" role="doc-biblioref"><strong>murphy2012machine?</strong></a>)</span>) for a discussion). Without diving further into this argument, let us now see how Bayesian logistic regression can be implemented.</p>
-<p>Unlike with linear regression there are no closed-form analytical solutions - not for our point estimate <span class="math inline">\(\hat{\mathbf{w}}\)</span> and much less for its posterior distribution <span class="math inline">\(p(\mathbf{w}|\mathcal{D})\)</span> <span class="citation" data-cites="murphy2022probabilistic">(<a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy 2022</a>)</span>. Fortunately though, there are many approximate solutions to this problem, some of which we will treat here.</p>
-<section id="laplace-approximation" class="level3">
-<h3 class="anchored" data-anchor-id="laplace-approximation">Laplace Approximation</h3>
-<p>One of the simplest approaches called <strong>Laplace Approximation</strong> is straight-forward to implement and can be summarized as follows:</p>
-<section id="step-1" class="level4">
-<h4 class="anchored" data-anchor-id="step-1">Step 1</h4>
-<p>Assume a Gaussian prior over model parameters, e.g.&nbsp;a spherical prior: let <span class="math inline">\(\mathbf{w}_0\)</span> denote the vector of prior means and <span class="math inline">\(\Sigma=\mathbf{H}_0^{-1}=\sigma^2\mathbf{I}\)</span> the prior covariance matrix. The <span class="math inline">\(\mathbf{H}_0^{-1}\)</span> indicates that in case of a multi-variate Gaussian distribution the covariance matrix is equivalent to the inverse Hessian. Formally, we assume:</p>
-<p><span class="math display">\[
+<div id="estimating-logistic-regression-the-bayesian-way" class="section level2">
+<h2>Estimating Logistic Regression the Bayesian way</h2>
+<p>Using the synthetic data <span class="math inline">\(\mathcal{D}\)</span> we will now estimate the logistic regression model <a href="#eq:logreg">(1)</a> that generates them. Estimation usually boils down to finding the vector of parameters <span class="math inline">\(\hat{\mathbf{w}}\)</span> that maximizes the likelihood of observing <span class="math inline">\(\mathcal{D}\)</span> under the assumed model. That estimate can then be used to compute predictions for some new unlabelled data set <span class="math inline">\(\mathcal{D}=\{x_m:m=1,...,M\}\)</span>. We are then typically interested in how accurate these model predictions are. This sums up how many automated decision-making systems operate in practice these days: for example, a company that is interested speeding up its recruitment process could train a binary classifier on historical data to automatically assign labels (<span class="math inline">\(\hat{y}_m \in \{\text{short-listed, rejected}\}\)</span>) to new applications <span class="math inline">\(\mathbf{x}_m\)</span>. Does this seem like a sound approach to automated decision-making? Haven’t we forgot anything? While I have mentioned prediction <strong>accuracy</strong> above, there was no mentioning of assessing the classifier’s <strong>uncertainty</strong> around its predictions. The predicted labels <span class="math inline">\(y_m\)</span> are merely point estimates based on the learned model parameters, which are random variables! Focusing merely on prediction accuracy and ignoring uncertainty altogether installs a false confidence in automated decision-making systems. Any <strong>trustworthy</strong> approach to learning from data should at the very least be transparent about its own uncertainty.</p>
+<p>How then, can we estimate uncertainty around model parameters and predictions? Frequentist methods for uncertainty quantification generally involve either closed-form solutions based on asymptotic theory or bootstrapping (see for example <a href="https://web.stanford.edu/class/archive/stats/stats200/stats200.1172/Lecture26.pdf">here</a> for the case of logistic regression). In Bayesian statistics and machine learning we instead use the <strong>posterior distribution</strong> over model parameters to quantify uncertainty. This approach to uncertainty quantification is known as <strong>Bayesian Inference</strong> because we treat model parameters in a Bayesian way: we make assumptions about their distribution based on <strong>prior</strong> knowledge or beliefs and update these beliefs in light of new evidence. The frequentist approach avoids the need for being explicit about prior beliefs, which in the past has sometimes been considered as <em>un</em>scientific. However, frequentist methods come with their own assumption and pitfalls (see for example <span class="citation">(<a href="#ref-murphy2012machine" role="doc-biblioref"><strong>murphy2012machine?</strong></a>)</span>) for a discussion). Without diving further into this argument, let us now see how Bayesian logistic regression can be implemented.</p>
+<div id="the-bayesian-setup" class="section level3">
+<h3>The Bayesian setup</h3>
+<p>The starting point for Bayesian Logistic Regression is <strong>Bayes’ Theorem</strong>:</p>
+<p><span class="math display" id="eq:posterior">\[
 \begin{equation} 
 \begin{aligned}
-&amp;&amp; p(\mathbf{w})&amp;\sim \mathcal{N} (\mathbf{w_0},\mathbf{H}_0^{-1}) \\
+&amp;&amp; p(\mathbf{w}|\mathcal{D})&amp;\propto p(\mathcal{D}|\mathbf{w})p(\mathbf{w}) \\
 \end{aligned}
-(\#eq:prior)
+\tag{2}
 \end{equation}
-\]</span></p>
-</section>
-<section id="step-2" class="level4">
-<h4 class="anchored" data-anchor-id="step-2">Step 2</h4>
-<p>Use an optimization algorithm to compute the <strong>maximum a posterior</strong> (MAP) estimate <span class="math inline">\(\hat{\mathbf{w}}\)</span> as well as an estimate of the posterior uncertainty. The latter is our main quantity of interest after all and in the Gaussian setting corresponds to inverse Hessian of the posterior likelihood. Since maximising the likelihood (or equivalently minimizing the negative log likelihood) in this setting is a convex optimization problem <span class="citation" data-cites="murphy2022probabilistic">(<a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy 2022</a>)</span> we have many efficient algorithms to choose from. Here we will implement one of the simplest: stochastic gradient descent (SGD). To avoid overfitting, we will also add a Ridge penalty that penalizes the <span class="math inline">\(\ell^2\)</span>-norm of our estimated parameters, i.e.&nbsp;<span class="math inline">\(||\mathbf{w}||_2^2=\mathbf{w}^T\mathbf{w}\)</span>. Let <span class="math inline">\(\lambda\)</span> denote a hyperparameter that governs how strictly we regularize and let <span class="math inline">\(\mu_n=\sigma(\mathbf{w}^T\mathbf{x}_n)\)</span>. Then all the important ingredients for our optimization problem can be summarized as follows:</p>
-<p><span class="math display">\[
+\]</span>
+Formally, this says that the posterior distribution of parameters <span class="math inline">\(\mathbf{w}\)</span> is proportional to the product of the likelihood of observing <span class="math inline">\(\mathcal{D}\)</span> given <span class="math inline">\(\mathbf{w}\)</span> and the prior density of <span class="math inline">\(\mathbf{w}\)</span>. Applied to our context this can intuitively be understood as follows: our posterior beliefs around <span class="math inline">\(\mathbf{w}\)</span> are formed by both our prior beliefs and the evidence we observe. Yet another way to this is that maximising <a href="#eq:posterior">(2)</a> with respect to <span class="math inline">\(\mathbf{w}\)</span> corresponds to maximum likelihood estimation regularized by prior beliefs.</p>
+<p>Under the assumption that individual label-feature pairs are <strong>independently</strong> and <strong>identically</strong> distributed, their joint likelihood is simply the product over their individual densities. The prior beliefs around <span class="math inline">\(\mathbf{w}\)</span> are at our discretion. In practice they may be derived from previous experiments. Here we will use a zero-mean spherical Gaussian prior for reasons explained further below. To sum this up we have</p>
+<p><span class="math display" id="eq:prior">\[
 \begin{equation} 
 \begin{aligned}
-&amp;&amp; \mathcal{L}(\mathbf{w})&amp;=- \frac{1}{N} \sum_{n=1}^{N} [y_n \log \mu_n + (1-y_n)\log (1-\mu_n)] + \lambda\mathbf{w}^T\mathbf{w} \\
-&amp;&amp; \nabla_{\mathbf{w}}\mathcal{L}(\mathbf{w})&amp;= \frac{1}{N} \sum_{n=1}^{N} (\mu_n-y_n) \mathbf{x}_n + \mathbf{H}_0^T(\mathbf{w}-\mathbf{w}_0)+2\lambda \mathbf{w} \\
-&amp;&amp; \nabla^2_{\mathbf{w}}\mathcal{L}(\mathbf{w})&amp;= \frac{1}{N} \sum_{n=1}^{N} \left[ \mu_n(1-\mu_n) \mathbf{x}_n \mathbf{x}_n^T \right]   + \mathbf{H}_0+2\lambda \mathbf{I} \\
+&amp;&amp; p(\mathcal{D}|\mathbf{w})&amp; \sim \prod_{n=1}^N p(y_n|\mathbf{x}_n;\mathbf{w})\\
+&amp;&amp; p(\mathbf{w})&amp; \sim \mathcal{N} \left( \mathbf{w} | \mathbf{w}_0, \Sigma_0 \right) \\
 \end{aligned}
-(\#eq:likeli)
+\tag{3}
 \end{equation}
 \]</span></p>
-</section>
-<section id="step-3" class="level4">
-<h4 class="anchored" data-anchor-id="step-3">Step 3</h4>
-<p>With the posterior distribution over parameters <span class="math inline">\(p(\mathbf{w}|\mathcal{D})\)</span> at hand we have the necessary ingredients to estimate the posterior predictive distribution <span class="math inline">\(p(y|\mathbf{x}, \mathcal{D})\)</span>. This estimated distribution can then be used to quantify the uncertainty around our predictions. …</p>
-</section>
-<section id="implementation-in-julia-from-scratch" class="level4">
-<h4 class="anchored" data-anchor-id="implementation-in-julia-from-scratch">Implementation in Julia (from scratch)</h4>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="sourceCode julia cell-code code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Packages</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="bu">LinearAlgebra</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Helper functions:</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">∑</span>(vector)<span class="op">=</span><span class="fu">sum</span>(vector)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Sigmoid function:</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">sigmoid</span>(w<span class="op">,</span>X)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">!</span><span class="fu">isa</span>(X<span class="op">,</span> <span class="dt">Matrix</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="fu">length</span>(<span class="fu">size</span>(X))<span class="op">&gt;</span><span class="fl">1</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            X <span class="op">=</span> X<span class="op">'</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">1</span> <span class="op">./</span> (<span class="fl">1</span> <span class="op">.+</span> <span class="fu">exp</span>.(<span class="op">-</span>X<span class="op">'</span>w))</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Gradient:</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">∇</span>(w<span class="op">,</span>w_0<span class="op">,</span>X<span class="op">,</span>y<span class="op">,</span>H_0<span class="op">,</span>λ)</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="fu">length</span>(y)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    μ <span class="op">=</span> <span class="fu">sigmoid</span>(w<span class="op">,</span>X)</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    Δw <span class="op">=</span> w<span class="op">-</span>w_0</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    g <span class="op">=</span> <span class="fl">1</span><span class="op">/</span>N <span class="op">*</span> <span class="fu">∑</span>((μ[n]<span class="op">-</span>y[n]) <span class="op">*</span> X[n<span class="op">,:</span>] <span class="cf">for</span> n<span class="op">=</span><span class="fl">1</span><span class="op">:</span>N) <span class="op">.+</span> H_0<span class="op">'</span>Δw <span class="op">.+</span> <span class="fl">2</span> <span class="op">*</span> λ <span class="op">*</span> w</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Normalalize gradient to length 1:</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># g = g / sqrt(g'g)</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> g</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Hessian:</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">∇∇</span>(X<span class="op">,</span>y<span class="op">,</span>H_0<span class="op">,</span>λ)</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="fu">length</span>(y)</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    μ <span class="op">=</span> <span class="fu">sigmoid</span>(w<span class="op">,</span>X)</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    Δw <span class="op">=</span> w<span class="op">-</span>w_0</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">1</span><span class="op">/</span>N <span class="op">.*</span> <span class="fu">∑</span>(μ[n] <span class="op">*</span> (<span class="fl">1</span><span class="op">-</span>μ[n]) <span class="op">*</span> X[n<span class="op">,:</span>] <span class="op">*</span> X[n<span class="op">,:</span>]<span class="op">'</span> <span class="cf">for</span> n<span class="op">=</span><span class="fl">1</span><span class="op">:</span>N) <span class="op">+</span> H_0 <span class="op">+</span> <span class="fu">UniformScaling</span>(<span class="fl">2</span> <span class="op">*</span> λ)</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Stochastic Gradient Descent:</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">sgd</span>(X<span class="op">,</span>y<span class="op">,</span>∇<span class="op">,</span>∇∇<span class="op">,</span>w_0<span class="op">,</span>H_0<span class="op">,</span>ρ_0<span class="op">=</span><span class="fl">1.0</span><span class="op">,</span>T<span class="op">=</span><span class="fl">1000</span><span class="op">,</span>λ<span class="op">=</span><span class="fl">1.0</span><span class="op">,</span>ε<span class="op">=</span><span class="fl">0.001</span>)</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialization:</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="fu">length</span>(y)</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> w_0</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    ρ <span class="op">=</span> ρ_0</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># w_avg &lt;- 1/n_iter * w # initialize average coefficients</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> <span class="fl">0</span> <span class="co"># iteration count</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> t<span class="op">&lt;</span>T</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>        n_t <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span>N)</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>        ρ <span class="op">=</span> ρ <span class="op">*</span> <span class="fu">exp</span>(<span class="op">-</span>ε<span class="op">*</span>t) <span class="co"># exponential decay</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> w <span class="op">-</span> ρ <span class="op">.*</span> <span class="fu">∇</span>(w<span class="op">,</span>w_0<span class="op">,</span>X[n_t<span class="op">,:</span>]<span class="op">',</span>y[n_t]<span class="op">,</span>H_0<span class="op">,</span>λ)</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        t <span class="op">+=</span> <span class="fl">1</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>with <span class="math inline">\(\mathbf{w}_0=\mathbf{0}\)</span> and <span class="math inline">\(\Sigma_0=\sigma^2\mathbf{I}\)</span>. Plugging this into Bayes’ rule we finally have</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;&amp; p(\mathbf{w}|\mathcal{D})&amp;\propto\prod_{n=1}^N \text{Ber}(y_n|\sigma(\mathbf{w}^T\mathbf{x}_n))\mathcal{N} \left( \mathbf{w} | \mathbf{w}_0, \Sigma_0 \right) \\
+\end{aligned}
+\]</span></p>
+<p>Unlike with linear regression there are no closed-form analytical solutions to estimating or maximising this posterior, but fortunately accurate approximations do exist <span class="citation">(<a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy 2022</a>)</span>. One of the simplest approaches called <strong>Laplace Approximation</strong> is straight-forward to implement and not computationally expensive. It can be shown that under the assumption of a Gaussian prior, the posterior of logistic regression is also approximately Gaussian: in particular, it approximately follows a Gaussian distribution centered around the <strong>maximum a posteriori</strong> (MAP) estimate <span class="math inline">\(\hat{\mathbf{w}}=\arg\max_{\mathbf{w}} p(\mathbf{w}|\mathcal{D})\)</span> and with a covariance matrix equal to the inverse Hessian evaluated at the mode <span class="math inline">\(\hat{\Sigma}=(\mathbf{H}(\hat{\mathbf{w}}))^{-1}\)</span>. With that in mind, finding <span class="math inline">\(\hat{\mathbf{w}}\)</span> seems like a natural next step.</p>
+<p>As a matter of fact there is a very straight-forward connection between</p>
 </div>
-</section>
-</section>
-<section id="mcmc-using-rstan" class="level3">
-<h3 class="anchored" data-anchor-id="mcmc-using-rstan">MCMC using <code>rstan</code></h3>
-<div class="cell" data-layout-align="center">
-
+<div id="estimating-coefficients" class="section level3">
+<h3>Estimating coefficients</h3>
+<p>Since maximising the posterior is a convex optimization problem <span class="citation">(<a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy 2022</a>)</span> we have many efficient algorithms to choose from. Here we will rely on stochastic gradient descent (SGD) with iterate averaging and an exponentially decaying step size. A much more natural and better choice would be to use a second-order method like Newton’s method, since we can actually derive the Hessian. But SGD is a) simple and b) universally applicable. In practice we do not maximize the likelihood <span class="math inline">\(p(\mathbf{w}|\mathcal{D})\)</span> directly, but instead minimize the negative log likelihood, which is equivalent and easier to implement. Let <span class="math inline">\(\mathbf{H}_0=\Sigma_0^{-1}\)</span> and <span class="math inline">\(\mu_n=\sigma(\mathbf{w}^T\mathbf{x}_n)\)</span>, then following a few simple derivation steps the negative log likelihood, its gradient and its Hessian can be summarized as follows:</p>
+<p><span class="math display" id="eq:likeli">\[
+\begin{equation} 
+\begin{aligned}
+&amp;&amp; \text{NLL}(\mathbf{w})&amp;=- \sum_{n=1}^{N} [y_n \log \mu_n + (1-y_n)\log (1-\mu_n)] + \frac{1}{2} (\mathbf{w}-\mathbf{w}_0)^T\mathbf{H}_0(\mathbf{w}-\mathbf{w}_0) \\
+&amp;&amp; \nabla_{\mathbf{w}}\text{NLL}(\mathbf{w})&amp;= \sum_{n=1}^{N} (\mu_n-y_n) \mathbf{x}_n + \mathbf{H}_0(\mathbf{w}-\mathbf{w}_0) \\
+&amp;&amp; \nabla^2_{\mathbf{w}}\text{NLL}(\mathbf{w})&amp;= \left[ \mu_n(1-\mu_n) \mathbf{x}_n \mathbf{x}_n^T \right] + \mathbf{H}_0\\
+\end{aligned}
+\tag{4}
+\end{equation}
+\]</span></p>
+<p>To understand how exactly the gradient and Hessian are derived see for example chapter 10 in <span class="citation"><a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy</a> (<a href="#ref-murphy2022probabilistic" role="doc-biblioref">2022</a>)</span>.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+<p>SIDENOTE</p>
+<p>Note how earlier I mentioned that maximising the posterior likelihood corresponds to a regularized version of MLE…</p>
 </div>
-<div class="cell" data-layout-align="center">
-
+<div id="posterior-predictive" class="section level3">
+<h3>Posterior predictive</h3>
+<p>With the posterior distribution over parameters <span class="math inline">\(p(\mathbf{w}|\mathcal{D})\)</span> at hand we have the necessary ingredients to estimate the posterior predictive distribution <span class="math inline">\(p(y=1|\mathbf{x}, \mathcal{D})\)</span>. This estimated distribution can then be used to quantify the uncertainty around our predictions. …</p>
 </div>
-</section>
-</section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
-<p>For a great reference regarding the theory covered in this post see <span class="citation" data-cites="murphy2022probabilistic">Murphy (<a href="#ref-murphy2022probabilistic" role="doc-biblioref">2022</a>)</span> (chapters 4 and 10) and <span class="citation" data-cites="bishop2006pattern">Bishop (<a href="#ref-bishop2006pattern" role="doc-biblioref">2006</a>)</span> (chapter 8). The section on <code>rstan</code> draws heavily on a great <a href="https://www.r-bloggers.com/2020/02/bayesian-logistic-regression-with-stan/">blog post</a> and also the <a href="https://mc-stan.org/docs/2_21/stan-users-guide/index.html#overview">Stan User’s Guide</a>.</p>
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
-<div id="ref-bishop2006pattern" class="csl-entry" role="doc-biblioentry">
+</div>
+<div id="implementation-in-julia-from-scratch" class="section level2">
+<h2>Implementation in Julia (from scratch)</h2>
+<!-- ### MCMC using `rstan` -->
+<!-- Now let us see if wee can improve upon the Laplace Approximation by instead relying on Monte Carlo methods.  -->
+<!-- ```{r, echo=FALSE} -->
+<!-- library(rstan) -->
+<!-- options(mc.cores = parallel::detectCores()) -->
+<!-- rstan_options(auto_write = TRUE) -->
+<!-- ``` -->
+<!-- ```{r, message=FALSE, eval=FALSE} -->
+<!-- sigma <- 10 # uncertainty around prior -->
+<!-- n_iter <- 100 # default is 2000 -->
+<!-- model_data <- list( -->
+<!--   N = nrow(X), -->
+<!--   K = ncol(X), -->
+<!--   X = as.matrix(X), -->
+<!--   y = y, -->
+<!--   sigma = sigma -->
+<!-- ) -->
+<!-- fit <- stan( -->
+<!--   file = 'logit.stan',  -->
+<!--   data = model_data, -->
+<!--   iter = n_iter, -->
+<!--   seed = seed -->
+<!-- ) -->
+<!-- ``` -->
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>For a great reference regarding the theory covered in this post see <span class="citation"><a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy</a> (<a href="#ref-murphy2022probabilistic" role="doc-biblioref">2022</a>)</span> (chapters 4 and 10) and <span class="citation"><a href="#ref-bishop2006pattern" role="doc-biblioref">Bishop</a> (<a href="#ref-bishop2006pattern" role="doc-biblioref">2006</a>)</span> (chapter 8). The section on <code>rstan</code> draws heavily on a great <a href="https://www.r-bloggers.com/2020/02/bayesian-logistic-regression-with-stan/">blog post</a> and also the <a href="https://mc-stan.org/docs/2_21/stan-users-guide/index.html#overview">Stan User’s Guide</a>.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-bishop2006pattern" class="csl-entry">
 Bishop, Christopher M. 2006. <em>Pattern Recognition and Machine Learning</em>. springer.
 </div>
-<div id="ref-murphy2022probabilistic" class="csl-entry" role="doc-biblioentry">
+<div id="ref-murphy2022probabilistic" class="csl-entry">
 Murphy, Kevin P. 2022. <em>Probabilistic Machine Learning: An Introduction</em>. MIT Press.
 </div>
 </div>
-</section>
-<script type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
-    }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    setTimeout(function() {
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    window.tippy(el, {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
-    }); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
-      });
-      return popup.innerHTML;
-    });
-  }
-});
-</script>
-</main>
-</div> <!-- /main column -->
-</div> <!-- /row -->
-</div> <!-- /container fluid -->
-
-
-</body></html>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Note that the author works with the negative log likelihood scaled by the sample size<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>

@@ -65,7 +65,10 @@ end
 function ∇∇(X,y,w,H_0)
     N = length(y)
     μ = sigmoid(w,X)
-    return ∑(μ[n] * (1-μ[n]) * X[n,:] * X[n,:]' for n=1:N) + H_0
+    # H = ∑(μ[n] * (1-μ[n]) * X[n,:] * X[n,:]' for n=1:N)
+    S = Diagonal(μ .* (1 .- μ))
+    H = X'S*X
+    return H + H_0
 end
 
 # Stochastic Gradient Descent:
