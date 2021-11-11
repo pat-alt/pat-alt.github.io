@@ -248,7 +248,7 @@ N = length(y);
 X = Matrix(df[:,Not(:y)]);
 # X = [ones(N) X]; # add for constant
 d = size(X)[2]; # number of features
-σ = 10; # prior uncertainty
+σ = 3; # prior uncertainty
 w_0 = zeros(d);
 H_0 = UniformScaling(1/(σ^2));
 ```

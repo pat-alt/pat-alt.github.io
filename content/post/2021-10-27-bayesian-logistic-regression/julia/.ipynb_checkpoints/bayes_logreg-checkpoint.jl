@@ -58,35 +58,18 @@ function ∇(w,w_0,X,y,H_0)
     N = length(y)
     μ = sigmoid(w,X)
     Δw = w-w_0
-    return ∑((μ[n]-y[n]) * X[n,:] for n=1:N) + H_0*Δw
+    g = ∑((μ[n]-y[n]) * X[n,:] for n=1:N)
+    return g + H_0*Δw
 end
 
 # Hessian:
-function ∇∇(X,y,w,H_0)
+function ∇∇(w,w_0,X,y,H_0)
     N = length(y)
     μ = sigmoid(w,X)
     # H = ∑(μ[n] * (1-μ[n]) * X[n,:] * X[n,:]' for n=1:N)
     S = Diagonal(μ .* (1 .- μ))
     H = X'S*X
     return H + H_0
-end
-
-# Stochastic Gradient Descent:
-function sgd(X,y,∇,w_0,H_0,ρ_0=1.0,T=10000,ε=0.001)
-    # Initialization:
-    N = length(y)
-    w_t = w_0 # initial parameters (prior mode)
-    w_map = 1/T * w_t # iterate averaging
-    ρ = ρ_0 # initial step size
-    t = 0 # iteration count
-    while t<T
-        n_t = rand(1:N) # sample minibatch (single sample)
-        ρ = ρ * exp(-ε*t) # exponential decay 
-        w_t = w_t - ρ .* ∇(w_t,w_0,X[n_t,:]',y[n_t],H_0) # update mode
-        w_map += 1/T * w_t # iterate averaging
-        t += 1 # update count
-    end
-    return w_map
 end
 
 # Main function:
