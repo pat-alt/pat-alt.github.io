@@ -50,7 +50,7 @@ invisible(
 ## Ground truth
 
 ```{r}
-w <- as.matrix(c(2,-4))
+w <- as.matrix(c(0,0.5,-1))
 seed <- 2021
 ```
 
@@ -69,7 +69,11 @@ where $\sigma(a)=1/(1+e^{-a})$ is the **sigmoid** or **logit** function [@murphy
 
 ```{r}
 logit <- function(w,X) {
-  X <- as.matrix(X)
+  if (dim(X)[2]!=dim(w)[1]) {
+    X <- cbind(1,as.matrix(X)) # add 1 for constant/bias
+  } else {
+    X <- as.matrix(X)
+  }
   logit <- 1 / (1 + exp(-1 * (X %*% w)))
   return(logit)
 }
@@ -119,8 +123,6 @@ y <- rbinom(n,1,p)
 
 ```{r density, fig.height=4, fig.width=9, fig.cap="Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty's attribute values."}
 dt <- data.table(y,X)
-# dt[,V1:=V1/max(V1)]
-# dt[,V2:=V2/max(V2)]
 fwrite(dt, "data/cats_dogs.csv")
 dt_plot <- copy(dt)
 dt_plot <- melt(dt_plot, id.vars = "y")
@@ -226,10 +228,11 @@ knitr::opts_chunk$set(eval=TRUE)
 
 ```{julia}
 include("julia/bayes_logreg.jl");
+include("julia/optimization.jl");
 using CSV;
 using DataFrames;
-df = CSV.read("data/cats_dogs_test.csv", DataFrame);
-# rename!(df, [:V1, :V2] .=> [:x_1, :x_2]);
+df = CSV.read("data/cats_dogs.csv", DataFrame);
+rename!(df, [:V1, :V2] .=> [:x_1, :x_2]);
 ```
 
 ```{julia, include=F}
@@ -246,21 +249,18 @@ p = ggplot() +
 y = df[:,:y];
 N = length(y);
 X = Matrix(df[:,Not(:y)]);
-# X = [ones(N) X]; # add for constant
+X = [ones(N) X]; # add for constant
 d = size(X)[2]; # number of features
-σ = 3; # prior uncertainty
+σ = 10; # prior uncertainty
 w_0 = zeros(d);
 H_0 = UniformScaling(1/(σ^2));
 ```
 
 ```{julia}
-T = 10000;
-sgd_options = (
-    ρ_0=1.0,
-    T=T,
-    ε=0.1/T
-);
-mod = bayes_logreg(X,y,w_0,H_0,sgd_options...);
+model = bayes_logreg(X,y,w_0,H_0,nll,∇,∇∇);
+w_map = model.μ;
+w_map
+model.Σ
 ```
 
 ```{julia}
@@ -270,18 +270,10 @@ N_grid = size(W)[1];
 ```
 
 ```{julia}
-y_probit = posterior_predictive(mod, W);
+y_probit = posterior_predictive(model, hcat(ones(N_grid), W));
 df_grid = DataFrame(hcat(y_probit,W), :auto);
 p + stat_contour(data=df_grid, aes(x = :x2, y = :x3, z = :x1), bins=30) 
 ```
-
-```{julia}
-mod.μ
-mod.Σ
-∇∇(X,y,mod.μ,H_0)
-H_0
-```
-
 
 
 <!-- ### MCMC using `rstan` -->
