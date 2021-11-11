@@ -223,7 +223,7 @@ With the posterior distribution over parameters $p(\mathbf{w}|\mathcal{D})$ at h
 We now have all the necessary ingredients to code Bayesian Logistic Regression up from scratch. While in practice we would usually want to rely on existing packages that have been properly tested, I often find it very educative and rewarding to program algorithms from the bottom up. You will see that Julia's syntax so closely resembles the mathematical formulas we have seen above, that going from maths to code is incredibly straight-forward. Seeing those formulas and algorithms then actually doing their magic is quite fun! The code chunk below, for example, shows the implementation of the loss function and its derivatives from \@ref(eq:likeli) above. Take a moment to go through the code line-by-line and try to understand what it does. Isn't it amazing how closely the code resembles the actual equations? 
 
 ```{julia, eval=FALSE, echo=T}
-# Loss function:
+# Loss:
 function 𝓁(w,w_0,H_0,X,y)
     N = length(y)
     D = size(X)[2]
