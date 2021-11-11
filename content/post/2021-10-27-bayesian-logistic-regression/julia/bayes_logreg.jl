@@ -35,7 +35,7 @@ function sigmoid(w,X)
 end
 
 # Negative log likelihood
-function nll(w,w_0,H_0,X,y)
+function 𝓁(w,w_0,H_0,X,y)
     N = length(y)
     D = size(X)[2]
     μ = sigmoid(w,X)
@@ -44,7 +44,7 @@ function nll(w,w_0,H_0,X,y)
 end
 
 # Negative log likelihood (unconstrained)
-function nll_(w,w_0,H_0,X,y)
+function 𝓁_(w,w_0,H_0,X,y)
     N = length(y)
     D = size(X)[2]
     #a = clamp.(X*w, -8.0, 8.0)
@@ -54,7 +54,7 @@ function nll_(w,w_0,H_0,X,y)
 end
 
 # Gradient:
-function ∇(w,w_0,H_0,X,y)
+function ∇𝓁(w,w_0,H_0,X,y)
     N = length(y)
     μ = sigmoid(w,X)
     Δw = w-w_0
@@ -63,7 +63,7 @@ function ∇(w,w_0,H_0,X,y)
 end
 
 # Hessian:
-function ∇∇(w,w_0,H_0,X,y)
+function ∇∇𝓁(w,w_0,H_0,X,y)
     N = length(y)
     μ = sigmoid(w,X)
     H = ∑(μ[n] * (1-μ[n]) * X[n,:] * X[n,:]' for n=1:N)
@@ -75,9 +75,9 @@ struct BayesLogreg
     μ::Vector{Float64}
     Σ::Matrix{Float64}
 end
-function bayes_logreg(X,y,w_0,H_0,nll,∇,∇∇,optim_options...)
+function bayes_logreg(X,y,w_0,H_0,𝓁,∇𝓁,∇∇𝓁,optim_options...)
     # Model:
-    w_map, H_map = newton(nll, w_0, ∇, ∇∇, (w_0=w_0, H_0=H_0, X=X, y=y), optim_options...) # fit the model (find mode of posterior distribution)
+    w_map, H_map = newton(𝓁, w_0, ∇𝓁, ∇∇𝓁, (w_0=w_0, H_0=H_0, X=X, y=y), optim_options...) # fit the model (find mode of posterior distribution)
     Σ_map = inv(H_map) # inverse Hessian at the mode
     Σ_map = Symmetric(Σ_map) # to ensure matrix is Hermitian (i.e. avoid rounding issues)
     # Output:

@@ -5,7 +5,7 @@ date: '2021-10-27'
 slug: bayesian-logistic-regression
 categories: [Data Science]
 tags: [bayes, logit]
-subtitle: ''
+subtitle: From scratch in Julia Language
 summary: ''
 authors: []
 lastmod: '2021-10-27T08:57:47+02:00'
@@ -47,7 +47,7 @@ invisible(
 )
 ```
 
-## Ground truth
+## The ground truth
 
 ```{r}
 w <- as.matrix(c(0,0.5,-1))
@@ -149,13 +149,13 @@ ggplot(data=dt, aes(x=V1, y=V2, colour=factor(y))) +
   )
 ```
 
-## Estimating Logistic Regression the Bayesian way
+## The maths
 
 Using the synthetic data $\mathcal{D}$ we will now estimate the logistic regression model \@ref(eq:logreg) that generates them. Estimation usually boils down to finding the vector of parameters $\hat{\mathbf{w}}$ that maximizes the likelihood of observing $\mathcal{D}$ under the assumed model. That estimate can then be used to compute predictions for some new unlabelled data set $\mathcal{D}=\{x_m:m=1,...,M\}$. We are then typically interested in how accurate these model predictions are. This sums up how many automated decision-making systems operate in practice these days: for example, a company that is interested speeding up its recruitment process could train a binary classifier on historical data to automatically assign labels ($\hat{y}_m \in \{\text{short-listed, rejected}\}$) to new applications $\mathbf{x}_m$. Does this seem like a sound approach to automated decision-making? Haven't we forgot anything? While I have mentioned prediction **accuracy** above, there was no mentioning of assessing the classifier's **uncertainty** around its predictions. The predicted labels $y_m$ are merely point estimates based on the learned model parameters, which are random variables! Focusing merely on prediction accuracy and ignoring uncertainty altogether installs a false confidence in automated decision-making systems. Any **trustworthy** approach to learning from data should at the very least be transparent about its own uncertainty. 
 
 How then, can we estimate uncertainty around model parameters and predictions? Frequentist methods for uncertainty quantification generally involve either closed-form solutions based on asymptotic theory or bootstrapping (see for example [here](https://web.stanford.edu/class/archive/stats/stats200/stats200.1172/Lecture26.pdf) for the case of logistic regression). In Bayesian statistics and machine learning we instead use the **posterior distribution** over model parameters to quantify uncertainty. This approach to uncertainty quantification is known as **Bayesian Inference** because we treat model parameters in a Bayesian way: we make assumptions about their distribution based on **prior** knowledge or beliefs and update these beliefs in light of new evidence. The frequentist approach avoids the need for being explicit about prior beliefs, which in the past has sometimes been considered as *un*scientific. However, frequentist methods come with their own assumption and pitfalls (see for example @murphy2012machine) for a discussion). Without diving further into this argument, let us now see how Bayesian logistic regression can be implemented.
 
-### The Bayesian setup
+### Problem setup
 
 The starting point for Bayesian Logistic Regression is **Bayes' Theorem**:
 
@@ -193,87 +193,68 @@ $$
 
 Unlike with linear regression there are no closed-form analytical solutions to estimating or maximising this posterior, but fortunately accurate approximations do exist [@murphy2022probabilistic]. One of the simplest approaches called **Laplace Approximation** is straight-forward to implement and not computationally expensive. It can be shown that under the assumption of a Gaussian prior, the posterior of logistic regression is also approximately Gaussian: in particular, it approximately follows a Gaussian distribution centered around the **maximum a posteriori** (MAP) estimate $\hat{\mathbf{w}}=\arg\max_{\mathbf{w}} p(\mathbf{w}|\mathcal{D})$ and with a covariance matrix equal to the inverse Hessian evaluated at the mode $\hat{\Sigma}=(\mathbf{H}(\hat{\mathbf{w}}))^{-1}$. With that in mind, finding $\hat{\mathbf{w}}$ seems like a natural next step.
 
-As a matter of fact there is a very straight-forward connection between 
+### Solving the problem
 
-### Estimating coefficients
-
-Since maximising the posterior is a convex optimization problem [@murphy2022probabilistic] we have many efficient algorithms to choose from. Here we will rely on stochastic gradient descent (SGD) with iterate averaging and an exponentially decaying step size. A much more natural and better choice would be to use a second-order method like Newton's method, since we can actually derive the Hessian. But SGD is a) simple and b) universally applicable. In practice we do not maximize the likelihood $p(\mathbf{w}|\mathcal{D})$ directly, but instead minimize the negative log likelihood, which is equivalent and easier to implement. Let $\mathbf{H}_0=\Sigma_0^{-1}$ and $\mu_n=\sigma(\mathbf{w}^T\mathbf{x}_n)$, then following a few simple derivation steps the negative log likelihood, its gradient and its Hessian can be summarized as follows:
+In practice we do not maximize the likelihood $p(\mathbf{w}|\mathcal{D})$ directly. Instead we minimize the negative log likelihood, which is equivalent and easier to implement. In \@ref(eq:likeli) below I have denoted the negative log likelihood as $\ell(\mathbf{w})$ indicating that this is the **loss function** we aim to minimize. The following two lines in \@ref(eq:likeli) show the gradient and Hessian - so the first- and second-order derivatives of $\ell$ with respect to $\mathbf{w}$ - where $\mathbf{H}_0=\Sigma_0^{-1}$ and $\mu_n=\sigma(\mathbf{w}^T\mathbf{x}_n)$. To understand how exactly the gradient and Hessian are derived see for example chapter 10 in @murphy2022probabilistic.^[Note that the author works with the negative log likelihood scaled by the sample size]. 
 
 $$
 \begin{equation} 
 \begin{aligned}
-&& \text{NLL}(\mathbf{w})&=- \sum_{n=1}^{N} [y_n \log \mu_n + (1-y_n)\log (1-\mu_n)] + \frac{1}{2} (\mathbf{w}-\mathbf{w}_0)^T\mathbf{H}_0(\mathbf{w}-\mathbf{w}_0) \\
-&& \nabla_{\mathbf{w}}\text{NLL}(\mathbf{w})&= \sum_{n=1}^{N} (\mu_n-y_n) \mathbf{x}_n + \mathbf{H}_0(\mathbf{w}-\mathbf{w}_0) \\
-&& \nabla^2_{\mathbf{w}}\text{NLL}(\mathbf{w})&= \left[ \mu_n(1-\mu_n) \mathbf{x}_n \mathbf{x}_n^T \right] + \mathbf{H}_0\\
+&& \ell(\mathbf{w})&=- \sum_{n=1}^{N} [y_n \log \mu_n + (1-y_n)\log (1-\mu_n)] + \frac{1}{2} (\mathbf{w}-\mathbf{w}_0)^T\mathbf{H}_0(\mathbf{w}-\mathbf{w}_0) \\
+&& \nabla_{\mathbf{w}}\ell(\mathbf{w})&= \sum_{n=1}^{N} (\mu_n-y_n) \mathbf{x}_n + \mathbf{H}_0(\mathbf{w}-\mathbf{w}_0) \\
+&& \nabla^2_{\mathbf{w}}\ell(\mathbf{w})&= \sum_{n=1}^{N} (\mu_n-y_n) \left( \mu_n(1-\mu_n) \mathbf{x}_n \mathbf{x}_n^T \right) + \mathbf{H}_0\\
 \end{aligned}
 (\#eq:likeli)
 \end{equation}
 $$
 
-To understand how exactly the gradient and Hessian are derived see for example chapter 10 in @murphy2022probabilistic.^[Note that the author works with the negative log likelihood scaled by the sample size]. 
-
 SIDENOTE 
 
 Note how earlier I mentioned that maximising the posterior likelihood corresponds to a regularized version of MLE...
+
+Since minimizing this loss function is a convex optimization problem we have many efficient algorithms to choose from in order to solve this problem. With the Hessian at hand it seems natural to use a second-order method, because incorporating information about the curvature of the loss function generally leads to faster convergence. Here we will implement Newton's method in line with the presentation in chapter 8 of @murphy2022probabilistic. 
 
 ### Posterior predictive
 
 With the posterior distribution over parameters $p(\mathbf{w}|\mathcal{D})$ at hand we have the necessary ingredients to estimate the posterior predictive distribution $p(y=1|\mathbf{x}, \mathcal{D})$. This estimated distribution can then be used to quantify the uncertainty around our predictions. ...
 
-## Implementation in Julia (from scratch)
+## The code
 
-```{r}
-knitr::opts_chunk$set(eval=TRUE)
+We now have all the necessary ingredients to code Bayesian Logistic Regression up from scratch. While in practice we would usually want to rely on existing packages that have been properly tested, I often find it very educative and rewarding to program algorithms from the bottom up. You will see that Julia's syntax so closely resembles the mathematical formulas we have seen above, that going from maths to code is incredibly straight-forward. Seeing those formulas and algorithms then actually doing their magic is quite fun! The code chunk below, for example, shows the implementation of the loss function and its derivatives from \@ref(eq:likeli) above. Take a moment to go through the code line-by-line and try to understand what it does. Isn't it amazing how closely the code resembles the actual equations? 
+
+```{julia, eval=FALSE, echo=T}
+# Loss function:
+function 𝓁(w,w_0,H_0,X,y)
+    N = length(y)
+    D = size(X)[2]
+    μ = sigmoid(w,X)
+    Δw = w-w_0
+    l = - ∑( y[n] * log(μ[n]) + (1-y[n]) * log(1-μ[n]) for n=1:N) + 1/2 * Δw'H_0*Δw
+    return l
+end
+
+# Gradient:
+function ∇𝓁(w,w_0,H_0,X,y)
+    N = length(y)
+    μ = sigmoid(w,X)
+    Δw = w-w_0
+    g = ∑((μ[n]-y[n]) * X[n,:] for n=1:N)
+    return g + H_0*Δw
+end
+    
+# Hessian:
+function ∇∇𝓁(w,w_0,H_0,X,y)
+    N = length(y)
+    μ = sigmoid(w,X)
+    H = ∑(μ[n] * (1-μ[n]) * X[n,:] * X[n,:]' for n=1:N)
+    return H + H_0
+end
 ```
 
-```{julia}
-include("julia/bayes_logreg.jl");
-include("julia/optimization.jl");
-using CSV;
-using DataFrames;
-df = CSV.read("data/cats_dogs.csv", DataFrame);
-rename!(df, [:V1, :V2] .=> [:x_1, :x_2]);
-```
+Aside from the optimization routine this is essentially all there is to coding up Bayesian Logistic Regression from scratch in Julia Language. If you are curious to see the full source code in detail you can check out this [interactive notebook](https://colab.research.google.com/github/pat-alt/pat-alt.github.io/blob/logitbayes/content/post/2021-10-27-bayesian-logistic-regression/toy_example.ipynb). Now let us finally turn back to our synthetic data and see how Bayesian Logistic Regression can help us understand the uncertainty around our model predictions.
 
-```{julia, include=F}
-# Loading library
-using RCall
-@rlibrary ggplot2
-p = ggplot() +
-  geom_point(data=df, aes(x=:x_1, y=:x_2, color=R"factor($df$y)")) +
-  scale_color_discrete(name="Labels:") +
-  theme_bw()
-```
+## The estimates
 
-```{julia, include=F}
-y = df[:,:y];
-N = length(y);
-X = Matrix(df[:,Not(:y)]);
-X = [ones(N) X]; # add for constant
-d = size(X)[2]; # number of features
-σ = 10; # prior uncertainty
-w_0 = zeros(d);
-H_0 = UniformScaling(1/(σ^2));
-```
-
-```{julia}
-model = bayes_logreg(X,y,w_0,H_0,nll,∇,∇∇);
-w_map = model.μ;
-w_map
-model.Σ
-```
-
-```{julia}
-step = 1;
-W = expandgrid((minimum(df.x_1)-50):step:(maximum(df.x_1)+50),(minimum(df.x_2)-50):step:(maximum(df.x_2)+50));
-N_grid = size(W)[1];
-```
-
-```{julia}
-y_probit = posterior_predictive(model, hcat(ones(N_grid), W));
-df_grid = DataFrame(hcat(y_probit,W), :auto);
-p + stat_contour(data=df_grid, aes(x = :x2, y = :x3, z = :x1), bins=30) 
-```
 
 
 <!-- ### MCMC using `rstan` -->
