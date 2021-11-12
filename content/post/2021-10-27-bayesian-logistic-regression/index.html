@@ -36,13 +36,7 @@ bibliography: ../../../bib.bib
 \end{equation}
 \]</span></p>
 <p>where <span class="math inline">\(\sigma(a)=1/(1+e^{-a})\)</span> is the <strong>sigmoid</strong> or <strong>logit</strong> function <span class="citation">(<a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy 2022</a>)</span>. We let <span class="math inline">\(\mathbf{w}=\begin{bmatrix} 0 \\ 0.5 \\ -1 \\ \end{bmatrix}\)</span> define the true coefficients.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:density"></span>
-<img src="{{< blogdown/postref >}}index_files/figure-html/density-1.png" alt="Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty's attribute values." width="864" />
-<p class="caption">
-Figure 1: Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty’s attribute values.
-</p>
-</div>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="480" style="display: block; margin: auto;" /></p>
 </div>
 <div id="the-maths" class="section level2">
 <h2>The maths</h2>
@@ -133,6 +127,8 @@ end</code></pre>
 </div>
 <div id="the-estimates" class="section level2">
 <h2>The estimates</h2>
+<p><img src="www/posterior.png" width="750" style="display: block; margin: auto;" /></p>
+<p><img src="www/predictive.png" width="750" style="display: block; margin: auto;" /></p>
 <!-- ### MCMC using `rstan` -->
 <!-- Now let us see if wee can improve upon the Laplace Approximation by instead relying on Monte Carlo methods.  -->
 <!-- ```{r, echo=FALSE} -->
