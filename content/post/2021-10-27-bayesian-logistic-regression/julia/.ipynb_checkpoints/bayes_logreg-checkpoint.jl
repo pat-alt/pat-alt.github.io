@@ -1,21 +1,6 @@
 # Packages
 using LinearAlgebra
 
-# Helper functions:
-∑(vector)=sum(vector)
-
-# Compute cartesian product over two vectors:
-function expandgrid(x,y)
-    N = length(x) * length(y)
-    grid = Iterators.product(x,y) |>
-        Iterators.flatten |>
-        collect |>
-        z -> reshape(z, (2,N)) |>
-        transpose |>
-        Matrix
-    return grid
-end
-
 # Sigmoid function:
 function sigmoid(w,X)
     trunc = 8.0 # truncation to avoid numerical over/underflow
