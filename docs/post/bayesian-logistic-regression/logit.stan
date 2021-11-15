@@ -1,31 +1,34 @@
-//
-// This Stan program defines a simple model, with a
-// vector of values 'y' modeled as normally distributed
-// with mean 'mu' and standard deviation 'sigma'.
-//
-// Learn more about model development with Stan at:
-//
-//    http://mc-stan.org/users/interfaces/rstan.html
-//    https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started
-//
-
-// The input data is a vector 'y' of length 'N'.
+// The input data.
 data {
-  int<lower=0> N;
-  vector[N] y;
+  int<lower=0> N;   // number of samples
+  int<lower=0> K;   // number of predictors
+  matrix[N, K] X;   // predictor matrix
+  int<lower=0,upper=1> y[N]; // labels
+  real<lower=0> sigma; // standard deviation of prior
 }
 
-// The parameters accepted by the model. Our model
-// accepts two parameters 'mu' and 'sigma'.
+// The parameters accepted by the model.
 parameters {
-  real mu;
-  real<lower=0> sigma;
+  real alpha;       // intercept
+  vector[K] beta;   // coefficients for predictors
 }
 
-// The model to be estimated. We model the output
-// 'y' to be normally distributed with mean 'mu'
-// and standard deviation 'sigma'.
+// The model to be estimated.
 model {
-  y ~ normal(mu, sigma);
+
+  y ~ bernoulli_logit(alpha + X * beta);
+
+  // Prior models for the unobserved parameters
+  alpha ~ normal(0, 1);
+  for (k in 1:K)
+    beta[k] ~ normal(0, sigma);
+}
+
+// Other quantities.
+generated quantities {
+
+  // Using the fitted model for probabilistic predicition
+  vector[N] y_hat = inv_logit(alpha + X * beta);
+
 }
 

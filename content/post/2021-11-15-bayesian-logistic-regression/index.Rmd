@@ -3,7 +3,7 @@ title: Bayesian Logistic Regression
 author: Patrick Altmeyer
 date: '2021-11-15'
 slug: bayesian-logistic-regression
-categories: [Data Science]
+categories: [Trustworthy AI]
 tags: [bayes, logit, julialang]
 subtitle: From scratch in Julia Language
 summary: 'An introduction to Bayesian Logistic Regression from the bottom up with examples in Julia language.'
@@ -46,48 +46,6 @@ invisible(
   )
 )
 ```
-
-
-<p style="float:right">
-<iframe src="https://giphy.com/embed/l0amJzVHIAfl7jMDos" width="200" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
-<!-- <p><a href="https://giphy.com/gifs/theoffice-the-office-tv-cafe-disco-l0amJzVHIAfl7jMDos"></a></p> -->
-</p>
-
-> Precision and Recall, 
->
-> ROC-AUC, 
->
-> Root Mean Squared Error,
->
-> Accuracy!!!
-
-<p style="float:right">
-<iframe src="https://giphy.com/embed/IwAZ6dvvvaTtdI8SD5" width="200" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
-<!-- <p><a href="https://giphy.com/gifs/theoffice-the-office-tv-michaels-birthday-IwAZ6dvvvaTtdI8SD5"></a></p> -->
-</p>
-
-> Train and test split, 
->
-> just wait and you'll see,
->
-> cross-validation,
->
-> top accuracy!!!
-
-<p style="float:right">
-<iframe src="https://giphy.com/embed/BY8ORoRpnJDXeBNwxg" width="200" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
-<!-- <p><a href="https://giphy.com/gifs/theoffice-BY8ORoRpnJDXeBNwxg"></a></p> -->
-</p>
-
-> Deploy model in practice,
->
-> complete travesty :(
->
-> Oh no, you forgot, 
->
-> there is uncertainty.
-
-## Uncertainty
 
 If you've ever looked for evaluation metrics to assess model accuracy, chances are that you found many (too many?). Accuracy is in some sense the holy grail of prediction so it's not at all surprising that the machine learning community spends a lot time thinking about it. In a world where more and more high-stake decisions are being automated, model accuracy is in fact a very valid concern. But does the current recipe for model evaluation seem like a sound approach to automated decision-making? Haven't we forgot anything? 
 
@@ -307,7 +265,7 @@ We now have all the necessary ingredients to code Bayesian Logistic Regression u
 
 <script src="https://gist.github.com/pat-alt/cc53a11470e4fb736f24bb6de2393f54.js"></script>
 
-Aside from the optimization routine this is essentially all there is to coding up Bayesian Logistic Regression from scratch in Julia Language. If you are curious to see the full source code in detail you can check out this [interactive notebook](https://colab.research.google.com/github/pat-alt/pat-alt.github.io/blob/logitbayes/content/post/2021-10-27-bayesian-logistic-regression/julia_implementation.ipynb). Now let us finally turn back to our synthetic data and see how Bayesian Logistic Regression can help us understand the uncertainty around our model predictions.
+Aside from the optimization routine this is essentially all there is to coding up Bayesian Logistic Regression from scratch in Julia Language. If you are curious to see the full source code in detail you can check out this [interactive notebook](https://colab.research.google.com/github/pat-alt/pat-alt.github.io/blob/main/content/post/2021-11-15-bayesian-logistic-regression/julia_implementation.ipynb). Now let us finally turn back to our synthetic data and see how Bayesian Logistic Regression can help us understand the uncertainty around our model predictions.
 
 ## The estimates
 

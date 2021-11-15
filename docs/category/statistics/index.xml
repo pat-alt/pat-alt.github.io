@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Statistics | Patrick Altmeyer</title>
+    <link>https://www.paltmeyer.com/category/statistics/</link>
+      <atom:link href="https://www.paltmeyer.com/category/statistics/index.xml" rel="self" type="application/rss+xml" />
+    <description>Statistics</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Patrick Altmeyer</copyright><lastBuildDate>Wed, 10 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://www.paltmeyer.com/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_512x512_fill_lanczos_center_3.png</url>
+      <title>Statistics</title>
+      <link>https://www.paltmeyer.com/category/statistics/</link>
+    </image>
+    
+    <item>
+      <title>Optimal subsampling</title>
+      <link>https://www.paltmeyer.com/post/2021-03-10-optimal-subsampling/</link>
+      <pubDate>Wed, 10 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://www.paltmeyer.com/post/2021-03-10-optimal-subsampling/</guid>
+      <description>
+&lt;script src=&#34;https://www.paltmeyer.com/post/2021-03-10-optimal-subsampling/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#optimal-subsampling&#34;&gt;Optimal subsampling&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#bias-variance-tradeoff&#34;&gt;Bias-variance tradeoff&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#subsampling&#34;&gt;Subsampling methods&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#ols-and-wls&#34;&gt;OLS and WLS&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#uniform-subsampling-unif&#34;&gt;Uniform subsampling (UNIF)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#basic-leveraging-blev&#34;&gt;Basic leveraging (BLEV)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#predictor-length-sampling-pl&#34;&gt;Predictor-length sampling (PL)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#comparison-of-methods&#34;&gt;Comparison of methods&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#lin-reg&#34;&gt;Linear regression model&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#a-review-of-zhu2015optimal&#34;&gt;A review of &lt;span class=&#34;citation&#34;&gt;&lt;span&gt;Zhu et al.&lt;/span&gt; (&lt;span&gt;2015&lt;/span&gt;)&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#computational-performance&#34;&gt;Computational performance&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#further-work&#34;&gt;Further work&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#references&#34;&gt;References&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#appendix&#34;&gt;Appendix&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#app-wls&#34;&gt;Weighted least-squares&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#app-svd&#34;&gt;From SVD to leverage scores&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#app-pl&#34;&gt;From optimal to prediction-length subsampling&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#app-dens&#34;&gt;Synthetic data&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#app-sin&#34;&gt;Subsampling applied to sinusoidal function&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;div id=&#34;optimal-subsampling&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Optimal subsampling&lt;/h1&gt;
+&lt;p&gt;When working with very large sample data, even the estimation of ordinary least-squares can be computationally prohibitive. Since we increasingly find ourselves in situations where the sample size &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; is extremely high, a body of literature concerned with optimal subsampling has recently emerged. This post summarises some of the main ideas and methodologies that have emerged from that literature. The post is structured as follows: to set the stage for the remainder of the analysis the first section briefly introduces the bias-variance trade-off. The following section then introduces various subsampling methods. Finally, we will looks at a small empirical exercise that illustrates the improvements associated with non-uniform subsampling.&lt;/p&gt;
+&lt;div id=&#34;bias-variance-tradeoff&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Bias-variance tradeoff&lt;/h2&gt;
+&lt;p&gt;All computations are done in R. Code is reported only where it is deemed useful, but as always full details can be found in the &lt;a href=&#34;https://github.com/pat-alt/patalt&#34;&gt;GitHub repository&lt;/a&gt;. In some places I use &lt;a href=&#34;https://github.com/pat-alt/fromScratchR&#34;&gt;fromScratchR&lt;/a&gt;, a package I am working on. The package is very much a work-in-progress and at this point primarily serves the purpose of collecting any programs I code up from scratch. It can be installed from GitHub through &lt;code&gt;devtools::install_github(&#34;pat-alt/fromScratchR&#34;)&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;To set the stage for the remainder of this note we will briefly revisit the bias-variance trade-off in this section. In particular we will illustrate the effect of varying the sample size &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;. Readers familiar with this topic may choose to skip this section.&lt;/p&gt;
+&lt;p&gt;As as in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-bishop2006pattern&#34; role=&#34;doc-biblioref&#34;&gt;Bishop&lt;/a&gt; (&lt;a href=&#34;#ref-bishop2006pattern&#34; role=&#34;doc-biblioref&#34;&gt;2006&lt;/a&gt;)&lt;/span&gt; we consider synthetic data generated by the sinusoidal function &lt;span class=&#34;math inline&#34;&gt;\(f(x)=\sin(2\pi x)\)&lt;/span&gt;. To simulate random samples of &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{y}\)&lt;/span&gt; we sample &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; input values from &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X} \sim \text{unif}(0,1)\)&lt;/span&gt; and introduce a random noise component &lt;span class=&#34;math inline&#34;&gt;\(\varepsilon \sim \mathcal{N}(0,0.3)\)&lt;/span&gt;. Figure &lt;a href=&#34;#fig:p-sim&#34;&gt;1&lt;/a&gt; shows &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{y}\)&lt;/span&gt; along with random draws &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{y}^*_n\)&lt;/span&gt;.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:p-sim&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://www.paltmeyer.com/post/2021-03-10-optimal-subsampling/index_files/figure-html/p-sim-1.png&#34; alt=&#34;Sinusoidal function and random draws.&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 1: Sinusoidal function and random draws.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Following &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-bishop2006pattern&#34; role=&#34;doc-biblioref&#34;&gt;Bishop&lt;/a&gt; (&lt;a href=&#34;#ref-bishop2006pattern&#34; role=&#34;doc-biblioref&#34;&gt;2006&lt;/a&gt;)&lt;/span&gt; we will use a Gaussian linear model with Gaussian kernels &lt;span class=&#34;math inline&#34;&gt;\(\exp(-\frac{(x_k-\mu_p)^{2}}{2s^2})\)&lt;/span&gt; as&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34; id=&#34;eq:model&#34;&gt;\[
+\begin{equation} 
+\begin{aligned}
+&amp;amp;&amp;amp; \mathbf{y}|\mathbf{X}&amp;amp; =f(x) \sim \mathcal{N} \left( \sum_{j=0}^{p-1} \phi_j(x)\beta_j, v \mathbb{I}_p \right) \\
+\end{aligned}
+\tag{1}
+\end{equation}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;with &lt;span class=&#34;math inline&#34;&gt;\(v=0.3\)&lt;/span&gt; to estimate &lt;span class=&#34;math inline&#34;&gt;\(\hat{\mathbf{y}}_k\)&lt;/span&gt; from random draws &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}_k\)&lt;/span&gt;. We fix the number of kernels &lt;span class=&#34;math inline&#34;&gt;\(p=24\)&lt;/span&gt; (and hence the number of features &lt;span class=&#34;math inline&#34;&gt;\(M=p+1=25\)&lt;/span&gt;) as well as the spatial scale &lt;span class=&#34;math inline&#34;&gt;\(s=0.1\)&lt;/span&gt;. To vary the complexity of the model we use a form of regularized least-squares (&lt;em&gt;Ridge regression&lt;/em&gt;) and let the regularization parameter &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; vary&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34; id=&#34;eq:reg-ls&#34;&gt;\[
+\begin{equation} 
+\begin{aligned}
+&amp;amp;&amp;amp; \hat\beta&amp;amp;=(\lambda I + \Phi^T \Phi)^{-1}\Phi^Ty \\
+\end{aligned}
+\tag{2}
+\end{equation}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where high values of &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; in &lt;a href=&#34;#eq:reg-ls&#34;&gt;(2)&lt;/a&gt; shrink parameter values towards zero. (Note that a choice &lt;span class=&#34;math inline&#34;&gt;\(\lambda=0\)&lt;/span&gt; corresponds to the OLS estimator which is defined as long as &lt;span class=&#34;math inline&#34;&gt;\(p \le n\)&lt;/span&gt;.)&lt;/p&gt;
+&lt;p&gt;As in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-bishop2006pattern&#34; role=&#34;doc-biblioref&#34;&gt;Bishop&lt;/a&gt; (&lt;a href=&#34;#ref-bishop2006pattern&#34; role=&#34;doc-biblioref&#34;&gt;2006&lt;/a&gt;)&lt;/span&gt; we proceed as follows for each choice of &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; and each sample draw to illustrate the bias-variance trade-off:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Draw &lt;span class=&#34;math inline&#34;&gt;\(N=25\)&lt;/span&gt; time from &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{u}_k \sim \text{unif}(0,1)\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Let &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}_k^*=\mathbf{u}_k+\varepsilon_k\)&lt;/span&gt; with &lt;span class=&#34;math inline&#34;&gt;\(\varepsilon \sim \mathcal{N}(0, 0.3)\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Compute &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{y}_k^*=\sin(2\pi \mathbf{X}^*_k)\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Extract features &lt;span class=&#34;math inline&#34;&gt;\(\Phi_k\)&lt;/span&gt; from &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}_k^*\)&lt;/span&gt; and estimate the parameter vector &lt;span class=&#34;math inline&#34;&gt;\(\beta_k^*(\Phi_k,\mathbf{y}^*_k,\lambda)\)&lt;/span&gt; through regularized least-squares.&lt;/li&gt;
+&lt;li&gt;Predict &lt;span class=&#34;math inline&#34;&gt;\(\hat{\mathbf{y}}_k^*=\Phi \beta_k^*\)&lt;/span&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Applying the above procedure we can construct the familiar picture that demonstrates how increased model complexity increases variance while reducing bias (Figure &lt;a href=&#34;#fig:plot-bias-var&#34;&gt;2&lt;/a&gt;). Recall that for the mean-squared error (MSE) we have&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34; id=&#34;eq:mse&#34;&gt;\[
+\begin{equation} 
+\begin{aligned}
+&amp;amp;&amp;amp; \mathbb{E} \left( (\hat{f}_n(x)-f(x))^2 \right)
+&amp;amp;= \text{var} (\hat{f}_n(x)) + \left( \mathbb{E} \left( \hat{f}_n(x) \right) - f(x) \right)^2 \\
+\end{aligned}
+\tag{3}
+\end{equation}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where the first term on the right-hand side corresponds to the variance of our prediction and the second term to its (squared) bias. In Figure &lt;a href=&#34;#fig:plot-bias-var&#34;&gt;2&lt;/a&gt; as model complexity increases the variance component of the MSE increases, while the bias term diminishes. A similar pattern would have been observed if instead of using regularization we had used OLS and let the number of Gaussian kernels (and hence the number of features &lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt;) vary where higher values of &lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt; correspond to increased model complexity.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:plot-bias-var&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://www.paltmeyer.com/post/2021-03-10-optimal-subsampling/index_files/figure-html/plot-bias-var-1.png&#34; alt=&#34;Bias-variance trade-off.&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 2: Bias-variance trade-off.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;The focus of this note is instead on varying the sample size &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;. It should not be surprising that both the variance and bias component of the MSE decrease as the sample size &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; increases (Figure &lt;a href=&#34;#fig:plot-bias-var-n&#34;&gt;3&lt;/a&gt;). But in today’s world &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; can potentially be very large, so much so that even computing simple linear models can be hard. Suppose for example you wanted to use patient data that is generated in real-time as a global pandemic unfolds to predict the trajectory of said pandemic. Or consider the vast quantities of potentially useful user-generated data that online service providers have access to. In the remainder of this note we will investigate how systematic subsampling can help improve model accuracy in these situations.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:plot-bias-var-n&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://www.paltmeyer.com/post/2021-03-10-optimal-subsampling/index_files/figure-html/plot-bias-var-n-1.png&#34; alt=&#34;Bias-variance trade-off. The effect of sample size.&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 3: Bias-variance trade-off. The effect of sample size.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;subsampling&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Subsampling methods&lt;/h2&gt;
+&lt;p&gt;The case for subsampling generally involves &lt;span class=&#34;math inline&#34;&gt;\(n &amp;gt;&amp;gt; p\)&lt;/span&gt;, so very large values of &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;. In such cases we may be interested in estimating &lt;span class=&#34;math inline&#34;&gt;\(\hat\beta_m\)&lt;/span&gt; instead of &lt;span class=&#34;math inline&#34;&gt;\(\hat\beta_n\)&lt;/span&gt; where &lt;span class=&#34;math inline&#34;&gt;\(p\le m&amp;lt;&amp;lt;n\)&lt;/span&gt; with &lt;span class=&#34;math inline&#34;&gt;\(m\)&lt;/span&gt; freely chosen by us. In practice we may want to do this to avoid high computational costs associated with large &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; as discussed above. The basic algorithm for estimating &lt;span class=&#34;math inline&#34;&gt;\(\hat\beta_m\)&lt;/span&gt; is simple:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Subsample with replacement from the data with some sampling probability &lt;span class=&#34;math inline&#34;&gt;\(\{\pi_i\}^n_{i=1}\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Estimate least-squares estimator &lt;span class=&#34;math inline&#34;&gt;\(\hat\beta_m\)&lt;/span&gt; using the subsample.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;But there are at least two questions about this algorithm: firstly, how do we choose &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}_m=({\mathbf{X}^{(1)}}^T,...,{\mathbf{X}^{(m)}}^T)^T\)&lt;/span&gt;? Secondly, how should we construct &lt;span class=&#34;math inline&#34;&gt;\(\hat\beta_m\)&lt;/span&gt;? With respect to the former, a better idea than just randomly selecting &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}_m\)&lt;/span&gt; might be to choose observations with high influence. We will look at a few of the different subsampling methods investigated and proposed in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt;, which differ primarily in their choice of subsampling probabilities &lt;span class=&#34;math inline&#34;&gt;\(\{\pi_i\}^n_{i=1}\)&lt;/span&gt;:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Uniform subsampling (UNIF): &lt;span class=&#34;math inline&#34;&gt;\(\{\pi_i\}^n_{i=1}=1/n\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Basic leveraging (BLEV): &lt;span class=&#34;math inline&#34;&gt;\(\{\pi_i\}^n_{i=1}=h_{ii}/ \text{tr}(\mathbf{H})=h_{ii}/p\)&lt;/span&gt; where &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{H}\)&lt;/span&gt; is the &lt;em&gt;hat matrix&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;Optimal (OPT) and predictor-length sampling (PL): involving &lt;span class=&#34;math inline&#34;&gt;\(||\mathbf{X}_i||/ \sum_{j=1}^{n}||\mathbf{X}_j||\)&lt;/span&gt; where &lt;span class=&#34;math inline&#34;&gt;\(||\mathbf{X}||\)&lt;/span&gt; denotes the &lt;span class=&#34;math inline&#34;&gt;\(L_2\)&lt;/span&gt; norm of &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}\)&lt;/span&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Methods involving predictor-lengths are proposed by the authors with the former shown to be optimal (more on this below). PL subsampling is shown to scale very well and a good approximation of optimal subsampling conditional on leverage scores &lt;span class=&#34;math inline&#34;&gt;\(h_{ii}\)&lt;/span&gt; being fairly homogeneous.&lt;/p&gt;
+&lt;p&gt;With respect to the second question &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; investigate both ordinary least-squares (OLS) and weighted least-squares (WLS), where weights simply correspond to subsampling probabilities &lt;span class=&#34;math inline&#34;&gt;\(\{\pi_i\}^n_{i=1}\)&lt;/span&gt;. The authors present empirical evidence that OLS is more efficient than WLS in that the mean-squared error (MSE) for predicting &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X} \beta\)&lt;/span&gt; is lower for OLS. The authors also note though that subsampling using OLS is not consistent for non-uniform subsampling methods meaning that the bias cannot be controlled. Given Equation &lt;a href=&#34;#eq:mse&#34;&gt;(3)&lt;/a&gt; the fact that OLS is nonetheless more efficient than WLS implies that the higher variance terms associated with WLS dominates the effect of relatively higher bias with OLS. In fact this is consistent with the theoretical results presented in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; (more on this below).&lt;/p&gt;
+&lt;p&gt;Next we will briefly run through different estimation and subsampling methods in some more detail and see how they can be implemented in R. In the following section we will then look at how the different approaches perform empirically.&lt;/p&gt;
+&lt;div id=&#34;ols-and-wls&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;OLS and WLS&lt;/h3&gt;
+&lt;p&gt;Both OLS and WLS are implemented here using QR decomposition. As for OLS this is very easily done in R. Given some feature matrix &lt;code&gt;X&lt;/code&gt; and a corresponding outcome variable &lt;code&gt;y&lt;/code&gt; we can use &lt;code&gt;qr.solve(X, y)&lt;/code&gt; to compute &lt;span class=&#34;math inline&#34;&gt;\(\hat\beta\)&lt;/span&gt;. For WLS we need to first weigh observations by their corresponding subsampling probabilities. Following &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; we can construct a weighting matrix &lt;span class=&#34;math inline&#34;&gt;\(\Phi= \text{diag}\{\pi_i\}^m_{i=1}\)&lt;/span&gt; and compute the weighted least-squares estimator as: (see &lt;a href=&#34;#app-wls&#34;&gt;appendix&lt;/a&gt; for derivation)&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34; id=&#34;eq:wls&#34;&gt;\[
+\begin{equation} 
+\begin{aligned}
+&amp;amp;&amp;amp; \hat\beta_m^{WLS}&amp;amp;= \left( \mathbf{X}^T \Phi^{-1} \mathbf{X} \right)^{-1} \mathbf{X}^T\Phi^{-1}\mathbf{y}\\
+\end{aligned}
+\tag{4}
+\end{equation}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;In R weighted least-squares can be implemented (from scratch) as follows&lt;/p&gt;
+&lt;pre class=&#34;r fold-show&#34;&gt;&lt;code&gt;function (X, y, weights) 
+{
+    Phi &amp;lt;- diag(weights)
+    beta &amp;lt;- qr.solve(t(X) %*% Phi %*% X, t(X) %*% Phi %*% y)
+    return(beta)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;where in order to implement the algorithm propose in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; the weights we need to supply as the function arguments are &lt;span class=&#34;math inline&#34;&gt;\(w=\{1/\pi_i\}^m_{i=1}\)&lt;/span&gt;. This follows from the following property of diagonal matrices:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\begin{aligned}
+&amp;amp;&amp;amp; \Phi^{-1}&amp;amp;= \begin{pmatrix}
+1\over\phi_{11} &amp;amp; 0 &amp;amp; 0 \\
+0 &amp;amp; ... &amp;amp; 0 \\
+0 &amp;amp; 0 &amp;amp; 1\over \phi_{nn}
+\end{pmatrix}
+ \\
+\end{aligned}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;uniform-subsampling-unif&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Uniform subsampling (UNIF)&lt;/h3&gt;
+&lt;p&gt;A simple function for uniform subsampling in R is shown in the code chunk below. Note that to streamline the comparison of the different methods in the following section the function takes an unused argument &lt;code&gt;weighted=F&lt;/code&gt; which for the other subsampling methods can be used to determine whether OLS or WLS should be used. Of course, with uniform subsampling the weights are all identical and hence &lt;span class=&#34;math inline&#34;&gt;\(\hat\beta^{OLS}=\hat\beta^{WLS}\)&lt;/span&gt; so the argument is passed to but not evaluated in &lt;code&gt;sub_UNIF&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r fold-show&#34;&gt;&lt;code&gt;function (vars, weighted = F, rand_state = NULL, fit_model = T) 
+{
+    if (!is.null(rand_state)) {
+        set.seed(rand_state)
+    }
+    invisible(list2env(vars, envir = environment()))
+    indices &amp;lt;- sample(indices_maj, size = n_min)
+    indices &amp;lt;- c(indices_min, indices)
+    X_m &amp;lt;- X[indices, ]
+    y_m &amp;lt;- y[indices]
+    weights &amp;lt;- NULL
+    if (fit_model) {
+        beta_hat &amp;lt;- glm(y_m ~ X_m, family = &amp;quot;binomial&amp;quot;)$coefficients
+        if (!all(X[, 1] == 1)) {
+            X &amp;lt;- cbind(1, X)
+        }
+        y_hat &amp;lt;- c(X %*% beta_hat)
+        p_y &amp;lt;- exp(y_hat)/(1 + exp(y_hat))
+        return(list(X_m = X_m, y_m = y_m, linear_predictors = y_hat, fitted = p_y, coeff = beta_hat))
+    }
+    else {
+        return(list(X = X_m, y = y_m, weights = weights))
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;basic-leveraging-blev&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Basic leveraging (BLEV)&lt;/h3&gt;
+&lt;p&gt;The &lt;code&gt;sub_UNIF&lt;/code&gt; function can be extended easily to the case with basic leveraging (see code below). Note that in this case the &lt;code&gt;weighted&lt;/code&gt; argument is actually evaluated.&lt;/p&gt;
+&lt;pre class=&#34;r fold-show&#34;&gt;&lt;code&gt;function (X, y, m, weighted = F, rand_state = NULL, plot_wgts = F, prob_only = F) 
+{
+    svd_X &amp;lt;- svd(X)
+    U &amp;lt;- svd_X$u
+    H &amp;lt;- tcrossprod(U)
+    h &amp;lt;- diag(H)
+    prob &amp;lt;- h/ncol(X)
+    if (plot_wgts) {
+        plot(prob, t = &amp;quot;l&amp;quot;, ylab = &amp;quot;Sampling probability&amp;quot;)
+    }
+    if (prob_only) {
+        return(prob)
+    }
+    else {
+        indices &amp;lt;- sample(x = 1:n, size = m, replace = T, prob = prob)
+        X_m &amp;lt;- X[indices, ]
+        y_m &amp;lt;- y[indices]
+        weights &amp;lt;- 1/prob[indices]
+        if (weighted) {
+            beta_hat &amp;lt;- wls_qr(X_m, y_m, weights)
+        }
+        else {
+            beta_hat &amp;lt;- qr.solve(X_m, y_m)
+        }
+        y_hat &amp;lt;- c(X %*% beta_hat)
+        return(list(fitted = y_hat, coeff = beta_hat, prob = prob))
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;a-note-on-computing-leverage-scores&#34; class=&#34;section level4&#34;&gt;
+&lt;h4&gt;A note on computing leverage scores&lt;/h4&gt;
+&lt;p&gt;Recall that for the &lt;em&gt;hat matrix&lt;/em&gt; we have&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34; id=&#34;eq:hat-mat&#34;&gt;\[
+\begin{equation} 
+\begin{aligned}
+&amp;amp;&amp;amp; \mathbf{H}&amp;amp;=\mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1}\mathbf{X}^T \\
+\end{aligned}
+\tag{5}
+\end{equation}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where the diagonal elements &lt;span class=&#34;math inline&#34;&gt;\(h_{ii}\)&lt;/span&gt; correspond to the leverage scores we’re after. Following &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; we will use (compact) singular value decomposition to obtain &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{H}\)&lt;/span&gt; rather than computing &lt;a href=&#34;#eq:hat-mat&#34;&gt;(5)&lt;/a&gt; directly. This has the benefit that there exist exceptionally stable numerical algorithms to compute SVD. To see how and why we can use SVD to obtain &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{H}\)&lt;/span&gt; see &lt;a href=&#34;#app-svd&#34;&gt;appendix&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Clearly to get &lt;span class=&#34;math inline&#34;&gt;\(h_{ii}\)&lt;/span&gt; we first need to compute &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{H}\)&lt;/span&gt; which in terms of computational costs is of order &lt;span class=&#34;math inline&#34;&gt;\(\mathcal{O}(np^2)=\max(\mathcal{O}(np^2),\mathcal{O}(p^3))\)&lt;/span&gt;. The fact that we use all &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; rows of &lt;span class=&#34;math inline&#34;&gt;\(\Phi\)&lt;/span&gt; to compute leverage scores even though we explicitly stated our goal was to only use &lt;span class=&#34;math inline&#34;&gt;\(m\)&lt;/span&gt; observations may rightly seem like a bit of a paradox. This is why fast algorithms that approximate leverage scores have been proposed. We will not look at them specifically here mainly because the PL method proposed by &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; does not depend on leverage scores and promises to be computationally even more efficient.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;predictor-length-sampling-pl&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Predictor-length sampling (PL)&lt;/h3&gt;
+&lt;p&gt;The basic characteristic of PL subsampling - choosing &lt;span class=&#34;math inline&#34;&gt;\(\{\pi_i\}^n_{i=1}= ||\mathbf{X}_i||/ \sum_{j=1}^{n}||\mathbf{X}_j||\)&lt;/span&gt; - was already introduced above. Again it is very easy to modify the subsampling functions from above to this case:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;function (X, y, m, weighted = F, rand_state = NULL, plot_wgts = F, prob_only = F) 
+{
+    predictor_len &amp;lt;- sqrt(X^2 %*% rep(1, ncol(X)))
+    prob &amp;lt;- predictor_len/sum(predictor_len)
+    if (plot_wgts) {
+        plot(prob, t = &amp;quot;l&amp;quot;, ylab = &amp;quot;Sampling probability&amp;quot;)
+    }
+    if (prob_only) {
+        return(prob)
+    }
+    else {
+        indices &amp;lt;- sample(x = 1:n, size = m, replace = T, prob = prob)
+        X_m &amp;lt;- X[indices, ]
+        y_m &amp;lt;- y[indices]
+        weights &amp;lt;- 1/prob[indices]
+        if (weighted) {
+            beta_hat &amp;lt;- wls_qr(X_m, y_m, weights)
+        }
+        else {
+            beta_hat &amp;lt;- qr.solve(X_m, y_m)
+        }
+        y_hat &amp;lt;- c(X %*% beta_hat)
+        return(list(fitted = y_hat, coeff = beta_hat, prob = prob))
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;a-note-on-optimal-subsampling-opt&#34; class=&#34;section level4&#34;&gt;
+&lt;h4&gt;A note on optimal subsampling (OPT)&lt;/h4&gt;
+&lt;p&gt;In fact, PL subsampling is an approximate version of optimal subsampling (OPT). &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; show that asymptotically we have:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34; id=&#34;eq:plim&#34;&gt;\[
+\begin{equation} 
+\begin{aligned}
+&amp;amp;&amp;amp;\text{plim} \left( \text{var} (\hat{f}_n(x)) \right) &amp;gt; \text{plim} \left(\left( \mathbb{E} \left( \hat{f}_n(x) \right) - f(x) \right)^2 \right)  \\
+\end{aligned}
+\tag{6}
+\end{equation}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Given this result minimizing the MSE (Equation &lt;a href=&#34;#eq:mse&#34;&gt;(3)&lt;/a&gt;) with respect to subsampling probabilities &lt;span class=&#34;math inline&#34;&gt;\(\{\pi_i\}^n_{i=1}\)&lt;/span&gt; corresponds to minimizing &lt;span class=&#34;math inline&#34;&gt;\(\text{var} (\hat{f}_n(x))\)&lt;/span&gt;. They further show that this minimization problem has the following closed-form solution:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34; id=&#34;eq:opt&#34;&gt;\[
+\begin{equation} 
+\begin{aligned}
+&amp;amp;&amp;amp; \pi_i&amp;amp;= \frac{\sqrt{(1-h_{ii})}||\mathbf{X}_i||}{\sum_{j=1}^n\sqrt{(1-h_{jj})}||\mathbf{X}_j||}\\
+\end{aligned}
+\tag{7}
+\end{equation}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;This still has computational costs of order &lt;span class=&#34;math inline&#34;&gt;\(\mathcal{O}(np^2)\)&lt;/span&gt;. But it should now be clear why PL subsampling is optimal conditional on leverage scores being homogeneous (see &lt;a href=&#34;#app-pl&#34;&gt;appendix&lt;/a&gt;). PL subsampling is associated with computational costs of order &lt;span class=&#34;math inline&#34;&gt;\(\mathcal{O}(np)\)&lt;/span&gt;, so a potentially massive improvement. The code for optimal subsampling is shown below:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;function (X, y, m, weighted = F, rand_state = NULL, plot_wgts = F, prob_only = F) 
+{
+    n &amp;lt;- nrow(X)
+    svd_X &amp;lt;- svd(X)
+    U &amp;lt;- svd_X$u
+    H &amp;lt;- tcrossprod(U)
+    h &amp;lt;- diag(H)
+    predictor_len &amp;lt;- sqrt(X^2 %*% rep(1, ncol(X)))
+    prob &amp;lt;- (sqrt(1 - h) * predictor_len)/crossprod(sqrt(1 - h), predictor_len)[1]
+    if (plot_wgts) {
+        plot(prob, t = &amp;quot;l&amp;quot;, ylab = &amp;quot;Sampling probability&amp;quot;)
+    }
+    if (prob_only) {
+        return(prob)
+    }
+    else {
+        indices &amp;lt;- sample(x = 1:n, size = m, replace = T, prob = prob)
+        X_m &amp;lt;- X[indices, ]
+        y_m &amp;lt;- y[indices]
+        weights &amp;lt;- 1/prob[indices]
+        if (weighted) {
+            beta_hat &amp;lt;- wls_qr(X_m, y_m, weights)
+        }
+        else {
+            beta_hat &amp;lt;- qr.solve(X_m, y_m)
+        }
+        y_hat &amp;lt;- c(X %*% beta_hat)
+        return(list(fitted = y_hat, coeff = beta_hat, prob = prob))
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;a-note-on-computing-predictor-lengths&#34; class=&#34;section level4&#34;&gt;
+&lt;h4&gt;A note on computing predictor lengths&lt;/h4&gt;
+&lt;p&gt;Computing the Euclidean norms &lt;span class=&#34;math inline&#34;&gt;\(||\mathbf{X}_i||\)&lt;/span&gt; in R can be done explicitly by looping over the rows of &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}\)&lt;/span&gt; and computing the norm in each iteration. It turns out that this computationally very expensive. A much more efficient way of computing the vector of predictor lengths is as follows&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34; id=&#34;eq:norm&#34;&gt;\[
+\begin{equation} 
+\begin{aligned}
+&amp;amp;&amp;amp; \mathbf{pl}&amp;amp;=\sqrt{\mathbf{X}^2 \mathbf{1}} \\
+\end{aligned}
+\tag{8}
+\end{equation}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}^2\)&lt;/span&gt; indicates &lt;em&gt;elements squared&lt;/em&gt;, the square root is also taken &lt;em&gt;element-wise&lt;/em&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{1}\)&lt;/span&gt; is a &lt;span class=&#34;math inline&#34;&gt;\((p \times 1)\)&lt;/span&gt; vectors of ones. A performance benchmark of the two approaches is shown in Figure &lt;a href=&#34;#fig:mbm-norm&#34;&gt;4&lt;/a&gt; below.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:mbm-norm&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://www.paltmeyer.com/post/2021-03-10-optimal-subsampling/index_files/figure-html/mbm-norm-1.png&#34; alt=&#34;Benchmark of Euclidean norm computations.&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 4: Benchmark of Euclidean norm computations.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;comparison-of-methods&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Comparison of methods&lt;/h3&gt;
+&lt;p&gt;As discussed in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; both OPT and PL subsampling tend to inflate subsampling probabilities of observations with low leverage scores and shrink those of high-leverage observations relative to BLEV. They show explicitly that this always holds for orthogonal design matrices. As a quick sense-check of the functions introduced above we can generate a random orthogonal design matrix &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}\)&lt;/span&gt; and plot subsampling probabilities with OPT and PL against those obtained with BLEV. Figure &lt;a href=&#34;#fig:comp-methods&#34;&gt;5&lt;/a&gt; illustrates this relationship nicely.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:comp-methods&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://www.paltmeyer.com/post/2021-03-10-optimal-subsampling/index_files/figure-html/comp-methods-1.png&#34; alt=&#34;Comparison of subsampling probabilities.&#34; width=&#34;576&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 5: Comparison of subsampling probabilities.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;The design matrix &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}\)&lt;/span&gt; &lt;span class=&#34;math inline&#34;&gt;\((n \times p)\)&lt;/span&gt; with &lt;span class=&#34;math inline&#34;&gt;\(n=1000\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(p=100\)&lt;/span&gt; was generated using SVD:&lt;/p&gt;
+&lt;pre class=&#34;r fold-show&#34;&gt;&lt;code&gt;function (n, p) 
+{
+    M &amp;lt;- matrix(rnorm(n * p), n, p)
+    X &amp;lt;- svd(M)$u
+    return(X)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;lin-reg&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Linear regression model&lt;/h2&gt;
+&lt;div id=&#34;a-review-of-zhu2015optimal&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;A review of &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt;&lt;/h3&gt;
+&lt;p&gt;To illustrate the improvements associated with the methods proposed in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt;, we will briefly replicate their main empirical findings here. The evaluate the performance of the different methods we will proceed as follows:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Empirical exercise&lt;/strong&gt;&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Generate synthetic data &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}\)&lt;/span&gt; of dimension &lt;span class=&#34;math inline&#34;&gt;\((n \times m)\)&lt;/span&gt; with &lt;span class=&#34;math inline&#34;&gt;\(n&amp;gt;&amp;gt;m\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Set some true model parameter &lt;span class=&#34;math inline&#34;&gt;\(\beta=(\mathbf{1}^T_{\overline{m*0.6}},\mathbf{1}^T_{\underline{m*0.4}})^T\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Model the outcome variable as &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{y}=\mathbf{X}\beta+\epsilon\)&lt;/span&gt; where &lt;span class=&#34;math inline&#34;&gt;\(\epsilon \sim \mathcal{N}(\mathbf{0},\sigma^2 \mathbf{I}_n)\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\sigma=10\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Estimate the full-sample OLS estimator &lt;span class=&#34;math inline&#34;&gt;\(\hat\beta_n\)&lt;/span&gt; (a benchmark estimator of sorts in this setting).&lt;/li&gt;
+&lt;li&gt;Use one of the subsampling methods to estimate iteratively &lt;span class=&#34;math inline&#34;&gt;\(\{\hat\beta^{(b)}_m\}^B_{b=1}\)&lt;/span&gt;. Note that all subsampling methods are stochastic so &lt;span class=&#34;math inline&#34;&gt;\(\hat\beta_m\)&lt;/span&gt; varies across iterations.&lt;/li&gt;
+&lt;li&gt;Evaluate average model performance of &lt;span class=&#34;math inline&#34;&gt;\(\hat\beta_m\)&lt;/span&gt; under the mean-squared error criterium: &lt;span class=&#34;math inline&#34;&gt;\(MSE= \frac{1}{B} \sum_{b=1}^{B} MSE^{(b)}\)&lt;/span&gt; where &lt;span class=&#34;math inline&#34;&gt;\(MSE^{(b)}\)&lt;/span&gt; corresponds to the in-sample estimator of the mean-squared error of the &lt;span class=&#34;math inline&#34;&gt;\(b\)&lt;/span&gt;-th iteration.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;As in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; we will generate the design matrix &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}\)&lt;/span&gt; from 5 different distributions: 1) Gaussian (GA) with &lt;span class=&#34;math inline&#34;&gt;\(\mathcal{N}(\mathbf{0},\Sigma)\)&lt;/span&gt;; 2) Mixed-Gaussian (MG) with &lt;span class=&#34;math inline&#34;&gt;\(0.5\mathcal{N}(\mathbf{0},\Sigma)+0.5\mathcal{N}(\mathbf{0},25\Sigma)\)&lt;/span&gt;; 3) Log-Gaussian (LN) with &lt;span class=&#34;math inline&#34;&gt;\(\log\mathcal{N}(\mathbf{0},\Sigma)\)&lt;/span&gt;; 4) T-distribution with 1 degree of freedom (T1) and &lt;span class=&#34;math inline&#34;&gt;\(\Sigma\)&lt;/span&gt;; 5) T-distribution as in 4) but truncated at &lt;span class=&#34;math inline&#34;&gt;\([-p,p]\)&lt;/span&gt;. All parameters are chosen in the same way as in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; with exception of &lt;span class=&#34;math inline&#34;&gt;\(n=1000\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(p=3\)&lt;/span&gt;, which are significantly smaller choices in order to decrease the computational costs. The corresponding densities of the 5 data sets are shown in Figure &lt;a href=&#34;#fig:dens&#34;&gt;8&lt;/a&gt; in the &lt;a href=&#34;#app-dens&#34;&gt;appendix&lt;/a&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;set.seed(1)
+library(expm)
+matrix_grid &amp;lt;- expand.grid(i=1:p,j=1:p)
+Sigma &amp;lt;- matrix(rep(0,p^2),p,p)
+for (x in 1:nrow(matrix_grid)) {
+  i &amp;lt;- matrix_grid$i[x]
+  j &amp;lt;- matrix_grid$j[x]
+  Sigma[i,j] &amp;lt;- 2 * (0.8)^(abs(i-j))
+}
+# 1.) Design matrix (as in Zhu et al): ----
+GA &amp;lt;- matrix(rnorm(n*p), nrow = n, ncol = p) %*% sqrtm(t(Sigma))
+# Gaussian mixture:
+gaus_mix &amp;lt;- list(
+  gaus_1 = matrix(rnorm(n*p), nrow = n, ncol = p) %*% sqrtm(t(Sigma)),
+  gaus_2 = matrix(rnorm(n*p), nrow = n, ncol = p) %*% sqrtm((25 * t(Sigma)))
+)
+MG &amp;lt;- matrix(rep(0,n*p),n,p)
+for (i in 1:nrow(MG)) {
+  x &amp;lt;- sample(1:2,1)
+  MG[i,] &amp;lt;- gaus_mix[[x]][i,]
+}
+# Log-Gaussian:
+LN &amp;lt;- exp(GA)
+# T-distribution:
+T1 &amp;lt;- matrix(rt(n*p,1), nrow = n, ncol = p) %*% sqrtm(t(Sigma))
+# Truncated T:
+TT &amp;lt;- T1
+TT[TT&amp;gt;p] &amp;lt;- p
+TT[TT&amp;lt;(-p)] &amp;lt;- -p
+data_sets &amp;lt;- list(
+  GA = list(X = GA),
+  MG = list(X = MG),
+  LN = list(X = LN),
+  TT = list(X = TT),
+  T1 = list(X = T1)
+)
+# 2.) Outcome:
+data_sets &amp;lt;- lapply(
+  data_sets,
+  function(i) {
+    X &amp;lt;- i[[&amp;quot;X&amp;quot;]]
+    beta &amp;lt;- c(rep(1,ceiling(0.6*p)),rep(0.1,floor(0.4*p)))
+    eps &amp;lt;- rnorm(n=n,mean=0,sd=10)
+    y &amp;lt;- X %*% beta + eps
+    list(X=X, y=y)
+  }
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We will run the empirical exercise for each data set and each subsampling method introduced above. Figure &lt;a href=&#34;#fig:plot-smpl-prob&#34;&gt;6&lt;/a&gt; shows logarithms of the sampling probabilities corresponding to the different subsampling methods (UNIF not shown for obvious reasons). The plots look very similar to the one in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; and is shown here primarily to reassure ourselves that we have implemented their ideas correctly. One interesting observation is worth pointing out however: note how the distributions for OPT and PL have lower standard deviations compared to BLEV. This should not be altogether surprising since we already saw above that for orthogonal design matrices the former methods inflate small leverage scores while shrinking high scores. But it is interesting to see that the same appears to hold for design matrices that are explicitly not orthogonal given our choice of &lt;span class=&#34;math inline&#34;&gt;\(\Sigma\)&lt;/span&gt;.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:plot-smpl-prob&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://www.paltmeyer.com/post/2021-03-10-optimal-subsampling/index_files/figure-html/plot-smpl-prob-1.png&#34; alt=&#34;Sampling probabilities for different subsampling methods.&#34; width=&#34;960&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 6: Sampling probabilities for different subsampling methods.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Figures &lt;a href=&#34;#fig:wls-zhu&#34;&gt;&lt;strong&gt;??&lt;/strong&gt;&lt;/a&gt; and &lt;a href=&#34;#fig:ols-zhu&#34;&gt;&lt;strong&gt;??&lt;/strong&gt;&lt;/a&gt; show the resulting MSE, squared bias and variance for the different subsampling methods and data sets using weighed least-squares and ordinary least-squares, respectively. The subsampling size increases along the horizontal axis. The figures are interactive to allow readers to zoom in etc.&lt;/p&gt;
+&lt;p&gt;For the data sets that are also shown in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; we find the same overall pattern: PL and OPT outperform other methods when using weighted least-squares, while BLEV outperforms other methods when using unweighted/ordinary least-squares.&lt;/p&gt;
+&lt;p&gt;For Gaussian data (GA) the differences between the methods are minimal since data points are homogeneous. A similar picture emerges when running the method comparison for the sinusoidal data introduced above (see &lt;a href=&#34;#app-sin&#34;&gt;appendix&lt;/a&gt;). In fact, &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; recommend to just rely on uniform subsampling when data is Gaussian. Another interesting observation is that for t-distributed data (T1) the non-uniform subsampling methods significantly outperform uniform subsampling methods. This is despite the fact that in the case of T1 data the conditions used to establish asymptotic consistency of the non-uniform subsampling methods in &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; are not fulfilled: in particular the fourth moment is not finite (in fact it is not defined).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;computational-performance&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Computational performance&lt;/h3&gt;
+&lt;p&gt;We have already seen above that theoretically speaking both BLEV and OPT subsampling are computationally more expensive than PL subsampling (with UNIF subsampling the least expensive). It should be obvious that in light of their computational costs &lt;span class=&#34;math inline&#34;&gt;\(\mathcal{O}(np^2)\)&lt;/span&gt; the former two methods do not scale well in higher-dimensional problems (higher &lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt;). &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; demonstrate this through empirical exercises to an extent that is beyond the scope of this note. Instead we will just quickly benchmark the different functions for non-uniform subsampling introduced above: &lt;code&gt;sub_BLEV&lt;/code&gt;, &lt;code&gt;sub_OPT&lt;/code&gt;, &lt;code&gt;sub_PL&lt;/code&gt; for &lt;span class=&#34;math inline&#34;&gt;\(n=200\)&lt;/span&gt;, &lt;span class=&#34;math inline&#34;&gt;\(p=100\)&lt;/span&gt;. We are only interested in how long it takes to compute subsampling probabilities, and since for &lt;code&gt;sub_UNIF&lt;/code&gt; all subsampling probabilities are simply &lt;span class=&#34;math inline&#34;&gt;\(\pi_i=1/n\)&lt;/span&gt; we neglect this here. Figure &lt;a href=&#34;#fig:mbm-methods&#34;&gt;7&lt;/a&gt; benchmarks the three non-uniform subsampling methods. Evidently PL subsampling is computationally much less costly.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:mbm-methods&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://www.paltmeyer.com/post/2021-03-10-optimal-subsampling/index_files/figure-html/mbm-methods-1.png&#34; alt=&#34;Benchmark of computational performance of different methods.&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 7: Benchmark of computational performance of different methods.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;further-work&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Further work&lt;/h2&gt;
+&lt;p&gt;We have looked at subsampling of linear regression problems, but of course the story does not end here. For binary classification problems, for example, we cannot directly apply the methods used here, but the same general ideas still apply. &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-wang2018optimal&#34; role=&#34;doc-biblioref&#34;&gt;Wang, Zhu, and Ma&lt;/a&gt; (&lt;a href=&#34;#ref-wang2018optimal&#34; role=&#34;doc-biblioref&#34;&gt;2018&lt;/a&gt;)&lt;/span&gt; explore optimal subsampling for large sample logistic regression - a paper that is very much related to &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;Zhu et al.&lt;/a&gt; (&lt;a href=&#34;#ref-zhu2015optimal&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt;. For a brief summary and a (cautious) application to imbalanced learning see &lt;a href=&#34;https://pat-alt.github.io/fromScratch/optimal-subsampling.html#classification-problems&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Very recently an &lt;a href=&#34;https://www.sciencedirect.com/science/article/pii/S0885064X20300558&#34;&gt;article&lt;/a&gt; has been published that investigates optimal subsampling in the context of quantile regression. More interesting work in this certain to emerge from this field, which researches some of the most pressing questions in large sample statistics.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;references&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references csl-bib-body hanging-indent&#34;&gt;
+&lt;div id=&#34;ref-bishop2006pattern&#34; class=&#34;csl-entry&#34;&gt;
+Bishop, Christopher M. 2006. &lt;em&gt;Pattern Recognition and Machine Learning&lt;/em&gt;. springer.
+&lt;/div&gt;
+&lt;div id=&#34;ref-wang2018optimal&#34; class=&#34;csl-entry&#34;&gt;
+Wang, HaiYing, Rong Zhu, and Ping Ma. 2018. &lt;span&gt;“Optimal Subsampling for Large Sample Logistic Regression.”&lt;/span&gt; &lt;em&gt;Journal of the American Statistical Association&lt;/em&gt; 113 (522): 829–44.
+&lt;/div&gt;
+&lt;div id=&#34;ref-zhu2015optimal&#34; class=&#34;csl-entry&#34;&gt;
+Zhu, Rong, Ping Ma, Michael W Mahoney, and Bin Yu. 2015. &lt;span&gt;“Optimal Subsampling Approaches for Large Sample Linear Regression.”&lt;/span&gt; &lt;em&gt;arXiv&lt;/em&gt;, arXiv–1509.
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;appendix&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Appendix&lt;/h2&gt;
+&lt;div id=&#34;app-wls&#34; class=&#34;section level3 unnumbered&#34;&gt;
+&lt;h3&gt;Weighted least-squares&lt;/h3&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;www/wls.png&#34; alt=&#34;&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Weighted least-squares&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;app-svd&#34; class=&#34;section level3 unnumbered&#34;&gt;
+&lt;h3&gt;From SVD to leverage scores&lt;/h3&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;www/svd_leverage.png&#34; alt=&#34;&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;From SVD to leverage&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;app-pl&#34; class=&#34;section level3 unnumbered&#34;&gt;
+&lt;h3&gt;From optimal to prediction-length subsampling&lt;/h3&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;www/PL.png&#34; alt=&#34;&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;From OPT to PL&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;app-dens&#34; class=&#34;section level3 unnumbered&#34;&gt;
+&lt;h3&gt;Synthetic data&lt;/h3&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:dens&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://www.paltmeyer.com/post/2021-03-10-optimal-subsampling/index_files/figure-html/dens-1.png&#34; alt=&#34;Densities of synthetic design matrices.&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 8: Densities of synthetic design matrices.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;app-sin&#34; class=&#34;section level3 unnumbered&#34;&gt;
+&lt;h3&gt;Subsampling applied to sinusoidal function&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.paltmeyer.com/post/2021-03-10-optimal-subsampling/index_files/figure-html/unnamed-chunk-18-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

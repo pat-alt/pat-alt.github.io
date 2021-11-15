@@ -30,9 +30,7 @@
   
     
   
-  <meta name="description" content="“You cannot appeal to [algorithms]. They do not listen. Nor do they bend.”
-— Cathy O’Neil
- In her popular book Weapons of Math Destruction Cathy O’Neil presents the example of public school teacher Sarah Wysocki, who lost her job after a teacher evaluation algorithm had rendered her redundant (O’neil 2016)." />
+  <meta name="description" content="An introduction to algorithmic recourse and an implementation of a simplified version of REVISE (Joshi et al., 2019). This post was prepared as part of my PhD application." />
 
   
   <link rel="alternate" hreflang="en-us" href="https://www.paltmeyer.com/post/2021-04-26-individual-recourse-for-black-box-models/" />
@@ -245,7 +243,7 @@
   
   
   
-  <link rel="stylesheet" href="/css/wowchemy.00bd16d61b26ac021c2845abd42653cc.css" />
+  <link rel="stylesheet" href="/css/wowchemy.4abf1bfca41826a5bfe61fda454af2be.css" />
 
   
 
@@ -295,9 +293,7 @@
   <meta property="og:site_name" content="Patrick Altmeyer" />
   <meta property="og:url" content="https://www.paltmeyer.com/post/2021-04-26-individual-recourse-for-black-box-models/" />
   <meta property="og:title" content="Individual recourse for Black Box Models | Patrick Altmeyer" />
-  <meta property="og:description" content="“You cannot appeal to [algorithms]. They do not listen. Nor do they bend.”
-— Cathy O’Neil
- In her popular book Weapons of Math Destruction Cathy O’Neil presents the example of public school teacher Sarah Wysocki, who lost her job after a teacher evaluation algorithm had rendered her redundant (O’neil 2016)." /><meta property="og:image" content="https://www.paltmeyer.com/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_512x512_fill_lanczos_center_3.png" />
+  <meta property="og:description" content="An introduction to algorithmic recourse and an implementation of a simplified version of REVISE (Joshi et al., 2019). This post was prepared as part of my PhD application." /><meta property="og:image" content="https://www.paltmeyer.com/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_512x512_fill_lanczos_center_3.png" />
     <meta property="twitter:image" content="https://www.paltmeyer.com/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
   
     
@@ -350,7 +346,7 @@
       "url": "https://www.paltmeyer.com/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_192x192_fill_lanczos_center_3.png"
     }
   },
-  "description": "“You cannot appeal to [algorithms]. They do not listen. Nor do they bend.”\n— Cathy O’Neil\n In her popular book Weapons of Math Destruction Cathy O’Neil presents the example of public school teacher Sarah Wysocki, who lost her job after a teacher evaluation algorithm had rendered her redundant (O’neil 2016)."
+  "description": "An introduction to algorithmic recourse and an implementation of a simplified version of REVISE (Joshi et al., 2019). This post was prepared as part of my PhD application."
 }
 </script>
 
@@ -568,7 +564,7 @@
 
         
         <li class="nav-item dropdown">
-          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Other Sites</span><span class="caret"></span>
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Other sites</span><span class="caret"></span>
           </a>
           <div class="dropdown-menu">
             
@@ -708,7 +704,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-categories">
-    <i class="fas fa-folder mr-1"></i><a href="/category/data-science/">Data Science</a>, <a href="/category/trustworth-ai/">Trustworth AI</a></span>
+    <i class="fas fa-folder mr-1"></i><a href="/category/trustworthy-ai/">Trustworthy AI</a></span>
   
 
 </div>
@@ -747,14 +743,14 @@
 <div id="from-to" class="section level2">
 <h2>From 🐱 to 🐶</h2>
 <p>We will explain <code>REVISE</code> through a short tale of cats and dogs. The protagonist of this tale is Kitty 🐱, a young cat that identifies as a dog. Unfortunately, Kitty is not very tall and her tail, though short for a cat, is longer than that of the average dog (Figure <a href="#fig:density">1</a>).</p>
-<div class="figure" style="text-align: center"><span id="fig:density"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:density"></span>
 <img src="https://www.paltmeyer.com/post/2021-04-26-individual-recourse-for-black-box-models/index_files/figure-html/density-1.png" alt="Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty's attribute values." width="864" />
 <p class="caption">
 Figure 1: Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty’s attribute values.
 </p>
 </div>
 <p>Much to her dismay, Kitty has been recognized as a cat by a linear classifier <span class="math inline">\(g_n(X)\)</span> that we trained through stochastic gradient descent using the data on animals’ height and tail length. Once again interested readers may find technical details and code in the annex below. Figure <a href="#fig:class">2</a> shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty’s location indicated by a red circle. Can we provide individual recourse to Kitty?</p>
-<div class="figure" style="text-align: center"><span id="fig:class"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:class"></span>
 <img src="https://www.paltmeyer.com/post/2021-04-26-individual-recourse-for-black-box-models/index_files/figure-html/class-1.png" alt="Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty's location is indicated by a red circle." width="672" />
 <p class="caption">
 Figure 2: Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty’s location is indicated by a red circle.
@@ -768,7 +764,7 @@ Figure 2: Linear separation of cats and dogs in the 2-dimensional attribute spac
 </ol>
 <p>Figure <a href="#fig:revise">3</a> illustrates what happens when this approach is applied to Kitty’s problem. The different panels show the results for different values of a regularization parameter <span class="math inline">\(\lambda\)</span> that governs the trade-off between achieving the desired label switch and keeping the distance between the original (<span class="math inline">\(\mathbf{x}_i\)</span>) and revised (<span class="math inline">\(\mathbf{x}_i&#39;\)</span>) attributes small. In all but one case, <code>REVISE</code> converges: a decrease in tail length along with an increase in height eventually allows Kitty to cross the decision boundary. In other words, we have successfully turned Kitty into a dog - at least in the eyes of the linear classifier!</p>
 <p>We also observe that as we increase <span class="math inline">\(\lambda\)</span> for a fixed learning rate, <code>REVISE</code> takes longer to converge. This should come as no surprise, since higher values of <span class="math inline">\(\lambda\)</span> lead to greater regularization with respect to the penalty we place on the distance that Kitty has to travel. When we penalize too much (<span class="math inline">\(\lambda=10\)</span>), Kitty never reaches the decision boundary, because she is reluctant to change her characteristics beyond a certain point. While not visible to the naked eye, in this particular example <span class="math inline">\(\lambda=0.001\)</span> corresponds to the best choice among the candidate values.</p>
-<div class="figure" style="text-align: center"><span id="fig:revise"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:revise"></span>
 <img src="www/revise.gif" alt="The simplified `REVISE` algorithm in action: how Kitty crosses the decision boundary by changing her attributes. Regularization with respect to the distance penalty increases from top left to bottom right."  />
 <p class="caption">
 Figure 3: The simplified <code>REVISE</code> algorithm in action: how Kitty crosses the decision boundary by changing her attributes. Regularization with respect to the distance penalty increases from top left to bottom right.

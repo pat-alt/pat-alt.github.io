@@ -2,12 +2,14 @@
 title: "Optimal subsampling"
 author: "Patrick Altmeyer"
 date: "2021-03-10"
+lastmod: 'r format(Sys.time(), "%b %d, %Y")'
+summary: 'This post explores recent advances in optimal subsampling.'
 output:
   blogdown::html_page:
       toc: true
 bibliography: ../../../bib.bib
 link-citations: true
-categories: [Data Science]
+categories: [Statistics]
 tags: [statistics, subsampling, bias-variance]
 ---
 
@@ -146,7 +148,7 @@ dt <- rbindlist(
                 }
               )
             )
-            beta_hat <- ridge(Phi_k,y_k,lambda_t) # fit model on (y,x)
+            beta_hat <- regularized_ls(Phi_k,y_k,lambda_t) # fit model on (y,x)
             y_hat <- c(Phi %*% beta_hat) # predict from model
             dt <- data.table(value=y_hat,draw=k,lambda=lambda_t,n=1:n,x=x)
             return(dt)
@@ -248,7 +250,7 @@ dt <- rbindlist(
                 }
               )
             )
-            beta_hat <- ridge(Phi_k,y_k,lambda) # fit model on (y,x)
+            beta_hat <- regularized_ls(Phi_k,y_k,lambda) # fit model on (y,x)
             y_hat <- c(Phi %*% beta_hat) # predict from model
             dt <- data.table(value=y_hat,draw=k,sample_size=n_sample,n=1:n,x=x)
             return(dt)
@@ -336,7 +338,7 @@ $$
 
 In R weighted least-squares can be implemented (from scratch) as follows
 
-```{r class.source = "fold-show", code=fromScratchR::ols, echo=T, eval=F}
+```{r class.source = "fold-show", code=fromScratchR::wls_qr, echo=T, eval=F}
 ```
 
 where in order to implement the algorithm propose in @zhu2015optimal the weights we need to supply as the function arguments are $w=\{1/\pi_i\}^m_{i=1}$. This follows from the following property of diagonal matrices:
@@ -356,14 +358,14 @@ $$
 
 A simple function for uniform subsampling in R is shown in the code chunk below. Note that to streamline the comparison of the different methods in the following section the function takes an unused argument `weighted=F` which for the other subsampling methods can be used to determine whether OLS or WLS should be used. Of course, with uniform subsampling the weights are all identical and hence $\hat\beta^{OLS}=\hat\beta^{WLS}$ so the argument is passed to but not evaluated in `sub_UNIF`.
 
-```{r class.source = "fold-show", code=fromScratchR::sub_UNIF, echo=T, eval=FALSE}
+```{r class.source = "fold-show", code=fromScratchR::UNIF.undersampler, echo=T, eval=FALSE}
 ```
 
 ### Basic leveraging (BLEV)
 
 The `sub_UNIF` function can be extended easily to the case with basic leveraging (see code below). Note that in this case the `weighted` argument is actually evaluated. 
 
-```{r class.source = "fold-show", code=fromScratchR::sub_BLEV, echo=T, eval=FALSE}
+```{r class.source = "fold-show", code=fromScratchR::BLEV, echo=T, eval=FALSE}
 ```
 
 #### A note on computing leverage scores
@@ -387,7 +389,7 @@ Clearly to get $h_{ii}$ we first need to compute $\mathbf{H}$ which in terms of 
 
 The basic characteristic of PL subsampling - choosing $\{\pi_i\}^n_{i=1}= ||\mathbf{X}_i||/ \sum_{j=1}^{n}||\mathbf{X}_j||$ - was already introduced above. Again it is very easy to modify the subsampling functions from above to this case:
 
-```{r code=fromScratchR::sub_PL, echo=T, eval=F}
+```{r code=fromScratchR::PL, echo=T, eval=F}
 ```
 
 #### A note on optimal subsampling (OPT)
@@ -416,7 +418,7 @@ $$
 
 This still has computational costs of order $\mathcal{O}(np^2)$. But it should now be clear why PL subsampling is optimal conditional on leverage scores being homogeneous (see [appendix](#app-pl)). PL subsampling is associated with computational costs of order $\mathcal{O}(np)$, so a potentially massive improvement. The code for optimal subsampling is shown below:
 
-```{r code=fromScratchR::sub_OPT, echo=TRUE, eval=FALSE}
+```{r code=fromScratchR::OPT, echo=TRUE, eval=FALSE}
 ```
 
 #### A note on computing predictor lengths
@@ -465,10 +467,10 @@ As discussed in @zhu2015optimal both OPT and PL subsampling tend to inflate subs
 X <- rorthogonal(n,p)
 # Subsampling methods:
 methods <- list(
-  "UNIF" = sub_UNIF,
-  "BLEV" = sub_BLEV,
-  "OPT" = sub_OPT,
-  "PL" = sub_PL
+  "UNIF" = UNIF,
+  "BLEV" = BLEV,
+  "OPT" = OPT,
+  "PL" = PL
 )
 smpl_probs <- rbindlist(
   lapply(
@@ -678,22 +680,22 @@ For Gaussian data (GA) the differences between the methods are minimal since dat
 
 ```{r wls-zhu, fig.height=5, fig.width=10, fig.cap="MSE, squared bias and variance for different subsampling methods and data sets. Subsampling with weighted least-squares."}
 library(plotly)
-layout_ggplotly <- function(gg, x = -0.075, y = -0.025, x_legend=1.05, y_legend=0.95, mar= list(l=50,r=150,b=50)){
-  # The 1 and 2 goes into the list that contains the options for the x and y axis labels respectively
-  gg[['x']][['layout']][['annotations']][[1]][['y']] <- x
-  gg[['x']][['layout']][['annotations']][[2]][['x']] <- y
-  gg[['x']][['layout']][['annotations']][[11]][['x']] <- x_legend
-  gg[['x']][['layout']][['legend']][['y']] <- y_legend
-  gg[['x']][['layout']][['legend']][['x']] <- x_legend
-  gg %>% layout(margin = mar)
-}
+# layout_ggplotly <- function(gg, x = -0.075, y = -0.025, x_legend=1.05, y_legend=0.95, mar= list(l=50,r=150,b=50)){
+#   # The 1 and 2 goes into the list that contains the options for the x and y axis labels respectively
+#   gg[['x']][['layout']][['annotations']][[1]][['y']] <- x
+#   gg[['x']][['layout']][['annotations']][[2]][['x']] <- y
+#   gg[['x']][['layout']][['annotations']][[11]][['x']] <- x_legend
+#   gg[['x']][['layout']][['legend']][['y']] <- y_legend
+#   gg[['x']][['layout']][['legend']][['x']] <- x_legend
+#   gg %>% layout(margin = mar)
+# }
 gg <- ggplotly(p_list$WLS)
-layout_ggplotly(gg)
+# layout_ggplotly(gg)
 ```
 
 ```{r ols-zhu, fig.height=5, fig.width=10, fig.cap="MSE, squared bias and variance for different subsampling methods and data sets. Subsampling with ordinary least-squares."}
 gg <- ggplotly(p_list$OLS)
-layout_ggplotly(gg)
+# layout_ggplotly(gg)
 ```
 
 ### Computational performance
@@ -710,9 +712,9 @@ library(microbenchmark)
 X <- matrix(rnorm(n*p),nrow=n)
 y <- rnorm(n)
 mb <- microbenchmark(
-  "BLEV" = {sub_BLEV(X,y,prob_only = T)}, 
-  "OPT" = {sub_OPT(X,y,prob_only = T)},
-  "PL" = {sub_PL(X,y,prob_only = T)}
+  "BLEV" = {BLEV(X,y,prob_only = T)}, 
+  "OPT" = {OPT(X,y,prob_only = T)},
+  "PL" = {PL(X,y,prob_only = T)}
 )
 autoplot(mb)
 ```
