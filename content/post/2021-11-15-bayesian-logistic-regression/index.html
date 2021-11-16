@@ -103,7 +103,6 @@ Formally, this says that the posterior distribution of parameters <span class="m
 \tag{4}
 \end{equation}
 \]</span></p>
-<p><br></p>
 <div class="sidenote">
 <p><strong>SIDENOTE</strong> 💡</p>
 <p>Note how earlier I mentioned that maximising the posterior likelihood can be seen as regularized maximum likelihood estimation. We can now make that connection explicit: in <a href="#eq:likeli">(4)</a> let us assume that <span class="math inline">\(\mathbf{w}_0=\mathbf{0}\)</span>. Then since <span class="math inline">\(\mathbf{H}_0=\lambda\mathbf{I}\)</span> with <span class="math inline">\(1/\sigma^2\)</span> the second term in the first line is simply <span class="math inline">\(\lambda \frac{1}{2} \mathbf{w}^T\mathbf{w}=\lambda \frac{1}{2} ||\mathbf{w}||_2^2\)</span>. This is equivalent to running logistic regression with an <span class="math inline">\(\ell_2\)</span>-penalty <span class="citation">(<a href="#ref-bishop2006pattern" role="doc-biblioref">Bishop 2006</a>)</span>.</p>
@@ -122,7 +121,6 @@ Formally, this says that the posterior distribution of parameters <span class="m
 \tag{5}
 \end{equation}
 \]</span></p>
-<p><br></p>
 <div class="sidenote">
 <p><strong>SIDENOTE</strong> 💡</p>
 <p>The approach that ignores uncertainty altogether corresponds to what is referred to as <strong>plugin</strong> approximation of the posterior predictive. Formally, it imposes <span class="math inline">\(p(y=1|\mathbf{x}, \mathcal{D})\approx p(y=1|\mathbf{x}, \hat{\mathbf{w}})\)</span>.</p>
@@ -144,6 +142,11 @@ Figure 2: Demonstration of the probit approximation.
 <p>We now have all the necessary ingredients to code Bayesian Logistic Regression up from scratch. While in practice we would usually want to rely on existing packages that have been properly tested, I often find it very educative and rewarding to program algorithms from the bottom up. You will see that Julia’s syntax so closely resembles the mathematical formulas we have seen above, that going from maths to code is incredibly easy. Seeing those formulas and algorithms then actually doing their magic is quite fun! The code chunk below, for example, shows the implementation of the loss function and its derivatives from <a href="#eq:likeli">(4)</a> above. Take a moment to go through the code line-by-line and try to understand how it relates back to the equations in <a href="#eq:likeli">(4)</a>. Isn’t it amazing how closely the code resembles the actual equations?</p>
 <script src="https://gist.github.com/pat-alt/cc53a11470e4fb736f24bb6de2393f54.js"></script>
 <p>Aside from the optimization routine this is essentially all there is to coding up Bayesian Logistic Regression from scratch in Julia Language. If you are curious to see the full source code in detail you can check out this <a href="https://colab.research.google.com/github/pat-alt/pat-alt.github.io/blob/main/content/post/2021-11-15-bayesian-logistic-regression/julia_implementation.ipynb">interactive notebook</a>. Now let us finally turn back to our synthetic data and see how Bayesian Logistic Regression can help us understand the uncertainty around our model predictions.</p>
+<div class="disclaimer">
+<p><strong>DISCLAIMER</strong> ❗️</p>
+<p>I should mention that this is the first time I program in Julia, so for any Julia pros out there: please bear with me! Happy to hear your suggestions/comments.</p>
+</div>
+<p><br></p>
 </div>
 <div id="the-estimates" class="section level2">
 <h2>The estimates</h2>
