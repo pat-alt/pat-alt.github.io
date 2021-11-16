@@ -60,8 +60,8 @@ S <- diag(c(1,1)) # covariance
 grid[,p:={
   mu <- unique(mu1)
   S_t <-  S - diag(c(0.1*abs(mu),0.1*abs(mu)))
-  S_t[2,1] <- 0.5 * abs(mu)
-  S_t[1,2] <- 0.5 * abs(mu)
+  S_t[2,1] <- 0.25 * abs(mu)
+  S_t[1,2] <- 0.25 * abs(mu)
   dmvnorm(cbind(x1,x2),c(mu,mu),S_t)
 },by=mu1]
 # Plot
@@ -79,6 +79,38 @@ animate(p, width = 400, height = 400)
 anim_save("www/toy.gif")
 ```
 
+```{r, fig.width=8, fig.height=4, eval=FALSE}
+library(mvtnorm)
+step <- 0.05
+range <- 2
+grid <- CJ(
+  x1=seq(-2*range,2*range,step),
+  x2=seq(-range,range,step),
+  mu1=seq(-range,range,step*5)
+)
+S <- diag(c(1,1)) # covariance
+grid[,p:={
+  mu <- unique(mu1)
+  S_t <-  S - diag(c(0.1*abs(mu),0.1*abs(mu)))
+  S_t[2,1] <- 0.1*abs(mu)
+  S_t[1,2] <- 0.1*abs(mu)
+  dmvnorm(cbind(x1,x2),c(2*mu,mu),S_t)
+},by=mu1]
+# Plot
+p <- ggplot(data=grid, aes(x = x1, y = x2)) +
+  geom_raster(aes(fill = p), interpolate = TRUE, show.legend = FALSE) +
+  geom_segment(aes(x=0, y=0, xend=2*mu1, yend=mu1), arrow = arrow(length = unit(0.25,"cm")), colour="coral") +
+  transition_time(mu1) +
+  scale_fill_viridis_c(option = "C") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  coord_equal() +
+  theme_void() 
+animate(p, width = 800, height = 400)
+anim_save("www/toy_medium.gif")
+```
+
+
 ## Uncertainty
 
 <div class="intro-gif">
@@ -88,11 +120,11 @@ anim_save("www/toy.gif")
   </figure>
 </div>
 
-If you've ever looked for evaluation metrics to assess model accuracy, chances are that you found many (too many?). Accuracy is in some sense the holy grail of prediction so it's not at all surprising that the machine learning community spends a lot time thinking about it. In a world where more and more high-stake decisions are being automated, model accuracy is in fact a very valid concern. 
+If you've ever searched for evaluation metrics to assess model accuracy, chances are that you found many different options to choose from (too many?). Accuracy is in some sense the holy grail of prediction so it's not at all surprising that the machine learning community spends a lot time thinking about it. In a world where more and more high-stake decisions are being automated, model accuracy is in fact a very valid concern. 
 
-But does the current recipe for model evaluation seem like a sound approach to automated decision-making? Haven't we forgot anything? Some would argue that we need to pay more attention to **model uncertainty**. No matter how many times you have cross-validated your model, the loss metric it's being optimized against as well as its parameters and predictions remain inherently random variables. Focusing merely on prediction accuracy and ignoring uncertainty altogether can install a false level of confidence in automated decision-making systems. Any **trustworthy** approach to learning from data should therefore at the very least be transparent about its own uncertainty. 
+But does this recipe for model evaluation seem like a sound and complete approach to automated decision-making? Haven't we forgot anything? Some would argue that we need to pay more attention to **model uncertainty**. No matter how many times you have cross-validated your model, the loss metric that it is being optimized against as well as its parameters and predictions remain inherently random variables. Focusing merely on prediction accuracy and ignoring uncertainty altogether can install a false level of confidence in automated decision-making systems. Any **trustworthy** approach to learning from data should therefore at the very least be transparent about its own uncertainty. 
 
-How can we estimate uncertainty around model parameters and predictions? **Frequentist** methods for uncertainty quantification generally involve either closed-form solutions based on asymptotic theory or bootstrapping (see for example [here](https://web.stanford.edu/class/archive/stats/stats200/stats200.1172/Lecture26.pdf) for the case of logistic regression). In Bayesian statistics and machine learning we are instead concerned with modelling the **posterior distribution** over model parameters. This approach to uncertainty quantification is known as **Bayesian Inference** because we treat model parameters in a Bayesian way: we make assumptions about their distribution based on **prior** knowledge or beliefs and update these beliefs in light of new evidence. The frequentist approach avoids the need for being explicit about prior beliefs, which in the past has sometimes been considered as *un*scientific. However, frequentist methods come with their own assumptions and pitfalls (see for example @murphy2012machine) for a discussion). Without diving further into this argument, let us now see how Bayesian logistic regression can be implemented from the bottom up.
+How can we estimate uncertainty around model parameters and predictions? **Frequentist** methods for uncertainty quantification generally involve either closed-form solutions based on asymptotic theory or bootstrapping (see for example [here](https://web.stanford.edu/class/archive/stats/stats200/stats200.1172/Lecture26.pdf) for the case of logistic regression). In Bayesian statistics and machine learning we are instead concerned with modelling the **posterior distribution** over model parameters. This approach to uncertainty quantification is known as **Bayesian Inference** because we treat model parameters in a Bayesian way: we make assumptions about their distribution based on **prior** knowledge or beliefs and update these beliefs in light of new evidence. The frequentist approach avoids the need for being explicit about prior beliefs, which in the past has sometimes been considered as *un*scientific. However, frequentist methods come with their own assumptions and pitfalls (see for example @murphy2012machine) for a discussion). Without diving further into this argument, let us now see how **Bayesian Logistic Regression** can be implemented from the bottom up.
 
 ## The ground truth
 
@@ -115,7 +147,7 @@ $$
 
 where $\sigma(a)=1/(1+e^{-a})$ is the **sigmoid** or **logit** function [@murphy2022probabilistic].^[We let $\mathbf{w}=(`r w[1]`, `r w[2]`, `r w[3]`)^T$ define the true coefficients.] Features are generated from a mixed Gaussian model. 
 
-To add a little bit of life to our example we will assume that the binary labels classify samples into cats and dogs, based on their height and tail length. Figure \@ref(fig:ground) shows the synthetic data in the two-dimensional feature domain. Following an introduction to Bayesian Logistic Regression in the next section we will use the synthetic data $\mathcal{D}$ to bechmark our model.
+To add a little bit of life to our example we will assume that the binary labels classify samples into cats and dogs, based on their height and tail length. Figure \@ref(fig:ground) shows the synthetic data in the two-dimensional feature domain. Following an introduction to Bayesian Logistic Regression in the next section we will use the synthetic data $\mathcal{D}$ to estimate our model.
 
 ```{r}
 logit <- function(w,X) {
@@ -224,11 +256,11 @@ $$
 
 
 
-Unlike with linear regression there are no closed-form analytical solutions to estimating or maximising this posterior, but fortunately accurate approximations do exist [@murphy2022probabilistic]. One of the simplest approaches called **Laplace Approximation** is straight-forward to implement and computationally very efficient. It can be shown that under the assumption of a Gaussian prior, the posterior of logistic regression is also approximately Gaussian: in particular, it approximately follows a Gaussian distribution centered around the **maximum a posteriori** (MAP) estimate $\hat{\mathbf{w}}=\arg\max_{\mathbf{w}} p(\mathbf{w}|\mathcal{D})$ and with a covariance matrix equal to the inverse Hessian evaluated at the mode $\hat{\Sigma}=(\mathbf{H}(\hat{\mathbf{w}}))^{-1}$. With that in mind, finding $\hat{\mathbf{w}}$ seems like a natural next step.
+Unlike with linear regression there are no closed-form analytical solutions to estimating or maximising this posterior, but fortunately accurate approximations do exist [@murphy2022probabilistic]. One of the simplest approaches called **Laplace Approximation** is straight-forward to implement and computationally very efficient. It relies on the observation that under the assumption of a Gaussian prior, the posterior of logistic regression is also approximately Gaussian: in particular, this Gaussian distribution is centered around the **maximum a posteriori** (MAP) estimate $\hat{\mathbf{w}}=\arg\max_{\mathbf{w}} p(\mathbf{w}|\mathcal{D})$ with a covariance matrix equal to the inverse Hessian evaluated at the mode $\hat{\Sigma}=(\mathbf{H}(\hat{\mathbf{w}}))^{-1}$. With that in mind, finding $\hat{\mathbf{w}}$ seems like a natural next step.
 
 ### Solving the problem
 
-In practice we do not maximize the likelihood $p(\mathbf{w}|\mathcal{D})$ directly. Instead we minimize the negative log likelihood, which is equivalent and easier to implement. In \@ref(eq:likeli) below I have denoted the negative log likelihood as $\ell(\mathbf{w})$ indicating that this is the **loss function** we aim to minimize. The following two lines in \@ref(eq:likeli) show the gradient and Hessian - so the first- and second-order derivatives of $\ell$ with respect to $\mathbf{w}$ - where $\mathbf{H}_0=\Sigma_0^{-1}$ and $\mu_n=\sigma(\mathbf{w}^T\mathbf{x}_n)$. To understand how exactly the gradient and Hessian are derived see for example chapter 10 in @murphy2022probabilistic.^[Note that the author works with the negative log likelihood scaled by the sample size]. 
+In practice we do not maximize the posterior $p(\mathbf{w}|\mathcal{D})$ directly. Instead we minimize the negative log likelihood, which is an equivalent optimization problem and easier to implement. In \@ref(eq:likeli) below I have denoted the negative log likelihood as $\ell(\mathbf{w})$ indicating that this is the **loss function** we aim to minimize. The following two lines in \@ref(eq:likeli) show the gradient and Hessian - so the first- and second-order derivatives of $\ell$ with respect to $\mathbf{w}$ - where $\mathbf{H}_0=\Sigma_0^{-1}$ and $\mu_n=\sigma(\mathbf{w}^T\mathbf{x}_n)$. To understand how exactly the gradient and Hessian are derived see for example chapter 10 in @murphy2022probabilistic.^[Note that the author works with the negative log likelihood scaled by the sample size]. 
 
 $$
 \begin{equation} 
@@ -318,13 +350,13 @@ I should mention that this is the first time I program in Julia, so for any Juli
 
 ## The estimates
 
-Figure \@ref(fig:posterior) below shows the resulting posterior distribution for $w_2$ and $w_3$ at varying degrees of prior uncertainty $\sigma$. The constant $w_1$ is held constant at the mode ($\hat{w}_1$). The red dot indicates the MLE. Note how for the choice of $\sigma\rightarrow 0$ the posterior is equal to the prior. This is intuitive since we have imposed that we have no uncertainty around our prior beliefs and hence no amount of new evidence can move us in any direction. Conversely, for $\sigma \rightarrow \infty$ the posterior distribution corresponds to the MLE posterior centered around the red dot.
+Figure \@ref(fig:posterior) below shows the resulting posterior distribution for $w_2$ and $w_3$ at varying degrees of prior uncertainty $\sigma$. The constant $w_1$ is held constant at the mode ($\hat{w}_1$). The red dot indicates the MLE. Note how for the choice of $\sigma\rightarrow 0$ the posterior is equal to the prior. This is intuitive since we have imposed that we have no uncertainty around our prior beliefs and hence no amount of new evidence can move us in any direction. Conversely, for $\sigma \rightarrow \infty$ the posterior distribution is centered around the unconstrained MLE: prior knowledge is very uncertain and hence the posterior is dominated by the likelihood of the data.
 
 ```{r posterior, fig.cap="Posterior distribution for $w_2$ and $w_3$ at varying degrees of prior uncertainty $\\sigma$."}
 knitr::include_graphics("www/posterior.png")
 ```
 
-What about the posterior predictive? The story is similar: since for $\sigma\rightarrow 0$ the posterior is completely dominated by the zero-mean prior we have $p(y=1|\mathbf{x},\hat{\mathbf{w}})=0.5$ everywhere (top left panel in Figure \@ref(fig:predictive)). As we gradually increase uncertainty around our prior the predictive posterior depends more and more on the data $\mathcal{D}$: uncertainty around predicted labels is high in regions that are not populated by samples $(y_n, \mathbf{x}_n)$. Not surprisingly, this effect is strongest for the MLE ($\sigma\rightarrow \infty$) and indicative of overfitting.
+What about the posterior predictive? The story is similar: since for $\sigma\rightarrow 0$ the posterior is completely dominated by the zero-mean prior we have $p(y=1|\mathbf{x},\hat{\mathbf{w}})=0.5$ everywhere (top left panel in Figure \@ref(fig:predictive)). As we gradually increase uncertainty around our prior the predictive posterior depends more and more on the data $\mathcal{D}$: uncertainty around predicted labels is high only in regions that are not populated by samples $(y_n, \mathbf{x}_n)$. Not surprisingly, this effect is strongest for the MLE ($\sigma\rightarrow \infty$) where we see some evidence of overfitting.
 
 ```{r predictive, fig.cap="Predictive posterior distribution at varying degrees of prior uncertainty $\\sigma$."}
 knitr::include_graphics("www/predictive.png")
@@ -332,7 +364,11 @@ knitr::include_graphics("www/predictive.png")
 
 ## Wrapping up
 
-In this post we have seen how Bayesian Logistic Regression can be implemented from scratch in Julia language. The estimated posterior distribution over model parameters can be used to quantify uncertainty around coefficients and model predictions. I have argued that it is important to be transparent about model uncertainty to avoid being overly confident in estimates. There are many more benefits associated with Bayesian (probabilistic) machine learning. Understanding where in the input domain our model exerts high uncertainty can for example be instrumental in labelling data: see for example @gal2017deep and follow-up works for an interesting application to **active learning** for image labels. Similarly, there is a recent work that uses estimates of the posterior predictive in the context of **algorithmic recourse** [@schut2021generating]. For a brief introduction to algorithmic recourse see one of my [previous posts](../2021-04-26-individual-recourse-for-black-box-models/index.html). As a great reference for further reading about probabilistic machine learning I can highly recommend @murphy2022probabilistic. An electronic version of the book is currently freely available as a draft.
+In this post we have seen how Bayesian Logistic Regression can be implemented from scratch in Julia language. The estimated posterior distribution over model parameters can be used to quantify uncertainty around coefficients and model predictions. I have argued that it is important to be transparent about model uncertainty to avoid being overly confident in estimates. 
+
+There are many more benefits associated with Bayesian (probabilistic) machine learning. Understanding where in the input domain our model exerts high uncertainty can for example be instrumental in labelling data: see for example @gal2017deep and follow-up works for an interesting application to **active learning** for image data. Similarly, there is a recent work that uses estimates of the posterior predictive in the context of **algorithmic recourse** [@schut2021generating]. For a brief introduction to algorithmic recourse see one of my [previous posts](../2021-04-26-individual-recourse-for-black-box-models/index.html). 
+
+As a great reference for further reading about probabilistic machine learning I can highly recommend @murphy2022probabilistic. An electronic version of the book is currently freely available as a draft. Finally, remember that if you want to try yourself at the code, you can check out this [interactive notebook](https://colab.research.google.com/github/pat-alt/pat-alt.github.io/blob/main/content/post/2021-11-15-bayesian-logistic-regression/julia_implementation.ipynb).
 
 ## References
 
