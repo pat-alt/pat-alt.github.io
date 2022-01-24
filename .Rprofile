@@ -10,3 +10,4 @@ options(
   blogdown.ext = ".qmd",
   blogdown.subdir = "post"
 )
+
