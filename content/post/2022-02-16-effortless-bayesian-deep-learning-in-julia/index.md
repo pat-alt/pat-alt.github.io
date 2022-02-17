@@ -8,12 +8,8 @@ crossref:
   tbl-prefix: Table
 date: 2022-02-16
 featured: "yes"
-format:
-  hugo:
-    html-math-method:
-      method: gladtex
-image:
-  preview_only: "no"
+format: hugo
+jupyter: julia
 lastmod: r format(Sys.time(), "%b %d, %Y")
 slug: effortless-bayesian-deep-learning-in-julia
 summary: "An introduction to effortless Bayesian deep learning through
@@ -56,14 +52,19 @@ among the most popular tools, but they too have been shown to lack
 robustness (Slack et al. 2020).
 
 Exactly why are deep neural networks instable and intransparent? Let
-𝒟 = {*x*, *y*}<sub>*n* = 1</sub><sup>*N*</sup> denote our feature-label
-pairs and let *f*(*x*;*θ*) = *y* denote some deep neural network
-specified by its parameters *θ*. Then the first thing to note is that
-the number of free parameters *θ* is typically huge (if you ask Mr
-Sutskever it really probably cannot be huge enough!). That alone makes
-it very hard to monitor and interpret the inner workings of
-deep-learning algorithms. Perhaps more importantly though, the number of
-parameters *relative* to the size of 𝒟 is generally huge:
+![\\mathcal{D}=\\{x,y\\}\_{n=1}^N](https://latex.codecogs.com/svg.latex?%5Cmathcal%7BD%7D%3D%5C%7Bx%2Cy%5C%7D_%7Bn%3D1%7D%5EN "\mathcal{D}=\{x,y\}_{n=1}^N")
+denote our feature-label pairs and let
+![f(x;\\theta)=y](https://latex.codecogs.com/svg.latex?f%28x%3B%5Ctheta%29%3Dy "f(x;\theta)=y")
+denote some deep neural network specified by its parameters
+![\\theta](https://latex.codecogs.com/svg.latex?%5Ctheta "\theta"). Then
+the first thing to note is that the number of free parameters
+![\\theta](https://latex.codecogs.com/svg.latex?%5Ctheta "\theta") is
+typically huge (if you ask Mr Sutskever it really probably cannot be
+huge enough!). That alone makes it very hard to monitor and interpret
+the inner workings of deep-learning algorithms. Perhaps more importantly
+though, the number of parameters *relative* to the size of
+![\\mathcal{D}](https://latex.codecogs.com/svg.latex?%5Cmathcal%7BD%7D "\mathcal{D}")
+is generally huge:
 
 > \[...\] deep neural networks are typically very underspecified by the
 > available data, and \[...\] parameters \[therefore\] correspond to a
@@ -78,19 +79,25 @@ predictions from deep learning models probabilistically (Wilson 2020).
 Formally, we are interested in estimating the posterior predictive
 distribution as the following Bayesian model average (BMA):
 
-*p*(*y*\|*x*,𝒟) = ∫*p*(*y*\|*x*,*θ*)*p*(*θ*\|𝒟)*d**θ*
+![
+p(y\|x,\\mathcal{D}) = \\int p(y\|x,\\theta)p(\\theta\|\\mathcal{D})d\\theta
+](https://latex.codecogs.com/svg.latex?%0Ap%28y%7Cx%2C%5Cmathcal%7BD%7D%29%20%3D%20%5Cint%20p%28y%7Cx%2C%5Ctheta%29p%28%5Ctheta%7C%5Cmathcal%7BD%7D%29d%5Ctheta%0A "
+p(y|x,\mathcal{D}) = \int p(y|x,\theta)p(\theta|\mathcal{D})d\theta
+")
 
 The integral implies that we essentially need many predictions from many
-different specifications of *θ*. Unfortunately, this means more work for
-us or rather our computers. Fortunately though, researchers have
-proposed many ingenious ways to approximate the equation above: Gal and
-Ghahramani (2016) propose using dropout at test time while
-Lakshminarayanan, Pritzel, and Blundell (2016) show that averaging over
-an ensemble of just five models seems to do the trick. Still, despite
-their simplicity and usefulness these approaches involve additional
-computational costs compared to training just a single network. As we
-shall see now though, another promising approach has recently entered
-the limelight: **Laplace approximation** (LA).
+different specifications of
+![\\theta](https://latex.codecogs.com/svg.latex?%5Ctheta "\theta").
+Unfortunately, this means more work for us or rather our computers.
+Fortunately though, researchers have proposed many ingenious ways to
+approximate the equation above: Gal and Ghahramani (2016) propose using
+dropout at test time while Lakshminarayanan, Pritzel, and Blundell
+(2016) show that averaging over an ensemble of just five models seems to
+do the trick. Still, despite their simplicity and usefulness these
+approaches involve additional computational costs compared to training
+just a single network. As we shall see now though, another promising
+approach has recently entered the limelight: **Laplace approximation**
+(LA).
 
 If you have read my [previous
 post](https://towardsdatascience.com/bayesian-logistic-regression-53df017ba90f)
@@ -130,15 +137,20 @@ provides all the detail you need.
 
 Let's recap: in the case of logisitic regression we had a assumed a
 zero-mean Gaussian prior
-*p*(**w**) ∼ 𝒩(**w**\|**0**,*σ*<sub>0</sub><sup>2</sup>**I**) = 𝒩(**w**\|**0**,**H**<sub>0</sub><sup>−1</sup>)
+![p(\\mathbf{w}) \\sim \\mathcal{N} \\left( \\mathbf{w} \| \\mathbf{0}, \\sigma_0^2 \\mathbf{I} \\right)=\\mathcal{N} \\left( \\mathbf{w} \| \\mathbf{0}, \\mathbf{H}\_0^{-1} \\right)](https://latex.codecogs.com/svg.latex?p%28%5Cmathbf%7Bw%7D%29%20%5Csim%20%5Cmathcal%7BN%7D%20%5Cleft%28%20%5Cmathbf%7Bw%7D%20%7C%20%5Cmathbf%7B0%7D%2C%20%5Csigma_0%5E2%20%5Cmathbf%7BI%7D%20%5Cright%29%3D%5Cmathcal%7BN%7D%20%5Cleft%28%20%5Cmathbf%7Bw%7D%20%7C%20%5Cmathbf%7B0%7D%2C%20%5Cmathbf%7BH%7D_0%5E%7B-1%7D%20%5Cright%29 "p(\mathbf{w}) \sim \mathcal{N} \left( \mathbf{w} | \mathbf{0}, \sigma_0^2 \mathbf{I} \right)=\mathcal{N} \left( \mathbf{w} | \mathbf{0}, \mathbf{H}_0^{-1} \right)")
 for the weights that are used to compute logits
-*μ*<sub>*n*</sub> = **w**<sup>*T*</sup>**x**<sub>*n*</sub>, which in
-turn are fed to a sigmoid function to produce probabilities
-*p*(*y*<sub>*n*</sub>=1) = *σ*(*μ*<sub>*n*</sub>). We saw that under
-this assumption solving the logisitic regression problem corresponds to
-minimizing the following differentiable loss function:
+![\\mu_n=\\mathbf{w}^T\\mathbf{x}\_n](https://latex.codecogs.com/svg.latex?%5Cmu_n%3D%5Cmathbf%7Bw%7D%5ET%5Cmathbf%7Bx%7D_n "\mu_n=\mathbf{w}^T\mathbf{x}_n"),
+which in turn are fed to a sigmoid function to produce probabilities
+![p(y_n=1)=\\sigma(\\mu_n)](https://latex.codecogs.com/svg.latex?p%28y_n%3D1%29%3D%5Csigma%28%5Cmu_n%29 "p(y_n=1)=\sigma(\mu_n)").
+We saw that under this assumption solving the logisitic regression
+problem corresponds to minimizing the following differentiable loss
+function:
 
-ℓ(**w**) =  − ∑<sub>*n*</sub>\[*y*<sub>*n*</sub>log*μ*<sub>*n*</sub>+(1−*y*<sub>*n*</sub>)log(1−*μ*<sub>*n*</sub>)\] + 0.5(**w**−**w**<sub>0</sub>)<sup>*T*</sup>**H**<sub>0</sub>(**w**−**w**<sub>0</sub>)
+![
+\\ell(\\mathbf{w})= - \\sum\_{n} \[y_n \\log \\mu_n + (1-y_n)\\log (1-\\mu_n)\] + 0.5 (\\mathbf{w}-\\mathbf{w}\_0)^T\\mathbf{H}\_0(\\mathbf{w}-\\mathbf{w}\_0)
+](https://latex.codecogs.com/svg.latex?%0A%5Cell%28%5Cmathbf%7Bw%7D%29%3D%20-%20%5Csum_%7Bn%7D%20%5By_n%20%5Clog%20%5Cmu_n%20%2B%20%281-y_n%29%5Clog%20%281-%5Cmu_n%29%5D%20%2B%200.5%20%28%5Cmathbf%7Bw%7D-%5Cmathbf%7Bw%7D_0%29%5ET%5Cmathbf%7BH%7D_0%28%5Cmathbf%7Bw%7D-%5Cmathbf%7Bw%7D_0%29%0A "
+\ell(\mathbf{w})= - \sum_{n} [y_n \log \mu_n + (1-y_n)\log (1-\mu_n)] + 0.5 (\mathbf{w}-\mathbf{w}_0)^T\mathbf{H}_0(\mathbf{w}-\mathbf{w}_0)
+")
 
 As our first step towards Bayesian deep learning, we observe the
 following: the loss function above corresponds to the objective faced by
@@ -149,22 +161,29 @@ not surprising that underlying concepts can in theory be applied in much
 the same way.
 
 So let's quickly recap the next core concept: LA relies on the fact that
-the second-order Taylor expansion of our loss function ℓ evaluated at
-the **maximum a posteriori** (MAP) estimate
-**ŵ** = arg max<sub>**w**</sub>*p*(**w**\|𝒟) amounts to a multi-variate
-Gaussian distribution. In particular, that Gaussian is centered around
-the MAP estimate with covariance equal to the inverse Hessian evaluated
-at the mode *Σ̂* = (**H**(**ŵ**))<sup>−1</sup> (Murphy 2022).
+the second-order Taylor expansion of our loss function
+![\\ell](https://latex.codecogs.com/svg.latex?%5Cell "\ell") evaluated
+at the **maximum a posteriori** (MAP) estimate
+![\\mathbf{\\hat{w}}=\\arg\\max\_{\\mathbf{w}} p(\\mathbf{w}\|\\mathcal{D})](https://latex.codecogs.com/svg.latex?%5Cmathbf%7B%5Chat%7Bw%7D%7D%3D%5Carg%5Cmax_%7B%5Cmathbf%7Bw%7D%7D%20p%28%5Cmathbf%7Bw%7D%7C%5Cmathcal%7BD%7D%29 "\mathbf{\hat{w}}=\arg\max_{\mathbf{w}} p(\mathbf{w}|\mathcal{D})")
+amounts to a multi-variate Gaussian distribution. In particular, that
+Gaussian is centered around the MAP estimate with covariance equal to
+the inverse Hessian evaluated at the mode
+![\\hat{\\Sigma}=(\\mathbf{H}(\\mathbf{\\hat{w}}))^{-1}](https://latex.codecogs.com/svg.latex?%5Chat%7B%5CSigma%7D%3D%28%5Cmathbf%7BH%7D%28%5Cmathbf%7B%5Chat%7Bw%7D%7D%29%29%5E%7B-1%7D "\hat{\Sigma}=(\mathbf{H}(\mathbf{\hat{w}}))^{-1}")
+(Murphy 2022).
 
 That is basically all there is to the story: if we have a good estimate
-of **H**(**ŵ**) we have an analytical expression for an (approximate)
-posterior over parameters. So let's go ahead and start by run Bayesian
-logisitic regression using [Flux.jl](https://fluxml.ai/). We begin by
-loading some required packages including
+of
+![\\mathbf{H}(\\mathbf{\\hat{w}})](https://latex.codecogs.com/svg.latex?%5Cmathbf%7BH%7D%28%5Cmathbf%7B%5Chat%7Bw%7D%7D%29 "\mathbf{H}(\mathbf{\hat{w}})")
+we have an analytical expression for an (approximate) posterior over
+parameters. So let's go ahead and start by run Bayesian logisitic
+regression using [Flux.jl](https://fluxml.ai/). We begin by loading some
+required packages including
 [BayesLaplace.jl](https://www.paltmeyer.com/BayesLaplace.jl/dev/). It
 ships with a helper function `toy_data_linear` that creates a toy data
 set composed of linearly separable samples evenly balanced across the
 two classes.
+
+<div class="cell" execution_count="9">
 
 ``` julia
 # Import libraries.
@@ -176,19 +195,32 @@ X = hcat(xs...); # bring into tabular format
 data = zip(xs,y);
 ```
 
+</div>
+
 Then we proceed to prepare the single-layer neural network with weight
-decay. The term *λ* determines the strength of the ℓ2 penalty: we
-regularize parameters *θ* more heavily for higher values. Equivalently,
-we can say that from the Bayesian perspective it governs the strength of
-the prior
-*p*(*θ*) ∼ 𝒩(*θ*\|**0**,*σ*<sub>0</sub><sup>2</sup>**I**) = 𝒩(**w**\|**0**,*λ*<sub>0</sub><sup>−2</sup>**I**):
-a higher value of *λ* indicates a higher conviction about our prior
-belief that *θ* = **0**, which is of course equivalent to regularizing
-more heavily. The exact choice of *λ* = 0.5 for this toy example is
-somewhat arbitrary (it made for good visualizations below). Note that I
-have used *θ* to denote our neural parameters to distinguish the case
-from Bayesian logisitic regression, but we are in fact still solving the
-same problem.
+decay. The term
+![\\lambda](https://latex.codecogs.com/svg.latex?%5Clambda "\lambda")
+determines the strength of the
+![\\ell2](https://latex.codecogs.com/svg.latex?%5Cell2 "\ell2") penalty:
+we regularize parameters
+![\\theta](https://latex.codecogs.com/svg.latex?%5Ctheta "\theta") more
+heavily for higher values. Equivalently, we can say that from the
+Bayesian perspective it governs the strength of the prior
+![p(\\theta) \\sim \\mathcal{N} \\left( \\theta \| \\mathbf{0}, \\sigma_0^2 \\mathbf{I} \\right)= \\mathcal{N} \\left( \\mathbf{w} \| \\mathbf{0}, \\lambda_0^{-2} \\mathbf{I} \\right)](https://latex.codecogs.com/svg.latex?p%28%5Ctheta%29%20%5Csim%20%5Cmathcal%7BN%7D%20%5Cleft%28%20%5Ctheta%20%7C%20%5Cmathbf%7B0%7D%2C%20%5Csigma_0%5E2%20%5Cmathbf%7BI%7D%20%5Cright%29%3D%20%5Cmathcal%7BN%7D%20%5Cleft%28%20%5Cmathbf%7Bw%7D%20%7C%20%5Cmathbf%7B0%7D%2C%20%5Clambda_0%5E%7B-2%7D%20%5Cmathbf%7BI%7D%20%5Cright%29 "p(\theta) \sim \mathcal{N} \left( \theta | \mathbf{0}, \sigma_0^2 \mathbf{I} \right)= \mathcal{N} \left( \mathbf{w} | \mathbf{0}, \lambda_0^{-2} \mathbf{I} \right)"):
+a higher value of
+![\\lambda](https://latex.codecogs.com/svg.latex?%5Clambda "\lambda")
+indicates a higher conviction about our prior belief that
+![\\theta=\\mathbf{0}](https://latex.codecogs.com/svg.latex?%5Ctheta%3D%5Cmathbf%7B0%7D "\theta=\mathbf{0}"),
+which is of course equivalent to regularizing more heavily. The exact
+choice of
+![\\lambda=0.5](https://latex.codecogs.com/svg.latex?%5Clambda%3D0.5 "\lambda=0.5")
+for this toy example is somewhat arbitrary (it made for good
+visualizations below). Note that I have used
+![\\theta](https://latex.codecogs.com/svg.latex?%5Ctheta "\theta") to
+denote our neural parameters to distinguish the case from Bayesian
+logisitic regression, but we are in fact still solving the same problem.
+
+<div class="cell" execution_count="10">
 
 ``` julia
 nn = Chain(Dense(2,1))
@@ -198,7 +230,11 @@ weight_regularization(λ=λ) = 1/2 * λ^2 * sum(sqnorm, Flux.params(nn))
 loss(x, y) = Flux.Losses.logitbinarycrossentropy(nn(x), y) + weight_regularization();
 ```
 
+</div>
+
 Before we apply Laplace approximation we train our model:
+
+<div class="cell" execution_count="11">
 
 ``` julia
 using Flux.Optimise: update!, ADAM
@@ -215,6 +251,8 @@ for epoch = 1:epochs
 end
 ```
 
+</div>
+
 Up until this point we have just followed the standard recipe for
 training a regularized artificial neural network in
 [Flux.jl](https://fluxml.ai/) for a simple binary classification task.
@@ -222,17 +260,23 @@ To compute the Laplace approximation using
 [BayesLaplace.jl](https://www.paltmeyer.com/BayesLaplace.jl/dev/) we
 need just two more lines of code:
 
+<div class="cell" execution_count="12">
+
 ``` julia
 la = laplace(nn, λ=λ)
 fit!(la, data);
 ```
 
+</div>
+
 Under the hood the Hessian is approximated through the **empirical
 Fisher**, which can be computed using only the gradients of our loss
 function
-∇<sub>*θ*</sub>ℓ(*f*(**x**<sub>*n*</sub>;*θ*,*y*<sub>*n*</sub>)) where
-{**x**<sub>*n*</sub>, *y*<sub>*n*</sub>} are training data (see [NeurIPS
-2021 paper](https://arxiv.org/pdf/2106.14806.pdf) for details). Finally,
+![\\nabla\_{\\theta}\\ell(f(\\mathbf{x}\_n;\\theta,y_n))](https://latex.codecogs.com/svg.latex?%5Cnabla_%7B%5Ctheta%7D%5Cell%28f%28%5Cmathbf%7Bx%7D_n%3B%5Ctheta%2Cy_n%29%29 "\nabla_{\theta}\ell(f(\mathbf{x}_n;\theta,y_n))")
+where
+![\\{\\mathbf{x}\_n,y_n\\}](https://latex.codecogs.com/svg.latex?%5C%7B%5Cmathbf%7Bx%7D_n%2Cy_n%5C%7D "\{\mathbf{x}_n,y_n\}")
+are training data (see [NeurIPS 2021
+paper](https://arxiv.org/pdf/2106.14806.pdf) for details). Finally,
 [BayesLaplace.jl](https://www.paltmeyer.com/BayesLaplace.jl/dev/) ships
 with a function
 `predict(𝑳::LaplaceRedux, X::AbstractArray; link_approx=:probit)` that
@@ -245,6 +289,8 @@ corresponding plugin estimate as well. Note how for the Laplace
 approximation the predicticted probabilities fan out indicating that
 confidence decrease in regions scarce of data.
 
+<div class="cell" execution_count="13">
+
 ``` julia
 p_plugin = plot_contour(X',y,la;title="Plugin",type=:plugin);
 p_laplace = plot_contour(X',y,la;title="Laplace")
@@ -253,8 +299,14 @@ plt = plot(p_plugin, p_laplace, layout=(1,2), size=(1000,400))
 savefig(plt, "www/posterior_predictive_logit.png");
 ```
 
+</div>
+
 <figure>
-<img src="www/posterior_predictive_logit.png" id="fig-logit" alt="Figure 1: Posterior predictive distribution of logisitic regression in the 2D feature space using plugin estimator (left) and Laplace approximation (right)." /><figcaption aria-hidden="true">Figure 1: Posterior predictive distribution of logisitic regression in the 2D feature space using plugin estimator (left) and Laplace approximation (right).</figcaption>
+<img src="www/posterior_predictive_logit.png" id="fig-logit"
+alt="Figure 1: Posterior predictive distribution of logisitic regression in the 2D feature space using plugin estimator (left) and Laplace approximation (right)." />
+<figcaption aria-hidden="true">Figure 1: Posterior predictive
+distribution of logisitic regression in the 2D feature space using
+plugin estimator (left) and Laplace approximation (right).</figcaption>
 </figure>
 
 ### ... to Bayesian Neural Networks
@@ -264,6 +316,8 @@ but this time for data that is not linearly separable using a simple MLP
 instead of the single-layer neural network we used above. The code below
 is almost the same as above, so I will not go through the various steps
 again.
+
+<div class="cell" execution_count="6">
 
 ``` julia
 # Number of points to generate:
@@ -295,6 +349,8 @@ for epoch = 1:epochs
 end
 ```
 
+</div>
+
 Fitting the Laplace approximation is also analogous, but note that this
 we have added an argument: `subset_of_weights=:last_layer`. This
 specifies that we only want to use the parameters of the last layer of
@@ -306,6 +362,8 @@ again the Laplace approximation yields a posterior predictive
 distribution that is more conservative than the over-confident plugin
 estimate.
 
+<div class="cell" execution_count="7">
+
 ``` julia
 la = laplace(nn, λ=λ, subset_of_weights=:last_layer)
 fit!(la, data);
@@ -316,16 +374,25 @@ plt = plot(p_plugin, p_laplace, layout=(1,2), size=(1000,400))
 savefig(plt, "www/posterior_predictive_mlp.png");
 ```
 
+</div>
+
 <figure>
-<img src="www/posterior_predictive_mlp.png" id="fig-mlp" alt="Figure 2: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right)." /><figcaption aria-hidden="true">Figure 2: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right).</figcaption>
+<img src="www/posterior_predictive_mlp.png" id="fig-mlp"
+alt="Figure 2: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right)." />
+<figcaption aria-hidden="true">Figure 2: Posterior predictive
+distribution of MLP in the 2D feature space using plugin estimator
+(left) and Laplace approximation (right).</figcaption>
 </figure>
 
 To see why this is a desirable outcome consider the zoomed out version
 of [Figure 2](#fig-mlp) below: the plugin estimator classifies with full
 confidence in regions completely scarce of any data. Arguably Laplace
 approximation produces a much more reasonable picture, even though it
-too could likely be improved by fine-tuning our choice of *λ* and the
-neural network architecture.
+too could likely be improved by fine-tuning our choice of
+![\\lambda](https://latex.codecogs.com/svg.latex?%5Clambda "\lambda")
+and the neural network architecture.
+
+<div class="cell" execution_count="8">
 
 ``` julia
 zoom=-50
@@ -336,8 +403,14 @@ plt = plot(p_plugin, p_laplace, layout=(1,2), size=(1000,400));
 savefig(plt, "www/posterior_predictive_mlp_zoom.png");
 ```
 
+</div>
+
 <figure>
-<img src="www/posterior_predictive_mlp_zoom.png" id="fig-mlp-zoom" alt="Figure 3: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right). Zoomed out." /><figcaption aria-hidden="true">Figure 3: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right). Zoomed out.</figcaption>
+<img src="www/posterior_predictive_mlp_zoom.png" id="fig-mlp-zoom"
+alt="Figure 3: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right). Zoomed out." />
+<figcaption aria-hidden="true">Figure 3: Posterior predictive
+distribution of MLP in the 2D feature space using plugin estimator
+(left) and Laplace approximation (right). Zoomed out.</figcaption>
 </figure>
 
 ## Wrapping up
