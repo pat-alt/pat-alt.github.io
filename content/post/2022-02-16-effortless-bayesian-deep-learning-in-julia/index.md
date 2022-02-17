@@ -11,7 +11,7 @@ featured: "yes"
 format:
   hugo:
     html-math-method:
-      method: plain
+      method: gladtex
 image:
   preview_only: "no"
 lastmod: r format(Sys.time(), "%b %d, %Y")
