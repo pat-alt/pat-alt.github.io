@@ -3,12 +3,18 @@ author: Patrick Altmeyer
 bibliography: ../../../bib.bib
 categories:
 - Trustworthy AI
+crossref:
+  fig-prefix: Figure
+  tbl-prefix: Table
 date: 2022-02-16
 featured: "yes"
-format: gfm
+format:
+  hugo:
+    html-math-method:
+      method: plain
 image:
   preview_only: "no"
-lastmod: r format(Sys.time(), “%b %d, %Y”)
+lastmod: r format(Sys.time(), "%b %d, %Y")
 slug: effortless-bayesian-deep-learning-in-julia
 summary: "An introduction to effortless Bayesian deep learning through
   Laplace approximation coded from scratch in Julia. See also the
@@ -30,7 +36,7 @@ increasingly polarising debate that you can follow live on
 [Twitter](https://twitter.com/ilyasut/status/1491554478243258368). On
 one side you have optimists like Ilya Sutskever, chief scientist of
 OpenAI, who believes that large deep neural networks may already be
-slighty conscious - that’s “may” and “slightly” and only if you just go
+slighty conscious - that's "may" and "slightly" and only if you just go
 deep enough? On the other side you have prominent sceptics like Judea
 Pearl who has long since argued that deep learning still boils down to
 curve fitting - purely associational and not even remotely intelligent
@@ -59,20 +65,18 @@ it very hard to monitor and interpret the inner workings of
 deep-learning algorithms. Perhaps more importantly though, the number of
 parameters *relative* to the size of 𝒟 is generally huge:
 
-> \[…\] deep neural networks are typically very underspecified by the
-> available data, and \[…\] parameters \[therefore\] correspond to a
-> diverse variety of compelling explanations for the data.
-> (**wilson2020case?**)
+> \[...\] deep neural networks are typically very underspecified by the
+> available data, and \[...\] parameters \[therefore\] correspond to a
+> diverse variety of compelling explanations for the data. (Wilson 2020)
 
 In other words, training a single deep neural network may (and usually
 does) lead to one random parameter specification that fits the
 underlying data very well. But in all likelihood there are many other
 specifications that also fit the data very well. This is both a strength
 and vulnerability of deep learning and very much calls for treating
-predictions from deep learning models probabilistically
-(**wilson2020case?**). Formally, we are interested in estimating the
-posterior predictive distribution as the following Bayesian model
-average (BMA):
+predictions from deep learning models probabilistically (Wilson 2020).
+Formally, we are interested in estimating the posterior predictive
+distribution as the following Bayesian model average (BMA):
 
 *p*(*y*\|*x*,𝒟) = ∫*p*(*y*\|*x*,*θ*)*p*(*θ*\|𝒟)*d**θ*
 
@@ -116,15 +120,15 @@ with any pretrained Torch model. For this post, I have built a much less
 comprehensive, pure-play equivalent of their package in Julia -
 [BayesLaplace.jl](https://www.paltmeyer.com/BayesLaplace.jl/dev/) can be
 used with deep learning models built in [Flux.jl](https://fluxml.ai/),
-which is Julia’s main DL library. As in the previous post on Bayesian
+which is Julia's main DL library. As in the previous post on Bayesian
 logistic regression I will rely on Julia code snippits instead of
-equations to convey the underlying maths. If you’re curious about the
+equations to convey the underlying maths. If you're curious about the
 maths, the [NeurIPS 2021 paper](https://arxiv.org/pdf/2106.14806.pdf)
 provides all the detail you need.
 
-### From Bayesian Logisitic Regression …
+### From Bayesian Logisitic Regression ...
 
-Let’s recap: in the case of logisitic regression we had a assumed a
+Let's recap: in the case of logisitic regression we had a assumed a
 zero-mean Gaussian prior
 *p*(**w**) ∼ 𝒩(**w**\|**0**,*σ*<sub>0</sub><sup>2</sup>**I**) = 𝒩(**w**\|**0**,**H**<sub>0</sub><sup>−1</sup>)
 for the weights that are used to compute logits
@@ -134,9 +138,7 @@ turn are fed to a sigmoid function to produce probabilities
 this assumption solving the logisitic regression problem corresponds to
 minimizing the following differentiable loss function:
 
-$$
-\\ell(\\mathbf{w})=- \\sum\_{n=1}^{N} \[y_n \\log \\mu_n + (1-y_n)\\log (1-\\mu_n)\] + \\frac{1}{2} (\\mathbf{w}-\\mathbf{w}\_0)^T\\mathbf{H}\_0(\\mathbf{w}-\\mathbf{w}\_0)
-$$
+ℓ(**w**) =  − ∑<sub>*n*</sub>\[*y*<sub>*n*</sub>log*μ*<sub>*n*</sub>+(1−*y*<sub>*n*</sub>)log(1−*μ*<sub>*n*</sub>)\] + 0.5(**w**−**w**<sub>0</sub>)<sup>*T*</sup>**H**<sub>0</sub>(**w**−**w**<sub>0</sub>)
 
 As our first step towards Bayesian deep learning, we observe the
 following: the loss function above corresponds to the objective faced by
@@ -146,21 +148,19 @@ equivalent to a very simple neural network architecture and hence it is
 not surprising that underlying concepts can in theory be applied in much
 the same way.
 
-So let’s quickly recap the next core concept: LA relies on the fact that
+So let's quickly recap the next core concept: LA relies on the fact that
 the second-order Taylor expansion of our loss function ℓ evaluated at
 the **maximum a posteriori** (MAP) estimate
-$\\hat{\\mathbf{w}}=\\arg\\max\_{\\mathbf{w}} p(\\mathbf{w}\|\\mathcal{D})$
-amounts to a multi-variate Gaussian distribution. In particular, that
-Gaussian is centered around the MAP estimate with covariance equal to
-the inverse Hessian evaluated at the mode
-$\\hat{\\Sigma}=(\\mathbf{H}(\\hat{\\mathbf{w}}))^{-1}$ (Murphy 2022).
+**ŵ** = arg max<sub>**w**</sub>*p*(**w**\|𝒟) amounts to a multi-variate
+Gaussian distribution. In particular, that Gaussian is centered around
+the MAP estimate with covariance equal to the inverse Hessian evaluated
+at the mode *Σ̂* = (**H**(**ŵ**))<sup>−1</sup> (Murphy 2022).
 
 That is basically all there is to the story: if we have a good estimate
-of $\\mathbf{H}(\\hat{\\mathbf{w}})$ we have an analytical expression
-for an (approximate) posterior over parameters. So let’s go ahead and
-start by run Bayesian logisitic regression using
-[Flux.jl](https://fluxml.ai/). We begin by loading some required
-packages including
+of **H**(**ŵ**) we have an analytical expression for an (approximate)
+posterior over parameters. So let's go ahead and start by run Bayesian
+logisitic regression using [Flux.jl](https://fluxml.ai/). We begin by
+loading some required packages including
 [BayesLaplace.jl](https://www.paltmeyer.com/BayesLaplace.jl/dev/). It
 ships with a helper function `toy_data_linear` that creates a toy data
 set composed of linearly separable samples evenly balanced across the
@@ -190,23 +190,13 @@ have used *θ* to denote our neural parameters to distinguish the case
 from Bayesian logisitic regression, but we are in fact still solving the
 same problem.
 
-<div class="cell" execution_count="2">
-
 ``` julia
 nn = Chain(Dense(2,1))
 λ = 0.5
 sqnorm(x) = sum(abs2, x)
 weight_regularization(λ=λ) = 1/2 * λ^2 * sum(sqnorm, Flux.params(nn))
-loss(x, y) = Flux.Losses.logitbinarycrossentropy(nn(x), y) + weight_regularization()
+loss(x, y) = Flux.Losses.logitbinarycrossentropy(nn(x), y) + weight_regularization();
 ```
-
-<div class="cell-output-display">
-
-    loss (generic function with 1 method)
-
-</div>
-
-</div>
 
 Before we apply Laplace approximation we train our model:
 
@@ -248,35 +238,28 @@ with a function
 `predict(𝑳::LaplaceRedux, X::AbstractArray; link_approx=:probit)` that
 computes the posterior predictive using a probit approximation, much
 like we saw in the previous post. That function is used under the hood
-of the `plot_contour` function below to create the right panel of Figure
-[fig. 1](#fig-logit). It visualizes the posterior predictive
+of the `plot_contour` function below to create the right panel of
+[Figure 1](#fig-logit). It visualizes the posterior predictive
 distribution in the 2D feature space. For comparison I have added the
 corresponding plugin estimate as well. Note how for the Laplace
 approximation the predicticted probabilities fan out indicating that
 confidence decrease in regions scarce of data.
 
-<div class="cell" execution_count="7">
-
 ``` julia
 p_plugin = plot_contour(X',y,la;title="Plugin",type=:plugin);
 p_laplace = plot_contour(X',y,la;title="Laplace")
 # Plot the posterior distribution with a contour plot.
-plot(p_plugin, p_laplace, layout=(1,2), size=(1000,400))
+plt = plot(p_plugin, p_laplace, layout=(1,2), size=(1000,400))
+savefig(plt, "www/posterior_predictive_logit.png");
 ```
 
-<div class="cell-output-display">
-
 <figure>
-<img src="index_files/figure-gfm/fig-logit-output-1.svg" id="fig-logit" alt="Figure 1: Posterior predictive distribution of logisitic regression in the 2D feature space using plugin estimator (left) and Laplace approximation (right)." /><figcaption aria-hidden="true">Figure 1: Posterior predictive distribution of logisitic regression in the 2D feature space using plugin estimator (left) and Laplace approximation (right).</figcaption>
+<img src="www/posterior_predictive_logit.png" id="fig-logit" alt="Figure 1: Posterior predictive distribution of logisitic regression in the 2D feature space using plugin estimator (left) and Laplace approximation (right)." /><figcaption aria-hidden="true">Figure 1: Posterior predictive distribution of logisitic regression in the 2D feature space using plugin estimator (left) and Laplace approximation (right).</figcaption>
 </figure>
 
-</div>
+### ... to Bayesian Neural Networks
 
-</div>
-
-### … to Bayesian Neural Networks
-
-Now let’s step it up a notch: we will repeat the exercise from above,
+Now let's step it up a notch: we will repeat the exercise from above,
 but this time for data that is not linearly separable using a simple MLP
 instead of the single-layer neural network we used above. The code below
 is almost the same as above, so I will not go through the various steps
@@ -318,12 +301,10 @@ specifies that we only want to use the parameters of the last layer of
 our MLP. While we could have used all of them
 (`subset_of_weights=:all`), Daxberger et al. (2021) find that the
 last-layer Laplace approximation produces satisfying results, while be
-computationally cheaper. Figure [fig. 2](#fig-mlp) demonstrates that
-once again the Laplace approximation yields a posterior predictive
+computationally cheaper. [Figure 2](#fig-mlp) demonstrates that once
+again the Laplace approximation yields a posterior predictive
 distribution that is more conservative than the over-confident plugin
 estimate.
-
-<div class="cell" execution_count="9">
 
 ``` julia
 la = laplace(nn, λ=λ, subset_of_weights=:last_layer)
@@ -331,49 +312,37 @@ fit!(la, data);
 p_plugin = plot_contour(X',y,la;title="Plugin",type=:plugin)
 p_laplace = plot_contour(X',y,la;title="Laplace")
 # Plot the posterior distribution with a contour plot.
-plot(p_plugin, p_laplace, layout=(1,2), size=(1000,400))
+plt = plot(p_plugin, p_laplace, layout=(1,2), size=(1000,400))
+savefig(plt, "www/posterior_predictive_mlp.png");
 ```
 
-<div class="cell-output-display">
-
 <figure>
-<img src="index_files/figure-gfm/fig-mlp-output-1.svg" id="fig-mlp" alt="Figure 2: Posterior predictive distribution of a simple MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right)." /><figcaption aria-hidden="true">Figure 2: Posterior predictive distribution of a simple MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right).</figcaption>
+<img src="www/posterior_predictive_mlp.png" id="fig-mlp" alt="Figure 2: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right)." /><figcaption aria-hidden="true">Figure 2: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right).</figcaption>
 </figure>
 
-</div>
-
-</div>
-
 To see why this is a desirable outcome consider the zoomed out version
-of Figure [fig. 2](#fig-mlp) below: the plugin estimator classifies with
-full confidence in regions completely scarce of any data. Arguably
-Laplace approximation produces a much more reasonable picture, even
-though it too could likely be improved by fine-tuning our choice of *λ*
-and the neural network architecture.
-
-<div class="cell" execution_count="10">
+of [Figure 2](#fig-mlp) below: the plugin estimator classifies with full
+confidence in regions completely scarce of any data. Arguably Laplace
+approximation produces a much more reasonable picture, even though it
+too could likely be improved by fine-tuning our choice of *λ* and the
+neural network architecture.
 
 ``` julia
 zoom=-50
 p_plugin = plot_contour(X',y,la;title="Plugin",type=:plugin,zoom=zoom);
 p_laplace = plot_contour(X',y,la;title="Laplace",zoom=zoom);
 # Plot the posterior distribution with a contour plot.
-plot(p_plugin, p_laplace, layout=(1,2), size=(1000,400))
+plt = plot(p_plugin, p_laplace, layout=(1,2), size=(1000,400));
+savefig(plt, "www/posterior_predictive_mlp_zoom.png");
 ```
 
-<div class="cell-output-display">
-
 <figure>
-<img src="index_files/figure-gfm/fig-mlp-zoom-output-1.svg" id="fig-mlp-zoom" alt="Figure 3: Posterior predictive distribution of a simple MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right). Zoomed out." /><figcaption aria-hidden="true">Figure 3: Posterior predictive distribution of a simple MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right). Zoomed out.</figcaption>
+<img src="www/posterior_predictive_mlp_zoom.png" id="fig-mlp-zoom" alt="Figure 3: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right). Zoomed out." /><figcaption aria-hidden="true">Figure 3: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right). Zoomed out.</figcaption>
 </figure>
-
-</div>
-
-</div>
 
 ## Wrapping up
 
-The case for Bayesian Deep Learning is strong: …
+The case for Bayesian Deep Learning is strong: ...
 
 ## References
 
@@ -381,9 +350,9 @@ The case for Bayesian Deep Learning is strong: …
 
 <div id="ref-bastounis2021mathematics" class="csl-entry">
 
-Bastounis, Alexander, Anders C Hansen, and Verner Vlačić. 2021. “The
-Mathematics of Adversarial Attacks in AI–Why Deep Learning Is Unstable
-Despite the Existence of Stable Neural Networks.” *arXiv Preprint
+Bastounis, Alexander, Anders C Hansen, and Verner Vlačić. 2021. "The
+Mathematics of Adversarial Attacks in AI--Why Deep Learning Is Unstable
+Despite the Existence of Stable Neural Networks." *arXiv Preprint
 arXiv:2109.06098*.
 
 </div>
@@ -391,25 +360,25 @@ arXiv:2109.06098*.
 <div id="ref-daxberger2021laplace" class="csl-entry">
 
 Daxberger, Erik, Agustinus Kristiadi, Alexander Immer, Runa Eschenhagen,
-Matthias Bauer, and Philipp Hennig. 2021. “Laplace Redux-Effortless
-Bayesian Deep Learning.” *Advances in Neural Information Processing
+Matthias Bauer, and Philipp Hennig. 2021. "Laplace Redux-Effortless
+Bayesian Deep Learning." *Advances in Neural Information Processing
 Systems* 34.
 
 </div>
 
 <div id="ref-gal2016dropout" class="csl-entry">
 
-Gal, Yarin, and Zoubin Ghahramani. 2016. “Dropout as a Bayesian
-Approximation: Representing Model Uncertainty in Deep Learning.” In
-*International Conference on Machine Learning*, 1050–59. PMLR.
+Gal, Yarin, and Zoubin Ghahramani. 2016. "Dropout as a Bayesian
+Approximation: Representing Model Uncertainty in Deep Learning." In
+*International Conference on Machine Learning*, 1050--59. PMLR.
 
 </div>
 
 <div id="ref-lakshminarayanan2016simple" class="csl-entry">
 
 Lakshminarayanan, Balaji, Alexander Pritzel, and Charles Blundell. 2016.
-“Simple and Scalable Predictive Uncertainty Estimation Using Deep
-Ensembles.” *arXiv Preprint arXiv:1612.01474*.
+"Simple and Scalable Predictive Uncertainty Estimation Using Deep
+Ensembles." *arXiv Preprint arXiv:1612.01474*.
 
 </div>
 
@@ -430,7 +399,7 @@ Science of Cause and Effect*. Basic books.
 <div id="ref-raghunathan2019adversarial" class="csl-entry">
 
 Raghunathan, Aditi, Sang Michael Xie, Fanny Yang, John C Duchi, and
-Percy Liang. 2019. “Adversarial Training Can Hurt Generalization.”
+Percy Liang. 2019. "Adversarial Training Can Hurt Generalization."
 *arXiv Preprint arXiv:1906.06032*.
 
 </div>
@@ -438,9 +407,16 @@ Percy Liang. 2019. “Adversarial Training Can Hurt Generalization.”
 <div id="ref-slack2020fooling" class="csl-entry">
 
 Slack, Dylan, Sophie Hilgard, Emily Jia, Sameer Singh, and Himabindu
-Lakkaraju. 2020. “Fooling Lime and Shap: Adversarial Attacks on Post Hoc
-Explanation Methods.” In *Proceedings of the AAAI/ACM Conference on AI,
-Ethics, and Society*, 180–86.
+Lakkaraju. 2020. "Fooling Lime and Shap: Adversarial Attacks on Post Hoc
+Explanation Methods." In *Proceedings of the AAAI/ACM Conference on AI,
+Ethics, and Society*, 180--86.
+
+</div>
+
+<div id="ref-wilson2020case" class="csl-entry">
+
+Wilson, Andrew Gordon. 2020. "The Case for Bayesian Deep Learning."
+*arXiv Preprint arXiv:2001.10995*.
 
 </div>
 
@@ -450,4 +426,5 @@ Ethics, and Society*, 180–86.
     article](https://www.technologyreview.com/2019/01/25/1436/we-analyzed-16625-papers-to-figure-out-where-ai-is-headed-next/)
     in the MIT Technology Review
 
-[^2]: See this \[answer\] on Stack Exchange for a detailed discussion.
+[^2]: See this [answer](https://stats.stackexchange.com/a/500973/288736)
+    on Stack Exchange for a detailed discussion.
