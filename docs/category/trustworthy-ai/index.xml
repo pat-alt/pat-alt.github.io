@@ -5,12 +5,435 @@
     <link>https://www.paltmeyer.com/category/trustworthy-ai/</link>
       <atom:link href="https://www.paltmeyer.com/category/trustworthy-ai/index.xml" rel="self" type="application/rss+xml" />
     <description>Trustworthy AI</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Patrick Altmeyer</copyright><lastBuildDate>Mon, 15 Nov 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Patrick Altmeyer</copyright><lastBuildDate>Fri, 18 Feb 2022 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://www.paltmeyer.com/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_512x512_fill_lanczos_center_3.png</url>
       <title>Trustworthy AI</title>
       <link>https://www.paltmeyer.com/category/trustworthy-ai/</link>
     </image>
+    
+    <item>
+      <title>Go deep, but also ... go Bayesian!</title>
+      <link>https://www.paltmeyer.com/post/effortless-bayesian-deep-learning-in-julia/</link>
+      <pubDate>Fri, 18 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://www.paltmeyer.com/post/effortless-bayesian-deep-learning-in-julia/</guid>
+      <description>&lt;div class=&#34;intro-gif&#34;&gt;
+&lt;figure&gt;
+&lt;img src=&#34;www/anim.gif&#34;&gt;
+&lt;figcaption&gt;
+A Bayesian Neural Network gradually learns.
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;Deep learning has dominated AI research in recent years&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; - but how
+much promise does it really hold? That is very much an ongoing and
+increasingly polarising debate that you can follow live on
+&lt;a href=&#34;https://twitter.com/ilyasut/status/1491554478243258368&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Twitter&lt;/a&gt;. On
+one side you have optimists like Ilya Sutskever, chief scientist of
+OpenAI, who believes that large deep neural networks may already be
+slightly conscious - that&amp;rsquo;s &amp;ldquo;may&amp;rdquo; and &amp;ldquo;slightly&amp;rdquo; and only if you just go
+deep enough? On the other side you have prominent skeptics like Judea
+Pearl who has long since argued that deep learning still boils down to
+curve fitting - purely associations and not even remotely intelligent
+(Pearl and Mackenzie 2018).&lt;/p&gt;
+&lt;h2 id=&#34;the-case-for-bayesian-deep-learning&#34;&gt;The case for Bayesian Deep Learning&lt;/h2&gt;
+&lt;p&gt;Whatever side of this entertaining debate you find yourself on, the
+reality is that deep-learning systems have already been deployed at
+large scale both in academia and industry. More pressing debates
+therefore revolve around the trustworthiness of these existing systems.
+How robust are they and in what way exactly do they arrive at decisions
+that affect each and every one of us? Robustifying deep neural networks
+generally involves some form of adversarial training, which is costly,
+can hurt generalization (Raghunathan et al. 2019) and does ultimately
+not guarantee stability (Bastounis, Hansen, and Vlačić 2021). With
+respect to interpretability, surrogate explainers like LIME and SHAP are
+among the most popular tools, but they too have been shown to lack
+robustness (Slack et al. 2020).&lt;/p&gt;
+&lt;p&gt;Exactly why are deep neural networks unstable and in-transparent? Let
+$\mathcal{D}={x,y}_{n=1}^N$ denote our feature-label pairs and let
+$f(x;\theta)=y$ denote some deep neural network specified by its
+parameters $\theta$. Then the first thing to note is that the number of
+free parameters $\theta$ is typically huge (if you ask Mr Sutskever it
+really probably cannot be huge enough!). That alone makes it very hard
+to monitor and interpret the inner workings of deep-learning algorithms.
+Perhaps more importantly though, the number of parameters &lt;em&gt;relative&lt;/em&gt; to
+the size of $\mathcal{D}$ is generally huge:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[&amp;hellip;] deep neural networks are typically very underspecified by the
+available data, and [&amp;hellip;] parameters [therefore] correspond to a
+diverse variety of compelling explanations for the data. (Wilson 2020)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;In other words, training a single deep neural network may (and usually
+does) lead to one random parameter specification that fits the
+underlying data very well. But in all likelihood there are many other
+specifications that also fit the data very well. This is both a strength
+and vulnerability of deep learning: it is a strength because it
+typically allows us to find one such &amp;ldquo;compelling explanation&amp;rdquo; for the
+data with ease through stochastic optimization; it is a vulnerability
+because one has to wonder:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;How compelling is an explanation really if it competes with many other
+equally compelling, but potentially very different explanations?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;A scenario like this very much calls for treating predictions from deep
+learning models probabilistically [Wilson (2020)]&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+&lt;p&gt;Formally, we are interested in estimating the posterior predictive
+distribution as the following Bayesian model average (BMA):&lt;/p&gt;
+&lt;p&gt;$$
+p(y|x,\mathcal{D}) = \int p(y|x,\theta)p(\theta|\mathcal{D})d\theta
+$$&lt;/p&gt;
+&lt;p&gt;The integral implies that we essentially need many predictions from many
+different specifications of $\theta$. Unfortunately, this means more
+work for us or rather our computers. Fortunately though, researchers
+have proposed many ingenious ways to approximate the equation above: Gal
+and Ghahramani (2016) propose using dropout at test time while
+Lakshminarayanan, Pritzel, and Blundell (2016) show that averaging over
+an ensemble of just five models seems to do the trick. Still, despite
+their simplicity and usefulness these approaches involve additional
+computational costs compared to training just a single network. As we
+shall see now though, another promising approach has recently entered
+the limelight: &lt;strong&gt;Laplace approximation&lt;/strong&gt; (LA).&lt;/p&gt;
+&lt;p&gt;If you have read my &lt;a href=&#34;https://towardsdatascience.com/bayesian-logistic-regression-53df017ba90f&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;previous
+post&lt;/a&gt;
+on Bayesian Logistic Regression, then the term Laplace should already
+sound familiar to you. As a matter of fact, we will see that all
+concepts covered in that previous post can be naturally extended to deep
+learning. While some of these concepts will be revisited below, I
+strongly recommend you check out the previous post before reading on
+here. Without further ado let us now see how LA can be used for truly
+effortless deep learning.&lt;/p&gt;
+&lt;h2 id=&#34;laplace-approximation&#34;&gt;Laplace Approximation&lt;/h2&gt;
+&lt;p&gt;While LA was first proposed in the 18th century, it has so far not
+attracted serious attention from the deep learning community largely
+because it involves a possibly large Hessian computation. Daxberger et
+al. (2021) are on a mission to change the perception that LA has no use
+in DL: in their &lt;a href=&#34;https://arxiv.org/pdf/2106.14806.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;NeurIPS 2021
+paper&lt;/a&gt; they demonstrate
+empirically that LA can be used to produce Bayesian model averages that
+are at least at par with existing approaches in terms of uncertainty
+quantification and out-of-distribution detection. They show that recent
+advancements in autodifferentation can be leveraged to produce fast and
+accurate approximations of the Hessian and even provide a fully-fledged
+&lt;a href=&#34;https://aleximmer.github.io/Laplace/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Python library&lt;/a&gt; that can be used
+with any pretrained Torch model. For this post, I have built a much less
+comprehensive, pure-play equivalent of their package in Julia -
+&lt;a href=&#34;https://www.paltmeyer.com/BayesLaplace.jl/dev/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;BayesLaplace.jl&lt;/a&gt; can be
+used with deep learning models built in &lt;a href=&#34;https://fluxml.ai/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Flux.jl&lt;/a&gt;,
+which is Julia&amp;rsquo;s main DL library. As in the previous post on Bayesian
+logistic regression I will rely on Julia code snippits instead of
+equations to convey the underlying maths. If you&amp;rsquo;re curious about the
+maths, the &lt;a href=&#34;https://arxiv.org/pdf/2106.14806.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;NeurIPS 2021 paper&lt;/a&gt;
+provides all the detail you need.&lt;/p&gt;
+&lt;h3 id=&#34;from-bayesian-logistic-regression-&#34;&gt;From Bayesian Logistic Regression &amp;hellip;&lt;/h3&gt;
+&lt;p&gt;Let&amp;rsquo;s recap: in the case of logistic regression we had a assumed a
+zero-mean Gaussian prior
+$p(\mathbf{w}) \sim \mathcal{N} \left( \mathbf{w} | \mathbf{0}, \sigma_0^2 \mathbf{I} \right)=\mathcal{N} \left( \mathbf{w} | \mathbf{0}, \mathbf{H}_0^{-1} \right)$
+for the weights that are used to compute logits
+$\mu_n=\mathbf{w}^T\mathbf{x}_n$, which in turn are fed to a sigmoid
+function to produce probabilities $p(y_n=1)=\sigma(\mu_n)$. We saw that
+under this assumption solving the logistic regression problem
+corresponds to minimizing the following differentiable loss function:&lt;/p&gt;
+&lt;p&gt;$$
+\ell(\mathbf{w})= - \sum_{n}^N [y_n \log \mu_n + (1-y_n)\log (1-\mu_n)] + \frac{1}{2} (\mathbf{w}-\mathbf{w}_0)^T\mathbf{H}_0(\mathbf{w}-\mathbf{w}_0)
+$$&lt;/p&gt;
+&lt;p&gt;As our first step towards Bayesian deep learning, we observe the
+following: the loss function above corresponds to the objective faced by
+a single-layer artificial neural network with sigmoid activation and
+weight decay&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;. In other words, regularized logistic regression is
+equivalent to a very simple neural network architecture and hence it is
+not surprising that underlying concepts can in theory be applied in much
+the same way.&lt;/p&gt;
+&lt;p&gt;So let&amp;rsquo;s quickly recap the next core concept: LA relies on the fact that
+the second-order Taylor expansion of our loss function $\ell$ evaluated
+at the &lt;strong&gt;maximum a posteriori&lt;/strong&gt; (MAP) estimate
+$\mathbf{\hat{w}}=\arg\max_{\mathbf{w}} p(\mathbf{w}|\mathcal{D})$
+amounts to a multi-variate Gaussian distribution. In particular, that
+Gaussian is centered around the MAP estimate with covariance equal to
+the inverse Hessian evaluated at the mode
+$\hat{\Sigma}=(\mathbf{H}(\mathbf{\hat{w}}))^{-1}$ (Murphy 2022).&lt;/p&gt;
+&lt;p&gt;That is basically all there is to the story: if we have a good estimate
+of $\mathbf{H}(\mathbf{\hat{w}})$ we have an analytical expression for
+an (approximate) posterior over parameters. So let&amp;rsquo;s go ahead and start
+by run Bayesian Logistic regression using &lt;a href=&#34;https://fluxml.ai/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Flux.jl&lt;/a&gt;.
+We begin by loading some required packages including
+&lt;a href=&#34;https://www.paltmeyer.com/BayesLaplace.jl/dev/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;BayesLaplace.jl&lt;/a&gt;. It
+ships with a helper function &lt;code&gt;toy_data_linear&lt;/code&gt; that creates a toy data
+set composed of linearly separable samples evenly balanced across the
+two classes.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-julia&#34; data-lang=&#34;julia&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# Import libraries.&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;using&lt;/span&gt; Flux, Plots, Random, PlotThemes, Statistics, BayesLaplace
+theme(&lt;span style=&#34;color:#f1fa8c&#34;&gt;:juno&lt;/span&gt;)
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Number of points to generate.&lt;/span&gt;
+xs, y &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; toy_data_linear(&lt;span style=&#34;color:#bd93f9&#34;&gt;100&lt;/span&gt;)
+X &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; hcat(xs&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;); &lt;span style=&#34;color:#6272a4&#34;&gt;# bring into tabular format&lt;/span&gt;
+data &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; zip(xs,y);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Then we proceed to prepare the single-layer neural network with weight
+decay. The term $\lambda$ determines the strength of the $\ell2$
+penalty: we regularize parameters $\theta$ more heavily for higher
+values. Equivalently, we can say that from the Bayesian perspective it
+governs the strength of the prior
+$p(\theta) \sim \mathcal{N} \left( \theta | \mathbf{0}, \sigma_0^2 \mathbf{I} \right)= \mathcal{N} \left( \mathbf{w} | \mathbf{0}, \lambda_0^{-2} \mathbf{I} \right)$:
+a higher value of $\lambda$ indicates a higher conviction about our
+prior belief that $\theta=\mathbf{0}$, which is of course equivalent to
+regularizing more heavily. The exact choice of $\lambda=0.5$ for this
+toy example is somewhat arbitrary (it made for good visualizations
+below). Note that I have used $\theta$ to denote our neural parameters
+to distinguish the case from Bayesian logistic regression, but we are in
+fact still solving the same problem.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-julia&#34; data-lang=&#34;julia&#34;&gt;nn &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; Chain(Dense(&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;,&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;))
+λ &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0.5&lt;/span&gt;
+sqnorm(x) &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; sum(abs2, x)
+weight_regularization(λ&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;λ) &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; λ&lt;span style=&#34;color:#ff79c6&#34;&gt;^&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; sum(sqnorm, Flux&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;params(nn))
+loss(x, y) &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; Flux&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;Losses&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;logitbinarycrossentropy(nn(x), y) &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; weight_regularization();
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Before we apply Laplace approximation we train our model:&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-julia&#34; data-lang=&#34;julia&#34;&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;using&lt;/span&gt; Flux&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;Optimise&lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt; update!, ADAM
+opt &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; ADAM()
+epochs &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;50&lt;/span&gt;
+
+&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; epoch &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt;epochs
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; d &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; data
+    gs &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; gradient(params(nn)) &lt;span style=&#34;color:#ff79c6&#34;&gt;do&lt;/span&gt;
+      l &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; loss(d&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;)
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;end&lt;/span&gt;
+    update!(opt, params(nn), gs)
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Up until this point we have just followed the standard recipe for
+training a regularized artificial neural network in
+&lt;a href=&#34;https://fluxml.ai/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Flux.jl&lt;/a&gt; for a simple binary classification task.
+To compute the Laplace approximation using
+&lt;a href=&#34;https://www.paltmeyer.com/BayesLaplace.jl/dev/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;BayesLaplace.jl&lt;/a&gt; we
+need just two more lines of code:&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-julia&#34; data-lang=&#34;julia&#34;&gt;la &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; laplace(nn, λ&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;λ)
+fit!(la, data);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Under the hood the Hessian is approximated through the &lt;strong&gt;empirical
+Fisher&lt;/strong&gt;, which can be computed using only the gradients of our loss
+function $\nabla_{\theta}\ell(f(\mathbf{x}_n;\theta,y_n))$ where
+${\mathbf{x}_n,y_n}$ are training data (see &lt;a href=&#34;https://arxiv.org/pdf/2106.14806.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;NeurIPS 2021
+paper&lt;/a&gt; for details). Finally,
+&lt;a href=&#34;https://www.paltmeyer.com/BayesLaplace.jl/dev/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;BayesLaplace.jl&lt;/a&gt; ships
+with a function
+&lt;code&gt;predict(𝑳::LaplaceRedux, X::AbstractArray; link_approx=:probit)&lt;/code&gt; that
+computes the posterior predictive using a probit approximation, much
+like we saw in the previous post. That function is used under the hood
+of the &lt;code&gt;plot_contour&lt;/code&gt; function below to create the right panel of
+&lt;a href=&#34;#fig-logit&#34;&gt;Figure 1&lt;/a&gt;. It visualizes the posterior predictive
+distribution in the 2D feature space. For comparison I have added the
+corresponding plugin estimate as well. Note how for the Laplace
+approximation the predicted probabilities fan out indicating that
+confidence decrease in regions scarce of data.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-julia&#34; data-lang=&#34;julia&#34;&gt;p_plugin &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; plot_contour(X&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;#39;&lt;/span&gt;,y,la;title&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Plugin&amp;#34;&lt;/span&gt;,type&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;:plugin&lt;/span&gt;);
+p_laplace &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; plot_contour(X&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;#39;&lt;/span&gt;,y,la;title&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Laplace&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Plot the posterior distribution with a contour plot.&lt;/span&gt;
+plt &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; plot(p_plugin, p_laplace, layout&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;(&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;), size&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;(&lt;span style=&#34;color:#bd93f9&#34;&gt;1000&lt;/span&gt;,&lt;span style=&#34;color:#bd93f9&#34;&gt;400&lt;/span&gt;))
+savefig(plt, &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;www/posterior_predictive_logit.png&amp;#34;&lt;/span&gt;);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;figure&gt;
+&lt;img src=&#34;www/posterior_predictive_logit.png&#34; id=&#34;fig-logit&#34;
+alt=&#34;Figure 1: Posterior predictive distribution of Logistic regression in the 2D feature space using plugin estimator (left) and Laplace approximation (right).&#34; /&gt;
+&lt;figcaption aria-hidden=&#34;true&#34;&gt;Figure 1: Posterior predictive
+distribution of Logistic regression in the 2D feature space using plugin
+estimator (left) and Laplace approximation (right).&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id=&#34;-to-bayesian-neural-networks&#34;&gt;&amp;hellip; to Bayesian Neural Networks&lt;/h3&gt;
+&lt;p&gt;Now let&amp;rsquo;s step it up a notch: we will repeat the exercise from above,
+but this time for data that is not linearly separable using a simple MLP
+instead of the single-layer neural network we used above. The code below
+is almost the same as above, so I will not go through the various steps
+again.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-julia&#34; data-lang=&#34;julia&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# Number of points to generate:&lt;/span&gt;
+xs, y &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; toy_data_non_linear(&lt;span style=&#34;color:#bd93f9&#34;&gt;200&lt;/span&gt;)
+X &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; hcat(xs&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;); &lt;span style=&#34;color:#6272a4&#34;&gt;# bring into tabular format&lt;/span&gt;
+data &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; zip(xs,y)
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Build MLP:&lt;/span&gt;
+n_hidden &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;32&lt;/span&gt;
+D &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; size(X)[&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;]
+nn &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; Chain(
+    Dense(D, n_hidden, σ),
+    Dense(n_hidden, &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;)
+)  
+λ &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0.01&lt;/span&gt;
+sqnorm(x) &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; sum(abs2, x)
+weight_regularization(λ&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;λ) &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; λ&lt;span style=&#34;color:#ff79c6&#34;&gt;^&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; sum(sqnorm, Flux&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;params(nn))
+loss(x, y) &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; Flux&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;Losses&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;logitbinarycrossentropy(nn(x), y) &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; weight_regularization()
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Training:&lt;/span&gt;
+epochs &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;200&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; epoch &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt;epochs
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; d &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; data
+    gs &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; gradient(params(nn)) &lt;span style=&#34;color:#ff79c6&#34;&gt;do&lt;/span&gt;
+      l &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; loss(d&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;)
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;end&lt;/span&gt;
+    update!(opt, params(nn), gs)
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Fitting the Laplace approximation is also analogous, but note that this
+we have added an argument: &lt;code&gt;subset_of_weights=:last_layer&lt;/code&gt;. This
+specifies that we only want to use the parameters of the last layer of
+our MLP. While we could have used all of them
+(&lt;code&gt;subset_of_weights=:all&lt;/code&gt;), Daxberger et al. (2021) find that the
+last-layer Laplace approximation produces satisfying results, while be
+computationally cheaper. &lt;a href=&#34;#fig-mlp&#34;&gt;Figure 2&lt;/a&gt; demonstrates that once
+again the Laplace approximation yields a posterior predictive
+distribution that is more conservative than the over-confident plugin
+estimate.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-julia&#34; data-lang=&#34;julia&#34;&gt;la &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; laplace(nn, λ&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;λ, subset_of_weights&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;:last_layer&lt;/span&gt;)
+fit!(la, data);
+p_plugin &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; plot_contour(X&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;#39;&lt;/span&gt;,y,la;title&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Plugin&amp;#34;&lt;/span&gt;,type&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;:plugin&lt;/span&gt;)
+p_laplace &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; plot_contour(X&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;#39;&lt;/span&gt;,y,la;title&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Laplace&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Plot the posterior distribution with a contour plot.&lt;/span&gt;
+plt &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; plot(p_plugin, p_laplace, layout&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;(&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;), size&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;(&lt;span style=&#34;color:#bd93f9&#34;&gt;1000&lt;/span&gt;,&lt;span style=&#34;color:#bd93f9&#34;&gt;400&lt;/span&gt;))
+savefig(plt, &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;www/posterior_predictive_mlp.png&amp;#34;&lt;/span&gt;);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;figure&gt;
+&lt;img src=&#34;www/posterior_predictive_mlp.png&#34; id=&#34;fig-mlp&#34;
+alt=&#34;Figure 2: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right).&#34; /&gt;
+&lt;figcaption aria-hidden=&#34;true&#34;&gt;Figure 2: Posterior predictive
+distribution of MLP in the 2D feature space using plugin estimator
+(left) and Laplace approximation (right).&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;To see why this is a desirable outcome consider the zoomed out version
+of &lt;a href=&#34;#fig-mlp&#34;&gt;Figure 2&lt;/a&gt; below: the plugin estimator classifies with full
+confidence in regions completely scarce of any data. Arguably Laplace
+approximation produces a much more reasonable picture, even though it
+too could likely be improved by fine-tuning our choice of $\lambda$ and
+the neural network architecture.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-julia&#34; data-lang=&#34;julia&#34;&gt;zoom&lt;span style=&#34;color:#ff79c6&#34;&gt;=-&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;50&lt;/span&gt;
+p_plugin &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; plot_contour(X&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;#39;&lt;/span&gt;,y,la;title&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Plugin&amp;#34;&lt;/span&gt;,type&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;:plugin&lt;/span&gt;,zoom&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;zoom);
+p_laplace &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; plot_contour(X&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;#39;&lt;/span&gt;,y,la;title&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Laplace&amp;#34;&lt;/span&gt;,zoom&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;zoom);
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Plot the posterior distribution with a contour plot.&lt;/span&gt;
+plt &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; plot(p_plugin, p_laplace, layout&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;(&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;), size&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;(&lt;span style=&#34;color:#bd93f9&#34;&gt;1000&lt;/span&gt;,&lt;span style=&#34;color:#bd93f9&#34;&gt;400&lt;/span&gt;));
+savefig(plt, &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;www/posterior_predictive_mlp_zoom.png&amp;#34;&lt;/span&gt;);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;figure&gt;
+&lt;img src=&#34;www/posterior_predictive_mlp_zoom.png&#34; id=&#34;fig-mlp-zoom&#34;
+alt=&#34;Figure 3: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right). Zoomed out.&#34; /&gt;
+&lt;figcaption aria-hidden=&#34;true&#34;&gt;Figure 3: Posterior predictive
+distribution of MLP in the 2D feature space using plugin estimator
+(left) and Laplace approximation (right). Zoomed out.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id=&#34;wrapping-up&#34;&gt;Wrapping up&lt;/h2&gt;
+&lt;p&gt;Recent state-of-the-art research on neural information processing
+suggests that Bayesian deep learning can be effortless: Laplace
+approximation for deep neural networks appears to work very well and it
+does so at minimal computational cost (Daxberger et al. 2021). This is
+great news, because the case for turning Bayesian is strong: society
+increasingly relies on complex automated decision-making systems that
+need to be trustworthy. More and more of these systems involve deep
+learning which in and of itself is not trustworthy. We have seen that
+typically there exist various viable parameterizations of deep neural
+networks each with their own distinct and compelling explanation for the
+data at hand. When faced with many viable options, don&amp;rsquo;t put all of your
+eggs in one basket. In other words, go Bayesian!&lt;/p&gt;
+&lt;h2 id=&#34;resources&#34;&gt;Resources&lt;/h2&gt;
+&lt;p&gt;To get started with Bayesian deep learning I have found many useful and
+free resources online, some of which are listed below:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://turing.ml/dev/tutorials/03-bayesian-neural-network/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;Turing.jl&lt;/code&gt;
+tutorial&lt;/a&gt;
+on Bayesian deep learning in Julia&lt;/li&gt;
+&lt;li&gt;Various RStudio AI blog posts including &lt;a href=&#34;https://blogs.rstudio.com/ai/posts/2018-11-12-uncertainty_estimates_dropout/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;this
+one&lt;/a&gt;
+and &lt;a href=&#34;https://blogs.rstudio.com/ai/posts/2019-06-05-uncertainty-estimates-tfprobability/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;this
+one&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://medium.com/tensorflow/regression-with-probabilistic-layers-in-tensorflow-probability-e46ff5d37baf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;TensorFlow blog
+post&lt;/a&gt;
+on regression with probabilistic layers&lt;/li&gt;
+&lt;li&gt;Kevin Murphy&amp;rsquo;s &lt;a href=&#34;https://probml.github.io/pml-book/book1.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;draft text
+book&lt;/a&gt;, now also
+available as print&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references csl-bib-body hanging-indent&#34;&gt;
+&lt;div id=&#34;ref-bastounis2021mathematics&#34; class=&#34;csl-entry&#34;&gt;
+&lt;p&gt;Bastounis, Alexander, Anders C Hansen, and Verner Vlačić. 2021. &amp;ldquo;The
+Mathematics of Adversarial Attacks in AI&amp;ndash;Why Deep Learning Is Unstable
+Despite the Existence of Stable Neural Networks.&amp;rdquo; &lt;em&gt;arXiv Preprint
+arXiv:2109.06098&lt;/em&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-daxberger2021laplace&#34; class=&#34;csl-entry&#34;&gt;
+&lt;p&gt;Daxberger, Erik, Agustinus Kristiadi, Alexander Immer, Runa Eschenhagen,
+Matthias Bauer, and Philipp Hennig. 2021. &amp;ldquo;Laplace Redux-Effortless
+Bayesian Deep Learning.&amp;rdquo; &lt;em&gt;Advances in Neural Information Processing
+Systems&lt;/em&gt; 34.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-gal2016dropout&#34; class=&#34;csl-entry&#34;&gt;
+&lt;p&gt;Gal, Yarin, and Zoubin Ghahramani. 2016. &amp;ldquo;Dropout as a Bayesian
+Approximation: Representing Model Uncertainty in Deep Learning.&amp;rdquo; In
+&lt;em&gt;International Conference on Machine Learning&lt;/em&gt;, 1050&amp;ndash;59. PMLR.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-lakshminarayanan2016simple&#34; class=&#34;csl-entry&#34;&gt;
+&lt;p&gt;Lakshminarayanan, Balaji, Alexander Pritzel, and Charles Blundell. 2016.
+&amp;ldquo;Simple and Scalable Predictive Uncertainty Estimation Using Deep
+Ensembles.&amp;rdquo; &lt;em&gt;arXiv Preprint arXiv:1612.01474&lt;/em&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-murphy2022probabilistic&#34; class=&#34;csl-entry&#34;&gt;
+&lt;p&gt;Murphy, Kevin P. 2022. &lt;em&gt;Probabilistic Machine Learning: An
+Introduction&lt;/em&gt;. MIT Press.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-pearl2018book&#34; class=&#34;csl-entry&#34;&gt;
+&lt;p&gt;Pearl, Judea, and Dana Mackenzie. 2018. &lt;em&gt;The Book of Why: The New
+Science of Cause and Effect&lt;/em&gt;. Basic books.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-raghunathan2019adversarial&#34; class=&#34;csl-entry&#34;&gt;
+&lt;p&gt;Raghunathan, Aditi, Sang Michael Xie, Fanny Yang, John C Duchi, and
+Percy Liang. 2019. &amp;ldquo;Adversarial Training Can Hurt Generalization.&amp;rdquo;
+&lt;em&gt;arXiv Preprint arXiv:1906.06032&lt;/em&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-slack2020fooling&#34; class=&#34;csl-entry&#34;&gt;
+&lt;p&gt;Slack, Dylan, Sophie Hilgard, Emily Jia, Sameer Singh, and Himabindu
+Lakkaraju. 2020. &amp;ldquo;Fooling Lime and Shap: Adversarial Attacks on Post Hoc
+Explanation Methods.&amp;rdquo; In &lt;em&gt;Proceedings of the AAAI/ACM Conference on AI,
+Ethics, and Society&lt;/em&gt;, 180&amp;ndash;86.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-wilson2020case&#34; class=&#34;csl-entry&#34;&gt;
+&lt;p&gt;Wilson, Andrew Gordon. 2020. &amp;ldquo;The Case for Bayesian Deep Learning.&amp;rdquo;
+&lt;em&gt;arXiv Preprint arXiv:2001.10995&lt;/em&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;See for example &lt;a href=&#34;https://www.technologyreview.com/2019/01/25/1436/we-analyzed-16625-papers-to-figure-out-where-ai-is-headed-next/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;this
+article&lt;/a&gt;
+in the MIT Technology Review&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;In fact, not treating probabilistic deep learning models as such
+is sheer madness because remember that the underlying parameters
+$\theta$ are random variables. Frequentists and Bayesians alike will
+tell you that relying on a single point estimate of random variables
+is just nuts!&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;Proponents of Causal AI like Judea Pearl would argue that the
+Bayesian treatment still does not go far enough: in their view model
+explanations can only be truly compelling if they are causally
+found.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;See this &lt;a href=&#34;https://stats.stackexchange.com/a/500973/288736&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;answer&lt;/a&gt;
+on Stack Exchange for a detailed discussion.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
+    </item>
     
     <item>
       <title>Bayesian Logistic Regression</title>
