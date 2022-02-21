@@ -51,138 +51,104 @@
     
     
     
-    <section>
-    
-      <h1 id="create-slides-in-markdown-with-wowchemy">Create slides in Markdown with Wowchemy</h1>
-<p><a href="https://wowchemy.com/" target="_blank" rel="noopener">Wowchemy</a> | <a href="https://owchemy.com/docs/managing-content/#create-slides" target="_blank" rel="noopener">Documentation</a></p>
+      <!-- # Create slides in Markdown with Wowchemy
 
-    </section>
-    
+[Wowchemy](https://wowchemy.com/) | [Documentation](https://owchemy.com/docs/managing-content/#create-slides)
 
-    
-    
-    
-    <section>
-    
-      
-<h2 id="features">Features</h2>
-<ul>
-<li>Efficiently write slides in Markdown</li>
-<li>3-in-1: Create, Present, and Publish your slides</li>
-<li>Supports speaker notes</li>
-<li>Mobile friendly slides</li>
-</ul>
+---
 
-    </section>
-    
+## Features
 
-    
-    
-    
-    <section>
-    
-      
-<h2 id="controls">Controls</h2>
-<ul>
-<li>Next: <code>Right Arrow</code> or <code>Space</code></li>
-<li>Previous: <code>Left Arrow</code></li>
-<li>Start: <code>Home</code></li>
-<li>Finish: <code>End</code></li>
-<li>Overview: <code>Esc</code></li>
-<li>Speaker notes: <code>S</code></li>
-<li>Fullscreen: <code>F</code></li>
-<li>Zoom: <code>Alt + Click</code></li>
-<li><a href="https://github.com/hakimel/reveal.js#pdf-export" target="_blank" rel="noopener">PDF Export</a>: <code>E</code></li>
-</ul>
+- Efficiently write slides in Markdown
+- 3-in-1: Create, Present, and Publish your slides
+- Supports speaker notes
+- Mobile friendly slides
 
-    </section>
-    
+---
 
-    
-    
-    
-    <section>
-    
-      
-<h2 id="code-highlighting">Code Highlighting</h2>
-<p>Inline code: <code>variable</code></p>
-<p>Code block:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">porridge <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;blueberry&#34;</span>
-<span style="color:#ff79c6">if</span> porridge <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;blueberry&#34;</span>:
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Eating...&#34;</span>)
-</code></pre></div>
-    </section>
-    
+## Controls
 
-    
-    
-    
-    <section>
-    
-      
-<h2 id="math">Math</h2>
-<p>In-line math: $x + y = z$</p>
-<p>Block math:</p>
-<p>$$
-f\left( x \right) = ;\frac{{2\left( {x + 4} \right)\left( {x - 4} \right)}}{{\left( {x + 4} \right)\left( {x + 1} \right)}}
-$$</p>
+- Next: `Right Arrow` or `Space`
+- Previous: `Left Arrow`
+- Start: `Home`
+- Finish: `End`
+- Overview: `Esc`
+- Speaker notes: `S`
+- Fullscreen: `F`
+- Zoom: `Alt + Click`
+- [PDF Export](https://github.com/hakimel/reveal.js#pdf-export): `E`
 
-    </section>
-    
+---
 
-    
-    
-    
-    <section>
-    
-      
-<h2 id="fragments">Fragments</h2>
-<p>Make content appear incrementally</p>
-<pre tabindex="0"><code>{{% fragment %}} One {{% /fragment %}}
+## Code Highlighting
+
+Inline code: `variable`
+
+Code block:
+```python
+porridge = "blueberry"
+if porridge == "blueberry":
+    print("Eating...")
+```
+
+---
+
+## Math
+
+In-line math: $x + y = z$
+
+Block math:
+
+$$
+f\left( x \right) = \;\frac{{2\left( {x + 4} \right)\left( {x - 4} \right)}}{{\left( {x + 4} \right)\left( {x + 1} \right)}}
+$$
+
+---
+
+## Fragments
+
+Make content appear incrementally
+
+```
+{{% fragment %}} One {{% /fragment %}}
 {{% fragment %}} **Two** {{% /fragment %}}
 {{% fragment %}} Three {{% /fragment %}}
-</code></pre><p>Press <code>Space</code> to play!</p>
-<p><span class="fragment " >
-One
+```
+
+Press `Space` to play!
+
+<span class="fragment " >
+   One 
 </span>
 <span class="fragment " >
-<strong>Two</strong>
+   **Two** 
 </span>
 <span class="fragment " >
-Three
-</span></p>
+   Three 
+</span>
 
-    </section>
-    
+---
 
-    
-    
-    
-    <section>
-    
-      
-<p>A fragment can accept two optional parameters:</p>
-<ul>
-<li><code>class</code>: use a custom style (requires definition in custom CSS)</li>
-<li><code>weight</code>: sets the order in which a fragment appears</li>
-</ul>
+A fragment can accept two optional parameters:
 
-    </section>
-    
+- `class`: use a custom style (requires definition in custom CSS)
+- `weight`: sets the order in which a fragment appears
 
-    
-    
-    
-    <section>
-    
-      
-<h2 id="speaker-notes">Speaker Notes</h2>
-<p>Add speaker notes to your presentation</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">{{% speaker_note %}}
-<span style="color:#ff79c6">-</span> Only the speaker can read these notes
-<span style="color:#ff79c6">-</span> Press <span style="color:#f1fa8c">`S`</span> key to view
+---
+
+## Speaker Notes
+
+Add speaker notes to your presentation
+
+```markdown
+{{% speaker_note %}}
+- Only the speaker can read these notes
+- Press `S` key to view
 {{% /speaker_note %}}
-</code></pre></div><p>Press the <code>S</code> key to view the speaker notes!</p>
+```
+
+Press the `S` key to view the speaker notes!
+
 <aside class="notes">
   <ul>
 <li>Only the speaker can read these notes</li>
@@ -191,47 +157,25 @@ Three
 
 </aside>
 
-    </section>
-    
+---
 
-    
-    
-    
-    <section>
-    
-      
-<h2 id="themes">Themes</h2>
-<ul>
-<li>black: Black background, white text, blue links (default)</li>
-<li>white: White background, black text, blue links</li>
-<li>league: Gray background, white text, blue links</li>
-<li>beige: Beige background, dark text, brown links</li>
-<li>sky: Blue background, thin dark text, blue links</li>
-</ul>
+## Themes
 
-    </section>
-    
+- black: Black background, white text, blue links (default)
+- white: White background, black text, blue links
+- league: Gray background, white text, blue links
+- beige: Beige background, dark text, brown links
+- sky: Blue background, thin dark text, blue links
 
-    
-    
-    
-    <section>
-    
-      
-<ul>
-<li>night: Black background, thick white text, orange links</li>
-<li>serif: Cappuccino background, gray text, brown links</li>
-<li>simple: White background, black text, blue links</li>
-<li>solarized: Cream-colored background, dark green text, blue links</li>
-</ul>
+---
 
-    </section>
-    
+- night: Black background, thick white text, orange links
+- serif: Cappuccino background, gray text, brown links
+- simple: White background, black text, blue links
+- solarized: Cream-colored background, dark green text, blue links
 
-    
-    
-    
-      
+---
+
 
 <section data-noprocess data-shortcode-slide
   
@@ -239,42 +183,40 @@ Three
       data-background-image="/media/boards.jpg"
   >
 
-<h2 id="custom-slide">Custom Slide</h2>
-<p>Customize the slide style and background</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">{{&lt; <span style="color:#ff79c6">slide</span> <span style="color:#50fa7b">background-image</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;/media/boards.jpg&#34;</span> &gt;}}
-{{&lt; <span style="color:#ff79c6">slide</span> <span style="color:#50fa7b">background-color</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;#0000FF&#34;</span> &gt;}}
-{{&lt; <span style="color:#ff79c6">slide</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;my-style&#34;</span> &gt;}}
-</code></pre></div>
-    </section>
-    
 
-    
-    
-    
-    <section>
-    
-      
-<h2 id="custom-css-example">Custom CSS Example</h2>
-<p>Let&rsquo;s make headers navy colored.</p>
-<p>Create <code>assets/css/reveal_custom.css</code> with:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#50fa7b">reveal</span> <span style="color:#ff79c6">section</span> <span style="color:#ff79c6">h1</span><span style="color:#ff79c6">,</span>
-.<span style="color:#50fa7b">reveal</span> <span style="color:#ff79c6">section</span> <span style="color:#ff79c6">h2</span><span style="color:#ff79c6">,</span>
-.<span style="color:#50fa7b">reveal</span> <span style="color:#ff79c6">section</span> <span style="color:#ff79c6">h3</span> {
-  <span style="color:#ff79c6">color</span>: <span style="color:#ff79c6">navy</span>;
+## Custom Slide
+
+Customize the slide style and background
+
+```markdown
+{{< slide background-image="/media/boards.jpg" >}}
+{{< slide background-color="#0000FF" >}}
+{{< slide class="my-style" >}}
+```
+
+---
+
+## Custom CSS Example
+
+Let's make headers navy colored.
+
+Create `assets/css/reveal_custom.css` with:
+
+```css
+.reveal section h1,
+.reveal section h2,
+.reveal section h3 {
+  color: navy;
 }
-</code></pre></div>
-    </section>
-    
+```
 
-    
-    
-    
-    <section>
-    
-      
-<h1 id="questions">Questions?</h1>
-<p><a href="https://github.com/wowchemy/wowchemy-hugo-modules/discussions" target="_blank" rel="noopener">Ask</a></p>
-<p><a href="https://wowchemy.com/docs/managing-content/#create-slides" target="_blank" rel="noopener">Documentation</a></p>
+---
+
+# Questions?
+
+[Ask](https://github.com/wowchemy/wowchemy-hugo-modules/discussions)
+
+[Documentation](https://wowchemy.com/docs/managing-content/#create-slides) -->
 
     </section>
     
