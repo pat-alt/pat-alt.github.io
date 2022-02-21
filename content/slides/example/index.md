@@ -10,7 +10,7 @@ tags: []
 title: Slides
 ---
 
-# Create slides in Markdown with Wowchemy
+<!-- # Create slides in Markdown with Wowchemy
 
 [Wowchemy](https://wowchemy.com/) | [Documentation](https://owchemy.com/docs/managing-content/#create-slides)
 
@@ -160,4 +160,4 @@ Create `assets/css/reveal_custom.css` with:
 
 [Ask](https://github.com/wowchemy/wowchemy-hugo-modules/discussions)
 
-[Documentation](https://wowchemy.com/docs/managing-content/#create-slides)
+[Documentation](https://wowchemy.com/docs/managing-content/#create-slides) -->
