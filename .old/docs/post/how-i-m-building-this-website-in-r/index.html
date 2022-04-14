@@ -1,0 +1,1320 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.3.0 for Hugo" />
+  
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Patrick Altmeyer" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Getting started Deploying your website Why all the trouble? A simple coding example Embedding existing work Resources   Getting started It turns out building a static website in R is remarkably easy, as long as you know your way around R Markdown." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://www.paltmeyer.com/post/how-i-m-building-this-website-in-r/" />
+
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#D6EAF8" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.f1ecf783c14edc00c9320c205831ad8e.css" media="print" onload="this.media='all'">
+
+  
+  
+  
+    
+    
+
+    
+    
+    
+    
+      
+      
+    
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.efc9e9c95613511794f3091ca193902b.css" />
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/manifest.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="https://www.paltmeyer.com/post/how-i-m-building-this-website-in-r/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary" />
+  
+    <meta property="twitter:site" content="@`r Sys.getenv(&#34;TWITTER_NAME&#34;)`" />
+    <meta property="twitter:creator" content="@`r Sys.getenv(&#34;TWITTER_NAME&#34;)`" />
+  
+  <meta property="og:site_name" content="Patrick Altmeyer" />
+  <meta property="og:url" content="https://www.paltmeyer.com/post/how-i-m-building-this-website-in-r/" />
+  <meta property="og:title" content="How I&#39;m building this website in R | Patrick Altmeyer" />
+  <meta property="og:description" content="Getting started Deploying your website Why all the trouble? A simple coding example Embedding existing work Resources   Getting started It turns out building a static website in R is remarkably easy, as long as you know your way around R Markdown." /><meta property="og:image" content="https://www.paltmeyer.com/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_512x512_fill_lanczos_center_3.png" />
+    <meta property="twitter:image" content="https://www.paltmeyer.com/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2021-02-02T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2021-02-02T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.paltmeyer.com/post/how-i-m-building-this-website-in-r/"
+  },
+  "headline": "How I'm building this website in R",
+  
+  "datePublished": "2021-02-02T00:00:00Z",
+  "dateModified": "2021-02-02T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Patrick Altmeyer"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Patrick Altmeyer",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.paltmeyer.com/media/icon_huf71aeb422d2dbec20c1fa0f7ef6934b2_32911_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "Getting started Deploying your website Why all the trouble? A simple coding example Embedding existing work Resources   Getting started It turns out building a static website in R is remarkably easy, as long as you know your way around R Markdown."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>How I&#39;m building this website in R | Patrick Altmeyer</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="661b258c151bbac47d2f2920ef41a0cf" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.8988fb2a4bba758785868cfcb5244555.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">Patrick Altmeyer</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">Patrick Altmeyer</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#hero"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/blog/" target="_blank" rel="noopener"><span>Blog</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/about/"><span>About me</span></a>
+        </li>
+
+        
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Code</span><span class="caret"></span>
+          </a>
+          <div class="dropdown-menu">
+            
+              <a class="dropdown-item" href="/AlgorithmicRecourse.jl/dev/"><span>AlgorithmicRecourse.jl</span></a>
+            
+              <a class="dropdown-item" href="/BayesLaplace.jl/dev/"><span>BayesLaplace.jl</span></a>
+            
+          </div>
+        </li>
+
+        
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Other</span><span class="caret"></span>
+          </a>
+          <div class="dropdown-menu">
+            
+              <a class="dropdown-item" href="/tai/"><span>Trustworthy AI</span></a>
+            
+          </div>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+          
+          <li class="nav-item d-none d-lg-inline-flex">
+            <a class="nav-link" href="https://twitter.com/paltmey" data-toggle="tooltip" data-placement="bottom" title="Follow me on Twitter" target="_blank" rel="noopener" aria-label="Follow me on Twitter">
+              <i class="fab fa-twitter" aria-hidden="true"></i>
+            </a>
+          </li>
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>How I&#39;m building this website in R</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Feb 2, 2021
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    5 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/coding/">Coding</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+<script src="https://www.paltmeyer.com/post/how-i-m-building-this-website-in-r/index_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#getting-started">Getting started</a></li>
+<li><a href="#deploying-your-website">Deploying your website</a></li>
+<li><a href="#why-all-the-trouble">Why all the trouble?</a></li>
+<li><a href="#a-simple-coding-example">A simple coding example</a></li>
+<li><a href="#embedding-existing-work">Embedding existing work</a></li>
+<li><a href="#resources">Resources</a></li>
+</ul>
+</div>
+
+<div id="getting-started" class="section level2">
+<h2>Getting started</h2>
+<p>It turns out building a static website in R is remarkably easy, as long as you know your way around R Markdown. Knowledge of HTML and CSS helps, but is not strictly necessary and can be acquired along the way. My package of choice for this website is <code>blogdown</code> by <a href="https://yihui.org/">Yihui Xie</a> who has had a major impact on the R community through his many package contributions (<code>knitr</code>, <code>bookdown</code>, <code>pagedown</code>, …) and certainly made my life a lot easier on many occasions.</p>
+<p>To get started just follow the instructions on <code>blogdown</code>’s <a href="https://github.com/rstudio/blogdown">GitHub repository</a> or keep reading here for a high-level overview. Setting up a basic website in R requires exactly two steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Set up a local directory for the website. Let’s suppose you create it here <code>~/Documents/myAwesomeWebsite</code>.</p></li>
+<li><p>In R, navigate to the directory and simply run <code>blogdown::newsite()</code>.</p></li>
+</ol>
+<p>This will set up a basic template which you can develop. Changing the theme and playing with the basic structure of the website is relatively straight-forward. Personally I have so far managed to work things out based on a working knowledge of HTML and CSS that I’ve developed in the past through my work with R Shiny.</p>
+</div>
+<div id="deploying-your-website" class="section level2">
+<h2>Deploying your website</h2>
+<p>There are various ways to deploy your website, i.e. make it accessible to the public. This website is deployed through GitHub pages. Detailed instructions on how to do this can be found <a href="https://bookdown.org/yihui/blogdown/github-pages.html">here</a>. Since I already had an existing local clone of my <code>pat-alt.github.io</code> repo, I just dropped it in the source directory of the website:</p>
+<pre><code>source/
+│
+├── config.yaml
+├── content/
+├── themes/
+└── ...
+
+patalt.github.io/
+│
+├── .git/
+├── .nojekyll
+├── index.html
+├── about/
+└── ...</code></pre>
+<p>After adding <code>publishDir: pat-alt.github.io</code> to my <code>config.yaml</code> and then running <code>blogdown::hugo_build()</code> the website was built inside the clone. All that was left to do was to commit changes from the local clone to the <code>pat-alt.github.io</code> remote repo. A few moments later the website was already up and running.</p>
+</div>
+<div id="why-all-the-trouble" class="section level2">
+<h2>Why all the trouble?</h2>
+<p>There are certainly easier ways to build a website. But if like me you do pretty much all your work in R Markdown and want to share some of it, then you will love <code>blogdown</code>. The beauty of it is that once the basic infrastructure is set up, adding content is as simple as running the following wrapper function</p>
+<pre class="r"><code>blogdown::new_post(&quot;Your new post&quot;, ext = &quot;.Rmd&quot;)</code></pre>
+<p>where the first argument is just the title of your post and the <code>ext</code> argument can be used to specify that you want to create an R Markdown document that can include code chucks. The wrapper function will automatically set up a directory for your post under <code>/post/</code>. R Studio will redirect you to the relevant <code>.Rmd</code> file that you can then fill with content. By default that folder will look roughly like this:</p>
+<pre><code>├── index.Rmd
+├── index.html
+└── index_files
+    └── header-attrs
+        └── header-attrs.js</code></pre>
+</div>
+<div id="a-simple-coding-example" class="section level2">
+<h2>A simple coding example</h2>
+<p>As you can probably tell from the code chunks above this post was created just in the way I described. So I thought I might as well go ahead with a simple coding example to add some flavour. Suppose you have built some function that you think is worth sharing with the world or simply learned something new and interesting. As a case in point, I recently had a look at the <code>Rcpp</code> package and wrote a small program in C++ to be used in R. Since R Markdown supports <code>Rcpp</code> code chunks (along with Python, bash, SQL, …) it is straight-forward to show-case that code on this website.</p>
+<p>The program can be used to simulate data from a categorical distribution. This distribution describes the possible results of a random variable that can take on one of <span class="math inline">\(K\)</span> possible categories with different probabilities. In base R we could use <code>rmultinom(n=1000,1,p=c(0.5,0.1,0.4))</code> to simulate draws from one such distribution with three different categories. Alternatively, we could write the program in C++ as follows:</p>
+<pre class="cpp"><code>#include &lt;Rcpp.h&gt;
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+NumericMatrix simCategorical(int n, NumericVector p) {
+  int k = p.size();
+  NumericMatrix mat(k, n);
+  // Normalise prob if necessary:
+  if (sum(p)!=1) {
+    p = p/sum(p);
+  }
+  NumericVector emp_cdf = cumsum(p);
+  NumericVector u = Rcpp::runif(n, 0, 1);
+  // Matrix for 1-hot-encoding:
+  for (int j = 0; j &lt; n; j++) {
+    // Perform binary search:
+    int l = 0;
+    int r = k;
+    double target = u[j];
+    while (l &lt; r) {
+      int m = floor((l+r)/2);
+      if (emp_cdf[m] &gt; target) {
+        r = m;
+      } else {
+        l = m+1;
+      }
+    }
+    mat(r,j) = 1;
+  }
+  return mat;
+}</code></pre>
+<p>In terms of performance it turns out that the simple C++ program actually does somewhat better than the base R alternative:</p>
+<pre class="r"><code>library(microbenchmark)
+library(ggplot2)
+n &lt;- 1000
+p &lt;- c(0.5,0.1,0.4)
+mb &lt;- microbenchmark(
+    &quot;rmultinom&quot; = {rmultinom(n, 1, p)},
+    &quot;Rcpp&quot; = {simCategorical(n, p)}
+)
+autoplot(mb)</code></pre>
+<p><img src="https://www.paltmeyer.com/post/how-i-m-building-this-website-in-r/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="embedding-existing-work" class="section level2">
+<h2>Embedding existing work</h2>
+<p>If you have some existing work that you would like to share you can just use it to overwrite the <code>index.Rmd</code> file. <code>blogdown</code> supports any kind of R Markdown documents so you can use all of your favourite markdown packages (<code>bookdown</code>, <code>pagedown</code>, …). Just make sure to specify HTML output in the YAML header.</p>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>For more information about <code>blogdown</code> see <a href="https://bookdown.org/yihui/blogdown/">here</a>. To inspect the code that builds this website check out my <a href="https://github.com/pat-alt/patalt">GitHub repository</a>.</p>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/blogdown/">blogdown</a>
+  
+  <a class="badge badge-light" href="/tag/rmarkdown/">rmarkdown</a>
+  
+  <a class="badge badge-light" href="/tag/c-/">C&#43;&#43;</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://www.paltmeyer.com/post/how-i-m-building-this-website-in-r/&amp;text=How%20I&amp;#39;m%20building%20this%20website%20in%20R" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://www.paltmeyer.com/post/how-i-m-building-this-website-in-r/&amp;t=How%20I&amp;#39;m%20building%20this%20website%20in%20R" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=How%20I&amp;#39;m%20building%20this%20website%20in%20R&amp;body=https://www.paltmeyer.com/post/how-i-m-building-this-website-in-r/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://www.paltmeyer.com/post/how-i-m-building-this-website-in-r/&amp;title=How%20I&amp;#39;m%20building%20this%20website%20in%20R" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=How%20I&amp;#39;m%20building%20this%20website%20in%20R%20https://www.paltmeyer.com/post/how-i-m-building-this-website-in-r/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://www.paltmeyer.com/post/how-i-m-building-this-website-in-r/&amp;title=How%20I&amp;#39;m%20building%20this%20website%20in%20R" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="https://www.paltmeyer.com/"><img class="avatar mr-3 avatar-circle" src="/author/patrick-altmeyer/avatar_hu3cfca0813412e5d3acdebb52b60777cc_515532_270x270_fill_q75_lanczos_center.jpg" alt="Patrick Altmeyer"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a></h5>
+      <h6 class="card-subtitle">PhD Candidate</h6>
+      <p class="card-text">My research interests include Causal Inference, Probabilistic Machine Learning and Algorithmic Recourse.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/paltmey" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=e7KRRa8AAAAJ&amp;hl=en" target="_blank" rel="noopener">
+        <i class="fas fa-graduation-cap"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/pat-alt" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/patrick-altmeyer-a2a25494/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://medium.com/@patrick.altmeyer" target="_blank" rel="noopener">
+        <i class="fab fa-medium"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+  
+  
+
+  
+  <section id="comments">
+    <script src="https://utteranc.es/client.js"
+        repo="pat-alt/pat-alt.github.io"
+        issue-term="title"
+        label="🔮"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+  </section>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2022 Patrick Altmeyer
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-modules" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    <script src="/js/vendor-bundle.min.b73dfaac3b6499dc997741748a7c3fe2.js"></script>
+
+    
+    
+    
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/python.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/latex.min.js" crossorigin="anonymous"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.d68ecd57c0ec1f1f61d65fd568f1c3a0.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>

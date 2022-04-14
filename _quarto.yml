@@ -1,0 +1,88 @@
+project:
+  title: "Website"
+  type: website
+  resources: 
+    - www/
+
+website:
+  title: Patrick Altmeyer
+  page-navigation: true
+  favicon: /www/favicon.ico
+
+  navbar:
+    logo: /www/icon.png
+    right:
+      - icon: house
+        href: https://www.paltmeyer.com/
+      - icon: github
+        href: https://github.com/pat-alt
+      - icon: twitter
+        href: https://twitter.com/paltmey
+      - icon: medium
+        href: https://medium.com/\@patrick.altmeyer
+  search: 
+    location: navbar
+    type: overlay
+
+  sidebar:
+    pinned: false
+    style: "docked"
+    search: true
+    contents:
+      - href: index.qmd
+        text: Home
+      - href: content/about/index.qmd
+        text: About
+      - section: Research
+        contents:
+        - href: https://www.paltmeyer.com/blog/
+          text: Blog
+        - href: content/publications/index.qmd
+          text: Publications
+      - section: Code
+        contents:
+          - section: Julia
+            contents:
+            - href: https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/
+              text: "`CounterfactualExplanations.jl`"
+            - href: https://www.paltmeyer.com/BayesLaplace.jl/dev/
+              text: "`BayesLaplace.jl`"
+          - section: R
+            contents:
+            - href: https://github.com/pat-alt/deepvars
+              text: "`deepvars`"
+    
+  twitter-card: true
+  opengraph: true
+  # google-analytics: G-BEEZ30787D
+  # cookie-consent: true
+  repo-url: https://github.com/pat-alt/pat-alt.github.io
+  repo-actions: [issue]
+  page-footer: 
+    left: '© 2022, Patrick Altmeyer'
+    right: 
+      - icon: github
+        href: https://github.com/pat-alt
+      - icon: twitter 
+        href: https://twitter.com/paltmey
+    
+format:
+  html:
+    theme: 
+      light: flatly
+      dark: darkly
+    css: styles.css
+    toc: true
+    
+
+bibliography: https://raw.githubusercontent.com/pat-alt/bib/main/bib.bib
+
+crossref:
+  fig-prefix: Figure
+  tbl-prefix: Table
+
+filters:
+  - lua/include-files.lua
+  - quarto
+
+
