@@ -1,7 +1,8 @@
 ---
 title: Publications
 listing:
-  contents: posts
+  contents: "`r cat(ymlthis::bib2yml(path = 'https://raw.githubusercontent.com/pat-alt/bib/main/mine.bib'))`"
+  template: gallery.ejs
   sort: "date desc"
   type: default
   fields: [image, title, author, description]

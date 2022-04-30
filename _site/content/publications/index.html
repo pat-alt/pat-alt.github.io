@@ -64,9 +64,9 @@
       }
 
       const options = {
-        valueNames: ['listing-image','listing-title','listing-author','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+        valueNames: ['listing-image','listing-title','listing-author','listing-description',{ data: ['index'] },{ data: ['categories'] }],
         
-        searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
+        searchColumns: [],
       };
 
       window['quarto-listings'] = window['quarto-listings'] || {};
@@ -139,11 +139,6 @@
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
-      <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-      </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -238,53 +233,9 @@
 
 
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="listing-actions-group">
-   <div class="input-group input-group-sm quarto-listing-sort">
-     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
-     <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
-       <option value="" disabled="" selected="" hidden="">Order By</option>
-       <option value="index" data-direction="asc">Default</option>
-         <option value="listing-title" data-direction="asc">
-          Title
-        </option>
-         <option value="listing-author" data-direction="asc">
-          Author
-        </option>
-     </select>
-  </div>
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
-</div>
-<div class="list quarto-listing-default">
-<div class="quarto-post image-left" data-index="0" data-listing-file-modified-sort="1649951301380" data-listing-reading-time-sort="0.005">
-<div class="thumbnail">
-<p><a href="../../content/publications/posts/deepvars/index.html"> <img src="../../content/publications/posts/deepvars/image.png" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="../../content/publications/posts/deepvars/index.html">
-<h3 class="no-anchor listing-title">
-Deep Vector Autoregression for Macroeconomic Data
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../content/publications/posts/deepvars/index.html">
-<div class="listing-author">
-Patrick Altmeyer, Marc Agusti, Ignacio Vidal-Quadras Costa
-</div>
-</a>
-</div>
-</div>
-</div>
+<div class="quarto-listing quarto-listing-container-custom" id="listing-listing">
+<table>
+</table>
 <div class="listing-no-matching d-none">
 No matching items
 </div>
