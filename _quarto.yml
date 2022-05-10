@@ -11,47 +11,40 @@ website:
 
   navbar:
     logo: /www/icon.png
-    right:
-      - icon: house
-        href: https://www.paltmeyer.com/
-      - icon: github
-        href: https://github.com/pat-alt
-      - icon: twitter
-        href: https://twitter.com/paltmey
-      - icon: medium
-        href: https://medium.com/\@patrick.altmeyer
-  search: 
-    location: navbar
-    type: overlay
+    left:
+      - text: "Home"
+        file: index.qmd
+      - text: "About"
+        file: content/about/index.qmd
+      - sidebar:research
+      - sidebar:code
+    search: true
 
   sidebar:
-    title: Patrick Altmeyer
-    pinned: false
-    style: "docked"
-    search: false
-    contents:
-      - href: index.qmd
-        text: Home
-      - href: content/about/index.qmd
-        text: About
-      - section: Research
-        contents:
+    - id: research
+      title: Research
+      contents: 
         - href: https://www.paltmeyer.com/blog/
           text: Blog
         - href: content/publications/index.qmd
           text: Publications
-      - section: Code
-        contents:
-          - section: Julia
-            contents:
+      pinned: false
+      style: "docked"
+    
+    - id: code
+      title: Code
+      contents: 
+        - section: Julia
+          contents:
             - href: https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/
               text: "`CounterfactualExplanations.jl`"
             - href: https://www.paltmeyer.com/BayesLaplace.jl/dev/
               text: "`BayesLaplace.jl`"
-          - section: R
-            contents:
+        - section: R
+          contents:
             - href: https://github.com/pat-alt/deepvars
               text: "`deepvars`"
+          
     
   twitter-card: true
   opengraph: true
@@ -62,10 +55,14 @@ website:
   page-footer: 
     left: '© 2022, Patrick Altmeyer'
     right: 
+      - icon: house
+        href: https://www.paltmeyer.com/
       - icon: github
         href: https://github.com/pat-alt
-      - icon: twitter 
+      - icon: twitter
         href: https://twitter.com/paltmey
+      - icon: medium
+        href: https://medium.com/\@patrick.altmeyer
     
 format:
   html:
