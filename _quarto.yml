@@ -14,38 +14,18 @@ website:
     left:
       - text: "Home"
         file: index.qmd
+      - text: "Blog"
+        file: content/blog/index.qmd
+      # - text: "Publications"
+      #   file: content/publications/index.qmd
+      # - text: "Talks"
+      #   file: content/talks/index.qmd
+      - text: "Software"
+        file: content/software.qmd
       - text: "About"
         file: content/about/index.qmd
-      - sidebar:research
-      - sidebar:code
     search: true
-
-  sidebar:
-    - id: research
-      title: Research
-      contents: 
-        - href: https://www.paltmeyer.com/blog/
-          text: Blog
-        - href: content/publications/index.qmd
-          text: Publications
-      pinned: true
-      style: "floating"
-    
-    - id: code
-      title: Code
-      contents: 
-        - section: Julia
-          contents:
-            - href: https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/
-              text: "`CounterfactualExplanations.jl`"
-            - href: https://www.paltmeyer.com/BayesLaplace.jl/dev/
-              text: "`BayesLaplace.jl`"
-        - section: R
-          contents:
-            - href: https://github.com/pat-alt/deepvars
-              text: "`deepvars`"
           
-    
   twitter-card: true
   opengraph: true
   # google-analytics: G-BEEZ30787D
