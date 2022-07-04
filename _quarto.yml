@@ -1,0 +1,66 @@
+project:
+  title: "Website"
+  type: website
+  resources: 
+    - www/
+
+website:
+  title: Patrick Altmeyer
+  page-navigation: true
+  favicon: /www/favicon.ico
+
+  navbar:
+    logo: /www/icon.png
+    left:
+      - text: "Home"
+        file: index.qmd
+      - text: "Blog"
+        file: content/blog/index.qmd
+      # - text: "Publications"
+      #   file: content/publications/index.qmd
+      # - text: "Talks"
+      #   file: content/talks/index.qmd
+      - text: "Software"
+        file: content/software.qmd
+      - text: "About"
+        file: content/about/index.qmd
+    search: true
+          
+  twitter-card: true
+  opengraph: true
+  # google-analytics: G-BEEZ30787D
+  # cookie-consent: true
+  repo-url: https://github.com/pat-alt/pat-alt.github.io
+  repo-actions: [issue]
+  page-footer: 
+    left: '© 2022, Patrick Altmeyer'
+    right: 
+      - icon: house
+        href: https://www.paltmeyer.com/
+      - icon: github
+        href: https://github.com/pat-alt
+      - icon: twitter
+        href: https://twitter.com/paltmey
+      - icon: medium
+        href: https://medium.com/\@patrick.altmeyer
+    
+format:
+  html:
+    theme: 
+      light: flatly
+      dark: darkly
+    css: styles.css
+    toc: true
+    
+
+bibliography: https://raw.githubusercontent.com/pat-alt/bib/main/bib.bib
+
+crossref:
+  fig-prefix: Figure
+  tbl-prefix: Table
+
+filters:
+  - lua/include-files.lua
+  - quarto
+
+
