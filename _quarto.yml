@@ -16,8 +16,11 @@ website:
     left:
       - text: "Home"
         file: index.qmd
+<<<<<<< HEAD
       - text: "Blog"
         href: blog/index.html
+=======
+>>>>>>> cba9a20a70cba8f0beb3d14874bec08c2e09f75c
       # - text: "Publications"
       #   file: content/publications/index.qmd
       # - text: "Talks"
@@ -25,12 +28,20 @@ website:
       - text: "Software"
         file: content/software.qmd
       - text: "About"
-        file: content/about/index.qmd
+        menu:
+        - text: Bio
+          file: content/about/index.qmd
+        - text: CV
+          file: www/cv/_cv.html
+        - text: Contact
+          file: content/about/contact.qmd
+      - text: Blog 
+        href: https://www.paltmeyer.com/blog/
     search: true
           
   twitter-card: true
   opengraph: true
-  # google-analytics: G-BEEZ30787D
+  google-analytics: G-BEEZ30787D
   # cookie-consent: true
   repo-url: https://github.com/pat-alt/pat-alt.github.io
   repo-actions: [issue]
