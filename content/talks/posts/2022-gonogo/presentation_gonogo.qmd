@@ -1,0 +1,439 @@
+---
+title: Counterfactual Reasoning and Probabilistic Methods for Trustworthy AI
+subtitle: Go/No Go Meeting 2022
+author: Patrick Altmeyer
+format: 
+  revealjs:
+    logo: /www/images/delft_logo.png
+    footer: |
+      Counterfactual Reasoning and Probabilistic Methods for Trustworthy AI with Applications in Finance -- Patrick Altmeyer
+    self-contained: true
+    smaller: true
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    fig-align: center
+execute:
+  eval: false
+  echo: true
+draft: true
+---
+
+## Overview
+
+:::{.incremental}
+- Trustworthy AI 🔮 ... and how I think about it
+- Looking back 🚩
+- The Road Ahead 🎯 
+- Questions ❓
+:::
+
+# Trustworthy AI 🔮 {background-image="/www/images/trust.jpeg" background-color="black"}
+
+## The Problem with Today's AI
+
+> From **human** to **data-driven** decision-making ...
+
+:::{.incremental}
+
+- Black-box models like deep neural networks are being deployed virtually everywhere.
+- Includes safety-critical and public domains: health care, autonomous driving, finance, ... 
+- More likely than not that your loan or employment application is handled by an algorithm.
+
+::: 
+
+. . .
+
+> ... where black boxes are recipe for disaster.
+
+:::{.incremental}
+- We have no idea what exactly we're cooking up ...
+    - Have you received an automated rejection email? Why didn't you "mEet tHe sHoRtLisTiNg cRiTeRia"? 🙃
+- ... but we do know that some of it is junk. 
+:::
+
+. . .
+
+![Adversarial attacks on deep neural networks. Source: @goodfellow2014explaining](/www/images/panda.png){#fig-panda width=50%}
+
+## Towards Trustworthy AI  {auto-animate=true auto-animate-easing="ease-in-out"}
+
+::: {.r-hstack}
+
+::: {data-id="box3" style="background: #389826; width: 150px; height: 150px; border-radius: 50%; display: grid; place-content: center; text-align: center;"}
+Ground Truthing
+:::
+
+::: {data-id="box2" style="background: #cb3c33; width: 150px; height: 150px; border-radius: 50%; display: grid; place-content: center; text-align: center;"}
+Probabilistic Models
+:::
+
+::: {data-id="box1" style="background: #9558b2; width: 150px; height: 150px; border-radius: 50%; display: grid; place-content: center; text-align: center;"}
+Counterfactual Reasoning
+:::
+:::
+
+## Towards Trustworthy AI {auto-animate=true auto-animate-easing="ease-in-out"}
+
+::: {.r-hstack style="text-align: center;"}
+::: {data-id="box3" style="background: #389826; width: 150px; height: 150px; border-radius: 50%; display: grid; place-content: center; text-align: center; opacity: 0.5;"}
+Ground Truthing
+:::
+
+::: {data-id="box2" style="background: #cb3c33; width: 150px; height: 150px; border-radius: 50%; display: grid; place-content: center; text-align: center;"}
+Probabilistic Models
+:::
+
+::: {data-id="box1" style="background: #9558b2; width: 150px; height: 150px; border-radius: 50%; display: grid; place-content: center; text-align: center; opacity: 0.5;"}
+Counterfactual Reasoning
+:::
+:::
+
+#### Current Standard in ML
+
+We typically want to maximize the likelihood of observing $\mathcal{D}_n$ under given parameters [@murphy2022probabilistic]:
+
+$$
+\theta^* = \arg \max_{\theta} p(\mathcal{D}_n|\theta)
+$$ {#eq-mle}
+
+Compute an MLE (or MAP) point estimate $\hat\theta = \mathbb{E} \theta^*$ and use **plugin** approximation for prediction:
+
+$$
+p(y|x,\mathcal{D}_n) \approx p(y|x,\hat\theta)
+$$ {#eq-plugin}
+
+- In an ideal world we can just use parsimonious and interpretable models like GLM [@rudin2019stop], for which in many cases we can rely on asymptotic properties of $\theta$ to quantify uncertainty.
+- In practice these models often have performance limitations.
+- Black-box models like deep neural networks are popular, but they are also the very opposite of parsimonious.
+
+#### Objective
+
+## Towards Trustworthy AI {auto-animate=true auto-animate-easing="ease-in-out"}
+
+::: {.r-hstack style="text-align: center;"}
+::: {data-id="box3" style="background: #389826; width: 150px; height: 150px; border-radius: 50%; display: grid; place-content: center; text-align: center; opacity: 0.5;"}
+Ground Truthing
+:::
+
+::: {data-id="box2" style="background: #cb3c33; width: 150px; height: 150px; border-radius: 50%; display: grid; place-content: center; text-align: center;"}
+Probabilistic Models
+:::
+
+::: {data-id="box1" style="background: #9558b2; width: 150px; height: 150px; border-radius: 50%; display: grid; place-content: center; text-align: center; opacity: 0.5;"}
+Counterfactual Reasoning
+:::
+:::
+
+#### Objective
+
+. . .
+
+> [...] deep neural networks are typically very underspecified by the available data, and [...] parameters [therefore] correspond to a diverse variety of compelling explanations for the data. 
+> [@wilson2020case]
+
+In this setting it is often crucial to treat models probabilistically!
+
+$$
+p(y|x,\mathcal{D}_n) = \int p(y|x,\theta)p(\theta|\mathcal{D}_n)d\theta
+$$ {#eq-bma}
+
+## Towards Trustworthy AI {auto-animate=true auto-animate-easing="ease-in-out"}
+
+::: {.r-hstack}
+::: {data-id="box3" style="background: #389826; width: 150px; height: 150px; border-radius: 50%; display: grid; place-content: center; text-align: center; opacity: 0.5;"}
+Ground Truthing
+:::
+
+::: {data-id="box2" style="background: #cb3c33; width: 150px; height: 150px; border-radius: 50%; display: grid; place-content: center; text-align: center; opacity: 0.5;"}
+Probabilistic Models
+:::
+
+::: {data-id="box1" style="background: #9558b2; width: 150px; height: 150px; border-radius: 50%; display: grid; place-content: center; text-align: center; align-items: center;"}
+Counterfactual Reasoning
+:::
+:::
+
+> We can now make predictions -- great! But do we know how the predictions are actually being made?
+
+. . .
+
+#### Objective
+
+With the model trained for its task, we are interested in understanding how its predictions change in response to input changes.
+
+$$
+\nabla_x p(y|x,\mathcal{D}_n;\hat\theta)
+$$ {#eq-ce-objective}
+
+:::{.incremental}
+- Counterfactual reasoning (in this context) boils down to simple questions: what if $x$ (factual) $\Rightarrow$ $x\prime$ (counterfactual)?
+- By strategically perturbing features and checking the model output, we can (begin to) understand how the model makes its decisions.
+- Counterfactual Explanations always have full fidelity by construction (as opposed to surrogate explanations, for example).
+:::
+
+. . .
+
+> Important to realize that we are keeping $\hat\theta$ constant!
+
+# Looking back 🚩 {background-image="/www/images/looking_back.jpeg" background-color="black"}
+
+## Some achievements ...
+
+1. Three presentations at JuliaCon 2022:
+    - [Explaining Black-Box Models through Counterfactuals](https://pretalx.com/juliacon-2022/talk/HU8FVH/)^[The relevant Julia package repository can be found here: [https://github.com/pat-alt/CounterfactualExplanations.jl](https://github.com/pat-alt/CounterfactualExplanations.jl). The repository that will be used to generate the relevant [JuliaCon Proceedings](https://proceedings.juliacon.org/) paper can be found here: [https://github.com/pat-alt/CounterfactualExplanations.jl/tree/paper](https://github.com/pat-alt/CounterfactualExplanations.jl/tree/paper).]
+    - [Effortless Bayesian Deep Learning through Laplace Redux](https://pretalx.com/juliacon-2022/talk/Z7MXFS/)^[The relevant Julia package repository can be found here: [https://github.com/pat-alt/LaplaceRedux.jl](https://github.com/pat-alt/LaplaceRedux.jl).]
+    - [Julia and Quarto: A Match Made in Heaven?](https://www.youtube.com/watch?v=9L5Oy3oGoTU)
+2. IEEE SaTML 2022 submission "Endogenous Macrodynamics in Algorithmic Recourse" (under review)
+    - The submitted paper can be found [here](https://anonymous.4open.science/r/AlgorithmicRecourseDynamics/paper/paper.pdf).
+    - The code for the companion Julia package can be found [here](https://anonymous.4open.science/r/AlgorithmicRecourseDynamics/README.md).
+3. Supervision of student Research Project
+
+## [Explaining Black-Box Models through Counterfactuals](https://pretalx.com/juliacon-2022/talk/HU8FVH/)
+
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://pat-alt.github.io/CounterfactualExplanations.jl/stable) [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://pat-alt.github.io/CounterfactualExplanations.jl/dev) [![Build Status](https://github.com/pat-alt/CounterfactualExplanations.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/pat-alt/CounterfactualExplanations.jl/actions/workflows/CI.yml?query=branch%3Amain) [![Coverage](https://codecov.io/gh/pat-alt/CounterfactualExplanations.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/pat-alt/CounterfactualExplanations.jl)
+
+::::{.columns}
+:::{.column width="50%"}
+
+`CounterfactualExplanations.jl` is a package for generating Counterfactual Explanations (CE) and Algorithmic Recourse (AR) for black-box algorithms. Both CE and AR are related tools for explainable artificial intelligence (XAI). While the package is written purely in Julia, it can be used to explain machine learning algorithms developed and trained in other popular programming languages like Python and R. See below for short introduction and other resources or dive straight into the [docs](https://pat-alt.github.io/CounterfactualExplanations.jl/dev).
+
+![Turning a nine (9) into a four (4).](/www/images/MNIST_9to4.png)
+
+:::
+
+:::{.column width="50%"}
+
+![A sad 🐱 on its counterfactual path to its cool dog friends.](https://raw.githubusercontent.com/pat-alt/CounterfactualExplanations.jl/main/docs/src//www/images/recourse_laplace.gif)
+
+::: 
+
+::::
+
+## [Effortless Bayesian Deep Learning through Laplace Redux](https://pretalx.com/juliacon-2022/talk/Z7MXFS/)
+
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://pat-alt.github.io/LaplaceRedux.jl/stable) [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://pat-alt.github.io/LaplaceRedux.jl/dev) [![Build Status](https://github.com/pat-alt/LaplaceRedux.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/pat-alt/LaplaceRedux.jl/actions/workflows/CI.yml?query=branch%3Amain) [![Coverage](https://codecov.io/gh/pat-alt/LaplaceRedux.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/pat-alt/LaplaceRedux.jl)
+
+::::{.columns}
+:::{.column width="50%"}
+
+`LaplaceRedux.jl` (formerly `BayesLaplace.jl`) is a small package that can be used for effortless Bayesian Deep Learning and Logistic Regression trough Laplace Approximation. It is inspired by this Python [library](https://aleximmer.github.io/Laplace/index.html#setup) and its companion [paper](https://arxiv.org/abs/2106.14806).
+
+![Plugin Approximation (left) and Laplace Posterior (right) for simple artificial neural network.](/www/images/posterior_predictive_mlp.png)
+
+:::
+
+:::{.column width="50%"}
+![Simulation of changing posteriour predictive distribution. Image by author.](https://raw.githubusercontent.com/pat-alt/LaplaceRedux.jl/main/dev/resources/juliacon22//www/images/intro.gif){width="70%"}
+:::
+
+::::
+
+## [Endogenous Macrodynamics in AR](https://anonymous.4open.science/r/AlgorithmicRecourseDynamics/README.md) - motivation
+
+::: {.panel-tabset}
+
+### Motivation
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+> **TLDR**: We find that standard implementation of various SOTA approaches to AR can induce substantial domain and model shifts. We argue that these dynamics indicate that individual recourse generates hidden external costs and provide mitigation strategies.
+
+**Description**: In this work we investigate what happens if Algorithmic Recourse is actually implemented by a large number of individuals. The chart below illustrates what we mean by Endogenous Macrodynamics in Algorithmic Recourse: (a) we have a simple linear classifier trained for binary classification where samples from the negative class (y=0) are marked in blue and samples of the positive class (y=1) are marked in orange; (b) the implementation of AR for a random subset of individuals leads to a noticable domain shift; (c) as the classifier is retrained we observe a corresponding model shift [@upadhyay2021robust]; (d) as this process is repeated, the decision boundary moves away from the target class.
+
+:::
+
+:::{.column width="50%"}
+![Proof of concept: repeated implementation of AR leads to domain and model shifts.](/www/images/poc.png){width="70%"}
+
+> We argue that these shifts should be considered as an expected external cost of individual recourse and call for a paradigm shift from individual to collective recourse in these types of situations. 
+
+![Mitigation strategies.](/www/images/mitigation.png){width="70%"}
+
+:::
+::::
+
+### Findings
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+![Results for synthetic data.](/www/images/synthetic_results.png){width="70%"}
+
+:::
+
+:::{.column width="50%"}
+
+![Mitigation strategies applied to synthetic data.](/www/images/mitigation_synthetic_results.png){width="70%"}
+
+:::
+
+::::
+
+:::
+
+# The Road Ahead 🎯 {background-image="/www/images/looking_ahead.jpeg"}
+
+## LaplaCE: Realistic and Surrogate-Free Counterfactual Explanations
+
+::: {.panel-tabset}
+
+### Motivating Example
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+#### Good VAE
+
+. . .
+
+> The results in @fig-mnist-latent look great!
+
+![Turning a nine (9) into a four (4) using REVISE. It appears that the VAE is well-specified in this case.](/www/images/mnist_9to4_latent.png){#fig-mnist-latent width="80%"}
+
+:::
+
+::: {.column width="50%"}
+
+#### Bad VAE
+
+. . .
+
+> But things can also go wrong ...
+
+The VAE used to generate the counterfactual in @fig-latent-fail is not expressive enough.
+
+![Turning a seven (7) into a nine (9) using REVISE with a weak VAE.](/www/images/mnist_7to9_latent.png){#fig-latent-fail width="60%"}
+
+. . .
+
+> The counterfactual in @fig-wachter-fail is also valid ... what to do?
+
+![Turning a seven (7) into a nine (9) using generic search.](/www/images/mnist_7to9_wachter.png){#fig-wachter-fail width="60%"}
+:::
+
+::::
+
+### Idea 💡
+
+> **TLDR**: Using Linearized Laplace Redux we can compute predictive uncertainty estimates for any neural network [@daxberger2021laplace]. By minimizing predictive uncertainty we can create realistic counterfactual explanations [@schut2021generating] without the need for surrogate generative models. 
+
+**Description**: We propose LaplaCE: an effortless way to produce realistic Counterfactual Explanations for deep neural networks (DNN) using Laplace Approximation (LA). To address the need for realistic counterfactuals, existing work has primarily relied on separate generative models to learn the data generating process (e.g. @joshi2019realistic). While this an effective way to produce plausible and model-agnostic counterfactual explanations, it not only introduces an significant engineering overhead, but also reallocates the task of creating realistic model explanations from the model itself to the surrogate generative model. Recent work has shown that there is no need for any of this when working with probabilistic models that explicitly quantify their own uncertainty. Unfortunately, most models used in practice still do not fulfill that basic requirement, in which case we would like to have a way to quantify predictive uncertainty in a post-hoc fashion. Recent work on Bayesian Deep Learning has shown that LA can be used effectively in this context. By leveraging this finding we show that it is possible to generate realistic counterfactual explanations, without the need to restrict the class of models or rely on a separate generative model. 
+
+**Potential venues**^[Likely submission deadline in brackets.]: FAccT (Dec '22), AIES (March '23), NeurIPS (May '23), SaTML (Sep '23)
+
+:::
+
+## "Crack my code" - can XAI teach users black-box behaviour? 
+
+> **TLDR**: Using a gamified experiment we test if SOTA XAI methods can actually help users to understand the workings of a black-box model. 
+
+**Description**: Do Counterfactual Explanations actually help users to understand the workings of a black-box model? In this work we investigate this question through gamified experiments. The idea is to set up an experiment as follows:
+
+1. Fit a neural network on a number of synthetic features with two classes and no inherent meaning.
+2. Generate a random sample from any of the two classes and show it to the user.
+3. Let user predict the class and compare it to actual prediction by neural network.
+4. Show user XAI explanation and reward user if their guess matches actual prediction.
+5. Repeat 1-4 many times. 
+
+If the XAI method is useful, the discrepancy between user guesses and neural network prediction should diminish over time. This project idea is inspired by an AIES 2022 paper that employs a similar framework [@dai2022counterfactual].
+
+**Potential venues**: AIES (March '23), JuliaCon (April '23)
+
+## Not your Typical Black-Box: the Dutch Childcare Benefits Scandal through the Lens of Counterfactual Explanations
+
+> **TLDR**: The automated decision-making system used by the Dutch tax authorities is opaque not because of its complexity, but rather by design. The goal of this work is to explore ways to explain such black-boxes through counterfactuals.
+
+**Description**: The Dutch childcare benefits scandal involved involved false fraud allegations based on an automated decision-making system (ADMS) used by the tax authorities. The ADMS was essentially a collection of spreadsheets containing hard-coded rules. The sheer quantity of spreadsheets has made it difficult for experts (Cynthia) to disentangle the inners workings and hence understand the behaviour of the ADMS. We can think of this a non-conventional black-box that is opaque not because of its complexity, but rather by design. We believe that these types of ADMS are still widely prevalent in industry and therefore should be considered as a different kind of threat to AI integrity. The goal of this work is to explore ways to explain such black-boxes through counterfactuals. This is a challenging and ambitious task, but a few strategies come to mind: 1) use brute force to search counterfactuals; 2) use a Growing Spheres [@laugel2017inverse] to generate counterfactuals; 3) derive a decision tree from the spreadsheets and generate counterfactuals for the tree.
+
+**Potential venues**: FAccT 2024
+
+## Counterfactual Explanations for Credit Risk Monitoring in Central Banks
+
+::::{.columns}
+:::{.column width="50%"}
+**Description**: This fall I will give a seminar about Counterfactual Explanations and Algorithmic Recourse at the Bank of England. Bank researchers are interested in applying CE and AR to their bank risk prediction models.
+
+**Potential venues**: 
+
+1. Blog post applying recent findings to sovereign default risk dataset. 
+2. Contribution to BoE Staff Working Paper. 
+
+:::
+:::{.column width="50%"}
+![Source: Paul Fiedler on [Unsplash](https://unsplash.com/photos/M_S7pim3Hwg)](/www/images/banks.jpeg)
+:::
+::::
+
+## Counterfactual Explanations for Regression Problems
+
+::::{.columns}
+:::{.column width="50%"}
+
+**Description**: The literature on Counterfactual Explanations almost exclusively focuses on classification problems. In Finance and Economics, however, the overwhelming majority of problems involve regression. Hence it is perhaps not altogether surprising that practitioners and researchers in these fields are largely unfamiliar with the CE and instead typically rely on surrogate explanations like LIME and SHAP to explain black-box models. Using @spooner2021counterfactual as a potential starting point, I would be interested in exploring how state-of-the-art CE approaches can be applied to regression problems. 
+
+**Potential venues**: -
+
+:::
+:::{.column width="50%"}
+
+![Source: @spooner2021counterfactual)](/www/images/regression.png)
+
+:::
+::::
+
+## Other plans
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+#### Priorities
+
+- Masters student supervision.
+- Contribute and/or participate in TU Delft Summer School on XAI.
+- Proposal for Google Summer of Code.
+- Increased co-operation with ING.
+
+#### Side projects
+
+- More blog post implementations of @murphy2022probabilistic. 
+- Revise master's work on Deep VAR. 
+
+:::
+
+:::{.column width="50%"}
+![Photo by [Ivan Diaz](https://unsplash.com/@ivvndiaz?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)](/www/images/launch.jpeg){width="70%"}
+:::
+
+::::
+
+# Questions ❓
+
+# Hiddens {visibility="hidden"}
+
+## [Endogenous Macrodynamics in Algorithmic Recourse](https://anonymous.4open.science/r/AlgorithmicRecourseDynamics/README.md) - findings (real world) {visibility="hidden"}
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+![](/www/images/real_world_results.png)
+
+:::
+
+:::{.column width="50%"}
+
+![](/www/images/mitigation_real_world_results.png)
+
+:::
+
+::::
+
+## References 
