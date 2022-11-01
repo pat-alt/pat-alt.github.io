@@ -18,9 +18,9 @@ version = "1.2.1"
 
 [[deps.Accessors]]
 deps = ["Compat", "CompositionsBase", "ConstructionBase", "Dates", "InverseFunctions", "LinearAlgebra", "MacroTools", "Requires", "Test"]
-git-tree-sha1 = "ff77abdacacad13fbdd2d0863fab1af5af819693"
+git-tree-sha1 = "ce67f55da3a937bb001a8d00559bdfa4dba6e4f5"
 uuid = "7d9f7c33-5ae7-4f3b-8dc6-eff91059b697"
-version = "0.1.21"
+version = "0.1.20"
 
 [[deps.Adapt]]
 deps = ["LinearAlgebra"]
@@ -228,10 +228,10 @@ uuid = "ed09eef8-17a6-5b46-8889-db040fac31e3"
 version = "0.3.2"
 
 [[deps.ConformalPrediction]]
-deps = ["MLJ", "MLJBase", "MLJModelInterface", "Statistics"]
+deps = ["MLJ", "MLJBase", "MLJModelInterface", "Statistics", "Term"]
 path = "../ConformalPrediction.jl"
 uuid = "98bfc277-1877-43dc-819b-a3e38c30242f"
-version = "0.1.3"
+version = "0.1.2"
 
 [[deps.ConstructionBase]]
 deps = ["LinearAlgebra"]
@@ -251,7 +251,7 @@ uuid = "d38c429a-6771-53c6-b99e-75d170b6e991"
 version = "0.6.2"
 
 [[deps.CounterfactualExplanations]]
-deps = ["BSON", "CUDA", "DataFrames", "Flux", "LaplaceRedux", "LazyArtifacts", "LinearAlgebra", "MLJ", "MLUtils", "MultivariateStats", "NearestNeighborModels", "Parameters", "PkgTemplates", "Plots", "Random", "Revise", "SliceMap", "Statistics", "StatsBase", "UMAP"]
+deps = ["BSON", "CUDA", "DataFrames", "Flux", "LaplaceRedux", "LazyArtifacts", "LinearAlgebra", "MLJ", "MLUtils", "MultivariateStats", "NearestNeighborModels", "Parameters", "Plots", "Random", "SliceMap", "Statistics", "StatsBase", "UMAP"]
 path = "../CounterfactualExplanations.jl"
 uuid = "2f13d31b-18db-44c1-bc43-ebaf2cff0be0"
 version = "0.1.3"
@@ -268,9 +268,9 @@ version = "1.12.0"
 
 [[deps.DataFrames]]
 deps = ["Compat", "DataAPI", "Future", "InvertedIndices", "IteratorInterfaceExtensions", "LinearAlgebra", "Markdown", "Missings", "PooledArrays", "PrettyTables", "Printf", "REPL", "Random", "Reexport", "SnoopPrecompile", "SortingAlgorithms", "Statistics", "TableTraits", "Tables", "Unicode"]
-git-tree-sha1 = "5b93f1b47eec9b7194814e40542752418546679f"
+git-tree-sha1 = "558078b0b78278683a7445c626ee78c86b9bb000"
 uuid = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
-version = "1.4.2"
+version = "1.4.1"
 
 [[deps.DataStructures]]
 deps = ["Compat", "InteractiveUtils", "OrderedCollections"]
@@ -549,6 +549,12 @@ git-tree-sha1 = "129acf094d168394e80ee1dc4bc06ec835e510a3"
 uuid = "2e76f6c2-a576-52d4-95c1-20adfe4de566"
 version = "2.8.1+1"
 
+[[deps.Highlights]]
+deps = ["DocStringExtensions", "InteractiveUtils", "REPL"]
+git-tree-sha1 = "0341077e8a6b9fc1c2ea5edc1e93a956d2aec0c7"
+uuid = "eafb193a-b7ab-5a9e-9068-77385905fa72"
+version = "0.5.2"
+
 [[deps.HypergeometricFunctions]]
 deps = ["DualNumbers", "LinearAlgebra", "OpenLibm_jll", "SpecialFunctions", "Test"]
 git-tree-sha1 = "709d864e3ed6e3545230601f94e11ebc65994641"
@@ -635,12 +641,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "b53380851c6e6664204efb2e62cd24fa5c47e4ba"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
 version = "2.1.2+0"
-
-[[deps.JuliaInterpreter]]
-deps = ["CodeTracking", "InteractiveUtils", "Random", "UUIDs"]
-git-tree-sha1 = "0f960b1404abb0b244c1ece579a0ec78d056a5d1"
-uuid = "aa1ae85d-cabe-5617-a682-6adf51b2e16a"
-version = "0.9.15"
 
 [[deps.JuliaVariables]]
 deps = ["MLStyle", "NameResolution"]
@@ -811,12 +811,6 @@ git-tree-sha1 = "53cd63a12f06a43eef6f4aafb910ac755c122be7"
 uuid = "30fc2ffe-d236-52d8-8643-a9d8f7c094a7"
 version = "0.8.0"
 
-[[deps.LoweredCodeUtils]]
-deps = ["JuliaInterpreter"]
-git-tree-sha1 = "dedbebe234e06e1ddad435f5c6f4b85cd8ce55f7"
-uuid = "6f1432cf-f94c-5a45-995e-cdbf5db27b0b"
-version = "2.2.2"
-
 [[deps.LsqFit]]
 deps = ["Distributions", "ForwardDiff", "LinearAlgebra", "NLSolversBase", "OptimBase", "Random", "StatsBase"]
 git-tree-sha1 = "91aa1442e63a77f101aff01dec5a821a17f43922"
@@ -825,9 +819,9 @@ version = "0.12.1"
 
 [[deps.MLJ]]
 deps = ["CategoricalArrays", "ComputationalResources", "Distributed", "Distributions", "LinearAlgebra", "MLJBase", "MLJEnsembles", "MLJIteration", "MLJModels", "MLJTuning", "OpenML", "Pkg", "ProgressMeter", "Random", "ScientificTypes", "Statistics", "StatsBase", "Tables"]
-git-tree-sha1 = "3bb6cf4ded6659d3be080bece70a15e94296fcbb"
+git-tree-sha1 = "025706ea81e635ac530a1d3dd365af971805bf79"
 uuid = "add582a8-e3ab-11e8-2d5e-e98b27df1bc7"
-version = "0.18.6"
+version = "0.18.5"
 
 [[deps.MLJBase]]
 deps = ["CategoricalArrays", "CategoricalDistributions", "ComputationalResources", "Dates", "DelimitedFiles", "Distributed", "Distributions", "InteractiveUtils", "InvertedIndices", "LinearAlgebra", "LossFunctions", "MLJModelInterface", "Missings", "OrderedCollections", "Parameters", "PrettyTables", "ProgressMeter", "Random", "ScientificTypes", "Serialization", "StatisticalTraits", "Statistics", "StatsBase", "Tables"]
@@ -855,9 +849,9 @@ version = "1.7.0"
 
 [[deps.MLJModels]]
 deps = ["CategoricalArrays", "CategoricalDistributions", "Combinatorics", "Dates", "Distances", "Distributions", "InteractiveUtils", "LinearAlgebra", "MLJModelInterface", "Markdown", "OrderedCollections", "Parameters", "Pkg", "PrettyPrinting", "REPL", "Random", "RelocatableFolders", "ScientificTypes", "StatisticalTraits", "Statistics", "StatsBase", "Tables"]
-git-tree-sha1 = "3d0faaf3e097f004fbeec103a314c72a069fb4a5"
+git-tree-sha1 = "147a8e7939601f8c37204addbbe29f2bcfb876a8"
 uuid = "d491faf4-2d78-11e9-2867-c94bc002c0b7"
-version = "0.15.15"
+version = "0.15.14"
 
 [[deps.MLJTuning]]
 deps = ["ComputationalResources", "Distributed", "Distributions", "LatinHypercubeSampling", "MLJBase", "ProgressMeter", "Random", "RecipesBase"]
@@ -923,12 +917,6 @@ version = "1.0.2"
 [[deps.Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
-[[deps.Mocking]]
-deps = ["ExprTools"]
-git-tree-sha1 = "748f6e1e4de814b101911e64cc12d83a6af66782"
-uuid = "78c3b35d-d492-501b-9361-3d52fe80e533"
-version = "0.7.2"
-
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
 version = "2022.2.1"
@@ -939,11 +927,10 @@ git-tree-sha1 = "efe9c8ecab7a6311d4b91568bd6c88897822fabe"
 uuid = "6f286f6a-111f-5878-ab1e-185364afe411"
 version = "0.10.0"
 
-[[deps.Mustache]]
-deps = ["Printf", "Tables"]
-git-tree-sha1 = "1e566ae913a57d0062ff1af54d2697b9344b99cd"
-uuid = "ffc61752-8dc7-55ee-8c37-f3e9cdd09e70"
-version = "1.0.14"
+[[deps.MyterialColors]]
+git-tree-sha1 = "01d8466fb449436348999d7c6ad740f8f853a579"
+uuid = "1c23619d-4212-4747-83aa-717207fae70f"
+version = "0.3.0"
 
 [[deps.NLSolversBase]]
 deps = ["DiffResults", "Distributed", "FiniteDiff", "ForwardDiff"]
@@ -1105,12 +1092,6 @@ deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markd
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 version = "1.8.0"
 
-[[deps.PkgTemplates]]
-deps = ["Dates", "InteractiveUtils", "LibGit2", "Mocking", "Mustache", "Parameters", "Pkg", "REPL", "UUIDs"]
-git-tree-sha1 = "a9bb1aaef87802cd64669f8c665dced70a0810bc"
-uuid = "14b8a8f1-9102-5b29-a752-f990bacb7fe1"
-version = "0.7.29"
-
 [[deps.PlotThemes]]
 deps = ["PlotUtils", "Statistics"]
 git-tree-sha1 = "1f03a2d339f42dca4a4da149c7e15e9b896ad899"
@@ -1239,12 +1220,6 @@ deps = ["UUIDs"]
 git-tree-sha1 = "838a3a4188e2ded87a4f9f184b4b0d78a1e91cb7"
 uuid = "ae029012-a4dd-5104-9daa-d747884805df"
 version = "1.3.0"
-
-[[deps.Revise]]
-deps = ["CodeTracking", "Distributed", "FileWatching", "JuliaInterpreter", "LibGit2", "LoweredCodeUtils", "OrderedCollections", "Pkg", "REPL", "Requires", "UUIDs", "Unicode"]
-git-tree-sha1 = "dad726963ecea2d8a81e26286f625aee09a91b7c"
-uuid = "295af30f-e4ad-537b-8983-00126c2a3abe"
-version = "3.4.0"
 
 [[deps.Rmath]]
 deps = ["Random", "Rmath_jll"]
@@ -1443,6 +1418,12 @@ deps = ["LinearAlgebra"]
 git-tree-sha1 = "1feb45f88d133a655e001435632f019a9a1bcdb6"
 uuid = "62fd8b95-f654-4bbd-a8a5-9c27f68ccd50"
 version = "0.1.1"
+
+[[deps.Term]]
+deps = ["CodeTracking", "Dates", "Highlights", "InteractiveUtils", "Logging", "Markdown", "MyterialColors", "OrderedCollections", "Parameters", "ProgressLogging", "SnoopPrecompile", "Tables", "UUIDs", "UnicodeFun"]
+git-tree-sha1 = "5b5d38673d148f80e7e04569a665006d3bf91cfb"
+uuid = "22787eb5-b846-44ae-b979-8e399b8463ab"
+version = "1.0.4"
 
 [[deps.Test]]
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
