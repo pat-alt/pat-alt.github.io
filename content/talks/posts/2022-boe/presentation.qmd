@@ -248,12 +248,13 @@ $$ {#eq-ce-objective}
 
 1. 🔮 Explaining Black-Box Models through Counterfactuals ($\approx$ 10min)
     - What are they? What are they not? 
+    - Counterfactual Explanations in the broader XAI landscape
     - From Counterfactual Explanations to Algorithmic Recourse
 2. 🛠️ Hands-on examples --- `CounterfactualExplanations.jl` in Julia ($\approx$ 15min)
-2. 📊 Endogenous Macrodynamics in Algorithmic Recourse ($\approx$ 10min)
-3. 🚀 The Road Ahead --- Related Research Topics ($\approx$ 10min)
-    - Predictive Uncertainty Quantification
+3. 📊 Endogenous Macrodynamics in Algorithmic Recourse ($\approx$ 10min)
 4. ❓ Q&A ($\approx$ 10min)
+5. 🚀 Related Research Topics ($\approx$ 10min)
+    - Predictive Uncertainty Quantification
 
 
 # Explaining Black-Box Models through Counterfactuals 🔮 {background-image="/www/images/colourful.jpeg"} 
@@ -262,8 +263,6 @@ $$ {#eq-ce-objective}
 
 > Even though [...] interpretability is of great importance and should be pursued, explanations can, in principle, be offered without opening the “black box”.
 > [@wachter2017counterfactual]
-
-
 
 ::::{.columns}
 
@@ -361,7 +360,38 @@ While both are methodologically very similar, adversarial examples are meant to 
 :::
 ::::
 
-## Counterfactual Explanations vs. Feature Attribution Methods
+## The XAI Landscape
+
+> A (highly) simplified and incomplete overview ...
+
+```{mermaid}
+%%| echo: false
+%%| label: fig-xai
+%%| fig-cap: A (highly) simplified and incomplete overview of the XAI landscape loosly based on @molnar2020interpretable. 
+
+flowchart LR
+  XAI([Explainable AI])
+  IAI([Interpretable AI]) 
+  global([Global Methods])
+  local([Local Methods])
+  surrogate([Surrogate])
+  permute([Feature Permutation])
+  game([Game Theory])
+  global-surrogate[Global Surrogate]
+  permute-feature[Permutation Feature Importance]
+  lime[LIME]
+  shap["SHAP"]
+  shapley["Shapley"]
+  ce[Counterfactual Explanations]
+
+  XAI ==> global & local
+  global ==> global-surrogate & permute-feature
+  local ==> lime & shap & shapley & ce
+
+  global-surrogate & lime & shap --- surrogate
+  permute-feature & ce --- permute
+  shap & shapley --- game
+```
 
 ## From Counterfactual Explanations to Algorithmic Recourse
 
@@ -416,6 +446,7 @@ While both are methodologically very similar, adversarial examples are meant to 
 - Fast, extensible and composable allowing users and developers to add and combine different counterfactual generators.
 - Implements a number of SOTA generators.
 - Built in Julia, but can be used to explain models built in R and Python (still experimental).
+- Status 🔁: ready for research, not production. Thought/challenge/contributions welcome!
 :::
 :::
 
@@ -441,7 +472,7 @@ While both are methodologically very similar, adversarial examples are meant to 
 ```{julia}
 # Data:
 using Random
-Random.seed!(123)
+Random.seed!(2022)
 N = 100
 using CounterfactualExplanations
 xs, ys = toy_data_linear(N)
@@ -765,66 +796,72 @@ gif(anim, fps=20)
 
 ## A Real-World Example - Credit Default
 
+- The **Give Me Some Credit** dataset is publicly available from [Kaggle](https://www.kaggle.com/competitions/GiveMeSomeCredit/leaderboard). 
+
+> Improve on the state of the art in credit scoring by predicting the probability that somebody will experience financial distress in the next two years.
+
+- We have $y \in \{0=\text{no stress},1=\text{stress}\}$ and a number of demographic and credit-related features $X$.
+
 ```{julia}
 #| echo: false
+
 using AlgorithmicRecourseDynamics
 max_obs = 2500
 data_sets = AlgorithmicRecourseDynamics.Data.load_real_world(max_obs)
-counterfactual_data = data_sets[:credit_default]
+counterfactual_data = data_sets[:gmsc]
 X = counterfactual_data.X
 ys = counterfactual_data.y
 input_names = Symbol.([
-  "LIMIT_BAL",
-  "AGE",
-  "PAY_0",
-  "PAY_2",
-  "PAY_3",
-  "PAY_4",
-  "PAY_5",
-  "PAY_6",
-  "BILL_AMT1",
-  "BILL_AMT2",
-  "BILL_AMT3",
-  "BILL_AMT4",
-  "BILL_AMT5",
-  "BILL_AMT6",
-  "PAY_AMT1",
-  "PAY_AMT2",
-  "PAY_AMT3",
-  "PAY_AMT4",
-  "PAY_AMT5",
-  "PAY_AMT6",
+  "unsecured_lines",
+  "age",
+  "times_past_due",
+  "debt_ratio",
+  "income",
+  "number_loans",
+  "times_late",
+  "number_mortgages",
+  "times_past_due_2",
+  "number_dependents",
 ])
 using Tables
-tab_input = Tables.table(permutedims(data.X), header=input_names)
+tab_input = Tables.table(permutedims(X), header=input_names)
 using DataFrames
 df_input = DataFrame(tab_input)
 using CategoricalArrays
 df_input.target = categorical(vec(ys))
 ```
 
-
 ```{julia}
+#| echo: false
+
 using AlgorithmicRecourseDynamics.Models: FluxEnsemble, train, model_evaluation
 using AlgorithmicRecourseDynamics.Data: train_test_split
 data_train, data_test = train_test_split(counterfactual_data)
-model = FluxEnsemble(data, 5)
+model = FluxEnsemble(counterfactual_data, 5)
 train(model, data_train; n_epochs=10)
+ŷ = round.(vec(probs(model, counterfactual_data.X)))
 model_evaluation(model, data_test)
 ```
 
 ```{julia}
+#| echo: false
+
 using Random
 Random.seed!(42)
 # Randomly selected factual:
-target_class = 0 
+target_class = 0
 non_target_class = 1
-x = select_factual(counterfactual_data,rand(findall(vec(ys).==non_target_class)))
+x = select_factual(counterfactual_data,rand(findall(vec(ŷ).==non_target_class)))
 ```
 
 ```{julia}
-x1 = :LIMIT_BAL    # Amount of given credit
-x2 = :AGE
+#| output: true
+#| echo: false
+
+using StatsPlots
+
+x1 = :income   # Amount of given credit
+x2 = :age
 
 x_origin = vcat(x[findall(input_names.==x1)], x[findall(input_names.==x2)])
 
@@ -837,24 +874,26 @@ Plots.vline!(p2, [x_origin[2]], label="factual")
 plt = plot(p1, p2, size=(800,300))
 ```
 
-```{julia}
-_mut = [:both for i in 1:length(input_names)]
-# _mut[2] = :increase
-counterfactual_data.mutability = _mut
-```
 
+## Ignoring Mutability
+
+Using **DiCE** to generate counterfactuals for a single individual, ignoring actionability:
 
 ```{julia}
+#| echo: false
+
 # Counterfactual search:
 generator = DiCEGenerator(λ=[0.1, 5.0])
 counterfactual = generate_counterfactual(
   x, target_class, counterfactual_data, model, generator;
-  num_counterfactuals = 5,
-  initialization = :identity
+  num_counterfactuals = 5
 )
 ```
 
 ```{julia}
+#| echo: false
+#| output: true
+
 # Plotting:
 plt = scatter(
   [x_origin[1]],
@@ -869,6 +908,87 @@ counterfactuals = CounterfactualExplanations.Counterfactuals.counterfactual(coun
 map(eachslice(counterfactuals, dims=3)) do _x
 
   _x = vcat(_x[findall(input_names.==x1)], _x[findall(input_names.==x2)])
+
+  # Marker
+  scatter!(
+    plt, 
+    [_x[1]],
+    [_x[2]],
+    colour = target_class + 1,
+    ms = 10
+  )
+
+  # Arrow
+  plot!(
+    plt, 
+    vcat(x_origin[1],_x[1]), 
+    vcat(x_origin[2],_x[2]), 
+    arrow=true, color=:white, linewidth=2, label=""
+  )
+ 
+end
+
+plot(plt, legend=false)
+```
+
+## Respecting Mutability
+
+Using the generic generator to generate counterfactuals for multiple individuals, respecting that `age` cannot be decreased (you might argue that `age` also cannot be easily increased ...):
+
+```{julia}
+#| echo: false
+
+_mut = [:both for i in 1:length(input_names)]
+_mut[2] = :increase
+counterfactual_data.mutability = _mut
+```
+
+```{julia}
+#| echo: false
+
+using Random
+Random.seed!(42)
+# Randomly selected factual:
+x = select_factual(counterfactual_data,rand(findall(vec(ŷ).==non_target_class),10))
+```
+
+```{julia}
+#| echo: false
+
+# Counterfactual search:
+generator = GenericGenerator()
+counterfactuals = generate_counterfactual(
+  x, target_class, counterfactual_data, model, generator;
+  initialization = :identity
+)
+```
+
+```{julia}
+#| echo: false
+#| output: true
+
+# Plotting:
+plt = plot()
+
+map(counterfactuals) do x
+
+  x_origin = x.x
+  x_origin = selectdim(x_origin,3,1)
+  x_origin = vcat(x_origin[findall(input_names.==x1)], x_origin[findall(input_names.==x2)])
+
+  _x = CounterfactualExplanations.Counterfactuals.counterfactual(x)
+  _x = selectdim(_x,3,1)
+  _x = vcat(_x[findall(input_names.==x1)], _x[findall(input_names.==x2)])
+
+  scatter!(
+    plt, 
+    [x_origin[1]],
+    [x_origin[2]],
+    xlabel = x1,
+    ylabel = x2,
+    colour = non_target_class + 1,
+    ms = 10
+  )
 
   # Marker
   scatter!(
@@ -922,6 +1042,28 @@ In this work we investigate what happens if Algorithmic Recourse is actually imp
 :::
 ::::
 
+## Generalised Framework
+
+#### From individual recourse ...
+
+We restate @eq-solution to encapsulate latent space search:
+
+$$
+\begin{aligned}
+\mathbf{s}^\prime &= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\} 
+\end{aligned} 
+$$ {#eq-general}
+
+#### ... towards collective recourse
+
+We borrow the notion of **negative externalities** from Economics, to formalise the idea that individual recourse fails to account for external costs:
+
+$$
+\begin{aligned}
+\mathbf{s}^\prime &= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \{ {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)} \\ &+ \lambda_1 {\text{cost}(f(\mathbf{s}^\prime))} + \lambda_2 {\text{extcost}(f(\mathbf{s}^\prime))} \} 
+\end{aligned} 
+$$ {#eq-collective}
+
 ## Findings
 
 ::::{.columns}
@@ -940,7 +1082,7 @@ In this work we investigate what happens if Algorithmic Recourse is actually imp
 
 ::::
 
-## Mitigation Strategies - Intuition
+## Mitigation Strategies
 
 ::::{.columns}
 
@@ -948,7 +1090,20 @@ In this work we investigate what happens if Algorithmic Recourse is actually imp
 
 1. Choose more conservative decision thresholds.
 2. Classifer Preserving ROAR (ClaPROAR): penalise classifier loss.
+
+$$
+\begin{aligned}
+\text{extcost}(f(\mathbf{s}^\prime)) = l(M(f(\mathbf{s}^\prime)),y^\prime)
+\end{aligned}
+$$ {#eq-clap}
+
 3. Gravitational Counterfactual Explanations: penalise distance to some sensible point in the target domain.
+
+$$
+\begin{aligned}
+\text{extcost}(f(\mathbf{s}^\prime)) = \text{dist}(f(\mathbf{s}^\prime),\bar{x})  
+\end{aligned}
+$$ {#eq-grav}
 
 :::
 
@@ -960,25 +1115,25 @@ In this work we investigate what happens if Algorithmic Recourse is actually imp
 
 ::::
 
-## Mitigation Strategies - Findings
-
 ::::{.columns}
 
 :::{.column width="50%"}
 
-![Mitigation strategies applied to synthetic data.](/www/images/mitigation_synthetic_results.png){width="70%"}
+![Mitigation strategies applied to synthetic data.](/www/images/mitigation_synthetic_results.png){width="50%"}
 
 :::
 
 :::{.column width="50%"}
 
-![Mitigation strategies applied to real-world data.](/www/images/mitigation_real_world_results.png){width="70%"}
+![Mitigation strategies applied to real-world data.](/www/images/mitigation_real_world_results.png){width="50%"}
 
 :::
 
 ::::
 
-# The Road Ahead -- Related Research Topics 🎯 {background-image="/www/images/looking_ahead.jpeg"}
+# Questions & Answers ❓ {background-color="#ffffff" background-size="20%" background-position="98% 98%" background-image="/www/images/boe.svg"}
+
+# Related Research Topics 🎯 {background-image="/www/images/looking_ahead.jpeg"}
 
 ## [Effortless Bayesian Deep Learning through Laplace Redux](https://pretalx.com/juliacon-2022/talk/Z7MXFS/)
 
@@ -1012,8 +1167,6 @@ In this work we investigate what happens if Algorithmic Recourse is actually imp
 `ConformalPrediction.jl` is a package for Uncertainty Quantification (UQ) through Conformal Prediction (CP) in Julia. It is designed to work with supervised models trained in [MLJ](https://alan-turing-institute.github.io/MLJ.jl/dev/) [@blaom2020mlj]. Conformal Prediction is distribution-free, easy-to-understand, easy-to-use and model-agnostic.
 
 ![Conformal Prediction in action: Prediction sets for two different samples and changing coverage rates. As coverage grows, so does the size of the prediction sets.](https://raw.githubusercontent.com/pat-alt/blog/main/posts/conformal-prediction/www/medium.gif)
-
-# Questions & Answers ❓ {background-color="#ffffff" background-size="30%" background-position="98% 98%" background-image="/www/images/boe.svg"}
 
 ## More Resources 📚
 
