@@ -1,0 +1,43 @@
+---
+title: "Tips and trick for using Quarto with Julia"
+date: '2022-10-14'
+description: |
+    A short post ...
+categories:
+  - Quarto
+  - Julia
+  - open-source
+  - reproducibility
+image: www/intro.gif
+draft: true
+---
+
+- Specifying jupyter kernel in _metadata.yml seems ot have now effect
+- Add IJulia to startup.jl
+- Add Revise to startup_ijulia.jl
+- set `keep-ipynb: true` to have interactive notebooks in repo
+
+> if you install a new Julia binary (or do anything that changes the location of Julia on your computer), you must update the IJulia installation (to tell Jupyter where to find the new Julia) by running
+> 
+> --- Source: [IJulia docs](https://julialang.github.io/IJulia.jl/stable/manual/installation/#Updating-Julia-and-IJulia)
+
+```julia
+Pkg.build("IJulia")
+```
+
+# Pros
+
+- when using `.qmd` the code junks running Jupyter connect to the REPL in VSCode (demo)
+
+## Quarto for package devs
+
+- For admonitions use the following (see [here](https://github.com/quarto-dev/quarto-cli/discussions/2947#discussioncomment-3960202)):
+
+```{.md}
+| !!! Note "An optional title"
+|     Here is something that you should pay attention to.   
+```
+
+
+
+## Quarto for academic writing
