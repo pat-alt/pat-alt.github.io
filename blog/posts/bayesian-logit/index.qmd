@@ -194,7 +194,10 @@ dt <- data.table(y,X)
 # fwrite(dt, "data/cats_dogs.csv")
 ```
 
-```{r fig-ground, fig.width=5, fig.height=5, fig.cap="Ground truth labels."}
+```{r}
+#| label: fig-ground
+#| fig-cap: Ground truth labels.
+#| output: true
 dt_plot <- copy(dt) 
 dt_plot[,emoji:=ifelse(y==1, file.path(www_path,"cat.png"), file.path(www_path,"dog.png"))]
 ggplot(data=dt_plot, aes(x=V1,y=V2,image=emoji)) +
@@ -298,7 +301,10 @@ An obvious, but computationally expensive way to estimate it is through Monte Ca
 
 Fortunately, it turns out that we can trade off a little bit of accuracy in return for a convenient analytical solution. In particular, we have that $\sigma(a) \approx \Phi(\lambda a)$ where $\Phi(.)$ is the standard Gaussian cdf and $\lambda=\pi/8$ ensures that the two functions have the same slope at the origin (@fig-probit). Without dwelling further on the details we can use this finding to approximate the integral in @eq-posterior-pred as a sigmoid function. This is called **probit approximation** and implemented below.
 
-```{r fig-probit, fig.cap="Demonstration of the probit approximation."}
+```{r}
+#| label: fig-probit
+#| fig-cap: Demonstration of the probit approximation.
+#| output: true
 a <- seq(-2,2,0.01)
 p_true <- 1/(1+exp(-a))
 p_norm <- pnorm(a)
@@ -337,15 +343,11 @@ I should mention that this is the first time I program in Julia, so for any Juli
 
 @fig-posterior below shows the resulting posterior distribution for $w_2$ and $w_3$ at varying degrees of prior uncertainty $\sigma$. The constant $w_1$ is held constant at the mode ($\hat{w}_1$). The red dot indicates the MLE. Note how for the choice of $\sigma\rightarrow 0$ the posterior is equal to the prior. This is intuitive since we have imposed that we have no uncertainty around our prior beliefs and hence no amount of new evidence can move us in any direction. Conversely, for $\sigma \rightarrow \infty$ the posterior distribution is centered around the unconstrained MLE: prior knowledge is very uncertain and hence the posterior is dominated by the likelihood of the data.
 
-```{r fig-posterior, fig.cap="Posterior distribution for $w_2$ and $w_3$ at varying degrees of prior uncertainty $\\sigma$."}
-knitr::include_graphics(file.path(www_path,"posterior.png"))
-```
+![Posterior distribution for $w_2$ and $w_3$ at varying degrees of prior uncertainty $\sigma$.](/www/images/posterior.png){#fig-posterior}
 
 What about the posterior predictive? The story is similar: since for $\sigma\rightarrow 0$ the posterior is completely dominated by the zero-mean prior we have $p(y=1|\mathbf{x},\hat{\mathbf{w}})=0.5$ everywhere (top left panel in @fig-predictive. As we gradually increase uncertainty around our prior the predictive posterior depends more and more on the data $\mathcal{D}$: uncertainty around predicted labels is high only in regions that are not populated by samples $(y_n, \mathbf{x}_n)$. Not surprisingly, this effect is strongest for the MLE ($\sigma\rightarrow \infty$) where we see some evidence of overfitting.
 
-```{r fig-predictive, fig.cap="Predictive posterior distribution at varying degrees of prior uncertainty $\\sigma$."}
-knitr::include_graphics(file.path(www_path,"predictive.png"))
-```
+![Predictive posterior distribution at varying degrees of prior uncertainty $\sigma$.](/www/images/predictive.png){#fig-predictive}
 
 ## Wrapping up
 

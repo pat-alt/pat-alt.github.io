@@ -96,7 +96,10 @@ kitty_dt <- data.table(value=kitty,variable=stringr::str_to_title(names(kitty)))
 kitty_dt_w <- data.table(height=kitty["height"], tail=kitty["tail"])
 ```
 
-```{r fig-density, fig.height=4, fig.width=9, fig.cap="Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty's attribute values."}
+```{r}
+#| label: fig-density
+#| fig-cap: Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty's attribute values.
+#| output: true
 dt <- data.table(y,X)
 dt <- melt(dt, id.vars = "y")
 dt[,y:=as.factor(y)]
@@ -125,7 +128,10 @@ mod <- linear_classifier(X,y,save_steps = T, n_iter = n_iter) # fit classifier
 y_hat <- predict(mod) # predict labels
 ```
 
-```{r fig-class, fig.asp=1, fig.cap="Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty's location is indicated by a red circle."}
+```{r}
+#| label: fig-class
+#| fig-cap: Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty's location is indicated by a red circle.
+#| output: true
 dt_plot <- data.table(y_hat = factor(y_hat), X)
 levels(dt_plot$y_hat) <- c("Cat", "Dog")
 dt_plot[,alpha:=1]
@@ -207,7 +213,10 @@ Let's see if and how we can apply `REVISE` to Kitty's problem. The following sum
 
 We also observe that as we increase $\lambda$ for a fixed learning rate, `REVISE` takes longer to converge. This should come as no surprise, since higher values of $\lambda$ lead to greater regularization with respect to the penalty we place on the distance that Kitty has to travel. When we penalize too much ($\lambda=10$), Kitty never reaches the decision boundary, because she is reluctant to change her characteristics beyond a certain point. While not visible to the naked eye, in this particular example $\lambda=0.001$ corresponds to the best choice among the candidate values.
 
-```{r fig-revise, fig.align='center', fig.cap="The simplified `REVISE` algorithm in action: how Kitty crosses the decision boundary by changing her attributes. Regularization with respect to the distance penalty increases from top left to bottom right."}
+```{r}
+#| label: fig-revise
+#| fig-cap: "The simplified `REVISE` algorithm in action: how Kitty crosses the decision boundary by changing her attributes. Regularization with respect to the distance penalty increases from top left to bottom right."
+#| output: true
 knitr::include_graphics("blog/posts/individual-recourse-for-black-box-models/www/revise.gif")
 ```
 

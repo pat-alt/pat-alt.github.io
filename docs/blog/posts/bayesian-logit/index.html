@@ -62,7 +62,7 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -200,7 +200,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <div class="quarto-title-meta-author">
   <div class="quarto-title-meta-heading">Author</div>
-  <div class="quarto-title-meta-heading"></div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
   
     <div class="quarto-title-meta-contents">
     <a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> 
@@ -264,7 +264,7 @@ Simulation of changing parameter distribution.
 \end{equation}
 \tag{1}\]</span></span></p>
 <p>where <span class="math inline">\(\sigma(a)=1/(1+e^{-a})\)</span> is the <strong>sigmoid</strong> or <strong>logit</strong> function <span class="citation" data-cites="murphy2022probabilistic">(<a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy 2022</a>)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Features are generated from a mixed Gaussian model.</p>
-<p>To add a little bit of life to our example we will assume that the binary labels classify samples into cats and dogs, based on their height and tail length. <strong>?@fig-ground</strong> shows the synthetic data in the two-dimensional feature domain. Following an introduction to Bayesian Logistic Regression in the next section we will use the synthetic data <span class="math inline">\(\mathcal{D}\)</span> to estimate our model.</p>
+<p>To add a little bit of life to our example we will assume that the binary labels classify samples into cats and dogs, based on their height and tail length. <a href="#fig-ground">Figure&nbsp;1</a> shows the synthetic data in the two-dimensional feature domain. Following an introduction to Bayesian Logistic Regression in the next section we will use the synthetic data <span class="math inline">\(\mathcal{D}\)</span> to estimate our model.</p>
 <div class="cell" data-layout-align="center">
 
 </div>
@@ -278,7 +278,14 @@ Simulation of changing parameter distribution.
 
 </div>
 <div class="cell" data-layout-align="center">
-
+<div class="cell-output-display">
+<div id="fig-ground" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-ground-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Ground truth labels.</figcaption><p></p>
+</figure>
+</div>
+</div>
 </div>
 </section>
 <section id="the-maths" class="level2">
@@ -349,9 +356,16 @@ Simulation of changing parameter distribution.
 <p><br></p>
 <p>With the posterior distribution over model parameters <span class="math inline">\(p(\mathbf{w}|\mathcal{D})\)</span> at hand we have the necessary ingredients to estimate the posterior predictive distribution <span class="math inline">\(p(y=1|\mathbf{x}, \mathcal{D})\)</span>.</p>
 <p>An obvious, but computationally expensive way to estimate it is through Monte Carlo: draw <span class="math inline">\(\mathbf{w}_s\)</span> from <span class="math inline">\(p(\mathbf{w}|\mathcal{D})\)</span> for <span class="math inline">\(s=1:S\)</span> and compute fitted values <span class="math inline">\(\sigma(\mathbf{w_s}^T\mathbf{x})\)</span> each. Then the posterior predictive distribution corresponds to the average over all fitted values, <span class="math inline">\(p(y=1|\mathbf{x}, \mathcal{D})=1/S \sum_{s=1}^{S}\sigma(\mathbf{w_s}^T\mathbf{x})\)</span>. By the law of large numbers the Monte Carlo estimate is an accurate estimate of the true posterior predictive for large enough <span class="math inline">\(S\)</span>. Of course, “large enough” is somewhat loosely defined here and depending on the problem can mean “very large”. Consequently, the computational costs involved essentially know no upper bound.</p>
-<p>Fortunately, it turns out that we can trade off a little bit of accuracy in return for a convenient analytical solution. In particular, we have that <span class="math inline">\(\sigma(a) \approx \Phi(\lambda a)\)</span> where <span class="math inline">\(\Phi(.)\)</span> is the standard Gaussian cdf and <span class="math inline">\(\lambda=\pi/8\)</span> ensures that the two functions have the same slope at the origin (<strong>?@fig-probit</strong>). Without dwelling further on the details we can use this finding to approximate the integral in <a href="#eq-posterior-pred">Equation&nbsp;5</a> as a sigmoid function. This is called <strong>probit approximation</strong> and implemented below.</p>
+<p>Fortunately, it turns out that we can trade off a little bit of accuracy in return for a convenient analytical solution. In particular, we have that <span class="math inline">\(\sigma(a) \approx \Phi(\lambda a)\)</span> where <span class="math inline">\(\Phi(.)\)</span> is the standard Gaussian cdf and <span class="math inline">\(\lambda=\pi/8\)</span> ensures that the two functions have the same slope at the origin (<a href="#fig-probit">Figure&nbsp;2</a>). Without dwelling further on the details we can use this finding to approximate the integral in <a href="#eq-posterior-pred">Equation&nbsp;5</a> as a sigmoid function. This is called <strong>probit approximation</strong> and implemented below.</p>
 <div class="cell" data-layout-align="center">
-
+<div class="cell-output-display">
+<div id="fig-probit" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-probit-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Demonstration of the probit approximation.</figcaption><p></p>
+</figure>
+</div>
+</div>
 </div>
 </section>
 </section>
@@ -368,13 +382,19 @@ Simulation of changing parameter distribution.
 </section>
 <section id="the-estimates" class="level2">
 <h2 class="anchored" data-anchor-id="the-estimates">The estimates</h2>
-<p><strong>?@fig-posterior</strong> below shows the resulting posterior distribution for <span class="math inline">\(w_2\)</span> and <span class="math inline">\(w_3\)</span> at varying degrees of prior uncertainty <span class="math inline">\(\sigma\)</span>. The constant <span class="math inline">\(w_1\)</span> is held constant at the mode (<span class="math inline">\(\hat{w}_1\)</span>). The red dot indicates the MLE. Note how for the choice of <span class="math inline">\(\sigma\rightarrow 0\)</span> the posterior is equal to the prior. This is intuitive since we have imposed that we have no uncertainty around our prior beliefs and hence no amount of new evidence can move us in any direction. Conversely, for <span class="math inline">\(\sigma \rightarrow \infty\)</span> the posterior distribution is centered around the unconstrained MLE: prior knowledge is very uncertain and hence the posterior is dominated by the likelihood of the data.</p>
-<div class="cell" data-layout-align="center">
-
+<p><a href="#fig-posterior">Figure&nbsp;3</a> below shows the resulting posterior distribution for <span class="math inline">\(w_2\)</span> and <span class="math inline">\(w_3\)</span> at varying degrees of prior uncertainty <span class="math inline">\(\sigma\)</span>. The constant <span class="math inline">\(w_1\)</span> is held constant at the mode (<span class="math inline">\(\hat{w}_1\)</span>). The red dot indicates the MLE. Note how for the choice of <span class="math inline">\(\sigma\rightarrow 0\)</span> the posterior is equal to the prior. This is intuitive since we have imposed that we have no uncertainty around our prior beliefs and hence no amount of new evidence can move us in any direction. Conversely, for <span class="math inline">\(\sigma \rightarrow \infty\)</span> the posterior distribution is centered around the unconstrained MLE: prior knowledge is very uncertain and hence the posterior is dominated by the likelihood of the data.</p>
+<div id="fig-posterior" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../../../www/images/posterior.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Posterior distribution for <span class="math inline">\(w_2\)</span> and <span class="math inline">\(w_3\)</span> at varying degrees of prior uncertainty <span class="math inline">\(\sigma\)</span>.</figcaption><p></p>
+</figure>
 </div>
-<p>What about the posterior predictive? The story is similar: since for <span class="math inline">\(\sigma\rightarrow 0\)</span> the posterior is completely dominated by the zero-mean prior we have <span class="math inline">\(p(y=1|\mathbf{x},\hat{\mathbf{w}})=0.5\)</span> everywhere (top left panel in <strong>?@fig-predictive</strong>. As we gradually increase uncertainty around our prior the predictive posterior depends more and more on the data <span class="math inline">\(\mathcal{D}\)</span>: uncertainty around predicted labels is high only in regions that are not populated by samples <span class="math inline">\((y_n, \mathbf{x}_n)\)</span>. Not surprisingly, this effect is strongest for the MLE (<span class="math inline">\(\sigma\rightarrow \infty\)</span>) where we see some evidence of overfitting.</p>
-<div class="cell" data-layout-align="center">
-
+<p>What about the posterior predictive? The story is similar: since for <span class="math inline">\(\sigma\rightarrow 0\)</span> the posterior is completely dominated by the zero-mean prior we have <span class="math inline">\(p(y=1|\mathbf{x},\hat{\mathbf{w}})=0.5\)</span> everywhere (top left panel in <a href="#fig-predictive">Figure&nbsp;4</a>. As we gradually increase uncertainty around our prior the predictive posterior depends more and more on the data <span class="math inline">\(\mathcal{D}\)</span>: uncertainty around predicted labels is high only in regions that are not populated by samples <span class="math inline">\((y_n, \mathbf{x}_n)\)</span>. Not surprisingly, this effect is strongest for the MLE (<span class="math inline">\(\sigma\rightarrow \infty\)</span>) where we see some evidence of overfitting.</p>
+<div id="fig-predictive" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../../../www/images/predictive.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: Predictive posterior distribution at varying degrees of prior uncertainty <span class="math inline">\(\sigma\)</span>.</figcaption><p></p>
+</figure>
 </div>
 </section>
 <section id="wrapping-up" class="level2">

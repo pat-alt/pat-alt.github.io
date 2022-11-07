@@ -3,9 +3,8 @@ project:
   type: website
   output-dir: docs
   resources: 
-    - www/
-    - www/cv/_cv.html     # CV in HTML format
-    - www/cv/_cv.pdf      # CV in PDF format
+    - "www/"
+    - "www/cv/"
   execute-dir: project
 
 website:
@@ -51,7 +50,7 @@ website:
 format:
   html:
     theme:
-      light: [solar, /www/theme-light.scss]
+      light: [solar, theme-light.scss]
       dark: solar
     css: styles.css
     toc: true
