@@ -4,7 +4,7 @@ subtitle: Tips and tricks for Julia practitioners --- Julia Eindhoven
 author: Patrick Altmeyer
 format: 
   revealjs:
-    logo: /www/images/TUDelft_logo_white.png
+    logo: /www/images/TUDelft_logo_rgb.png
     footer: A year of using Quarto with Julia --- Patrick Altmeyer --- CC BY-NC
     self-contained: true
     smaller: true
@@ -19,7 +19,7 @@ format:
       data-background-image: /www/images/julia_eindhoven_logo.png
       data-background-size: 15%
       data-background-position: 98% 98%
-      data-background-color: "#ffffff"
+      data-background-color: "black"
 draft: false
 ---
 
@@ -76,7 +76,7 @@ draft: false
 
 ::::
 
-# What is Quarto?
+# What is Quarto? {background-image="/www/images/quarto.png" background-color="white" background-size="10%" background-position="95% 95%"}
 
 ## Quarto -- A New (Old) Way to Publish Science
 
@@ -92,7 +92,7 @@ draft: false
 
 > A plain Markdown document blended with **your favourite programming language** of your choice and a YAML header defining your output.
 
-# Quarto with Julia
+# Quarto with Julia {background-image="/www/images/julia_quarto.gif" background-color="black" background-size="25%" background-position="95% 95%"}
 
 ## Setup
 
@@ -140,7 +140,7 @@ format:
 :::{.column width='50%'}
 
 ```{julia}
-#| code-fold: true
+#| eval: false
 
 using Javis, Animations, Colors
 www_path = "www/images"
@@ -237,23 +237,27 @@ render(
 )
 ```
 
-![Julia and Quarto: a perfect match. Image by author (heavily borrowing from `Javis.jl` [tutorial](https://juliaanimators.github.io/Javis.jl/stable/tutorials/tutorial_7/))](/www/images/intro.gif){#fig-intro width="80%"}
+
 
 :::
 ::::
 
-# Questions & Answers ❓ {background-color="#ffffff" background-size="20%" background-position="98% 98%" background-image="/www/images/boe.svg"}
+# Questions & Answers ❓ {background-color="black" background-size="20%" background-position="98% 98%" background-image="/www/images/julia_eindhoven_logo.png"}
 
-# Related Research Topics 🎯 {background-image="/www/images/looking_ahead.jpeg"}
+# Packages I've built ... 📦 {background-image="/www/images/julia.gif" background-size="20%" background-position="98% 98%"}
 
-## [Effortless Bayesian Deep Learning through Laplace Redux](https://pretalx.com/juliacon-2022/talk/Z7MXFS/)
+## [`CounterfactualExplanations.jl`]
+
+## [`LaplaceRedux.jl`](https://github.com/pat-alt/LaplaceRedux.jl)
 
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://pat-alt.github.io/LaplaceRedux.jl/stable) [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://pat-alt.github.io/LaplaceRedux.jl/dev) [![Build Status](https://github.com/pat-alt/LaplaceRedux.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/pat-alt/LaplaceRedux.jl/actions/workflows/CI.yml?query=branch%3Amain) [![Coverage](https://codecov.io/gh/pat-alt/LaplaceRedux.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/pat-alt/LaplaceRedux.jl)
+
+JuliaCon 22: [Effortless Bayesian Deep Learning through Laplace Redux](https://pretalx.com/juliacon-2022/talk/Z7MXFS/)
 
 ::::{.columns}
 :::{.column width="50%"}
 
-`LaplaceRedux.jl` (formerly `BayesLaplace.jl`) is a small package that can be used for effortless Bayesian Deep Learning and Logistic Regression trough Laplace Approximation. It is inspired by this Python [library](https://aleximmer.github.io/Laplace/index.html#setup) and its companion [paper](https://arxiv.org/abs/2106.14806).
+`LaplaceRedux.jl` is a small package that can be used for effortless Bayesian Deep Learning and Logistic Regression trough Laplace Approximation. It is inspired by this Python [library](https://aleximmer.github.io/Laplace/index.html#setup) and its companion [paper](https://arxiv.org/abs/2106.14806).
 
 ![Plugin Approximation (left) and Laplace Posterior (right) for simple artificial neural network.](/www/images/posterior_predictive_mlp.png)
 
@@ -334,5 +338,8 @@ render(
 ::::
 
 ## Image Sources
+
+- Quarto logo. Source: [Quarto](https://raw.githubusercontent.com/quarto-dev/quarto-web/main/quarto.png)
+- Julia to Quarto animation. Source: author (heavily borrowing from `Javis.jl` [tutorial](https://juliaanimators.github.io/Javis.jl/stable/tutorials/tutorial_7/))
 
 ## References 
