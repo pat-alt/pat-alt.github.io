@@ -27,7 +27,7 @@ draft: false
 
 > As a Julia practitioner you may want to publish your work in various forms: notebooks, Markdown, HTML, PDF and more. What if you could produce all these different outputs from the same input? I will share how I've been using Quarto with Julia, for package documentation, blogging and JuliaCon proceedings. 
 
-**DISCLAIMER**: Views presented in this presentation are my own. I do not represent Quarto or Posit (RStudio).
+**DISCLAIMER**: Views presented in this presentation are my own. I am not affiliated with either Quarto or Posit (RStudio).
 
 ## Quick Intro
 
@@ -265,6 +265,8 @@ gif(anim, fps=5)
 
 Some people still prefer to read paper or work with MS Office. Most scientific journals, for example, still work with PDF and $\LaTeX$.
 
+> Quarto has fantastic support for traditional and modern [scholarly writing](https://quarto.org/docs/authoring/title-blocks.html).
+
 ```{markdown}
 $$
 \begin{aligned}
@@ -363,10 +365,11 @@ plot(snp[:Close], legend=false)
 
 ## VSCode, Quarto and Julia
 
+> To get started, see [here](https://quarto.org/docs/computations/julia.html).
+
 #### Tips to get started
 
 - Add IJulia to `startup.jl`
-- Add Revise to `startup_ijulia.jl`
 
 > if you install a new Julia binary (or do anything that changes the location of Julia on your computer), you must update the IJulia installation (to tell Jupyter where to find the new Julia) by running
 > 
@@ -376,7 +379,7 @@ plot(snp[:Close], legend=false)
 Pkg.build("IJulia")
 ```
 
-#### `.ipynb` vs `.qmd`
+#### Using `.ipynb` vs `.qmd`
 
 - Can switch between Jupyter and `.qmd` with ease.
 - When working with `.qmd`, code chunks connect to REPL.
@@ -457,7 +460,11 @@ format:
 
 ## JuliaCon Proceedings
 
-- Quarto supports $\LaTeX$ templates/classes ...
+- Quarto supports $\LaTeX$ templates/classes, but I've found that `rticles` still has an edge here.
+- The [list](https://quarto.org/docs/extensions/listing-journals.html) of out-of-the-box templates for journal articles is growing.
+
+. . .
+
 - ... but why only publish proceedings in PDF form?
 - Quarto opens gateway to more innovative forms of publishing!
 
@@ -466,8 +473,6 @@ format:
 > As an example we will look at ... 🥁
 
 ... my pending JuliaCon Proceedings [submission](https://github.com/pat-alt/CounterfactualExplanations.jl/blob/main/paper/_paper.qmd) for my 2022 talk: [Explaining Black-Box Models through Counterfactuals](https://pretalx.com/juliacon-2022/talk/HU8FVH/)
-
-# Questions & Answers ❓ {background-color="black" background-size="20%" background-position="98% 98%" background-image="/www/images/julia_eindhoven_logo.png"}
 
 # Packages I've built ... 📦 {background-image="/www/images/julia.gif" background-size="20%" background-position="98% 98%"}
 
@@ -486,7 +491,7 @@ format:
 
 :::{.column width="50%"}
 
-![A sad 🐱 on its counterfactual path to its cool dog friends.](https://raw.githubusercontent.com/pat-alt/CounterfactualExplanations.jl/main/docs/src//www/images/recourse_laplace.gif)
+![A sad 🐱 on its counterfactual path to its cool dog friends.](/www/images/recourse_laplace.gif)
 
 ::: 
 
@@ -580,6 +585,8 @@ JuliaCon 22: [Effortless Bayesian Deep Learning through Laplace Redux](https://p
 :::
 
 ::::
+
+# Questions & Answers ❓ {background-color="black" background-size="20%" background-position="98% 98%" background-image="/www/images/julia_eindhoven_logo.png"}
 
 ## Image Sources
 
