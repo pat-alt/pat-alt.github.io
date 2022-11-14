@@ -113,7 +113,7 @@ draft: false
 :::
 :::{.column width='50%'}
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Y1uKNO32H_I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Quarto at JuliaCon 2022.](/www/images/jj_julia_con.png)](https://www.youtube.com/watch?v=Y1uKNO32H_I)
 
 :::
 ::::
@@ -269,6 +269,24 @@ anim = @animate for t in 2:T
 end
 gif(anim, fps=5)
 ```
+
+```{julia}
+using Statistics, LinearAlgebra
+
+function gradient_descent(𝒟train, φ, ∇loss; η=0.1, T=100)
+    𝐰 = zeros(length(φ(𝒟train[1][1])))
+    for t in 1:T
+        𝐰 = 𝐰 .- η*mean(∇loss(x, y, 𝐰, φ) for (x,y) ∈ 𝒟train)
+    end
+    return 𝐰
+end
+```
+
+```{julia}
+
+```
+
+
 
 ## Meeting Varying Requirements
 
