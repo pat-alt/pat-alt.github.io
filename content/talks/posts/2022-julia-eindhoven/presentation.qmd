@@ -312,6 +312,8 @@ When the S&P 500 last traded, on $(last_trade_day_formatted), it closed at $(p_c
 ::: {.column width=50%}
 
 ```{julia}
+#| output: true
+
 using Plots
 plot(snp[:Close], legend=false)
 ```

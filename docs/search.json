@@ -1348,7 +1348,7 @@
     "href": "content/talks/posts/2022-julia-eindhoven/presentation.html#vscode-quarto-and-julia",
     "title": "A year of using Quarto with Julia",
     "section": "VSCode, Quarto and Julia",
-    "text": "VSCode, Quarto and Julia\nAdditional considerations\n\nCan switch between Jupyter and .qmd with ease.\nWhen working with .qmd, code chunks connect to REPL."
+    "text": "VSCode, Quarto and Julia\nTips to get started\n\nAdd IJulia to startup.jl\nAdd Revise to startup_ijulia.jl\n\n\nif you install a new Julia binary (or do anything that changes the location of Julia on your computer), you must update the IJulia installation (to tell Jupyter where to find the new Julia) by running\n— Source: IJulia docs\n\nPkg.build(\"IJulia\")\n.ipynb vs .qmd\n\nCan switch between Jupyter and .qmd with ease.\nWhen working with .qmd, code chunks connect to REPL.\nSet keep-ipynb: true to have interactive notebooks in repo."
   },
   {
     "objectID": "content/talks/posts/2022-julia-eindhoven/presentation.html#blogging-1",
