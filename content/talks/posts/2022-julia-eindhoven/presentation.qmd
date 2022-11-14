@@ -78,69 +78,67 @@ draft: false
 
 # What is Quarto? {background-image="/www/images/quarto.png" background-color="white" background-size="10%" background-position="95% 95%"}
 
-## Quarto -- A New (Old) Way to Publish Science
+## From R Markdown ...
 
-- Have used R Markdown for many years for essentially anything work-related.
+:::: {.columns}
+
+::: {.column width=50%}
+
+- [R Markdown](https://rmarkdown.rstudio.com/index.html) users have enjoyed many of the benefits highlighted in today's for many years.
+- For me personally, the workflow enabled by R Markdown was for many years a key reason to rely on `R` whenever possible (see [here](https://www.paltmeyer.com/blog/posts/julia-and-quarto-a-match-made-in-heaven/#sec-bubble)).
+- In recent years [Posit](https://posit.co/) (formerly RStudio) has first embraced Python and then geared towards multi-language support.
+
+:::
+
+::: {.column width=50%}
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">We have some wonderful news: RStudio is now Posit! 🎉<br><br>While many things will stay the same, our rebrand will result in changes beyond a new name. To start, our new website <a href="https://t.co/vI56Gz7Yqf">https://t.co/vI56Gz7Yqf</a> is now live. Please check out our new home and let us know what you think! <a href="https://t.co/hzJGXsX0tj">pic.twitter.com/hzJGXsX0tj</a></p>&mdash; Posit PBC (\@posit_pbc) <a href="https://twitter.com/posit_pbc/status/1587823489859264512?ref_src=twsrc%5Etfw">November 2, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+:::
+
+::::
+
+## ... to Quarto
+
 - Generate multiple different output formats with ease:
-    - The old school: LaTeX and PDF (including [Beamer](https://quarto.org/docs/presentations/beamer.html)); MS Office
-    - The brave new world: beautiful HTML content 
+    - The old school: $\LaTeX$ and PDF (including [Beamer](https://quarto.org/docs/presentations/beamer.html)); MS Office
+    - The brave new world: beautiful, dynamic HTML content 
         - websites
         - e-books
         - apps
         - ...
 - All of this starting from the same place ...
 
-> A plain Markdown document blended with **your favourite programming language** of your choice and a YAML header defining your output.
+> A plain Markdown document blended with **your favorite programming language** of your choice and a YAML header defining your output.
 
-# Quarto with Julia {background-image="/www/images/julia_quarto.gif" background-color="black" background-size="25%" background-position="95% 95%"}
+## Effective Communication and Reproducibility in Science
 
-## Setup
+- Most science today involves code. Often code forms such an integral part of the science, that it deserves its place in the final publication.
+- Scientific Ideas can often be most effectively communicated through dynamic visualizations.
+- Requirements and preferences vary.
+- Quarto allows us to cater to those needs, while at the same time facilitating reproducibility by bridging the gap between computations and writing.
 
-::::{.columns}::::
-:::{.column width='50%'}
+> Quarto enables enables effective communication and reproducibility without compromises. 
 
-:::{.fragment .fade-down}
+## Code chunks
 
-#### Preferred setup: VSCode, Quarto and Julia
-
-- Can switch between Jupyter and `.qmd` with ease.
-- When working with `.qmd`, code chunks connect to REPL.
-
-:::
-
-:::{.fragment .fade-right}
-
-#### `Documenter.jl` and Quarto
-
-
-- [Generally](https://github.com/quarto-dev/quarto-cli/discussions/408) play nicely with each other (both Markdown based).
-
-```yaml
-format: 
-  commonmark:
-    variant: -raw_html
-```
-
-- You get some stuff for free, e.g. citation management.
-- Unfortunately lose support for cross-referencing ...
-
-:::
-
-:::{.fragment .fade-up}
-
-#### Suggestion: Quarto for JuliaCon Proceedings
-
-- Quarto supports LaTex templates/classes ...
-- ... but why only publish proceedings in PDF form?
-- Quarto opens gateway to more innovative forms of publishing!
-
-:::
-
-:::
-:::{.column width='50%'}
+Most science today involves code. 
 
 ```{julia}
-#| eval: false
+#| output: true
+
+using Markdown
+Markdown.parse("""
+Often code forms such an integral part of the science, that it deserves its place in the final publication.
+""")
+```
+
+. . .
+
+Using simple YAML options, we can specify how code is displayed. For example, we may want to use code folding to avoid unnecessary interruptions or hide large code chunks like this one that builds @fig-anim.
+
+```{julia}
+#| code-fold: true
 
 using Javis, Animations, Colors
 www_path = "www/images"
@@ -237,16 +235,260 @@ render(
 )
 ```
 
+![A simple animation built with `Javis.jl`.](/www/images/julia_quarto.gif){#fig-anim width="5cm"}
+
+## Dynamic Visualizations
+
+Scientific Ideas can often be most effectively communicated through dynamic visualizations.
+
+```{julia}
+#| output: true
+
+using Plots
+using StatsBase
+
+steps = randn(1)
+T = 100
+
+anim = @animate for t in 2:T
+    append!(steps, randn(1))
+    random_walk = cumsum(steps)
+    p1 = plot(random_walk, color=1, label="", title="A Gaussian random walk ...", xlims=(0,T))
+    acf = autocor(random_walk)
+    p2 = bar(acf, color=1, label="", title="... is non-stationary", xlims=(0,10), ylims=(0,1))
+    plot(p1, p2, size=(800,300))
+end
+gif(anim, fps=5)
+```
+
+## Meeting Varying Requirements
+
+Some people still prefer to read paper or work with MS Office. Most scientific journals, for example, still work with PDF and $\LaTeX$.
+
+```{markdown}
+$$
+\begin{aligned}
+Z &= \sum_{t=0}^T X_t, && X_t \sim N(\mu, \sigma)
+\end{aligned}
+$$ {#eq-bm}
+```
+
+$$
+\begin{aligned}
+Z &= \sum_{t=0}^T X_t, && X_t \sim N(\mu, \sigma)
+\end{aligned}
+$$ {#eq-bm}
+
+![Source: [Giphy](https://giphy.com/gifs/vintage-opening-7vfhdCIn13zm8?utm_source=media-link&utm_medium=landing&utm_campaign=Media%20Links&utm_term=)](/www/images/newspaper.gif){#fig-newspaper}
+
+## Reproducible and Dynamic Content
+
+:::: {.columns}
+
+Quarto allows us to cater to different requirements, while at the same time facilitating reproducibility by bridging the gap between computations and writing.
+
+::: {.column width=50%}
+
+```{julia}
+#| output: true
+
+using MarketData
+snp = yahoo("^GSPC")
+
+using Dates
+last_trade_day = timestamp(snp[end])[1]
+p_close = values(snp[end,:Close])[1]
+last_trade_day_formatted = Dates.format(last_trade_day, "U d, yyyy")
+
+Markdown.parse("""
+When the S&P 500 last traded, on $(last_trade_day_formatted), it closed at $(p_close). 
+
+> The world and the data that describes it is not static. Why should scientific outputs be?
+""")
+```
+
+:::
+
+::: {.column width=50%}
+
+```{julia}
+using Plots
+plot(snp[:Close], legend=false)
+```
 
 
 :::
+
 ::::
+
+# Quarto with Julia {background-image="/www/images/julia_quarto.gif" background-color="black" background-size="25%" background-position="95% 95%"}
+
+## In this section ...
+
+:::{.fragment .fade-left}
+
+#### Preferred setup: VSCode, Quarto and Julia
+
+- Using Julia and VSCode? There's a Quarto extension for VSCode, so you can stick with your preferred IDE.
+
+:::
+
+:::{.fragment .fade-down}
+
+#### Blogging
+
+- Quarto makes it easy to build beautiful websites and blogs.
+
+:::
+
+:::{.fragment .fade-right}
+
+#### Julia Packages
+
+- `Documenter.jl` and Quarto play nicely with each other (both Markdown based).
+- Turning Julia packages into Quarto projects comes with a few advantages.
+
+:::
+
+:::{.fragment .fade-up}
+
+#### JuliaCon Proceedings
+
+- JuliaCon proceedings submissions currently work with a GitHub template that requires users to submit a `.tex` file.
+- Quarto can be used to generate that file, but there are additional benefits we could tab into. 
+
+:::
+
+## VSCode, Quarto and Julia
+
+#### Tips to get started
+
+- Add IJulia to `startup.jl`
+- Add Revise to `startup_ijulia.jl`
+
+> if you install a new Julia binary (or do anything that changes the location of Julia on your computer), you must update the IJulia installation (to tell Jupyter where to find the new Julia) by running
+> 
+> --- Source: [IJulia docs](https://julialang.github.io/IJulia.jl/stable/manual/installation/#Updating-Julia-and-IJulia)
+
+```{.julia}
+Pkg.build("IJulia")
+```
+
+#### `.ipynb` vs `.qmd`
+
+- Can switch between Jupyter and `.qmd` with ease.
+- When working with `.qmd`, code chunks connect to REPL.
+- Set `keep-ipynb: true` to have interactive notebooks in repo.
+
+## Blogging
+
+- The slides you are looking at are not only built using Quarto, but also hosted on a [website](https://www.paltmeyer.com/) that is also run on Quarto.
+ 
+. . .
+
+- Quarto uses something call listing pages, to make it easy to collect and navigate content like this one. 
+
+```{.yaml}
+---
+title: "Talks"
+listing:
+  contents: 
+    - "posts/*/index.qmd"
+  sort: "date desc"
+  type: default
+  categories: false
+  fields: [image, date, title, description, author, file-modified]
+  image-align: left
+---
+```
+
+. . .
+
+- You can specify YAML options such that changes to your underlying Julia code will trigger your blog post to be rerendered. This essentially allows you to easily test that the code you publish actually runs:
+
+```{.yaml}
+execute:
+  freeze: auto
+  eval: true
+  echo: true
+  output: false
+```
+
+. . .
+
+- The Julia environment can be managed globally or locally for individual blog posts:
+
+```{.yaml}
+jupyter: julia-1.8
+```
+
+## Julia Packages
+
+- `Documenter.jl` and Quarto [generally](https://github.com/quarto-dev/quarto-cli/discussions/408) play nicely with each other (both Markdown based).
+
+```{.yaml}
+format: 
+  commonmark:
+    variant: -raw_html
+    wrap: preserve
+    self-contained: true
+```
+
+- You get some stuff for free, e.g. citation management. Unfortunately, still no support for cross-referencing ...
+- The use of `jldoctest` is not always straight-forward (see [here](https://github.com/JuliaDocs/Documenter.jl/issues/452)). Letting docs run through the Quarto engine provides an additional layer quality assurance.
+
+. . .
+
+> As an example, we will look at ... 🥁
+
+#### [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl)
+
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://pat-alt.github.io/ConformalPrediction.jl/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://pat-alt.github.io/ConformalPrediction.jl/dev/)
+[![Build Status](https://github.com/pat-alt/ConformalPrediction.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/pat-alt/ConformalPrediction.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Coverage](https://codecov.io/gh/pat-alt/ConformalPrediction.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/pat-alt/ConformalPrediction.jl)
+[![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
+[![ColPrac: Contributor’s Guide on Collaborative Practices for Community Packages](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet.png)](https://github.com/SciML/ColPrac)
+[![Twitter Badge](https://img.shields.io/twitter/url/https/twitter.com/paltmey.svg?style=social&label=Follow%20%40paltmey)](https://twitter.com/paltmey)
+
+`ConformalPrediction.jl` is a package for Uncertainty Quantification (UQ) through Conformal Prediction (CP) in Julia. It is designed to work with supervised models trained in [MLJ](https://alan-turing-institute.github.io/MLJ.jl/dev/) [@blaom2020mlj]. Conformal Prediction is distribution-free, easy-to-understand, easy-to-use and model-agnostic.
+
+## JuliaCon Proceedings
+
+- Quarto supports $\LaTeX$ templates/classes ...
+- ... but why only publish proceedings in PDF form?
+- Quarto opens gateway to more innovative forms of publishing!
+
+. . . 
+
+> As an example we will look at ... 🥁
+
+... my pending JuliaCon Proceedings [submission](https://github.com/pat-alt/CounterfactualExplanations.jl/blob/main/paper/_paper.qmd) for my 2022 talk: [Explaining Black-Box Models through Counterfactuals](https://pretalx.com/juliacon-2022/talk/HU8FVH/)
 
 # Questions & Answers ❓ {background-color="black" background-size="20%" background-position="98% 98%" background-image="/www/images/julia_eindhoven_logo.png"}
 
 # Packages I've built ... 📦 {background-image="/www/images/julia.gif" background-size="20%" background-position="98% 98%"}
 
-## [`CounterfactualExplanations.jl`]
+## [`CounterfactualExplanations.jl`](https://github.com/pat-alt/CounterfactualExplanations.jl)
+
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://pat-alt.github.io/CounterfactualExplanations.jl/stable) [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://pat-alt.github.io/CounterfactualExplanations.jl/dev) [![Build Status](https://github.com/pat-alt/CounterfactualExplanations.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/pat-alt/CounterfactualExplanations.jl/actions/workflows/CI.yml?query=branch%3Amain) [![Coverage](https://codecov.io/gh/pat-alt/CounterfactualExplanations.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/pat-alt/CounterfactualExplanations.jl)
+
+::::{.columns}
+:::{.column width="50%"}
+
+`CounterfactualExplanations.jl` is a package for generating Counterfactual Explanations (CE) and Algorithmic Recourse (AR) for black-box algorithms. Both CE and AR are related tools for explainable artificial intelligence (XAI). While the package is written purely in Julia, it can be used to explain machine learning algorithms developed and trained in other popular programming languages like Python and R. See below for short introduction and other resources or dive straight into the [docs](https://pat-alt.github.io/CounterfactualExplanations.jl/dev).
+
+![Turning a nine (9) into a four (4).](/www/images/MNIST_9to4.png)
+
+:::
+
+:::{.column width="50%"}
+
+![A sad 🐱 on its counterfactual path to its cool dog friends.](https://raw.githubusercontent.com/pat-alt/CounterfactualExplanations.jl/main/docs/src//www/images/recourse_laplace.gif)
+
+::: 
+
+::::
 
 ## [`LaplaceRedux.jl`](https://github.com/pat-alt/LaplaceRedux.jl)
 
