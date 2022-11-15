@@ -152,7 +152,7 @@ Using simple YAML options, we can specify how code is displayed. For example, we
 using Javis, Animations, Colors
 www_path = "www/images"
 
-size = 600
+_size = 600
 radius_factor = 0.33
 
 function ground(args...)
@@ -172,13 +172,13 @@ end
 
 translate_anim = Animation(
     [0, 1], # must go from 0 to 1
-    [O, Point(size*radius_factor, 0)],
+    [O, Point(_size*radius_factor, 0)],
     [sineio()],
 )
 
 translate_back_anim = Animation(
     [0, 1], # must go from 0 to 1
-    [O, Point(-(size*radius_factor), 0)],
+    [O, Point(-(_size*radius_factor), 0)],
     [sineio()],
 )
 
@@ -198,7 +198,7 @@ function color_anim(start_colour::String, quarto_col::String="#4b95d0")
     )
 end
 
-video = Video(size, size)
+video = Video(_size, _size)
 
 frame_starts = 1:10:40
 n_total = 250
@@ -215,9 +215,9 @@ function cross(color="black";orientation=:horizontal)
     sethue(color)
     setline(10)
     if orientation==:horizontal
-        out = line(Point(-size,0),Point(size,0), :stroke)
+        out = line(Point(-_size,0),Point(_size,0), :stroke)
     else
-        out = line(Point(0,-size),Point(0,size), :stroke)
+        out = line(Point(0,-_size),Point(0,_size), :stroke)
     end
     return out
 end
@@ -229,7 +229,7 @@ for (i, frame_start) in enumerate(1:10:40)
     act!(blob, Action(1:Int(round(n_frames*0.25)), change(:radius, 1 => 75))) # scale up
     act!(blob, Action(n_frames:(n_frames+50), change(:radius, 75 => 250))) # scale up further
     act!(blob, Action(1:30, translate_anim, translate()))
-    act!(blob, Action(31:120, rotate_anim(i, n_colours), rotate_around(Point(-(size*radius_factor), 0))))
+    act!(blob, Action(31:120, rotate_anim(i, n_colours), rotate_around(Point(-(_size*radius_factor), 0))))
     act!(blob, Action(121:150, translate_back_anim, translate()))
     act!(blob, Action(1:150, color_anim(julia_colours[colour_order[i]]), sethue()))
 
@@ -269,24 +269,6 @@ anim = @animate for t in 2:T
 end
 gif(anim, fps=5)
 ```
-
-```{julia}
-using Statistics, LinearAlgebra
-
-function gradient_descent(𝒟train, φ, ∇loss; η=0.1, T=100)
-    𝐰 = zeros(length(φ(𝒟train[1][1])))
-    for t in 1:T
-        𝐰 = 𝐰 .- η*mean(∇loss(x, y, 𝐰, φ) for (x,y) ∈ 𝒟train)
-    end
-    return 𝐰
-end
-```
-
-```{julia}
-
-```
-
-
 
 ## Meeting Varying Requirements
 
