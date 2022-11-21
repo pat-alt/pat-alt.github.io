@@ -27,7 +27,7 @@ draft: false
 
 > As a Julia practitioner you may want to publish your work in various forms: notebooks, Markdown, HTML, PDF and more. What if you could produce all these different outputs from the same input? I will share how I've been using Quarto with Julia, for package documentation, blogging and JuliaCon proceedings. 
 
-**DISCLAIMER**: Views presented in this presentation are my own. I do not represent Quarto or Posit (RStudio).
+**DISCLAIMER**: Views presented in this presentation are my own. I am not affiliated with either Quarto or Posit (RStudio).
 
 ## Quick Intro
 
@@ -100,6 +100,8 @@ draft: false
 
 ## ... to Quarto
 
+::::{.columns}::::
+:::{.column width='50%'}
 - Generate multiple different output formats with ease:
     - The old school: $\LaTeX$ and PDF (including [Beamer](https://quarto.org/docs/presentations/beamer.html)); MS Office
     - The brave new world: beautiful, dynamic HTML content 
@@ -108,8 +110,15 @@ draft: false
         - apps
         - ...
 - All of this starting from the same place ...
+:::
+:::{.column width='50%'}
 
-> A plain Markdown document blended with **your favorite programming language** of your choice and a YAML header defining your output.
+[![Quarto at JuliaCon 2022.](/www/images/jj_julia_con.png)](https://www.youtube.com/watch?v=Y1uKNO32H_I)
+
+:::
+::::
+
+> A plain Markdown document blended with **your favorite programming language** and a YAML header defining your output.
 
 ## Effective Communication and Reproducibility in Science
 
@@ -118,7 +127,7 @@ draft: false
 - Requirements and preferences vary.
 - Quarto allows us to cater to those needs, while at the same time facilitating reproducibility by bridging the gap between computations and writing.
 
-> Quarto enables enables effective communication and reproducibility without compromises. 
+> Quarto enables effective communication and reproducibility without compromises. 
 
 ## Code chunks
 
@@ -143,7 +152,7 @@ Using simple YAML options, we can specify how code is displayed. For example, we
 using Javis, Animations, Colors
 www_path = "www/images"
 
-size = 600
+_size = 600
 radius_factor = 0.33
 
 function ground(args...)
@@ -163,13 +172,13 @@ end
 
 translate_anim = Animation(
     [0, 1], # must go from 0 to 1
-    [O, Point(size*radius_factor, 0)],
+    [O, Point(_size*radius_factor, 0)],
     [sineio()],
 )
 
 translate_back_anim = Animation(
     [0, 1], # must go from 0 to 1
-    [O, Point(-(size*radius_factor), 0)],
+    [O, Point(-(_size*radius_factor), 0)],
     [sineio()],
 )
 
@@ -189,7 +198,7 @@ function color_anim(start_colour::String, quarto_col::String="#4b95d0")
     )
 end
 
-video = Video(size, size)
+video = Video(_size, _size)
 
 frame_starts = 1:10:40
 n_total = 250
@@ -206,9 +215,9 @@ function cross(color="black";orientation=:horizontal)
     sethue(color)
     setline(10)
     if orientation==:horizontal
-        out = line(Point(-size,0),Point(size,0), :stroke)
+        out = line(Point(-_size,0),Point(_size,0), :stroke)
     else
-        out = line(Point(0,-size),Point(0,size), :stroke)
+        out = line(Point(0,-_size),Point(0,_size), :stroke)
     end
     return out
 end
@@ -220,7 +229,7 @@ for (i, frame_start) in enumerate(1:10:40)
     act!(blob, Action(1:Int(round(n_frames*0.25)), change(:radius, 1 => 75))) # scale up
     act!(blob, Action(n_frames:(n_frames+50), change(:radius, 75 => 250))) # scale up further
     act!(blob, Action(1:30, translate_anim, translate()))
-    act!(blob, Action(31:120, rotate_anim(i, n_colours), rotate_around(Point(-(size*radius_factor), 0))))
+    act!(blob, Action(31:120, rotate_anim(i, n_colours), rotate_around(Point(-(_size*radius_factor), 0))))
     act!(blob, Action(121:150, translate_back_anim, translate()))
     act!(blob, Action(1:150, color_anim(julia_colours[colour_order[i]]), sethue()))
 
@@ -263,7 +272,28 @@ gif(anim, fps=5)
 
 ## Meeting Varying Requirements
 
+> Quarto has fantastic support for traditional and modern [scholarly writing](https://quarto.org/docs/authoring/title-blocks.html).
+
+::::{.columns}::::
+:::{.column width='50%'}
+
+#### The challenge ...
+
+. . .
+
 Some people still prefer to read paper or work with MS Office. Most scientific journals, for example, still work with PDF and $\LaTeX$.
+
+![Source: [Giphy](https://giphy.com/gifs/vintage-opening-7vfhdCIn13zm8?utm_source=media-link&utm_medium=landing&utm_campaign=Media%20Links&utm_term=)](/www/images/newspaper.gif){#fig-newspaper}
+
+:::
+
+:::{.column width='50%'}
+
+#### ... and Quarto's answer
+
+. . .
+
+Equations like @eq-bm (as well as Sections, Figures, Theorems, ...) can be cross-referenced in a [standardized way](https://quarto.org/docs/authoring/cross-references.html). 
 
 ```{markdown}
 $$
@@ -278,20 +308,30 @@ $$
 Z &= \sum_{t=0}^T X_t, && X_t \sim N(\mu, \sigma)
 \end{aligned}
 $$ {#eq-bm}
+:::
+::::
 
-![Source: [Giphy](https://giphy.com/gifs/vintage-opening-7vfhdCIn13zm8?utm_source=media-link&utm_medium=landing&utm_campaign=Media%20Links&utm_term=)](/www/images/newspaper.gif){#fig-newspaper}
+
 
 ## Reproducible and Dynamic Content
 
-:::: {.columns}
-
 Quarto allows us to cater to different requirements, while at the same time facilitating reproducibility by bridging the gap between computations and writing.
 
-::: {.column width=50%}
+> The world and the data that describes it is not static 📈. Why should scientific outputs be?
+
+. . .
+
+:::: {.columns}
+
+::: {.column width=40%}
+
+#### From dynamic inputs ...
+
+. . .
+
+The code below depends on remote data that is continuously updated:
 
 ```{julia}
-#| output: true
-
 using MarketData
 snp = yahoo("^GSPC")
 
@@ -299,26 +339,34 @@ using Dates
 last_trade_day = timestamp(snp[end])[1]
 p_close = values(snp[end,:Close])[1]
 last_trade_day_formatted = Dates.format(last_trade_day, "U d, yyyy")
-
-Markdown.parse("""
-When the S&P 500 last traded, on $(last_trade_day_formatted), it closed at $(p_close). 
-
-> The world and the data that describes it is not static. Why should scientific outputs be?
-""")
 ```
+
+
+We'd like any updates to the inputs to automatically affect our output (ideally, all the way through to the finished report or paper).
 
 :::
 
-::: {.column width=50%}
+::: {.column width=60%}
+
+#### ... to dynamic outputs
+
+. . .
 
 ```{julia}
 #| output: true
 
+Markdown.parse("""
+When the S&P 500 last traded, on $(last_trade_day_formatted), it closed at $(p_close). 
+""")
+```
+
+```{julia}
+#| output: true
+#| echo: false
+
 using Plots
 plot(snp[:Close], legend=false)
 ```
-
-
 :::
 
 ::::
@@ -363,20 +411,44 @@ plot(snp[:Close], legend=false)
 
 ## VSCode, Quarto and Julia
 
-#### Tips to get started
+> To get started, see [here](https://quarto.org/docs/computations/julia.html).
 
+. . .
+
+#### Some tips to get started
+
+::::{.columns}::::
+:::{.column width='50%'}
 - Add IJulia to `startup.jl`
-- Add Revise to `startup_ijulia.jl`
 
-> if you install a new Julia binary (or do anything that changes the location of Julia on your computer), you must update the IJulia installation (to tell Jupyter where to find the new Julia) by running
+> If you install a new Julia binary [...], you must update the IJulia installation [...] by running `Pkg.build("IJulia")`
 > 
 > --- Source: [IJulia docs](https://julialang.github.io/IJulia.jl/stable/manual/installation/#Updating-Julia-and-IJulia)
+:::
+:::{.column width='50%'}
+- User snippets need to be explicitly enabled (see [here](https://stackoverflow.com/a/74339599/6681707))
 
-```{.julia}
-Pkg.build("IJulia")
+```{.json}
+{
+  "Two columns": {
+    "prefix": "cols",
+    "body": [
+      "::::{.columns}::::",
+      ":::{.column width='$1%'}",
+      ":::",
+      ":::{.column width='$2%'}",
+      ":::",
+      "::::"
+    ]
+  }
+}
 ```
+:::
+::::
 
-#### `.ipynb` vs `.qmd`
+. . .
+
+#### Using `.ipynb` vs `.qmd`
 
 - Can switch between Jupyter and `.qmd` with ease.
 - When working with `.qmd`, code chunks connect to REPL.
@@ -384,11 +456,11 @@ Pkg.build("IJulia")
 
 ## Blogging
 
-- The slides you are looking at are not only built using Quarto, but also hosted on a [website](https://www.paltmeyer.com/) that is also run on Quarto.
+> These very slides are not only built using Quarto, but also hosted on a [website](https://www.paltmeyer.com/) that is also run on Quarto.
  
 . . .
 
-- Quarto uses something call listing pages, to make it easy to collect and navigate content like this one. 
+**Organization** --- Quarto uses something call [document listings](https://quarto.org/docs/websites/website-listings.html): an easy way to collect, arrange and navigate content like this one. 
 
 ```{.yaml}
 ---
@@ -406,7 +478,7 @@ listing:
 
 . . .
 
-- You can specify YAML options such that changes to your underlying Julia code will trigger your blog post to be rerendered. This essentially allows you to easily test that the code you publish actually runs:
+**Code Execution** --- You can specify YAML options such that changes to your underlying Julia code will trigger your blog post to be rerendered. This essentially allows you to easily test that the code you publish actually runs:
 
 ```{.yaml}
 execute:
@@ -414,6 +486,28 @@ execute:
   eval: true
   echo: true
   output: false
+```
+
+. . .
+
+**Reproducibility** --- The Julia version and environment can be managed globally or locally for individual blog posts:
+
+```{.yaml}
+jupyter: julia-1.8
+```
+
+```{.julia}
+using Pkg; Pkg.activate("<path>")
+```
+
+. . .
+
+**Community Engagement** --- It is remarkably easy to engage the community through support for commenting, an RSS Feed, ...
+
+```{.yaml}
+comments:
+  utterances:
+    repo: quarto-dev/quarto-docs
 ```
 
 ## Julia Packages
@@ -431,14 +525,16 @@ format:
 - The use of `jldoctest` is not always straight-forward (see [here](https://github.com/JuliaDocs/Documenter.jl/issues/452)). Letting docs run through the Quarto engine provides an additional layer of quality assurance.
 - Admonitions can be used as follows (see related [discussion](https://github.com/quarto-dev/quarto-cli/discussions/2947)):
 
-```
-| !!! Note \"An optional title\"
+```{.md}
+| !!! note \"An optional title\"
 |     Here is something that you should pay attention to.   
 ```
 
 . . .
 
 > As an example, we will look at ... 🥁
+
+::: {.fragment .fade-right}
 
 #### [`LaplaceRedux.jl`](https://github.com/pat-alt/LaplaceRedux.jl)
 
@@ -452,32 +548,27 @@ format:
 
 `LaplaceRedux.jl` is a library written in pure Julia that can be used for effortless Bayesian Deep Learning trough Laplace Approximation (LA).
 
+:::
+
 ## JuliaCon Proceedings
 
-- Quarto supports $\LaTeX$ templates/classes ...
-- ... but why only publish proceedings in PDF form?
-- Quarto opens gateway to more innovative forms of publishing!
+- Quarto supports $\LaTeX$ templates/classes, but I've found that [`rticles`](https://pkgs.rstudio.com/rticles/articles/rticles.html) still has an edge here.
+- The [list](https://quarto.org/docs/extensions/listing-journals.html) of out-of-the-box templates for journal articles is growing.
 
 . . . 
 
 > As an example we will look at ... 🥁
 
+::: {.fragment .fade-right}
+
 ... my pending JuliaCon Proceedings [submission](https://github.com/pat-alt/CounterfactualExplanations.jl/blob/main/paper/_paper.qmd) for my 2022 talk: [Explaining Black-Box Models through Counterfactuals](https://pretalx.com/juliacon-2022/talk/HU8FVH/)
 
-## Other Tips and Tricks
+:::
 
-- The Julia environment can be managed globally or locally for individual blog posts:
-
-```{.yaml}
-jupyter: julia-1.8
-```
-
-```{.julia}
-using Pkg; Pkg.activate("<path>")
-```
 . . .
 
-
+- ... but why only publish proceedings in PDF form?
+- Quarto opens the floodgates to more innovative forms of publishing (think [distill](https://distill.pub/), but [more](https://www.paltmeyer.com/blog/) than that)
 
 
 # Questions & Answers ❓ {background-color="black" background-size="20%" background-position="98% 98%" background-image="/www/images/julia_eindhoven_logo.png"}
@@ -499,7 +590,7 @@ using Pkg; Pkg.activate("<path>")
 
 :::{.column width="50%"}
 
-![A sad 🐱 on its counterfactual path to its cool dog friends.](https://raw.githubusercontent.com/pat-alt/CounterfactualExplanations.jl/main/docs/src//www/images/recourse_laplace.gif)
+![A sad 🐱 on its counterfactual path to its cool dog friends.](/www/images/recourse_laplace.gif)
 
 ::: 
 
@@ -593,6 +684,8 @@ JuliaCon 22: [Effortless Bayesian Deep Learning through Laplace Redux](https://p
 :::
 
 ::::
+
+# Questions & Answers ❓ {background-color="black" background-size="20%" background-position="98% 98%" background-image="/www/images/julia_eindhoven_logo.png"}
 
 ## Image Sources
 
