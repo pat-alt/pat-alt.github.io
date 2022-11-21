@@ -416,14 +416,6 @@ execute:
   output: false
 ```
 
-. . .
-
-- The Julia environment can be managed globally or locally for individual blog posts:
-
-```{.yaml}
-jupyter: julia-1.8
-```
-
 ## Julia Packages
 
 - `Documenter.jl` and Quarto [generally](https://github.com/quarto-dev/quarto-cli/discussions/408) play nicely with each other (both Markdown based).
@@ -433,27 +425,32 @@ format:
   commonmark:
     variant: -raw_html
     wrap: preserve
-    self-contained: true
 ```
 
 - You get some stuff for free, e.g. citation management. Unfortunately, still no support for cross-referencing ...
-- The use of `jldoctest` is not always straight-forward (see [here](https://github.com/JuliaDocs/Documenter.jl/issues/452)). Letting docs run through the Quarto engine provides an additional layer quality assurance.
+- The use of `jldoctest` is not always straight-forward (see [here](https://github.com/JuliaDocs/Documenter.jl/issues/452)). Letting docs run through the Quarto engine provides an additional layer of quality assurance.
+- Admonitions can be used as follows (see related [discussion](https://github.com/quarto-dev/quarto-cli/discussions/2947)):
+
+```
+| !!! Note \"An optional title\"
+|     Here is something that you should pay attention to.   
+```
 
 . . .
 
 > As an example, we will look at ... 🥁
 
-#### [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl)
+#### [`LaplaceRedux.jl`](https://github.com/pat-alt/LaplaceRedux.jl)
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://pat-alt.github.io/ConformalPrediction.jl/stable/)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://pat-alt.github.io/ConformalPrediction.jl/dev/)
-[![Build Status](https://github.com/pat-alt/ConformalPrediction.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/pat-alt/ConformalPrediction.jl/actions/workflows/CI.yml?query=branch%3Amain)
-[![Coverage](https://codecov.io/gh/pat-alt/ConformalPrediction.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/pat-alt/ConformalPrediction.jl)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://pat-alt.github.io/LaplaceRedux.jl/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://pat-alt.github.io/LaplaceRedux.jl/dev)
+[![Build Status](https://github.com/pat-alt/LaplaceRedux.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/pat-alt/LaplaceRedux.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Coverage](https://codecov.io/gh/pat-alt/LaplaceRedux.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/pat-alt/LaplaceRedux.jl)
 [![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
-[![ColPrac: Contributor’s Guide on Collaborative Practices for Community Packages](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet.png)](https://github.com/SciML/ColPrac)
+[![ColPrac: Contributor's Guide on Collaborative Practices for Community Packages](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet)](https://github.com/SciML/ColPrac)
 [![Twitter Badge](https://img.shields.io/twitter/url/https/twitter.com/paltmey.svg?style=social&label=Follow%20%40paltmey)](https://twitter.com/paltmey)
 
-`ConformalPrediction.jl` is a package for Uncertainty Quantification (UQ) through Conformal Prediction (CP) in Julia. It is designed to work with supervised models trained in [MLJ](https://alan-turing-institute.github.io/MLJ.jl/dev/) [@blaom2020mlj]. Conformal Prediction is distribution-free, easy-to-understand, easy-to-use and model-agnostic.
+`LaplaceRedux.jl` is a library written in pure Julia that can be used for effortless Bayesian Deep Learning trough Laplace Approximation (LA).
 
 ## JuliaCon Proceedings
 
@@ -466,6 +463,22 @@ format:
 > As an example we will look at ... 🥁
 
 ... my pending JuliaCon Proceedings [submission](https://github.com/pat-alt/CounterfactualExplanations.jl/blob/main/paper/_paper.qmd) for my 2022 talk: [Explaining Black-Box Models through Counterfactuals](https://pretalx.com/juliacon-2022/talk/HU8FVH/)
+
+## Other Tips and Tricks
+
+- The Julia environment can be managed globally or locally for individual blog posts:
+
+```{.yaml}
+jupyter: julia-1.8
+```
+
+```{.julia}
+using Pkg; Pkg.activate("<path>")
+```
+. . .
+
+
+
 
 # Questions & Answers ❓ {background-color="black" background-size="20%" background-position="98% 98%" background-image="/www/images/julia_eindhoven_logo.png"}
 
