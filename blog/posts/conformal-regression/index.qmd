@@ -1,0 +1,48 @@
+---
+title: Conformal Prediction in Julia 🟣🔴🟢
+subtitle: Part 2 - Regression
+author: Patrick Altmeyer
+date: '2022-11-30'
+categories:
+  - probabilistic programming
+  - uncertainty
+  - Julia
+description: >-
+  Second part of a series of posts exploring Conformal Prediction in Julia using [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl).
+image: www/intro.gif
+jupyter: julia-1.8
+draft: true
+---
+
+```{julia}
+#| echo: false
+
+using Pkg; Pkg.activate("blog/posts/conformal-regression")
+```
+
+<div class="intro-gif">
+  <figure>
+    <img src="www/intro.gif">
+    <figcaption>Prediction sets for two different samples <br> and changing coverage rates. <br> As coverage grows, so does the size of the <br> prediction sets.</figcaption>
+  </figure>
+</div>
+
+
+```{julia}
+# Regression data:
+N = 150
+xmax = 8.0
+noise = 0.3
+X = rand(N) * xmax
+ε = randn(N) .* noise
+y = @.(sin(X)) + ε
+
+using Plots
+scatter(X, y, label="Observed")
+xrange = range(0,xmax,length=50)
+plot!(xrange, sin.(xrange), lw=4, label="Ground truth")
+```
+
+```{julia}
+using MLJ
+```

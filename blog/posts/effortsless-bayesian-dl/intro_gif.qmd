@@ -9,7 +9,7 @@ execute:
 
 ```{julia}
 # Import libraries.
-using Flux, Plots, Random, PlotThemes, Statistics, BayesLaplace
+using Flux, Plots, Random, Statistics, LaplaceRedux
 theme(:wong)
 # Number of points to generate.
 xs, y = toy_data_non_linear(200)
@@ -84,4 +84,5 @@ for N in 1:1:length(data)
 end
 gif(anim, "www/medium.gif", fps=50)
 ```
+
 

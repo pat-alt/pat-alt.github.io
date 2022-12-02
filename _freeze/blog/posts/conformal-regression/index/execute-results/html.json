@@ -1,0 +1,11 @@
+{
+  "hash": "447869ac34e16d932c2fd86b87ebc039",
+  "result": {
+    "markdown": "---\ntitle: \"Conformal Prediction in Julia \\U0001F7E3\\U0001F534\\U0001F7E2\"\nsubtitle: Part 2 - Regression\nauthor: Patrick Altmeyer\ndate: '2022-11-30'\ncategories:\n  - probabilistic programming\n  - uncertainty\n  - Julia\ndescription: 'Second part of a series of posts exploring Conformal Prediction in Julia using [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl).'\nimage: www/intro.gif\ndraft: true\n---\n\n\n\n<div class=\"intro-gif\">\n  <figure>\n    <img src=\"www/intro.gif\">\n    <figcaption>Prediction sets for two different samples <br> and changing coverage rates. <br> As coverage grows, so does the size of the <br> prediction sets.</figcaption>\n  </figure>\n</div>\n\n::: {.cell execution_count=2}\n``` {.julia .cell-code}\n# Regression data:\nN = 150\nxmax = 8.0\nnoise = 0.3\nX = rand(N) * xmax\nε = randn(N) .* noise\ny = @.(sin(X)) + ε\n\nusing Plots\nscatter(X, y, label=\"Observed\")\nxrange = range(0,xmax,length=50)\nplot!(xrange, sin.(xrange), lw=4, label=\"Ground truth\")\n```\n:::\n\n\n::: {.cell execution_count=3}\n``` {.julia .cell-code}\nusing MLJ\n```\n:::\n\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}
