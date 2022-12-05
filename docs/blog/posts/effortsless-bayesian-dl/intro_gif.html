@@ -227,7 +227,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <h3 class="anchored" data-anchor-id="train-model">Train model</h3>
 <div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import libraries.</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Flux</span>, <span class="bu">Plots</span>, <span class="bu">Random</span>, <span class="bu">PlotThemes</span>, <span class="bu">Statistics</span>, <span class="bu">BayesLaplace</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Flux</span>, <span class="bu">Plots</span>, <span class="bu">Random</span>, <span class="bu">Statistics</span>, <span class="bu">LaplaceRedux</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="op">:</span>wong)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of points to generate.</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>xs, y <span class="op">=</span> <span class="fu">toy_data_non_linear</span>(<span class="fl">200</span>)</span>
