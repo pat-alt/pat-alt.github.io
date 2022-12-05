@@ -9,8 +9,233 @@
 <link>https://www.paltmeyer.com/blog/blog/index.html</link>
 <atom:link href="https://www.paltmeyer.com/blog/blog/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-99.9.9</generator>
-<lastBuildDate>Sun, 20 Nov 2022 23:00:00 GMT</lastBuildDate>
+<generator>quarto-1.2.253</generator>
+<lastBuildDate>Sun, 04 Dec 2022 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>How to Conformalize a Deep Image Classifier</title>
+  <dc:creator>Patrick Altmeyer</dc:creator>
+  <dc:creator>Patrick Altmeyer</dc:creator>
+  <link>https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<div class="intro-gif">
+<figure class="figure">
+<img src="https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/www/intro.gif" class="figure-img">
+<figcaption class="figure-caption">
+Conformalised prediction sets for a<br>simple Deep Image Classifier.
+</figcaption>
+</figure>
+</div>
+<p>Deep Learning is popular and — for some tasks like image classification — remarkably powerful. But it is also well-known that Deep Neural Networks (DNN) can be unstable <span class="citation" data-cites="goodfellow2014explaining">(Goodfellow, Shlens, and Szegedy 2014)</span> and poorly calibrated. Conformal Prediction can be used to mitigate these pitfalls.</p>
+<p>In the <a href="../../../blog/posts/conformal-prediction/index.html">first part</a> of this series of posts on Conformal Prediction, we looked at the basic underlying methodology and how CP can be implemented in Julia using <a href="https://github.com/pat-alt/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>. This second part of the series is a more goal-oriented how-to guide: it demonstrates how you can conformalize a deep learning image classifier built in <code>Flux.jl</code> in just a few lines of code.</p>
+<section id="the-task-at-hand" class="level2">
+<h2 class="anchored" data-anchor-id="the-task-at-hand">🎯 The Task at Hand</h2>
+<p>The task at hand is to predict the labels of handwritten images of digits using the famous MNIST dataset <span class="citation" data-cites="lecun1998mnist">(LeCun 1998)</span>. Importing this popular machine learning dataset in Julia is made remarkably easy through <code>MLDatasets.jl</code>:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><span class="im" style="color: #00769E;">using</span> <span class="bu" style="color: null;">MLDatasets</span></span>
+<span id="cb1-2">N <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">1000</span></span>
+<span id="cb1-3">Xraw, yraw <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">MNIST</span>(split<span class="op" style="color: #5E5E5E;">=:</span>train)[<span class="op" style="color: #5E5E5E;">:</span>]</span>
+<span id="cb1-4">Xraw <span class="op" style="color: #5E5E5E;">=</span> Xraw[<span class="op" style="color: #5E5E5E;">:</span>,<span class="op" style="color: #5E5E5E;">:</span>,<span class="fl" style="color: #AD0000;">1</span><span class="op" style="color: #5E5E5E;">:</span>N]</span>
+<span id="cb1-5">yraw <span class="op" style="color: #5E5E5E;">=</span> yraw[<span class="fl" style="color: #AD0000;">1</span><span class="op" style="color: #5E5E5E;">:</span>N]</span></code></pre></div>
+</div>
+<p>Figure&nbsp;1 below shows a few random samples from the training data:</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><span class="im" style="color: #00769E;">using</span> <span class="bu" style="color: null;">MLJ</span></span>
+<span id="cb2-2"><span class="im" style="color: #00769E;">using</span> <span class="bu" style="color: null;">Images</span></span>
+<span id="cb2-3">X <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">map</span>(x <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="fu" style="color: #4758AB;">convert2image</span>(MNIST, x), <span class="fu" style="color: #4758AB;">eachslice</span>(Xraw, dims<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">3</span>))</span>
+<span id="cb2-4">y <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">coerce</span>(yraw, Multiclass)</span>
+<span id="cb2-5"></span>
+<span id="cb2-6">n_samples <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">10</span></span>
+<span id="cb2-7"><span class="fu" style="color: #4758AB;">mosaic</span>(<span class="fu" style="color: #4758AB;">rand</span>(X, n_samples)<span class="op" style="color: #5E5E5E;">...</span>, ncol<span class="op" style="color: #5E5E5E;">=</span>n_samples)</span></code></pre></div>
+<div id="fig-samples" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<img src="https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAjAAAAA4CAAAAADGVp33AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAACPVJREFUeAHtwQuUVgWBAODvZy4MHBkYQV7ylABdQgJ8JCDskUcpkhovNTkqKRYkuRsuqElpJkKbB80AFXkY6REz8AG4y6KtmYRuBAq48pAEeU8DDDiAENw998zhAMP8j/snbXbu9wUSiRgCiUQMgUQihkAiEUMgkYghkEjEEMiglbGGGGqRIxL5CNxqnMaqOWqdsV7yeRdIJGIIpFXNRIOxwJnK5KOBtYp9zXz/GFJ666qrK/yX+yyR3b3utcqfFOqsjQkamubzLZBIxBBIo5ZZBuNDTQ33U/m4W12hWv4x1DLVN3xkjYcM96yO9srmTsO8aJ9C/TyhrfFetVk8jbRxvgvRTg8hevlvcfzOTNPFUd87zlGkXGWBRCKGQJVqmGmw3Sa7z28E8lFshMh62XzB3b6hppQQe8x1q+zqW6GZezzkb+Ni63W2WmS9pzSyVzZtbRP51Dw7LVDPApfbJhdFLjRAb3U1EaoQCvGCy6yUTnUdLHdca52E4rlLK1sccapAIhFDoAo1jTEEM/wASz0uvpS7FOJd/yuzbuZqgNA+KWeoa5hbZVNgorO9bpFcXarY+zbI1xvecMylNtgqu22Oe8uP/FQHLW2Ti5Waq9pEK6U3SEfLHVdDLfE8ZLTQUAedKpBIxBCows3uF/q5fxMZKx8DjRH5loMyu08D7HOnRWq4yT1ycYVhSlylXK4e0l1km8UWeE2p/F2gVLm45vt3oVw09LoWQuy0y1vWYY3RemCJaTIZoET+AuN9T6RUVQKJRAyBU7TwsNDjRstfHVNFXrZKZv31EaKzP4k84HrnKLZHJtVc6KjhyuVuuBlqIuU6Q/3R3RbLT3Ot3Sa+tf6os2stlc0+f8EzHrfRFpFbPK86Dhplj0wGKjHScW3lrsB4o2USSCRiCJziB2rZb6LD8tdafZHb7JeL6TarcMhBDDBDJtcaZ5NXnKqFTar2gW4qtFfbTL/2XU/Lx0BnWCEfXYSayO6ATo67y1h1RSa6WzYpM50sJSUXLf2rUSrsUKYqgUQihkAlX3WTlP42yt9ZXhX5pRLZnC/lsF847JhGUsZbaLv02iPQ0nF77TbEJA+aIpv3McHTzpKfoVb5SBzFirQ1Tsohi+Wmurr66GCA84RCR/zQFNmFQifqKBTK7hoTtHXIBMO0sNrHqhJIJGIIVFKkQJk1/hqDNEKp7whlFrhKaI/fOaYQoYbq2i6963G2DUgJkfKRtXoq9LxcpeSnt/MMd0AcS7URCa0xRy5ucZPuTnTAmTriTfEUycVwY7R2SCdr3IhSVQskEjEEKvknvKW5l1V40nzbxNHY/Qg9aJ9s2rgYdQzygkg/49RDqU9kMslIDdTHRvtFCvSV8ku75GagUH5uUGCZeNoKVehghh97VyYtTdNTDaET1TbaHQ4aZJld0il2qj2elUkDXT2q0G88YI1uGuMZVQskEjEEKtmJ9hapo8ITjlhqtiflaoQGKPOI7NaZ7HY1zDYFKXUViLxti0wmm6yl5njPXpFipXjOUblo5lz5qauvhdaKp6UK49zi6/oqlklbX1ZdVaoL/Iffukw6AxzTTg8hBprroPTqmqcrZrlLCfqq6WR9fNEsZSKBRCKGQCWD0VJkob24VoHualrqPbnoaAyO+rZcHPGg21FDfaSEKsyV3UYbnazMarkYb6QiWy0QX3dNPSquzSp8yyse08KLrpFeSzWlpFDqbXOlhCJtDdMQX9LGelX7ppQrXKAPUkKRLxguvZd1wwG/UqRIiZ5StlitNRob4iLdlNvgFZFAIhFDoJIZemG++61wBCNc7QkXWKiZ7Kr5rkIs87zc7NDEWDeqh/VG+oo7kRLXNfiDjXJxuTq42Qfiu8Mua+Rvvo5+pLNMpntDgcgntjhRkRHYY6d0ntHN+fZaaKVZIku8JpPnnaGzmhaIvKepUFPrHPe+cV5RIZBIxBCo5JDIKBtVKPMLP1OotrNtlc10N6FEP7nb4XseVhvbHTZJiBfEdRbmyc3VFmrvau8qcbLqmtgkvfZ6WmiH5upbIbtO/myzk61DQ728Lr31qvaWEajnbHtVbapWVlpsu2OOKJPJZE+7Um+XaY2OjjvoGUyz3m7HBBKJGAJVSDkuME8RinSxVWYj3YhP3KtUPFtUOEt7LFYmruqYLzcf62Wmb/q6NyxX4Rzdhaor1FZ6vRV61A0maKiHd2Q21VX62exkC2zXRD3xFZsu8r4PpDfWiYoUyOYTc8xRqMBtWhmFjb4osl9lgUQihkAlOx1W3SNG2I6mpvuKyLPmy+wGD0vhBdPk6waRleI607fFUaK/Dq400HVSQpGUP3jOUzLpj587z2yX+7XvKHel3ropd6rBblOur80OKVZqvwr9NZES3yT91BSa7n6566VYbj7FI4r11t5R+1UtkEjEEKjkt0aY7GqXeEonF2uAwx7xE5l1M0Yhlhktf4Uic8XVQXMfKhPHKqtM1EcTFWbLrhAdDDXHReZ5EbvcqlxVfm+VDia43S5f8ntb8KZlhgiVWiqdZnrobYEldqhQx0XG6oOUJX5si9ytUC6OPXZob450AolEDIFTzPCfZuji+yqs9hOzZdbNFOfjoPF2y98wKfkJrVcmvsVyV0c7PGaOI5Zqo75eXrJb1Ta73CT1XaYZLhEZJBS5x2bpDHMfhtlhj9d8jJGaI8QT7nBIHC3UEEdDLTFfOoFEIoZAFbb4qlvcrDue9LB1MiswUUccdr2X5K+LVkIbLBdfSjvF9jidemis1AOOiJQrN0sm21ynUANd9BTiAv9sm+cs96x0RrlThcYaOVckJcRqP/OUuN60VxyNtMYS6QQSiRgCaUw3Xa6u0h1/McRL/hq11EChWg6IK9RKHXucTh8pcYc/i+NTm232slwt9H21VVZqmR96x/+/QCIRQ+AzME81n4V2ItvsE9eH1jjX275sk9NntUZOtw9doZa6Boi00Mdacz1po3ytFccaU3WVXiCRiCHwd+RN/+MiNzssrq3+xRSP2eTzb7nIqz4rl4rjkNtlEkgkYgj8HVnvEvlapI3E6RdIJGIIJBIxBBKJGP4PoRaByT/eOqYAAAAASUVORK5C" class="figure-img">
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Random samples from the MNIST dataset.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</section>
+<section id="building-the-network" class="level2">
+<h2 class="anchored" data-anchor-id="building-the-network">🚧 Building the Network</h2>
+<p>To model the mapping from image inputs to labels will rely on a simple Multi-Layer Perceptron (MLP). A great Julia library for Deep Learning is <code>Flux.jl</code>. But wait … doesn’t <code>ConformalPrediction.jl</code> work with models trained in <code>MLJ.jl</code>? That’s right, but fortunately there exists a <code>Flux.jl</code> interface to <code>MLJ.jl</code>, namely <code>MLJFlux.jl</code>. The interface is still in its early stages, but already very powerful and easily accessible for anyone (like myself) who is used to building Neural Networks in <code>Flux.jl</code>.</p>
+<p>In <code>Flux.jl</code>, you could build an MLP for this task as follows,</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><span class="im" style="color: #00769E;">using</span> <span class="bu" style="color: null;">Flux</span></span>
+<span id="cb3-2"></span>
+<span id="cb3-3">mlp <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">Chain</span>(</span>
+<span id="cb3-4">    Flux.flatten,</span>
+<span id="cb3-5">    <span class="fu" style="color: #4758AB;">Dense</span>(<span class="fu" style="color: #4758AB;">prod</span>((<span class="fl" style="color: #AD0000;">28</span>,<span class="fl" style="color: #AD0000;">28</span>)), <span class="fl" style="color: #AD0000;">32</span>, relu),</span>
+<span id="cb3-6">    <span class="fu" style="color: #4758AB;">Dense</span>(<span class="fl" style="color: #AD0000;">32</span>, <span class="fl" style="color: #AD0000;">10</span>)</span>
+<span id="cb3-7">)</span></code></pre></div>
+</div>
+<p>where <code>(28,28)</code> is just the input dimension (28x28 pixel images). Since we have ten digits, our output dimension is ten.<sup>1</sup></p>
+<p>We can do the exact same thing in <code>MLJFlux.jl</code> as follows,</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><span class="im" style="color: #00769E;">using</span> <span class="bu" style="color: null;">MLJFlux</span></span>
+<span id="cb4-2"></span>
+<span id="cb4-3">builder <span class="op" style="color: #5E5E5E;">=</span> MLJFlux.<span class="pp" style="color: #AD0000;">@builder</span> <span class="fu" style="color: #4758AB;">Chain</span>(</span>
+<span id="cb4-4">    Flux.flatten,</span>
+<span id="cb4-5">    <span class="fu" style="color: #4758AB;">Dense</span>(<span class="fu" style="color: #4758AB;">prod</span>(n_in), <span class="fl" style="color: #AD0000;">32</span>, relu),</span>
+<span id="cb4-6">    <span class="fu" style="color: #4758AB;">Dense</span>(<span class="fl" style="color: #AD0000;">32</span>, n_out)</span>
+<span id="cb4-7">)</span></code></pre></div>
+</div>
+<p>where here we rely on the <code>@builder</code> macro to make the transition from <code>Flux.jl</code> to <code>MLJ.jl</code> as seamless as possible. Finally, <code>MLJFlux.jl</code> already comes with a number of helper functions to define plain-vanilla networks. In this case, we will use the <code>ImageClassifier</code> with our custom builder and cross-entropy loss:</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1">ImageClassifier <span class="op" style="color: #5E5E5E;">=</span> <span class="pp" style="color: #AD0000;">@load</span> ImageClassifier</span>
+<span id="cb5-2">clf <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">ImageClassifier</span>(</span>
+<span id="cb5-3">    builder<span class="op" style="color: #5E5E5E;">=</span>builder,</span>
+<span id="cb5-4">    epochs<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">10</span>,</span>
+<span id="cb5-5">    loss<span class="op" style="color: #5E5E5E;">=</span>Flux.crossentropy</span>
+<span id="cb5-6">)</span></code></pre></div>
+</div>
+<p>The generated instance <code>clf</code> is a model (in the <code>MLJ.jl</code> sense) so from this point on we can rely on standard <code>MLJ.jl</code> workflows. For example, we can wrap our model in data to create a machine and then evaluate it on a holdout set as follows:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1">mach <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">machine</span>(clf, X, y)</span>
+<span id="cb6-2"></span>
+<span id="cb6-3"><span class="fu" style="color: #4758AB;">evaluate!</span>(</span>
+<span id="cb6-4">    mach,</span>
+<span id="cb6-5">    resampling<span class="op" style="color: #5E5E5E;">=</span><span class="fu" style="color: #4758AB;">Holdout</span>(rng<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">123</span>, fraction_train<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">0.8</span>),</span>
+<span id="cb6-6">    operation<span class="op" style="color: #5E5E5E;">=</span>predict_mode,</span>
+<span id="cb6-7">    measure<span class="op" style="color: #5E5E5E;">=</span>[accuracy]</span>
+<span id="cb6-8">)</span></code></pre></div>
+</div>
+<p>The accuracy of our very simple model is not amazing, but good enough for the purpose of this tutorial. For each image, our MLP returns a softmax output for each possible digit: 0,1,2,3,…,9. Since each individual softmax output is valued between zero and one, <img src="https://latex.codecogs.com/png.latex?y_k%5Cin(0,1)">, this is commonly interpreted as a probability: <img src="https://latex.codecogs.com/png.latex?y_k%20%5Ccoloneqq%20p(y=k%7CX)">. Edge cases – that is values close to either zero or one – indicate high predictive certainty. But this is only a heuristic notion of predictive uncertainty <span class="citation" data-cites="angelopoulos2021gentle">(Angelopoulos and Bates 2021)</span>. Next, we will turn this heuristic notion of uncertainty into a rigorous one using Conformal Prediction.</p>
+</section>
+<section id="conformalizing-the-network" class="level2">
+<h2 class="anchored" data-anchor-id="conformalizing-the-network">🔥 Conformalizing the Network</h2>
+<p>Since <code>clf</code> is a model, it is also compatible with our package: <code>ConformalPrediction.jl</code>. To conformalize our MLP, we therefore only need to call <code>conformal_model(clf)</code>. Since the generated instance <code>conf_model</code> is also just a model, we can still rely on standard <code>MLJ.jl</code> workflows. Below we first wrap it in data and then fit it. Aaaand … we’re done! Let’s look at the results in the next section.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><span class="im" style="color: #00769E;">using</span> <span class="bu" style="color: null;">ConformalPrediction</span></span>
+<span id="cb7-2">conf_model <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">conformal_model</span>(clf; method<span class="op" style="color: #5E5E5E;">=:</span>simple_inductive, coverage<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">.95</span>)</span>
+<span id="cb7-3">mach <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">machine</span>(conf_model, X, y)</span>
+<span id="cb7-4"><span class="fu" style="color: #4758AB;">fit!</span>(mach)</span></code></pre></div>
+</div>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">📊 Results</h2>
+<p>Figure&nbsp;2 below presents the results. Figure&nbsp;2 (a) displays highly certain predictions, now defined in the rigorous sense of Conformal Prediction: in each case, the conformal set (just beneath the image) includes only one label.</p>
+<p>Figure&nbsp;2 (b) and Figure&nbsp;2 (c) display increasingly uncertain predictions of set size two and three, respectively. They demonstrate that CP is well equipped to deal with samples characterized by high aleatoric uncertainty: digits four (4), seven (7) and nine (9) share certain similarities. So do digits five (5) and six (6) as well as three (3) and eight (8). These may be hard to distinguish from each other even after seeing many examples (and even for a human). It is therefore unsurprising to see that these digits often end up together in conformal sets.</p>
+<div id="fig-plots" class="cell quarto-layout-panel" data-execution_count="10">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output cell-output-display quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 100.0%;justify-content: center;">
+<div id="fig-plots-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/index_files/figure-html/fig-plots-output-1.svg" class="img-fluid figure-img" data-ref-parent="fig-plots"></p>
+<p></p><figcaption class="figure-caption">(a) Randomly selected prediction sets of size <img src="https://latex.codecogs.com/png.latex?%7CC%7C=1">.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output cell-output-display quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 100.0%;justify-content: center;">
+<div id="fig-plots-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/index_files/figure-html/fig-plots-output-2.svg" class="img-fluid figure-img" data-ref-parent="fig-plots"></p>
+<p></p><figcaption class="figure-caption">(b) Randomly selected prediction sets of size <img src="https://latex.codecogs.com/png.latex?%7CC%7C=2">.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output cell-output-display quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 100.0%;justify-content: center;">
+<div id="fig-plots-3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/index_files/figure-html/fig-plots-output-3.svg" class="img-fluid figure-img" data-ref-parent="fig-plots"></p>
+<p></p><figcaption class="figure-caption">(c) Randomly selected prediction sets of size <img src="https://latex.codecogs.com/png.latex?%7CC%7C=3">.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Conformalised predictions from an image classifier.</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation">🧐 Evaluation</h2>
+<p>To evaluate the performance of conformal models, specific performance measures can be used to assess if the model is correctly specified and well-calibrated <span class="citation" data-cites="angelopoulos2021gentle">(Angelopoulos and Bates 2021)</span>. We will look at this in some more detail in another post in the future. For now, just be aware that these measures are already available in <code>ConformalPrediction.jl</code> and we will briefly showcase them here.</p>
+<p>As for many other things, <code>ConformalPrediction.jl</code> taps into the existing functionality of <code>MLJ.jl</code> for model evaluation. In particular, we will see below how we can use the generic <code>evaluate!</code> method on our machine. To assess the correctness of our conformal predictor, we can compute the empirical coverage rate using the custom performance measure <code>emp_coverage</code>. With respect to model calibration we will look at the model’s conditional coverage. For adaptive, well-calibrated conformal models, conditional coverage is high. One general go-to measure for assessing conditional coverage is size-stratified coverage. The custom measure for this purpose is just called <code>size_stratified_coverage</code>, aliased by <code>ssc</code>.</p>
+<p>The code below implements the model evaluation using cross-validation. The Simple Inductive Classifier that we used above is not adaptive and hence the attained conditional coverage is low compared to the overall empirical coverage, which is close to <img src="https://latex.codecogs.com/png.latex?0.95">, so in line with the desired coverage rate specified above.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1">_eval <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">evaluate!</span>(</span>
+<span id="cb8-2">    mach,</span>
+<span id="cb8-3">    resampling<span class="op" style="color: #5E5E5E;">=</span><span class="fu" style="color: #4758AB;">CV</span>(),</span>
+<span id="cb8-4">    operation<span class="op" style="color: #5E5E5E;">=</span>predict,</span>
+<span id="cb8-5">    measure<span class="op" style="color: #5E5E5E;">=</span>[emp_coverage, ssc]</span>
+<span id="cb8-6">)</span>
+<span id="cb8-7"><span class="fu" style="color: #4758AB;">println</span>(<span class="st" style="color: #20794D;">"Empirical coverage: </span><span class="sc" style="color: #5E5E5E;">$</span>(<span class="fu" style="color: #4758AB;">round</span>(_eval.measurement[<span class="fl" style="color: #AD0000;">1</span>], digits<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">3</span>))<span class="st" style="color: #20794D;">"</span>)</span>
+<span id="cb8-8"><span class="fu" style="color: #4758AB;">println</span>(<span class="st" style="color: #20794D;">"SSC: </span><span class="sc" style="color: #5E5E5E;">$</span>(<span class="fu" style="color: #4758AB;">round</span>(_eval.measurement[<span class="fl" style="color: #AD0000;">2</span>], digits<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">3</span>))<span class="st" style="color: #20794D;">"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Empirical coverage: 0.946
+SSC: 0.748</code></pre>
+</div>
+</div>
+<p>We can attain higher adaptivity (SSC) when using adaptive prediction sets:</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1">conf_model <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">conformal_model</span>(clf; method<span class="op" style="color: #5E5E5E;">=:</span>adaptive_inductive, coverage<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">.95</span>)</span>
+<span id="cb10-2">mach <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">machine</span>(conf_model, X, y)</span>
+<span id="cb10-3"><span class="fu" style="color: #4758AB;">fit!</span>(mach)</span>
+<span id="cb10-4">_eval <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">evaluate!</span>(</span>
+<span id="cb10-5">    mach,</span>
+<span id="cb10-6">    resampling<span class="op" style="color: #5E5E5E;">=</span><span class="fu" style="color: #4758AB;">CV</span>(),</span>
+<span id="cb10-7">    operation<span class="op" style="color: #5E5E5E;">=</span>predict,</span>
+<span id="cb10-8">    measure<span class="op" style="color: #5E5E5E;">=</span>[emp_coverage, ssc]</span>
+<span id="cb10-9">)</span>
+<span id="cb10-10"><span class="fu" style="color: #4758AB;">println</span>(<span class="st" style="color: #20794D;">"Empirical coverage: </span><span class="sc" style="color: #5E5E5E;">$</span>(<span class="fu" style="color: #4758AB;">round</span>(_eval.measurement[<span class="fl" style="color: #AD0000;">1</span>], digits<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">3</span>))<span class="st" style="color: #20794D;">"</span>)</span>
+<span id="cb10-11"><span class="fu" style="color: #4758AB;">println</span>(<span class="st" style="color: #20794D;">"SSC: </span><span class="sc" style="color: #5E5E5E;">$</span>(<span class="fu" style="color: #4758AB;">round</span>(_eval.measurement[<span class="fl" style="color: #AD0000;">2</span>], digits<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">3</span>))<span class="st" style="color: #20794D;">"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Empirical coverage: 0.99
+SSC: 0.93</code></pre>
+</div>
+</div>
+</section>
+<section id="recap" class="level2">
+<h2 class="anchored" data-anchor-id="recap">🔁 Recap</h2>
+<p>In this short guide we have seen how easy it is to conformalize a deep learning image classifier in Julia using <code>ConformalPrediction.jl</code>. Almost any deep neural network trained in <code>Flux.jl</code> is compatible with <code>MLJ.jl</code> and can therefore be conformalized in just a few lines of code. This makes it remarkably easy to move uncertainty heuristics to rigorous predictive uncertainty estimates. We have also seen a sneak peek at performance evaluation of conformal predictors. Stay tuned for more!</p>
+</section>
+<section id="references" class="level2">
+
+
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-angelopoulos2021gentle" class="csl-entry">
+Angelopoulos, Anastasios N., and Stephen Bates. 2021. <span>“A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification.”</span> <a href="https://arxiv.org/abs/2107.07511">https://arxiv.org/abs/2107.07511</a>.
+</div>
+<div id="ref-goodfellow2014explaining" class="csl-entry">
+Goodfellow, Ian J, Jonathon Shlens, and Christian Szegedy. 2014. <span>“Explaining and Harnessing Adversarial Examples.”</span> <a href="https://arxiv.org/abs/1412.6572">https://arxiv.org/abs/1412.6572</a>.
+</div>
+<div id="ref-lecun1998mnist" class="csl-entry">
+LeCun, Yann. 1998. <span>“The <span>MNIST</span> Database of Handwritten Digits.”</span>
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>For a full tutorial on how to build an MNIST image classifier relying solely on <code>Flux.jl</code>, check out this <a href="https://fluxml.ai/Flux.jl/stable/tutorials/2021-01-26-mlp/">tutorial</a>.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
+  author = {Patrick Altmeyer and Patrick Altmeyer},
+  title = {How to {Conformalize} a {Deep} {Image} {Classifier}},
+  date = {2022-12-05},
+  url = {https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas">
+Patrick Altmeyer, and Patrick Altmeyer. 2022. <span>“How to Conformalize
+a Deep Image Classifier.”</span> December 5, 2022. <a href="https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier">https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier</a>.
+</div></div></section></div> ]]></description>
+  <category>probabilistic programming</category>
+  <category>uncertainty</category>
+  <category>Julia</category>
+  <guid>https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/index.html</guid>
+  <pubDate>Sun, 04 Dec 2022 23:00:00 GMT</pubDate>
+  <media:content url="https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/www/intro.gif" medium="image" type="image/gif"/>
+</item>
 <item>
   <title>A year of using Quarto with Julia</title>
   <dc:creator>Patrick Altmeyer</dc:creator>
