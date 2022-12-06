@@ -4,11 +4,11 @@ subtitle: Conformal Prediction in Julia --- Part 2
 author: Patrick Altmeyer
 date: '2022-12-05'
 categories:
-  - probabilistic programming
+  - conformal prediction
   - uncertainty
   - Julia
 description: >-
-  A how-to guide for Comformalized Image Classification in Julia lifted from the documentation of [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl).
+  A guide demonstrating how to use [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl) to conformalize a deep image classifier in a few lines of code.
 image: www/intro.gif
 jupyter: julia-1.8
 draft: false
@@ -28,7 +28,7 @@ www_path = "blog/posts/conformal-image-classifier/www"
 <div class="intro-gif">
   <figure>
     <img src="www/intro.gif">
-    <figcaption>Conformalised prediction sets for a<br>simple Deep Image Classifier.</figcaption>
+    <figcaption>Conformalized prediction sets for a<br>simple Deep Image Classifier.</figcaption>
   </figure>
 </div>
 
@@ -140,7 +140,8 @@ using Plots
 using Plots.PlotMeasures
 using StatsBase: sample
 
-function plot_results(mach, X, y; set_size=1, n_samples=3, kwargs...)
+cw = [1, 253, 253] |> (x -> x./sum(x))
+function plot_results(mach, X, y; set_size=1, n_samples=3, c_weights=cw, c_inv=0, kwargs...)
 
     # Choose images:
     set_sizes = ConformalPrediction.set_size.(predict(mach, X))
@@ -153,10 +154,16 @@ function plot_results(mach, X, y; set_size=1, n_samples=3, kwargs...)
         ytrue = y[i]
         x = X[i]
         ŷ = predict(mach, x)[1]
-        title = join(["$(Int(key)-1) ($(round(val, digits=2)))" for (key, val) in ŷ.prob_given_ref], ", ")
+        title = join(["$(Int(key)-1) ($(Int(round(val*100)))%)" for (key, val) in ŷ.prob_given_ref], ", ")
         title = "C={$title}\nytrue=$ytrue"
-        plt = plot(x; axis=nothing, bottom_margin=10mm, kwargs...)
-        annotate!(plt, (14, 31, (title, 10-set_size)))
+        # Colouring:
+        x = abs.(c_inv .- (c_weights .* channelview(RGB.(x))))
+        prominent_col = median(x, dims=(2,3))
+        x = colorview(RGB, eachslice(x, dims=1)...)
+        bg_color = RGB(prominent_col...)            # most common image colour
+        plt = plot(x; axis=([],false), bottom_margin=10mm, bg_color=bg_color, bg_color_inside=bg_color, kwargs...)
+        ann_colour = RGB((1 .- prominent_col)...)   # opposite of background
+        annotate!(plt, (14, 31, (title, 14-set_size), ann_colour))
         push!(plt_lst, plt)
     end
 
@@ -171,7 +178,7 @@ end
 ```{julia}
 #| output: true
 #| label: fig-plots
-#| fig-cap: Conformalised predictions from an image classifier.
+#| fig-cap: Conformalized predictions from an image classifier.
 #| fig-subcap:
 #|   - "Randomly selected prediction sets of size $|C|=1$."
 #|   - "Randomly selected prediction sets of size $|C|=2$."
@@ -191,12 +198,12 @@ display(plot_results(mach, X, y; set_size=3))
 n_total = 10
 
 anim = @animate for i in repeat([1,2,3],n_total)
-    plot_results(mach, X, y; set_size=i, n_samples=1)
+    plot_results(mach, X, y; set_size=i, n_samples=1, c_weights=rand(3), c_inv=rand([0,1],3))
 end
 gif(anim, joinpath(www_path, "intro.gif"), fps=1)
 
 anim = @animate for i in repeat([1,2,3],n_total)
-    plot_results(mach, X, y; set_size=i, n_samples=3)
+    plot_results(mach, X, y; set_size=i, n_samples=3, c_weights=rand(3), c_inv=rand([0,1],3))
 end
 gif(anim, joinpath(www_path, "medium.gif"), fps=1)
 ```
