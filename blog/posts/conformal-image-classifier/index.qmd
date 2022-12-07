@@ -19,7 +19,6 @@ draft: false
 
 using Pkg; Pkg.activate("blog/posts/conformal-image-classifier/")
 using Plots
-theme(:lime)
 using Random
 Random.seed!(2022)
 www_path = "blog/posts/conformal-image-classifier/www"
@@ -34,7 +33,9 @@ www_path = "blog/posts/conformal-image-classifier/www"
 
 Deep Learning is popular and --- for some tasks like image classification --- remarkably powerful. But it is also well-known that Deep Neural Networks (DNN) can be unstable [@goodfellow2014explaining] and poorly calibrated. Conformal Prediction can be used to mitigate these pitfalls. 
 
-In the [first part](../conformal-prediction/index.qmd) of this series of posts on Conformal Prediction, we looked at the basic underlying methodology and how CP can be implemented in Julia using [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl). This second part of the series is a more goal-oriented how-to guide: it demonstrates how you can conformalize a deep learning image classifier built in `Flux.jl` in just a few lines of code.
+In the [first part](../conformal-prediction/index.qmd) of this series of posts on Conformal Prediction, we looked at the basic underlying methodology and how CP can be implemented in Julia using [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl). This second part of the series is a more goal-oriented how-to guide: it demonstrates how you can conformalize a deep learning image classifier built in `Flux.jl` in just a few lines of code. 
+
+Since this is meant to be more of a hands-on article, we will avoid diving too deeply into methodological concepts. If you need more colour on this, be sure to check out the [first article](../conformal-prediction/index.qmd) on this topic and also @angelopoulos2021gentle. For a more formal treatment of Conformal Prediction see also @angelopoulos2022uncertainty.
 
 ## 🎯 The Task at Hand 
 
@@ -225,8 +226,15 @@ _eval = evaluate!(
     operation=predict,
     measure=[emp_coverage, ssc]
 )
+display(_eval)
 println("Empirical coverage: $(round(_eval.measurement[1], digits=3))")
 println("SSC: $(round(_eval.measurement[2], digits=3))")
+```
+
+```{julia}
+#| echo: false
+
+results = Dict{Symbol,Any}(:simple_inductive => mach) # store results
 ```
 
 We can attain higher adaptivity (SSC) when using adaptive prediction sets:
@@ -243,8 +251,24 @@ _eval = evaluate!(
     operation=predict,
     measure=[emp_coverage, ssc]
 )
+results[:adaptive_inductive] = mach
+display(_eval)
 println("Empirical coverage: $(round(_eval.measurement[1], digits=3))")
 println("SSC: $(round(_eval.measurement[2], digits=3))")
+```
+
+We can also have a look at the resulting set size for both approaches using a custom `Plots.jl` recipe (fig-setsize). In line with the above, the spread is wider for the adaptive approach, which reflects that "the procedure is effectively distinguishing between easy and hard inputs" [@angelopoulos2021gentle].
+
+```{julia}
+#| output: true
+#| label: fig-setsize
+#| fig-cap: "Prediction interval width."
+
+plt_list = []
+for (_mod, mach) in results
+    push!(plt_list, bar(mach.model, mach.fitresult, X; title=String(_mod)))
+end
+plot(plt_list..., size=(800,300),bg_colour=:transparent)
 ```
 
 ## 🔁 Recap

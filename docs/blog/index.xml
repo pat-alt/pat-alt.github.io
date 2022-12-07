@@ -9,7 +9,7 @@
 <link>https://www.paltmeyer.com/blog/blog/index.html</link>
 <atom:link href="https://www.paltmeyer.com/blog/blog/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-99.9.9</generator>
+<generator>quarto-1.2.253</generator>
 <lastBuildDate>Sun, 04 Dec 2022 23:00:00 GMT</lastBuildDate>
 <item>
   <title>How to Conformalize a Deep Image Classifier</title>
@@ -30,6 +30,7 @@ Conformalized prediction sets for a<br>simple Deep Image Classifier.
 </div>
 <p>Deep Learning is popular and — for some tasks like image classification — remarkably powerful. But it is also well-known that Deep Neural Networks (DNN) can be unstable <span class="citation" data-cites="goodfellow2014explaining">(Goodfellow, Shlens, and Szegedy 2014)</span> and poorly calibrated. Conformal Prediction can be used to mitigate these pitfalls.</p>
 <p>In the <a href="../../../blog/posts/conformal-prediction/index.html">first part</a> of this series of posts on Conformal Prediction, we looked at the basic underlying methodology and how CP can be implemented in Julia using <a href="https://github.com/pat-alt/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>. This second part of the series is a more goal-oriented how-to guide: it demonstrates how you can conformalize a deep learning image classifier built in <code>Flux.jl</code> in just a few lines of code.</p>
+<p>Since this is meant to be more of a hands-on article, we will avoid diving too deeply into methodological concepts. If you need more colour on this, be sure to check out the <a href="../../../blog/posts/conformal-prediction/index.html">first article</a> on this topic and also <span class="citation" data-cites="angelopoulos2021gentle">A. N. Angelopoulos and Bates (2021)</span>. For a more formal treatment of Conformal Prediction see also <span class="citation" data-cites="angelopoulos2022uncertainty">A. Angelopoulos et al. (2022)</span>.</p>
 <section id="the-task-at-hand" class="level2">
 <h2 class="anchored" data-anchor-id="the-task-at-hand">🎯 The Task at Hand</h2>
 <p>The task at hand is to predict the labels of handwritten images of digits using the famous MNIST dataset <span class="citation" data-cites="lecun1998mnist">(LeCun 1998)</span>. Importing this popular machine learning dataset in Julia is made remarkably easy through <code>MLDatasets.jl</code>:</p>
@@ -51,7 +52,7 @@ Conformalized prediction sets for a<br>simple Deep Image Classifier.
 <span id="cb2-7"><span class="fu" style="color: #4758AB;">mosaic</span>(<span class="fu" style="color: #4758AB;">rand</span>(X, n_samples)<span class="op" style="color: #5E5E5E;">...</span>, ncol<span class="op" style="color: #5E5E5E;">=</span>n_samples)</span></code></pre></div>
 <div id="fig-samples" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<img src="https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/data:image/png;base64,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" class="figure-img">
+<img src="https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/data:image/png;base64,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" class="figure-img">
 <p></p><figcaption class="figure-caption">Figure&nbsp;1: Random samples from the MNIST dataset.</figcaption><p></p>
 </figure>
 </div>
@@ -101,7 +102,7 @@ Conformalized prediction sets for a<br>simple Deep Image Classifier.
 <span id="cb6-7">    measure<span class="op" style="color: #5E5E5E;">=</span>[accuracy]</span>
 <span id="cb6-8">)</span></code></pre></div>
 </div>
-<p>The accuracy of our very simple model is not amazing, but good enough for the purpose of this tutorial. For each image, our MLP returns a softmax output for each possible digit: 0,1,2,3,…,9. Since each individual softmax output is valued between zero and one, <img src="https://latex.codecogs.com/png.latex?y_k%5Cin(0,1)">, this is commonly interpreted as a probability: <img src="https://latex.codecogs.com/png.latex?y_k%20%5Ccoloneqq%20p(y=k%7CX)">. Edge cases – that is values close to either zero or one – indicate high predictive certainty. But this is only a heuristic notion of predictive uncertainty <span class="citation" data-cites="angelopoulos2021gentle">(Angelopoulos and Bates 2021)</span>. Next, we will turn this heuristic notion of uncertainty into a rigorous one using Conformal Prediction.</p>
+<p>The accuracy of our very simple model is not amazing, but good enough for the purpose of this tutorial. For each image, our MLP returns a softmax output for each possible digit: 0,1,2,3,…,9. Since each individual softmax output is valued between zero and one, <img src="https://latex.codecogs.com/png.latex?y_k%5Cin(0,1)">, this is commonly interpreted as a probability: <img src="https://latex.codecogs.com/png.latex?y_k%20%5Ccoloneqq%20p(y=k%7CX)">. Edge cases – that is values close to either zero or one – indicate high predictive certainty. But this is only a heuristic notion of predictive uncertainty <span class="citation" data-cites="angelopoulos2021gentle">(A. N. Angelopoulos and Bates 2021)</span>. Next, we will turn this heuristic notion of uncertainty into a rigorous one using Conformal Prediction.</p>
 </section>
 <section id="conformalizing-the-network" class="level2">
 <h2 class="anchored" data-anchor-id="conformalizing-the-network">🔥 Conformalizing the Network</h2>
@@ -155,7 +156,7 @@ Conformalized prediction sets for a<br>simple Deep Image Classifier.
 </section>
 <section id="evaluation" class="level2">
 <h2 class="anchored" data-anchor-id="evaluation">🧐 Evaluation</h2>
-<p>To evaluate the performance of conformal models, specific performance measures can be used to assess if the model is correctly specified and well-calibrated <span class="citation" data-cites="angelopoulos2021gentle">(Angelopoulos and Bates 2021)</span>. We will look at this in some more detail in another post in the future. For now, just be aware that these measures are already available in <code>ConformalPrediction.jl</code> and we will briefly showcase them here.</p>
+<p>To evaluate the performance of conformal models, specific performance measures can be used to assess if the model is correctly specified and well-calibrated <span class="citation" data-cites="angelopoulos2021gentle">(A. N. Angelopoulos and Bates 2021)</span>. We will look at this in some more detail in another post in the future. For now, just be aware that these measures are already available in <code>ConformalPrediction.jl</code> and we will briefly showcase them here.</p>
 <p>As for many other things, <code>ConformalPrediction.jl</code> taps into the existing functionality of <code>MLJ.jl</code> for model evaluation. In particular, we will see below how we can use the generic <code>evaluate!</code> method on our machine. To assess the correctness of our conformal predictor, we can compute the empirical coverage rate using the custom performance measure <code>emp_coverage</code>. With respect to model calibration we will look at the model’s conditional coverage. For adaptive, well-calibrated conformal models, conditional coverage is high. One general go-to measure for assessing conditional coverage is size-stratified coverage. The custom measure for this purpose is just called <code>size_stratified_coverage</code>, aliased by <code>ssc</code>.</p>
 <p>The code below implements the model evaluation using cross-validation. The Simple Inductive Classifier that we used above is not adaptive and hence the attained conditional coverage is low compared to the overall empirical coverage, which is close to <img src="https://latex.codecogs.com/png.latex?0.95">, so in line with the desired coverage rate specified above.</p>
 <div class="cell" data-execution_count="12">
@@ -165,15 +166,33 @@ Conformalized prediction sets for a<br>simple Deep Image Classifier.
 <span id="cb8-4">    operation<span class="op" style="color: #5E5E5E;">=</span>predict,</span>
 <span id="cb8-5">    measure<span class="op" style="color: #5E5E5E;">=</span>[emp_coverage, ssc]</span>
 <span id="cb8-6">)</span>
-<span id="cb8-7"><span class="fu" style="color: #4758AB;">println</span>(<span class="st" style="color: #20794D;">"Empirical coverage: </span><span class="sc" style="color: #5E5E5E;">$</span>(<span class="fu" style="color: #4758AB;">round</span>(_eval.measurement[<span class="fl" style="color: #AD0000;">1</span>], digits<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">3</span>))<span class="st" style="color: #20794D;">"</span>)</span>
-<span id="cb8-8"><span class="fu" style="color: #4758AB;">println</span>(<span class="st" style="color: #20794D;">"SSC: </span><span class="sc" style="color: #5E5E5E;">$</span>(<span class="fu" style="color: #4758AB;">round</span>(_eval.measurement[<span class="fl" style="color: #AD0000;">2</span>], digits<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">3</span>))<span class="st" style="color: #20794D;">"</span>)</span></code></pre></div>
+<span id="cb8-7"><span class="fu" style="color: #4758AB;">display</span>(_eval)</span>
+<span id="cb8-8"><span class="fu" style="color: #4758AB;">println</span>(<span class="st" style="color: #20794D;">"Empirical coverage: </span><span class="sc" style="color: #5E5E5E;">$</span>(<span class="fu" style="color: #4758AB;">round</span>(_eval.measurement[<span class="fl" style="color: #AD0000;">1</span>], digits<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">3</span>))<span class="st" style="color: #20794D;">"</span>)</span>
+<span id="cb8-9"><span class="fu" style="color: #4758AB;">println</span>(<span class="st" style="color: #20794D;">"SSC: </span><span class="sc" style="color: #5E5E5E;">$</span>(<span class="fu" style="color: #4758AB;">round</span>(_eval.measurement[<span class="fl" style="color: #AD0000;">2</span>], digits<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">3</span>))<span class="st" style="color: #20794D;">"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div class="ansi-escaped-output">
+<pre>PerformanceEvaluation object with these fields:
+  measure, operation, measurement, per_fold,
+  per_observation, fitted_params_per_fold,
+  report_per_fold, train_test_rows
+Extract:
+┌───────────────────────────────────────────────────────────┬───────────┬───────
+│ measure                                                   │ operation │ meas ⋯
+├───────────────────────────────────────────────────────────┼───────────┼───────
+│ emp_coverage (generic function with 1 method)             │ predict   │ 0.94 ⋯
+│ size_stratified_coverage (generic function with 1 method) │ predict   │ 0.80 ⋯
+└───────────────────────────────────────────────────────────┴───────────┴───────
+<span class="ansi-cyan-fg">                                                               3 columns omitted</span>
+</pre>
+</div>
+</div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Empirical coverage: 0.957
-SSC: 0.556</code></pre>
+<pre><code>Empirical coverage: 0.947
+SSC: 0.801</code></pre>
 </div>
 </div>
 <p>We can attain higher adaptivity (SSC) when using adaptive prediction sets:</p>
-<div class="cell" data-execution_count="13">
+<div class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1">conf_model <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">conformal_model</span>(clf; method<span class="op" style="color: #5E5E5E;">=:</span>adaptive_inductive, coverage<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">.95</span>)</span>
 <span id="cb10-2">mach <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">machine</span>(conf_model, X, y)</span>
 <span id="cb10-3"><span class="fu" style="color: #4758AB;">fit!</span>(mach)</span>
@@ -183,11 +202,46 @@ SSC: 0.556</code></pre>
 <span id="cb10-7">    operation<span class="op" style="color: #5E5E5E;">=</span>predict,</span>
 <span id="cb10-8">    measure<span class="op" style="color: #5E5E5E;">=</span>[emp_coverage, ssc]</span>
 <span id="cb10-9">)</span>
-<span id="cb10-10"><span class="fu" style="color: #4758AB;">println</span>(<span class="st" style="color: #20794D;">"Empirical coverage: </span><span class="sc" style="color: #5E5E5E;">$</span>(<span class="fu" style="color: #4758AB;">round</span>(_eval.measurement[<span class="fl" style="color: #AD0000;">1</span>], digits<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">3</span>))<span class="st" style="color: #20794D;">"</span>)</span>
-<span id="cb10-11"><span class="fu" style="color: #4758AB;">println</span>(<span class="st" style="color: #20794D;">"SSC: </span><span class="sc" style="color: #5E5E5E;">$</span>(<span class="fu" style="color: #4758AB;">round</span>(_eval.measurement[<span class="fl" style="color: #AD0000;">2</span>], digits<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">3</span>))<span class="st" style="color: #20794D;">"</span>)</span></code></pre></div>
+<span id="cb10-10">results[<span class="op" style="color: #5E5E5E;">:</span>adaptive_inductive] <span class="op" style="color: #5E5E5E;">=</span> mach</span>
+<span id="cb10-11"><span class="fu" style="color: #4758AB;">display</span>(_eval)</span>
+<span id="cb10-12"><span class="fu" style="color: #4758AB;">println</span>(<span class="st" style="color: #20794D;">"Empirical coverage: </span><span class="sc" style="color: #5E5E5E;">$</span>(<span class="fu" style="color: #4758AB;">round</span>(_eval.measurement[<span class="fl" style="color: #AD0000;">1</span>], digits<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">3</span>))<span class="st" style="color: #20794D;">"</span>)</span>
+<span id="cb10-13"><span class="fu" style="color: #4758AB;">println</span>(<span class="st" style="color: #20794D;">"SSC: </span><span class="sc" style="color: #5E5E5E;">$</span>(<span class="fu" style="color: #4758AB;">round</span>(_eval.measurement[<span class="fl" style="color: #AD0000;">2</span>], digits<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">3</span>))<span class="st" style="color: #20794D;">"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div class="ansi-escaped-output">
+<pre>PerformanceEvaluation object with these fields:
+  measure, operation, measurement, per_fold,
+  per_observation, fitted_params_per_fold,
+  report_per_fold, train_test_rows
+Extract:
+┌───────────────────────────────────────────────────────────┬───────────┬───────
+│ measure                                                   │ operation │ meas ⋯
+├───────────────────────────────────────────────────────────┼───────────┼───────
+│ emp_coverage (generic function with 1 method)             │ predict   │ 0.99 ⋯
+│ size_stratified_coverage (generic function with 1 method) │ predict   │ 0.95 ⋯
+└───────────────────────────────────────────────────────────┴───────────┴───────
+<span class="ansi-cyan-fg">                                                               3 columns omitted</span>
+</pre>
+</div>
+</div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Empirical coverage: 0.99
-SSC: 0.942</code></pre>
+<pre><code>Empirical coverage: 0.991
+SSC: 0.951</code></pre>
+</div>
+</div>
+<p>We can also have a look at the resulting set size for both approaches using a custom <code>Plots.jl</code> recipe (fig-setsize). In line with the above, the spread is wider for the adaptive approach, which reflects that “the procedure is effectively distinguishing between easy and hard inputs” <span class="citation" data-cites="angelopoulos2021gentle">(A. N. Angelopoulos and Bates 2021)</span>.</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1">plt_list <span class="op" style="color: #5E5E5E;">=</span> []</span>
+<span id="cb12-2"><span class="cf" style="color: #003B4F;">for</span> (_mod, mach) <span class="kw" style="color: #003B4F;">in</span> results</span>
+<span id="cb12-3">    <span class="fu" style="color: #4758AB;">push!</span>(plt_list, <span class="fu" style="color: #4758AB;">bar</span>(mach.model, mach.fitresult, X; title<span class="op" style="color: #5E5E5E;">=</span><span class="fu" style="color: #4758AB;">String</span>(_mod)))</span>
+<span id="cb12-4"><span class="cf" style="color: #003B4F;">end</span></span>
+<span id="cb12-5"><span class="fu" style="color: #4758AB;">plot</span>(plt_list<span class="op" style="color: #5E5E5E;">...</span>, size<span class="op" style="color: #5E5E5E;">=</span>(<span class="fl" style="color: #AD0000;">800</span>,<span class="fl" style="color: #AD0000;">300</span>),bg_colour<span class="op" style="color: #5E5E5E;">=:</span>transparent)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="67">
+<div id="fig-setsize" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/index_files/figure-html/fig-setsize-output-1.svg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Prediction interval width.</figcaption><p></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -206,6 +260,9 @@ SSC: 0.942</code></pre>
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-angelopoulos2021gentle" class="csl-entry">
 Angelopoulos, Anastasios N., and Stephen Bates. 2021. <span>“A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification.”</span> <a href="https://arxiv.org/abs/2107.07511">https://arxiv.org/abs/2107.07511</a>.
+</div>
+<div id="ref-angelopoulos2022uncertainty" class="csl-entry">
+Angelopoulos, Anastasios, Stephen Bates, Jitendra Malik, and Michael I. Jordan. 2022. <span>“Uncertainty <span>Sets</span> for <span>Image Classifiers</span> Using <span>Conformal Prediction</span>.”</span> <span>arXiv</span>. <a href="http://arxiv.org/abs/2009.14193">http://arxiv.org/abs/2009.14193</a>.
 </div>
 <div id="ref-goodfellow2014explaining" class="csl-entry">
 Goodfellow, Ian J, Jonathon Shlens, and Christian Szegedy. 2014. <span>“Explaining and Harnessing Adversarial Examples.”</span> <a href="https://arxiv.org/abs/1412.6572">https://arxiv.org/abs/1412.6572</a>.
