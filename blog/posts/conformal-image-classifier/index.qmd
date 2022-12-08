@@ -262,12 +262,13 @@ We can also have a look at the resulting set size for both approaches using a cu
 ```{julia}
 #| output: true
 #| label: fig-setsize
-#| fig-cap: "Prediction interval width."
+#| fig-cap: "Distribution of set sizes for both approaches."
 
 plt_list = []
 for (_mod, mach) in results
     push!(plt_list, bar(mach.model, mach.fitresult, X; title=String(_mod)))
 end
+plot(plt_list..., size=(800,300))
 plot(plt_list..., size=(800,300),bg_colour=:transparent)
 ```
 
