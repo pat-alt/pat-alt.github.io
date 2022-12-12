@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Patrick Altmeyer">
-<meta name="dcterms.date" content="2022-11-30">
-<meta name="description" content="Second part of a series of posts exploring Conformal Prediction in Julia using ConformalPrediction.jl.">
+<meta name="dcterms.date" content="2022-12-12">
+<meta name="description" content="This third post introduces conformal regression by going through a standard machine learning workflow using MLJ.jl and ConformalPrediction.jl.">
 
-<title>Patrick Altmeyer - Conformal Prediction in Julia 🟣🔴🟢</title>
+<title>Patrick Altmeyer - Prediction Intervals for any Regression Model</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -86,6 +86,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -136,15 +155,19 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../styles.css">
-<meta property="og:title" content="Patrick Altmeyer - Conformal Prediction in Julia 🟣🔴🟢">
-<meta property="og:description" content="Second part of a series of posts exploring Conformal Prediction in Julia using [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl).">
+<meta property="og:title" content="Patrick Altmeyer - Prediction Intervals for any Regression Model">
+<meta property="og:description" content="This third post introduces conformal regression by going through a standard machine learning workflow using [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/) and [`ConformalPrediction.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/conformal-regression/www/intro.gif">
 <meta property="og:site-name" content="Patrick Altmeyer">
-<meta name="twitter:title" content="Patrick Altmeyer - Conformal Prediction in Julia 🟣🔴🟢">
-<meta name="twitter:description" content="Second part of a series of posts exploring Conformal Prediction in Julia using [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl).">
+<meta name="twitter:title" content="Patrick Altmeyer - Prediction Intervals for any Regression Model">
+<meta name="twitter:description" content="This third post introduces conformal regression by going through a standard machine learning workflow using [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/) and [`ConformalPrediction.">
 <meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/conformal-regression/www/intro.gif">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -173,16 +196,16 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
  <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html">
- <span class="menu-text">Talks</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../../../blog/index.html">
  <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/software.html">
  <span class="menu-text">Software</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/talks/index.html">
+ <span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/about/index.html">
@@ -219,42 +242,72 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background">📖 Background</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">📈 Data</a></li>
+  <li><a href="#model-training-using-mlj" id="toc-model-training-using-mlj" class="nav-link" data-scroll-target="#model-training-using-mlj">🏋️ Model Training using <code>MLJ</code></a></li>
+  <li><a href="#conformalizing-the-model" id="toc-conformalizing-the-model" class="nav-link" data-scroll-target="#conformalizing-the-model">🔥 Conformalizing the Model</a></li>
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">🧐 Evaluation</a>
+  <ul class="collapse">
+  <li><a href="#so-whats-happening-under-the-hood" id="toc-so-whats-happening-under-the-hood" class="nav-link" data-scroll-target="#so-whats-happening-under-the-hood"><em>So what’s happening under the hood?</em></a></li>
+  </ul></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap">🔃 Recap</a>
+  <ul class="collapse">
+  <li><a href="#are-we-done" id="toc-are-we-done" class="nav-link" data-scroll-target="#are-we-done"><em>Are we done?</em></a></li>
+  </ul></li>
+  <li><a href="#read-on" id="toc-read-on" class="nav-link" data-scroll-target="#read-on">📚 Read on</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Conformal Prediction in Julia 🟣🔴🟢</h1>
-<p class="subtitle lead">Part 2 - Regression</p>
+<h1 class="title">Prediction Intervals for any Regression Model</h1>
+<p class="subtitle lead">Conformal Prediction in Julia — Part 3</p>
   <div class="quarto-categories">
     <div class="quarto-category">probabilistic programming</div>
     <div class="quarto-category">uncertainty</div>
+    <div class="quarto-category">conformal prediction</div>
+    <div class="quarto-category">regression</div>
     <div class="quarto-category">Julia</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    Second part of a series of posts exploring Conformal Prediction in Julia using <a href="https://github.com/pat-alt/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>.
+    This third post introduces conformal regression by going through a standard machine learning workflow using <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a> and <a href="https://github.com/pat-alt/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>.
   </div>
 </div>
 
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> 
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://www.tudelft.nl/en/">
+            Delft University of Technology
+            </a>
+          </p>
+      </div>
+    </div>
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Patrick Altmeyer </p>
-          </div>
-  </div>
-    
+      
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 30, 2022</p>
+      <p class="date">December 12, 2022</p>
     </div>
   </div>
   
@@ -268,40 +321,235 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <figure class="figure">
 <img src="www/intro.gif" class="figure-img">
 <figcaption class="figure-caption">
-Prediction sets for two different samples <br> and changing coverage rates. <br> As coverage grows, so does the size of the <br> prediction sets.
+Conformal Prediction intervals for different<br>coverage rates. As coverage grows, so does<br>the width of the prediction interval.
 </figcaption>
 </figure>
 </div>
+<p>This is the third (and for now final) part of a series of posts that introduce Conformal Prediction in Julia using <a href="https://github.com/pat-alt/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>. The first <a href="../../../blog/posts/conformal-prediction/index.html">post</a> introduced Conformal Prediction for supervised classification tasks: we learned that conformal classifiers produce set-valued predictions that are guaranteed to include the true label of a new sample with a certain probability. In the second <a href="../conformal-image-classifier/">post</a> we applied these ideas to a more hands-on example: we saw how easy it is to use <a href="https://github.com/pat-alt/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a> to conformalize a Deep Learning image classifier.</p>
+<p>In this post, we will look at regression models instead, that is supervised learning tasks involving a continuous outcome variable. Regression tasks are as ubiquitous as classification tasks. For example, we might be interested in using a machine learning model to predict house prices or the inflation rate of the Euro or the parameter size of the next large language model. In fact, many readers may be more familiar with regression models than classification, in which case it may also be easier for you to understand Conformal Prediction (CP) in this context.</p>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">📖 Background</h2>
+<p>Before we start, let’s briefly recap what CP is all about. Don’t worry, we’re not about to deep-dive into methodology. But just to give you a high-level description upfront:</p>
+<blockquote class="blockquote">
+<p>Conformal prediction (a.k.a. conformal inference) is a user-friendly paradigm for creating statistically rigorous uncertainty sets/intervals for the predictions of such models. Critically, the sets are valid in a distribution-free sense: they possess explicit, non-asymptotic guarantees even without distributional assumptions or model assumptions.</p>
+<p>— <span class="citation" data-cites="angelopoulos2021gentle">Angelopoulos and Bates (<a href="#ref-angelopoulos2021gentle" role="doc-biblioref">2021</a>)</span> (<a href="https://arxiv.org/pdf/2107.07511.pdf">arXiv</a>)</p>
+</blockquote>
+<p>Intuitively, CP works under the premise of turning heuristic notions of uncertainty into rigorous uncertainty estimates through repeated sampling or the use of dedicated calibration data.</p>
+<p>In what follows we will explore what CP can do by going through a standard machine learning workflow using <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a> and <a href="https://github.com/pat-alt/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>. There will be less focus on how exactly CP works, but references will point you to additional resources.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Interactive Version
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This post is also available as a fully interactive <a href="https://github.com/fonsp/Pluto.jl"><code>Pluto.jl</code></a> 🎈 notebook hosted on <a href="https://mybinder.org/">binder</a>: <a href="https://binder.plutojl.org/v0.19.12/open?url=https%253A%252F%252Fraw.githubusercontent.com%252Fpat-alt%252FConformalPrediction.jl%252Fmain%252Fdocs%252Fpluto%252Fintro.jl" target="_blank"><img src="https://mybinder.org/badge_logo.svg" class="img-fluid" alt="Binder"></a></p>
+<p>In my own experience, this may take some time to load, certainly long enough to get yourself a hot beverage ☕ or first read on here. But I promise you that the wait is worth it!</p>
+</div>
+</div>
+</section>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">📈 Data</h2>
+<p>Most machine learning workflows start with data. For illustrative purposes we will work with synthetic data. The helper function below can be used to generate some regression data.</p>
 <div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Regression data:</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="fl">150</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>xmax <span class="op">=</span> <span class="fl">8.0</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>noise <span class="op">=</span> <span class="fl">0.3</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> <span class="fu">rand</span>(N) <span class="op">*</span> xmax</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>ε <span class="op">=</span> <span class="fu">randn</span>(N) <span class="op">.*</span> noise</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> @.(<span class="fu">sin</span>(X)) <span class="op">+</span> ε</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Plots</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">scatter</span>(X, y, label<span class="op">=</span><span class="st">"Observed"</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>xrange <span class="op">=</span> <span class="fu">range</span>(<span class="fl">0</span>,xmax,length<span class="op">=</span><span class="fl">50</span>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot!</span>(xrange, <span class="fu">sin</span>.(xrange), lw<span class="op">=</span><span class="fl">4</span>, label<span class="op">=</span><span class="st">"Ground truth"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">get_data</span>(;N<span class="op">=</span><span class="fl">1000</span>, xmax<span class="op">=</span><span class="fl">3.0</span>, noise<span class="op">=</span><span class="fl">0.5</span>, fun<span class="op">::</span><span class="dt">Function</span>=<span class="fu">fun</span>(X) <span class="op">=</span> X <span class="op">*</span> <span class="fu">sin</span>(X))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Inputs:</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> Distributions.<span class="fu">Uniform</span>(<span class="op">-</span>xmax, xmax)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> <span class="fu">rand</span>(d, N)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> MLJBase.<span class="fu">table</span>(<span class="fu">reshape</span>(X, <span class="op">:</span>, <span class="fl">1</span>))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Outputs:</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    ε <span class="op">=</span> <span class="fu">randn</span>(N) <span class="op">.*</span> noise</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> @.(<span class="fu">fun</span>(X.x1)) <span class="op">+</span> ε</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="fu">vec</span>(y)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X, y</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><a href="#fig-data">Figure&nbsp;1</a> illustrates our observations (dots) along with the ground-truth mapping from inputs to outputs (line). We have defined that mapping <span class="math inline">\(f: \mathcal{X} \mapsto \mathcal{Y}\)</span> as follows:</p>
 <div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MLJ</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(X) <span class="op">=</span> X <span class="op">*</span> <span class="fu">cos</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="cell" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="45">
+<div id="fig-data" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-data-output-1.svg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Some synthetic regression data. Observations are shown as dots. The ground-truth mapping from inputs to outputs is shown as a dashed line.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="model-training-using-mlj" class="level2">
+<h2 class="anchored" data-anchor-id="model-training-using-mlj">🏋️ Model Training using <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ</code></a></h2>
+<p><a href="(https://github.com/pat-alt/ConformalPrediction.jl)"><code>ConformalPrediction.jl</code></a> is interfaced to <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a> <span class="citation" data-cites="blaom2020mlj">(<a href="#ref-blaom2020mlj" role="doc-biblioref">Blaom et al. 2020</a>)</span>: a comprehensive Machine Learning Framework for Julia. <code>MLJ.jl</code> provides a large and growing suite of popular machine learning models that can be used for supervised and unsupervised tasks. Conformal Prediction is a model-agnostic approach to uncertainty quantification, so it can be applied to any common supervised machine learning model.</p>
+<p>The interface to <code>MLJ.jl</code> therefore seems natural: any (supervised) <code>MLJ.jl</code> model can now be conformalized using <code>ConformalPrediction.jl</code>. By leveraging existing <code>MLJ.jl</code> functionality for common tasks like training, prediction and model evaluation, this package is light-weight and scalable. Now let’s see how all of that works …</p>
+<p>To start with, let’s split our data into a training and test set:</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>train, test <span class="op">=</span> <span class="fu">partition</span>(<span class="fu">eachindex</span>(y), <span class="fl">0.4</span>, <span class="fl">0.4</span>, shuffle<span class="op">=</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s define a model for our regression task:</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Model <span class="op">=</span> <span class="pp">@load</span> KNNRegressor pkg <span class="op">=</span> NearestNeighborModels</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> <span class="fu">Model</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Have it your way!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Think this dataset is too simple? Wondering why on earth I’m not using XGBoost for this task? In the interactive <a href="https://binder.plutojl.org/v0.19.12/open?url=https%253A%252F%252Fraw.githubusercontent.com%252Fpat-alt%252FConformalPrediction.jl%252Fmain%252Fdocs%252Fpluto%252Fintro.jl" target="_blank">version</a> of this post you have full control over the data and the model. Try it out!</p>
+</div>
+</div>
+<p>Using standard <code>MLJ.jl</code> workflows let us now first train the unconformalized model. We first wrap our model in data:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mach_raw <span class="op">=</span> <span class="fu">machine</span>(model, X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we fit the machine to the training data:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>MLJBase.<span class="fu">fit!</span>(mach_raw, rows<span class="op">=</span>train, verbosity<span class="op">=</span><span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><a href="#fig-point">Figure&nbsp;2</a> below shows the resulting point predictions for the test data set:</p>
+<div class="cell" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="50">
+<div id="fig-point" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-point-output-1.svg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Point predictions for our machine learning model.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>How is our model doing? It’s never quite right, of course, since predictions are estimates and therefore uncertain. Let’s see how we can use Conformal Prediction to express that uncertainty.</p>
+</section>
+<section id="conformalizing-the-model" class="level2">
+<h2 class="anchored" data-anchor-id="conformalizing-the-model">🔥 Conformalizing the Model</h2>
+<p>We can turn our <code>model</code> into a conformalized model in just one line of code:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>By default <code>conformal_model</code> creates an Inductive Conformal Regressor (more on this below) when called on a <code>&lt;:Deterministic</code> model. This behaviour can be changed by using the optional <code>method</code> key argument.</p>
+<p>To train our conformal model we can once again rely on standard <code>MLJ.jl</code> workflows. We first wrap our model in data:</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we fit the machine to the data:</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>MLJBase.<span class="fu">fit!</span>(mach, rows<span class="op">=</span>train, verbosity<span class="op">=</span><span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let us look at the predictions for our test data again. The chart below shows the results for our conformalized model. Predictions from conformal regressors are range-valued: for each new sample the model returns an interval <span class="math inline">\((y_{\text{lb}},y_{\text{ub}})\in\mathcal{Y}\)</span> that covers the test sample with a user-specified probability <span class="math inline">\((1-\alpha)\)</span>, where <span class="math inline">\(\alpha\)</span> is the expected error rate. This is known as the <strong>marginal coverage guarantee</strong> and it is proven to hold under the assumption that training and test data are exchangeable.</p>
+<div class="cell" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="54">
+<div id="fig-interval" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-interval-output-1.svg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Prediction intervals for our conformalized machine learning model.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Intuitively, a higher coverage rate leads to larger prediction intervals: since a larger interval covers a larger subspace of <span class="math inline">\(\mathcal{Y}\)</span>, it is more likely to cover the true value.</p>
+<p>I don’t expect you to believe me that the marginal coverage property really holds. In fact, I couldn’t believe it myself when I first learned about it. If you like mathematical proofs, you can find one in this <a href="https://arxiv.org/pdf/2107.07511.pdf">tutorial</a>, for example. If you like convincing yourself through empirical observations, read on below …</p>
+</section>
+<section id="evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation">🧐 Evaluation</h2>
+<p>To verify the marginal coverage property empirically we can look at the empirical coverage rate of our conformal predictor (see Section 3 of the <a href="https://arxiv.org/pdf/2107.07511.pdf">tutorial</a> for details). To this end our package provides a custom performance measure <code>emp_coverage</code> that is compatible with <code>MLJ.jl</code> model evaluation workflows. In particular, we will call <code>evaluate!</code> on our conformal model using <code>emp_coverage</code> as our performance metric. The resulting empirical coverage rate should then be close to the desired level of coverage.</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model_evaluation <span class="op">=</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">evaluate!</span>(_mach, operation<span class="op">=</span>MLJBase.predict, measure<span class="op">=</span>emp_coverage, verbosity<span class="op">=</span><span class="fl">0</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Empirical coverage: </span><span class="sc">$</span>(<span class="fu">round</span>(model_evaluation.measurement[<span class="fl">1</span>], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Coverage per fold: </span><span class="sc">$</span>(<span class="fu">round</span>.(model_evaluation.per_fold[<span class="fl">1</span>], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Empirical coverage: 0.902
+Coverage per fold: [0.94, 0.904, 0.874, 0.874, 0.898, 0.922]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="cell-output cell-output-display" data-execution_count="58">
+<blockquote class="blockquote">
+<p>✅ ✅ ✅ Great! We got an empirical coverage rate that is slightly higher than desired 😁 … but why isn’t it exactly the same?</p>
+</blockquote>
+<p>In most cases it will be slightly higher than desired, since <span class="math inline">\((1-\alpha)\)</span> is a lower bound. But note that it can also be slightly lower than desired. That is because the coverage property is “marginal” in the sense that the probability is averaged over the randomness in the data. For most purposes a large enough calibration set size (<span class="math inline">\(n&gt;1000\)</span>) mitigates that randomness enough. Depending on your choices above, the calibration set may be quite small (set to 500), which can lead to <strong>coverage slack</strong> (see Section 3 in the <a href="https://arxiv.org/pdf/2107.07511.pdf">tutorial</a>).</p>
+</div>
+</div>
+<section id="so-whats-happening-under-the-hood" class="level3">
+<h3 class="anchored" data-anchor-id="so-whats-happening-under-the-hood"><em>So what’s happening under the hood?</em></h3>
+<p>Inductive Conformal Prediction (also referred to as Split Conformal Prediction) broadly speaking works as follows:</p>
+<ol type="1">
+<li>Partition the training into a proper training set and a separate calibration set</li>
+<li>Train the machine learning model on the proper training set.</li>
+<li>Using some heuristic notion of uncertainty (e.g., absolute error in the regression case), compute nonconformity scores using the calibration data and the fitted model.</li>
+<li>For the given coverage ratio compute the corresponding quantile of the empirical distribution of nonconformity scores.</li>
+<li>For the given quantile and test sample <span class="math inline">\(X_{\text{test}}\)</span>, form the corresponding conformal prediction set like so: <span class="math inline">\(C(X_{\text{test}})=\{y:s(X_{\text{test}},y) \le \hat{q}\}\)</span></li>
+</ol>
+</section>
+</section>
+<section id="recap" class="level2">
+<h2 class="anchored" data-anchor-id="recap">🔃 Recap</h2>
+<p>This has been a super quick tour of <a href="https://github.com/pat-alt/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>. We have seen how the package naturally integrates with <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a>, allowing users to generate rigorous predictive uncertainty estimates for any supervised machine learning model.</p>
+<section id="are-we-done" class="level3">
+<h3 class="anchored" data-anchor-id="are-we-done"><em>Are we done?</em></h3>
+<p>Quite cool, right? Using a single API call we are able to generate rigorous prediction intervals for all kinds of different regression models. Have we just solved predictive uncertainty quantification once and for all? Do we even need to bother with anything else? Conformal Prediction is a very useful tool, but like so many other things, it is not the final answer to all our problems. In fact, let’s see if we can take CP to its limits.</p>
+<p>The helper function to generate data from above takes an optional argument <code>xmax</code>. By increasing that value, we effectively expand the domain of our input. Let’s do that and see how our conformal model does on this new out-of-domain data.</p>
+<div class="cell" data-execution_count="18">
+<div class="cell-output cell-output-display" data-execution_count="59">
+<div id="fig-ood" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-ood-output-1.svg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: Prediction intervals for our conformalized machine learning model applied to out-of-domain data.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>Whooooops 🤕 … looks like we’re in trouble: in <a href="#fig-ood">Figure&nbsp;4</a> the prediction intervals do not cover out-of-domain test samples well. What happened here?</p>
+</blockquote>
+<p>By expanding the domain of out inputs, we have violated the exchangeability assumption. When that assumption is violated, the marginal coverage property does not hold. But do not despair! There are ways to deal with this.</p>
+</section>
+</section>
+<section id="read-on" class="level2">
+<h2 class="anchored" data-anchor-id="read-on">📚 Read on</h2>
+<p>If you are curious to find out more, be sure to read on in the <a href="https://www.paltmeyer.com/ConformalPrediction.jl/stable/">docs</a>. There are also a number of useful resources to learn more about Conformal Prediction, a few of which I have listed below:</p>
+<ul>
+<li><em>A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification</em> by Angelopoulos and Bates (<a href="https://arxiv.org/pdf/2107.07511.pdf">2022</a>).</li>
+<li><em>Awesome Conformal Prediction</em> repository by Manokhin (<a href="https://github.com/valeman/awesome-conformal-prediction">2022</a>)</li>
+<li><strong>MAPIE</strong>: a comprehensive Python <a href="https://mapie.readthedocs.io/en/latest/index.html">library</a> for conformal prediction.</li>
+<li>My previous two blog posts.</li>
+</ul>
+<p>Enjoy!</p>
+</section>
+<section id="references" class="level2">
 
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
-  author = {Patrick Altmeyer and Patrick Altmeyer},
-  title = {Conformal {Prediction} in {Julia} 🟣🔴🟢},
-  date = {2022-11-30},
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-angelopoulos2021gentle" class="csl-entry" role="doc-biblioentry">
+Angelopoulos, Anastasios N., and Stephen Bates. 2021. <span>“A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification.”</span> <a href="https://arxiv.org/abs/2107.07511">https://arxiv.org/abs/2107.07511</a>.
+</div>
+<div id="ref-blaom2020mlj" class="csl-entry" role="doc-biblioentry">
+Blaom, Anthony D., Franz Kiraly, Thibaut Lienart, Yiannis Simillides, Diego Arenas, and Sebastian J. Vollmer. 2020. <span>“<span>MLJ</span>: <span>A Julia</span> Package for Composable Machine Learning.”</span> <em>Journal of Open Source Software</em> 5 (55): 2704. <a href="https://doi.org/10.21105/joss.02704">https://doi.org/10.21105/joss.02704</a>.
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
+  author = {Patrick Altmeyer},
+  title = {Prediction {Intervals} for Any {Regression} {Model}},
+  date = {2022-12-12},
   url = {https://www.paltmeyer.com/blog//blog/posts/conformal-regression},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
-Patrick Altmeyer, and Patrick Altmeyer. 2022. <span>“Conformal
-Prediction in Julia 🟣🔴🟢.”</span> November 30, 2022. <a href="https://www.paltmeyer.com/blog//blog/posts/conformal-regression">https://www.paltmeyer.com/blog//blog/posts/conformal-regression</a>.
+Patrick Altmeyer. 2022. <span>“Prediction Intervals for Any Regression
+Model.”</span> December 12, 2022. <a href="https://www.paltmeyer.com/blog//blog/posts/conformal-regression">https://www.paltmeyer.com/blog//blog/posts/conformal-regression</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
