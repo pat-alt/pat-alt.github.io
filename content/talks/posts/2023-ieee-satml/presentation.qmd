@@ -13,8 +13,8 @@ institute: Delft University of Technology
 date: today
 format: 
   tudelft-revealjs:
-    logo: /www/images/TUDelft_logo_rgb.png
-    footer: A year of using Quarto with Julia --- Patrick Altmeyer --- CC BY-NC
+    theme: custom.scss
+    footer: IEEE Secure and Trustworthy Machine Learning '23 --- Patrick Altmeyer --- CC BY-NC
     self-contained: true
     smaller: true
     scrollable: true
@@ -23,14 +23,7 @@ format:
     transition: slide
     background-transition: fade
     fig-align: center
-draft: true
 ---
-
-## 🥜 In a nutshell ... 
-
-> [...] we run experiments that simulate the application of recourse in practice using various state-of-the-art counterfac- tual generators and find that all of them induce substantial domain and model shifts.
-
-**ACKNOWLEDGEMENTS**: Views presented in this presentation are my own. I am not affiliated with either Quarto or Posit (RStudio).
 
 ## Quick Intro
 
@@ -79,67 +72,218 @@ draft: true
 
 ::::
 
-# Motivation {background-image="/www/images/delft-transition-2.png" background-color=$presentation-heading-color background-size="10%" background-position="95% 95%"}
+# Motivation and Contributions
 
-# Questions & Answers ❓ {background-color="black" background-size="20%" background-position="98% 98%" background-image="/www/images/julia_eindhoven_logo.png"}
+## In a nutshell ... 
 
-# Packages I've built ... 📦 {background-image="/www/images/julia.gif" background-size="20%" background-position="98% 98%"}
+> [...] we run experiments that simulate the application of recourse in practice using various state-of-the-art counterfactual generators and find that all of them induce substantial domain and model shifts.
 
-## [`CounterfactualExplanations.jl`](https://github.com/pat-alt/CounterfactualExplanations.jl)
+- **Counterfactual Explanation** (CE) explain how inputs into a model need to change for it to produce different outputs.
+- Counterfactual Explanations that involve realistic and actionable changes can be used for the purpose of **Algorithmic Recourse** (AR) to help individuals who face adverse outcomes.
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://pat-alt.github.io/CounterfactualExplanations.jl/stable) [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://pat-alt.github.io/CounterfactualExplanations.jl/dev) [![Build Status](https://github.com/pat-alt/CounterfactualExplanations.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/pat-alt/CounterfactualExplanations.jl/actions/workflows/CI.yml?query=branch%3Amain) [![Coverage](https://codecov.io/gh/pat-alt/CounterfactualExplanations.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/pat-alt/CounterfactualExplanations.jl)
+![Dynamics in Algorithmic Recourse: (a) we have a simple linear classifier trained for binary classification where samples from the negative class ($y=0$) are marked in blue and samples of the positive class ($y=1$) are marked in orange; (b) the implementation of AR for a random subset of individuals leads to a noticable domain shift; (c) as the classifier is retrained we observe a corresponding model shift; (d) as this process is repeated, the decision boundary moves away from the target class.](/www/images/ieee_poc.png){#fig-poc}
+
+:::{.callout-tip}
+
+## 🔑 Key Contributions
+
+- We find that the induced shifts are substantial enough to likely impede the applicability of Algorithmic Recourse in some situations.
+- Fortunately, we find various strategies to mitigate these concerns. 
+- Our simulation framework for studying recourse dynamics is fast and open-sourced. 
+
+:::
+
+## Consumer Credit Example
+
+::: {.incremental}
+- Suppose @fig-poc relates to an automated decision-making system used by a retail bank to evaluate credit applicants with respect to their creditworthiness. 
+- Assume that the two features are meaningful in the sense that creditworthiness increases in the south-east direction. 
+- Then we can think of the outcome in panel (d) as representing a situation where the bank supplies credit to more borrowers (orange), but these borrowers are on average less creditworthy and more of them can be expected to default on their loan. 
+- This represents a cost to the retail bank.
+:::
+
+## Student Admission Example
+
+::: {.incremental}
+- Suppose Figure @fig-poc relates to an automated decision-making system used by a university in its student admission process. 
+- Assume that the two features are meaningful in the sense that the likelihood of students completing their degree increases in the south-east direction. 
+- Then we can think of the outcome in panel (b) as representing a situation where more students are admitted to university (orange), but they are more likely to fail their degree than students that were admitted in previous years. 
+- The university admission committee catches on to this and suspends its efforts to offer Algorithmic Recourse. 
+- This represents an opportunity cost to future student applicants, that may have derived utility from being offered recourse.
+:::
+
+# Background
+
+## Algorithmic Recourse
+
+> Even though [...] interpretability is of great importance and should be pursued, explanations can, in principle, be offered without opening the “black box”.
+> [@wachter2017counterfactual]
 
 ::::{.columns}
+
 :::{.column width="50%"}
 
-`CounterfactualExplanations.jl` is a package for generating Counterfactual Explanations (CE) and Algorithmic Recourse (AR) for black-box algorithms. Both CE and AR are related tools for explainable artificial intelligence (XAI). While the package is written purely in Julia, it can be used to explain machine learning algorithms developed and trained in other popular programming languages like Python and R. See below for short introduction and other resources or dive straight into the [docs](https://pat-alt.github.io/CounterfactualExplanations.jl/dev).
+#### Framework
 
-![Turning a nine (9) into a four (4).](/www/images/MNIST_9to4.png)
+. . .
+
+Objective originally proposed by @wachter2017counterfactual is as follows
+
+$$
+\min_{x^\prime \in \mathcal{X}} \text{cost}(x^\prime) \ \ \ \mbox{s. t.} \ \ \ M(x^\prime) = y^* 
+$$ {#eq-obj}
+
+Typically this is approximated through regularization:
+
+$$
+x^\prime = \arg \min_{x^\prime}  \text{yloss}(M(x^\prime),y^*) + \lambda \text{cost}(x^\prime) 
+$$ {#eq-solution}
 
 :::
 
 :::{.column width="50%"}
 
-![A sad 🐱 on its counterfactual path to its cool dog friends.](/www/images/recourse_laplace.gif)
+#### Intuition
 
-::: 
+. . .
 
-::::
-
-## [`LaplaceRedux.jl`](https://github.com/pat-alt/LaplaceRedux.jl)
-
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://pat-alt.github.io/LaplaceRedux.jl/stable) [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://pat-alt.github.io/LaplaceRedux.jl/dev) [![Build Status](https://github.com/pat-alt/LaplaceRedux.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/pat-alt/LaplaceRedux.jl/actions/workflows/CI.yml?query=branch%3Amain) [![Coverage](https://codecov.io/gh/pat-alt/LaplaceRedux.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/pat-alt/LaplaceRedux.jl)
-
-JuliaCon 22: [Effortless Bayesian Deep Learning through Laplace Redux](https://pretalx.com/juliacon-2022/talk/Z7MXFS/)
-
-::::{.columns}
-:::{.column width="50%"}
-
-`LaplaceRedux.jl` is a small package that can be used for effortless Bayesian Deep Learning and Logistic Regression trough Laplace Approximation. It is inspired by this Python [library](https://aleximmer.github.io/Laplace/index.html#setup) and its companion [paper](https://arxiv.org/abs/2106.14806).
-
-![Plugin Approximation (left) and Laplace Posterior (right) for simple artificial neural network.](/www/images/posterior_predictive_mlp.png)
+![A cat performing gradient descent in the feature space à la @wachter2017counterfactual.](https://raw.githubusercontent.com/pat-alt/CounterfactualExplanations.jl/main/docs/src/www/recourse_mlp.gif){#fig-cat-mlp}
 
 :::
 
-:::{.column width="50%"}
-![Simulation of changing posteriour predictive distribution. Image by author.](https://raw.githubusercontent.com/pat-alt/LaplaceRedux.jl/main/dev/resources/juliacon22/www/intro.gif){width="70%"}
+# Gradient-Based Recourse Revisited {#method}
+
+## From individual recourse ... {#method-general}
+
+- We include the following generators in our simulation experiments below: **REVISE** [@joshi2019realistic], **CLUE** [@antoran2020getting], **DiCE** [@mothilal2020explaining] and a greedy approach that relies on probabilistic models [@schut2021generating].
+- All of them can be described by the following generalized form of Equation \@ref(eq:general):
+
+$$
+\begin{aligned}
+\mathbf{s}^\prime &= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\} 
+\end{aligned} 
+$$ {#eq-general}
+
+- Here $\mathbf{s}^\prime=\left\{s_k^\prime\right\}_K$ is a $K$-dimensional array of counterfactual states and $f: \mathcal{S} \mapsto \mathcal{X}$ maps from the counterfactual state space to the feature space.
+
+## ... towards collective recourse {#method-collective}
+
+- All of the different approaches introduced above tackle the problem of Algorithmic Recourse from the perspective of one single individual.
+- We propose to extend Equation @eq-general as follows:
+
+$$
+\begin{aligned}
+\mathbf{s}^\prime &= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \{ {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)} \\ &+ \lambda_1 {\text{cost}(f(\mathbf{s}^\prime))} + \lambda_2 {\text{extcost}(f(\mathbf{s}^\prime))} \}  
+\end{aligned} 
+$$ {#eq-collective}
+
+- Here $\text{cost}(f(\mathbf{s}^\prime))$ denotes the proxy for private costs faced by the individual as before and $\lambda_1$ governs to what extent that private cost ought to be penalized. 
+- The newly introduced term $\text{extcost}(f(\mathbf{s}^\prime))$ is meant to capture and address external costs incurred by the collective of individuals in response to changes in $\mathbf{s}^\prime$.
+- The underlying concept of private and external costs is borrowed from Economics and well-established in that field: when the decisions or actions by some individual market participant generate external costs, then the market is said to suffer from negative externalities and is considered inefficient [@pindyck2014microeconomics].
+
+# Modeling Endogenous Macrodynamics in Algorithmic Recourse {#method-2}
+
+## Research Questions
+
+::: {.proposition #shifts name="Endogenous Shifts"}
+Does the repeated implementation of recourse provided by state-of-the-art generators lead to shifts in the domain and model?
 :::
 
-::::
+::: {.proposition #costs name="Costs"}
+If so, are these dynamics substantial enough to be considered costly to stakeholders involved in real-world automated decision-making processes?
+:::
 
-## [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl)
+::: {.proposition #het name="Heterogeneity"}
+Do different counterfactual generators yield significantly different outcomes in this context? Furthermore, is there any heterogeneity concerning the chosen classifier and dataset?
+:::
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://pat-alt.github.io/ConformalPrediction.jl/stable/)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://pat-alt.github.io/ConformalPrediction.jl/dev/)
-[![Build Status](https://github.com/pat-alt/ConformalPrediction.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/pat-alt/ConformalPrediction.jl/actions/workflows/CI.yml?query=branch%3Amain)
-[![Coverage](https://codecov.io/gh/pat-alt/ConformalPrediction.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/pat-alt/ConformalPrediction.jl)
-[![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
-[![ColPrac: Contributor’s Guide on Collaborative Practices for Community Packages](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet.png)](https://github.com/SciML/ColPrac)
-[![Twitter Badge](https://img.shields.io/twitter/url/https/twitter.com/paltmey.svg?style=social&label=Follow%20%40paltmey)](https://twitter.com/paltmey)
+::: {.proposition #drive name="Drivers"}
+What are the drivers of endogenous dynamics in Algorithmic Recourse?
+:::
 
-`ConformalPrediction.jl` is a package for Uncertainty Quantification (UQ) through Conformal Prediction (CP) in Julia. It is designed to work with supervised models trained in [MLJ](https://alan-turing-institute.github.io/MLJ.jl/dev/) [@blaom2020mlj]. Conformal Prediction is distribution-free, easy-to-understand, easy-to-use and model-agnostic.
+## Simulations {#method-2-experiment}
 
-![Conformal Prediction in action: Prediction sets for two different samples and changing coverage rates. As coverage grows, so does the size of the prediction sets.](https://raw.githubusercontent.com/pat-alt/blog/main/posts/conformal-prediction/www/medium.gif)
+\begin{algorithm}
+\caption{Simulation Experiment}\label{algo-experiment}
+\begin{algorithmic}[1]
+\Procedure{Experiment}{$M,\mathcal{D},G$}
+\State $E\gets \emptyset$ \Comment{Initialize evaluation $E$.}
+\State $t\gets 0$
+\While{$t<T$}
+\State $\text{batch} \subset \mathcal{D}_0$ \Comment{Sample from $\mathcal{D}_0$  (assignment).}
+\State $\text{batch}\gets G(\text{batch})$ \Comment{Generate counterfactuals.}
+\State $M\gets M(\mathcal{D})$ \Comment{Retrain model.}
+\State $E\gets \text{eval}(M,\mathcal{D}) \cup E$ \Comment{Update evaluation.}
+\State $t\gets t+1$ \Comment{Increment $t$.}
+\EndWhile
+\State \textbf{return} $E, M,\mathcal{D}$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+## Evaluation Metrics {#method-2-metrics}
+
+# Experiment Setup {#empirical}
+
+## $M$---Classifiers and Generative Models {#empirical-classifiers}
+
+```{r architecture}
+tab <- data.frame(
+  "Model" = c("MLP","MLP","VAE","VAE"),
+  "Data" = c("Synthetic", "Real-World", "Synthetic", "Real-World"),
+  "Hidden" = c(32,64,32,32),
+  "Latent" = c("-","-",2,8),
+  "Layers" = c(1,2,1,1),
+  "Batch" = c("-",500,"-","-"),
+  "Dropout" = c("-",0.1,"-","-"),
+  "Epochs" = c(100,100,100,250)
+)
+library(kableExtra)
+kbl(
+  tab, booktabs = TRUE,
+  caption = 'Neural network architectures and training parameters.',
+  col.names = c("Model","Data","Hidden Dim.","Latent Dim.","Hidden Layers", "Batch", "Dropout", "Epochs")
+) |> 
+  collapse_rows(1:2, row_group_label_position = 'stack') |>
+  kable_styling(latex_options = c("scale_down"))
+```
+
+## $\mathcal{D}$---Data {#empirical-data}
+
+### Synthetic Data
+
+We use four synthetic binary classification datasets consisting of 1000 samples each: **Overlapping**, **Linearly Separable**, **Circles** and **Moons** (\@ref(fig:synthetic-data)).
+
+```{r synthetic-data, fig.cap="Synthetic classification datasets used in our experiments. Samples from the negative class ($y=0$) are marked in blue while samples of the positive class ($y=1$) are marked in orange."}
+knitr::include_graphics("www/synthetic_data.png")
+```
+
+### Real-World Data
+
+We use three different real-world datasets from the Finance and Economics domain, all of which are tabular and can be used for binary classification. 
+
+1. The **Give Me Some Credit** dataset: predict whether a borrower is likely to experience financial difficulties in the next two years [@kaggle2011give].
+2. The **UCI defaultCredit** dataset [@yeh2009comparisons]: a benchmark dataset that can be used to train binary classifiers to predict the whether credit card clients default on their payment.
+3. The **California Housing** dataset [@pedregosa2011scikitlearn, @pace1997sparse]: continuous outcome variable binarized as $\tilde{y}=\mathbb{I}_{y>\text{median}(Y)}$ indicating if the median house price of a given district is above the median of all districts.
+
+## $G$---Generators
+
+- All generators introduced earlier are included in the experiments: Wachter [@wachter2017counterfactual], REVISE [@joshi2019realistic], CLUE [@antoran2020getting], DiCE [@mothilal2020explaining] and Greedy [@schut2021generating]. 
+- In addition, we introduce two new generators in Section \@ref(mitigate) that directly address the issue of endogenous domain and model shifts. We also test to what extent it may be beneficial to combine ideas underlying the various generators. 
+
+# Experiments {#empirical-2}
+
+# Mitigation Strategies and Experiments {#mitigate}
+
+# Discussion {#discussion}
+
+# Limitations and Future Work {#limit}
+
+# Concluding Remarks {#conclusion}
+
+# Questions & Answers ❓
+
+# Final Things 🏁
 
 ## More Resources 📚
 
@@ -194,8 +338,6 @@ JuliaCon 22: [Effortless Bayesian Deep Learning through Laplace Redux](https://p
 :::
 
 ::::
-
-# Questions & Answers ❓ {background-color="black" background-size="20%" background-position="98% 98%" background-image="/www/images/julia_eindhoven_logo.png"}
 
 ## Image Sources
 
