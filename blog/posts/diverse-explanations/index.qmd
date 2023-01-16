@@ -18,20 +18,10 @@ draft: true
 #| echo: false
 
 using Pkg; Pkg.activate("blog/posts/diverse-explanations")
-using CounterfactualExplanations
-using Distributions
-using Markdown
-using MLJBase
-using MLJModels
-using NearestNeighborModels: KNNRegressor
-using Plots
-using Random
-Random.seed!(2022)
-theme(:wong)
 www_path = "blog/posts/diverse-explanations/www"
 ```
 
-<div class="intro-gif">
+<!-- <div class="intro-gif">
   <figure>
     <img src="www/intro.gif">
     <figcaption>Conformal Prediction intervals for different<br>coverage rates. As coverage grows, so does<br>the width of the prediction interval.</figcaption>
@@ -40,7 +30,7 @@ www_path = "blog/posts/diverse-explanations/www"
 
 This is the third (and for now final) part of a series of posts that introduce Conformal Prediction in Julia using [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl). The first [post](../conformal-prediction/index.qmd) introduced Conformal Prediction for supervised classification tasks: we learned that conformal classifiers produce set-valued predictions that are guaranteed to include the true label of a new sample with a certain probability. In the second [post](../conformal-image-classifier/) we applied these ideas to a more hands-on example: we saw how easy it is to use [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl) to conformalize a Deep Learning image classifier. 
 
-In this post, we will look at regression models instead, that is supervised learning tasks involving a continuous outcome variable. Regression tasks are as ubiquitous as classification tasks. For example, we might be interested in using a machine learning model to predict house prices or the inflation rate of the Euro or the parameter size of the next large language model. In fact, many readers may be more familiar with regression models than classification, in which case it may also be easier for you to understand Conformal Prediction (CP) in this context. 
+In this post, we will look at regression models instead, that is supervised learning tasks involving a continuous outcome variable. Regression tasks are as ubiquitous as classification tasks. For example, we might be interested in using a machine learning model to predict house prices or the inflation rate of the Euro or the parameter size of the next large language model. In fact, many readers may be more familiar with regression models than classification, in which case it may also be easier for you to understand Conformal Prediction (CP) in this context.  -->
 
 :::{.callout-tip}
 

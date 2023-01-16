@@ -1,7 +1,7 @@
 ---
 title: 'Quarto on Steroids: Advanced Customization through Quarto Extensions'
 subtitle: Using and Contributing Quarto Extensions for Custom Formats.
-date: '2023-01-06'
+date: '2023-01-16'
 categories:
   - Quarto
   - reproducibility
@@ -30,20 +30,20 @@ Users can already utilize several open-sourced extensions that add [filters](htt
 
 ## 🫴 Contributing Quarto Extensions
 
-Normally, I would start by explaining how to use Quarto Extensions, but in this particular case, the user and developer experience is so close, that I'll jump straight into development. To get started with building the TU Delft Custom Format I followed the official [Quarto docs](https://quarto.org/docs/extensions/formats.html#quick-start). I first used the appropriate Quarto command, which initiates an interactive process in the command line:
+Normally, I would start by explaining how to use Quarto Extensions, but in this particular case, the user and developer experience is so close, that I'll jump straight into development. 
 
-```{zsh}
+### Setup
+
+To get started with building the TU Delft Custom Format I followed the official [Quarto docs](https://quarto.org/docs/extensions/formats.html#quick-start). I first used the appropriate Quarto command, which initiates an interactive process in the command line:
+
+```{.zsh}
 $ quarto create extension format:revealjs
  ? Extension Name › lexdoc
 ```
 
-Once done, the basic folder structure for my extension was set up and ready to be pushed to a remote Github repository for distribution: [https://github.com/pat-alt/quarto-tudelft](https://github.com/pat-alt/quarto-tudelft). Even though I had not yet added any custom formatting rules, anyone would now be able to use this empty extension for their work, as outlined in the README:
+Once done, the basic folder structure for my extension was set up and ready to be pushed to a remote Github repository for distribution: [https://github.com/pat-alt/quarto-tudelft](https://github.com/pat-alt/quarto-tudelft). Even though I had not yet added any custom formatting rules, anyone would now be able to use this empty extension for their work.
 
-```zsh
-quarto use template pat-alt/quarto-tudelft
-```
-
-This will install the extension and create an example `.qmd` file that you can use as a starting place for your presentation.
+### Adding Rules
 
 To actually add some custom formatting rules to the extension I started working on the files contained in `_extensions/tudelft/`. Using my institution's PowerPoint template as a reference, I previewed the `template.qmd` file and simply made appropriate adjustments to the [_extensions/tudelft/custom.scss](https://github.com/pat-alt/quarto-tudelft/blob/main/_extensions/tudelft/custom.scss) and [_extensions/tudelft/_extension.yml](https://github.com/pat-alt/quarto-tudelft/blob/main/_extensions/tudelft/_extension.yml) files until I was satisfied. To help me in that process, I took inspiration from various existing Revealjs extensions all listed in the [awesome-quarto](https://github.com/mcanouil/awesome-quarto#presentations) repository. 
 
@@ -54,5 +54,50 @@ I am no expert in CSS (far from it!), so this was very much trial-and-error base
 ```
 
 will be formatted in a standardized way. The relevant CSS rule can be found [here](https://github.com/pat-alt/quarto-tudelft/blob/b324cee4a6860a5ed5385dc607330d49de052875/_extensions/tudelft/custom.scss#L96)
+
+### Adding Assets
+
+The Reavealjs template also includes a few images, which I have lifted from my institution's PowerPoint template. To make sure that these images are also available locally when users install the template, any resources need to be stored inside the theme directory `_extensions/tudelft/`. I have had some issues pointing to the right location of these images in the [_extensions/tudelft/custom.scss](https://github.com/pat-alt/quarto-tudelft/blob/main/_extensions/tudelft/custom.scss) and [_extensions/tudelft/_extension.yml](https://github.com/pat-alt/quarto-tudelft/blob/main/_extensions/tudelft/_extension.yml) file. At the time of writing this, the image URLs are pointing to their remote location on Github (see [here](https://github.com/pat-alt/quarto-tudelft/blob/b324cee4a6860a5ed5385dc607330d49de052875/_extensions/tudelft/custom.scss#L12)). This works, but probably isn't ideal, so any suggestions are welcome. 
+
+## 📋 Example Presentation - Using Quarto Extensions
+
+In February, 2023, I will present a research paper on Algorithmic Recourse at the first IEEE Conference on Secure and Trustworthy Machine Learning: [SaTML 2023](https://satml.org/). This was a good incentive for me to build a TU Delft Theme once for this occasion and then be able to reuse it again in the future.
+
+> With the template built and distributed, how do others and I actually use it?
+
+This part is truly a walk in the park. As outlined in the [README](https://github.com/pat-alt/quarto-tudelft) users can either work directly with the template, 
+
+```{.zsh}
+quarto use template pat-alt/quarto-tudelft
+```
+
+or add the template to an existing Quarto project:
+
+```{.zsh}
+quarto add pat-alt/quarto-tudelft
+```
+
+The first option will get you started with a working document straight away. For my paper presentation, I worked with the second option. At the time of writing, I am building and hosting all of my presentations in my website repository (the repo that also builds this very article you're reading): [https://github.com/pat-alt/pat-alt.github.io](https://github.com/pat-alt/pat-alt.github.io). 
+
+With the extension added to the project, I can now use it anywhere within that project by simply specifying,
+
+```{.yaml}
+format: tudelft-revealjs
+```
+
+where `tudelft-revealjs` is just the name of the custom format. 
+
+The extension can be extended further locally by providing yet another [custom style sheet](https://github.com/pat-alt/pat-alt.github.io/blob/b6207a616f6ef9c7ec09cf8ad3383db788b9148b/content/talks/posts/2023-ieee-satml/custom.scss#L1), as I have done for my paper presentation:
+
+```{.yaml}
+format: 
+  tudelft-revealjs:
+    theme: custom.scss
+```
+
+Check out the final presentation [here](../../../content/talks/posts/2023-ieee-satml/presentation.qmd){target="_blank"}. 
+
+
+
 
 

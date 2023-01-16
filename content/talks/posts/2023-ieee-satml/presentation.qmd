@@ -1,12 +1,12 @@
 ---
 title: Endogenous Macrodynamics in Algorithmic Recourse
-subtitle: IEEE --- Secure and Trustworthy Machine Learning
+subtitle: IEEE Conference on Secure and Trustworthy Machine Learning
 author: 
   - name: "**Patrick Altmeyer**"
     url: https://www.paltmeyer.com/
   - name: Giovan Angela
-  - name: Aleksander 
-  - name: Karol
+  - name: Aleksander Buszydlik
+  - name: Karol Dobicyek
   - name: Arie van Deursen
   - name: Cynthia C. S. Liem
 institute: Delft University of Technology
@@ -14,7 +14,7 @@ date: today
 format: 
   tudelft-revealjs:
     theme: custom.scss
-    footer: IEEE Secure and Trustworthy Machine Learning '23 --- Patrick Altmeyer --- CC BY-NC
+    footer: IEEE Conference on Secure and Trustworthy Machine Learning '23 --- Patrick Altmeyer --- CC BY-NC
     self-contained: true
     smaller: true
     scrollable: true
@@ -23,6 +23,8 @@ format:
     transition: slide
     background-transition: fade
     fig-align: center
+crossref: 
+  prp-title: RQ
 ---
 
 ## Quick Intro
@@ -78,14 +80,16 @@ format:
 
 > [...] we run experiments that simulate the application of recourse in practice using various state-of-the-art counterfactual generators and find that all of them induce substantial domain and model shifts.
 
+:::{.incremental}
 - **Counterfactual Explanation** (CE) explain how inputs into a model need to change for it to produce different outputs.
 - Counterfactual Explanations that involve realistic and actionable changes can be used for the purpose of **Algorithmic Recourse** (AR) to help individuals who face adverse outcomes.
+:::
 
-![Dynamics in Algorithmic Recourse: (a) we have a simple linear classifier trained for binary classification where samples from the negative class ($y=0$) are marked in blue and samples of the positive class ($y=1$) are marked in orange; (b) the implementation of AR for a random subset of individuals leads to a noticable domain shift; (c) as the classifier is retrained we observe a corresponding model shift; (d) as this process is repeated, the decision boundary moves away from the target class.](/www/images/ieee_poc.png){#fig-poc}
+. . .
 
-:::{.callout-tip}
+:::{.callout-note icon=false}
 
-## 🔑 Key Contributions
+## 🎯 Key Contributions
 
 - We find that the induced shifts are substantial enough to likely impede the applicability of Algorithmic Recourse in some situations.
 - Fortunately, we find various strategies to mitigate these concerns. 
@@ -93,26 +97,38 @@ format:
 
 :::
 
-## Consumer Credit Example
+## Proof-of-Concept
 
-::: {.incremental}
-- Suppose @fig-poc relates to an automated decision-making system used by a retail bank to evaluate credit applicants with respect to their creditworthiness. 
-- Assume that the two features are meaningful in the sense that creditworthiness increases in the south-east direction. 
-- Then we can think of the outcome in panel (d) as representing a situation where the bank supplies credit to more borrowers (orange), but these borrowers are on average less creditworthy and more of them can be expected to default on their loan. 
-- This represents a cost to the retail bank.
+::::{.columns}::::
+:::{.column width='60%'}
+
+:::{#exm-credit}
+
+## Consumer Credit 
+
+- Suppose @fig-poc relates to an automated decision-making system used by a retail bank to evaluate credit applicants.
+- Creditworthiness increases in the South-East direction. 
+- **Outcome**: bank supplies credit to more borrowers (orange), but these borrowers are riskier on average, which represents a cost to the retail bank.
+
 :::
 
-## Student Admission Example
+:::{#exm-student}
 
-::: {.incremental}
-- Suppose Figure @fig-poc relates to an automated decision-making system used by a university in its student admission process. 
-- Assume that the two features are meaningful in the sense that the likelihood of students completing their degree increases in the south-east direction. 
-- Then we can think of the outcome in panel (b) as representing a situation where more students are admitted to university (orange), but they are more likely to fail their degree than students that were admitted in previous years. 
-- The university admission committee catches on to this and suspends its efforts to offer Algorithmic Recourse. 
-- This represents an opportunity cost to future student applicants, that may have derived utility from being offered recourse.
+## Student Admission
+
+- Suppose @fig-poc relates to an automated decision-making system used by a university in its student admission process. 
+- Likelihood of students completing their degree increases in the South-East direction. 
+- **Outcome**: more students are admitted to university (orange), but they are more likely to fail their degree; the university suspends its efforts to offer AR, which represents a cost to future applicants.
 :::
 
-# Background
+:::
+:::{.column width='40%'}
+![Dynamics in Algorithmic Recourse: (a) we have a simple linear classifier trained for binary classification where samples from the negative class ($y=0$) are marked in blue and samples of the positive class ($y=1$) are marked in orange; (b) the implementation of AR for a random subset of individuals leads to a noticable domain shift; (c) as the classifier is retrained we observe a corresponding model shift; (d) as this process is repeated, the decision boundary moves away from the target class.](/www/images/ieee_poc.png){#fig-poc}
+:::
+::::
+
+
+# Gradient-Based Recourse Revisited {#method}
 
 ## Algorithmic Recourse
 
@@ -151,12 +167,15 @@ $$ {#eq-solution}
 
 :::
 
-# Gradient-Based Recourse Revisited {#method}
+::::
 
 ## From individual recourse ... {#method-general}
 
-- We include the following generators in our simulation experiments below: **REVISE** [@joshi2019realistic], **CLUE** [@antoran2020getting], **DiCE** [@mothilal2020explaining] and a greedy approach that relies on probabilistic models [@schut2021generating].
-- All of them can be described by the following generalized form of Equation \@ref(eq:general):
+- We include the following generators in our simulation experiments below: **REVISE** [@joshi2019realistic], **CLUE** [@antoran2020getting], **DiCE** [@mothilal2020explaining] and a **Greedy** approach that relies on probabilistic models [@schut2021generating].
+
+. . .
+
+- All of them can be described by the following generalized form of @eq-solution:
 
 $$
 \begin{aligned}
@@ -164,11 +183,20 @@ $$
 \end{aligned} 
 $$ {#eq-general}
 
+. . .
+
 - Here $\mathbf{s}^\prime=\left\{s_k^\prime\right\}_K$ is a $K$-dimensional array of counterfactual states and $f: \mathcal{S} \mapsto \mathcal{X}$ maps from the counterfactual state space to the feature space.
+
+. . .
+
+![Feature space (left) and counterfactual state space (right).](/www/images/example_3d.png){#fig-state-space width="50%"}
 
 ## ... towards collective recourse {#method-collective}
 
-- All of the different approaches introduced above tackle the problem of Algorithmic Recourse from the perspective of one single individual.
+- All of the different approaches introduced above tackle the problem of Algorithmic Recourse from the perspective of one **single individual**.
+
+. . .
+
 - We propose to extend Equation @eq-general as follows:
 
 $$
@@ -177,57 +205,101 @@ $$
 \end{aligned} 
 $$ {#eq-collective}
 
-- Here $\text{cost}(f(\mathbf{s}^\prime))$ denotes the proxy for private costs faced by the individual as before and $\lambda_1$ governs to what extent that private cost ought to be penalized. 
-- The newly introduced term $\text{extcost}(f(\mathbf{s}^\prime))$ is meant to capture and address external costs incurred by the collective of individuals in response to changes in $\mathbf{s}^\prime$.
-- The underlying concept of private and external costs is borrowed from Economics and well-established in that field: when the decisions or actions by some individual market participant generate external costs, then the market is said to suffer from negative externalities and is considered inefficient [@pindyck2014microeconomics].
+. . .
+
+- Here $\text{cost}(f(\mathbf{s}^\prime))$ denotes the proxy for **private costs** faced by the individual; the newly introduced term $\text{extcost}(f(\mathbf{s}^\prime))$ is meant to capture **external costs** generated by changes to $\mathbf{s}^\prime$.
+
+. . .
+
+:::{.callout-note icon="false"}
+
+## Negative Externalities
+
+The underlying concept of private and external costs is borrowed from Economics and well-established in that field: when the decisions or actions by some individual market participant generate external costs, then the market is said to suffer from negative externalities and is considered inefficient [@pindyck2014microeconomics].
+:::
+
 
 # Modeling Endogenous Macrodynamics in Algorithmic Recourse {#method-2}
 
 ## Research Questions
 
-::: {.proposition #shifts name="Endogenous Shifts"}
+#### Principal Concerns
+
+::: {#prp-shifts}
+## Endogenous Shifts
+
 Does the repeated implementation of recourse provided by state-of-the-art generators lead to shifts in the domain and model?
 :::
 
-::: {.proposition #costs name="Costs"}
+::: {#prp-costs}
+## Costs
+
 If so, are these dynamics substantial enough to be considered costly to stakeholders involved in real-world automated decision-making processes?
 :::
 
-::: {.proposition #het name="Heterogeneity"}
+::: {#prp-het}
+## Heterogeneity
+
 Do different counterfactual generators yield significantly different outcomes in this context? Furthermore, is there any heterogeneity concerning the chosen classifier and dataset?
 :::
 
-::: {.proposition #drive name="Drivers"}
+::: {#prp-drive}
+## Drivers
+
 What are the drivers of endogenous dynamics in Algorithmic Recourse?
 :::
 
-## Simulations {#method-2-experiment}
+#### Secondary Concerns
 
-\begin{algorithm}
-\caption{Simulation Experiment}\label{algo-experiment}
-\begin{algorithmic}[1]
-\Procedure{Experiment}{$M,\mathcal{D},G$}
-\State $E\gets \emptyset$ \Comment{Initialize evaluation $E$.}
-\State $t\gets 0$
-\While{$t<T$}
-\State $\text{batch} \subset \mathcal{D}_0$ \Comment{Sample from $\mathcal{D}_0$  (assignment).}
-\State $\text{batch}\gets G(\text{batch})$ \Comment{Generate counterfactuals.}
-\State $M\gets M(\mathcal{D})$ \Comment{Retrain model.}
-\State $E\gets \text{eval}(M,\mathcal{D}) \cup E$ \Comment{Update evaluation.}
-\State $t\gets t+1$ \Comment{Increment $t$.}
-\EndWhile
-\State \textbf{return} $E, M,\mathcal{D}$
-\EndProcedure
-\end{algorithmic}
-\end{algorithm}
+::: {#prp-mitigate}
+## Mitigation Strategies
 
-## Evaluation Metrics {#method-2-metrics}
+What are potential mitigation strategies with respect to endogenous macrodynamics in AR?
+:::
 
-# Experiment Setup {#empirical}
+## Empirical Setup
 
-## $M$---Classifiers and Generative Models {#empirical-classifiers}
+:::{.panel-tabset}
 
-```{r architecture}
+### Evaluation Metrics
+
+::::{.columns}::::
+:::{.column width='30%'}
+#### Domain Shifts
+
+- **Maximum Mean Discrepancy (MMD)**: a measure of the distance between the kernel mean embeddings of two samples; in our context, large values indicate that a domain shift indeed seems to have occurred.
+
+:::
+:::{.column width='70%'}
+#### Model Shifts
+
+- **Perturbations**: following @upadhyay2021robust we define $\Delta=||\theta_{t+1}-\theta_{t}||^2$, that is the euclidean distance between the vectors of parameters before and after retraining the model $M$.
+- **Predicted Probability MMD (PP MMD)**: instead of applying MMD to features directly, we apply it to the predicted probabilities assigned to a set of samples by the model $M$.
+- **Disagreement Coefficient**: this metric was introduced in @hanneke2007bound and estimates $p(M(x) \neq M^\prime(x))$, that is the probability that two classifiers disagree on the predicted outcome for a randomly chosen sample.
+- **Decisiveness**: we define the metric simply as ${\frac{1}{N}}\sum_{i=0}^N(\sigma(M(x)) - 0.5)^2$ where $M(x)$ are predicted logits from a binary classifier and $\sigma$ denotes the sigmoid function; it quantifies the likelihood that a model assigns a high probability to its classification of any given sample.
+- **Performance**: we compute the classifier's F-score on a test sample that we leave untouched throughout the experiment. 
+
+:::
+::::
+
+### Models
+
+#### Classifiers
+
+1. Simple linear classifier---**Logistic Regression**.
+2. Multilayer perceptron---**MLP**.
+3. **Deep Ensemble** composed of five MLPs following @lakshminarayanan2016simple.
+
+#### Generative Models
+
+Different specifications of a plain-vanilla Variational Autoencoder (**VAE**)
+
+```{r}
+#| output: true
+#| echo: false
+#| label: tbl-models
+#| tbl-cap: "Model parameters."
+
 tab <- data.frame(
   "Model" = c("MLP","MLP","VAE","VAE"),
   "Data" = c("Synthetic", "Real-World", "Synthetic", "Real-World"),
@@ -248,38 +320,162 @@ kbl(
   kable_styling(latex_options = c("scale_down"))
 ```
 
-## $\mathcal{D}$---Data {#empirical-data}
+### Data {#empirical-data}
 
-### Synthetic Data
+::::{.columns}::::
+:::{.column width='50%'}
+#### Synthetic Data
 
-We use four synthetic binary classification datasets consisting of 1000 samples each: **Overlapping**, **Linearly Separable**, **Circles** and **Moons** @fig-synthetic-data.
+Four synthetic binary classification datasets consisting of 1000 samples each: **Overlapping**, **Linearly Separable**, **Circles** and **Moons** (@fig-synthetic-data).
 
 ![Synthetic classification datasets used in our experiments. Samples from the negative class ($y=0$) are marked in blue while samples of the positive class ($y=1$) are marked in orange.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/main/paper/www/synthetic_data.png){#fig-synthetic-data}
+:::
+:::{.column width='50%'}
+#### Real-World Data
 
-### Real-World Data
-
-We use three different real-world datasets from the Finance and Economics domain, all of which are tabular and can be used for binary classification. 
+Three real-world datasets from the Finance and Economics domain: all tabular and can be used for binary classification. 
 
 1. The **Give Me Some Credit** dataset: predict whether a borrower is likely to experience financial difficulties in the next two years [@kaggle2011give].
 2. The **UCI defaultCredit** dataset [@yeh2009comparisons]: a benchmark dataset that can be used to train binary classifiers to predict the whether credit card clients default on their payment.
 3. The **California Housing** dataset [@pedregosa2011scikitlearn, @pace1997sparse]: continuous outcome variable binarized as $\tilde{y}=\mathbb{I}_{y>\text{median}(Y)}$ indicating if the median house price of a given district is above the median of all districts.
+:::
+::::
 
-## $G$---Generators
+### Generators
 
-- All generators introduced earlier are included in the experiments: Wachter [@wachter2017counterfactual], REVISE [@joshi2019realistic], CLUE [@antoran2020getting], DiCE [@mothilal2020explaining] and Greedy [@schut2021generating]. 
-- In addition, we introduce two new generators in Section \@ref(mitigate) that directly address the issue of endogenous domain and model shifts. We also test to what extent it may be beneficial to combine ideas underlying the various generators. 
+::::{.columns}::::
+:::{.column width='50%'}
+#### Primary Concerns
 
-# Experiments {#empirical-2}
+- Wachter [@wachter2017counterfactual]
+- REVISE [@joshi2019realistic]
+- CLUE [@antoran2020getting]
+- DiCE [@mothilal2020explaining]
+- Greedy [@schut2021generating]
+:::
+:::{.column width='50%'}
+#### Secondary Concerns
 
-# Mitigation Strategies and Experiments {#mitigate}
+- More Conservative Decision Thresholds
+- Classifier Preserving ROAR (ClaPROAR):
 
-# Discussion {#discussion}
+$$
+\begin{aligned}
+\text{extcost}(f(\mathbf{s}^\prime)) = l(M(f(\mathbf{s}^\prime)),y^\prime) 
+\end{aligned}
+$$ {#eq-clap}
 
-# Limitations and Future Work {#limit}
+- Gravitational Counterfactual Explanations:
 
-# Concluding Remarks {#conclusion}
+$$
+\begin{aligned}
+\text{extcost}(f(\mathbf{s}^\prime)) = \text{dist}(f(\mathbf{s}^\prime),\bar{x}^*) 
+\end{aligned}
+$$ {#eq-grav}
 
-# Questions & Answers ❓
+![Mitigation strategies.](/www/images/mitigation.png)
+:::
+::::
+
+:::
+
+## Primary Findings
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+![Results for synthetic data.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/main/paper/www/synthetic_results.png)
+:::
+
+:::{.column width="50%"}
+
+![Results for real-world data.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/main/paper/www/real_world_results.png)
+
+:::
+
+::::
+
+## Secondary Findings
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+![Results for synthetic data.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/main/paper/www/mitigation_synthetic_results.png)
+:::
+
+:::{.column width="50%"}
+
+![Results for real-world data.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/main/paper/www/mitigation_real_world_results.png)
+
+:::
+
+::::
+
+## Summary of Findings
+
+#### Principal Concerns
+
+- Firstly, endogenous dynamics do emerge in our experiments (@prp-shifts) and we find them substantial enough to be considered costly (@prp-costs)
+- Secondly, the choice of the counterfactual generator matters, with Latent Space search generally having a dampening effect (@prp-het). 
+- The observed dynamics, therefore, seem to be driven by a discrepancy between counterfactual outcomes that minimize costs to individuals and outcomes that comply with the data-generating process (@prp-drive). 
+
+#### Secondary Concerns
+
+- Our findings indicate that all three proposed mitigation strategies are at least at par with LS generators (@prp-mitigate).
+
+# Discussion
+
+## Key Takeaways 🔑
+
+. . .
+
+> Our findings indicate that state-of-the-art approaches to Algorithmic Recourse induce substantial domain and model shifts.
+
+. . .
+
+> We would argue that the expected external costs of individual recourse should be shared by all stakeholders.
+
+. . .
+
+> A straightforward way to achieve this is to penalize external costs in the counterfactual search objective function (@eq-collective).
+
+. . .
+
+> Various simple strategies based on this notion can be effectively used to mitigate shifts.
+
+
+## Limitations
+
+. . .
+
+#### Private vs. External Costs
+
+- We fall short of providing any definitive answers as to how to trade off private vs. external costs.
+- Proposed strategies are a good starting point, but they are ad-hoc.
+
+. . .
+
+#### Experimental Setup
+
+- Experimental design is a vast over-simplification of potential real-world scenarios.
+
+. . .
+
+#### Causal Modelling
+
+- Have focused on popular counterfactual generators that do not incorporate any causal knowledge.
+- Perturbations therefore may involve changes to variables that affect the outcome predicted by the black-box model, but not the true, causal outcome.
+- Future work would likely benefit from including recent approaches to AR that incorporate causal knowledge such @karimi2021algorithmic. 
+
+. . .
+
+#### Classifiers
+
+- We have limited our analysis to differentiable linear and non-linear classifiers; empirical evidence suggests that other models such as boosted decision trees outperform DL on tabular data (@borisov2021deep, @grinsztajn2022why). 
+
+# Q & A ❓
 
 # Final Things 🏁
 
@@ -291,15 +487,14 @@ We use three different real-world datasets from the Finance and Economics domain
 
 > Read on ...
 
-- Related blog posts (hosted on this website that itself is built with Quarto and involves lots of Julia content): [[1]((https://www.paltmeyer.com/blog/posts/julia-and-quarto-a-match-made-in-heaven/))] and [[2](https://www.paltmeyer.com/blog/posts/tips-and-tricks-for-using-quarto-with-julia/)]. 
-- Blog post introducing CE: [[TDS](https://towardsdatascience.com/individual-recourse-for-black-box-models-5e9ed1e4b4cc)], [[blog](https://www.paltmeyer.com/blog/posts/individual-recourse-for-black-box-models/)].
-- Blog post on Laplace Redux: [[TDS](https://towardsdatascience.com/go-deep-but-also-go-bayesian-ab25efa6f7b)], [[blog](https://www.paltmeyer.com/blog/posts/effortsless-bayesian-dl/)].
-- Blog post on Conformal Prediction: [[TDS](https://towardsdatascience.com/conformal-prediction-in-julia-351b81309e30)], [[blog](https://www.paltmeyer.com/blog/posts/conformal-prediction/)].
+- Granular results for all of our experiments can be found in this online companion: [https://www.paltmeyer.com/endogenous-macrodynamics-in-algorithmic-recourse/](https://www.paltmeyer.com/endogenous-macrodynamics-in-algorithmic-recourse/). 
+- Blog post introducing Counterfactual Explanations: [[TDS](https://towardsdatascience.com/individual-recourse-for-black-box-models-5e9ed1e4b4cc), [homepage](https://www.paltmeyer.com/blog/posts/individual-recourse-for-black-box-models/)].
 
-> ... or get involved! 🤗
+> ... or get busy 🖥️
 
-- [Contributor's Guide](https://www.paltmeyer.com/CounterfactualExplanations.jl/dev/contributing/) for `CounterfactualExplanations.jl`
-- [Contributor's Guide](file:///Users/FA31DU/code/ConformalPrediction.jl/docs/build/contribute.html) for `ConformalPrediction.jl`
+- [`CounterfactualExplanations.jl`](https://github.com/pat-alt/CounterfactualExplanations.jl) [@altmeyer2022counterfactualexplanations] provides an extensible, fast and language-agnostic implementation in Julia. 
+- We have built a framework that extends the functionality from static benchmarks to simulation experiments: [`AlgorithmicRecourseDynamics.jl`]((https://github.com/pat-alt/AlgorithmicRecourseDynamics.jl)).
+- The Github repository containing all the code used to produce the results in this paper can be found [here](https://github.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse).
 
 :::
 
@@ -339,7 +534,7 @@ We use three different real-world datasets from the Finance and Economics domain
 
 ## Image Sources
 
-- Quarto logo. Source: [Quarto](https://raw.githubusercontent.com/quarto-dev/quarto-web/main/quarto.png)
-- Julia to Quarto animation. Source: author (heavily borrowing from `Javis.jl` [tutorial](https://juliaanimators.github.io/Javis.jl/stable/tutorials/tutorial_7/))
+- Copyright for stock images belongs to TU Delft.
+- All other images, graphics or animations were created by us.
 
 ## References 
