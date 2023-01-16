@@ -141,10 +141,12 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <link rel="stylesheet" href="../../../styles.css">
 <meta property="og:title" content="Patrick Altmeyer - Quarto on Steroids: Advanced Customization through Quarto Extensions">
 <meta property="og:description" content="A short introduction to using, building and contributing Quarto Extensions.">
+<meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/quarto-extensions/www/intro.gif">
 <meta property="og:site-name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer - Quarto on Steroids: Advanced Customization through Quarto Extensions">
 <meta name="twitter:description" content="A short introduction to using, building and contributing Quarto Extensions.">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/quarto-extensions/www/intro.gif">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed">
@@ -284,9 +286,17 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 </header>
 
-<p>I’ve said it before: Quarto is amazing! Since the beginning of my PhD I haven’t used any other tool for prototyping, writing and publishing any of my work.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> That work has included: this website, presentations, academic articles, notebooks and more. By highlighting useful features of Quarto in articles like this one, I hope to encourage more people to try it out.</p>
+<div class="intro-gif">
+<figure class="figure">
+<img src="www/intro.gif" class="figure-img">
+<figcaption class="figure-caption">
+A TU Delft Theme for Quarto.
+</figcaption>
+</figure>
+</div>
+<p>I’ve said it before: <a href="https://quarto.org/">Quarto</a> is amazing! Since the beginning of my PhD I haven’t used any other tool for prototyping, writing and publishing any of my work.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> That work has included: this website, presentations, academic articles, notebooks and more. By highlighting useful features of Quarto in articles like this one, I hope to encourage more people to try it out.</p>
 <p>While I’m convinced that Quarto can be useful in almost any context including industry, I realize that certain obstacles may have so far prevented some of you from using it. One such obstacle concerns custom formats: the standard Quarto formats for HTML, PDF, Revealjs, etc. are slick but minimalistic. For many formats, there are various themes to choose from, but they too lack personal touch (or corporate identity in the industry setting).</p>
-<p>At first sight, traditional publishing tools like MS Office seem to have an edge here: customization is made easy through GUIs and standardization through templates is possible to a certain degree. I understand the appeal but still encourage you to look beyond MS Word, Powerpoint and Beamer presentations. To this end, I’ve put together this short tutorial that explains how I have built and contributed a <a href="https://github.com/pat-alt/quarto-tudelft">TU Delft theme</a> for Revealjs. If nothing else, this theme can be used by my colleagues at Delft University of Technology to create beautiful, Delft-styled presentations with ease.</p>
+<p>At first sight, traditional publishing tools like MS Office seem to have an edge here: customization is made easy through GUIs and standardization through templates is possible to a certain degree. I understand the appeal but still would encourage you to look beyond MS Word, Powerpoint and Beamer presentations. To this end, I’ve put together this short tutorial that explains how I have built and contributed a <a href="https://github.com/pat-alt/quarto-tudelft">TU Delft theme</a> for Revealjs. If nothing else, this theme can be used by my colleagues at Delft University of Technology to create beautiful, Delft-styled presentations with ease.</p>
 <section id="background" class="level2">
 <h2 class="anchored" data-anchor-id="background">📖 Background</h2>
 <p>Advanced and reproducible customization in Quarto is done through <a href="https://quarto.org/docs/extensions/">Quarto Extensions</a>:</p>
@@ -298,7 +308,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 </section>
 <section id="contributing-quarto-extensions" class="level2">
 <h2 class="anchored" data-anchor-id="contributing-quarto-extensions">🫴 Contributing Quarto Extensions</h2>
-<p>Normally, I would start by explaining how to use Quarto Extensions, but in this particular case, the user and developer experience is so close, that I’ll jump straight into development.</p>
+<p>Normally, I would start by explaining how to use Quarto Extensions, but in this particular case the user and developer experience is so close that I’ll jump straight into development.</p>
 <section id="setup" class="level3">
 <h3 class="anchored" data-anchor-id="setup">Setup</h3>
 <p>To get started with building the TU Delft Custom Format I followed the official <a href="https://quarto.org/docs/extensions/formats.html#quick-start">Quarto docs</a>. I first used the appropriate Quarto command, which initiates an interactive process in the command line:</p>
@@ -322,7 +332,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <h2 class="anchored" data-anchor-id="example-presentation---using-quarto-extensions">📋 Example Presentation - Using Quarto Extensions</h2>
 <p>In February, 2023, I will present a research paper on Algorithmic Recourse at the first IEEE Conference on Secure and Trustworthy Machine Learning: <a href="https://satml.org/">SaTML 2023</a>. This was a good incentive for me to build a TU Delft Theme once for this occasion and then be able to reuse it again in the future.</p>
 <blockquote class="blockquote">
-<p>With the template built and distributed, how do others and I actually use it?</p>
+<p>With the template built and distributed, how do you actually use it?</p>
 </blockquote>
 <p>This part is truly a walk in the park. As outlined in the <a href="https://github.com/pat-alt/quarto-tudelft">README</a> users can either work directly with the template,</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode zsh code-with-copy"><code class="sourceCode zsh"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> use template pat-alt/quarto-tudelft</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -331,12 +341,14 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <p>The first option will get you started with a working document straight away. For my paper presentation, I worked with the second option. At the time of writing, I am building and hosting all of my presentations in my website repository (the repo that also builds this very article you’re reading): <a href="https://github.com/pat-alt/pat-alt.github.io">https://github.com/pat-alt/pat-alt.github.io</a>.</p>
 <p>With the extension added to the project, I can now use it anywhere within that project by simply specifying,</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> tudelft-revealjs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>where <code>tudelft-revealjs</code> is just the name of the custom format.</p>
-<p>The extension can be extended further locally by providing yet another <a href="https://github.com/pat-alt/pat-alt.github.io/blob/b6207a616f6ef9c7ec09cf8ad3383db788b9148b/content/talks/posts/2023-ieee-satml/custom.scss#L1">custom style sheet</a>, as I have done for my paper presentation:</p>
+<p>in the YAML header of my Quarto document where <code>tudelft-revealjs</code> is just the name of the custom format.</p>
+<p>It gets better … The extension can be extended further by providing yet another <a href="https://github.com/pat-alt/pat-alt.github.io/blob/b6207a616f6ef9c7ec09cf8ad3383db788b9148b/content/talks/posts/2023-ieee-satml/custom.scss#L1">custom style sheet</a>, as I have done for my paper presentation:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">tudelft-revealjs</span><span class="kw">:</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">theme</span><span class="kw">:</span><span class="at"> custom.scss</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Check out the final presentation <a href="../../../content/talks/posts/2023-ieee-satml/presentation.html" target="_blank">here</a>.</p>
+<p>Check out the final presentation <a href="../../../content/talks/posts/2023-ieee-satml/presentation.html" target="_blank">here</a> or see the embedded version below:</p>
+<iframe src="https://www.paltmeyer.com/content/talks/posts/2023-ieee-satml/presentation.html#/title-slide" width="100%" height="350">
+</iframe>
 
 
 </section>
