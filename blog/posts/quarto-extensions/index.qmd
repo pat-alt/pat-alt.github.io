@@ -1,13 +1,13 @@
 ---
-title: 'Quarto on Steroids: Custom Formatting'
-subtitle: Using and Contributing Quarto Extensions
+title: 'Quarto on Steroids: Advanced Customization through Quarto Extensions'
+subtitle: Using and Contributing Quarto Extensions for Custom Formats.
 date: '2023-01-06'
 categories:
   - Quarto
   - reproducibility
   - open-source
 description: >-
-  A short introduction to using, building and contributing Quarto extensions. 
+  A short introduction to using, building and contributing Quarto Extensions. 
 # image: www/intro.gif
 draft: true
 ---
@@ -16,10 +16,43 @@ I've said it before: Quarto is amazing! Since the beginning of my PhD I haven't 
 
 While I'm convinced that Quarto can be useful in almost any context including industry, I realize that certain obstacles may have so far prevented some of you from using it. One such obstacle concerns custom formats: the standard Quarto formats for HTML, PDF, Revealjs, etc. are slick but minimalistic. For many formats, there are various themes to choose from, but they too lack personal touch (or corporate identity in the industry setting). 
 
-At first sight, traditional publishing tools like MS Office seem to have an edge here: customization is made easy though GUIs and standardization through templates is possible to a certain degree. I understand the appeal, but still encourage you to look beyond MS Word, Powerpoint and Beamer presentations. To this end, I've put together this short tutorial that explains how I have built and contributed a TU Delft theme for Revealjs. If nothing else, this theme can be used by my colleagues at Delft University of Technology to create beautiful, Delft-styled presentations with ease. 
+At first sight, traditional publishing tools like MS Office seem to have an edge here: customization is made easy through GUIs and standardization through templates is possible to a certain degree. I understand the appeal but still encourage you to look beyond MS Word, Powerpoint and Beamer presentations. To this end, I've put together this short tutorial that explains how I have built and contributed a [TU Delft theme](https://github.com/pat-alt/quarto-tudelft) for Revealjs. If nothing else, this theme can be used by my colleagues at Delft University of Technology to create beautiful, Delft-styled presentations with ease. 
 
 ## 📖 Background
 
+Advanced and reproducible customization in Quarto is done through [Quarto Extensions](https://quarto.org/docs/extensions/):
 
+> "Quarto Extensions are a powerful way to modify or extend the behavior of Quarto, and can be created and distributed by anyone."
+>
+> Quarto team
+
+Users can already utilize several open-sourced extensions that add [filters](https://quarto.org/docs/extensions/listing-filters.html), [journal article formats](https://quarto.org/docs/extensions/listing-journals.html) and other [custom formats](https://quarto.org/docs/extensions/listing-formats.html). As we will see, it is very straightforward to contribute extensions, so the list of available extensions is growing quickly. 
+
+## 🫴 Contributing Quarto Extensions
+
+Normally, I would start by explaining how to use Quarto Extensions, but in this particular case, the user and developer experience is so close, that I'll jump straight into development. To get started with building the TU Delft Custom Format I followed the official [Quarto docs](https://quarto.org/docs/extensions/formats.html#quick-start). I first used the appropriate Quarto command, which initiates an interactive process in the command line:
+
+```{zsh}
+$ quarto create extension format:revealjs
+ ? Extension Name › lexdoc
+```
+
+Once done, the basic folder structure for my extension was set up and ready to be pushed to a remote Github repository for distribution: [https://github.com/pat-alt/quarto-tudelft](https://github.com/pat-alt/quarto-tudelft). Even though I had not yet added any custom formatting rules, anyone would now be able to use this empty extension for their work, as outlined in the README:
+
+```zsh
+quarto use template pat-alt/quarto-tudelft
+```
+
+This will install the extension and create an example `.qmd` file that you can use as a starting place for your presentation.
+
+To actually add some custom formatting rules to the extension I started working on the files contained in `_extensions/tudelft/`. Using my institution's PowerPoint template as a reference, I previewed the `template.qmd` file and simply made appropriate adjustments to the [_extensions/tudelft/custom.scss](https://github.com/pat-alt/quarto-tudelft/blob/main/_extensions/tudelft/custom.scss) and [_extensions/tudelft/_extension.yml](https://github.com/pat-alt/quarto-tudelft/blob/main/_extensions/tudelft/_extension.yml) files until I was satisfied. To help me in that process, I took inspiration from various existing Revealjs extensions all listed in the [awesome-quarto](https://github.com/mcanouil/awesome-quarto#presentations) repository. 
+
+I am no expert in CSS (far from it!), so this was very much trial-and-error based, but I got there eventually. One feature I am particularly happy about is the custom transition slides: by default all slides at level 1, so slides that initiate a new section, 
+
+```{.md}
+# Transition Slide
+```
+
+will be formatted in a standardized way. The relevant CSS rule can be found [here](https://github.com/pat-alt/quarto-tudelft/blob/b324cee4a6860a5ed5385dc607330d49de052875/_extensions/tudelft/custom.scss#L96)
 
 
