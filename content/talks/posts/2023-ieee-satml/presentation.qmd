@@ -28,55 +28,6 @@ crossref:
   prp-prefix: RQ
 ---
 
-## Quick Intro {.hidden}
-
-::::{.columns}
-
-:::{.column width="60%"}
-
-- Currently 2nd year of PhD in Trustworthy Artificial Intelligence at Delft University of Technology.
-- Working on Counterfactual Explanations and Probabilistic Machine Learning with applications in Finance.
-- Previously, educational background in Economics and Finance and two years at the Bank of England.
-- Enthusiastic about free open-source software, in particular Julia and Quarto. 
-
-:::
-
-:::{.column width="40%"}
-
-<img src="/www/images/profile.jpg" height="auto" width="250" style="border-radius:50%; display: block; margin-left: auto; margin-right: auto;">
-
-<div style="text-align: center;">
-  <p style="display: inline; vertical-align: middle"> 
-    <a href="https://www.linkedin.com/in/patrick-altmeyer-a2a25494/" style="display: inline-block; color: rgb(207, 142, 255) !important;">
-      <font style="">
-        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/d0fc399dee4218d1e0e0399b8947acab.png" alt="LinkedIn (Personal)" style="border: none; max-width: 100%; height: 60px !important;">
-      </font>
-    </a>
-    <a href="https://twitter.com/paltmey" style="display: inline-block; color: rgb(207, 142, 255) !important;">
-      <font style="">
-        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border: none; max-width: 100%; height: 60px !important;">
-      </font>
-    </a>
-    <a href="https://github.com/pat-alt" style="display: inline-block; color: rgb(207, 142, 255) !important;">
-      <font style="">
-        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/47f4eb2d0082a8a3611d614b75a09db8.png" alt="Github" style="border: none; max-width: 100%; height: 60px !important;">
-      </font>
-    </a>
-    <a href="https://medium.com/@patrick.altmeyer" style="display: inline-block; color: rgb(207, 142, 255) !important;">
-      <font style="">
-        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/175f49662614345cb7dbb95fce3f88af.png" alt="Medium" style="border: none; max-width: 100%; height: 60px !important;">
-      </font>
-    </a>
-  </p>
-</div>
-
-<img src="/www/images/qr.png" height="auto" width="100" style="display: block; margin-left: auto; margin-right: auto;">
-:::
-
-::::
-
-# Motivation and Contributions
-
 ## In a nutshell ... 
 
 > [...] we run experiments that simulate the application of recourse in practice using various state-of-the-art counterfactual generators and find that all of them induce substantial domain and model shifts.
@@ -92,44 +43,31 @@ crossref:
 
 ## 🎯 Key Contributions
 
-- We propose to adapt the general methodological framework to explicitly account for external costs of recourse.
+- We adjust the methodological framework to explicitly account for external costs of recourse.
 - We propose various strategies to mitigate these costs. 
-- We have open-sourced our simulation framework. 
+- We have open-sourced our simulation framework: [`AlgorithmicRecourseDynamics.jl`](https://github.com/pat-alt/AlgorithmicRecourseDynamics.jl)
 
 :::
 
-## Proof-of-Concept
+## Proof-of-Concept 
 
 ::::{.columns}::::
 :::{.column width='60%'}
 
-:::{#exm-credit}
-
-## Consumer Credit 
-
 Consider @fig-poc:
 
-. . .
+::: {.incremental}
 
 a) Retail bank has trained binary classifier to evaluate credit applicants; credit risk highest in bottom-right corner.
-
-. . .
-
 b) Bank provides recourse to unsuccessful applicants. 
-
-. . .
-
 c) Bank retrains classifier.
-
-. . .
-
 d) **Outcome**: bank supplies credit to more borrowers (orange), but these borrowers are riskier on average, which represents a cost to the retail bank.
 
 :::
 
 :::
 :::{.column width='40%'}
-![Dynamics in Algorithmic Recourse: (a) bank has trained binary classifier; successfull borrowers ($y=1$) are marked in blue; (b) bank provides recourse to unsuccessful applicants which leads to a noticeable domain shift; (c) as the classifier is retrained we observe a corresponding model shift; (d) as this process is repeated, the decision boundary moves away from the target class.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/poc.png){#fig-poc}
+![Dynamics in Algorithmic Recourse.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/poc.png){#fig-poc}
 :::
 ::::
 
@@ -176,6 +114,8 @@ $$ {#eq-solution}
 ::::
 
 ## From individual recourse ... {#method-general}
+
+. . .
 
 - Included generators: **REVISE** [@joshi2019realistic], **CLUE** [@antoran2020getting], **DiCE** [@mothilal2020explaining] and a **Greedy** approach that relies on probabilistic models [@schut2021generating].
 
@@ -257,25 +197,23 @@ What are potential mitigation strategies with respect to endogenous macrodynamic
 
 . . .
 
-- **Evaluation metrics**: we propose and use various evaluation metrics to measure domain shits (MMD) and model shifts (MMD, parameter perturbations, disagreement coefficient, ...)
+- **Evaluation metrics**: propose various metrics to measure domain shifts (MMD) and model shifts (MMD, parameter perturbations, disagreement coefficient, ...)
 
 . . . 
 
-- **Models**: for our experiments, we use linear classifiers, deep neural networks and deep ensembles [@lakshminarayanan2016simple].
+- **Models**: we use linear classifiers, deep neural networks and deep ensembles.
 
 . . .
 
 - **Data**: we look at synthetic and real-world datasets:
-    - Four synthetic binary classification datasets consisting of 1000 samples each: **Overlapping**, **Linearly Separable**, **Circles** and **Moons** (@fig-synthetic-data).
+    - Four synthetic datasets: **Overlapping**, **Linearly Separable**, **Circles** and **Moons** (@fig-synthetic-data).
     - Three real-world datasets from the Finance and Economics domain: **Give Me Some Credit** [@kaggle2011give], **UCI defaultCredit** [@yeh2009comparisons] and **California Housing** [@pedregosa2011scikitlearn, @pace1997sparse].
 
 ![Synthetic classification datasets used in our experiments. Samples from the negative class ($y=0$) are marked in orange while samples of the positive class ($y=1$) are marked in blue.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/synthetic_data.png){#fig-synthetic-data}
 
 . . .
 
-- **Generators**: from the existing literature we use Wachter [@wachter2017counterfactual], REVISE [@joshi2019realistic], DiCE [@mothilal2020explaining], Greedy [@schut2021generating]; we introduce Classifier Preserving ROAR (ClaPROAR) inspired by ROAR [@upadhyay2021robust] and Gravitational Generator.
-
-![Mitigation strategies.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/main/paper/www/mitigation.png)
+- **Generators**: from the existing literature we use Wachter [@wachter2017counterfactual], REVISE [@joshi2019realistic], DiCE [@mothilal2020explaining], Greedy [@schut2021generating]
 
 ## Principal Findings
 
@@ -293,6 +231,27 @@ What are potential mitigation strategies with respect to endogenous macrodynamic
 :::
 
 ::::
+
+## Mitigation Strategies
+
+- More Conservative Decision Thresholds
+- Classifier Preserving ROAR (ClaPROAR)^[Loosely inspired by ROAR [@upadhyay2021robust]]:
+
+$$
+\begin{aligned}
+\text{extcost}(f(\mathbf{s}^\prime)) = l(M(f(\mathbf{s}^\prime)),y^\prime) 
+\end{aligned}
+$$ {#eq-clap}
+
+- Gravitational Counterfactual Explanations:
+
+$$
+\begin{aligned}
+\text{extcost}(f(\mathbf{s}^\prime)) = \text{dist}(f(\mathbf{s}^\prime),\bar{x}^*) 
+\end{aligned}
+$$ {#eq-grav}
+
+![Mitigation strategies.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/mitigation.png)
 
 ## Secondary Findings
 
@@ -317,70 +276,51 @@ What are potential mitigation strategies with respect to endogenous macrodynamic
 
 . . .
 
-> Our findings indicate that state-of-the-art approaches to Algorithmic Recourse induce substantial domain and model shifts.
+- State-of-the-art approaches to AR induce substantial domain and model shifts.
 
 . . .
 
-> We would argue that the expected external costs of individual recourse should be shared by all stakeholders.
+- External costs of Individual Recourse should be shared across stakeholders.
 
 . . .
 
-> A straightforward way to achieve this is to penalize external costs in the counterfactual search objective function (@eq-collective).
+- Straightforward way to achieve this is to explicitly penalize external costs in the counterfactual search objective function (@eq-collective).
 
 . . .
 
-> Various simple strategies based on this notion can be effectively used to mitigate shifts.
+#### Future Research Ideas
 
+**Private vs. External Costs**: 
 
-## Limitations
+- How can we make informed choices about the tradeoff between private and external costs?
+- Pareto-optimal collective recourse?
 
-. . .
+**Causal Modelling**: 
 
-#### Private vs. External Costs
+- How do things play out for recent approaches to AR that incorporate causal knowledge such as @karimi2021algorithmic?
 
-- We fall short of providing any definitive answers as to how to trade off private vs. external costs.
-- Proposed strategies are a good starting point, but they are ad-hoc.
+## Counterfactual Explanations and Probabilistic Machine Learning
 
-. . .
-
-#### Experimental Setup
-
-- Experimental design is a vast over-simplification of potential real-world scenarios.
-
-. . .
-
-#### Causal Modelling
-
-- Have focused on popular counterfactual generators that do not incorporate any causal knowledge.
-- Perturbations therefore may involve changes to variables that affect the outcome predicted by the black-box model, but not the true, causal outcome.
-- Future work would likely benefit from including recent approaches to AR that incorporate causal knowledge such @karimi2021algorithmic. 
-
-. . .
-
-#### Classifiers
-
-- We have limited our analysis to differentiable linear and non-linear classifiers; empirical evidence suggests that other models such as boosted decision trees outperform DL on tabular data (@borisov2021deep, @grinsztajn2022why). 
-
-# Q & A ❓
-
-# Final Things 🏁
-
-## More Resources 📚
+> We are working on methodologies and open-source tools to help researchers and practitioners assess the trustworthiness of predictive models. 
 
 ::::{.columns}
 
 :::{.column width="60%"}
 
-> Read on ...
+#### Towards Trustworthy AI in `Julia`
+
+1. [`CounterfactualExplanations.jl`](https://github.com/pat-alt/CounterfactualExplanations.jl) (JuliaCon 2022)
+2. [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl) (JuliaCon 2023 --- I hope!)
+3. [`LaplaceRedudx.jl`](https://github.com/pat-alt/LaplaceRedux.jl) (JuliaCon 2022)
+4. [`AlgorithmicRecourseDynamics.jl`](https://github.com/pat-alt/AlgorithmicRecourseDynamics.jl)
+
+... contributions welcome! 😊
+
+#### More Reading
 
 - Granular results for all of our experiments can be found in this online companion: [https://www.paltmeyer.com/endogenous-macrodynamics-in-algorithmic-recourse/](https://www.paltmeyer.com/endogenous-macrodynamics-in-algorithmic-recourse/). 
 - Blog post introducing Counterfactual Explanations: [[TDS](https://towardsdatascience.com/individual-recourse-for-black-box-models-5e9ed1e4b4cc), [homepage](https://www.paltmeyer.com/blog/posts/individual-recourse-for-black-box-models/)].
-
-> ... or get busy 🖥️
-
-- [`CounterfactualExplanations.jl`](https://github.com/pat-alt/CounterfactualExplanations.jl) [@altmeyer2022counterfactualexplanations] provides an extensible, fast and language-agnostic implementation in Julia. 
-- We have built a framework that extends the functionality from static benchmarks to simulation experiments: [`AlgorithmicRecourseDynamics.jl`]((https://github.com/pat-alt/AlgorithmicRecourseDynamics.jl)).
-- The Github repository containing all the code used to produce the results in this paper can be found [here](https://github.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse).
+- Many other related posts on my [blog](https://www.paltmeyer.com/blog).
 
 :::
 
