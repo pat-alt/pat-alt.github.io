@@ -25,10 +25,9 @@ format:
     fig-align: center
 crossref: 
   prp-title: RQ
-  prp-prefix: RQ
 ---
 
-## Quick Intro {.hidden}
+## Quick Intro
 
 ::::{.columns}
 
@@ -92,9 +91,9 @@ crossref:
 
 ## 🎯 Key Contributions
 
-- We propose to adapt the general methodological framework to explicitly account for external costs of recourse.
-- We propose various strategies to mitigate these costs. 
-- We have open-sourced our simulation framework. 
+- We find that the induced shifts are substantial enough to likely impede the applicability of Algorithmic Recourse in some situations.
+- Fortunately, we find various strategies to mitigate these concerns. 
+- Our simulation framework for studying recourse dynamics is fast and open-sourced. 
 
 :::
 
@@ -107,29 +106,24 @@ crossref:
 
 ## Consumer Credit 
 
-Consider @fig-poc:
+- Suppose @fig-poc relates to an automated decision-making system used by a retail bank to evaluate credit applicants.
+- Creditworthiness decreases in the South-East direction. 
+- **Outcome**: bank supplies credit to more borrowers (orange), but these borrowers are riskier on average, which represents a cost to the retail bank.
 
-. . .
+:::
 
-a) Retail bank has trained binary classifier to evaluate credit applicants; credit risk highest in bottom-right corner.
+:::{#exm-student}
 
-. . .
+## Student Admission
 
-b) Bank provides recourse to unsuccessful applicants. 
-
-. . .
-
-c) Bank retrains classifier.
-
-. . .
-
-d) **Outcome**: bank supplies credit to more borrowers (orange), but these borrowers are riskier on average, which represents a cost to the retail bank.
-
+- Suppose @fig-poc relates to an automated decision-making system used by a university in its student admission process. 
+- Likelihood of students completing their degree decreases in the South-East direction. 
+- **Outcome**: more students are admitted to university (orange), but they are more likely to fail their degree; the university suspends its efforts to offer AR, which represents a cost to future applicants.
 :::
 
 :::
 :::{.column width='40%'}
-![Dynamics in Algorithmic Recourse: (a) bank has trained binary classifier; successfull borrowers ($y=1$) are marked in blue; (b) bank provides recourse to unsuccessful applicants which leads to a noticeable domain shift; (c) as the classifier is retrained we observe a corresponding model shift; (d) as this process is repeated, the decision boundary moves away from the target class.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/poc.png){#fig-poc}
+![Dynamics in Algorithmic Recourse: (a) we have a simple linear classifier trained for binary classification where samples from the negative class ($y=0$) are marked in orange and samples of the positive class ($y=1$) are marked in blue; (b) the implementation of AR for a random subset of individuals leads to a noticeable domain shift; (c) as the classifier is retrained we observe a corresponding model shift; (d) as this process is repeated, the decision boundary moves away from the target class.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/main/paper/www/poc.png){#fig-poc}
 :::
 ::::
 
@@ -149,7 +143,7 @@ d) **Outcome**: bank supplies credit to more borrowers (orange), but these borro
 
 . . .
 
-Objective function originally proposed by @wachter2017counterfactual is as follows
+Objective originally proposed by @wachter2017counterfactual is as follows
 
 $$
 \min_{x^\prime \in \mathcal{X}} \text{cost}(x^\prime) \ \ \ \mbox{s. t.} \ \ \ M(x^\prime) = y^* 
@@ -169,7 +163,7 @@ $$ {#eq-solution}
 
 . . .
 
-![Counterfactuals for Give Me Some Credit dataset [@kaggle2011give].](www/gmsc.svg){#fig-credit}
+![A cat performing gradient descent in the feature space à la @wachter2017counterfactual.](https://raw.githubusercontent.com/pat-alt/CounterfactualExplanations.jl/main/docs/src/www/recourse_mlp.gif){#fig-cat-mlp}
 
 :::
 
@@ -177,7 +171,7 @@ $$ {#eq-solution}
 
 ## From individual recourse ... {#method-general}
 
-- Included generators: **REVISE** [@joshi2019realistic], **CLUE** [@antoran2020getting], **DiCE** [@mothilal2020explaining] and a **Greedy** approach that relies on probabilistic models [@schut2021generating].
+- We include the following generators in our simulation experiments below: **REVISE** [@joshi2019realistic], **CLUE** [@antoran2020getting], **DiCE** [@mothilal2020explaining] and a **Greedy** approach that relies on probabilistic models [@schut2021generating].
 
 . . .
 
@@ -188,6 +182,10 @@ $$
 \mathbf{s}^\prime &= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\} 
 \end{aligned} 
 $$ {#eq-general}
+
+. . .
+
+- Here $\mathbf{s}^\prime=\left\{s_k^\prime\right\}_K$ is a $K$-dimensional array of counterfactual states and $f: \mathcal{S} \mapsto \mathcal{X}$ maps from the counterfactual state space to the feature space.
 
 . . .
 
@@ -213,7 +211,13 @@ $$ {#eq-collective}
 
 . . .
 
-- We borrow the concept of **Negative Externalities** from Economics (see more detailed [slide pack](https://www.paltmeyer.com/content/talks/posts/2023-ieee-satml/long_presentation.html))
+:::{.callout-note icon="false"}
+
+## 🎓 Negative Externalities
+
+The underlying concept of private and external costs is borrowed from Economics and well-established in that field: when the decisions or actions by some individual market participant generate external costs, then the market is said to suffer from negative externalities and is considered inefficient [@pindyck2014microeconomics].
+:::
+
 
 # Modeling Endogenous Macrodynamics in Algorithmic Recourse {#method-2}
 
@@ -255,27 +259,125 @@ What are potential mitigation strategies with respect to endogenous macrodynamic
 
 ## Empirical Setup
 
-. . .
+:::{.panel-tabset}
 
-- **Evaluation metrics**: we propose and use various evaluation metrics to measure domain shits (MMD) and model shifts (MMD, parameter perturbations, disagreement coefficient, ...)
+### Evaluation Metrics
 
-. . . 
+::::{.columns}::::
+:::{.column width='30%'}
+#### Domain Shifts
 
-- **Models**: for our experiments, we use linear classifiers, deep neural networks and deep ensembles [@lakshminarayanan2016simple].
+- **Maximum Mean Discrepancy (MMD)**: a measure of the distance between the kernel mean embeddings of two samples; in our context, large values indicate that a domain shift indeed seems to have occurred.
 
-. . .
+:::
+:::{.column width='70%'}
+#### Model Shifts
 
-- **Data**: we look at synthetic and real-world datasets:
-    - Four synthetic binary classification datasets consisting of 1000 samples each: **Overlapping**, **Linearly Separable**, **Circles** and **Moons** (@fig-synthetic-data).
-    - Three real-world datasets from the Finance and Economics domain: **Give Me Some Credit** [@kaggle2011give], **UCI defaultCredit** [@yeh2009comparisons] and **California Housing** [@pedregosa2011scikitlearn, @pace1997sparse].
+- **Perturbations**: following @upadhyay2021robust we define $\Delta=||\theta_{t+1}-\theta_{t}||^2$, that is the euclidean distance between the vectors of parameters before and after retraining the model $M$.
+- **Predicted Probability MMD (PP MMD)**: instead of applying MMD to features directly, we apply it to the predicted probabilities assigned to a set of samples by the model $M$.
+- **Disagreement Coefficient**: this metric was introduced in @hanneke2007bound and estimates $p(M(x) \neq M^\prime(x))$, that is the probability that two classifiers disagree on the predicted outcome for a randomly chosen sample.
+- **Decisiveness**: we define the metric simply as ${\frac{1}{N}}\sum_{i=0}^N(\sigma(M(x)) - 0.5)^2$ where $M(x)$ are predicted logits from a binary classifier and $\sigma$ denotes the sigmoid function; it quantifies the likelihood that a model assigns a high probability to its classification of any given sample.
+- **Performance**: we compute the classifier's F-score on a test sample that we leave untouched throughout the experiment. 
+
+:::
+::::
+
+### Models
+
+#### Classifiers
+
+1. Simple linear classifier---**Logistic Regression**.
+2. Multilayer perceptron---**MLP**.
+3. **Deep Ensemble** composed of five MLPs following @lakshminarayanan2016simple.
+
+#### Generative Models
+
+Different specifications of a plain-vanilla Variational Autoencoder (**VAE**)
+
+```{r}
+#| output: true
+#| echo: false
+#| label: tbl-models
+#| tbl-cap: "Model parameters."
+
+tab <- data.frame(
+  "Model" = c("MLP","MLP","VAE","VAE"),
+  "Data" = c("Synthetic", "Real-World", "Synthetic", "Real-World"),
+  "Hidden" = c(32,64,32,32),
+  "Latent" = c("-","-",2,8),
+  "Layers" = c(1,2,1,1),
+  "Batch" = c("-",500,"-","-"),
+  "Dropout" = c("-",0.1,"-","-"),
+  "Epochs" = c(100,100,100,250)
+)
+library(kableExtra)
+kbl(
+  tab, booktabs = TRUE,
+  caption = 'Neural network architectures and training parameters.',
+  col.names = c("Model","Data","Hidden Dim.","Latent Dim.","Hidden Layers", "Batch", "Dropout", "Epochs")
+) |> 
+  collapse_rows(1:2, row_group_label_position = 'stack') |>
+  kable_styling(latex_options = c("scale_down"))
+```
+
+### Data {#empirical-data}
+
+::::{.columns}::::
+:::{.column width='50%'}
+#### Synthetic Data
+
+Four synthetic binary classification datasets consisting of 1000 samples each: **Overlapping**, **Linearly Separable**, **Circles** and **Moons** (@fig-synthetic-data).
 
 ![Synthetic classification datasets used in our experiments. Samples from the negative class ($y=0$) are marked in orange while samples of the positive class ($y=1$) are marked in blue.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/synthetic_data.png){#fig-synthetic-data}
+:::
+:::{.column width='50%'}
+#### Real-World Data
 
-. . .
+Three real-world datasets from the Finance and Economics domain: all tabular and can be used for binary classification. 
 
-- **Generators**: from the existing literature we use Wachter [@wachter2017counterfactual], REVISE [@joshi2019realistic], DiCE [@mothilal2020explaining], Greedy [@schut2021generating]; we introduce Classifier Preserving ROAR (ClaPROAR) inspired by ROAR [@upadhyay2021robust] and Gravitational Generator.
+1. The **Give Me Some Credit** dataset: predict whether a borrower is likely to experience financial difficulties in the next two years [@kaggle2011give].
+2. The **UCI defaultCredit** dataset [@yeh2009comparisons]: a benchmark dataset that can be used to train binary classifiers to predict the whether credit card clients default on their payment.
+3. The **California Housing** dataset [@pedregosa2011scikitlearn, @pace1997sparse]: continuous outcome variable binarized as $\tilde{y}=\mathbb{I}_{y>\text{median}(Y)}$ indicating if the median house price of a given district is above the median of all districts.
+:::
+::::
+
+### Generators
+
+::::{.columns}::::
+:::{.column width='50%'}
+#### Principal Concerns
+
+- Wachter [@wachter2017counterfactual]
+- REVISE [@joshi2019realistic]
+- CLUE [@antoran2020getting]
+- DiCE [@mothilal2020explaining]
+- Greedy [@schut2021generating]
+:::
+:::{.column width='50%'}
+#### Secondary Concerns
+
+- More Conservative Decision Thresholds
+- Classifier Preserving ROAR (ClaPROAR):
+
+$$
+\begin{aligned}
+\text{extcost}(f(\mathbf{s}^\prime)) = l(M(f(\mathbf{s}^\prime)),y^\prime) 
+\end{aligned}
+$$ {#eq-clap}
+
+- Gravitational Counterfactual Explanations:
+
+$$
+\begin{aligned}
+\text{extcost}(f(\mathbf{s}^\prime)) = \text{dist}(f(\mathbf{s}^\prime),\bar{x}^*) 
+\end{aligned}
+$$ {#eq-grav}
 
 ![Mitigation strategies.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/main/paper/www/mitigation.png)
+:::
+::::
+
+:::
 
 ## Principal Findings
 
@@ -310,6 +412,18 @@ What are potential mitigation strategies with respect to endogenous macrodynamic
 :::
 
 ::::
+
+## Summary of Findings
+
+#### Principal Concerns
+
+- Firstly, endogenous dynamics do emerge in our experiments (@prp-shifts) and we find them substantial enough to be considered costly (@prp-costs)
+- Secondly, the choice of the counterfactual generator matters, with Latent Space search generally having a dampening effect (@prp-het). 
+- The observed dynamics, therefore, seem to be driven by a discrepancy between counterfactual outcomes that minimize costs to individuals and outcomes that comply with the data-generating process (@prp-drive). 
+
+#### Secondary Concerns
+
+- Our findings indicate that all three proposed mitigation strategies are at least at par with LS generators (@prp-mitigate).
 
 # Discussion
 
