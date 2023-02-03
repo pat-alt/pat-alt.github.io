@@ -27,82 +27,61 @@ crossref:
   prp-title: RQ
   prp-prefix: RQ
 ---
-<!-- 
-## In a nutshell ...
 
-::::{.columns}::::
-:::{.column width='50%'}
-### Background
+## Background
 
 :::{.incremental}
 - **Counterfactual Explanation** (CE) explain how inputs into a model need to change for it to produce different outputs.
 - Counterfactual Explanations that involve realistic and actionable changes can be used for the purpose of **Algorithmic Recourse** (AR) to help individuals who face adverse outcomes.
 :::
-:::
-:::{.column width='50%'}
-### Example
+
+## Example: Consumer Credit
 
 In @fig-credit, arrows indicate changes from factuals (credit denied) to counterfactuals (credit supplied). 
 
-. . .
-
 ![Counterfactuals for Give Me Some Credit dataset [@kaggle2011give].](www/gmsc.svg){#fig-credit}
-:::
-::::
 
-## Proof-of-Concept (a)
+## Our work in a nutshell ...
 
 > [...] we run experiments that simulate the application of recourse in practice using various state-of-the-art counterfactual generators and find that all of them induce substantial domain and model shifts.
 
-::::{.columns}::::
-:::{.column width='30%'}
+@fig-poc illustrates how the application of recourse can induce shifts.
+
+![Dynamics in Algorithmic Recourse.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/poc.png){#fig-poc}
+
+## Proof-of-Concept
+
+:::: {.inline-fragment}
+
+::: {.fragment .fade-in-then-out fragment-index=1}
 In @fig-poc-a, a retail bank has trained binary classifier to evaluate credit applicants. Credit risk is highest in bottom-right corner.
-:::
-:::{.column width='70%'}
+
 ![Dynamics in Algorithmic Recourse.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/poc.png){#fig-poc-a}
 :::
-::::
 
-## Proof-of-Concept (b)
-
-> [...] we run experiments that simulate the application of recourse in practice using various state-of-the-art counterfactual generators and find that all of them induce substantial domain and model shifts.
-
-::::{.columns}::::
-:::{.column width='30%'}
+::: {.fragment .fade-in-then-out fragment-index=2}
 In @fig-poc-b, the retail bank has provided recourse to some of the previously unsuccessful applicants. We observe an **endogenous domain shift**.
-:::
-:::{.column width='70%'}
+
 ![Dynamics in Algorithmic Recourse.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/poc.png){#fig-poc-b}
 :::
-::::
 
-## Proof-of-Concept (c)
-
-> [...] we run experiments that simulate the application of recourse in practice using various state-of-the-art counterfactual generators and find that all of them induce substantial domain and model shifts.
-
-::::{.columns}::::
-:::{.column width='30%'}
+::: {.fragment .fade-in-then-out fragment-index=3}
 In @fig-poc-c, the retail bank has retrained the classifier. We consider this as an **endogenous model shift**.
-:::
-:::{.column width='70%'}
+
 ![Dynamics in Algorithmic Recourse.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/poc.png){#fig-poc-c}
 :::
-::::
 
-## Proof-of-Concept (d)
-
-> [...] we run experiments that simulate the application of recourse in practice using various state-of-the-art counterfactual generators and find that all of them induce substantial domain and model shifts.
-
-::::{.columns}::::
-:::{.column width='30%'}
+::: {.fragment .fade-in-then-out fragment-index=4}
 @fig-poc-d shows the outcome after the process has been repeated a few times. 
 
-> Who is supposed to carry the risk (cost)? Also, what have we really achieved? Individuals who received recourse are easily distinguishable, hence subject to discrimination.
-:::
-:::{.column width='70%'}
 ![Dynamics in Algorithmic Recourse.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/poc.png){#fig-poc-d}
 :::
-::::
+
+:::: 
+
+## Questions?
+
+> Who is supposed to carry the risk (cost)? Also, what have we really achieved? Individuals who received recourse are easily distinguishable, hence subject to discrimination.
 
 ## Research Questions
 
@@ -345,4 +324,4 @@ $$ {#eq-grav}
 - Copyright for stock images belongs to TU Delft.
 - All other images, graphics or animations were created by us.
 
-## References  -->
+## References 
