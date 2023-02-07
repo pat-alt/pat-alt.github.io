@@ -23,6 +23,20 @@ format:
     transition: slide
     background-transition: fade
     fig-align: center
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
 crossref: 
   prp-title: RQ
   prp-prefix: RQ
@@ -47,77 +61,114 @@ In @fig-credit, arrows indicate changes from factuals (credit denied) to counter
 
 @fig-poc illustrates how the application of recourse can induce shifts.
 
-![Dynamics in Algorithmic Recourse.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/poc.png){#fig-poc}
+![Dynamics in Algorithmic Recourse.](www/poc.png){#fig-poc}
 
 ## Proof-of-Concept
 
-:::: {.inline-fragment}
+:::: {.grid-container}
 
-::: {.fragment .fade-in-then-out fragment-index=1}
-In @fig-poc-a, a retail bank has trained binary classifier to evaluate credit applicants. Credit risk is highest in bottom-right corner.
-
-![Dynamics in Algorithmic Recourse.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/poc.png){#fig-poc-a}
+::: {.fragment .fade-in-then-semi-out fragment-index=1}
+![A bank has trained a model to evaluate credit applicants. Credit risk is highest in bottom-right corner.](www/poc-1.svg){#fig-poc-a}
 :::
 
-::: {.fragment .fade-in-then-out fragment-index=2}
-In @fig-poc-b, the retail bank has provided recourse to some of the previously unsuccessful applicants. We observe an **endogenous domain shift**.
-
-![Dynamics in Algorithmic Recourse.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/poc.png){#fig-poc-b}
+::: {.fragment .fade-in-then-semi-out fragment-index=2}
+![The bank has provided recourse to unsuccessful applicants: endogenous domain shift.](www/poc-2.svg){#fig-poc-b}
 :::
 
-::: {.fragment .fade-in-then-out fragment-index=3}
-In @fig-poc-c, the retail bank has retrained the classifier. We consider this as an **endogenous model shift**.
-
-![Dynamics in Algorithmic Recourse.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/poc.png){#fig-poc-c}
+::: {.fragment .fade-in-then-semi-out fragment-index=3}
+![The bank has retrained the classifier: endogenous model shift.](www/poc-3.svg){#fig-poc-c}
 :::
 
-::: {.fragment .fade-in-then-out fragment-index=4}
-@fig-poc-d shows the outcome after the process has been repeated a few times. 
-
-![Dynamics in Algorithmic Recourse.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/poc.png){#fig-poc-d}
+::: {.fragment .fade-in-then-semi-out fragment-index=4}
+![The outcome after the process has been repeated a few times. Average default risk has increased.](www/poc-4.svg){#fig-poc-d}
 :::
 
 :::: 
 
-## Questions?
+## Questions ...
 
-> Who is supposed to carry the risk (cost)? Also, what have we really achieved? Individuals who received recourse are easily distinguishable, hence subject to discrimination.
+::::{.columns}::::
+:::{.column width='50%'}
 
-## Research Questions
-
-#### Principal Concerns
-
-::: {#prp-shifts}
-## Endogenous Shifts
-
-Does the repeated implementation of recourse provided by state-of-the-art generators lead to shifts in the domain and model?
+::: {.incremental}
+- Who should bear the risk?
+- Are the counterfactuals genuinely valid in practice?
+- What about fairness and privacy concerns?
 :::
 
-::: {#prp-costs}
-## Costs
+:::
+:::{.column width='50%'}
+![](www/poc-4.svg)
+:::
+::::
 
-If so, are these dynamics substantial enough to be considered costly to stakeholders involved in real-world automated decision-making processes?
+# Experiments {#method-2}
+
+## Empirical Setup {.smaller}
+
+. . .
+
+**Evaluation**: we propose metrics to measure domain shifts and model shifts.
+
+. . . 
+
+**Models**: we use linear classifiers, deep neural networks and deep ensembles.
+
+. . .
+
+**Data**:
+
+::::{.columns}::::
+:::{.column width='50%'}
+##### Synthetic
+
+- Overlapping, Linearly Separable, Circles, Moons.
+
+![](www/synthetic_data.png)
+:::
+:::{.column width='50%'}
+##### Real-World
+
+- Give Me Some Credit [@kaggle2011give], UCI defaultCredit [@yeh2009comparisons], California Housing
+:::
+::::
+. . .
+
+**Generators**: Wachter [@wachter2017counterfactual], REVISE [@joshi2019realistic], DiCE [@mothilal2020explaining], Greedy [@schut2021generating]
+
+## Principal Findings --- Synthetic
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+![Domain shifts for overlapping synthetic data using deep ensemble.](www/synthetic_domain.gif)
 :::
 
-::: {#prp-het}
-## Heterogeneity
+:::{.column width="50%"}
 
-Do different counterfactual generators yield significantly different outcomes in this context? Furthermore, is there any heterogeneity concerning the chosen classifier and dataset?
+![Performance deterioration for overlapping synthetic data using deep ensemble.](www/synthetic_performance.gif)
+
 :::
 
-::: {#prp-drive}
-## Drivers
+::::
 
-What are the drivers of endogenous dynamics in Algorithmic Recourse?
+## Principal Findings --- Real-World
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+![Model shifts for Credit Default data using deep ensemble.](www/real_world_model.gif)
 :::
 
-#### Secondary Concerns
+:::{.column width="50%"}
 
-::: {#prp-mitigate}
-## Mitigation Strategies
+![Performance deterioration for Credit Default data using deep ensemble.](www/real_world_performance.gif)
 
-What are potential mitigation strategies with respect to endogenous macrodynamics in AR?
 :::
+
+::::
 
 # Gradient-Based Recourse Revisited {#method}
 
@@ -127,7 +178,7 @@ Many existing approaches to CE and AR work with the following baseline:
 
 $$
 \begin{aligned}
-\mathbf{s}^\prime &= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\} 
+\color{lightgrey} \mathbf{s}^\prime &\color{lightgrey}= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)} \\&\color{black} + \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \color{lightgrey} \} 
 \end{aligned} 
 $$ {#eq-general}
 
@@ -141,81 +192,21 @@ We propose to extend @eq-general as follows:
 
 $$
 \begin{aligned}
-\mathbf{s}^\prime &= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \{ {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)} \\ &+ \lambda_1 {\text{cost}(f(\mathbf{s}^\prime))} + \lambda_2 {\text{extcost}(f(\mathbf{s}^\prime))} \}  
+\color{lightgrey}\mathbf{s}^\prime &\color{lightgrey}= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \{ {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)} \\ &\color{lightgrey}+ \lambda_1 {\text{cost}(f(\mathbf{s}^\prime))} + \color{black}\lambda_2 {\text{extcost}(f(\mathbf{s}^\prime))} \color{lightgrey}\}  
 \end{aligned} 
 $$ {#eq-collective}
 
 . . .
 
-- Here $\text{cost}(f(\mathbf{s}^\prime))$ denotes the proxy for **private costs** faced by the individual; the newly introduced term $\text{extcost}(f(\mathbf{s}^\prime))$ is meant to capture **external costs** generated by changes to $\mathbf{s}^\prime$.
-
-. . .
-
-- We borrow the concept of **Negative Externalities** from Economics (see more detailed [slide pack](https://www.paltmeyer.com/content/talks/posts/2023-ieee-satml/long_presentation.html))
-
-## Illustrating the trade-off
-
-# Experiments {#method-2}
-
-## Empirical Setup
-
-. . .
-
-- **Evaluation metrics**: propose various metrics to measure domain shifts (MMD) and model shifts (MMD, parameter perturbations, disagreement coefficient, ...)
-
-. . . 
-
-- **Models**: we use linear classifiers, deep neural networks and deep ensembles.
-
-. . .
-
-- **Data**: we look at synthetic and real-world datasets:
-    - Four synthetic datasets: **Overlapping**, **Linearly Separable**, **Circles** and **Moons** (@fig-synthetic-data).
-    - Three real-world datasets from the Finance and Economics domain: **Give Me Some Credit** [@kaggle2011give], **UCI defaultCredit** [@yeh2009comparisons] and **California Housing** [@pedregosa2011scikitlearn, @pace1997sparse].
-
-![Synthetic classification datasets used in our experiments. Samples from the negative class ($y=0$) are marked in orange while samples of the positive class ($y=1$) are marked in blue.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/synthetic_data.png){#fig-synthetic-data}
-
-. . .
-
-- **Generators**: from the existing literature we use Wachter [@wachter2017counterfactual], REVISE [@joshi2019realistic], DiCE [@mothilal2020explaining], Greedy [@schut2021generating]
-
-## Principal Findings
-
-::::{.columns}
-
-:::{.column width="50%"}
-
-![Results for synthetic data.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/synthetic_results.png)
-:::
-
-:::{.column width="50%"}
-
-![Results for real-world data.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/real_world_results.png)
-
-:::
-
-::::
+- The newly introduced term $\text{extcost}(f(\mathbf{s}^\prime))$ is meant to explicitly capture **external costs** generated by changes to $\mathbf{s}^\prime$.
 
 ## Mitigation Strategies
 
-- More Conservative Decision Thresholds
-- Classifier Preserving ROAR (ClaPROAR)^[Loosely inspired by ROAR [@upadhyay2021robust]]:
+1. More Conservative Decision Thresholds
+2. Classifier Preserving ROAR (ClaPROAR)^[Loosely inspired by ROAR [@upadhyay2021robust]]
+3. Gravitational Counterfactual Explanations
 
-$$
-\begin{aligned}
-\text{extcost}(f(\mathbf{s}^\prime)) = l(M(f(\mathbf{s}^\prime)),y^\prime) 
-\end{aligned}
-$$ {#eq-clap}
-
-- Gravitational Counterfactual Explanations:
-
-$$
-\begin{aligned}
-\text{extcost}(f(\mathbf{s}^\prime)) = \text{dist}(f(\mathbf{s}^\prime),\bar{x}^*) 
-\end{aligned}
-$$ {#eq-grav}
-
-![Mitigation strategies.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/mitigation.png)
+![Mitigation strategies.](www/mitigation.png){#fig-mitigate width="50%"}
 
 ## Secondary Findings
 
@@ -223,12 +214,12 @@ $$ {#eq-grav}
 
 :::{.column width="50%"}
 
-![Results for synthetic data.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/mitigation_synthetic_results.png)
+![Domain shifts for overlapping synthetic data using deep ensemble.](www/mitigation_domain.gif)
 :::
 
 :::{.column width="50%"}
 
-![Results for real-world data.](https://raw.githubusercontent.com/pat-alt/endogenous-macrodynamics-in-algorithmic-recourse/camera-ready-branch/paper/www/mitigation_real_world_results.png)
+![Performance deterioration for overlapping synthetic data using deep ensemble.](www/mitigation_performance.gif)
 
 :::
 
@@ -250,9 +241,7 @@ $$ {#eq-grav}
 
 - Straightforward way to achieve this is to explicitly penalize external costs in the counterfactual search objective function (@eq-collective).
 
-. . .
-
-#### Future Research Ideas
+## Future Research Ideas
 
 **Private vs. External Costs**: 
 
@@ -263,15 +252,15 @@ $$ {#eq-grav}
 
 - How do things play out for recent approaches to AR that incorporate causal knowledge such as @karimi2021algorithmic?
 
-## Counterfactual Explanations and Probabilistic Machine Learning
+## Counterfactual Explanations and Probabilistic Machine Learning {.smaller}
 
-> We are working on methodologies and open-source tools to help researchers and practitioners assess the trustworthiness of predictive models. 
+> Methodologies and open-source tools that help researchers and practitioners assess the trustworthiness of predictive models. 
 
 ::::{.columns}
 
 :::{.column width="60%"}
 
-#### Towards Trustworthy AI in `Julia`
+##### Towards Trustworthy AI in `Julia`
 
 1. [`CounterfactualExplanations.jl`](https://github.com/pat-alt/CounterfactualExplanations.jl) (JuliaCon 2022)
 2. [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl) (JuliaCon 2023 --- I hope!)
@@ -279,11 +268,6 @@ $$ {#eq-grav}
 4. [`AlgorithmicRecourseDynamics.jl`](https://github.com/pat-alt/AlgorithmicRecourseDynamics.jl)
 
 ... contributions welcome! 😊
-
-#### More Reading
-
-- Granular results for all of our experiments can be found in this online companion: [https://www.paltmeyer.com/endogenous-macrodynamics-in-algorithmic-recourse/](https://www.paltmeyer.com/endogenous-macrodynamics-in-algorithmic-recourse/). 
-- Many other related posts on my [blog](https://www.paltmeyer.com/blog).
 
 :::
 
@@ -318,6 +302,11 @@ $$ {#eq-grav}
 :::
 
 ::::
+
+## 📚 More Reading
+
+- Granular results for all of our experiments can be found in this online companion: [https://www.paltmeyer.com/endogenous-macrodynamics-in-algorithmic-recourse/](https://www.paltmeyer.com/endogenous-macrodynamics-in-algorithmic-recourse/). 
+- Many other related posts on my [blog](https://www.paltmeyer.com/blog).
 
 ## Image Sources
 
