@@ -14,7 +14,6 @@ date: today
 format: 
   tudelft-revealjs:
     theme: custom.scss
-    footer: IEEE Conference on Secure and Trustworthy Machine Learning '23 --- Patrick Altmeyer --- CC BY-NC
     self-contained: true
     smaller: false
     scrollable: true
@@ -44,10 +43,11 @@ crossref:
 
 ## Background
 
-:::{.incremental}
-- **Counterfactual Explanation** (CE) explain how inputs into a model need to change for it to produce different outputs.
-- Counterfactual Explanations that involve realistic and actionable changes can be used for the purpose of **Algorithmic Recourse** (AR) to help individuals who face adverse outcomes.
-:::
+**Counterfactual Explanation** (CE) explain how inputs into a model need to change for it to produce different outputs.
+
+. . .
+
+Provided the changes are realistic and actionable, they can be used for **Algorithmic Recourse** (AR) to help individuals who face adverse outcomes.
 
 ## Example: Consumer Credit
 
@@ -210,6 +210,12 @@ We borrow the concept of private vs. external costs from Economics.
 
 ![Illustration of a negative externality. Source: [Investopedia](https://www.investopedia.com/terms/e/externality.asp).](www/externality.webp){#fig-ext width="50%"}
 
+## Externalities in our Context
+
+Relating this bank to our opening example, the external cost is carried by the retail bank.
+
+![External cost is carried by bank.](www/bank_cartoon.png){#fig-bank}
+
 ## Mitigation Strategies
 
 1. More Conservative Decision Thresholds
@@ -249,18 +255,11 @@ We borrow the concept of private vs. external costs from Economics.
 
 . . .
 
-- Straightforward way to achieve this is to explicitly penalize external costs in the counterfactual search objective function (@eq-collective).
+- Ad-hoc solution: penalize external costs in the counterfactual search objective function (@eq-collective).
 
-## Future Research Ideas
+. . .
 
-**Private vs. External Costs**: 
-
-- How can we make informed choices about the tradeoff between private and external costs?
-- Pareto-optimal collective recourse?
-
-**Causal Modelling**: 
-
-- How do things play out for recent approaches to AR that incorporate causal knowledge such as @karimi2021algorithmic?
+- This gives rise to interesting cross-disciplinary research ideas (e.g. Pareto-optimal AR).
 
 ## Counterfactual Explanations and Probabilistic Machine Learning {.smaller}
 
