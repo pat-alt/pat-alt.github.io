@@ -13,7 +13,6 @@ image: www/intro.gif
 comments:
   utterances:
     repo: pat-alt/pat-alt.github.io
-jupyter: julia-1.7
 execute:
     echo: false
     eval: false
@@ -116,7 +115,7 @@ Pkg.add("CounterfactualExplanations")
 
 Contrary to Jupyter notebooks, executing this code cells will start a Julia REPL in VSCode. I find this very helpful, because it lets me fiddle with anything I have created inside the Quarto notebook without having to click into cells all the time. Quarto comes with great support for specifying [code executing options](https://quarto.org/docs/computations/julia.html). For example, for the code below I have specified `#| echo: true` in order for the code to be rendered. The code itself is the code I actually used to build the animation above (heavily borrowed from this `Javis.jl` [tutorial](https://juliaanimators.github.io/Javis.jl/stable/tutorials/tutorial_7/)).
 
-```{julia}
+```{.julia}
 #| echo: true
 using Javis, Animations, Colors
 
@@ -214,7 +213,7 @@ render(
 
 #### Working with `Documenter.jl` and Quarto
 
-An interesting application of Quarto in the Julia ecosystem is package documentation. This is of course best done using `Documenter.jl` and fortunately the two play nicely with each other, since both share a common ground (Markdown). Their interaction is perhaps best demonstrated through this Julia library I recently developed: [`CounterfactualExplanatinos.jl`](https://github.com/pat-alt/CounterfactualExplanations.jl). On there you will find lot of Julia scripts `*.jl` under `src/` and `test/`, as well as many Markdown `.md` and Quarto documents `.qmd` under `docs`. I *wrote* the package documentation in the Quarto documents, *rendered* documents individually through `quarto render [doc].qmd` and then fed the resulting Markdown documents to `Documenter.jl` as always. 
+An interesting application of Quarto in the Julia ecosystem is package documentation. This is of course best done using `Documenter.jl` and fortunately the two play nicely with each other, since both share a common ground (Markdown). Their interaction is perhaps best demonstrated through this Julia library I recently developed: [`CounterfactualExplanatinos.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl). On there you will find lot of Julia scripts `*.jl` under `src/` and `test/`, as well as many Markdown `.md` and Quarto documents `.qmd` under `docs`. I *wrote* the package documentation in the Quarto documents, *rendered* documents individually through `quarto render [doc].qmd` and then fed the resulting Markdown documents to `Documenter.jl` as always. 
 
 Below is my standard YAML header for those Quarto documents:
 

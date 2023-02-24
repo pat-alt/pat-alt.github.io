@@ -7,7 +7,7 @@ categories:
   - uncertainty
   - Julia
 description: >-
-  A (very) gentle introduction to Conformal Prediction in Julia using my new package [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl).
+  A (very) gentle introduction to Conformal Prediction in Julia using my new package [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl).
 image: www/intro.gif
 jupyter: julia-1.8
 draft: false
@@ -40,7 +40,7 @@ Enter: Conformal Prediction (CP) --- a scalable frequentist approach to uncertai
 
 1. Conformal Prediction is an interesting frequentist approach to uncertainty quantification that can even be combined with Bayes (@sec-background).
 2. It is scalable and model-agnostic and therefore well applicable to machine learning (@sec-background).
-3. [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl) implements CP in pure Julia and can be used with any supervised model available from [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/v0.18/) (@sec-julia).
+3. [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) implements CP in pure Julia and can be used with any supervised model available from [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/v0.18/) (@sec-julia).
 4. Implementing CP directly on top of an existing, powerful machine learning toolkit demonstrates the potential usefulness of this framework to the ML community (@sec-julia). 
 5. Standard conformal classifiers produce set-valued predictions: for ambiguous samples these sets are typically large (for high coverage) or empty (for low coverage) (@sec-scp).
 :::
@@ -57,10 +57,10 @@ CP can be used to generate prediction intervals for regression models and predic
 
 ## 📦 Conformal Prediction in Julia {#sec-julia}
 
-In this section of this first short post on CP we will look at how conformal prediction can be implemented in Julia. In particular, we will look at an approach that is compatible with any of the many supervised machine learning models available in [MLJ](https://alan-turing-institute.github.io/MLJ.jl/dev/): a beautiful, comprehensive machine learning framework funded by the [Alan Turing Institute](https://www.turing.ac.uk/) and the [New Zealand Strategic Science Investment Fund](https://www.mbie.govt.nz/science-and-technology/science-and-innovation/funding-information-and-opportunities/investment-funds/strategic-science-investment-fund/ssif-funded-programmes/university-of-auckland/) @blaom2020mlj. We will go through some basic usage examples employing a new Julia package that I have been working on: [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl).  
+In this section of this first short post on CP we will look at how conformal prediction can be implemented in Julia. In particular, we will look at an approach that is compatible with any of the many supervised machine learning models available in [MLJ](https://alan-turing-institute.github.io/MLJ.jl/dev/): a beautiful, comprehensive machine learning framework funded by the [Alan Turing Institute](https://www.turing.ac.uk/) and the [New Zealand Strategic Science Investment Fund](https://www.mbie.govt.nz/science-and-technology/science-and-innovation/funding-information-and-opportunities/investment-funds/strategic-science-investment-fund/ssif-funded-programmes/university-of-auckland/) @blaom2020mlj. We will go through some basic usage examples employing a new Julia package that I have been working on: [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl).  
 
 :::{.callout-note}
-## [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl)
+## [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl)
 
 `ConformalPrediction.jl` is a package for uncertainty quantification through conformal prediction for machine learning models trained in [MLJ](https://alan-turing-institute.github.io/MLJ.jl/dev/). At the time of writing it is still in its early stages of development, but already implements a range of different approaches to CP. Contributions are very much welcome:
 
@@ -94,9 +94,9 @@ $$
 C(X_{\text{test}})=\{y:s(X_{\text{test}},y) \le \hat{q}\}
 $$ {#eq-set}
 
-This is the default procedure used for classification and regression in [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl). 
+This is the default procedure used for classification and regression in [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl). 
 
-You may want to take a look at the source code for the classification case [here](https://github.com/pat-alt/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L1). As a [first](https://github.com/pat-alt/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L3) important step, we begin by defining a concrete type `SimpleInductiveClassifier` that wraps a supervised model from [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/v0.18/) and reserves additional fields for a few hyperparameters. As a [second](https://github.com/pat-alt/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L26) step, we define the training procedure, which includes the data-splitting and calibration step. Finally, as a [third](https://github.com/pat-alt/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L56) step we implement the procedure in @eq-set to compute the conformal prediction set.
+You may want to take a look at the source code for the classification case [here](https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L1). As a [first](https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L3) important step, we begin by defining a concrete type `SimpleInductiveClassifier` that wraps a supervised model from [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/v0.18/) and reserves additional fields for a few hyperparameters. As a [second](https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L26) step, we define the training procedure, which includes the data-splitting and calibration step. Finally, as a [third](https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L56) step we implement the procedure in @eq-set to compute the conformal prediction set.
 
 :::{.callout-warning}
 ## Development Status
@@ -104,7 +104,7 @@ You may want to take a look at the source code for the classification case [here
 The permalinks above take you to the version of the package that was up-to-date at the time of writing. Since the package is in its early stages of development, the code base and API can be expected to change.
 :::
 
-Now let's take this to our 🌙 data. To illustrate the package functionality we will demonstrate the envisioned workflow. We first define our atomic machine learning model following standard [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/v0.18/) conventions. Using [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl) we then wrap our atomic model in a conformal model using the standard API call `conformal_model(model::Supervised; kwargs...)`. To train and predict from our conformal model we can then rely on the conventional [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/v0.18/) procedure again. In particular, we wrap our conformal model in data (turning it into a machine) and then fit it on the training set. Finally, we use our machine to predict the label for a new test sample `Xtest`:
+Now let's take this to our 🌙 data. To illustrate the package functionality we will demonstrate the envisioned workflow. We first define our atomic machine learning model following standard [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/v0.18/) conventions. Using [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) we then wrap our atomic model in a conformal model using the standard API call `conformal_model(model::Supervised; kwargs...)`. To train and predict from our conformal model we can then rely on the conventional [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/v0.18/) procedure again. In particular, we wrap our conformal model in data (turning it into a machine) and then fit it on the training set. Finally, we use our machine to predict the label for a new test sample `Xtest`:
 
 ```{julia}
 #| output: true
@@ -342,7 +342,7 @@ This has really been a whistle-stop tour of Conformal Prediction: an active area
 
 1. Conformal Prediction is an interesting frequentist approach to uncertainty quantification that can even be combined with Bayes (@sec-background).
 2. It is scalable and model-agnostic and therefore well applicable to machine learning (@sec-background).
-3. [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl) implements CP in pure Julia and can be used with any supervised model available from [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/v0.18/) (@sec-julia).
+3. [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) implements CP in pure Julia and can be used with any supervised model available from [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/v0.18/) (@sec-julia).
 4. Implementing CP directly on top of an existing, powerful machine learning toolkit demonstrates the potential usefulness of this framework to the ML community (@sec-julia). 
 5. Standard conformal classifiers produce set-valued predictions: for ambiguous samples these sets are typically large (for high coverage) or empty (for low coverage) (@sec-scp).
 

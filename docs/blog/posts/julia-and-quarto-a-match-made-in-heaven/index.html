@@ -371,104 +371,103 @@ Just had my first go <a href="https://twitter.com/hashtag/quarto?src=hash&amp;re
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Pkg.add(<span class="ot">"</span><span class="st">CounterfactualExplanations</span><span class="ot">"</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Contrary to Jupyter notebooks, executing this code cells will start a Julia REPL in VSCode. I find this very helpful, because it lets me fiddle with anything I have created inside the Quarto notebook without having to click into cells all the time. Quarto comes with great support for specifying <a href="https://quarto.org/docs/computations/julia.html">code executing options</a>. For example, for the code below I have specified <code>#| echo: true</code> in order for the code to be rendered. The code itself is the code I actually used to build the animation above (heavily borrowed from this <code>Javis.jl</code> <a href="https://juliaanimators.github.io/Javis.jl/stable/tutorials/tutorial_7/">tutorial</a>).</p>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Javis</span>, <span class="bu">Animations</span>, <span class="bu">Colors</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>size <span class="op">=</span> <span class="fl">600</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>radius_factor <span class="op">=</span> <span class="fl">0.33</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">ground</span>(args<span class="op">...</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">background</span>(<span class="st">"transparent"</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sethue</span>(<span class="st">"white"</span>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">rotate_anim</span>(idx<span class="op">::</span><span class="dt">Number</span>, total<span class="op">::</span><span class="dt">Number</span>) </span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    distance_circle <span class="op">=</span> <span class="fl">0.875</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    steps <span class="op">=</span> <span class="fu">collect</span>(<span class="fu">range</span>(distance_circle,<span class="fl">1</span><span class="op">-</span>distance_circle,length<span class="op">=</span>total))</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Animation</span>(</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        [<span class="fl">0</span>, <span class="fl">1</span>], <span class="co"># must go from 0 to 1</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        [<span class="fl">0</span>, steps[idx]<span class="op">*</span><span class="fl">2</span>π],</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        [<span class="fu">sineio</span>()],</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>translate_anim <span class="op">=</span> <span class="fu">Animation</span>(</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">0</span>, <span class="fl">1</span>], <span class="co"># must go from 0 to 1</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    [O, <span class="fu">Point</span>(size<span class="op">*</span>radius_factor, <span class="fl">0</span>)],</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    [<span class="fu">sineio</span>()],</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>translate_back_anim <span class="op">=</span> <span class="fu">Animation</span>(</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">0</span>, <span class="fl">1</span>], <span class="co"># must go from 0 to 1</span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    [O, <span class="fu">Point</span>(<span class="fu">-</span>(size<span class="op">*</span>radius_factor), <span class="fl">0</span>)],</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    [<span class="fu">sineio</span>()],</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>julia_colours <span class="op">=</span> <span class="fu">Dict</span>(</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span>blue <span class="op">=&gt;</span> <span class="st">"#4063D8"</span>,</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span>green <span class="op">=&gt;</span> <span class="st">"#389826"</span>,</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span>purple <span class="op">=&gt;</span> <span class="st">"#9558b2"</span>,</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span>red <span class="op">=&gt;</span> <span class="st">"#CB3C33"</span></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>colour_order <span class="op">=</span> [<span class="op">:</span>red, <span class="op">:</span>purple, <span class="op">:</span>green, <span class="op">:</span>blue]</span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>n_colours <span class="op">=</span> <span class="fu">length</span>(julia_colours)</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">color_anim</span>(start_colour<span class="op">::</span><span class="dt">String</span>, quarto_col<span class="op">::</span><span class="dt">String</span>=<span class="st">"#4b95d0"</span>)</span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Animation</span>(</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        [<span class="fl">0</span>, <span class="fl">1</span>], <span class="co"># must go from 0 to 1</span></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        [<span class="fu">Lab</span>(<span class="fu">color</span>(start_colour)), <span class="fu">Lab</span>(<span class="fu">color</span>(quarto_col))],</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>        [<span class="fu">sineio</span>()],</span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>video <span class="op">=</span> <span class="fu">Video</span>(size, size)</span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>frame_starts <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">:</span><span class="fl">40</span></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>n_total <span class="op">=</span> <span class="fl">250</span></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>n_frames <span class="op">=</span> <span class="fl">150</span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="fu">Background</span>(<span class="fl">1</span><span class="op">:</span>n_total, ground)</span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Blob:</span></span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">element</span>(; radius <span class="op">=</span> <span class="fl">1</span>)</span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">circle</span>(O, radius, <span class="op">:</span>fill) <span class="co"># The 4 is to make the circle not so small</span></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Cross:</span></span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">cross</span>(color<span class="op">=</span><span class="st">"black"</span>;orientation<span class="op">=:</span>horizontal)</span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sethue</span>(color)</span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setline</span>(<span class="fl">10</span>)</span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> orientation<span class="op">==:</span>horizontal</span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="fu">line</span>(<span class="fu">Point</span>(<span class="op">-</span>size,<span class="fl">0</span>),<span class="fu">Point</span>(size,<span class="fl">0</span>), <span class="op">:</span>stroke)</span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="fu">line</span>(<span class="fu">Point</span>(<span class="fl">0</span>,<span class="op">-</span>size),<span class="fu">Point</span>(<span class="fl">0</span>,size), <span class="op">:</span>stroke)</span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out</span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i, frame_start) <span class="kw">in</span> <span class="fu">enumerate</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">:</span><span class="fl">40</span>)</span>
-<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Julia circles:</span></span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>    blob <span class="op">=</span> <span class="fu">Object</span>(frame_start<span class="op">:</span>n_total, (args<span class="op">...</span>;radius<span class="op">=</span><span class="fl">1</span>) <span class="op">-&gt;</span> <span class="fu">element</span>(;radius<span class="op">=</span>radius))</span>
-<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">1</span><span class="op">:</span><span class="fu">Int</span>(<span class="fu">round</span>(n_frames<span class="op">*</span><span class="fl">0.25</span>)), <span class="fu">change</span>(<span class="op">:</span>radius, <span class="fl">1</span> <span class="op">=&gt;</span> <span class="fl">75</span>))) <span class="co"># scale up</span></span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(n_frames<span class="op">:</span>(n_frames<span class="op">+</span><span class="fl">50</span>), <span class="fu">change</span>(<span class="op">:</span>radius, <span class="fl">75</span> <span class="op">=&gt;</span> <span class="fl">250</span>))) <span class="co"># scale up further</span></span>
-<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, translate_anim, <span class="fu">translate</span>()))</span>
-<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">31</span><span class="op">:</span><span class="fl">120</span>, <span class="fu">rotate_anim</span>(i, n_colours), <span class="fu">rotate_around</span>(<span class="fu">Point</span>(<span class="fu">-</span>(size<span class="op">*</span>radius_factor), <span class="fl">0</span>))))</span>
-<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">121</span><span class="op">:</span><span class="fl">150</span>, translate_back_anim, <span class="fu">translate</span>()))</span>
-<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">150</span>, <span class="fu">color_anim</span>(julia_colours[colour_order[i]]), <span class="fu">sethue</span>()))</span>
-<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Quarto cross:</span></span>
-<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>    cross_h <span class="op">=</span> <span class="fu">Object</span>((n_frames<span class="op">+</span><span class="fl">50</span>)<span class="op">:</span>n_total, (args<span class="op">...</span>) <span class="op">-&gt;</span> <span class="fu">cross</span>(;orientation<span class="op">=:</span>horizontal))</span>
-<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>    cross_v <span class="op">=</span> <span class="fu">Object</span>((n_frames<span class="op">+</span><span class="fl">50</span>)<span class="op">:</span>n_total, (args<span class="op">...</span>) <span class="op">-&gt;</span> <span class="fu">cross</span>(;orientation<span class="op">=:</span>vertical))</span>
-<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a><span class="fu">render</span>(</span>
-<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>    video;</span>
-<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>    pathname <span class="op">=</span> <span class="fu">joinpath</span>(www_path, <span class="st">"intro.gif"</span>),</span>
-<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Javis</span>, <span class="bu">Animations</span>, <span class="bu">Colors</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>size <span class="op">=</span> <span class="fl">600</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>radius_factor <span class="op">=</span> <span class="fl">0.33</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">ground</span>(args<span class="op">...</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">background</span>(<span class="st">"transparent"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sethue</span>(<span class="st">"white"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">rotate_anim</span>(idx<span class="op">::</span><span class="dt">Number</span>, total<span class="op">::</span><span class="dt">Number</span>) </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    distance_circle <span class="op">=</span> <span class="fl">0.875</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    steps <span class="op">=</span> <span class="fu">collect</span>(<span class="fu">range</span>(distance_circle,<span class="fl">1</span><span class="op">-</span>distance_circle,length<span class="op">=</span>total))</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Animation</span>(</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        [<span class="fl">0</span>, <span class="fl">1</span>], <span class="co"># must go from 0 to 1</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        [<span class="fl">0</span>, steps[idx]<span class="op">*</span><span class="fl">2</span>π],</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        [<span class="fu">sineio</span>()],</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>translate_anim <span class="op">=</span> <span class="fu">Animation</span>(</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">0</span>, <span class="fl">1</span>], <span class="co"># must go from 0 to 1</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    [O, <span class="fu">Point</span>(size<span class="op">*</span>radius_factor, <span class="fl">0</span>)],</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    [<span class="fu">sineio</span>()],</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>translate_back_anim <span class="op">=</span> <span class="fu">Animation</span>(</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">0</span>, <span class="fl">1</span>], <span class="co"># must go from 0 to 1</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    [O, <span class="fu">Point</span>(<span class="fu">-</span>(size<span class="op">*</span>radius_factor), <span class="fl">0</span>)],</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    [<span class="fu">sineio</span>()],</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>julia_colours <span class="op">=</span> <span class="fu">Dict</span>(</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span>blue <span class="op">=&gt;</span> <span class="st">"#4063D8"</span>,</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span>green <span class="op">=&gt;</span> <span class="st">"#389826"</span>,</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span>purple <span class="op">=&gt;</span> <span class="st">"#9558b2"</span>,</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span>red <span class="op">=&gt;</span> <span class="st">"#CB3C33"</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>colour_order <span class="op">=</span> [<span class="op">:</span>red, <span class="op">:</span>purple, <span class="op">:</span>green, <span class="op">:</span>blue]</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>n_colours <span class="op">=</span> <span class="fu">length</span>(julia_colours)</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">color_anim</span>(start_colour<span class="op">::</span><span class="dt">String</span>, quarto_col<span class="op">::</span><span class="dt">String</span>=<span class="st">"#4b95d0"</span>)</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Animation</span>(</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        [<span class="fl">0</span>, <span class="fl">1</span>], <span class="co"># must go from 0 to 1</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>        [<span class="fu">Lab</span>(<span class="fu">color</span>(start_colour)), <span class="fu">Lab</span>(<span class="fu">color</span>(quarto_col))],</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>        [<span class="fu">sineio</span>()],</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>video <span class="op">=</span> <span class="fu">Video</span>(size, size)</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>frame_starts <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">:</span><span class="fl">40</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>n_total <span class="op">=</span> <span class="fl">250</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>n_frames <span class="op">=</span> <span class="fl">150</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="fu">Background</span>(<span class="fl">1</span><span class="op">:</span>n_total, ground)</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Blob:</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">element</span>(; radius <span class="op">=</span> <span class="fl">1</span>)</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>    <span class="fu">circle</span>(O, radius, <span class="op">:</span>fill) <span class="co"># The 4 is to make the circle not so small</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Cross:</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">cross</span>(color<span class="op">=</span><span class="st">"black"</span>;orientation<span class="op">=:</span>horizontal)</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sethue</span>(color)</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setline</span>(<span class="fl">10</span>)</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> orientation<span class="op">==:</span>horizontal</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="fu">line</span>(<span class="fu">Point</span>(<span class="op">-</span>size,<span class="fl">0</span>),<span class="fu">Point</span>(size,<span class="fl">0</span>), <span class="op">:</span>stroke)</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="fu">line</span>(<span class="fu">Point</span>(<span class="fl">0</span>,<span class="op">-</span>size),<span class="fu">Point</span>(<span class="fl">0</span>,size), <span class="op">:</span>stroke)</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i, frame_start) <span class="kw">in</span> <span class="fu">enumerate</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">:</span><span class="fl">40</span>)</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Julia circles:</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>    blob <span class="op">=</span> <span class="fu">Object</span>(frame_start<span class="op">:</span>n_total, (args<span class="op">...</span>;radius<span class="op">=</span><span class="fl">1</span>) <span class="op">-&gt;</span> <span class="fu">element</span>(;radius<span class="op">=</span>radius))</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">1</span><span class="op">:</span><span class="fu">Int</span>(<span class="fu">round</span>(n_frames<span class="op">*</span><span class="fl">0.25</span>)), <span class="fu">change</span>(<span class="op">:</span>radius, <span class="fl">1</span> <span class="op">=&gt;</span> <span class="fl">75</span>))) <span class="co"># scale up</span></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(n_frames<span class="op">:</span>(n_frames<span class="op">+</span><span class="fl">50</span>), <span class="fu">change</span>(<span class="op">:</span>radius, <span class="fl">75</span> <span class="op">=&gt;</span> <span class="fl">250</span>))) <span class="co"># scale up further</span></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, translate_anim, <span class="fu">translate</span>()))</span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">31</span><span class="op">:</span><span class="fl">120</span>, <span class="fu">rotate_anim</span>(i, n_colours), <span class="fu">rotate_around</span>(<span class="fu">Point</span>(<span class="fu">-</span>(size<span class="op">*</span>radius_factor), <span class="fl">0</span>))))</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">121</span><span class="op">:</span><span class="fl">150</span>, translate_back_anim, <span class="fu">translate</span>()))</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">150</span>, <span class="fu">color_anim</span>(julia_colours[colour_order[i]]), <span class="fu">sethue</span>()))</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Quarto cross:</span></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>    cross_h <span class="op">=</span> <span class="fu">Object</span>((n_frames<span class="op">+</span><span class="fl">50</span>)<span class="op">:</span>n_total, (args<span class="op">...</span>) <span class="op">-&gt;</span> <span class="fu">cross</span>(;orientation<span class="op">=:</span>horizontal))</span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>    cross_v <span class="op">=</span> <span class="fu">Object</span>((n_frames<span class="op">+</span><span class="fl">50</span>)<span class="op">:</span>n_total, (args<span class="op">...</span>) <span class="op">-&gt;</span> <span class="fu">cross</span>(;orientation<span class="op">=:</span>vertical))</span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="fu">render</span>(</span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>    video;</span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>    pathname <span class="op">=</span> <span class="fu">joinpath</span>(www_path, <span class="st">"intro.gif"</span>),</span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="working-with-documenter.jl-and-quarto" class="level4">
 <h4 class="anchored" data-anchor-id="working-with-documenter.jl-and-quarto">Working with <code>Documenter.jl</code> and Quarto</h4>
-<p>An interesting application of Quarto in the Julia ecosystem is package documentation. This is of course best done using <code>Documenter.jl</code> and fortunately the two play nicely with each other, since both share a common ground (Markdown). Their interaction is perhaps best demonstrated through this Julia library I recently developed: <a href="https://github.com/pat-alt/CounterfactualExplanations.jl"><code>CounterfactualExplanatinos.jl</code></a>. On there you will find lot of Julia scripts <code>*.jl</code> under <code>src/</code> and <code>test/</code>, as well as many Markdown <code>.md</code> and Quarto documents <code>.qmd</code> under <code>docs</code>. I <em>wrote</em> the package documentation in the Quarto documents, <em>rendered</em> documents individually through <code>quarto render [doc].qmd</code> and then fed the resulting Markdown documents to <code>Documenter.jl</code> as always.</p>
+<p>An interesting application of Quarto in the Julia ecosystem is package documentation. This is of course best done using <code>Documenter.jl</code> and fortunately the two play nicely with each other, since both share a common ground (Markdown). Their interaction is perhaps best demonstrated through this Julia library I recently developed: <a href="https://github.com/juliatrustworthyai/CounterfactualExplanations.jl"><code>CounterfactualExplanatinos.jl</code></a>. On there you will find lot of Julia scripts <code>*.jl</code> under <code>src/</code> and <code>test/</code>, as well as many Markdown <code>.md</code> and Quarto documents <code>.qmd</code> under <code>docs</code>. I <em>wrote</em> the package documentation in the Quarto documents, <em>rendered</em> documents individually through <code>quarto render [doc].qmd</code> and then fed the resulting Markdown documents to <code>Documenter.jl</code> as always.</p>
 <p>Below is my standard YAML header for those Quarto documents:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> </span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">commonmark</span><span class="kw">:</span></span>

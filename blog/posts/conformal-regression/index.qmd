@@ -9,7 +9,7 @@ categories:
   - regression
   - Julia
 description: >-
-  This third post introduces conformal regression by going through a standard machine learning workflow using [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/) and [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl).
+  This third post introduces conformal regression by going through a standard machine learning workflow using [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/) and [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl).
 image: www/intro.gif
 jupyter: julia-1.8
 draft: false
@@ -39,7 +39,7 @@ www_path = "blog/posts/conformal-regression/www"
   </figure>
 </div>
 
-This is the third (and for now final) part of a series of posts that introduce Conformal Prediction in Julia using [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl). The first [post](../conformal-prediction/index.qmd) introduced Conformal Prediction for supervised classification tasks: we learned that conformal classifiers produce set-valued predictions that are guaranteed to include the true label of a new sample with a certain probability. In the second [post](../conformal-image-classifier/) we applied these ideas to a more hands-on example: we saw how easy it is to use [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl) to conformalize a Deep Learning image classifier. 
+This is the third (and for now final) part of a series of posts that introduce Conformal Prediction in Julia using [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl). The first [post](../conformal-prediction/index.qmd) introduced Conformal Prediction for supervised classification tasks: we learned that conformal classifiers produce set-valued predictions that are guaranteed to include the true label of a new sample with a certain probability. In the second [post](../conformal-image-classifier/) we applied these ideas to a more hands-on example: we saw how easy it is to use [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) to conformalize a Deep Learning image classifier. 
 
 In this post, we will look at regression models instead, that is supervised learning tasks involving a continuous outcome variable. Regression tasks are as ubiquitous as classification tasks. For example, we might be interested in using a machine learning model to predict house prices or the inflation rate of the Euro or the parameter size of the next large language model. In fact, many readers may be more familiar with regression models than classification, in which case it may also be easier for you to understand Conformal Prediction (CP) in this context. 
 
@@ -53,7 +53,7 @@ Before we start, let's briefly recap what CP is all about. Don't worry, we're no
 
 Intuitively, CP works under the premise of turning heuristic notions of uncertainty into rigorous uncertainty estimates through repeated sampling or the use of dedicated calibration data. 
 
-In what follows we will explore what CP can do by going through a standard machine learning workflow using [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/) and [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl). There will be less focus on how exactly CP works, but references will point you to additional resources. 
+In what follows we will explore what CP can do by going through a standard machine learning workflow using [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/) and [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl). There will be less focus on how exactly CP works, but references will point you to additional resources. 
 
 :::{.callout-tip}
 ## Interactive Version
@@ -112,7 +112,7 @@ plot!(
 
 ## 🏋️ Model Training using [`MLJ`](https://alan-turing-institute.github.io/MLJ.jl/dev/)
 
-[`ConformalPrediction.jl`]((https://github.com/pat-alt/ConformalPrediction.jl)) is interfaced to [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/) [@blaom2020mlj]: a comprehensive Machine Learning Framework for Julia. `MLJ.jl` provides a large and growing suite of popular machine learning models that can be used for supervised and unsupervised tasks. Conformal Prediction is a model-agnostic approach to uncertainty quantification, so it can be applied to any common supervised machine learning model. 
+[`ConformalPrediction.jl`]((https://github.com/juliatrustworthyai/ConformalPrediction.jl)) is interfaced to [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/) [@blaom2020mlj]: a comprehensive Machine Learning Framework for Julia. `MLJ.jl` provides a large and growing suite of popular machine learning models that can be used for supervised and unsupervised tasks. Conformal Prediction is a model-agnostic approach to uncertainty quantification, so it can be applied to any common supervised machine learning model. 
 
 The interface to `MLJ.jl` therefore seems natural: any (supervised) `MLJ.jl` model can now be conformalized using `ConformalPrediction.jl`. By leveraging existing `MLJ.jl` functionality for common tasks like training, prediction and model evaluation, this package is light-weight and scalable. Now let's see how all of that works ...
 
@@ -306,7 +306,7 @@ Inductive Conformal Prediction (also referred to as Split Conformal Prediction) 
 
 ## 🔃 Recap
 
-This has been a super quick tour of [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl). We have seen how the package naturally integrates with [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/), allowing users to generate rigorous predictive uncertainty estimates for any supervised machine learning model. 
+This has been a super quick tour of [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl). We have seen how the package naturally integrates with [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/), allowing users to generate rigorous predictive uncertainty estimates for any supervised machine learning model. 
 
 ### *Are we done?*
 

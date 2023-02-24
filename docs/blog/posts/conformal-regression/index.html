@@ -276,7 +276,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <div>
   <div class="description">
-    This third post introduces conformal regression by going through a standard machine learning workflow using <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a> and <a href="https://github.com/pat-alt/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>.
+    This third post introduces conformal regression by going through a standard machine learning workflow using <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a> and <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>.
   </div>
 </div>
 
@@ -320,7 +320,7 @@ Conformal Prediction intervals for different<br>coverage rates. As coverage grow
 </figcaption>
 </figure>
 </div>
-<p>This is the third (and for now final) part of a series of posts that introduce Conformal Prediction in Julia using <a href="https://github.com/pat-alt/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>. The first <a href="../../../blog/posts/conformal-prediction/index.html">post</a> introduced Conformal Prediction for supervised classification tasks: we learned that conformal classifiers produce set-valued predictions that are guaranteed to include the true label of a new sample with a certain probability. In the second <a href="../conformal-image-classifier/">post</a> we applied these ideas to a more hands-on example: we saw how easy it is to use <a href="https://github.com/pat-alt/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a> to conformalize a Deep Learning image classifier.</p>
+<p>This is the third (and for now final) part of a series of posts that introduce Conformal Prediction in Julia using <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>. The first <a href="../../../blog/posts/conformal-prediction/index.html">post</a> introduced Conformal Prediction for supervised classification tasks: we learned that conformal classifiers produce set-valued predictions that are guaranteed to include the true label of a new sample with a certain probability. In the second <a href="../conformal-image-classifier/">post</a> we applied these ideas to a more hands-on example: we saw how easy it is to use <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a> to conformalize a Deep Learning image classifier.</p>
 <p>In this post, we will look at regression models instead, that is supervised learning tasks involving a continuous outcome variable. Regression tasks are as ubiquitous as classification tasks. For example, we might be interested in using a machine learning model to predict house prices or the inflation rate of the Euro or the parameter size of the next large language model. In fact, many readers may be more familiar with regression models than classification, in which case it may also be easier for you to understand Conformal Prediction (CP) in this context.</p>
 <section id="background" class="level2">
 <h2 class="anchored" data-anchor-id="background">📖 Background</h2>
@@ -330,7 +330,7 @@ Conformal Prediction intervals for different<br>coverage rates. As coverage grow
 <p>— <span class="citation" data-cites="angelopoulos2021gentle">Angelopoulos and Bates (<a href="#ref-angelopoulos2021gentle" role="doc-biblioref">2021</a>)</span> (<a href="https://arxiv.org/pdf/2107.07511.pdf">arXiv</a>)</p>
 </blockquote>
 <p>Intuitively, CP works under the premise of turning heuristic notions of uncertainty into rigorous uncertainty estimates through repeated sampling or the use of dedicated calibration data.</p>
-<p>In what follows we will explore what CP can do by going through a standard machine learning workflow using <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a> and <a href="https://github.com/pat-alt/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>. There will be less focus on how exactly CP works, but references will point you to additional resources.</p>
+<p>In what follows we will explore what CP can do by going through a standard machine learning workflow using <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a> and <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>. There will be less focus on how exactly CP works, but references will point you to additional resources.</p>
 <div class="callout callout-style-default callout-tip callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -368,7 +368,7 @@ Interactive Version
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(X) <span class="op">=</span> X <span class="op">*</span> <span class="fu">cos</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="4">
-<div class="cell-output cell-output-display" data-execution_count="45">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <div id="fig-data" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="index_files/figure-html/fig-data-output-1.svg" class="img-fluid figure-img"></p>
@@ -380,7 +380,7 @@ Interactive Version
 </section>
 <section id="model-training-using-mlj" class="level2">
 <h2 class="anchored" data-anchor-id="model-training-using-mlj">🏋️ Model Training using <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ</code></a></h2>
-<p><a href="(https://github.com/pat-alt/ConformalPrediction.jl)"><code>ConformalPrediction.jl</code></a> is interfaced to <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a> <span class="citation" data-cites="blaom2020mlj">(<a href="#ref-blaom2020mlj" role="doc-biblioref">Blaom et al. 2020</a>)</span>: a comprehensive Machine Learning Framework for Julia. <code>MLJ.jl</code> provides a large and growing suite of popular machine learning models that can be used for supervised and unsupervised tasks. Conformal Prediction is a model-agnostic approach to uncertainty quantification, so it can be applied to any common supervised machine learning model.</p>
+<p><a href="(https://github.com/juliatrustworthyai/ConformalPrediction.jl)"><code>ConformalPrediction.jl</code></a> is interfaced to <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a> <span class="citation" data-cites="blaom2020mlj">(<a href="#ref-blaom2020mlj" role="doc-biblioref">Blaom et al. 2020</a>)</span>: a comprehensive Machine Learning Framework for Julia. <code>MLJ.jl</code> provides a large and growing suite of popular machine learning models that can be used for supervised and unsupervised tasks. Conformal Prediction is a model-agnostic approach to uncertainty quantification, so it can be applied to any common supervised machine learning model.</p>
 <p>The interface to <code>MLJ.jl</code> therefore seems natural: any (supervised) <code>MLJ.jl</code> model can now be conformalized using <code>ConformalPrediction.jl</code>. By leveraging existing <code>MLJ.jl</code> functionality for common tasks like training, prediction and model evaluation, this package is light-weight and scalable. Now let’s see how all of that works …</p>
 <p>To start with, let’s split our data into a training and test set:</p>
 <div class="cell" data-execution_count="5">
@@ -414,7 +414,7 @@ Have it your way!
 </div>
 <p><a href="#fig-point">Figure&nbsp;2</a> below shows the resulting point predictions for the test data set:</p>
 <div class="cell" data-execution_count="9">
-<div class="cell-output cell-output-display" data-execution_count="50">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <div id="fig-point" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="index_files/figure-html/fig-point-output-1.svg" class="img-fluid figure-img"></p>
@@ -442,7 +442,7 @@ Have it your way!
 </div>
 <p>Now let us look at the predictions for our test data again. The chart below shows the results for our conformalized model. Predictions from conformal regressors are range-valued: for each new sample the model returns an interval <span class="math inline">\((y_{\text{lb}},y_{\text{ub}})\in\mathcal{Y}\)</span> that covers the test sample with a user-specified probability <span class="math inline">\((1-\alpha)\)</span>, where <span class="math inline">\(\alpha\)</span> is the expected error rate. This is known as the <strong>marginal coverage guarantee</strong> and it is proven to hold under the assumption that training and test data are exchangeable.</p>
 <div class="cell" data-execution_count="13">
-<div class="cell-output cell-output-display" data-execution_count="54">
+<div class="cell-output cell-output-display" data-execution_count="14">
 <div id="fig-interval" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="index_files/figure-html/fig-interval-output-1.svg" class="img-fluid figure-img"></p>
@@ -463,12 +463,14 @@ Have it your way!
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Empirical coverage: </span><span class="sc">$</span>(<span class="fu">round</span>(model_evaluation.measurement[<span class="fl">1</span>], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Coverage per fold: </span><span class="sc">$</span>(<span class="fu">round</span>.(model_evaluation.per_fold[<span class="fl">1</span>], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Empirical coverage: 0.902
-Coverage per fold: [0.94, 0.904, 0.874, 0.874, 0.898, 0.922]</code></pre>
+<pre><code>Empirical coverage: 0.902</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Coverage per fold: [0.94, 0.904, 0.874, 0.874, 0.898, 0.922]</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="17">
-<div class="cell-output cell-output-display" data-execution_count="58">
+<div class="cell-output cell-output-display" data-execution_count="18">
 <blockquote class="blockquote">
 <p>✅ ✅ ✅ Great! We got an empirical coverage rate that is slightly higher than desired 😁 … but why isn’t it exactly the same?</p>
 </blockquote>
@@ -489,13 +491,13 @@ Coverage per fold: [0.94, 0.904, 0.874, 0.874, 0.898, 0.922]</code></pre>
 </section>
 <section id="recap" class="level2">
 <h2 class="anchored" data-anchor-id="recap">🔃 Recap</h2>
-<p>This has been a super quick tour of <a href="https://github.com/pat-alt/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>. We have seen how the package naturally integrates with <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a>, allowing users to generate rigorous predictive uncertainty estimates for any supervised machine learning model.</p>
+<p>This has been a super quick tour of <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>. We have seen how the package naturally integrates with <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a>, allowing users to generate rigorous predictive uncertainty estimates for any supervised machine learning model.</p>
 <section id="are-we-done" class="level3">
 <h3 class="anchored" data-anchor-id="are-we-done"><em>Are we done?</em></h3>
 <p>Quite cool, right? Using a single API call we are able to generate rigorous prediction intervals for all kinds of different regression models. Have we just solved predictive uncertainty quantification once and for all? Do we even need to bother with anything else? Conformal Prediction is a very useful tool, but like so many other things, it is not the final answer to all our problems. In fact, let’s see if we can take CP to its limits.</p>
 <p>The helper function to generate data from above takes an optional argument <code>xmax</code>. By increasing that value, we effectively expand the domain of our input. Let’s do that and see how our conformal model does on this new out-of-domain data.</p>
 <div class="cell" data-execution_count="18">
-<div class="cell-output cell-output-display" data-execution_count="59">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <div id="fig-ood" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="index_files/figure-html/fig-ood-output-1.svg" class="img-fluid figure-img"></p>

@@ -7,7 +7,7 @@ categories:
   - uncertainty
   - Julia
 description: >-
-  A guide demonstrating how to use [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl) to conformalize a deep image classifier in a few lines of code.
+  A guide demonstrating how to use [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) to conformalize a deep image classifier in a few lines of code.
 image: www/intro.gif
 jupyter: julia-1.8
 draft: false
@@ -32,7 +32,7 @@ www_path = "blog/posts/conformal-image-classifier/www"
 
 Deep Learning is popular and --- for some tasks like image classification --- remarkably powerful. But it is also well-known that Deep Neural Networks (DNN) can be unstable [@goodfellow2014explaining] and poorly calibrated. Conformal Prediction can be used to mitigate these pitfalls. 
 
-In the [first part](../conformal-prediction/index.qmd) of this series of posts on Conformal Prediction, we looked at the basic underlying methodology and how CP can be implemented in Julia using [`ConformalPrediction.jl`](https://github.com/pat-alt/ConformalPrediction.jl). This second part of the series is a more goal-oriented how-to guide: it demonstrates how you can conformalize a deep learning image classifier built in `Flux.jl` in just a few lines of code. 
+In the [first part](../conformal-prediction/index.qmd) of this series of posts on Conformal Prediction, we looked at the basic underlying methodology and how CP can be implemented in Julia using [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl). This second part of the series is a more goal-oriented how-to guide: it demonstrates how you can conformalize a deep learning image classifier built in `Flux.jl` in just a few lines of code. 
 
 Since this is meant to be more of a hands-on article, we will avoid diving too deeply into methodological concepts. If you need more colour on this, be sure to check out the [first article](../conformal-prediction/index.qmd) on this topic and also @angelopoulos2021gentle. For a more formal treatment of Conformal Prediction see also @angelopoulos2022uncertainty.
 

@@ -322,26 +322,18 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <section id="from-to" class="level2">
 <h2 class="anchored" data-anchor-id="from-to">From 🐱 to 🐶</h2>
 <p>We will explain <code>REVISE</code> through a short tale of cats and dogs. The protagonist of this tale is Kitty 🐱, a young cat that identifies as a dog. Unfortunately, Kitty is not very tall and her tail, though short for a cat, is longer than that of the average dog (<a href="#fig-density">Figure&nbsp;1</a>).</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
 <div id="fig-density" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="index_files/figure-html/fig-density-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="www/density.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;1: Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty’s attribute values.</figcaption><p></p>
 </figure>
 </div>
-</div>
-</div>
 <p>Much to her dismay, Kitty has been recognized as a cat by a linear classifier <span class="math inline">\(g_n(X)\)</span> that we trained through stochastic gradient descent using the data on animals’ height and tail length. Once again interested readers may find technical details and code in the annex below. <a href="#fig-class">Figure&nbsp;2</a> shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty’s location indicated by a red circle. Can we provide individual recourse to Kitty?</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
 <div id="fig-class" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="index_files/figure-html/fig-class-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="www/class.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;2: Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty’s location is indicated by a red circle.</figcaption><p></p>
 </figure>
-</div>
-</div>
 </div>
 <p>Let’s see if and how we can apply <code>REVISE</code> to Kitty’s problem. The following summary should give you some flavour of how the algorithm works:</p>
 <ol type="1">
@@ -351,15 +343,11 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 </ol>
 <p><a href="#fig-revise">Figure&nbsp;3</a> illustrates what happens when this approach is applied to Kitty’s problem. The different panels show the results for different values of a regularization parameter <span class="math inline">\(\lambda\)</span> that governs the trade-off between achieving the desired label switch and keeping the distance between the original (<span class="math inline">\(\mathbf{x}_i\)</span>) and revised (<span class="math inline">\(\mathbf{x}_i'\)</span>) attributes small. In all but one case, <code>REVISE</code> converges: a decrease in tail length along with an increase in height eventually allows Kitty to cross the decision boundary. In other words, we have successfully turned Kitty into a dog - at least in the eyes of the linear classifier!</p>
 <p>We also observe that as we increase <span class="math inline">\(\lambda\)</span> for a fixed learning rate, <code>REVISE</code> takes longer to converge. This should come as no surprise, since higher values of <span class="math inline">\(\lambda\)</span> lead to greater regularization with respect to the penalty we place on the distance that Kitty has to travel. When we penalize too much (<span class="math inline">\(\lambda=10\)</span>), Kitty never reaches the decision boundary, because she is reluctant to change her characteristics beyond a certain point. While not visible to the naked eye, in this particular example <span class="math inline">\(\lambda=0.001\)</span> corresponds to the best choice among the candidate values.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
 <div id="fig-revise" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="blog/posts/individual-recourse-for-black-box-models/www/revise.gif" class="img-fluid figure-img"></p>
+<p><img src="www/revise.gif" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;3: The simplified <code>REVISE</code> algorithm in action: how Kitty crosses the decision boundary by changing her attributes. Regularization with respect to the distance penalty increases from top left to bottom right.</figcaption><p></p>
 </figure>
-</div>
-</div>
 </div>
 </section>
 <section id="discussion" class="level2">

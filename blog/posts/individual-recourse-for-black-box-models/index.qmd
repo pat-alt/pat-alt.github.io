@@ -99,7 +99,6 @@ kitty_dt_w <- data.table(height=kitty["height"], tail=kitty["tail"])
 ```{r}
 #| label: fig-density
 #| fig-cap: Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty's attribute values.
-#| output: true
 dt <- data.table(y,X)
 dt <- melt(dt, id.vars = "y")
 dt[,y:=as.factor(y)]
@@ -119,6 +118,8 @@ p <- ggplot(data=dt_plot, aes(x=value)) +
 p
 ```
 
+![Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty's attribute values.](www/density.png){#fig-density}
+
 Much to her dismay, Kitty has been recognized as a cat by a linear classifier $g_n(X)$ that we trained through stochastic gradient descent using the data on animals' height and tail length. Once again interested readers may find technical details and code in the annex below. @fig-class shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty's location indicated by a red circle. Can we provide individual recourse to Kitty?
 
 ```{r fit}
@@ -131,7 +132,6 @@ y_hat <- predict(mod) # predict labels
 ```{r}
 #| label: fig-class
 #| fig-cap: Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty's location is indicated by a red circle.
-#| output: true
 dt_plot <- data.table(y_hat = factor(y_hat), X)
 levels(dt_plot$y_hat) <- c("Cat", "Dog")
 dt_plot[,alpha:=1]
@@ -145,6 +145,8 @@ p <- ggplot() +
   )
 p + geom_point(data=kitty_dt_w,aes(x=height,y=tail),colour="coral", shape=1, stroke=2, size=7)
 ```
+
+![Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty's location is indicated by a red circle.](www/class.png){#fig-class}
 
 ```{r}
 set.seed(seed)
@@ -213,12 +215,7 @@ Let's see if and how we can apply `REVISE` to Kitty's problem. The following sum
 
 We also observe that as we increase $\lambda$ for a fixed learning rate, `REVISE` takes longer to converge. This should come as no surprise, since higher values of $\lambda$ lead to greater regularization with respect to the penalty we place on the distance that Kitty has to travel. When we penalize too much ($\lambda=10$), Kitty never reaches the decision boundary, because she is reluctant to change her characteristics beyond a certain point. While not visible to the naked eye, in this particular example $\lambda=0.001$ corresponds to the best choice among the candidate values.
 
-```{r}
-#| label: fig-revise
-#| fig-cap: "The simplified `REVISE` algorithm in action: how Kitty crosses the decision boundary by changing her attributes. Regularization with respect to the distance penalty increases from top left to bottom right."
-#| output: true
-knitr::include_graphics("blog/posts/individual-recourse-for-black-box-models/www/revise.gif")
-```
+![The simplified `REVISE` algorithm in action: how Kitty crosses the decision boundary by changing her attributes. Regularization with respect to the distance penalty increases from top left to bottom right.](www/revise.gif){#fig-revise}
 
 ```{r, eval=F}
 dt_dist <- steps[,.(distance=unique(distance)),by=lambda]
