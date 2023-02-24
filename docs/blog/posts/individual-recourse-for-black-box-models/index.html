@@ -23,6 +23,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -86,11 +87,12 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -104,8 +106,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -181,6 +182,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     <span class="navbar-title">Patrick Altmeyer</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
@@ -224,7 +226,8 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
  <span class="menu-text"></span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
+            <div class="quarto-navbar-tools">
+</div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
@@ -359,14 +362,14 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
-<div id="ref-joshi2019realistic" class="csl-entry" role="doc-biblioentry">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-joshi2019realistic" class="csl-entry" role="listitem">
 Joshi, Shalmali, Oluwasanmi Koyejo, Warut Vijitbenjaronk, Been Kim, and Joydeep Ghosh. 2019. <span>“Towards Realistic Individual Recourse and Actionable Explanations in Black-Box Decision Making Systems.”</span> <a href="https://arxiv.org/abs/1907.09615">https://arxiv.org/abs/1907.09615</a>.
 </div>
-<div id="ref-oneil2016weapons" class="csl-entry" role="doc-biblioentry">
+<div id="ref-oneil2016weapons" class="csl-entry" role="listitem">
 O’Neil, Cathy. 2016. <em>Weapons of Math Destruction: <span>How</span> Big Data Increases Inequality and Threatens Democracy</em>. <span>Crown</span>.
 </div>
-<div id="ref-ustun2019actionable" class="csl-entry" role="doc-biblioentry">
+<div id="ref-ustun2019actionable" class="csl-entry" role="listitem">
 Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recourse in Linear Classification.”</span> In <em>Proceedings of the <span>Conference</span> on <span>Fairness</span>, <span>Accountability</span>, and <span>Transparency</span></em>, 10–19.
 </div>
 </div>
@@ -608,14 +611,14 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2021,
-  author = {Patrick Altmeyer},
+  author = {Altmeyer, Patrick},
   title = {Individual Recourse for {Black} {Box} {Models}},
   date = {21-04-27},
   url = {https://www.paltmeyer.com/blog//blog/posts/individual-recourse-for-black-box-models},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2021" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
-Patrick Altmeyer. 21AD. <span>“Individual Recourse for Black Box
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2021" class="csl-entry quarto-appendix-citeas" role="listitem">
+Altmeyer, Patrick. 21AD. <span>“Individual Recourse for Black Box
 Models.”</span> April 27, 21AD. <a href="https://www.paltmeyer.com/blog//blog/posts/individual-recourse-for-black-box-models">https://www.paltmeyer.com/blog//blog/posts/individual-recourse-for-black-box-models</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

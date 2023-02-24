@@ -23,6 +23,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -86,11 +87,12 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -104,8 +106,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -184,6 +185,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     <span class="navbar-title">Patrick Altmeyer</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
@@ -227,7 +229,8 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
  <span class="menu-text"></span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
+            <div class="quarto-navbar-tools">
+</div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
@@ -541,17 +544,17 @@ SSC: 0.948</code></pre>
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
-<div id="ref-angelopoulos2021gentle" class="csl-entry" role="doc-biblioentry">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-angelopoulos2021gentle" class="csl-entry" role="listitem">
 Angelopoulos, Anastasios N., and Stephen Bates. 2021. <span>“A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification.”</span> <a href="https://arxiv.org/abs/2107.07511">https://arxiv.org/abs/2107.07511</a>.
 </div>
-<div id="ref-angelopoulos2022uncertainty" class="csl-entry" role="doc-biblioentry">
+<div id="ref-angelopoulos2022uncertainty" class="csl-entry" role="listitem">
 Angelopoulos, Anastasios, Stephen Bates, Jitendra Malik, and Michael I. Jordan. 2022. <span>“Uncertainty <span>Sets</span> for <span>Image Classifiers</span> Using <span>Conformal Prediction</span>.”</span> <span>arXiv</span>. <a href="http://arxiv.org/abs/2009.14193">http://arxiv.org/abs/2009.14193</a>.
 </div>
-<div id="ref-goodfellow2014explaining" class="csl-entry" role="doc-biblioentry">
+<div id="ref-goodfellow2014explaining" class="csl-entry" role="listitem">
 Goodfellow, Ian J, Jonathon Shlens, and Christian Szegedy. 2014. <span>“Explaining and Harnessing Adversarial Examples.”</span> <a href="https://arxiv.org/abs/1412.6572">https://arxiv.org/abs/1412.6572</a>.
 </div>
-<div id="ref-lecun1998mnist" class="csl-entry" role="doc-biblioentry">
+<div id="ref-lecun1998mnist" class="csl-entry" role="listitem">
 LeCun, Yann. 1998. <span>“The <span>MNIST</span> Database of Handwritten Digits.”</span>
 </div>
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
@@ -560,14 +563,14 @@ LeCun, Yann. 1998. <span>“The <span>MNIST</span> Database of Handwritten Digit
 <li id="fn1"><p>For a full tutorial on how to build an MNIST image classifier relying solely on <code>Flux.jl</code>, check out this <a href="https://fluxml.ai/Flux.jl/stable/tutorials/2021-01-26-mlp/">tutorial</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
-  author = {Patrick Altmeyer},
+  author = {Altmeyer, Patrick},
   title = {How to {Conformalize} a {Deep} {Image} {Classifier}},
   date = {22-12-05},
   url = {https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
-Patrick Altmeyer. 22AD. <span>“How to Conformalize a Deep Image
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas" role="listitem">
+Altmeyer, Patrick. 22AD. <span>“How to Conformalize a Deep Image
 Classifier.”</span> December 5, 22AD. <a href="https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier">https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

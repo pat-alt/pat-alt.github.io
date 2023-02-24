@@ -23,11 +23,12 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -41,8 +42,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -117,6 +117,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     <span class="navbar-title">Patrick Altmeyer</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
@@ -160,7 +161,8 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
  <span class="menu-text"></span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
+            <div class="quarto-navbar-tools">
+</div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
@@ -244,12 +246,12 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 This is the third (and for now final) part of a series of posts that introduce Conformal Prediction in Julia using [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl). The first [post](../conformal-prediction/index.qmd) introduced Conformal Prediction for supervised classification tasks: we learned that conformal classifiers produce set-valued predictions that are guaranteed to include the true label of a new sample with a certain probability. In the second [post](../conformal-image-classifier/) we applied these ideas to a more hands-on example: we saw how easy it is to use [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) to conformalize a Deep Learning image classifier. 
 
 In this post, we will look at regression models instead, that is supervised learning tasks involving a continuous outcome variable. Regression tasks are as ubiquitous as classification tasks. For example, we might be interested in using a machine learning model to predict house prices or the inflation rate of the Euro or the parameter size of the next large language model. In fact, many readers may be more familiar with regression models than classification, in which case it may also be easier for you to understand Conformal Prediction (CP) in this context.  -->
-<div class="callout callout-style-default callout-tip callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 🏃‍♀️ TL;DR
 </div>
 </div>
@@ -279,19 +281,19 @@ In this post, we will look at regression models instead, that is supervised lear
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">📚 Further Resources</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
-<div id="ref-mothilal2020explaining" class="csl-entry" role="doc-biblioentry">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">📚 Further Resources</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-mothilal2020explaining" class="csl-entry" role="listitem">
 Mothilal, Ramaravind K, Amit Sharma, and Chenhao Tan. 2020. <span>“Explaining Machine Learning Classifiers Through Diverse Counterfactual Explanations.”</span> In <em>Proceedings of the 2020 <span>Conference</span> on <span>Fairness</span>, <span>Accountability</span>, and <span>Transparency</span></em>, 607–17.
 </div>
 </div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
-  author = {Patrick Altmeyer},
+  author = {Altmeyer, Patrick},
   title = {Diverse {Explanations} for {Black-Box} {Models}},
   date = {22-12-29},
   url = {https://www.paltmeyer.com/blog//blog/posts/diverse-explanations},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
-Patrick Altmeyer. 22AD. <span>“Diverse Explanations for Black-Box
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas" role="listitem">
+Altmeyer, Patrick. 22AD. <span>“Diverse Explanations for Black-Box
 Models.”</span> December 29, 22AD. <a href="https://www.paltmeyer.com/blog//blog/posts/diverse-explanations">https://www.paltmeyer.com/blog//blog/posts/diverse-explanations</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
