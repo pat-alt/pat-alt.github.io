@@ -1,0 +1,113 @@
+---
+title: Literally Getting Started with Metaprogramming in Julia
+subtitle: Learning Julia
+date: '2022-03-12'
+categories:
+  - metaprogramming
+  - macros
+  - Julia
+description: >-
+  
+image: www/intro.gif
+jupyter: julia-1.8
+draft: true
+---
+
+```{julia}
+#| echo: false
+
+using Pkg; Pkg.activate("blog/posts/metaprogramming")
+```
+
+<div class="intro-gif">
+  <figure>
+    <img src="www/intro.gif">
+    <figcaption>Conformal Prediction intervals for different<br>coverage rates. As coverage grows, so does<br>the width of the prediction interval.</figcaption>
+  </figure>
+</div>
+
+On this blog, I typically talk about things that I have **some** understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly **clueless** about. There's an interesting aspect about Julia, which I know embarrassingly little about at this point: [Metaprogramming](https://docs.julialang.org/en/v1/manual/metaprogramming/). 
+
+Having worked with Julia almost every day for about 1.5 years now, I have employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it doesn't exist. Meanwhile, [Karandeep Singh](https://twitter.com/kdpsinghlab) has stepped onto the Julia stage around 5 minutes ago and already developed a package that literally oozes Metaprogramming: [Tidier.jl](https://kdpsingh.github.io/Tidier.jl/dev/). The package API is such a joy to work with, that I have felt inspired to finally take a serious look at what Metaprogramming is all about. 
+
+My goal is to get to the point where I can confidently write my first macro for [`CounterfactualExplanations.jl`] - more on this below! If you are as clueless and curious about the topic as yours truly, then follow along on a journey into the metaverse. Buckle in though, it's going to be a bumpy ride! You have been warned. 
+
+## All right, where to start?
+
+You guessed it, we'll start with the official Julia [documentation](https://docs.julialang.org/en/v1/manual/metaprogramming/) on the topic:
+
+> Like Lisp, Julia represents its own code as a data structure of the language itself.
+
+Hmmm ... I know nothing about Lisp and this is already beyond me. Code as a data structure?
+
+Let's first try to understand what exactly metaprogramming even is, outside of Julia and Lisp. We'll take a quick detour before we're back. 
+
+[Wikipedia](https://en.wikipedia.org/wiki/Metaprogramming#:~:text=Metaprogramming%20is%20a%20programming%20technique,even%20modify%20itself%20while%20running.) has the following to say on the topic:
+
+> Metaprogramming is a programming technique in which computer programs have the ability to treat other programs as their data.
+
+Ok, ChatGPT? I wanted to try out [ReplGPT](https://github.com/ThatcherC/ReplGPT.jl) anyway so here goes:
+
+```{.julia-repl}
+julia> using ReplGPT
+ChatGPT> Hey hey, can you please explain metaprogramming to me (I have no computer science background, but am experienced with programming and data science)
+  Metaprogramming is a programming technique where a program is capable of creating or manipulating code at
+  runtime. It involves writing computer programs that create, modify, or analyze other computer programs or data
+  about those programs.
+```
+
+Alright, so in layman's terms metaprogramming involves code that generates code - I guess we really have entered the metaverse!
+
+## Code as Data Structures
+
+Let's head back to the Julia [documentation](https://docs.julialang.org/en/v1/manual/metaprogramming/) and look at the first couple of examples. Skipping the details here, it turns out that when I write `1 + 1` in the REPL, Julia first parses this program as a string `"1 + 1` into an expression `ex=:(1 + 1)::Expr`, which is then evaluated `eval(ex)`. I've used a `quote` here to generate the expression because I've used **quoting** before for use with `Documenter.jl`. 
+
+And if I understand this correctly, the expression `ex::Expr` is literally **code as a data structure**:
+
+```{julia}
+ex = :(sum([1,2,3]))
+dump(ex)
+```
+
+That data structure can be "manipulated from within the language". Let's try that! Currently, evaluating this expression yields the `sum` of the `Array`:
+
+```{julia}
+eval(ex)
+```
+
+Upon manipulation (that sounds weird!), we have:
+
+```{julia}
+ex.args[1] = :maximum
+eval(ex)
+```
+
+Ok ok, things are starting to make sense! 
+
+## Interpolation
+
+Back to the Julia documentation and next on the agenda we [Interpolation](https://docs.julialang.org/en/v1/manual/metaprogramming/#man-expression-interpolation). Skipping the details again, it seems like I can interpolate expression much like strings. Using interpolation I can recreate the expression from above as follows:
+
+```{julia}
+fun = maximum
+x = [1,2,3]
+ex_from_ex_interpoliation = (:($fun($x)))
+a = eval(ex_from_ex_interpoliation)
+```
+
+Using string interpolation is quite similar:
+
+```{julia}
+fun = maximum
+x = [1,2,3]
+ex_from_string_interpolation = Meta.parse("$fun($x)")
+eval(ex_from_string_interpolation) == a
+```
+
+Moving on 🏃!
+
+
+
+
+
+## References
