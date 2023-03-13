@@ -18,6 +18,7 @@ draft: true
 
 using Pkg; Pkg.activate("blog/posts/metaprogramming")
 using CounterfactualExplanations
+using Markdown
 ```
 
 <div class="intro-gif">
@@ -174,9 +175,7 @@ In other words, all generators currently implemented work with that same objecti
 
 > Why not compose generators that combine ideas from different off-the-shelf generators?
 
-I want to give users an easy way to do that, without having to build custom `Generator`s from scratch. This (I think) is a good use case for metaprogramming. 
-
-### Build your own @objective
+I want to give users an easy way to do that, without having to build custom `Generator`s from scratch. This (I think) is a good use case for metaprogramming.
 
 Let's try and see if we can make that work. We'll simply extend `CounterfactualExplanations` right here in this repo hosting the blog (easily done in Julia) and provided everything works out well create a pull request. I already have a GitHub [issue](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/118) for this with a linked branch, so that's the one I'll use in my environment:
 
@@ -200,7 +199,17 @@ mutable struct ComposableGenerator <: AbstractGradientBasedGenerator
 end
 ```
 
-The goal is to use a macro that builds an expression that, when evaluated, instantiates a composable generator. In particular, the macro should accept as its main argument an expression that looks much like the right-hand-side of @eq-general, which is essentially just a weighted sum. 
+This can be instantiated in the same way as off-the-shelf generators:
+
+```{julia}
+generator = ComposableGenerator()
+```
+
+Our goal is to create macros that build expressions that, when evaluated, mutate the `generator` instance. 
+
+#### Define an @objective
+
+Our first and most important macro shall define the counterfactual search objective. In particular, the `@objective` macro should accept an expression that looks much like the right-hand-side of @eq-general, which is essentially just a weighted sum. 
 
 Let's start with that part. Naively, we could begin by writing it out very literally:
 
@@ -226,25 +235,16 @@ ex.args
 My first naive approach ...
 
 ```{.julia}
-macro objective(ex)
+macro objective(generator, ex)
     loss = ex.args[2]
     ex_penalty = ex.args[3]
     λ = ex_penalty.args[2]
     cost = ex_penalty.args[3]
-    ex_generator = :(ComposableGenerator(loss, cost, λ))
-    return ex_generator
-end
-```
-
-I forgot to interpolate ...
-
-```{.julia}
-macro objective(ex)
-    loss = ex.args[2]
-    ex_penalty = ex.args[3]
-    λ = ex_penalty.args[2]
-    cost = ex_penalty.args[3]
-    ex_generator = :(ComposableGenerator($loss, $cost, $λ))
+    ex_generator = quote 
+        $generator.loss = $loss
+        $generator.cost = $cost
+        $generator.λ = $λ
+    end
     return ex_generator
 end
 ```
@@ -252,17 +252,82 @@ end
 This still throws an error because ...
 
 ```{julia}
-macro objective(ex)
+macro objective(generator, ex)
     loss = getfield(CounterfactualExplanations.Objectives, ex.args[2])
     ex_penalty = ex.args[3]
     λ = ex_penalty.args[2]
     cost = getfield(CounterfactualExplanations.Objectives, ex_penalty.args[3])
-    ex_generator = :(ComposableGenerator($loss, $cost, $λ))
+    ex_generator = quote 
+        $generator.loss = $loss
+        $generator.complexity = $cost
+        $generator.λ = $λ
+        generator
+    end
     return ex_generator
 end
 ```
 
 Finally, this works!
+
+But what about adding multiple penalties? The DiCE generator, for example, also takes into account how diverse the counterfactual explanations are [@mothilal2020explaining]. The corresponding penalty is called `ddp_diversity`. Let's start with the expression again:
+
+```{julia}
+ex = :(logitbinarycrossentropy + 0.1 * distance_l2 + 1.0 * ddp_diversity)
+ex.args
+```
+
+```{julia}
+Markdown.parse(
+    """
+    This time there's a second nested `Expr`ession among the arguments: `:($(ex.args[end]))`.
+    """
+)
+```
+
+
+```{julia}
+macro objective(ex)
+    loss = getfield(CounterfactualExplanations.Objectives, ex.args[2])
+    Λ = Vector{AbstractFloat}()
+    costs = Vector{Function}()
+    for i in 3:length(ex.args)
+        ex_penalty = ex.args[i]
+        λ = ex_penalty.args[2]
+        push!(Λ, λ)
+        cost = getfield(CounterfactualExplanations.Objectives, ex_penalty.args[3])
+        push!(costs, cost)
+    end
+    ex_generator = :(ComposableGenerator($loss, $costs, $Λ))
+    return ex_generator
+end
+```
+
+Finally, let's add another argument that can be used to specify the decision threshold $\gamma$, which determines when the counterfactual search is considered to have converged:
+
+```{julia}
+macro objective(generator, ex)
+    loss = getfield(CounterfactualExplanations.Objectives, ex.args[2])
+    Λ = Vector{AbstractFloat}()
+    costs = Vector{Function}()
+    for i in 3:length(ex.args)
+        ex_penalty = ex.args[i]
+        λ = ex_penalty.args[2]
+        push!(Λ, λ)
+        cost = getfield(CounterfactualExplanations.Objectives, ex_penalty.args[3])
+        push!(costs, cost)
+    end
+    ex_generator = quote 
+        $generator.loss = $loss
+        $generator.complexity = $costs
+        $generator.λ = $Λ
+        generator
+    end
+    return ex_generator
+end
+```
+
+
+
 
 
 ## References
