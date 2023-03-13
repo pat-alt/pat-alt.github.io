@@ -1,13 +1,13 @@
 ---
-title: Literally Getting Started with Metaprogramming in Julia
-subtitle: Learning Julia
-date: '2022-03-12'
+title: A Leap of Faith into Julia's Metaverse
+subtitle: Getting started with metaprogramming in Julia
+date: '2022-03-13'
 categories:
   - metaprogramming
   - macros
   - Julia
 description: >-
-  
+  In this slightly different post, I talk about my first experience with metaprogramming in Julia.
 image: www/intro.gif
 jupyter: julia-1.8
 draft: true
@@ -19,6 +19,7 @@ draft: true
 using Pkg; Pkg.activate("blog/posts/metaprogramming")
 using CounterfactualExplanations
 using Markdown
+using Plots
 ```
 
 <div class="intro-gif">
@@ -143,7 +144,7 @@ So I understand that a macro is a way to build and return expressions inside a b
 
 To fully grasp the next [part](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hold-up:-why-macros?), I should have not skipped the part on [functions on `Expr`essions](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions). We'll leave that little nugget for Future Me. That same guy will also have to suffer the consequences of Present Me merely skimming the details in the next [section](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Macro-invocation) on macro invocation. Present Me is impatient and overly confident in the level of knowledge that we have just acquired about metaprogramming. Let's meet the final boss of the metaverse and ...
 
-## [BUILD AN ADVANCED MACRO]
+## 🔥🔥🔥 BUILD AN ADVANCED MACRO
 
 Ok, great, let's go! I'll leave it to you to read that section in the Julia [docs](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Building-an-advanced-macro). We'll jump straight into building the macro I want to build for [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl). I now think it'll be less involved than I thought --- optimism in the face of uncertainty!
 
@@ -207,7 +208,7 @@ generator = ComposableGenerator()
 
 Our goal is to create macros that build expressions that, when evaluated, mutate the `generator` instance. 
 
-#### Define an @objective
+### The Macros
 
 Our first and most important macro shall define the counterfactual search objective. In particular, the `@objective` macro should accept an expression that looks much like the right-hand-side of @eq-general, which is essentially just a weighted sum. 
 
@@ -247,6 +248,7 @@ macro objective(generator, ex)
     end
     return ex_generator
 end
+@objective(generator, logitbinarycrossentropy + 0.1 * distance_l2)
 ```
 
 This still throws an error because ...
@@ -265,6 +267,7 @@ macro objective(generator, ex)
     end
     return ex_generator
 end
+@objective(generator, logitbinarycrossentropy + 0.1 * distance_l2)
 ```
 
 Finally, this works!
@@ -283,26 +286,6 @@ Markdown.parse(
     """
 )
 ```
-
-
-```{julia}
-macro objective(ex)
-    loss = getfield(CounterfactualExplanations.Objectives, ex.args[2])
-    Λ = Vector{AbstractFloat}()
-    costs = Vector{Function}()
-    for i in 3:length(ex.args)
-        ex_penalty = ex.args[i]
-        λ = ex_penalty.args[2]
-        push!(Λ, λ)
-        cost = getfield(CounterfactualExplanations.Objectives, ex_penalty.args[3])
-        push!(costs, cost)
-    end
-    ex_generator = :(ComposableGenerator($loss, $costs, $Λ))
-    return ex_generator
-end
-```
-
-Finally, let's add another argument that can be used to specify the decision threshold $\gamma$, which determines when the counterfactual search is considered to have converged:
 
 ```{julia}
 macro objective(generator, ex)
@@ -324,9 +307,63 @@ macro objective(generator, ex)
     end
     return ex_generator
 end
+@objective(generator, logitbinarycrossentropy + 0.2distance_l2 + 1.0ddp_diversity)
 ```
 
+Finally, let's also define a simple macro that can be used to change the decision threshold $\gamma$ that is used to specify when the counterfactual search is considered to have converged:
 
+```{julia}
+macro threshold(generator, γ)
+    return :(generator.decision_threshold=$γ; generator)
+end
+@threshold(generator, 0.75)
+```
+
+In this case, using a macro is most definitely not necessary, but this should help to keep the syntax for composing generators consistent.
+
+Ok, shall we see if that's worked? Below we go through some of the typical workflows associated with Counterfactual Explanations. Firstly, we load some synthetic data and fit a black-box model to it.
+
+```{julia}
+n_dim = 2
+n_classes = 4
+n_samples = 400
+model_name = :MLP
+counterfactual_data = CounterfactualExplanations.load_blobs(n_samples; k=n_dim, centers=n_classes)
+M = fit_model(counterfactual_data, model_name)
+plot(M, counterfactual_data)
+```
+
+Next, we begin by specifying our target and factual label. We then draw a random sample from the non-target (factual) class.
+
+```{julia}
+# Factual and target:
+target = 2
+factual = 4
+chosen = rand(findall(predict_label(M, counterfactual_data) .== factual))
+x = select_factual(counterfactual_data,chosen)
+```
+
+Finally, we use our `generator` to generate counterfactuals:
+
+```{julia}
+ce = generate_counterfactual(
+    x, target, counterfactual_data, M, generator;
+    num_counterfactuals = 5
+)
+```
+
+It worked! 🎉 The resulting counterfactual search is illustrated in @fig-search. 
+
+```{julia}
+#| fig-cap: "Counterfactual search using our composed generator."
+#| label: fig-search
+
+plot(ce)
+```
+
+Time for me to add this all to [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl). But not before quickly wrapping things up ...
+
+## Wrapping Up
 
 
 
