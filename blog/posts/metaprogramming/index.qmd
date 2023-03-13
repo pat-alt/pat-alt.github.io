@@ -26,15 +26,15 @@ using Pkg; Pkg.activate("blog/posts/metaprogramming")
   </figure>
 </div>
 
-On this blog, I typically talk about things that I have **some** understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly **clueless** about. There's an interesting aspect about Julia, which I know embarrassingly little about at this point: [Metaprogramming](https://docs.julialang.org/en/v1/manual/metaprogramming/). 
+On this blog, I typically talk about things that I have **some** understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly **clueless** about. There's an interesting aspect about Julia, which I know embarrassingly little about at this point: [Metaprogramming](https://docs.julialang.org/en/v1.8/manual/metaprogramming/). 
 
 Having worked with Julia almost every day for about 1.5 years now, I have employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it doesn't exist. Meanwhile, [Karandeep Singh](https://twitter.com/kdpsinghlab) has stepped onto the Julia stage around 5 minutes ago and already developed a package that literally oozes Metaprogramming: [Tidier.jl](https://kdpsingh.github.io/Tidier.jl/dev/). The package API is such a joy to work with, that I have felt inspired to finally take a serious look at what Metaprogramming is all about. 
 
-My goal is to get to the point where I can confidently write my first macro for [`CounterfactualExplanations.jl`] - more on this below! If you are as clueless and curious about the topic as yours truly, then follow along on a journey into the metaverse. Buckle in though, it's going to be a bumpy ride! You have been warned. 
+My goal is to get to the point where I can confidently write my first macro for [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) - more on this below! If you are as clueless and curious about the topic as yours truly, then follow along on a journey into the metaverse. Buckle in though, it's going to be a bumpy ride! You have been warned. 
 
 ## All right, where to start?
 
-You guessed it, we'll start with the official Julia [documentation](https://docs.julialang.org/en/v1/manual/metaprogramming/) on the topic:
+You guessed it, we'll start with the official Julia [documentation](https://docs.julialang.org/en/v1.8/manual/metaprogramming/) on the topic:
 
 > Like Lisp, Julia represents its own code as a data structure of the language itself.
 
@@ -58,9 +58,13 @@ ChatGPT> Hey hey, can you please explain metaprogramming to me (I have no comput
 
 Alright, so in layman's terms metaprogramming involves code that generates code - I guess we really have entered the metaverse!
 
-## Code as Data Structures
+## Julia docs (v1.8)
 
-Let's head back to the Julia [documentation](https://docs.julialang.org/en/v1/manual/metaprogramming/) and look at the first couple of examples. Skipping the details here, it turns out that when I write `1 + 1` in the REPL, Julia first parses this program as a string `"1 + 1` into an expression `ex=:(1 + 1)::Expr`, which is then evaluated `eval(ex)`. I've used a `quote` here to generate the expression because I've used **quoting** before for use with `Documenter.jl`. 
+Let's head back to the Julia [documentation](https://docs.julialang.org/en/v1.8/manual/metaprogramming/) and look at the first couple of examples.
+
+### Code as Data Structures
+
+Skipping the details here, it turns out that when I write `1 + 1` in the REPL, Julia first parses this program as a string `"1 + 1` into an expression `ex=:(1 + 1)::Expr`, which is then evaluated `eval(ex)`. I've used a `quote` here to generate the expression because I've used **quoting** before for use with `Documenter.jl`. 
 
 And if I understand this correctly, the expression `ex::Expr` is literally **code as a data structure**:
 
@@ -84,14 +88,14 @@ eval(ex)
 
 Ok ok, things are starting to make sense! 
 
-## Interpolation
+### Interpolation
 
-Back to the Julia documentation and next on the agenda we [Interpolation](https://docs.julialang.org/en/v1/manual/metaprogramming/#man-expression-interpolation). Skipping the details again, it seems like I can interpolate expression much like strings. Using interpolation I can recreate the expression from above as follows:
+Back to the Julia documentation and next on the agenda we [Interpolation](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-expression-interpolation). Skipping the details again, it seems like I can interpolate expression much like strings. Using interpolation I can recreate the expression from above as follows:
 
 ```{julia}
 fun = maximum
 x = [1,2,3]
-ex_from_ex_interpoliation = (:($fun($x)))
+ex_from_ex_interpoliation = :($fun($x))
 a = eval(ex_from_ex_interpoliation)
 ```
 
@@ -104,8 +108,105 @@ ex_from_string_interpolation = Meta.parse("$fun($x)")
 eval(ex_from_string_interpolation) == a
 ```
 
-Moving on 🏃!
+And much like with function arguments, we can also use splatting:
 
+```{julia}
+eval(:(zeros($x...)))
+```
+
+Next off, we have [**nested quotes**](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Nested-quote). I can't see myself using these anytime soon but anyway it seems that for each `$` sign that we prepend to `x`, an evaluation is trigged: 
+
+```{julia}
+eval(quote quote $$:(x) end end)
+```
+
+Moving on, we have [`QuoteNodes`](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-quote-node), which I will skip because I probably won't be doing any advanced metaprogramming anytime soon. The next two sections on [evaluating expressions](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Evaluating-expressions) and [functions on `Expr`essions](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions) also look somewhat more involved than what I need right now, but I expect I'll find myself back here when I write that first macro for [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl).
+
+### Macros 
+
+Ahhh I see we've finally arrived in [Macroland](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-macros)! 
+
+> A macro maps a tuple of arguments to a returned expression, and the resulting expression is compiled directly rather than requiring a runtime eval call.
+
+Let's see if we can make sense of this as we move on. The `Hello, world!` example makes it quite clear:
+
+```{julia}
+macro sayhello(name)
+    return :( println("Hello, ", $name) )   # return the expression ...
+end
+@sayhello "reader"                          # ... to be immediately compiled.
+```
+
+So I understand that a macro is a way to build and return expressions inside a block (a bit like a function) but on call that expression is immediately evaluated. In other words, we can use macros to write code that generates code that is then evaluated. 
+
+To fully grasp the next [part](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hold-up:-why-macros?), I should have not skipped the part on [functions on `Expr`essions](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions). We'll leave that little nugget for Future Me. That same guy will also have to suffer the consequences of Present Me merely skimming the details in the next [section](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Macro-invocation) on macro invocation. Present Me is impatient and overly confident in the level of knowledge that we have just acquired about metaprogramming. Let's meet the final boss of the metaverse and ...
+
+## [BUILD AN ADVANCED MACRO]
+
+Ok, great, let's go! I'll leave it to you to read that section in the Julia [docs](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Building-an-advanced-macro). We'll jump straight into building the macro I want to build for [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl). I now think it'll be less involved than I thought --- optimism in the face of uncertainty!
+
+### From Off-the-Shelf Counterfactual Generators ...
+
+[`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) is a package for generating Counterfactual Explanations for predictive models $f: \mathcal{X} \mapsto \mathcal{Y}$. This is a relatively recent approach to Explainable AI that I am (probably a little too) excited about and won't dwell on here. For what follows, it's worth mentioning that generating Counterfactual Explanations can be seen as a generative modelling task because it involves generating samples in the input space: $x \sim \mathcal{X}$. To this end, the package ships with a number of `Generators`, which are really just composite types that contain information about how counterfactuals ought to be generated. 
+
+Currently, users can specify the type of generator they want to use by instantiating it. For example, the DiCE generator by @mothilal2020explaining can be instantiated as follows:
+
+```{julia}
+generator = DiCEGenerator()
+```
+
+This is a straightforward way for users to use off-the-shelf counterfactual generators. But there is some untapped potential here, as we will see next.
+
+### ... To Composable Generators
+
+One of my key objectives for the package has always been composability. It turns out that many of the various counterfactual generators that have been proposed in the literature, essentially do the same thing: they optimize an objective function. In @altmeyer2023endogenous, we denote that objective formally as follows,
+
+$$
+\begin{aligned}
+\mathbf{s}^\prime &= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\} 
+\end{aligned} 
+$$ {#eq-general}
+
+where $\text{yloss}$ denotes the main loss function and $\text{cost}$ is a penalty term. I won't cover this in any more detail here, but you can read more about it in the package [docs](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators). The important thing to mention here is that @eq-eq-general very closely describes how counterfactual search is actually implemented in the package. 
+
+In other words, all generators currently implemented work with that same objective. They just vary in the way that penalties are defined, for example. This gives rise to an interesting idea: 
+
+> Why not compose generators that combine ideas from different off-the-shelf generators?
+
+I want to give users an easy way to do that, without having to build custom `Generator`s from scratch. This (I think) is a good use case for metaprogramming. 
+
+### Build your own @objective
+
+Let's try and see if we can make that work. We'll simply extend `CounterfactualExplanations` right here in this repo hosting the blog (easily done in Julia) and provided everything works out well create a pull request. I already have a GitHub [issue](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/118) for this with a linked branch, so that's the one I'll use in my environment:
+
+```{.julia}
+] add https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl#118-add-losses-and-penalties-modules-or-group-under-objectives-module
+```
+
+By the time you're reading this, all changes to that branch will hopefully already be committed and merged.
+
+Before turning to the actual macro, we need a new `ComposableGenerator` class, which I've already added [here](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/blob/4d15ad462d29b3ca46577389ac5899cdf1f41bf9/src/generators/ComposableGenerator.jl#L5)
+
+```{julia}
+mutable struct ComposableGenerator <: AbstractGradientBasedGenerator
+    loss::Union{Nothing,Function}                       # loss function
+    complexity::Union{Function,Vector{Function}}        # penalties
+    λ::Union{AbstractFloat,Vector{AbstractFloat}}       # strength of penalties
+    decision_threshold::Union{Nothing,AbstractFloat}    # probability threshold
+    opt::Flux.Optimise.AbstractOptimiser                # optimizer
+    τ::AbstractFloat                                    # tolerance for convergence
+end
+```
+
+The goal is to use a macro that builds an expression that, when evaluated, instantiates a composable generator. 
+
+Let's start simple:
+
+```{julia}
+macro objective()
+
+end
+```
 
 
 
