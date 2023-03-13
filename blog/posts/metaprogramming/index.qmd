@@ -17,6 +17,7 @@ draft: true
 #| echo: false
 
 using Pkg; Pkg.activate("blog/posts/metaprogramming")
+using CounterfactualExplanations
 ```
 
 <div class="intro-gif">
@@ -180,14 +181,15 @@ I want to give users an easy way to do that, without having to build custom `Gen
 Let's try and see if we can make that work. We'll simply extend `CounterfactualExplanations` right here in this repo hosting the blog (easily done in Julia) and provided everything works out well create a pull request. I already have a GitHub [issue](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/118) for this with a linked branch, so that's the one I'll use in my environment:
 
 ```{.julia}
-] add https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl#118-add-losses-and-penalties-modules-or-group-under-objectives-module
+(metaprogramming) pkg> add https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl#118-add-losses-and-penalties-modules-or-group-under-objectives-module
+julia> using CounterfactualExplanations
 ```
 
 By the time you're reading this, all changes to that branch will hopefully already be committed and merged.
 
 Before turning to the actual macro, we need a new `ComposableGenerator` class, which I've already added [here](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/blob/4d15ad462d29b3ca46577389ac5899cdf1f41bf9/src/generators/ComposableGenerator.jl#L5)
 
-```{julia}
+```{.julia}
 mutable struct ComposableGenerator <: AbstractGradientBasedGenerator
     loss::Union{Nothing,Function}                       # loss function
     complexity::Union{Function,Vector{Function}}        # penalties
@@ -198,17 +200,69 @@ mutable struct ComposableGenerator <: AbstractGradientBasedGenerator
 end
 ```
 
-The goal is to use a macro that builds an expression that, when evaluated, instantiates a composable generator. 
+The goal is to use a macro that builds an expression that, when evaluated, instantiates a composable generator. In particular, the macro should accept as its main argument an expression that looks much like the right-hand-side of @eq-general, which is essentially just a weighted sum. 
 
-Let's start simple:
+Let's start with that part. Naively, we could begin by writing it out very literally:
+
+```{.julia}
+ex = :(yloss + λ*cost)
+eval(ex)
+```
+
+Of course, evaluating this expression throws an error because none of the variables are actually defined. Let's work on that ...
+
+For the loss and penalty functions, we will use methods available from the `CounterfactualExplanations.Objectives` module, while for $\lambda$ we will use a literal:
 
 ```{julia}
-macro objective()
+ex = :(logitbinarycrossentropy + 0.1 * distance_l2)
+```
 
+Let's try to make sense of the data structure we have created:
+
+```{julia}
+ex.args
+```
+
+My first naive approach ...
+
+```{.julia}
+macro objective(ex)
+    loss = ex.args[2]
+    ex_penalty = ex.args[3]
+    λ = ex_penalty.args[2]
+    cost = ex_penalty.args[3]
+    ex_generator = :(ComposableGenerator(loss, cost, λ))
+    return ex_generator
 end
 ```
 
+I forgot to interpolate ...
 
+```{.julia}
+macro objective(ex)
+    loss = ex.args[2]
+    ex_penalty = ex.args[3]
+    λ = ex_penalty.args[2]
+    cost = ex_penalty.args[3]
+    ex_generator = :(ComposableGenerator($loss, $cost, $λ))
+    return ex_generator
+end
+```
+
+This still throws an error because ...
+
+```{julia}
+macro objective(ex)
+    loss = getfield(CounterfactualExplanations.Objectives, ex.args[2])
+    ex_penalty = ex.args[3]
+    λ = ex_penalty.args[2]
+    cost = getfield(CounterfactualExplanations.Objectives, ex_penalty.args[3])
+    ex_generator = :(ComposableGenerator($loss, $cost, $λ))
+    return ex_generator
+end
+```
+
+Finally, this works!
 
 
 ## References
