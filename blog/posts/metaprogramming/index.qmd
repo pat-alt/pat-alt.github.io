@@ -76,6 +76,8 @@ ex = :(sum([1,2,3]))
 dump(ex)
 ```
 
+![Key concept: code as a data structure.](www/code-as-data.png)
+
 That data structure can be "manipulated from within the language". Let's try that! Currently, evaluating this expression yields the `sum` of the `Array`:
 
 ```{julia}
@@ -127,7 +129,9 @@ Moving on, we have [`QuoteNodes`](https://docs.julialang.org/en/v1.8/manual/meta
 
 ### Macros 
 
-Ahhh I see we've finally arrived in [Macroland](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-macros)! 
+![Arrived in Macroland.](www/macroland.png){fig-align="right"}
+
+Ahhh, I see we've finally arrived in [Macroland](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-macros)! 
 
 > A macro maps a tuple of arguments to a returned expression, and the resulting expression is compiled directly rather than requiring a runtime eval call.
 
@@ -147,6 +151,8 @@ To fully grasp the next [part](https://docs.julialang.org/en/v1.8/manual/metapro
 ## 🔥🔥🔥 BUILD AN ADVANCED MACRO
 
 Ok, great, let's go! I'll leave it to you to read that section in the Julia [docs](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Building-an-advanced-macro). We'll jump straight into building the macro I want to build for [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl). I now think it'll be less involved than I thought --- optimism in the face of uncertainty!
+
+![Advanced Macro: the final boss.](www/final-boss.png){fig-align="right"}
 
 ### From Off-the-Shelf Counterfactual Generators ...
 
@@ -170,7 +176,7 @@ $$
 \end{aligned} 
 $$ {#eq-general}
 
-where $\text{yloss}$ denotes the main loss function and $\text{cost}$ is a penalty term. I won't cover this in any more detail here, but you can read more about it in the package [docs](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators). The important thing to mention here is that @eq-eq-general very closely describes how counterfactual search is actually implemented in the package. 
+where $\text{yloss}$ denotes the main loss function and $\text{cost}$ is a penalty term. I won't cover this in any more detail here, but you can read more about it in the package [docs](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators). The important thing to mention here is that @eq-general very closely describes how counterfactual search is actually implemented in the package. 
 
 In other words, all generators currently implemented work with that same objective. They just vary in the way that penalties are defined, for example. This gives rise to an interesting idea: 
 
@@ -187,30 +193,19 @@ julia> using CounterfactualExplanations
 
 By the time you're reading this, all changes to that branch will hopefully already be committed and merged.
 
-Before turning to the actual macro, we need a new `ComposableGenerator` class, which I've already added [here](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/blob/4d15ad462d29b3ca46577389ac5899cdf1f41bf9/src/generators/ComposableGenerator.jl#L5)
-
-```{.julia}
-mutable struct ComposableGenerator <: AbstractGradientBasedGenerator
-    loss::Union{Nothing,Function}                       # loss function
-    complexity::Union{Function,Vector{Function}}        # penalties
-    λ::Union{AbstractFloat,Vector{AbstractFloat}}       # strength of penalties
-    decision_threshold::Union{Nothing,AbstractFloat}    # probability threshold
-    opt::Flux.Optimise.AbstractOptimiser                # optimizer
-    τ::AbstractFloat                                    # tolerance for convergence
-end
-```
-
-This can be instantiated in the same way as off-the-shelf generators:
+Let's start by instantiating a generic generator:
 
 ```{julia}
-generator = ComposableGenerator()
+generator = GenericGenerator()
 ```
 
 Our goal is to create macros that build expressions that, when evaluated, mutate the `generator` instance. 
 
-### The Macros
+### Define your `@objective`
 
 Our first and most important macro shall define the counterfactual search objective. In particular, the `@objective` macro should accept an expression that looks much like the right-hand-side of @eq-general, which is essentially just a weighted sum. 
+
+![Sketch of the envisioned `@objective` macro.](www/objective.png)
 
 Let's start with that part. Naively, we could begin by writing it out very literally:
 
@@ -261,7 +256,7 @@ macro objective(generator, ex)
     cost = getfield(CounterfactualExplanations.Objectives, ex_penalty.args[3])
     ex_generator = quote 
         $generator.loss = $loss
-        $generator.complexity = $cost
+        $generator.penalty = $cost
         $generator.λ = $λ
         generator
     end
@@ -301,7 +296,7 @@ macro objective(generator, ex)
     end
     ex_generator = quote 
         $generator.loss = $loss
-        $generator.complexity = $costs
+        $generator.penalty = $costs
         $generator.λ = $Λ
         generator
     end
@@ -309,17 +304,6 @@ macro objective(generator, ex)
 end
 @objective(generator, logitbinarycrossentropy + 0.2distance_l2 + 1.0ddp_diversity)
 ```
-
-Finally, let's also define a simple macro that can be used to change the decision threshold $\gamma$ that is used to specify when the counterfactual search is considered to have converged:
-
-```{julia}
-macro threshold(generator, γ)
-    return :(generator.decision_threshold=$γ; generator)
-end
-@threshold(generator, 0.75)
-```
-
-In this case, using a macro is most definitely not necessary, but this should help to keep the syntax for composing generators consistent.
 
 Ok, shall we see if that's worked? Below we go through some of the typical workflows associated with Counterfactual Explanations. Firstly, we load some synthetic data and fit a black-box model to it.
 
