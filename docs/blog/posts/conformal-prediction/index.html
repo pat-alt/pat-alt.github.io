@@ -23,7 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -87,12 +86,11 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging-indent div.csl-entry {
+.hanging div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -106,7 +104,8 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}</style>
+}
+</style>
 
 
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -185,7 +184,6 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     <span class="navbar-title">Patrick Altmeyer</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
@@ -229,8 +227,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
  <span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
+              <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
@@ -318,12 +315,12 @@ Prediction sets for two different samples <br> and changing coverage rates. <br>
 <p>Beyond that obvious concern, it turns out that quantifying model uncertainty actually opens up a myriad of possibilities to improve up- and down-stream modeling tasks like active learning and robustness. In Bayesian Active Learning, for example, uncertainty estimates are used to guide the search for new input samples, which can make ground-truthing tasks more efficient <span class="citation" data-cites="houlsby2011bayesian">(<a href="#ref-houlsby2011bayesian" role="doc-biblioref">Houlsby et al. 2011</a>)</span>. With respect to model performance in downstream tasks, uncertainty quantification can be used to improve model calibration and robustness <span class="citation" data-cites="lakshminarayanan2016simple">(<a href="#ref-lakshminarayanan2016simple" role="doc-biblioref">Lakshminarayanan, Pritzel, and Blundell 2016</a>)</span>.</p>
 <p>In previous posts we have looked at how uncertainty can be quantified in the Bayesian context (see <a href="https://www.paltmeyer.com/blog/posts/bayesian-logit/">here</a> and <a href="https://www.paltmeyer.com/blog/posts/effortsless-bayesian-dl/">here</a>). Since in Bayesian modeling we are generally concerned with estimating posterior distributions, we get uncertainty estimates almost as a byproduct. This is great for all intends and purposes, but it hinges on assumptions about prior distributions. Personally, I have no quarrel with the idea of making prior distributional assumptions. On the contrary, I think the Bayesian framework formalizes the idea of integrating prior information in models and therefore provides a powerful toolkit for conducting science. Still, in some cases this requirement may be seen as too restrictive or we may simply lack prior information.</p>
 <p>Enter: Conformal Prediction (CP) — a scalable frequentist approach to uncertainty quantification and coverage control. In this post we will go through the basic concepts underlying CP. A number of hands-on usage examples in Julia should hopefully help to convey some intuition and ideally attract people interested in contributing to a new and exciting open-source development.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-default callout-tip callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 🏃‍♀️ TL;DR
 </div>
 </div>
@@ -340,12 +337,12 @@ Prediction sets for two different samples <br> and changing coverage rates. <br>
 <section id="sec-background" class="level2">
 <h2 class="anchored" data-anchor-id="sec-background">📖 Background</h2>
 <p>Conformal Prediction promises to be an easy-to-understand, distribution-free and model-agnostic way to generate statistically rigorous uncertainty estimates. That’s quite a mouthful, so let’s break it down: firstly, as I will hopefully manage to illustrate in this post, the underlying concepts truly are fairly straight-forward to understand; secondly, CP indeed relies on only minimal distributional assumptions; thirdly, common procedures to generate conformal predictions really do apply almost universally to all supervised models, therefore making the framework very intriguing to the ML community; and, finally, CP does in fact come with a frequentist coverage guarantee that ensures that conformal prediction sets contain the true value with a user-chosen probability. For a formal proof of this <em>marginal coverage</em> property and a detailed introduction to the topic, I recommend <span class="citation" data-cites="angelopoulos2021gentle">Angelopoulos and Bates (<a href="#ref-angelopoulos2021gentle" role="doc-biblioref">2021</a>)</span>.</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-note callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 Note
 </div>
 </div>
@@ -358,12 +355,12 @@ Note
 <section id="sec-julia" class="level2">
 <h2 class="anchored" data-anchor-id="sec-julia">📦 Conformal Prediction in Julia</h2>
 <p>In this section of this first short post on CP we will look at how conformal prediction can be implemented in Julia. In particular, we will look at an approach that is compatible with any of the many supervised machine learning models available in <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/">MLJ</a>: a beautiful, comprehensive machine learning framework funded by the <a href="https://www.turing.ac.uk/">Alan Turing Institute</a> and the <a href="https://www.mbie.govt.nz/science-and-technology/science-and-innovation/funding-information-and-opportunities/investment-funds/strategic-science-investment-fund/ssif-funded-programmes/university-of-auckland/">New Zealand Strategic Science Investment Fund</a> <span class="citation" data-cites="blaom2020mlj">Blaom et al. (<a href="#ref-blaom2020mlj" role="doc-biblioref">2020</a>)</span>. We will go through some basic usage examples employing a new Julia package that I have been working on: <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>.</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-note callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>
 </div>
 </div>
@@ -400,12 +397,12 @@ C(X_{\text{test}})=\{y:s(X_{\text{test}},y) \le \hat{q}\}
 \tag{1}\]</span></span></p>
 <p>This is the default procedure used for classification and regression in <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>.</p>
 <p>You may want to take a look at the source code for the classification case <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L1">here</a>. As a <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L3">first</a> important step, we begin by defining a concrete type <code>SimpleInductiveClassifier</code> that wraps a supervised model from <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.18/"><code>MLJ.jl</code></a> and reserves additional fields for a few hyperparameters. As a <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L26">second</a> step, we define the training procedure, which includes the data-splitting and calibration step. Finally, as a <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L56">third</a> step we implement the procedure in <a href="#eq-set">Equation&nbsp;1</a> to compute the conformal prediction set.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout callout-style-default callout-warning callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 Development Status
 </div>
 </div>
@@ -560,26 +557,26 @@ Development Status
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-angelopoulos2021gentle" class="csl-entry" role="listitem">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-angelopoulos2021gentle" class="csl-entry" role="doc-biblioentry">
 Angelopoulos, Anastasios N., and Stephen Bates. 2021. <span>“A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification.”</span> <a href="https://arxiv.org/abs/2107.07511">https://arxiv.org/abs/2107.07511</a>.
 </div>
-<div id="ref-blaom2020mlj" class="csl-entry" role="listitem">
+<div id="ref-blaom2020mlj" class="csl-entry" role="doc-biblioentry">
 Blaom, Anthony D., Franz Kiraly, Thibaut Lienart, Yiannis Simillides, Diego Arenas, and Sebastian J. Vollmer. 2020. <span>“<span>MLJ</span>: <span>A Julia</span> Package for Composable Machine Learning.”</span> <em>Journal of Open Source Software</em> 5 (55): 2704. <a href="https://doi.org/10.21105/joss.02704">https://doi.org/10.21105/joss.02704</a>.
 </div>
-<div id="ref-hoff2021bayesoptimal" class="csl-entry" role="listitem">
+<div id="ref-hoff2021bayesoptimal" class="csl-entry" role="doc-biblioentry">
 Hoff, Peter. 2021. <span>“Bayes-Optimal Prediction with Frequentist Coverage Control.”</span> <a href="https://arxiv.org/abs/2105.14045">https://arxiv.org/abs/2105.14045</a>.
 </div>
-<div id="ref-houlsby2011bayesian" class="csl-entry" role="listitem">
+<div id="ref-houlsby2011bayesian" class="csl-entry" role="doc-biblioentry">
 Houlsby, Neil, Ferenc Huszár, Zoubin Ghahramani, and Máté Lengyel. 2011. <span>“Bayesian Active Learning for Classification and Preference Learning.”</span> <a href="https://arxiv.org/abs/1112.5745">https://arxiv.org/abs/1112.5745</a>.
 </div>
-<div id="ref-lakshminarayanan2016simple" class="csl-entry" role="listitem">
+<div id="ref-lakshminarayanan2016simple" class="csl-entry" role="doc-biblioentry">
 Lakshminarayanan, Balaji, Alexander Pritzel, and Charles Blundell. 2016. <span>“Simple and Scalable Predictive Uncertainty Estimation Using Deep Ensembles.”</span> <a href="https://arxiv.org/abs/1612.01474">https://arxiv.org/abs/1612.01474</a>.
 </div>
-<div id="ref-manokhin2022awesome" class="csl-entry" role="listitem">
+<div id="ref-manokhin2022awesome" class="csl-entry" role="doc-biblioentry">
 Manokhin, Valery. n.d. <span>“Awesome Conformal Prediction.”</span>
 </div>
-<div id="ref-stanton2022bayesian" class="csl-entry" role="listitem">
+<div id="ref-stanton2022bayesian" class="csl-entry" role="doc-biblioentry">
 Stanton, Samuel, Wesley Maddox, and Andrew Gordon Wilson. 2022. <span>“Bayesian <span>Optimization</span> with <span>Conformal Coverage Guarantees</span>.”</span> <a href="https://arxiv.org/abs/2210.12496">https://arxiv.org/abs/2210.12496</a>.
 </div>
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
@@ -589,14 +586,14 @@ Stanton, Samuel, Wesley Maddox, and Andrew Gordon Wilson. 2022. <span>“Bayesia
 <li id="fn2"><p>Any thoughts/comments welcome!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
-  author = {Altmeyer, Patrick},
+  author = {Patrick Altmeyer},
   title = {Conformal {Prediction} in {Julia} 🟣🔴🟢},
   date = {22-10-25},
   url = {https://www.paltmeyer.com/blog//blog/posts/conformal-prediction},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas" role="listitem">
-Altmeyer, Patrick. 22AD. <span>“Conformal Prediction in Julia
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Patrick Altmeyer. 22AD. <span>“Conformal Prediction in Julia
 🟣🔴🟢.”</span> October 25, 22AD. <a href="https://www.paltmeyer.com/blog//blog/posts/conformal-prediction">https://www.paltmeyer.com/blog//blog/posts/conformal-prediction</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

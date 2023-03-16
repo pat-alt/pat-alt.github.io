@@ -10,7 +10,421 @@
 <atom:link href="https://www.paltmeyer.com/blog/blog/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-99.9.9</generator>
-<lastBuildDate>Sun, 15 Jan 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 12 Mar 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>A Leap of Faith into Julia’s Metaverse</title>
+  <dc:creator>Patrick Altmeyer</dc:creator>
+  <link>https://www.paltmeyer.com/blog/blog/posts/meta-programming/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<div class="intro-gif">
+<figure class="figure">
+<img src="https://www.paltmeyer.com/blog/blog/posts/meta-programming/www/intro.png" class="figure-img">
+<figcaption class="figure-caption">
+A leap of faith into Julia’s metaverse.
+</figcaption>
+</figure>
+</div>
+<p>On this blog, I typically talk about things that I have <strong>some</strong> understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly <strong>clueless</strong> about. There’s an interesting aspect about Julia, which I know embarrassingly little about at this point: <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/">Metaprogramming</a>.</p>
+<p>Having worked with Julia almost every day for about 1.5 years now, I have employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it doesn’t exist. Meanwhile, <a href="https://twitter.com/kdpsinghlab">Karandeep Singh</a> has stepped onto the Julia stage around 5 minutes ago and already developed a package that literally oozes Metaprogramming: <a href="https://kdpsingh.github.io/Tidier.jl/dev/">Tidier.jl</a>. The package API is such a joy to work with, that I have felt inspired to finally take a serious look at what Metaprogramming is all about.</p>
+<p>My goal is to get to the point where I can confidently write my first macro for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> - more on this below! If you are as clueless and curious about the topic as yours truly, then follow along on a journey into the metaverse. Buckle in though, it’s going to be a bumpy ride! You have been warned.</p>
+<section id="all-right-where-to-start" class="level2">
+<h2 class="anchored" data-anchor-id="all-right-where-to-start">🤔 All right, where to start?</h2>
+<p>You guessed it, we’ll start with the official Julia <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/">documentation</a> on the topic:</p>
+<blockquote class="blockquote">
+<p>Like Lisp, Julia represents its own code as a data structure of the language itself.</p>
+</blockquote>
+<p>Hmmm … I know nothing about Lisp and this is already beyond me. Code as a data structure?</p>
+<p>Let’s first try to understand what exactly metaprogramming even is, outside of Julia and Lisp. We’ll take a quick detour before we’re back.</p>
+<p><a href="https://en.wikipedia.org/wiki/Metaprogramming#:~:text=Metaprogramming%20is%20a%20programming%20technique,even%20modify%20itself%20while%20running.">Wikipedia</a> has the following to say on the topic:</p>
+<blockquote class="blockquote">
+<p>Metaprogramming is a programming technique in which computer programs have the ability to treat other programs as their data.</p>
+</blockquote>
+<p>Ok, ChatGPT? I wanted to try out <a href="https://github.com/ThatcherC/ReplGPT.jl">ReplGPT</a> anyway so here goes:</p>
+<pre class="julia-repl"><code>julia&gt; using ReplGPT
+ChatGPT&gt; Hey hey, can you please explain metaprogramming to me (I have no computer science background, but am experienced with programming and data science)
+  Metaprogramming is a programming technique where a program is capable of creating or manipulating code at
+  runtime. It involves writing computer programs that create, modify, or analyze other computer programs or data
+  about those programs.</code></pre>
+<p>Alright, so in layman’s terms metaprogramming involves code that generates code - I guess we really have entered the metaverse!</p>
+</section>
+<section id="julia-docs-v1.8" class="level2">
+<h2 class="anchored" data-anchor-id="julia-docs-v1.8">📖 Julia docs (v1.8)</h2>
+<p>Let’s head back to the Julia <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/">documentation</a> and look at the first couple of examples.</p>
+<section id="code-as-data-structures" class="level3">
+<h3 class="anchored" data-anchor-id="code-as-data-structures">Code as Data Structures</h3>
+<p>Skipping the details here, it turns out that when I write <code>1 + 1</code> in the REPL, Julia first parses this program as a string <code>"1 + 1</code> into an expression <code>ex=:(1 + 1)::Expr</code>, which is then evaluated <code>eval(ex)</code> (Figure&nbsp;1). I’ve used a <code>quote</code> here to generate the expression because I’ve used <strong>quoting</strong> before for use with <code>Documenter.jl</code>.</p>
+<div id="fig-code" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://www.paltmeyer.com/blog/blog/posts/meta-programming/www/code-as-data.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Key concept: code as a data structure.</figcaption><p></p>
+</figure>
+</div>
+<p>And if I understand this correctly, the expression <code>ex::Expr</code> is literally <strong>code as a data structure</strong>:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1">ex <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">:</span>(<span class="fu" style="color: #4758AB;">sum</span>([<span class="fl" style="color: #AD0000;">1</span>,<span class="fl" style="color: #AD0000;">2</span>,<span class="fl" style="color: #AD0000;">3</span>]))</span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;">dump</span>(ex)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Expr
+  head: Symbol call
+  args: Array{Any}(</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(2,))
+    1: Symbol sum
+    2: Expr
+      head: Symbol vect
+      args: Array{Any}((3,))
+        1: Int64 1
+        2: Int64 2
+        3: Int64 3</code></pre>
+</div>
+</div>
+<p>That data structure can be “manipulated from within the language”. Let’s try that! Currently, evaluating this expression yields the <code>sum</code> of the <code>Array</code>:</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><span class="fu" style="color: #4758AB;">eval</span>(ex)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>6</code></pre>
+</div>
+</div>
+<p>Upon manipulation (that sounds weird!), we have:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1">ex.args[<span class="fl" style="color: #AD0000;">1</span>] <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">:</span>maximum</span>
+<span id="cb7-2"><span class="fu" style="color: #4758AB;">eval</span>(ex)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>3</code></pre>
+</div>
+</div>
+<p>Ok ok, things are starting to make sense!</p>
+</section>
+<section id="interpolation" class="level3">
+<h3 class="anchored" data-anchor-id="interpolation">Interpolation</h3>
+<p>Back to the Julia documentation and next on the agenda we <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-expression-interpolation">Interpolation</a>. Skipping the details again, it seems like I can interpolate expression much like strings. Using interpolation I can recreate the expression from above as follows:</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1">fun <span class="op" style="color: #5E5E5E;">=</span> maximum</span>
+<span id="cb9-2">x <span class="op" style="color: #5E5E5E;">=</span> [<span class="fl" style="color: #AD0000;">1</span>,<span class="fl" style="color: #AD0000;">2</span>,<span class="fl" style="color: #AD0000;">3</span>]</span>
+<span id="cb9-3">ex_from_ex_interpoliation <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">:</span>(<span class="op" style="color: #5E5E5E;">$</span><span class="fu" style="color: #4758AB;">fun</span>(<span class="op" style="color: #5E5E5E;">$</span>x))</span>
+<span id="cb9-4">a <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">eval</span>(ex_from_ex_interpoliation)</span></code></pre></div>
+</div>
+<p>Using string interpolation is quite similar:</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1">fun <span class="op" style="color: #5E5E5E;">=</span> maximum</span>
+<span id="cb10-2">x <span class="op" style="color: #5E5E5E;">=</span> [<span class="fl" style="color: #AD0000;">1</span>,<span class="fl" style="color: #AD0000;">2</span>,<span class="fl" style="color: #AD0000;">3</span>]</span>
+<span id="cb10-3">ex_from_string_interpolation <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">Meta</span>.<span class="fu" style="color: #4758AB;">parse</span>(<span class="st" style="color: #20794D;">"</span><span class="sc" style="color: #5E5E5E;">$</span>fun<span class="st" style="color: #20794D;">(</span><span class="sc" style="color: #5E5E5E;">$</span>x<span class="st" style="color: #20794D;">)"</span>)</span>
+<span id="cb10-4"><span class="fu" style="color: #4758AB;">eval</span>(ex_from_string_interpolation) <span class="op" style="color: #5E5E5E;">==</span> a</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>true</code></pre>
+</div>
+</div>
+<p>And much like with function arguments, we can also use splatting:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><span class="fu" style="color: #4758AB;">eval</span>(<span class="op" style="color: #5E5E5E;">:</span>(<span class="fu" style="color: #4758AB;">zeros</span>(<span class="op" style="color: #5E5E5E;">$</span>x<span class="op" style="color: #5E5E5E;">...</span>)))</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>1×2×3 Array{Float64, 3}:
+[:, :, 1] =
+ 0.0  0.0
+
+[:, :, 2] =
+ 0.0  0.0
+
+[:, :, 3] =
+ 0.0  0.0</code></pre>
+</div>
+</div>
+<p>Next off, we have <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Nested-quote"><strong>nested quotes</strong></a>. I can’t see myself using these anytime soon but anyway it seems that for each <code>$</code> sign that we prepend to <code>x</code>, an evaluation is trigged:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><span class="fu" style="color: #4758AB;">eval</span>(<span class="kw" style="color: #003B4F;">quote</span> <span class="kw" style="color: #003B4F;">quote</span> <span class="op" style="color: #5E5E5E;">$$:</span>(x) <span class="kw" style="color: #003B4F;">end</span> <span class="kw" style="color: #003B4F;">end</span>)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="ansi-escaped-output">
+<pre>quote
+    <span class="ansi-bright-black-fg">#= In[9]:2 =#</span>
+    [1, 2, 3]
+end</pre>
+</div>
+</div>
+</div>
+<p>Moving on, we have <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-quote-node"><code>QuoteNodes</code></a>, which I will skip because I probably won’t be doing any advanced metaprogramming anytime soon. The next two sections on <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Evaluating-expressions">evaluating expressions</a> and <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions">functions on <code>Expr</code>essions</a> also look somewhat more involved than what I need right now, but I expect I’ll find myself back here when I write that first macro for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>.</p>
+</section>
+<section id="macros" class="level3">
+<h3 class="anchored" data-anchor-id="macros">Macros</h3>
+<p>Ahhh, I see we’ve finally arrived in <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-macros">Macroland</a>!</p>
+<blockquote class="blockquote">
+<p>A macro maps a tuple of arguments to a returned expression, and the resulting expression is compiled directly rather than requiring a runtime eval call.</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-right">
+<figure class="figure">
+<p><img src="https://www.paltmeyer.com/blog/blog/posts/meta-programming/www/macroland.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Arrived in Macroland.</figcaption><p></p>
+</figure>
+</div>
+<p>Let’s see if we can make sense of this as we move on. The <code>Hello, world!</code> example makes it quite clear:</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><span class="kw" style="color: #003B4F;">macro</span> <span class="fu" style="color: #4758AB;">sayhello</span>(name)</span>
+<span id="cb15-2">    <span class="cf" style="color: #003B4F;">return</span> <span class="op" style="color: #5E5E5E;">:</span>( <span class="fu" style="color: #4758AB;">println</span>(<span class="st" style="color: #20794D;">"Hello, "</span>, <span class="op" style="color: #5E5E5E;">$</span>name) )   <span class="co" style="color: #5E5E5E;"># return the expression ...</span></span>
+<span id="cb15-3"><span class="kw" style="color: #003B4F;">end</span></span>
+<span id="cb15-4"><span class="pp" style="color: #AD0000;">@sayhello</span> <span class="st" style="color: #20794D;">"reader"</span>                          <span class="co" style="color: #5E5E5E;"># ... to be immediately compiled.</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello, reader</code></pre>
+</div>
+</div>
+<p>So I understand that a macro is a way to build and return expressions inside a block (a bit like a function) but on call that expression is immediately evaluated. In other words, we can use macros to write code that generates code that is then evaluated.</p>
+<p>To fully grasp the next <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hold-up:-why-macros?">part</a>, I should have not skipped the part on <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions">functions on <code>Expr</code>essions</a>. We’ll leave that little nugget for Future Me. That same guy will also have to suffer the consequences of Present Me merely skimming the details in the next <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Macro-invocation">section</a> on macro invocation. Present Me is impatient and overly confident in the level of knowledge that we have just acquired about metaprogramming. Let’s meet the final boss of the metaverse: an Advanced Macro.</p>
+</section>
+</section>
+<section id="build-an-advanced-macro" class="level2">
+<h2 class="anchored" data-anchor-id="build-an-advanced-macro">🔥 BUILD AN ADVANCED MACRO</h2>
+<p>Ok, great, let’s go! I’ll leave it to you to read that section in the Julia <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Building-an-advanced-macro">docs</a>. We’ll jump straight into building the macro I want to build for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>. I now think it’ll be less involved than I thought — optimism in the face of uncertainty!</p>
+<div class="quarto-figure quarto-figure-right">
+<figure class="figure">
+<p><img src="https://www.paltmeyer.com/blog/blog/posts/meta-programming/www/final-boss.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Advanced Macro: the final boss.</figcaption><p></p>
+</figure>
+</div>
+<section id="from-off-the-shelf-counterfactual-generators" class="level3">
+<h3 class="anchored" data-anchor-id="from-off-the-shelf-counterfactual-generators">From Off-the-Shelf Counterfactual Generators …</h3>
+<p><a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> is a package for generating Counterfactual Explanations for predictive models <img src="https://latex.codecogs.com/png.latex?f:%20%5Cmathcal%7BX%7D%20%5Cmapsto%20%5Cmathcal%7BY%7D">. This is a relatively recent approach to Explainable AI that I am (probably a little too) excited about and won’t dwell on here. For what follows, it’s worth mentioning that generating Counterfactual Explanations can be seen as a generative modelling task because it involves generating samples in the input space: <img src="https://latex.codecogs.com/png.latex?x%20%5Csim%20%5Cmathcal%7BX%7D">. To this end, the package ships with a number of <code>Generators</code>, which are really just composite types that contain information about how counterfactuals ought to be generated.</p>
+<p>Currently, users can specify the type of generator they want to use by instantiating it. For example, the DiCE generator by <span class="citation" data-cites="mothilal2020explaining">Mothilal, Sharma, and Tan (2020)</span> can be instantiated as follows:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1">generator <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">DiCEGenerator</span>()</span></code></pre></div>
+</div>
+<p>This is a straightforward way for users to use off-the-shelf counterfactual generators. But there is some untapped potential here, as we will see next.</p>
+</section>
+<section id="to-composable-generators" class="level3">
+<h3 class="anchored" data-anchor-id="to-composable-generators">… To Composable Generators</h3>
+<p>One of my key objectives for the package has always been composability. It turns out that many of the various counterfactual generators that have been proposed in the literature, essentially do the same thing: they optimize an objective function. In <span class="citation" data-cites="altmeyer2023endogenous">Altmeyer et al. (2023)</span>, we denote that objective formally as follows,</p>
+<p><span id="eq-general"><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0A%5Cmathbf%7Bs%7D%5E%5Cprime%20&amp;=%20%5Carg%20%5Cmin_%7B%5Cmathbf%7Bs%7D%5E%5Cprime%20%5Cin%20%5Cmathcal%7BS%7D%7D%20%5Cleft%5C%7B%20%20%7B%5Ctext%7Byloss%7D(M(f(%5Cmathbf%7Bs%7D%5E%5Cprime)),y%5E*)%7D+%20%5Clambda%20%7B%5Ctext%7Bcost%7D(f(%5Cmathbf%7Bs%7D%5E%5Cprime))%20%7D%20%20%5Cright%5C%7D%0A%5Cend%7Baligned%7D%0A%5Ctag%7B1%7D"></span></p>
+<p>where <img src="https://latex.codecogs.com/png.latex?%5Ctext%7Byloss%7D"> denotes the main loss function and <img src="https://latex.codecogs.com/png.latex?%5Ctext%7Bcost%7D"> is a penalty term. I won’t cover this in any more detail here, but you can read more about it in the package <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators">docs</a>. The important thing to mention here is that Equation&nbsp;1 very closely describes how counterfactual search is actually implemented in the package.</p>
+<p>In other words, all generators currently implemented work with that same objective. They just vary in the way that penalties are defined, for example. This gives rise to an interesting idea:</p>
+<blockquote class="blockquote">
+<p>Why not compose generators that combine ideas from different off-the-shelf generators?</p>
+</blockquote>
+<p>I want to give users an easy way to do that, without having to build custom <code>Generator</code>s from scratch. This (I think) is a good use case for metaprogramming.</p>
+<p>Let’s try and see if we can make that work. We’ll simply extend <code>CounterfactualExplanations</code> right here in this repo hosting the blog (easily done in Julia) and provided everything works out well create a pull request. I already have a GitHub <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/118">issue</a> for this with a linked branch, so that’s the one I’ll use in my environment:</p>
+<div class="sourceCode" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1">(metaprogramming) pkg<span class="op" style="color: #5E5E5E;">&gt;</span> add https<span class="op" style="color: #5E5E5E;">://</span>github.com<span class="op" style="color: #5E5E5E;">/</span>JuliaTrustworthyAI<span class="op" style="color: #5E5E5E;">/</span>CounterfactualExplanations.jl<span class="co" style="color: #5E5E5E;">#118-add-losses-and-penalties-modules-or-group-under-objectives-module</span></span>
+<span id="cb18-2">julia<span class="op" style="color: #5E5E5E;">&gt;</span> <span class="im" style="color: #00769E;">using</span> <span class="bu" style="color: null;">CounterfactualExplanations</span></span></code></pre></div>
+<p>By the time you’re reading this, all changes to that branch will hopefully already be committed and merged.</p>
+<p>Let’s start by instantiating a generic generator:</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1">generator <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">GenericGenerator</span>()</span></code></pre></div>
+</div>
+<p>Our goal is to create macros that build expressions that, when evaluated, mutate the <code>generator</code> instance.</p>
+</section>
+<section id="define-your-objective" class="level3">
+<h3 class="anchored" data-anchor-id="define-your-objective">Define your <code>@objective</code></h3>
+<p>Our first and most important macro shall define the counterfactual search objective. In particular, the <code>@objective</code> macro should accept an expression that looks much like the right-hand-side of Equation&nbsp;1, which is essentially just a weighted sum.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.paltmeyer.com/blog/blog/posts/meta-programming/www/objective.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Sketch of the envisioned <code>@objective</code> macro.</figcaption><p></p>
+</figure>
+</div>
+<p>Let’s start with that part. Naively, we could begin by writing it out very literally:</p>
+<div class="sourceCode" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1">ex <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">:</span>(yloss <span class="op" style="color: #5E5E5E;">+</span> λ<span class="op" style="color: #5E5E5E;">*</span>cost)</span>
+<span id="cb20-2"><span class="fu" style="color: #4758AB;">eval</span>(ex)</span></code></pre></div>
+<p>Of course, evaluating this expression throws an error because none of the variables are actually defined. Let’s work on that …</p>
+<p>For the loss and penalty functions, we will use methods available from the <code>CounterfactualExplanations.Objectives</code> module, while for <img src="https://latex.codecogs.com/png.latex?%5Clambda"> we will use a literal:</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1">ex <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">:</span>(logitbinarycrossentropy <span class="op" style="color: #5E5E5E;">+</span> <span class="fl" style="color: #AD0000;">0.1</span> <span class="op" style="color: #5E5E5E;">*</span> distance_l2)</span></code></pre></div>
+</div>
+<p>Let’s try to make sense of the data structure we have created:</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb22-1">ex.args</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>3-element Vector{Any}:
+ :+
+ :logitbinarycrossentropy
+ :(0.1distance_l2)</code></pre>
+</div>
+</div>
+<p>My first naive approach is shown below. It errors because I forgot to interpolate the variables inside the <code>quote</code>.</p>
+<div class="sourceCode" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><span class="kw" style="color: #003B4F;">macro</span> <span class="fu" style="color: #4758AB;">objective</span>(generator, ex)</span>
+<span id="cb24-2">    loss <span class="op" style="color: #5E5E5E;">=</span> ex.args[<span class="fl" style="color: #AD0000;">2</span>]</span>
+<span id="cb24-3">    ex_penalty <span class="op" style="color: #5E5E5E;">=</span> ex.args[<span class="fl" style="color: #AD0000;">3</span>]</span>
+<span id="cb24-4">    λ <span class="op" style="color: #5E5E5E;">=</span> ex_penalty.args[<span class="fl" style="color: #AD0000;">2</span>]</span>
+<span id="cb24-5">    cost <span class="op" style="color: #5E5E5E;">=</span> ex_penalty.args[<span class="fl" style="color: #AD0000;">3</span>]</span>
+<span id="cb24-6">    ex_generator <span class="op" style="color: #5E5E5E;">=</span> <span class="kw" style="color: #003B4F;">quote</span> </span>
+<span id="cb24-7">        generator.loss <span class="op" style="color: #5E5E5E;">=</span> loss</span>
+<span id="cb24-8">        generator.cost <span class="op" style="color: #5E5E5E;">=</span> cost</span>
+<span id="cb24-9">        generator.λ <span class="op" style="color: #5E5E5E;">=</span> λ</span>
+<span id="cb24-10">    <span class="kw" style="color: #003B4F;">end</span></span>
+<span id="cb24-11">    <span class="cf" style="color: #003B4F;">return</span> ex_generator</span>
+<span id="cb24-12"><span class="kw" style="color: #003B4F;">end</span></span></code></pre></div>
+<p>Having fixed that below, I still get an error because <code>loss</code> and <code>cost</code> functions are not part of the global scope. I am pretty sure that this error would have occurred anyway and has nothing to do with the fact that I’m writing a macro.</p>
+<div class="sourceCode" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><span class="kw" style="color: #003B4F;">macro</span> <span class="fu" style="color: #4758AB;">objective</span>(generator, ex)</span>
+<span id="cb25-2">    loss <span class="op" style="color: #5E5E5E;">=</span> ex.args[<span class="fl" style="color: #AD0000;">2</span>]</span>
+<span id="cb25-3">    ex_penalty <span class="op" style="color: #5E5E5E;">=</span> ex.args[<span class="fl" style="color: #AD0000;">3</span>]</span>
+<span id="cb25-4">    λ <span class="op" style="color: #5E5E5E;">=</span> ex_penalty.args[<span class="fl" style="color: #AD0000;">2</span>]</span>
+<span id="cb25-5">    cost <span class="op" style="color: #5E5E5E;">=</span> ex_penalty.args[<span class="fl" style="color: #AD0000;">3</span>]</span>
+<span id="cb25-6">    ex_generator <span class="op" style="color: #5E5E5E;">=</span> <span class="kw" style="color: #003B4F;">quote</span> </span>
+<span id="cb25-7">        <span class="op" style="color: #5E5E5E;">$</span>generator.loss <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">$</span>loss</span>
+<span id="cb25-8">        <span class="op" style="color: #5E5E5E;">$</span>generator.cost <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">$</span>cost</span>
+<span id="cb25-9">        <span class="op" style="color: #5E5E5E;">$</span>generator.λ <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">$</span>λ</span>
+<span id="cb25-10">    <span class="kw" style="color: #003B4F;">end</span></span>
+<span id="cb25-11">    <span class="cf" style="color: #003B4F;">return</span> ex_generator</span>
+<span id="cb25-12"><span class="kw" style="color: #003B4F;">end</span></span></code></pre></div>
+<p>Instead of importing the functions, I just get them explicitly from the <code>Objectives</code> module,</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><span class="kw" style="color: #003B4F;">macro</span> <span class="fu" style="color: #4758AB;">objective</span>(generator, ex)</span>
+<span id="cb26-2">    loss <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">getfield</span>(CounterfactualExplanations.Objectives, ex.args[<span class="fl" style="color: #AD0000;">2</span>])</span>
+<span id="cb26-3">    ex_penalty <span class="op" style="color: #5E5E5E;">=</span> ex.args[<span class="fl" style="color: #AD0000;">3</span>]</span>
+<span id="cb26-4">    λ <span class="op" style="color: #5E5E5E;">=</span> ex_penalty.args[<span class="fl" style="color: #AD0000;">2</span>]</span>
+<span id="cb26-5">    cost <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">getfield</span>(CounterfactualExplanations.Objectives, ex_penalty.args[<span class="fl" style="color: #AD0000;">3</span>])</span>
+<span id="cb26-6">    ex_generator <span class="op" style="color: #5E5E5E;">=</span> <span class="kw" style="color: #003B4F;">quote</span> </span>
+<span id="cb26-7">        <span class="op" style="color: #5E5E5E;">$</span>generator.loss <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">$</span>loss</span>
+<span id="cb26-8">        <span class="op" style="color: #5E5E5E;">$</span>generator.penalty <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">$</span>cost</span>
+<span id="cb26-9">        <span class="op" style="color: #5E5E5E;">$</span>generator.λ <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">$</span>λ</span>
+<span id="cb26-10">        generator</span>
+<span id="cb26-11">    <span class="kw" style="color: #003B4F;">end</span></span>
+<span id="cb26-12">    <span class="cf" style="color: #003B4F;">return</span> ex_generator</span>
+<span id="cb26-13"><span class="kw" style="color: #003B4F;">end</span></span></code></pre></div>
+</div>
+<p>and, finally, this works:</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><span class="pp" style="color: #AD0000;">@objective</span>(generator, logitbinarycrossentropy <span class="op" style="color: #5E5E5E;">+</span> <span class="fl" style="color: #AD0000;">0.1</span>distance_l2)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>Generator(Flux.Losses.logitbinarycrossentropy, CounterfactualExplanations.Objectives.distance_l2, 0.1, false, Flux.Optimise.Descent(0.1))</code></pre>
+</div>
+</div>
+<p>But what about adding multiple penalties? The DiCE generator, for example, also takes into account how diverse the counterfactual explanations are <span class="citation" data-cites="mothilal2020explaining">(Mothilal, Sharma, and Tan 2020)</span>. The corresponding penalty is called <code>ddp_diversity</code>. Let’s start with the expression again:</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb29-1">ex <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">:</span>(logitbinarycrossentropy <span class="op" style="color: #5E5E5E;">+</span> <span class="fl" style="color: #AD0000;">0.1</span>distance_l2 <span class="op" style="color: #5E5E5E;">+</span> <span class="fl" style="color: #AD0000;">1.0</span>ddp_diversity)</span>
+<span id="cb29-2">ex.args</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>4-element Vector{Any}:
+ :+
+ :logitbinarycrossentropy
+ :(0.1distance_l2)
+ :(1.0ddp_diversity)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="cell-output cell-output-display" data-execution_count="18">
+<p>This time there’s a second nested <code>Expr</code>ession among the arguments: <code>:(1.0ddp_diversity)</code>.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><span class="kw" style="color: #003B4F;">macro</span> <span class="fu" style="color: #4758AB;">objective</span>(generator, ex)</span>
+<span id="cb31-2">    loss <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">getfield</span>(CounterfactualExplanations.Objectives, ex.args[<span class="fl" style="color: #AD0000;">2</span>])</span>
+<span id="cb31-3">    Λ <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">Vector</span><span class="dt" style="color: #AD0000;">{AbstractFloat}</span>()</span>
+<span id="cb31-4">    costs <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">Vector</span><span class="dt" style="color: #AD0000;">{Function}</span>()</span>
+<span id="cb31-5">    <span class="cf" style="color: #003B4F;">for</span> i <span class="kw" style="color: #003B4F;">in</span> <span class="fl" style="color: #AD0000;">3</span><span class="op" style="color: #5E5E5E;">:</span><span class="fu" style="color: #4758AB;">length</span>(ex.args)</span>
+<span id="cb31-6">        ex_penalty <span class="op" style="color: #5E5E5E;">=</span> ex.args[i]</span>
+<span id="cb31-7">        λ <span class="op" style="color: #5E5E5E;">=</span> ex_penalty.args[<span class="fl" style="color: #AD0000;">2</span>]</span>
+<span id="cb31-8">        <span class="fu" style="color: #4758AB;">push!</span>(Λ, λ)</span>
+<span id="cb31-9">        cost <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">getfield</span>(CounterfactualExplanations.Objectives, ex_penalty.args[<span class="fl" style="color: #AD0000;">3</span>])</span>
+<span id="cb31-10">        <span class="fu" style="color: #4758AB;">push!</span>(costs, cost)</span>
+<span id="cb31-11">    <span class="cf" style="color: #003B4F;">end</span></span>
+<span id="cb31-12">    ex_generator <span class="op" style="color: #5E5E5E;">=</span> <span class="kw" style="color: #003B4F;">quote</span> </span>
+<span id="cb31-13">        <span class="op" style="color: #5E5E5E;">$</span>generator.loss <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">$</span>loss</span>
+<span id="cb31-14">        <span class="op" style="color: #5E5E5E;">$</span>generator.penalty <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">$</span>costs</span>
+<span id="cb31-15">        <span class="op" style="color: #5E5E5E;">$</span>generator.λ <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">$</span>Λ</span>
+<span id="cb31-16">        generator</span>
+<span id="cb31-17">    <span class="kw" style="color: #003B4F;">end</span></span>
+<span id="cb31-18">    <span class="cf" style="color: #003B4F;">return</span> ex_generator</span>
+<span id="cb31-19"><span class="kw" style="color: #003B4F;">end</span></span></code></pre></div>
+</div>
+<p>That works well,</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><span class="pp" style="color: #AD0000;">@objective</span>(generator, logitbinarycrossentropy <span class="op" style="color: #5E5E5E;">+</span> <span class="fl" style="color: #AD0000;">0.05</span>distance_l2 <span class="op" style="color: #5E5E5E;">+</span> <span class="fl" style="color: #AD0000;">1.0</span>ddp_diversity)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>Generator(Flux.Losses.logitbinarycrossentropy, Function[CounterfactualExplanations.Objectives.distance_l2, CounterfactualExplanations.Objectives.ddp_diversity], AbstractFloat[0.05, 1.0], false, Flux.Optimise.Descent(0.1))</code></pre>
+</div>
+</div>
+<p>but we should still make sure that this <code>generator</code> is also compatible with our package. Below we go through some of the typical workflows associated with Counterfactual Explanations. Firstly, we load some synthetic data and fit a black-box model to it.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb34-1">n_dim <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">2</span></span>
+<span id="cb34-2">n_classes <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">4</span></span>
+<span id="cb34-3">n_samples <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">400</span></span>
+<span id="cb34-4">model_name <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">:</span>MLP</span>
+<span id="cb34-5">counterfactual_data <span class="op" style="color: #5E5E5E;">=</span> CounterfactualExplanations.<span class="fu" style="color: #4758AB;">load_blobs</span>(n_samples; k<span class="op" style="color: #5E5E5E;">=</span>n_dim, centers<span class="op" style="color: #5E5E5E;">=</span>n_classes)</span>
+<span id="cb34-6">M <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">fit_model</span>(counterfactual_data, model_name)</span>
+<span id="cb34-7"><span class="fu" style="color: #4758AB;">plot</span>(M, counterfactual_data)</span></code></pre></div>
+</div>
+<p>Next, we begin by specifying our target and factual label. We then draw a random sample from the non-target (factual) class.</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><span class="co" style="color: #5E5E5E;"># Factual and target:</span></span>
+<span id="cb35-2">target <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">2</span></span>
+<span id="cb35-3">factual <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">4</span></span>
+<span id="cb35-4">chosen <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">rand</span>(<span class="fu" style="color: #4758AB;">findall</span>(<span class="fu" style="color: #4758AB;">predict_label</span>(M, counterfactual_data) <span class="op" style="color: #5E5E5E;">.==</span> factual))</span>
+<span id="cb35-5">x <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">select_factual</span>(counterfactual_data,chosen)</span></code></pre></div>
+</div>
+<p>Finally, we use our <code>generator</code> to generate counterfactuals:</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb36" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb36-1">ce <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">generate_counterfactual</span>(</span>
+<span id="cb36-2">    x, target, counterfactual_data, M, generator;</span>
+<span id="cb36-3">    num_counterfactuals <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">5</span>,</span>
+<span id="cb36-4">    converge_when <span class="op" style="color: #5E5E5E;">=</span> <span class="op" style="color: #5E5E5E;">:</span>generator_conditions</span>
+<span id="cb36-5">)</span></code></pre></div>
+</div>
+<p>It worked! 🎉 The resulting counterfactual search is illustrated in Figure&nbsp;2. I may have overspecified the size of the <code>ddp_diversity</code> penalty a little bit here, but it sure makes for a cool chart!</p>
+<div class="cell" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="24">
+<div id="fig-search" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://www.paltmeyer.com/blog/blog/posts/meta-programming/index_files/figure-html/fig-search-output-1.svg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Counterfactual search using our composed generator.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Time for me to add this all to <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> … ⏳</p>
+</section>
+</section>
+<section id="hygiene" class="level2">
+<h2 class="anchored" data-anchor-id="hygiene">🧼 Hygiene</h2>
+<p>… aaand I’m back. There was one thing I had ignored, that ended up causing a minor complication: macro <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hygiene">hygiene</a>.</p>
+<p>Again, I’ll leave it to you to read up on the details, but the bottom line is that when writing macros, we need to keep variable scopes in mind. <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> is composed of various (sub)modules, and when I initially added the macro to the <code>CounterfactualExplanations.Generators</code> module, it errored.</p>
+<p>The problem was (I believe) that the <code>generator</code> variable existed in the global scope (<code>Main</code>) but it was not accessible for the <code>@objective</code> macro that at runtime lives in (<code>Main.Generators</code>). Fortunately, it is easy to make the variable accessible by wrapping it inside and <code>esc()</code> call:</p>
+<blockquote class="blockquote">
+<p>This escaping mechanism can be used to “violate” hygiene when necessary, in order to introduce or manipulate user variables.</p>
+</blockquote>
+<p>This may not be the ideal way to do this, and as always, if you have any suggestions I’d be happy to hear about them.</p>
+<p>If you want to find out more about how macros can now be used to easily compose counterfactual generators, check out the new section in the package <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/tutorials/generators/">documentation</a>.</p>
+</section>
+<section id="wrapping-up" class="level2">
+<h2 class="anchored" data-anchor-id="wrapping-up">🌯 Wrapping Up</h2>
+<p>In this blog post, I’ve done something I usually try to avoid: talk about stuff I know next to nothing about. Metaprogramming is an exciting topic and if you’re still here, you just got to experience it through the lens of an absolute novice. During our leap of faith into Julia’s metaverse we’ve learned the following things:</p>
+<ol type="1">
+<li>Code in Julia is internally represented as a mutable data structure.</li>
+<li>Macros are a way to take such data structures and transform them before they get evaluated at runtime.</li>
+<li>An important thing to keep in mind when writing macros is variable scopes.</li>
+</ol>
+<p>Throughout this post, I have skipped various important details that (I think) were not immediately relevant to the goal I had in mind: adding my first macro to <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>.</p>
+</section>
+<section id="references" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-altmeyer2023endogenous" class="csl-entry">
+Altmeyer, Patrick, Giovan Angela, Aleksander Buszydlik, Karol Dobiczek, Arie van Deursen, and Cynthia Liem. 2023. <span>“Endogenous <span>Macrodynamics</span> in <span>Algorithmic</span> <span>Recourse</span>.”</span> In <em>First <span>IEEE</span> <span>Conference</span> on <span>Secure</span> and <span>Trustworthy</span> <span>Machine</span> <span>Learning</span></em>.
+</div>
+<div id="ref-mothilal2020explaining" class="csl-entry">
+Mothilal, Ramaravind K, Amit Sharma, and Chenhao Tan. 2020. <span>“Explaining Machine Learning Classifiers Through Diverse Counterfactual Explanations.”</span> In <em>Proceedings of the 2020 <span>Conference</span> on <span>Fairness</span>, <span>Accountability</span>, and <span>Transparency</span></em>, 607–17.
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
+  author = {Patrick Altmeyer},
+  title = {A {Leap} of {Faith} into {Julia’s} {Metaverse}},
+  date = {23-03-13},
+  url = {https://www.paltmeyer.com/blog//blog/posts/meta-programming},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2023" class="csl-entry quarto-appendix-citeas">
+Patrick Altmeyer. 23AD. <span>“A Leap of Faith into Julia’s
+Metaverse.”</span> March 13, 23AD. <a href="https://www.paltmeyer.com/blog//blog/posts/meta-programming">https://www.paltmeyer.com/blog//blog/posts/meta-programming</a>.
+</div></div></section></div> ]]></description>
+  <category>metaprogramming</category>
+  <category>macros</category>
+  <category>Julia</category>
+  <guid>https://www.paltmeyer.com/blog/blog/posts/meta-programming/index.html</guid>
+  <pubDate>Sun, 12 Mar 2023 23:00:00 GMT</pubDate>
+  <media:content url="https://www.paltmeyer.com/blog/blog/posts/meta-programming/www/intro.png" medium="image" type="image/png" height="141" width="144"/>
+</item>
 <item>
   <title>Quarto on Steroids: Advanced Customization through Quarto Extensions</title>
   <dc:creator>Patrick Altmeyer</dc:creator>
@@ -93,7 +507,7 @@ A TU Delft Theme for Quarto.
 <li id="fn1"><p>Not entirely true: I’ve also used <code>Pluto.jl</code> 🎈 and had to resort to <code>.Rmd</code> in one particular case.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
-  author = {Altmeyer, Patrick},
+  author = {Patrick Altmeyer},
   title = {Quarto on {Steroids:} {Advanced} {Customization} Through
     {Quarto} {Extensions}},
   date = {23-01-16},
@@ -101,7 +515,7 @@ A TU Delft Theme for Quarto.
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2023" class="csl-entry quarto-appendix-citeas">
-Altmeyer, Patrick. 23AD. <span>“Quarto on Steroids: Advanced
+Patrick Altmeyer. 23AD. <span>“Quarto on Steroids: Advanced
 Customization Through Quarto Extensions.”</span> January 16, 23AD. <a href="https://www.paltmeyer.com/blog//blog/posts/quarto-extensions">https://www.paltmeyer.com/blog//blog/posts/quarto-extensions</a>.
 </div></div></section></div> ]]></description>
   <category>Quarto</category>
@@ -138,12 +552,12 @@ Conformal Prediction intervals for different<br>coverage rates. As coverage grow
 </blockquote>
 <p>Intuitively, CP works under the premise of turning heuristic notions of uncertainty into rigorous uncertainty estimates through repeated sampling or the use of dedicated calibration data.</p>
 <p>In what follows we will explore what CP can do by going through a standard machine learning workflow using <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a> and <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>. There will be less focus on how exactly CP works, but references will point you to additional resources.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-default callout-tip callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 Interactive Version
 </div>
 </div>
@@ -198,12 +612,12 @@ Interactive Version
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1">Model <span class="op" style="color: #5E5E5E;">=</span> <span class="pp" style="color: #AD0000;">@load</span> KNNRegressor pkg <span class="op" style="color: #5E5E5E;">=</span> NearestNeighborModels</span>
 <span id="cb4-2">model <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">Model</span>()</span></code></pre></div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-default callout-tip callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 Have it your way!
 </div>
 </div>
@@ -345,14 +759,14 @@ Angelopoulos, Anastasios N., and Stephen Bates. 2021. <span>“A Gentle Introduc
 Blaom, Anthony D., Franz Kiraly, Thibaut Lienart, Yiannis Simillides, Diego Arenas, and Sebastian J. Vollmer. 2020. <span>“<span>MLJ</span>: <span>A Julia</span> Package for Composable Machine Learning.”</span> <em>Journal of Open Source Software</em> 5 (55): 2704. <a href="https://doi.org/10.21105/joss.02704">https://doi.org/10.21105/joss.02704</a>.
 </div>
 </div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
-  author = {Altmeyer, Patrick},
+  author = {Patrick Altmeyer},
   title = {Prediction {Intervals} for Any {Regression} {Model}},
   date = {22-12-12},
   url = {https://www.paltmeyer.com/blog//blog/posts/conformal-regression},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas">
-Altmeyer, Patrick. 22AD. <span>“Prediction Intervals for Any Regression
+Patrick Altmeyer. 22AD. <span>“Prediction Intervals for Any Regression
 Model.”</span> December 12, 22AD. <a href="https://www.paltmeyer.com/blog//blog/posts/conformal-regression">https://www.paltmeyer.com/blog//blog/posts/conformal-regression</a>.
 </div></div></section></div> ]]></description>
   <category>probabilistic programming</category>
@@ -629,14 +1043,14 @@ LeCun, Yann. 1998. <span>“The <span>MNIST</span> Database of Handwritten Digit
 <li id="fn1"><p>For a full tutorial on how to build an MNIST image classifier relying solely on <code>Flux.jl</code>, check out this <a href="https://fluxml.ai/Flux.jl/stable/tutorials/2021-01-26-mlp/">tutorial</a>.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
-  author = {Altmeyer, Patrick},
+  author = {Patrick Altmeyer},
   title = {How to {Conformalize} a {Deep} {Image} {Classifier}},
   date = {22-12-05},
   url = {https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas">
-Altmeyer, Patrick. 22AD. <span>“How to Conformalize a Deep Image
+Patrick Altmeyer. 22AD. <span>“How to Conformalize a Deep Image
 Classifier.”</span> December 5, 22AD. <a href="https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier">https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier</a>.
 </div></div></section></div> ]]></description>
   <category>conformal prediction</category>
@@ -786,14 +1200,14 @@ A year of using Quarto with Julia.
 <li id="fn2"><p>See related <a href="https://github.com/quarto-dev/quarto-cli/discussions/2947">discussion</a>.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
-  author = {Altmeyer, Patrick},
+  author = {Patrick Altmeyer},
   title = {A Year of Using {Quarto} with {Julia}},
   date = {22-11-21},
   url = {https://www.paltmeyer.com/blog//blog/posts/tips-and-tricks-for-using-quarto-with-julia},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas">
-Altmeyer, Patrick. 22AD. <span>“A Year of Using Quarto with
+Patrick Altmeyer. 22AD. <span>“A Year of Using Quarto with
 Julia.”</span> November 21, 22AD. <a href="https://www.paltmeyer.com/blog//blog/posts/tips-and-tricks-for-using-quarto-with-julia">https://www.paltmeyer.com/blog//blog/posts/tips-and-tricks-for-using-quarto-with-julia</a>.
 </div></div></section></div> ]]></description>
   <category>Quarto</category>
@@ -824,12 +1238,12 @@ Prediction sets for two different samples <br> and changing coverage rates. <br>
 <p>Beyond that obvious concern, it turns out that quantifying model uncertainty actually opens up a myriad of possibilities to improve up- and down-stream modeling tasks like active learning and robustness. In Bayesian Active Learning, for example, uncertainty estimates are used to guide the search for new input samples, which can make ground-truthing tasks more efficient <span class="citation" data-cites="houlsby2011bayesian">(Houlsby et al. 2011)</span>. With respect to model performance in downstream tasks, uncertainty quantification can be used to improve model calibration and robustness <span class="citation" data-cites="lakshminarayanan2016simple">(Lakshminarayanan, Pritzel, and Blundell 2016)</span>.</p>
 <p>In previous posts we have looked at how uncertainty can be quantified in the Bayesian context (see <a href="https://www.paltmeyer.com/blog/posts/bayesian-logit/">here</a> and <a href="https://www.paltmeyer.com/blog/posts/effortsless-bayesian-dl/">here</a>). Since in Bayesian modeling we are generally concerned with estimating posterior distributions, we get uncertainty estimates almost as a byproduct. This is great for all intends and purposes, but it hinges on assumptions about prior distributions. Personally, I have no quarrel with the idea of making prior distributional assumptions. On the contrary, I think the Bayesian framework formalizes the idea of integrating prior information in models and therefore provides a powerful toolkit for conducting science. Still, in some cases this requirement may be seen as too restrictive or we may simply lack prior information.</p>
 <p>Enter: Conformal Prediction (CP) — a scalable frequentist approach to uncertainty quantification and coverage control. In this post we will go through the basic concepts underlying CP. A number of hands-on usage examples in Julia should hopefully help to convey some intuition and ideally attract people interested in contributing to a new and exciting open-source development.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-default callout-tip callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 🏃‍♀️ TL;DR
 </div>
 </div>
@@ -846,12 +1260,12 @@ Prediction sets for two different samples <br> and changing coverage rates. <br>
 <section id="sec-background" class="level2">
 <h2 class="anchored" data-anchor-id="sec-background">📖 Background</h2>
 <p>Conformal Prediction promises to be an easy-to-understand, distribution-free and model-agnostic way to generate statistically rigorous uncertainty estimates. That’s quite a mouthful, so let’s break it down: firstly, as I will hopefully manage to illustrate in this post, the underlying concepts truly are fairly straight-forward to understand; secondly, CP indeed relies on only minimal distributional assumptions; thirdly, common procedures to generate conformal predictions really do apply almost universally to all supervised models, therefore making the framework very intriguing to the ML community; and, finally, CP does in fact come with a frequentist coverage guarantee that ensures that conformal prediction sets contain the true value with a user-chosen probability. For a formal proof of this <em>marginal coverage</em> property and a detailed introduction to the topic, I recommend <span class="citation" data-cites="angelopoulos2021gentle">Angelopoulos and Bates (2021)</span>.</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-note callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 Note
 </div>
 </div>
@@ -864,12 +1278,12 @@ Note
 <section id="sec-julia" class="level2">
 <h2 class="anchored" data-anchor-id="sec-julia">📦 Conformal Prediction in Julia</h2>
 <p>In this section of this first short post on CP we will look at how conformal prediction can be implemented in Julia. In particular, we will look at an approach that is compatible with any of the many supervised machine learning models available in <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/">MLJ</a>: a beautiful, comprehensive machine learning framework funded by the <a href="https://www.turing.ac.uk/">Alan Turing Institute</a> and the <a href="https://www.mbie.govt.nz/science-and-technology/science-and-innovation/funding-information-and-opportunities/investment-funds/strategic-science-investment-fund/ssif-funded-programmes/university-of-auckland/">New Zealand Strategic Science Investment Fund</a> <span class="citation" data-cites="blaom2020mlj">Blaom et al. (2020)</span>. We will go through some basic usage examples employing a new Julia package that I have been working on: <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>.</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-note callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>
 </div>
 </div>
@@ -904,12 +1318,12 @@ Note
 <p><span id="eq-set"><img src="https://latex.codecogs.com/png.latex?%0AC(X_%7B%5Ctext%7Btest%7D%7D)=%5C%7By:s(X_%7B%5Ctext%7Btest%7D%7D,y)%20%5Cle%20%5Chat%7Bq%7D%5C%7D%0A%5Ctag%7B1%7D"></span></p>
 <p>This is the default procedure used for classification and regression in <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>.</p>
 <p>You may want to take a look at the source code for the classification case <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L1">here</a>. As a <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L3">first</a> important step, we begin by defining a concrete type <code>SimpleInductiveClassifier</code> that wraps a supervised model from <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.18/"><code>MLJ.jl</code></a> and reserves additional fields for a few hyperparameters. As a <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L26">second</a> step, we define the training procedure, which includes the data-splitting and calibration step. Finally, as a <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L56">third</a> step we implement the procedure in Equation&nbsp;1 to compute the conformal prediction set.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout callout-style-default callout-warning callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 Development Status
 </div>
 </div>
@@ -1093,14 +1507,14 @@ Stanton, Samuel, Wesley Maddox, and Andrew Gordon Wilson. 2022. <span>“Bayesia
 <li id="fn2"><p>Any thoughts/comments welcome!↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
-  author = {Altmeyer, Patrick},
+  author = {Patrick Altmeyer},
   title = {Conformal {Prediction} in {Julia} 🟣🔴🟢},
   date = {22-10-25},
   url = {https://www.paltmeyer.com/blog//blog/posts/conformal-prediction},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas">
-Altmeyer, Patrick. 22AD. <span>“Conformal Prediction in Julia
+Patrick Altmeyer. 22AD. <span>“Conformal Prediction in Julia
 🟣🔴🟢.”</span> October 25, 22AD. <a href="https://www.paltmeyer.com/blog//blog/posts/conformal-prediction">https://www.paltmeyer.com/blog//blog/posts/conformal-prediction</a>.
 </div></div></section></div> ]]></description>
   <category>conformal prediction</category>
@@ -1240,12 +1654,12 @@ Turning a 9 (nine) into a 4 (four).
 <span id="cb5-20">M <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">TorchNetwork</span>(R<span class="st" style="color: #20794D;">"model"</span>)</span></code></pre></div>
 </div>
 <p>Compared to models trained in Julia, we need to do a little more work at this point. Since our counterfactual generators need gradient access, we essentially need to allow our package to communicate with the R <code>torch</code> library. While this may sound daunting, it turns out to be quite manageable: all we have to do is respecify the function that computes the gradient with respect to the counterfactual loss function so that it can deal with the <code>TorchNetwork</code> type we defined above. That is all the adjustment needed to use <code>CounterfactualExplanations.jl</code> for our custom R model. Figure&nbsp;2 shows a counterfactual path for a randomly chosen sample with respect to the MLP trained in R.</p>
-<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout callout-style-default callout-caution callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 Experimental functionality
 </div>
 </div>
@@ -1344,14 +1758,14 @@ Wachter, Sandra, Brent Mittelstadt, and Chris Russell. 2017. <span>“Counterfac
 <li id="fn3"><p>The corresponding example involving <code>PyTorch</code> is analogous and therefore not included here. You may find it <a href="https://www.paltmeyer.com/CounterfactualExplanations.jl/dev/tutorials/interop/">here</a>.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
-  author = {Altmeyer, Patrick},
+  author = {Patrick Altmeyer},
   title = {A New Tool for Explainable {AI}},
   date = {22-04-20},
   url = {https://www.paltmeyer.com/blog//blog/posts/a-new-tool-for-explainable-ai},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas">
-Altmeyer, Patrick. 22AD. <span>“A New Tool for Explainable AI.”</span>
+Patrick Altmeyer. 22AD. <span>“A New Tool for Explainable AI.”</span>
 April 20, 22AD. <a href="https://www.paltmeyer.com/blog//blog/posts/a-new-tool-for-explainable-ai">https://www.paltmeyer.com/blog//blog/posts/a-new-tool-for-explainable-ai</a>.
 </div></div></section></div> ]]></description>
   <category>counterfactuals</category>
@@ -1385,12 +1799,12 @@ Julia and Quarto: a perfect match.
 <p>Hold up?! Wasn’t this supposed to be about Julia and Quarto?</p>
 </blockquote>
 <p>Yes! But it’s worth noting that a lot of the benefits that Quarto brings have been available to R users for many years, thanks to the amazing work of many great open-source contributors like <a href="https://twitter.com/xieyihui">@xieyihui</a>. Julia was the main reason for me to branch out of this comfortable R bubble as I describe below. That said, if you are a Julia user who really couldn’t care less about my previous experiences with R Markdown, this is a good time to skip straight ahead to Section&nbsp;2. By the way, if you haven’t clicked on that link, here’s a small showcase demonstrating how it was generated. It shows easy it is to have everything well organised and connected with Quarto.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-default callout-tip callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 Cross-referencing
 </div>
 </div>
@@ -1591,15 +2005,15 @@ Just had my first go <a href="https://twitter.com/hashtag/quarto?src=hash&amp;re
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
-  author = {Altmeyer, Patrick},
+  author = {Patrick Altmeyer},
   title = {Julia and {Quarto:} A Match Made in Heaven? 🌤},
   date = {22-04-07},
   url = {https://www.paltmeyer.com/blog//blog/posts/julia-and-quarto-a-match-made-in-heaven},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas">
-Altmeyer, Patrick. 22AD. <span>“Julia and Quarto: A Match Made in
-Heaven? 🌤.”</span> April 7, 22AD. <a href="https://www.paltmeyer.com/blog//blog/posts/julia-and-quarto-a-match-made-in-heaven">https://www.paltmeyer.com/blog//blog/posts/julia-and-quarto-a-match-made-in-heaven</a>.
+Patrick Altmeyer. 22AD. <span>“Julia and Quarto: A Match Made in Heaven?
+🌤.”</span> April 7, 22AD. <a href="https://www.paltmeyer.com/blog//blog/posts/julia-and-quarto-a-match-made-in-heaven">https://www.paltmeyer.com/blog//blog/posts/julia-and-quarto-a-match-made-in-heaven</a>.
 </div></div></section></div> ]]></description>
   <category>scientific publishing</category>
   <category>Quarto</category>
@@ -1828,14 +2242,14 @@ Wilson, Andrew Gordon. 2020. <span>“The Case for <span>Bayesian</span> Deep Le
 <li id="fn4"><p>See this <a href="https://stats.stackexchange.com/a/500973/288736">answer</a> on Stack Exchange for a detailed discussion.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
-  author = {Altmeyer, Patrick},
+  author = {Patrick Altmeyer},
   title = {Go Deep, but Also ... Go {Bayesian!}},
   date = {22-02-18},
   url = {https://www.paltmeyer.com/blog//blog/posts/effortsless-bayesian-dl},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas">
-Altmeyer, Patrick. 22AD. <span>“Go Deep, but Also ... Go
+Patrick Altmeyer. 22AD. <span>“Go Deep, but Also ... Go
 Bayesian!”</span> February 18, 22AD. <a href="https://www.paltmeyer.com/blog//blog/posts/effortsless-bayesian-dl">https://www.paltmeyer.com/blog//blog/posts/effortsless-bayesian-dl</a>.
 </div></div></section></div> ]]></description>
   <category>bayes</category>
@@ -1999,14 +2413,14 @@ Schut, Lisa, Oscar Key, Rory Mc Grath, Luca Costabello, Bogdan Sacaleanu, Yarin 
 <li id="fn2"><p>Note that the author works with the negative log likelihood scaled by the sample size↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2021,
-  author = {Altmeyer, Patrick},
+  author = {Patrick Altmeyer},
   title = {Bayesian {Logistic} {Regression}},
   date = {21-11-15},
   url = {https://www.paltmeyer.com/blog//blog/posts/bayesian-logit},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2021" class="csl-entry quarto-appendix-citeas">
-Altmeyer, Patrick. 21AD. <span>“Bayesian Logistic Regression.”</span>
+Patrick Altmeyer. 21AD. <span>“Bayesian Logistic Regression.”</span>
 November 15, 21AD. <a href="https://www.paltmeyer.com/blog//blog/posts/bayesian-logit">https://www.paltmeyer.com/blog//blog/posts/bayesian-logit</a>.
 </div></div></section></div> ]]></description>
   <category>bayes</category>
@@ -2308,14 +2722,14 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2021,
-  author = {Altmeyer, Patrick},
+  author = {Patrick Altmeyer},
   title = {Individual Recourse for {Black} {Box} {Models}},
   date = {21-04-27},
   url = {https://www.paltmeyer.com/blog//blog/posts/individual-recourse-for-black-box-models},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2021" class="csl-entry quarto-appendix-citeas">
-Altmeyer, Patrick. 21AD. <span>“Individual Recourse for Black Box
+Patrick Altmeyer. 21AD. <span>“Individual Recourse for Black Box
 Models.”</span> April 27, 21AD. <a href="https://www.paltmeyer.com/blog//blog/posts/individual-recourse-for-black-box-models">https://www.paltmeyer.com/blog//blog/posts/individual-recourse-for-black-box-models</a>.
 </div></div></section></div> ]]></description>
   <category>counterfactuals</category>
@@ -2418,7 +2832,7 @@ Ish-Horowicz, Jonathan, Dana Udwin, Seth Flaxman, Sarah Filippi, and Lorin Crawf
 <li id="fn3"><p>For simplicity I have omitted the deterministic bias term.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2021,
-  author = {Altmeyer, Patrick},
+  author = {Patrick Altmeyer},
   title = {A Peek Inside the “{Black} {Box}” - Interpreting Neural
     Networks},
   date = {21-02-07},
@@ -2426,7 +2840,7 @@ Ish-Horowicz, Jonathan, Dana Udwin, Seth Flaxman, Sarah Filippi, and Lorin Crawf
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2021" class="csl-entry quarto-appendix-citeas">
-Altmeyer, Patrick. 21AD. <span>“A Peek Inside the <span>‘Black
+Patrick Altmeyer. 21AD. <span>“A Peek Inside the <span>‘Black
 Box’</span> - Interpreting Neural Networks.”</span> February 7, 21AD. <a href="https://www.paltmeyer.com/blog//blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks">https://www.paltmeyer.com/blog//blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks</a>.
 </div></div></section></div> ]]></description>
   <category>deep learning</category>
@@ -2444,12 +2858,12 @@ Box’</span> - Interpreting Neural Networks.”</span> February 7, 21AD. <a hre
 
 
 
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-note callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 Note
 </div>
 </div>
@@ -2566,14 +2980,14 @@ patalt.github.io/
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2021,
-  author = {Altmeyer, Patrick},
+  author = {Patrick Altmeyer},
   title = {How {I’m} Building This Website in {R}},
   date = {21-02-02},
   url = {https://www.paltmeyer.com/blog//blog/posts/how-i-m-building-this-website-in-r},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2021" class="csl-entry quarto-appendix-citeas">
-Altmeyer, Patrick. 21AD. <span>“How I’m Building This Website in
+Patrick Altmeyer. 21AD. <span>“How I’m Building This Website in
 R.”</span> February 2, 21AD. <a href="https://www.paltmeyer.com/blog//blog/posts/how-i-m-building-this-website-in-r">https://www.paltmeyer.com/blog//blog/posts/how-i-m-building-this-website-in-r</a>.
 </div></div></section></div> ]]></description>
   <category>blogdown</category>
@@ -2593,12 +3007,12 @@ R.”</span> February 2, 21AD. <a href="https://www.paltmeyer.com/blog//blog/pos
 
 <p>Welcome to my blog!</p>
 <p>Having worked with R Markdown and some of <a href="https://yihui.org/">Yihui Xie</a>’s amazing packages for years, I have only now come across his <a href="https://bookdown.org/yihui/blogdown/">blogdown</a> package. For a while I have been thinking about a good way to share some of my work and actually started collecting snippets in a <a href="https://pat-alt.github.io/fromScratch/">Gitbook</a> through <a href="https://bookdown.org/yihui/bookdown/">bookdown</a> quite some time ago. While the book is a work-in-progress that I aim to finish eventually, I will use this website to regularly share content related to my work, research and other things.</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-note callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 Note
 </div>
 </div>
@@ -2615,14 +3029,14 @@ Note
 
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2021,
-  author = {Altmeyer, Patrick and Altmeyer, Patrick},
+  author = {Patrick Altmeyer and Patrick Altmeyer},
   title = {Welcome},
   date = {21-02-01},
   url = {https://www.paltmeyer.com/blog//blog/posts/welcome},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2021" class="csl-entry quarto-appendix-citeas">
-Altmeyer, Patrick, and Patrick Altmeyer. 21AD. <span>“Welcome.”</span>
+Patrick Altmeyer, and Patrick Altmeyer. 21AD. <span>“Welcome.”</span>
 February 1, 21AD. <a href="https://www.paltmeyer.com/blog//blog/posts/welcome">https://www.paltmeyer.com/blog//blog/posts/welcome</a>.
 </div></div></section></div> ]]></description>
   <guid>https://www.paltmeyer.com/blog/blog/posts/welcome/index.html</guid>

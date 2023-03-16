@@ -614,6 +614,7 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
       manageTransition("TOC", slow);
       manageTransition("quarto-sidebar", slow);
     };
+
     const readerMode = !isReaderMode();
     setReaderModeValue(readerMode);
 
@@ -622,7 +623,6 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
       slowTransition(readerMode);
     }
     highlightReaderToggle(readerMode);
-    hideOverlappedSidebars();
 
     // If we're exiting reader mode, restore the non-slow transition
     if (!readerMode) {
