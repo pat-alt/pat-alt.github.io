@@ -29,11 +29,11 @@ using Plots
   </figure>
 </div>
 
-On this blog, I typically talk about things that I have **some** understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly **clueless** about. There's an interesting aspect about Julia, which I know embarrassingly little about at this point: [Metaprogramming](https://docs.julialang.org/en/v1.8/manual/metaprogramming/). 
+On this blog, I typically talk about things that I have *some* understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly *clueless* about. There's an interesting aspect about Julia, which I know embarrassingly little about at this point: [Metaprogramming](https://docs.julialang.org/en/v1.8/manual/metaprogramming/). 
 
-Having worked with Julia almost every day for about 1.5 years now, I have employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it doesn't exist. Meanwhile, [Karandeep Singh](https://twitter.com/kdpsinghlab) has stepped onto the Julia stage around 5 minutes ago and already developed a package that literally oozes Metaprogramming: [Tidier.jl](https://kdpsingh.github.io/Tidier.jl/dev/). The package API is such a joy to work with, that I have felt inspired to finally take a serious look at what Metaprogramming is all about. 
+Having worked with Julia for about 1.5 years now, I have so far employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it never existed. Meanwhile, [Karandeep Singh](https://twitter.com/kdpsinghlab) has stepped on the Julia scence around 5 minutes ago and already developed a package that literally oozes macro: [Tidier.jl](https://kdpsingh.github.io/Tidier.jl/dev/). The package API is such a joy to work with that I have felt inspired to finally take a serious look at what metaprogramming is all about. 
 
-My goal is to get to the point where I can confidently write my first macro for [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) - more on this below! If you are as clueless and curious about the topic as yours truly, then follow along on a journey into the metaverse. Buckle in though, it's going to be a bumpy ride! You have been warned. 
+My goal for this post is to get to the point where I can confidently write my first macro for [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) - more on this below! If you are as clueless and curious about the topic as I am, then follow along on a journey into the metaverse. Buckle in though, it's going to be a bumpy ride! You have been warned. 
 
 ## 🤔 All right, where to start?
 
@@ -43,13 +43,11 @@ You guessed it, we'll start with the official Julia [documentation](https://docs
 
 Hmmm ... I know nothing about Lisp and this is already beyond me. Code as a data structure?
 
-Let's first try to understand what exactly metaprogramming even is, outside of Julia and Lisp. We'll take a quick detour before we're back. 
-
-[Wikipedia](https://en.wikipedia.org/wiki/Metaprogramming#:~:text=Metaprogramming%20is%20a%20programming%20technique,even%20modify%20itself%20while%20running.) has the following to say on the topic:
+Let's first try to understand what exactly metaprogramming is, outside of Julia and Lisp. We'll take a quick detour before we're back. [Wikipedia](https://en.wikipedia.org/wiki/Metaprogramming#:~:text=Metaprogramming%20is%20a%20programming%20technique,even%20modify%20itself%20while%20running.) has the following to say on the topic:
 
 > Metaprogramming is a programming technique in which computer programs have the ability to treat other programs as their data.
 
-Ok, ChatGPT? I wanted to try out [ReplGPT](https://github.com/ThatcherC/ReplGPT.jl) anyway so here goes:
+Right ... What about ChatGPT? I wanted to try out [ReplGPT](https://github.com/ThatcherC/ReplGPT.jl) anyway so here goes^[A very cool package! Funny story, though, I somehow managed to commit my OpenAI API key to GitHub on the first go ([developing](https://github.com/ThatcherC/ReplGPT.jl/issues/8))]:
 
 ```{.julia-repl}
 julia> using ReplGPT
@@ -59,11 +57,11 @@ ChatGPT> Hey hey, can you please explain metaprogramming to me (I have no comput
   about those programs.
 ```
 
-Alright, so in layman's terms metaprogramming involves code that generates code - I guess we really have entered the metaverse!
+So, in layman's terms, metaprogramming involves code that generates code - I guess we really have entered the metaverse!
 
-## 📖 Julia docs (v1.8)
+## 📖 Julia docs 
 
-Let's head back to the Julia [documentation](https://docs.julialang.org/en/v1.8/manual/metaprogramming/) and look at the first couple of examples.
+Let's head back to the Julia [documentation (v1.8)](https://docs.julialang.org/en/v1.8/manual/metaprogramming/) and look at the first couple of examples.
 
 ### Code as Data Structures
 
@@ -79,7 +77,9 @@ ex = :(sum([1,2,3]))
 dump(ex)
 ```
 
-That data structure can be "manipulated from within the language". Let's try that! Currently, evaluating this expression yields the `sum` of the `Array`:
+That data structure can be "manipulated from within the language". 
+
+Let's try that! Currently, evaluating this expression yields the `sum` of the `Array`:
 
 ```{julia}
 #| output: true
@@ -94,11 +94,11 @@ ex.args[1] = :maximum
 eval(ex)
 ```
 
-Ok ok, things are starting to make sense! 
+Ok ok, things are starting to make sense now! 
 
 ### Interpolation
 
-Back to the Julia documentation and next on the agenda we [Interpolation](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-expression-interpolation). Skipping the details again, it seems like I can interpolate expression much like strings. Using interpolation I can recreate the expression from above as follows:
+Back to the Julia documentation and next on the agenda we have [Interpolation](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-expression-interpolation). Skipping the details again, it seems like I can interpolate an expression much like strings. Using interpolation I can recreate the expression from above as follows:
 
 ```{julia}
 fun = maximum
@@ -134,7 +134,7 @@ Next off, we have [**nested quotes**](https://docs.julialang.org/en/v1.8/manual/
 eval(quote quote $$:(x) end end)
 ```
 
-Moving on, we have [`QuoteNodes`](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-quote-node), which I will skip because I probably won't be doing any advanced metaprogramming anytime soon. The next two sections on [evaluating expressions](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Evaluating-expressions) and [functions on `Expr`essions](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions) also look somewhat more involved than what I need right now, but I expect I'll find myself back here when I write that first macro for [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl).
+Moving on, we have [`QuoteNodes`](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-quote-node), which I will steer clear of because I probably won't be doing any super advanced metaprogramming anytime soon. The next two sections on [evaluating expressions](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Evaluating-expressions) and [functions on `Expr`essions](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions) also look somewhat more involved than what I need right now, but I expect I'll find myself back here when I write that first macro for [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl).
 
 ### Macros 
 
@@ -144,7 +144,7 @@ Ahhh, I see we've finally arrived in [Macroland](https://docs.julialang.org/en/v
 
 ![Arrived in Macroland.](www/macroland.png){fig-align="right"}
 
-Let's see if we can make sense of this as we move on. The `Hello, world!` example makes it quite clear:
+Let's see if we can make sense of this as we move on. The `Hello, world!` example makes the concept quite clear:
 
 ```{julia}
 #| output: true
@@ -155,27 +155,29 @@ end
 @sayhello "reader"                          # ... to be immediately compiled.
 ```
 
-So I understand that a macro is a way to build and return expressions inside a block (a bit like a function) but on call that expression is immediately evaluated. In other words, we can use macros to write code that generates code that is then evaluated. 
+It seems that a macro is a way to build and return expressions inside a block (a bit like a function) but on call that expression is immediately evaluated. In other words, we can use macros to write code that generates code that is then evaluated. 
 
-To fully grasp the next [part](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hold-up:-why-macros?), I should have not skipped the part on [functions on `Expr`essions](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions). We'll leave that little nugget for Future Me. That same guy will also have to suffer the consequences of Present Me merely skimming the details in the next [section](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Macro-invocation) on macro invocation. Present Me is impatient and overly confident in the level of knowledge that we have just acquired about metaprogramming. Let's meet the final boss of the metaverse: an Advanced Macro.
+To fully grasp the next [part](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hold-up:-why-macros?), I should have not skipped the part on [functions on `Expr`essions](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions). We'll leave that little nugget for Future Me. That same guy will also have to suffer the consequences of Present Me merely skimming the details in the next [section](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Macro-invocation) on macro invocation. Present Me is impatient and overly confident in the level of knowledge that we have just acquired about metaprogramming. 
+
+Let's get ahead of ourselves and meet the final boss of the metaverse: an Advanced Macro.
 
 ## 🔥 BUILD AN ADVANCED MACRO
 
-Ok, great, let's go! I'll leave it to you to read that section in the Julia [docs](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Building-an-advanced-macro). We'll jump straight into building the macro I want to build for [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl). I now think it'll be less involved than I thought --- optimism in the face of uncertainty!
+I'll leave it to you to thoroughly read that section in the Julia [docs](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Building-an-advanced-macro). Here, we'll jump straight into building the macro I want to have for [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl). I now think it'll be less involved than I thought --- optimism in the face of uncertainty!
 
 ![Advanced Macro: the final boss.](www/final-boss.png){fig-align="right"}
 
 ### From Off-the-Shelf Counterfactual Generators ...
 
-[`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) is a package for generating Counterfactual Explanations for predictive models $f: \mathcal{X} \mapsto \mathcal{Y}$. This is a relatively recent approach to Explainable AI that I am (probably a little too) excited about and won't dwell on here. For what follows, it's worth mentioning that generating Counterfactual Explanations can be seen as a generative modelling task because it involves generating samples in the input space: $x \sim \mathcal{X}$. To this end, the package ships with a number of `Generators`, which are really just composite types that contain information about how counterfactuals ought to be generated. 
+[`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) is a package for generating Counterfactual Explanations for predictive models $f: \mathcal{X} \mapsto \mathcal{Y}$. This is a relatively recent approach to Explainable AI that I am (probably a little too) excited about and won't dwell on here. For what follows, it suffices to say that generating Counterfactual Explanations can be seen as a generative modelling task because it involves generating samples in the input space: $x \sim \mathcal{X}$. To this end, the package has previously shipped with a number of `Generators`: composite types that contain information about how counterfactuals ought to be generated. 
 
-Currently, users can specify the type of generator they want to use by instantiating it. For example, the DiCE generator by @mothilal2020explaining can be instantiated as follows:
+This has allowed users to specify the type of generator they want to use by instantiating it. For example, the DiCE generator by @mothilal2020explaining could (and still can) be instantiated as follows:
 
 ```{julia}
 generator = DiCEGenerator()
 ```
 
-This is a straightforward way for users to use off-the-shelf counterfactual generators. But there is some untapped potential here, as we will see next.
+This has been a straightforward way for users to use off-the-shelf counterfactual generators. But relying on separate composite types for this task may have been an overkill. In fact, all this time there was some untapped potential here, as we will see next.
 
 ### ... To Composable Generators
 
@@ -187,13 +189,13 @@ $$
 \end{aligned} 
 $$ {#eq-general}
 
-where $\text{yloss}$ denotes the main loss function and $\text{cost}$ is a penalty term. I won't cover this in any more detail here, but you can read more about it in the package [docs](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators). The important thing to mention here is that @eq-general very closely describes how counterfactual search is actually implemented in the package. 
+where $\text{yloss}$ denotes the main loss function and $\text{cost}$ is a penalty term. I won't cover this in any more detail here, but you can read about it in the package [docs](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators). The important thing is that @eq-general very closely describes how counterfactual search is actually implemented in the package. 
 
-In other words, all generators currently implemented work with that same objective. They just vary in the way that penalties are defined, for example. This gives rise to an interesting idea: 
+In other words, all generators currently implemented share a common starting point. They largely just vary in the exact way the objective function is specified. This gives rise to an interesting idea: 
 
 > Why not compose generators that combine ideas from different off-the-shelf generators?
 
-I want to give users an easy way to do that, without having to build custom `Generator`s from scratch. This (I think) is a good use case for metaprogramming.
+I want to give users an easy way to do that, without having to build custom `Generator` types from scratch. This (I think) is a good use case for metaprogramming.
 
 Let's try and see if we can make that work. We'll simply extend `CounterfactualExplanations` right here in this repo hosting the blog (easily done in Julia) and provided everything works out well create a pull request. I already have a GitHub [issue](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/118) for this with a linked branch, so that's the one I'll use in my environment:
 
@@ -202,7 +204,7 @@ Let's try and see if we can make that work. We'll simply extend `CounterfactualE
 julia> using CounterfactualExplanations
 ```
 
-By the time you're reading this, all changes to that branch will hopefully already be committed and merged.
+By the time you're reading this, all changes to that branch will have hopefully already been committed and merged.
 
 Let's start by instantiating a generic generator:
 
@@ -398,11 +400,11 @@ Time for me to add this all to [`CounterfactualExplanations.jl`](https://github.
 
 ## 🧼 Hygiene
 
-... aaand I'm back. There was one thing I had ignored, that ended up causing a minor complication: macro [hygiene](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hygiene).  
+... aaand I'm back. There was one thing I had ignored that ended up causing a minor complication: macro [hygiene](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hygiene).  
 
 Again, I'll leave it to you to read up on the details, but the bottom line is that when writing macros, we need to keep variable scopes in mind. [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) is composed of various (sub)modules, and when I initially added the macro to the `CounterfactualExplanations.Generators` module, it errored. 
 
-The problem was (I believe) that the `generator` variable existed in the global scope (`Main`) but it was not accessible for the `@objective` macro that at runtime lives in (`Main.Generators`). Fortunately, it is easy to make the variable accessible by wrapping it inside and `esc()` call:
+The problem was (I believe) that the `generator` variable existed in the global scope (`Main`) but it was not accessible for the `@objective` macro that at runtime lives in `Main.Generators`. Fortunately, it is easy to make the variable accessible by wrapping it inside an `esc()` call:
 
 > This escaping mechanism can be used to "violate" hygiene when necessary, in order to introduce or manipulate user variables. 
 
@@ -412,12 +414,12 @@ If you want to find out more about how macros can now be used to easily compose 
 
 ## 🌯 Wrapping Up
 
-In this blog post, I've done something I usually try to avoid: talk about stuff I know next to nothing about. Metaprogramming is an exciting topic and if you're still here, you just got to experience it through the lens of an absolute novice. During our leap of faith into Julia's metaverse we've learned the following things:
+In this blog post, I've done something I usually try to avoid: talk about things I don't know. Metaprogramming is an exciting topic and if you're still here, you just got to experience it through the lens of an absolute novice. During our leap of faith into Julia's metaverse we've learned the following things:
 
 1. Code in Julia is internally represented as a mutable data structure.
 2. Macros are a way to take such data structures and transform them before they get evaluated at runtime. 
 3. An important thing to keep in mind when writing macros is variable scopes. 
 
-Throughout this post, I have skipped various important details that (I think) were not immediately relevant to the goal I had in mind: adding my first macro to  [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl). 
+Throughout this post, I have skipped various important details that (I think) were not immediately relevant to the goal I had in mind: adding my first macro to  [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl). In the future, I may write about this topic again and cover some of these missing details (hopefully with a bit more insight at that point!).
 
 ## 🎓 References

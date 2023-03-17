@@ -246,7 +246,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
    
   <ul>
   <li><a href="#all-right-where-to-start" id="toc-all-right-where-to-start" class="nav-link active" data-scroll-target="#all-right-where-to-start">🤔 All right, where to start?</a></li>
-  <li><a href="#julia-docs-v1.8" id="toc-julia-docs-v1.8" class="nav-link" data-scroll-target="#julia-docs-v1.8">📖 Julia docs (v1.8)</a>
+  <li><a href="#julia-docs" id="toc-julia-docs" class="nav-link" data-scroll-target="#julia-docs">📖 Julia docs</a>
   <ul class="collapse">
   <li><a href="#code-as-data-structures" id="toc-code-as-data-structures" class="nav-link" data-scroll-target="#code-as-data-structures">Code as Data Structures</a></li>
   <li><a href="#interpolation" id="toc-interpolation" class="nav-link" data-scroll-target="#interpolation">Interpolation</a></li>
@@ -324,9 +324,9 @@ A leap of faith into Julia’s metaverse.
 </figcaption>
 </figure>
 </div>
-<p>On this blog, I typically talk about things that I have <strong>some</strong> understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly <strong>clueless</strong> about. There’s an interesting aspect about Julia, which I know embarrassingly little about at this point: <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/">Metaprogramming</a>.</p>
-<p>Having worked with Julia almost every day for about 1.5 years now, I have employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it doesn’t exist. Meanwhile, <a href="https://twitter.com/kdpsinghlab">Karandeep Singh</a> has stepped onto the Julia stage around 5 minutes ago and already developed a package that literally oozes Metaprogramming: <a href="https://kdpsingh.github.io/Tidier.jl/dev/">Tidier.jl</a>. The package API is such a joy to work with, that I have felt inspired to finally take a serious look at what Metaprogramming is all about.</p>
-<p>My goal is to get to the point where I can confidently write my first macro for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> - more on this below! If you are as clueless and curious about the topic as yours truly, then follow along on a journey into the metaverse. Buckle in though, it’s going to be a bumpy ride! You have been warned.</p>
+<p>On this blog, I typically talk about things that I have <em>some</em> understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly <em>clueless</em> about. There’s an interesting aspect about Julia, which I know embarrassingly little about at this point: <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/">Metaprogramming</a>.</p>
+<p>Having worked with Julia for about 1.5 years now, I have so far employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it never existed. Meanwhile, <a href="https://twitter.com/kdpsinghlab">Karandeep Singh</a> has stepped on the Julia scence around 5 minutes ago and already developed a package that literally oozes macro: <a href="https://kdpsingh.github.io/Tidier.jl/dev/">Tidier.jl</a>. The package API is such a joy to work with that I have felt inspired to finally take a serious look at what metaprogramming is all about.</p>
+<p>My goal for this post is to get to the point where I can confidently write my first macro for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> - more on this below! If you are as clueless and curious about the topic as I am, then follow along on a journey into the metaverse. Buckle in though, it’s going to be a bumpy ride! You have been warned.</p>
 <section id="all-right-where-to-start" class="level2">
 <h2 class="anchored" data-anchor-id="all-right-where-to-start">🤔 All right, where to start?</h2>
 <p>You guessed it, we’ll start with the official Julia <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/">documentation</a> on the topic:</p>
@@ -334,22 +334,21 @@ A leap of faith into Julia’s metaverse.
 <p>Like Lisp, Julia represents its own code as a data structure of the language itself.</p>
 </blockquote>
 <p>Hmmm … I know nothing about Lisp and this is already beyond me. Code as a data structure?</p>
-<p>Let’s first try to understand what exactly metaprogramming even is, outside of Julia and Lisp. We’ll take a quick detour before we’re back.</p>
-<p><a href="https://en.wikipedia.org/wiki/Metaprogramming#:~:text=Metaprogramming%20is%20a%20programming%20technique,even%20modify%20itself%20while%20running.">Wikipedia</a> has the following to say on the topic:</p>
+<p>Let’s first try to understand what exactly metaprogramming is, outside of Julia and Lisp. We’ll take a quick detour before we’re back. <a href="https://en.wikipedia.org/wiki/Metaprogramming#:~:text=Metaprogramming%20is%20a%20programming%20technique,even%20modify%20itself%20while%20running.">Wikipedia</a> has the following to say on the topic:</p>
 <blockquote class="blockquote">
 <p>Metaprogramming is a programming technique in which computer programs have the ability to treat other programs as their data.</p>
 </blockquote>
-<p>Ok, ChatGPT? I wanted to try out <a href="https://github.com/ThatcherC/ReplGPT.jl">ReplGPT</a> anyway so here goes:</p>
+<p>Right … What about ChatGPT? I wanted to try out <a href="https://github.com/ThatcherC/ReplGPT.jl">ReplGPT</a> anyway so here goes<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
 <pre class="julia-repl"><code>julia&gt; using ReplGPT
 ChatGPT&gt; Hey hey, can you please explain metaprogramming to me (I have no computer science background, but am experienced with programming and data science)
   Metaprogramming is a programming technique where a program is capable of creating or manipulating code at
   runtime. It involves writing computer programs that create, modify, or analyze other computer programs or data
   about those programs.</code></pre>
-<p>Alright, so in layman’s terms metaprogramming involves code that generates code - I guess we really have entered the metaverse!</p>
+<p>So, in layman’s terms, metaprogramming involves code that generates code - I guess we really have entered the metaverse!</p>
 </section>
-<section id="julia-docs-v1.8" class="level2">
-<h2 class="anchored" data-anchor-id="julia-docs-v1.8">📖 Julia docs (v1.8)</h2>
-<p>Let’s head back to the Julia <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/">documentation</a> and look at the first couple of examples.</p>
+<section id="julia-docs" class="level2">
+<h2 class="anchored" data-anchor-id="julia-docs">📖 Julia docs</h2>
+<p>Let’s head back to the Julia <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/">documentation (v1.8)</a> and look at the first couple of examples.</p>
 <section id="code-as-data-structures" class="level3">
 <h3 class="anchored" data-anchor-id="code-as-data-structures">Code as Data Structures</h3>
 <p>Skipping the details here, it turns out that when I write <code>1 + 1</code> in the REPL, Julia first parses this program as a string <code>"1 + 1</code> into an expression <code>ex=:(1 + 1)::Expr</code>, which is then evaluated <code>eval(ex)</code> (<a href="#fig-code">Figure&nbsp;1</a>). I’ve used a <code>quote</code> here to generate the expression because I’ve used <strong>quoting</strong> before for use with <code>Documenter.jl</code>.</p>
@@ -366,10 +365,7 @@ ChatGPT&gt; Hey hey, can you please explain metaprogramming to me (I have no com
 <div class="cell-output cell-output-stdout">
 <pre><code>Expr
   head: Symbol call
-  args: Array{Any}(</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>(2,))
+  args: Array{Any}((2,))
     1: Symbol sum
     2: Expr
       head: Symbol vect
@@ -379,46 +375,47 @@ ChatGPT&gt; Hey hey, can you please explain metaprogramming to me (I have no com
         3: Int64 3</code></pre>
 </div>
 </div>
-<p>That data structure can be “manipulated from within the language”. Let’s try that! Currently, evaluating this expression yields the <code>sum</code> of the <code>Array</code>:</p>
+<p>That data structure can be “manipulated from within the language”.</p>
+<p>Let’s try that! Currently, evaluating this expression yields the <code>sum</code> of the <code>Array</code>:</p>
 <div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>6</code></pre>
 </div>
 </div>
 <p>Upon manipulation (that sounds weird!), we have:</p>
 <div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ex.args[<span class="fl">1</span>] <span class="op">=</span> <span class="op">:</span>maximum</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ex.args[<span class="fl">1</span>] <span class="op">=</span> <span class="op">:</span>maximum</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>3</code></pre>
 </div>
 </div>
-<p>Ok ok, things are starting to make sense!</p>
+<p>Ok ok, things are starting to make sense now!</p>
 </section>
 <section id="interpolation" class="level3">
 <h3 class="anchored" data-anchor-id="interpolation">Interpolation</h3>
-<p>Back to the Julia documentation and next on the agenda we <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-expression-interpolation">Interpolation</a>. Skipping the details again, it seems like I can interpolate expression much like strings. Using interpolation I can recreate the expression from above as follows:</p>
+<p>Back to the Julia documentation and next on the agenda we have <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-expression-interpolation">Interpolation</a>. Skipping the details again, it seems like I can interpolate an expression much like strings. Using interpolation I can recreate the expression from above as follows:</p>
 <div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fun <span class="op">=</span> maximum</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>ex_from_ex_interpoliation <span class="op">=</span> <span class="op">:</span>(<span class="op">$</span><span class="fu">fun</span>(<span class="op">$</span>x))</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="fu">eval</span>(ex_from_ex_interpoliation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fun <span class="op">=</span> maximum</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>ex_from_ex_interpoliation <span class="op">=</span> <span class="op">:</span>(<span class="op">$</span><span class="fu">fun</span>(<span class="op">$</span>x))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="fu">eval</span>(ex_from_ex_interpoliation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Using string interpolation is quite similar:</p>
 <div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fun <span class="op">=</span> maximum</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>ex_from_string_interpolation <span class="op">=</span> <span class="bu">Meta</span>.<span class="fu">parse</span>(<span class="st">"</span><span class="sc">$</span>fun<span class="st">(</span><span class="sc">$</span>x<span class="st">)"</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(ex_from_string_interpolation) <span class="op">==</span> a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fun <span class="op">=</span> maximum</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>ex_from_string_interpolation <span class="op">=</span> <span class="bu">Meta</span>.<span class="fu">parse</span>(<span class="st">"</span><span class="sc">$</span>fun<span class="st">(</span><span class="sc">$</span>x<span class="st">)"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(ex_from_string_interpolation) <span class="op">==</span> a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
 <pre><code>true</code></pre>
 </div>
 </div>
 <p>And much like with function arguments, we can also use splatting:</p>
 <div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(<span class="op">:</span>(<span class="fu">zeros</span>(<span class="op">$</span>x<span class="op">...</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(<span class="op">:</span>(<span class="fu">zeros</span>(<span class="op">$</span>x<span class="op">...</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
 <pre><code>1×2×3 Array{Float64, 3}:
 [:, :, 1] =
  0.0  0.0
@@ -432,17 +429,17 @@ ChatGPT&gt; Hey hey, can you please explain metaprogramming to me (I have no com
 </div>
 <p>Next off, we have <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Nested-quote"><strong>nested quotes</strong></a>. I can’t see myself using these anytime soon but anyway it seems that for each <code>$</code> sign that we prepend to <code>x</code>, an evaluation is trigged:</p>
 <div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(<span class="kw">quote</span> <span class="kw">quote</span> <span class="op">$$:</span>(x) <span class="kw">end</span> <span class="kw">end</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(<span class="kw">quote</span> <span class="kw">quote</span> <span class="op">$$:</span>(x) <span class="kw">end</span> <span class="kw">end</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
 <div class="ansi-escaped-output">
 <pre>quote
-    <span class="ansi-bright-black-fg">#= In[9]:2 =#</span>
+    <span class="ansi-bright-black-fg">#= In[34]:2 =#</span>
     [1, 2, 3]
 end</pre>
 </div>
 </div>
 </div>
-<p>Moving on, we have <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-quote-node"><code>QuoteNodes</code></a>, which I will skip because I probably won’t be doing any advanced metaprogramming anytime soon. The next two sections on <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Evaluating-expressions">evaluating expressions</a> and <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions">functions on <code>Expr</code>essions</a> also look somewhat more involved than what I need right now, but I expect I’ll find myself back here when I write that first macro for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>.</p>
+<p>Moving on, we have <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-quote-node"><code>QuoteNodes</code></a>, which I will steer clear of because I probably won’t be doing any super advanced metaprogramming anytime soon. The next two sections on <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Evaluating-expressions">evaluating expressions</a> and <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions">functions on <code>Expr</code>essions</a> also look somewhat more involved than what I need right now, but I expect I’ll find myself back here when I write that first macro for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>.</p>
 </section>
 <section id="macros" class="level3">
 <h3 class="anchored" data-anchor-id="macros">Macros</h3>
@@ -456,23 +453,24 @@ end</pre>
 <p></p><figcaption class="figure-caption">Arrived in Macroland.</figcaption><p></p>
 </figure>
 </div>
-<p>Let’s see if we can make sense of this as we move on. The <code>Hello, world!</code> example makes it quite clear:</p>
+<p>Let’s see if we can make sense of this as we move on. The <code>Hello, world!</code> example makes the concept quite clear:</p>
 <div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">macro</span> <span class="fu">sayhello</span>(name)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">:</span>( <span class="fu">println</span>(<span class="st">"Hello, "</span>, <span class="op">$</span>name) )   <span class="co"># return the expression ...</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="pp">@sayhello</span> <span class="st">"reader"</span>                          <span class="co"># ... to be immediately compiled.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">macro</span> <span class="fu">sayhello</span>(name)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">:</span>( <span class="fu">println</span>(<span class="st">"Hello, "</span>, <span class="op">$</span>name) )   <span class="co"># return the expression ...</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="pp">@sayhello</span> <span class="st">"reader"</span>                          <span class="co"># ... to be immediately compiled.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Hello, reader</code></pre>
 </div>
 </div>
-<p>So I understand that a macro is a way to build and return expressions inside a block (a bit like a function) but on call that expression is immediately evaluated. In other words, we can use macros to write code that generates code that is then evaluated.</p>
-<p>To fully grasp the next <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hold-up:-why-macros?">part</a>, I should have not skipped the part on <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions">functions on <code>Expr</code>essions</a>. We’ll leave that little nugget for Future Me. That same guy will also have to suffer the consequences of Present Me merely skimming the details in the next <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Macro-invocation">section</a> on macro invocation. Present Me is impatient and overly confident in the level of knowledge that we have just acquired about metaprogramming. Let’s meet the final boss of the metaverse: an Advanced Macro.</p>
+<p>It seems that a macro is a way to build and return expressions inside a block (a bit like a function) but on call that expression is immediately evaluated. In other words, we can use macros to write code that generates code that is then evaluated.</p>
+<p>To fully grasp the next <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hold-up:-why-macros?">part</a>, I should have not skipped the part on <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions">functions on <code>Expr</code>essions</a>. We’ll leave that little nugget for Future Me. That same guy will also have to suffer the consequences of Present Me merely skimming the details in the next <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Macro-invocation">section</a> on macro invocation. Present Me is impatient and overly confident in the level of knowledge that we have just acquired about metaprogramming.</p>
+<p>Let’s get ahead of ourselves and meet the final boss of the metaverse: an Advanced Macro.</p>
 </section>
 </section>
 <section id="build-an-advanced-macro" class="level2">
 <h2 class="anchored" data-anchor-id="build-an-advanced-macro">🔥 BUILD AN ADVANCED MACRO</h2>
-<p>Ok, great, let’s go! I’ll leave it to you to read that section in the Julia <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Building-an-advanced-macro">docs</a>. We’ll jump straight into building the macro I want to build for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>. I now think it’ll be less involved than I thought — optimism in the face of uncertainty!</p>
+<p>I’ll leave it to you to thoroughly read that section in the Julia <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Building-an-advanced-macro">docs</a>. Here, we’ll jump straight into building the macro I want to have for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>. I now think it’ll be less involved than I thought — optimism in the face of uncertainty!</p>
 <div class="quarto-figure quarto-figure-right">
 <figure class="figure">
 <p><img src="www/final-boss.png" class="img-fluid figure-img"></p>
@@ -481,12 +479,12 @@ end</pre>
 </div>
 <section id="from-off-the-shelf-counterfactual-generators" class="level3">
 <h3 class="anchored" data-anchor-id="from-off-the-shelf-counterfactual-generators">From Off-the-Shelf Counterfactual Generators …</h3>
-<p><a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> is a package for generating Counterfactual Explanations for predictive models <span class="math inline">\(f: \mathcal{X} \mapsto \mathcal{Y}\)</span>. This is a relatively recent approach to Explainable AI that I am (probably a little too) excited about and won’t dwell on here. For what follows, it’s worth mentioning that generating Counterfactual Explanations can be seen as a generative modelling task because it involves generating samples in the input space: <span class="math inline">\(x \sim \mathcal{X}\)</span>. To this end, the package ships with a number of <code>Generators</code>, which are really just composite types that contain information about how counterfactuals ought to be generated.</p>
-<p>Currently, users can specify the type of generator they want to use by instantiating it. For example, the DiCE generator by <span class="citation" data-cites="mothilal2020explaining">Mothilal, Sharma, and Tan (<a href="#ref-mothilal2020explaining" role="doc-biblioref">2020</a>)</span> can be instantiated as follows:</p>
+<p><a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> is a package for generating Counterfactual Explanations for predictive models <span class="math inline">\(f: \mathcal{X} \mapsto \mathcal{Y}\)</span>. This is a relatively recent approach to Explainable AI that I am (probably a little too) excited about and won’t dwell on here. For what follows, it suffices to say that generating Counterfactual Explanations can be seen as a generative modelling task because it involves generating samples in the input space: <span class="math inline">\(x \sim \mathcal{X}\)</span>. To this end, the package has previously shipped with a number of <code>Generators</code>: composite types that contain information about how counterfactuals ought to be generated.</p>
+<p>This has allowed users to specify the type of generator they want to use by instantiating it. For example, the DiCE generator by <span class="citation" data-cites="mothilal2020explaining">Mothilal, Sharma, and Tan (<a href="#ref-mothilal2020explaining" role="doc-biblioref">2020</a>)</span> could (and still can) be instantiated as follows:</p>
 <div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>generator <span class="op">=</span> <span class="fu">DiCEGenerator</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>generator <span class="op">=</span> <span class="fu">DiCEGenerator</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This is a straightforward way for users to use off-the-shelf counterfactual generators. But there is some untapped potential here, as we will see next.</p>
+<p>This has been a straightforward way for users to use off-the-shelf counterfactual generators. But relying on separate composite types for this task may have been an overkill. In fact, all this time there was some untapped potential here, as we will see next.</p>
 </section>
 <section id="to-composable-generators" class="level3">
 <h3 class="anchored" data-anchor-id="to-composable-generators">… To Composable Generators</h3>
@@ -496,19 +494,19 @@ end</pre>
 \mathbf{s}^\prime &amp;= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\}
 \end{aligned}
 \tag{1}\]</span></span></p>
-<p>where <span class="math inline">\(\text{yloss}\)</span> denotes the main loss function and <span class="math inline">\(\text{cost}\)</span> is a penalty term. I won’t cover this in any more detail here, but you can read more about it in the package <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators">docs</a>. The important thing to mention here is that <a href="#eq-general">Equation&nbsp;1</a> very closely describes how counterfactual search is actually implemented in the package.</p>
-<p>In other words, all generators currently implemented work with that same objective. They just vary in the way that penalties are defined, for example. This gives rise to an interesting idea:</p>
+<p>where <span class="math inline">\(\text{yloss}\)</span> denotes the main loss function and <span class="math inline">\(\text{cost}\)</span> is a penalty term. I won’t cover this in any more detail here, but you can read about it in the package <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators">docs</a>. The important thing is that <a href="#eq-general">Equation&nbsp;1</a> very closely describes how counterfactual search is actually implemented in the package.</p>
+<p>In other words, all generators currently implemented share a common starting point. They largely just vary in the exact way the objective function is specified. This gives rise to an interesting idea:</p>
 <blockquote class="blockquote">
 <p>Why not compose generators that combine ideas from different off-the-shelf generators?</p>
 </blockquote>
-<p>I want to give users an easy way to do that, without having to build custom <code>Generator</code>s from scratch. This (I think) is a good use case for metaprogramming.</p>
+<p>I want to give users an easy way to do that, without having to build custom <code>Generator</code> types from scratch. This (I think) is a good use case for metaprogramming.</p>
 <p>Let’s try and see if we can make that work. We’ll simply extend <code>CounterfactualExplanations</code> right here in this repo hosting the blog (easily done in Julia) and provided everything works out well create a pull request. I already have a GitHub <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/118">issue</a> for this with a linked branch, so that’s the one I’ll use in my environment:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>(metaprogramming) pkg<span class="op">&gt;</span> add https<span class="op">://</span>github.com<span class="op">/</span>JuliaTrustworthyAI<span class="op">/</span>CounterfactualExplanations.jl<span class="co">#118-add-losses-and-penalties-modules-or-group-under-objectives-module</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>julia<span class="op">&gt;</span> <span class="im">using</span> <span class="bu">CounterfactualExplanations</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>By the time you’re reading this, all changes to that branch will hopefully already be committed and merged.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>(metaprogramming) pkg<span class="op">&gt;</span> add https<span class="op">://</span>github.com<span class="op">/</span>JuliaTrustworthyAI<span class="op">/</span>CounterfactualExplanations.jl<span class="co">#118-add-losses-and-penalties-modules-or-group-under-objectives-module</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>julia<span class="op">&gt;</span> <span class="im">using</span> <span class="bu">CounterfactualExplanations</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>By the time you’re reading this, all changes to that branch will have hopefully already been committed and merged.</p>
 <p>Let’s start by instantiating a generic generator:</p>
 <div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>generator <span class="op">=</span> <span class="fu">GenericGenerator</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>generator <span class="op">=</span> <span class="fu">GenericGenerator</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Our goal is to create macros that build expressions that, when evaluated, mutate the <code>generator</code> instance.</p>
 </section>
@@ -522,17 +520,17 @@ end</pre>
 </figure>
 </div>
 <p>Let’s start with that part. Naively, we could begin by writing it out very literally:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ex <span class="op">=</span> <span class="op">:</span>(yloss <span class="op">+</span> λ<span class="op">*</span>cost)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ex <span class="op">=</span> <span class="op">:</span>(yloss <span class="op">+</span> λ<span class="op">*</span>cost)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Of course, evaluating this expression throws an error because none of the variables are actually defined. Let’s work on that …</p>
 <p>For the loss and penalty functions, we will use methods available from the <code>CounterfactualExplanations.Objectives</code> module, while for <span class="math inline">\(\lambda\)</span> we will use a literal:</p>
 <div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ex <span class="op">=</span> <span class="op">:</span>(logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span> <span class="op">*</span> distance_l2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ex <span class="op">=</span> <span class="op">:</span>(logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span> <span class="op">*</span> distance_l2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s try to make sense of the data structure we have created:</p>
 <div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ex.args</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ex.args</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
 <pre><code>3-element Vector{Any}:
  :+
  :logitbinarycrossentropy
@@ -540,59 +538,59 @@ end</pre>
 </div>
 </div>
 <p>My first naive approach is shown below. It errors because I forgot to interpolate the variables inside the <code>quote</code>.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> ex.args[<span class="fl">2</span>]</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    cost <span class="op">=</span> ex_penalty.args[<span class="fl">3</span>]</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>        generator.loss <span class="op">=</span> loss</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>        generator.cost <span class="op">=</span> cost</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>        generator.λ <span class="op">=</span> λ</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ex_generator</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Having fixed that below, I still get an error because <code>loss</code> and <code>cost</code> functions are not part of the global scope. I am pretty sure that this error would have occurred anyway and has nothing to do with the fact that I’m writing a macro.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> ex.args[<span class="fl">2</span>]</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    cost <span class="op">=</span> ex_penalty.args[<span class="fl">3</span>]</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>        generator.loss <span class="op">=</span> loss</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>        generator.cost <span class="op">=</span> cost</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>        generator.λ <span class="op">=</span> λ</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.loss <span class="op">=</span> <span class="op">$</span>loss</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.cost <span class="op">=</span> <span class="op">$</span>cost</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.λ <span class="op">=</span> <span class="op">$</span>λ</span>
 <span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
 <span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ex_generator</span>
 <span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Having fixed that below, I still get an error because <code>loss</code> and <code>cost</code> functions are not part of the global scope. I am pretty sure that this error would have occurred anyway and has nothing to do with the fact that I’m writing a macro.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> ex.args[<span class="fl">2</span>]</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    cost <span class="op">=</span> ex_penalty.args[<span class="fl">3</span>]</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.loss <span class="op">=</span> <span class="op">$</span>loss</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.cost <span class="op">=</span> <span class="op">$</span>cost</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.λ <span class="op">=</span> <span class="op">$</span>λ</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ex_generator</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Instead of importing the functions, I just get them explicitly from the <code>Objectives</code> module,</p>
 <div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex.args[<span class="fl">2</span>])</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    cost <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex_penalty.args[<span class="fl">3</span>])</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.loss <span class="op">=</span> <span class="op">$</span>loss</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.penalty <span class="op">=</span> <span class="op">$</span>cost</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.λ <span class="op">=</span> <span class="op">$</span>λ</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>        generator</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ex_generator</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex.args[<span class="fl">2</span>])</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    cost <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex_penalty.args[<span class="fl">3</span>])</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.loss <span class="op">=</span> <span class="op">$</span>loss</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.penalty <span class="op">=</span> <span class="op">$</span>cost</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.λ <span class="op">=</span> <span class="op">$</span>λ</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>        generator</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ex_generator</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>and, finally, this works:</p>
 <div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@objective</span>(generator, logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span>distance_l2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@objective</span>(generator, logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span>distance_l2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="41">
 <pre><code>Generator(Flux.Losses.logitbinarycrossentropy, CounterfactualExplanations.Objectives.distance_l2, 0.1, false, Flux.Optimise.Descent(0.1))</code></pre>
 </div>
 </div>
 <p>But what about adding multiple penalties? The DiCE generator, for example, also takes into account how diverse the counterfactual explanations are <span class="citation" data-cites="mothilal2020explaining">(<a href="#ref-mothilal2020explaining" role="doc-biblioref">Mothilal, Sharma, and Tan 2020</a>)</span>. The corresponding penalty is called <code>ddp_diversity</code>. Let’s start with the expression again:</p>
 <div class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ex <span class="op">=</span> <span class="op">:</span>(logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span>distance_l2 <span class="op">+</span> <span class="fl">1.0</span>ddp_diversity)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>ex.args</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>ex <span class="op">=</span> <span class="op">:</span>(logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span>distance_l2 <span class="op">+</span> <span class="fl">1.0</span>ddp_diversity)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>ex.args</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="42">
 <pre><code>4-element Vector{Any}:
  :+
  :logitbinarycrossentropy
@@ -601,67 +599,67 @@ end</pre>
 </div>
 </div>
 <div class="cell" data-execution_count="17">
-<div class="cell-output cell-output-display" data-execution_count="18">
+<div class="cell-output cell-output-display" data-execution_count="43">
 <p>This time there’s a second nested <code>Expr</code>ession among the arguments: <code>:(1.0ddp_diversity)</code>.</p>
 </div>
 </div>
 <div class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex.args[<span class="fl">2</span>])</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    Λ <span class="op">=</span> <span class="fu">Vector</span><span class="dt">{AbstractFloat}</span>()</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    costs <span class="op">=</span> <span class="fu">Vector</span><span class="dt">{Function}</span>()</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">3</span><span class="op">:</span><span class="fu">length</span>(ex.args)</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>        ex_penalty <span class="op">=</span> ex.args[i]</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>        λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">push!</span>(Λ, λ)</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>        cost <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex_penalty.args[<span class="fl">3</span>])</span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">push!</span>(costs, cost)</span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.loss <span class="op">=</span> <span class="op">$</span>loss</span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.penalty <span class="op">=</span> <span class="op">$</span>costs</span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.λ <span class="op">=</span> <span class="op">$</span>Λ</span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>        generator</span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ex_generator</span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex.args[<span class="fl">2</span>])</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    Λ <span class="op">=</span> <span class="fu">Vector</span><span class="dt">{AbstractFloat}</span>()</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    costs <span class="op">=</span> <span class="fu">Vector</span><span class="dt">{Function}</span>()</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">3</span><span class="op">:</span><span class="fu">length</span>(ex.args)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>        ex_penalty <span class="op">=</span> ex.args[i]</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>        λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">push!</span>(Λ, λ)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>        cost <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex_penalty.args[<span class="fl">3</span>])</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">push!</span>(costs, cost)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.loss <span class="op">=</span> <span class="op">$</span>loss</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.penalty <span class="op">=</span> <span class="op">$</span>costs</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span>generator.λ <span class="op">=</span> <span class="op">$</span>Λ</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>        generator</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ex_generator</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>That works well,</p>
 <div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@objective</span>(generator, logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.05</span>distance_l2 <span class="op">+</span> <span class="fl">1.0</span>ddp_diversity)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@objective</span>(generator, logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.05</span>distance_l2 <span class="op">+</span> <span class="fl">1.0</span>ddp_diversity)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="45">
 <pre><code>Generator(Flux.Losses.logitbinarycrossentropy, Function[CounterfactualExplanations.Objectives.distance_l2, CounterfactualExplanations.Objectives.ddp_diversity], AbstractFloat[0.05, 1.0], false, Flux.Optimise.Descent(0.1))</code></pre>
 </div>
 </div>
 <p>but we should still make sure that this <code>generator</code> is also compatible with our package. Below we go through some of the typical workflows associated with Counterfactual Explanations. Firstly, we load some synthetic data and fit a black-box model to it.</p>
 <div class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>n_dim <span class="op">=</span> <span class="fl">2</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>n_classes <span class="op">=</span> <span class="fl">4</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="fl">400</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>model_name <span class="op">=</span> <span class="op">:</span>MLP</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>counterfactual_data <span class="op">=</span> CounterfactualExplanations.<span class="fu">load_blobs</span>(n_samples; k<span class="op">=</span>n_dim, centers<span class="op">=</span>n_classes)</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> <span class="fu">fit_model</span>(counterfactual_data, model_name)</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(M, counterfactual_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>n_dim <span class="op">=</span> <span class="fl">2</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>n_classes <span class="op">=</span> <span class="fl">4</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="fl">400</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>model_name <span class="op">=</span> <span class="op">:</span>MLP</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>counterfactual_data <span class="op">=</span> CounterfactualExplanations.<span class="fu">load_blobs</span>(n_samples; k<span class="op">=</span>n_dim, centers<span class="op">=</span>n_classes)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> <span class="fu">fit_model</span>(counterfactual_data, model_name)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(M, counterfactual_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we begin by specifying our target and factual label. We then draw a random sample from the non-target (factual) class.</p>
 <div class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Factual and target:</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> <span class="fl">2</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>factual <span class="op">=</span> <span class="fl">4</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>chosen <span class="op">=</span> <span class="fu">rand</span>(<span class="fu">findall</span>(<span class="fu">predict_label</span>(M, counterfactual_data) <span class="op">.==</span> factual))</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fu">select_factual</span>(counterfactual_data,chosen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Factual and target:</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> <span class="fl">2</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>factual <span class="op">=</span> <span class="fl">4</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>chosen <span class="op">=</span> <span class="fu">rand</span>(<span class="fu">findall</span>(<span class="fu">predict_label</span>(M, counterfactual_data) <span class="op">.==</span> factual))</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fu">select_factual</span>(counterfactual_data,chosen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Finally, we use our <code>generator</code> to generate counterfactuals:</p>
 <div class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>ce <span class="op">=</span> <span class="fu">generate_counterfactual</span>(</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    x, target, counterfactual_data, M, generator;</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    num_counterfactuals <span class="op">=</span> <span class="fl">5</span>,</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    converge_when <span class="op">=</span> <span class="op">:</span>generator_conditions</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ce <span class="op">=</span> <span class="fu">generate_counterfactual</span>(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    x, target, counterfactual_data, M, generator;</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    num_counterfactuals <span class="op">=</span> <span class="fl">5</span>,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    converge_when <span class="op">=</span> <span class="op">:</span>generator_conditions</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>It worked! 🎉 The resulting counterfactual search is illustrated in <a href="#fig-search">Figure&nbsp;2</a>. I may have overspecified the size of the <code>ddp_diversity</code> penalty a little bit here, but it sure makes for a cool chart!</p>
 <div class="cell" data-execution_count="23">
-<div class="cell-output cell-output-display" data-execution_count="24">
+<div class="cell-output cell-output-display" data-execution_count="49">
 <div id="fig-search" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="index_files/figure-html/fig-search-output-1.svg" class="img-fluid figure-img"></p>
@@ -675,9 +673,9 @@ end</pre>
 </section>
 <section id="hygiene" class="level2">
 <h2 class="anchored" data-anchor-id="hygiene">🧼 Hygiene</h2>
-<p>… aaand I’m back. There was one thing I had ignored, that ended up causing a minor complication: macro <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hygiene">hygiene</a>.</p>
+<p>… aaand I’m back. There was one thing I had ignored that ended up causing a minor complication: macro <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hygiene">hygiene</a>.</p>
 <p>Again, I’ll leave it to you to read up on the details, but the bottom line is that when writing macros, we need to keep variable scopes in mind. <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> is composed of various (sub)modules, and when I initially added the macro to the <code>CounterfactualExplanations.Generators</code> module, it errored.</p>
-<p>The problem was (I believe) that the <code>generator</code> variable existed in the global scope (<code>Main</code>) but it was not accessible for the <code>@objective</code> macro that at runtime lives in (<code>Main.Generators</code>). Fortunately, it is easy to make the variable accessible by wrapping it inside and <code>esc()</code> call:</p>
+<p>The problem was (I believe) that the <code>generator</code> variable existed in the global scope (<code>Main</code>) but it was not accessible for the <code>@objective</code> macro that at runtime lives in <code>Main.Generators</code>. Fortunately, it is easy to make the variable accessible by wrapping it inside an <code>esc()</code> call:</p>
 <blockquote class="blockquote">
 <p>This escaping mechanism can be used to “violate” hygiene when necessary, in order to introduce or manipulate user variables.</p>
 </blockquote>
@@ -686,13 +684,13 @@ end</pre>
 </section>
 <section id="wrapping-up" class="level2">
 <h2 class="anchored" data-anchor-id="wrapping-up">🌯 Wrapping Up</h2>
-<p>In this blog post, I’ve done something I usually try to avoid: talk about stuff I know next to nothing about. Metaprogramming is an exciting topic and if you’re still here, you just got to experience it through the lens of an absolute novice. During our leap of faith into Julia’s metaverse we’ve learned the following things:</p>
+<p>In this blog post, I’ve done something I usually try to avoid: talk about things I don’t know. Metaprogramming is an exciting topic and if you’re still here, you just got to experience it through the lens of an absolute novice. During our leap of faith into Julia’s metaverse we’ve learned the following things:</p>
 <ol type="1">
 <li>Code in Julia is internally represented as a mutable data structure.</li>
 <li>Macros are a way to take such data structures and transform them before they get evaluated at runtime.</li>
 <li>An important thing to keep in mind when writing macros is variable scopes.</li>
 </ol>
-<p>Throughout this post, I have skipped various important details that (I think) were not immediately relevant to the goal I had in mind: adding my first macro to <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>.</p>
+<p>Throughout this post, I have skipped various important details that (I think) were not immediately relevant to the goal I had in mind: adding my first macro to <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>. In the future, I may write about this topic again and cover some of these missing details (hopefully with a bit more insight at that point!).</p>
 </section>
 <section id="references" class="level2">
 
@@ -701,6 +699,7 @@ end</pre>
 
 </section>
 
+
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-altmeyer2023endogenous" class="csl-entry" role="listitem">
 Altmeyer, Patrick, Giovan Angela, Aleksander Buszydlik, Karol Dobiczek, Arie van Deursen, and Cynthia Liem. 2023. <span>“Endogenous <span>Macrodynamics</span> in <span>Algorithmic</span> <span>Recourse</span>.”</span> In <em>First <span>IEEE</span> <span>Conference</span> on <span>Secure</span> and <span>Trustworthy</span> <span>Machine</span> <span>Learning</span></em>.
@@ -708,7 +707,12 @@ Altmeyer, Patrick, Giovan Angela, Aleksander Buszydlik, Karol Dobiczek, Arie van
 <div id="ref-mothilal2020explaining" class="csl-entry" role="listitem">
 Mothilal, Ramaravind K, Amit Sharma, and Chenhao Tan. 2020. <span>“Explaining Machine Learning Classifiers Through Diverse Counterfactual Explanations.”</span> In <em>Proceedings of the 2020 <span>Conference</span> on <span>Fairness</span>, <span>Accountability</span>, and <span>Transparency</span></em>, 607–17.
 </div>
-</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>A very cool package! Funny story, though, I somehow managed to commit my OpenAI API key to GitHub on the first go (<a href="https://github.com/ThatcherC/ReplGPT.jl/issues/8">developing</a>)<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
   author = {Altmeyer, Patrick},
   title = {A {Leap} of {Faith} into {Julia’s} {Metaverse}},
   date = {23-03-13},
