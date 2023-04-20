@@ -20,7 +20,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
@@ -50,43 +50,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -158,6 +128,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../styles.css">
@@ -339,7 +310,7 @@ Conformalized prediction sets for a<br>simple Deep Image Classifier.
 <div id="fig-samples" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <img src="data:image/png;base64,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" class="figure-img">
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: Random samples from the MNIST dataset.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Random samples from the MNIST dataset.</figcaption>
 </figure>
 </div>
 </div>
@@ -411,7 +382,7 @@ Conformalized prediction sets for a<br>simple Deep Image Classifier.
 <div id="fig-plots-1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="index_files/figure-html/fig-plots-output-1.svg" class="img-fluid figure-img" data-ref-parent="fig-plots"></p>
-<p></p><figcaption class="figure-caption">(a) Randomly selected prediction sets of size <span class="math inline">\(|C|=1\)</span>.</figcaption><p></p>
+<figcaption class="figure-caption">(a) Randomly selected prediction sets of size <span class="math inline">\(|C|=1\)</span>.</figcaption>
 </figure>
 </div>
 </div>
@@ -421,7 +392,7 @@ Conformalized prediction sets for a<br>simple Deep Image Classifier.
 <div id="fig-plots-2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="index_files/figure-html/fig-plots-output-2.svg" class="img-fluid figure-img" data-ref-parent="fig-plots"></p>
-<p></p><figcaption class="figure-caption">(b) Randomly selected prediction sets of size <span class="math inline">\(|C|=2\)</span>.</figcaption><p></p>
+<figcaption class="figure-caption">(b) Randomly selected prediction sets of size <span class="math inline">\(|C|=2\)</span>.</figcaption>
 </figure>
 </div>
 </div>
@@ -431,7 +402,7 @@ Conformalized prediction sets for a<br>simple Deep Image Classifier.
 <div id="fig-plots-3" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="index_files/figure-html/fig-plots-output-3.svg" class="img-fluid figure-img" data-ref-parent="fig-plots"></p>
-<p></p><figcaption class="figure-caption">(c) Randomly selected prediction sets of size <span class="math inline">\(|C|=3\)</span>.</figcaption><p></p>
+<figcaption class="figure-caption">(c) Randomly selected prediction sets of size <span class="math inline">\(|C|=3\)</span>.</figcaption>
 </figure>
 </div>
 </div>
@@ -526,7 +497,7 @@ SSC: 0.948</code></pre>
 <div id="fig-setsize" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="index_files/figure-html/fig-setsize-output-1.svg" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3: Distribution of set sizes for both approaches.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;3: Distribution of set sizes for both approaches.</figcaption>
 </figure>
 </div>
 </div>
@@ -549,7 +520,7 @@ SSC: 0.948</code></pre>
 Angelopoulos, Anastasios N., and Stephen Bates. 2021. <span>“A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification.”</span> <a href="https://arxiv.org/abs/2107.07511">https://arxiv.org/abs/2107.07511</a>.
 </div>
 <div id="ref-angelopoulos2022uncertainty" class="csl-entry" role="listitem">
-Angelopoulos, Anastasios, Stephen Bates, Jitendra Malik, and Michael I. Jordan. 2022. <span>“Uncertainty <span>Sets</span> for <span>Image Classifiers</span> Using <span>Conformal Prediction</span>.”</span> <span>arXiv</span>. <a href="http://arxiv.org/abs/2009.14193">http://arxiv.org/abs/2009.14193</a>.
+Angelopoulos, Anastasios, Stephen Bates, Jitendra Malik, and Michael I. Jordan. 2022. <span>“Uncertainty <span>Sets</span> for <span>Image Classifiers</span> Using <span>Conformal Prediction</span>.”</span> <span>arXiv</span>. <a href="https://arxiv.org/abs/2009.14193">https://arxiv.org/abs/2009.14193</a>.
 </div>
 <div id="ref-goodfellow2014explaining" class="csl-entry" role="listitem">
 Goodfellow, Ian J, Jonathon Shlens, and Christian Szegedy. 2014. <span>“Explaining and Harnessing Adversarial Examples.”</span> <a href="https://arxiv.org/abs/1412.6572">https://arxiv.org/abs/1412.6572</a>.
@@ -565,13 +536,13 @@ LeCun, Yann. 1998. <span>“The <span>MNIST</span> Database of Handwritten Digit
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
   author = {Altmeyer, Patrick},
   title = {How to {Conformalize} a {Deep} {Image} {Classifier}},
-  date = {22-12-05},
+  date = {2022-12-05},
   url = {https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas" role="listitem">
-Altmeyer, Patrick. 22AD. <span>“How to Conformalize a Deep Image
-Classifier.”</span> December 5, 22AD. <a href="https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier">https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier</a>.
+Altmeyer, Patrick. 2022. <span>“How to Conformalize a Deep Image
+Classifier.”</span> December 5, 2022. <a href="https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier">https://www.paltmeyer.com/blog//blog/posts/conformal-image-classifier</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -600,9 +571,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -798,6 +783,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">© 2022, Patrick Altmeyer</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
