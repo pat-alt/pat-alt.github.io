@@ -47,9 +47,8 @@ crossref:
 :::{.column width="60%"}
 
 - Currently 2nd year of PhD in Trustworthy Artificial Intelligence at Delft University of Technology.
-- Working on Counterfactual Explanations and Probabilistic Machine Learning with applications in Finance.
-- Previously, educational background in Economics and Finance and two years at the Bank of England.
-- Enthusiastic about free open-source software, in particular Julia and Quarto. 
+- Previously, educational background in Economics and Finance and two years in Monetary Policy at the Bank of England.
+- Interested in applying Trustworthy AI to real-world problems, particularly in the financial sector.
 
 :::
 
@@ -135,7 +134,25 @@ We have been exploring both Bayesian (**Laplace Redux**) and Frequentist approac
 
 ![Conformal Prediction sets for an Image Classifier.](www/cp_example.svg){#fig-cp-example width="80%"}
 
-# ECCCos from the Black Box
+# Research Questions
+
+## Recourse Dynamics
+
+We present evidence suggesting that state-of-the-art applications of Algorithmic Recourse to groups of individuals induce large domain and model shifts and propose ways to mitigate this (link to [paper](https://openreview.net/forum?id=-LFT2YicI9v)).
+
+![](www/dynamics_poc.png){align="center" width="100%"}
+
+## A Balancing Act
+
+:::{.incremental}
+- Minimizing **private** costs generates **external** costs for other stakeholders.
+- To avoid this, counterfactuals need to be **plausible**, i.e. comply with the data-generating process.
+- In practice, costs to various stakeholders need to be carefully **balanced**.
+:::
+
+. . . 
+
+> Is plausibility really all we need?
 
 ## Pick your Poison?
 
@@ -149,14 +166,14 @@ These images are sampled from the posterior distribution learned by the model. L
 
 ![Conditional Generated Images from the Image Classifier](www/learn.png){#fig-learn}
 
-## ECCCos
+## ECCCos from the Black Box
 
 ::::{.columns}::::
 :::{.column width='60%'}
 We propose a framework for generating **E**nergy-**C**onstrained **C**onformal **Co**unterfactuals (*ECCCos*) which explain black-box models *faithfully*.
 :::
 :::{.column width='40%'}
-![(a) Wachter, (b) ECCCo (no EBM), (c) ECCCo (no CP), (d) ECCCo](www/mnist_eccco.png){#fig-eccco}
+![](www/mnist_eccco.png)
 :::
 ::::
 
