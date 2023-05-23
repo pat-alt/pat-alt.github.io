@@ -96,26 +96,33 @@ Provided the changes are realistic and actionable, they can be used for **Algori
 
 ## Example: Consumer Credit
 
-In @fig-credit, arrows indicate changes from factuals (loan denied) to counterfactuals (loan supplied). 
-
-![Counterfactuals for Give Me Some Credit dataset [@kaggle2011give].](www/gmsc.svg){#fig-credit}
-
-## Conformal Prediction
+From 'loan denied' to 'loan supplied': [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) 📦.
 
 ::::{.columns}::::
-:::{.column width='60%'}
-[`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) is our Julia package for Conformal Prediction.
+:::{.column width='55%'}
+![Gradient-based counterfactual search.](www/ce_intro.gif){#fig-intro}
 :::
-:::{.column width='40%'}
-[![](www/cp_logo.png)](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl)
+:::{.column width='45%'}
+![Counterfactuals for Give Me Some Credit dataset [@kaggle2011give].](www/gmsc.svg){#fig-credit}
 :::
 ::::
 
-![Conformal Prediction sets for an Image Classifier.](www/cp_example.svg){#fig-cp-example width="80%"}
+## Conformal Prediction
+
+Conformal Prediction is a model-agnostic, distribution-free approach to Predictive Uncertainty Quantification: [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) 📦.
+
+::::{.columns}::::
+:::{.column width='45%'}
+![Conformal Prediction intervals for regression.](www/cp_anim.gif){#fig-reg}
+:::
+:::{.column width='55%'}
+![Conformal Prediction sets for an Image Classifier.](www/cp_example.svg){#fig-cp-example}
+:::
+::::
 
 ## Joint Energy Models
 
-Joint Energy Models (JEMs) are hybrid models trained to learn the conditional output **and** input distribution [@grathwohl2020your].
+Joint Energy Models (JEMs) are hybrid models trained to learn the conditional output **and** input distribution [@grathwohl2020your]: [`JointEnergyModels.jl`](https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl) 📦.
 
 ![A JEM trained on Circles data.](www/jem.svg){#fig-jem }
 
