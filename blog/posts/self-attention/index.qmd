@@ -1,0 +1,136 @@
+---
+title: Self-Attention from Scratch in Julia
+subtitle: Getting started with metaprogramming in Julia
+date: '2023-06-13'
+categories:
+  - metaprogramming
+  - macros
+  - Julia
+description: >-
+  In this slightly different post, I talk about my first experience with metaprogramming in Julia.
+image: www/intro.png
+jupyter: julia-1.9
+draft: true
+---
+
+```{julia}
+#| echo: false
+
+using Pkg; Pkg.activate("blog/posts/self-attention")
+```
+
+<div class="intro-gif">
+  <figure>
+    <img src="www/intro.png">
+    <figcaption>A leap of faith into Julia's metaverse.</figcaption>
+  </figure>
+</div>
+
+On this blog, I typically talk about things that I have *some* understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly *clueless* about. There's an interesting aspect about Julia, which I know embarrassingly little about at this point: [Metaprogramming](https://docs.julialang.org/en/v1.8/manual/metaprogramming/). 
+
+Having worked with Julia for about 1.5 years now, I have so far employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it never existed. Meanwhile, [Karandeep Singh](https://twitter.com/kdpsinghlab) has stepped on the Julia scence around 5 minutes ago and already developed a package that literally oozes macro: [Tidier.jl](https://kdpsingh.github.io/Tidier.jl/dev/). The package API is such a joy to work with that I have felt inspired to finally take a serious look at what metaprogramming is all about. 
+
+My goal for this post is to get to the point where I can confidently write my first macro for [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) - more on this below! If you are as clueless and curious about the topic as I am, then follow along on a journey into the metaverse. Buckle in though, it's going to be a bumpy ride! You have been warned. 
+
+```{julia}
+sentence = "Life is short, eat dessert first"
+dc = Dict(key => value for (value, key) in enumerate(sort(split(sentence))))
+```
+
+```{julia}
+sentence_int = [dc[word] for word in split(sentence)]
+```
+
+```{julia}
+using Flux
+embed = Flux.Embedding(6 => 16)
+embedded_sentence = embed(sentence_int)
+```
+
+```{julia}
+d = size(embedded_sentence,1)
+d_q, d_k, d_v = 24, 24, 28
+
+W_query = rand(d_q, d)
+W_key = rand(d_k, d)
+W_value = rand(d_v, d)
+```
+
+```{julia}
+x_2 = embedded_sentence[:,2]
+query_2 = W_query * x_2
+key_2 = W_key * x_2
+value_2 = W_value * x_2
+
+println("query_2: ", size(query_2))
+println("key_2: ", size(key_2))
+println("value_2: ", size(value_2))
+```
+
+```{julia}
+keys = (W_key * embedded_sentence)'
+values = (W_value * embedded_sentence)'
+```
+
+```{julia}
+ω_24 = query_2'keys[4,:]
+```
+
+```{julia}
+ω_2 = query_2'keys'
+```
+
+```{julia}
+attention_weights_2 = softmax(ω_2 / d_k^0.5, dims=2)
+print(attention_weights_2)
+```
+
+```{julia}
+attention_weights_2 * values
+```
+
+## Multi-Head Attention
+
+```{julia}
+h = 3
+multihead_W_query = rand(d_q, d, h)
+multihead_W_key = rand(d_k, d, h)
+multihead_W_value = rand(d_v, d, h)
+```
+
+```{julia}
+multihead_query_2 = multihead_W_query ⊠ x_2[:,:] |> x -> reshape(x, 1, d_q, h)
+multihead_key_2 = multihead_W_key ⊠ x_2[:,:] |> x -> reshape(x, 1, d_k, h)
+multihead_value_2 = multihead_W_value ⊠ x_2[:,:] |> x -> reshape(x, 1, d_v, h)
+```
+
+```{julia}
+stacked_inputs = repeat(embedded_sentence, outer=(1,1,3))
+```
+
+```{julia}
+multihead_keys = multihead_W_query ⊠ stacked_inputs
+multihead_values = multihead_W_value ⊠ stacked_inputs
+
+println("multihead_keys: ", size(multihead_keys))
+println("multihead_values: ", size(multihead_values))
+```
+
+```{julia}
+multi_ω_2 = multihead_query_2 ⊠ keys'
+```
+
+```{julia}
+multi_attention_weights_2 = softmax(multi_ω_2 / d_k^0.5, dims=2)
+@show multi_attention_weights_2
+```
+
+```{julia}
+multi_attention_weights_2 ⊠ values
+```
+
+## 🤔 All right, where to start?
+
+## 🌯 Wrapping Up
+
+## 🎓 References
