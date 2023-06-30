@@ -103,6 +103,11 @@ div.csl-indent {
   "panel-placement": "end",
   "type": "overlay",
   "limit": 20,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -112,7 +117,8 @@ div.csl-indent {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-BEEZ30787D"></script>
@@ -135,7 +141,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <meta property="og:title" content="Patrick Altmeyer - Conformal Prediction in Julia 🟣🔴🟢">
 <meta property="og:description" content="A (very) gentle introduction to Conformal Prediction in Julia using my new package ConformalPrediction.jl.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/conformal-prediction/www/intro.gif">
-<meta property="og:site-name" content="Patrick Altmeyer">
+<meta property="og:site_name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer - Conformal Prediction in Julia 🟣🔴🟢">
 <meta name="twitter:description" content="A (very) gentle introduction to Conformal Prediction in Julia using my new package ConformalPrediction.jl.">
 <meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/conformal-prediction/www/intro.gif">
@@ -148,7 +154,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
@@ -200,9 +206,9 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
  <span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -300,11 +306,11 @@ Prediction sets for two different samples <br> and changing coverage rates. <br>
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>Conformal Prediction is an interesting frequentist approach to uncertainty quantification that can even be combined with Bayes (<a href="#sec-background">Section&nbsp;1</a>).</li>
-<li>It is scalable and model-agnostic and therefore well applicable to machine learning (<a href="#sec-background">Section&nbsp;1</a>).</li>
-<li><a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a> implements CP in pure Julia and can be used with any supervised model available from <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.18/"><code>MLJ.jl</code></a> (<a href="#sec-julia">Section&nbsp;2</a>).</li>
-<li>Implementing CP directly on top of an existing, powerful machine learning toolkit demonstrates the potential usefulness of this framework to the ML community (<a href="#sec-julia">Section&nbsp;2</a>).</li>
-<li>Standard conformal classifiers produce set-valued predictions: for ambiguous samples these sets are typically large (for high coverage) or empty (for low coverage) (<a href="#sec-scp">Section&nbsp;2.1</a>).</li>
+<li>Conformal Prediction is an interesting frequentist approach to uncertainty quantification that can even be combined with Bayes (<a href="#sec-background" class="quarto-xref">Section&nbsp;1</a>).</li>
+<li>It is scalable and model-agnostic and therefore well applicable to machine learning (<a href="#sec-background" class="quarto-xref">Section&nbsp;1</a>).</li>
+<li><a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a> implements CP in pure Julia and can be used with any supervised model available from <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.18/"><code>MLJ.jl</code></a> (<a href="#sec-julia" class="quarto-xref">Section&nbsp;2</a>).</li>
+<li>Implementing CP directly on top of an existing, powerful machine learning toolkit demonstrates the potential usefulness of this framework to the ML community (<a href="#sec-julia" class="quarto-xref">Section&nbsp;2</a>).</li>
+<li>Standard conformal classifiers produce set-valued predictions: for ambiguous samples these sets are typically large (for high coverage) or empty (for low coverage) (<a href="#sec-scp" class="quarto-xref">Section&nbsp;2.1</a>).</li>
 </ol>
 </div>
 </div>
@@ -370,7 +376,7 @@ Note
 C(X_{\text{test}})=\{y:s(X_{\text{test}},y) \le \hat{q}\}
 \tag{1}\]</span></span></p>
 <p>This is the default procedure used for classification and regression in <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>.</p>
-<p>You may want to take a look at the source code for the classification case <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L1">here</a>. As a <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L3">first</a> important step, we begin by defining a concrete type <code>SimpleInductiveClassifier</code> that wraps a supervised model from <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.18/"><code>MLJ.jl</code></a> and reserves additional fields for a few hyperparameters. As a <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L26">second</a> step, we define the training procedure, which includes the data-splitting and calibration step. Finally, as a <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L56">third</a> step we implement the procedure in <a href="#eq-set">Equation&nbsp;1</a> to compute the conformal prediction set.</p>
+<p>You may want to take a look at the source code for the classification case <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L1">here</a>. As a <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L3">first</a> important step, we begin by defining a concrete type <code>SimpleInductiveClassifier</code> that wraps a supervised model from <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.18/"><code>MLJ.jl</code></a> and reserves additional fields for a few hyperparameters. As a <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L26">second</a> step, we define the training procedure, which includes the data-splitting and calibration step. Finally, as a <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L56">third</a> step we implement the procedure in <a href="#eq-set" class="quarto-xref">Equation&nbsp;1</a> to compute the conformal prediction set.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -455,7 +461,7 @@ Development Status
 <pre><code>missing</code></pre>
 </div>
 </div>
-<p><a href="#fig-anim">Figure&nbsp;1</a> should provide some more intuition as to what exactly is happening here. It illustrates the effect of the chosen coverage rate on the predicted softmax output and the set size in the two-dimensional feature space. Contours are overlayed with the moon data points (including test data). The two samples highlighted in red, <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>, have been manually added for illustration purposes. Let’s look at these one by one.</p>
+<p><a href="#fig-anim" class="quarto-xref">Figure&nbsp;1</a> should provide some more intuition as to what exactly is happening here. It illustrates the effect of the chosen coverage rate on the predicted softmax output and the set size in the two-dimensional feature space. Contours are overlayed with the moon data points (including test data). The two samples highlighted in red, <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>, have been manually added for illustration purposes. Let’s look at these one by one.</p>
 <p>Firstly, note that <span class="math inline">\(X_1\)</span> (red cross) falls into a region of the domain that is characterized by high predictive uncertainty. It sits right at the bottom-right corner of our class-zero moon 🌜 (orange), a region that is almost entirely enveloped by our class-one moon 🌛 (green). For low coverage rates the prediction set for <span class="math inline">\(X_1\)</span> is empty: on the left-hand side this is indicated by the missing contour for the softmax probability; on the right-hand side we can observe that the corresponding set size is indeed zero. For high coverage rates the prediction set includes both <span class="math inline">\(y=0\)</span> and <span class="math inline">\(y=1\)</span>, indicative of the fact that the conformal classifier is uncertain about the true label.</p>
 <p>With respect to <span class="math inline">\(X_2\)</span>, we observe that while also sitting on the fringe of our class-zero moon, this sample populates a region that is not fully enveloped by data points from the opposite class. In this region, the underlying atomic classifier can be expected to be more certain about its predictions, but still not highly confident. How is this reflected by our corresponding conformal prediction sets?</p>
 <div class="cell" data-execution_count="9">
@@ -514,11 +520,11 @@ Development Status
 <h2 class="anchored" data-anchor-id="conclusion">🏁 Conclusion</h2>
 <p>This has really been a whistle-stop tour of Conformal Prediction: an active area of research that probably deserves much more attention. Hopefully, though, this post has helped to provide some color and, if anything, made you more curious about the topic. Let’s recap the TL;DR from above:</p>
 <ol type="1">
-<li>Conformal Prediction is an interesting frequentist approach to uncertainty quantification that can even be combined with Bayes (<a href="#sec-background">Section&nbsp;1</a>).</li>
-<li>It is scalable and model-agnostic and therefore well applicable to machine learning (<a href="#sec-background">Section&nbsp;1</a>).</li>
-<li><a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a> implements CP in pure Julia and can be used with any supervised model available from <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.18/"><code>MLJ.jl</code></a> (<a href="#sec-julia">Section&nbsp;2</a>).</li>
-<li>Implementing CP directly on top of an existing, powerful machine learning toolkit demonstrates the potential usefulness of this framework to the ML community (<a href="#sec-julia">Section&nbsp;2</a>).</li>
-<li>Standard conformal classifiers produce set-valued predictions: for ambiguous samples these sets are typically large (for high coverage) or empty (for low coverage) (<a href="#sec-scp">Section&nbsp;2.1</a>).</li>
+<li>Conformal Prediction is an interesting frequentist approach to uncertainty quantification that can even be combined with Bayes (<a href="#sec-background" class="quarto-xref">Section&nbsp;1</a>).</li>
+<li>It is scalable and model-agnostic and therefore well applicable to machine learning (<a href="#sec-background" class="quarto-xref">Section&nbsp;1</a>).</li>
+<li><a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a> implements CP in pure Julia and can be used with any supervised model available from <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.18/"><code>MLJ.jl</code></a> (<a href="#sec-julia" class="quarto-xref">Section&nbsp;2</a>).</li>
+<li>Implementing CP directly on top of an existing, powerful machine learning toolkit demonstrates the potential usefulness of this framework to the ML community (<a href="#sec-julia" class="quarto-xref">Section&nbsp;2</a>).</li>
+<li>Standard conformal classifiers produce set-valued predictions: for ambiguous samples these sets are typically large (for high coverage) or empty (for low coverage) (<a href="#sec-scp" class="quarto-xref">Section&nbsp;2.1</a>).</li>
 </ol>
 <p>Below I will leave you with some further resources.</p>
 </section>
@@ -553,13 +559,13 @@ Manokhin, Valery. n.d. <span>“Awesome Conformal Prediction.”</span>
 <div id="ref-stanton2022bayesian" class="csl-entry" role="listitem">
 Stanton, Samuel, Wesley Maddox, and Andrew Gordon Wilson. 2022. <span>“Bayesian <span>Optimization</span> with <span>Conformal Coverage Guarantees</span>.”</span> <a href="https://arxiv.org/abs/2210.12496">https://arxiv.org/abs/2210.12496</a>.
 </div>
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>In other places split conformal prediction is sometimes referred to as <em>inductive</em> conformal prediction.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Any thoughts/comments welcome!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
   author = {Altmeyer, Patrick},
   title = {Conformal {Prediction} in {Julia} 🟣🔴🟢},
   date = {2022-10-25},
@@ -649,10 +655,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -662,8 +667,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -676,6 +690,60 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -719,6 +787,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -808,7 +877,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">© 2022, Patrick Altmeyer</div>   
+    <div class="nav-footer-left">
+<p>© 2022, Patrick Altmeyer</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
@@ -842,6 +913,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 

@@ -103,6 +103,11 @@ div.csl-indent {
   "panel-placement": "end",
   "type": "overlay",
   "limit": 20,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -112,7 +117,8 @@ div.csl-indent {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-BEEZ30787D"></script>
@@ -132,7 +138,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <meta property="og:title" content="Patrick Altmeyer - Individual recourse for Black Box Models">
 <meta property="og:description" content="An introduction to algorithmic recourse and an implementation of a simplified version of REVISE (Joshi et al., 2019). This post was prepared as part of my PhD application.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/individual-recourse-for-black-box-models/www/intro.gif">
-<meta property="og:site-name" content="Patrick Altmeyer">
+<meta property="og:site_name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer - Individual recourse for Black Box Models">
 <meta name="twitter:description" content="An introduction to algorithmic recourse and an implementation of a simplified version of REVISE (Joshi et al., 2019). This post was prepared as part of my PhD application.">
 <meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/individual-recourse-for-black-box-models/www/intro.gif">
@@ -145,7 +151,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
@@ -197,9 +203,9 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
  <span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -295,14 +301,14 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <p>For a detailed discussion of these points you may check out this <a href="paper_presentation.pdf">slide deck</a> or consult the paper directly (freely available on <a href="https://deepai.org/publication/towards-realistic-individual-recourse-and-actionable-explanations-in-black-box-decision-making-systems">DeepAI</a>). Here, we will abstract from some of these complications and instead look at an application of a slightly simplified version of <code>REVISE</code>. This should help us to first build a good intuition. Readers interested in the technicalities and code may find all of this in the annex below.</p>
 <section id="from-to" class="level2">
 <h2 class="anchored" data-anchor-id="from-to">From 🐱 to 🐶</h2>
-<p>We will explain <code>REVISE</code> through a short tale of cats and dogs. The protagonist of this tale is Kitty 🐱, a young cat that identifies as a dog. Unfortunately, Kitty is not very tall and her tail, though short for a cat, is longer than that of the average dog (<a href="#fig-density">Figure&nbsp;1</a>).</p>
+<p>We will explain <code>REVISE</code> through a short tale of cats and dogs. The protagonist of this tale is Kitty 🐱, a young cat that identifies as a dog. Unfortunately, Kitty is not very tall and her tail, though short for a cat, is longer than that of the average dog (<a href="#fig-density" class="quarto-xref">Figure&nbsp;1</a>).</p>
 <div id="fig-density" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="www/density.png" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">Figure&nbsp;1: Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty’s attribute values.</figcaption>
 </figure>
 </div>
-<p>Much to her dismay, Kitty has been recognized as a cat by a linear classifier <span class="math inline">\(g_n(X)\)</span> that we trained through stochastic gradient descent using the data on animals’ height and tail length. Once again interested readers may find technical details and code in the annex below. <a href="#fig-class">Figure&nbsp;2</a> shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty’s location indicated by a red circle. Can we provide individual recourse to Kitty?</p>
+<p>Much to her dismay, Kitty has been recognized as a cat by a linear classifier <span class="math inline">\(g_n(X)\)</span> that we trained through stochastic gradient descent using the data on animals’ height and tail length. Once again interested readers may find technical details and code in the annex below. <a href="#fig-class" class="quarto-xref">Figure&nbsp;2</a> shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty’s location indicated by a red circle. Can we provide individual recourse to Kitty?</p>
 <div id="fig-class" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="www/class.png" class="img-fluid figure-img"></p>
@@ -315,7 +321,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <li>Through gradient descent recursively revise <span class="math inline">\(\mathbf{x}_i'^{(t)}\)</span> until <span class="math inline">\(g_n(\mathbf{x}_i'^{(T)})=\)</span>🐶. At this point <span class="math inline">\(T\)</span> the descent terminates since for these revised attributes the classifier labels Kitty as a dog.</li>
 <li>Return <span class="math inline">\(\delta_i=\mathbf{x}_i'^{(T)}-\mathbf{x}_i\)</span>, that is the individual recourse for Kitty.</li>
 </ol>
-<p><a href="#fig-revise">Figure&nbsp;3</a> illustrates what happens when this approach is applied to Kitty’s problem. The different panels show the results for different values of a regularization parameter <span class="math inline">\(\lambda\)</span> that governs the trade-off between achieving the desired label switch and keeping the distance between the original (<span class="math inline">\(\mathbf{x}_i\)</span>) and revised (<span class="math inline">\(\mathbf{x}_i'\)</span>) attributes small. In all but one case, <code>REVISE</code> converges: a decrease in tail length along with an increase in height eventually allows Kitty to cross the decision boundary. In other words, we have successfully turned Kitty into a dog - at least in the eyes of the linear classifier!</p>
+<p><a href="#fig-revise" class="quarto-xref">Figure&nbsp;3</a> illustrates what happens when this approach is applied to Kitty’s problem. The different panels show the results for different values of a regularization parameter <span class="math inline">\(\lambda\)</span> that governs the trade-off between achieving the desired label switch and keeping the distance between the original (<span class="math inline">\(\mathbf{x}_i\)</span>) and revised (<span class="math inline">\(\mathbf{x}_i'\)</span>) attributes small. In all but one case, <code>REVISE</code> converges: a decrease in tail length along with an increase in height eventually allows Kitty to cross the decision boundary. In other words, we have successfully turned Kitty into a dog - at least in the eyes of the linear classifier!</p>
 <p>We also observe that as we increase <span class="math inline">\(\lambda\)</span> for a fixed learning rate, <code>REVISE</code> takes longer to converge. This should come as no surprise, since higher values of <span class="math inline">\(\lambda\)</span> lead to greater regularization with respect to the penalty we place on the distance that Kitty has to travel. When we penalize too much (<span class="math inline">\(\lambda=10\)</span>), Kitty never reaches the decision boundary, because she is reluctant to change her characteristics beyond a certain point. While not visible to the naked eye, in this particular example <span class="math inline">\(\lambda=0.001\)</span> corresponds to the best choice among the candidate values.</p>
 <div id="fig-revise" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -474,7 +480,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 &amp;&amp; {\mathbf{x}_i^{'}}^t&amp;\leftarrow {\mathbf{x}_i^{'}}^{t-1} + \eta \nabla_{{\mathbf{x}_i^{'}}} \left( \ell(g_n(\mathbf{x}_i^{'}),1) + \lambda d(\mathbf{x}_i^{'},\mathbf{x}_i)  \right)  \\
 \end{aligned}
 \]</span></p>
-<p>where <span class="math inline">\(\eta\)</span> is the learning rate. The descent step is almost equivalent to the one described in <span class="citation" data-cites="joshi2019realistic">Joshi et al. (<a href="#ref-joshi2019realistic" role="doc-biblioref">2019</a>)</span>, but here we greatly simplify things by optimizing directly in the attribute space instead of a latent space. The gradient of the loss function looks very similar to <a href="#eq-hinge">Equation&nbsp;1</a>. With respect to the Euclidean distance partial derivatives are of the following form:</p>
+<p>where <span class="math inline">\(\eta\)</span> is the learning rate. The descent step is almost equivalent to the one described in <span class="citation" data-cites="joshi2019realistic">Joshi et al. (<a href="#ref-joshi2019realistic" role="doc-biblioref">2019</a>)</span>, but here we greatly simplify things by optimizing directly in the attribute space instead of a latent space. The gradient of the loss function looks very similar to <a href="#eq-hinge" class="quarto-xref">Equation&nbsp;1</a>. With respect to the Euclidean distance partial derivatives are of the following form:</p>
 <p><span class="math display">\[
 \begin{aligned}
 &amp;&amp;  \frac{\partial ||\mathbf{x}_i^{'}-\mathbf{x}_i||}{\partial {x_i'}^{(d)}}  &amp;= \frac{{x_i'}^{(d)}-{x_i}^{(d)}}{||\mathbf{x}_i^{'}-\mathbf{x}_i||} \\
@@ -671,10 +677,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -684,8 +689,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -698,6 +712,60 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -741,6 +809,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -830,7 +899,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">© 2022, Patrick Altmeyer</div>   
+    <div class="nav-footer-left">
+<p>© 2022, Patrick Altmeyer</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
@@ -864,6 +935,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 
