@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-99.9.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Patrick Altmeyer">
+<meta name="dcterms.date" content="2022-11-21">
+<meta name="description" content="A short companion post to my presentation on using Quarto with Julia at the 2nd JuliaLang Eindhoven meetup in November, 2022.">
+
+<title>Patrick Altmeyer - A year of using Quarto with Julia</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../..//www/favicon.ico" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-BEEZ30787D"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
+</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../styles.css">
+<meta property="og:title" content="Patrick Altmeyer - A year of using Quarto with Julia">
+<meta property="og:description" content="A short companion post to my presentation on using Quarto with Julia at the 2nd JuliaLang Eindhoven meetup in November, 2022.">
+<meta property="og:image" content="https://www.paltmeyer.com/blog//www/images/julia_quarto.gif">
+<meta property="og:site_name" content="Patrick Altmeyer">
+<meta name="twitter:title" content="Patrick Altmeyer - A year of using Quarto with Julia">
+<meta name="twitter:description" content="A short companion post to my presentation on using Quarto with Julia at the 2nd JuliaLang Eindhoven meetup in November, 2022.">
+<meta name="twitter:image" content="https://www.paltmeyer.com/blog//www/images/julia_quarto.gif">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Patrick Altmeyer</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/software.html" rel="" target="">
+ <span class="menu-text">Software</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/talks/index.html" rel="" target="">
+ <span class="menu-text">Talks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/about/index.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../../blog/index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/pat-alt" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/paltmey" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#general-things" id="toc-general-things" class="nav-link active" data-scroll-target="#general-things">General things</a>
+  <ul class="collapse">
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#using-.ipynb-vs-.qmd" id="toc-using-.ipynb-vs-.qmd" class="nav-link" data-scroll-target="#using-.ipynb-vs-.qmd">Using <code>.ipynb</code> vs <code>.qmd</code></a></li>
+  <li><a href="#dynamic-content" id="toc-dynamic-content" class="nav-link" data-scroll-target="#dynamic-content">Dynamic Content</a></li>
+  <li><a href="#code-execution" id="toc-code-execution" class="nav-link" data-scroll-target="#code-execution">Code Execution</a></li>
+  <li><a href="#reproducibility" id="toc-reproducibility" class="nav-link" data-scroll-target="#reproducibility">Reproducibility</a></li>
+  </ul></li>
+  <li><a href="#package-documentation" id="toc-package-documentation" class="nav-link" data-scroll-target="#package-documentation">Package Documentation</a></li>
+  <li><a href="#quarto-for-academic-journal-articles" id="toc-quarto-for-academic-journal-articles" class="nav-link" data-scroll-target="#quarto-for-academic-journal-articles">Quarto for Academic Journal Articles</a></li>
+  <li><a href="#wrapping-up" id="toc-wrapping-up" class="nav-link" data-scroll-target="#wrapping-up">Wrapping up</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">A year of using Quarto with Julia</h1>
+<p class="subtitle lead">Tips and tricks for Julia practitioners</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Quarto</div>
+    <div class="quarto-category">Julia</div>
+    <div class="quarto-category">open-source</div>
+    <div class="quarto-category">reproducibility</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    <p>A short companion post to my presentation on using Quarto with Julia at the 2nd JuliaLang Eindhoven meetup in November, 2022.</p>
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> </p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://www.tudelft.nl/en/">
+            Delft University of Technology
+            </a>
+          </p>
+      </div>
+    </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 21, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="intro-gif">
+<figure class="figure">
+<img src="../../../www/images/julia_quarto.gif" class="figure-img">
+<figcaption class="figure-caption">
+A year of using Quarto with Julia.
+</figcaption>
+</figure>
+</div>
+<p>Earlier this year in July, I gave a short Experience Talk at <a href="https://pretalx.com/juliacon-2022/speaker/8DGYCX/">JuliaCon</a>. In a related blog <a href="../../../blog/posts/julia-and-quarto-a-match-made-in-heaven/index.html">post</a> I explained how the introduction of Quarto made my transition from R to Julia painless: I would be able to start learning Julia without having to give up on all the benefits associated with R Markdown.</p>
+<p>In November, 2022, I am presenting on this topic again at the <a href="https://www.linkedin.com/feed/update/urn:li:activity:6995656928957718528?updateEntityUrn=urn%3Ali%3Afs_feedUpdate%3A%28V2%2Curn%3Ali%3Aactivity%3A6995656928957718528%29">2nd JuliaLang Eindhoven meetup</a>. In addition to the <a href="../../../content/talks/posts/2022-julia-eindhoven/index.html">slides</a>, I thought I’d share a small companion blog post that highlights some useful tips and tricks for anyone interested in using Quarto with Julia.</p>
+<section id="general-things" class="level2">
+<h2 class="anchored" data-anchor-id="general-things">General things</h2>
+<p>We will start in this section with a few general recommendations.</p>
+<section id="setup" class="level3">
+<h3 class="anchored" data-anchor-id="setup">Setup</h3>
+<p>I continue to recommend using VSCode for any work with Quarto and Julia. The Quarto <a href="https://quarto.org/docs/computations/julia.html#vs-code">docs</a> explain how to get started by installing the necessary Quarto and IJulia extensions. Since most Julia users will regularly want to update their Julia version, I would additionally recommend to add <code>IJulia.jl</code> to your <code>~/.julia/config/startup.jl</code> file:<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup OhMyREPL, Revise and Term</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="bu">Pkg</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    pkgs <span class="op">=</span> [<span class="st">"Revise"</span>, <span class="st">"OhMyREPL"</span>, <span class="st">"Term"</span>, <span class="st">"IJulia"</span>]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> pkg <span class="kw">in</span> pkgs</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">Base</span>.<span class="fu">find_package</span>(pkg) <span class="op">===</span> <span class="cn">nothing</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            <span class="bu">Pkg</span>.<span class="fu">add</span>(pkg)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Additionally, you only need to remember that …</p>
+<blockquote class="blockquote">
+<p>… if you install a new Julia binary […], you must update the IJulia installation […] by running <code>Pkg.build("IJulia")</code></p>
+<p>— Source: <a href="https://julialang.github.io/IJulia.jl/stable/manual/installation/#Updating-Julia-and-IJulia">IJulia docs</a></p>
+</blockquote>
+<p>I guess this step can also be automated in <code>~/.julia/config/startup.jl</code>, but haven’t tried that yet.</p>
+</section>
+<section id="using-.ipynb-vs-.qmd" class="level3">
+<h3 class="anchored" data-anchor-id="using-.ipynb-vs-.qmd">Using <code>.ipynb</code> vs <code>.qmd</code></h3>
+<p>I also continue to recommend working with Quarto notebooks as opposed to Jupyter notebooks (files ending in <code>.qmd</code> and <code>.ipynb</code>, respectively). This is partially just based on preference (from R Markdown I’m used to working with <code>.Rmd</code> files), but there is also a good reason to consider using <code>.qmd</code>, even if you’re used to working with Jupyter: the code chunks in your Quarto notebook automatically link to the Julia REPL in VSCode. In other words, you can run code chunks in your notebook and then access any variable that you may have created in the REPL. I find this quite useful, cause it allows me to quickly test code. Perhaps there’s a good way to do this with Jupyter notebooks as well, but when I last used them I would always have to insert new code cells to test stuff.</p>
+<p>Either way switching between Jupyter and Quarto notebooks is straight-forward: <code>quarto convert notebook.qmd</code> will convert any Quarto notebook into a Jupyter notebook and vice versa. One potential benefit of Jupyter notebooks is their connection to Google Colab: it is possible to store Jupyter notebooks on Github and make them available on Colab, allowing users to quickly interact with your code without the need to clone anything. If this is important to you, you can still work with <code>.qmd</code> documents and simply specify <code>keep-ipynb: true</code> in the YAML header.</p>
+</section>
+<section id="dynamic-content" class="level3">
+<h3 class="anchored" data-anchor-id="dynamic-content">Dynamic Content</h3>
+<blockquote class="blockquote">
+<p>The world and the data that describes it is not static 📈. Why should scientific outputs be?</p>
+</blockquote>
+<p>One of the things I have always really loved about R Markdown was the ability to use inline code: the Knitr engine allows you to call and render any object <code>x</code> that you have created in preceding R chunks like this: <code>r x</code>. This is very powerful, because it enables us to bridge the gap between computations and output. In other words, it allows us to easily produce reproducible and dynamic content.</p>
+<p>Until recently I had not been aware that this is also possible for Julia. Consider the following example. The code below depends on remote data that is continuously updated:</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MarketData</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>snp <span class="op">=</span> <span class="fu">yahoo</span>(<span class="st">"^GSPC"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Dates</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>last_trade_day <span class="op">=</span> <span class="fu">timestamp</span>(snp[<span class="kw">end</span>])[<span class="fl">1</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>p_close <span class="op">=</span> <span class="fu">values</span>(snp[<span class="kw">end</span>,<span class="op">:</span>Close])[<span class="fl">1</span>]</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>last_trade_day_formatted <span class="op">=</span> <span class="bu">Dates</span>.<span class="fu">format</span>(last_trade_day, <span class="st">"U d, yyyy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It loads the most recent publicly available data on equity prices from Yahoo finance. In an ideal world, we’d like any updates to these inputs to be reflected in our output. That way you can just re-render the Quarto notebook to get an updated report. To render Julia code inline, we use <code>Markdown.jl</code> like so:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Markdown</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Markdown.<span class="fu">parse</span>(<span class="st">"""</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">When the S&amp;P 500 last traded, on </span><span class="sc">$</span>(last_trade_day_formatted)<span class="st">, it closed at </span><span class="sc">$</span>(p_close)<span class="st">. </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<p>When the S&amp;P 500 last traded, on February 23, 2023, it closed at 4012.320068.</p>
+</div>
+</div>
+<p>In practice, one would of course set <code>#| echo: false</code> in this case. Whatever content you publish, this approach will keep it up-to-date. This practice of simply re-rendering the source notebook also ensures that any other output remains up-to-date (e.g. <a href="#fig-snp" class="quarto-xref">Figure&nbsp;1</a>)</p>
+<div class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div id="fig-snp" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-snp-output-1.svg" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Price history of the S&amp;P 500.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="code-execution" class="level3">
+<h3 class="anchored" data-anchor-id="code-execution">Code Execution</h3>
+<p>Related to the previous point, I typically define the following execution options in my <code>_quarto.yml</code> or <code>_metadata.yml</code>. The <code>freeze: auto</code> option ensures that documents are only rerendered if the source changes. In cases where code should always be re-executed you whould want to set <code>freeze: false</code>, instead. I set <code>output: false</code> because typically I have a lot of code chunks that don’t generate any output that is of immediate interest to readers.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">execute</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">freeze</span><span class="kw">:</span><span class="at"> auto</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">eval</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">echo</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">output</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="reproducibility" class="level3">
+<h3 class="anchored" data-anchor-id="reproducibility">Reproducibility</h3>
+<p>To ensure that your content can be repoduced easily, it may additionally be helpful to explicitly specify the Julia version you used (<code>jupyter: julia-1.8</code>) and set up a global or local Julia environments. Inserting the following at the beginning of your Quarto notebook</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Pkg; Pkg</span>.<span class="fu">activate</span>(<span class="st">"&lt;path&gt;"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>ensures that the desired environemnt that lives in <code>&lt;path&gt;</code> is actually activated and used.</p>
+</section>
+</section>
+<section id="package-documentation" class="level2">
+<h2 class="anchored" data-anchor-id="package-documentation">Package Documentation</h2>
+<p>I have also continued to use Quarto in combination with <code>Documenter.jl</code> to document my Julia packages. This essentially boils down to writing up documentation using interactive <code>.qmd</code> notebooks and then rendering those to <code>.md</code> files as inputs for <code>Documenter.jl</code>. There are a few good reasons for this approach, especially if you’re used to working with Quarto anyway:</p>
+<ol type="1">
+<li>Re-rendering any docs with <code>eval: true</code> provides an additional layer of quality assurance: if any of the code chunks throws an error, you know that your documentation is outdated (perhaps due to an API change). It also offers a straight-forward way to test package functions that produce non-testable (e.g.&nbsp;stochastic) output. In such cases, the use of <code>jldoctest</code> is not always straight-forward (see <a href="https://github.com/JuliaDocs/Documenter.jl/issues/452">here</a>).</li>
+<li>You get some stuff for free, e.g.&nbsp;citation management. Unfortunately, as far as I’m aware there is still no support for cross-referencing.</li>
+<li>You can use Quarto execution options like <code>execute-dir: project</code> and <code>resources: www/</code> to globally specify the working directory and a directory for external resources like images.</li>
+</ol>
+<p>There are also a few peculiarities to be aware of. To avoid any issues with <code>Documenter.jl</code>, I’ve found it useful to ensure that the rendered <code>.md</code> files do not contain any raw HTML and to preserve text wrapping:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode yml code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">commonmark</span><span class="kw">:</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">variant</span><span class="kw">:</span><span class="at"> -raw_html</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">wrap</span><span class="kw">:</span><span class="at"> preserve</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>When working with <code>.qmd</code> files you also need to use a slightly different syntax for <a href="https://documenter.juliadocs.org/stable/showcase/#Admonitions">admonitions</a>. The following syntax inside the <code>.qmd</code></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>| !!! note \"An optional title\"</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>|     Here is something that you should pay attention to.   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>will generate the desired output inside the rendered <code>.md</code>:<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>!!! note "An optional title"</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    Here is something that you should pay attention to.   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Any of my package repos — <a href="https://github.com/juliatrustworthyai/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>, <a href="https://github.com/juliatrustworthyai/LaplaceRedux.jl"><code>LaplaceRedux.jl</code></a>, <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a> — should provide additional colour on this topic.</p>
+</section>
+<section id="quarto-for-academic-journal-articles" class="level2">
+<h2 class="anchored" data-anchor-id="quarto-for-academic-journal-articles">Quarto for Academic Journal Articles</h2>
+<p>Quarto supports <span class="math inline">\(\LaTeX\)</span> templates/classes, which has helped me with paper submissions in the past (e.g.&nbsp;my pending JuliaCon Proceedings submissions). I’ve found that <a href="https://pkgs.rstudio.com/rticles/articles/rticles.html"><code>rticles</code></a> still has an edge here, but the <a href="https://quarto.org/docs/extensions/listing-journals.html">list</a> of out-of-the-box templates for journal articles is growing. Should I find some time in the future, I will try to add a template for JuliaCon Proceedings. The beauty of this is that it should enable publishers to not only use traditional forms of publication (PDF), but also include more dynamic formats with ease (think <a href="https://distill.pub/">distill</a>, but more than that.)</p>
+</section>
+<section id="wrapping-up" class="level2">
+<h2 class="anchored" data-anchor-id="wrapping-up">Wrapping up</h2>
+<p>This short post has provided a bit of an update on using Quarto with Julia. From my own experience so far, things have been getting easier and better (thanks to the amazing work of Quarto dev team). I’m exicted to see things improve even further and still think that Quarto is a revolutionary new tool for scientific publishing. Let’s hope publishers eventually recognise this value 👀.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Unrelated to Quarto, but this <a href="https://discourse.julialang.org/t/what-is-in-your-startup-jl/18228/21">thread</a> on discourse is full of other useful ideas for your <code>startup.jl</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>See related <a href="https://github.com/quarto-dev/quarto-cli/discussions/2947">discussion</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
+  author = {Altmeyer, Patrick},
+  title = {A Year of Using {Quarto} with {Julia}},
+  date = {2022-11-21},
+  url = {https://www.paltmeyer.com/blog//blog/posts/tips-and-tricks-for-using-quarto-with-julia},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas" role="listitem">
+Altmeyer, Patrick. 2022. <span>“A Year of Using Quarto with
+Julia.”</span> November 21, 2022. <a href="https://www.paltmeyer.com/blog//blog/posts/tips-and-tricks-for-using-quarto-with-julia">https://www.paltmeyer.com/blog//blog/posts/tips-and-tricks-for-using-quarto-with-julia</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2022, Patrick Altmeyer</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.paltmeyer.com/">
+      <i class="bi bi-house" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/pat-alt">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/paltmey">
+      <i class="bi bi-twitter" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://medium.com/\@patrick.altmeyer">
+      <i class="bi bi-medium" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

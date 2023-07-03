@@ -108,11 +108,15 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <link rel="stylesheet" href="../../../styles.css">
 <meta property="og:title" content="Patrick Altmeyer - An Accessible Intro to Laplace Approximations in Julia for Bayesian Deep Learning">
 <meta property="og:description" content="This is a guest blog post by a team of students from TU Delft, who have contributed multiple improvements to LaplaceRedux.jl. Inspired by its Pythonic counterpart, laplace-torch, this Julia library aims to provide low-overhead Bayesian uncertainty calibration to deep neural networks via Laplace Approximations.">
-<meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/guest-students-laplace/www/intro.gif">
+<meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/guest-students-laplace/www/intro.png">
 <meta property="og:site_name" content="Patrick Altmeyer">
+<meta property="og:image:height" content="772">
+<meta property="og:image:width" content="1164">
 <meta name="twitter:title" content="Patrick Altmeyer - An Accessible Intro to Laplace Approximations in Julia for Bayesian Deep Learning">
 <meta name="twitter:description" content="This is a guest blog post by a team of students from TU Delft, who have contributed multiple improvements to LaplaceRedux.jl. Inspired by its Pythonic counterpart, laplace-torch, this Julia library aims to provide low-overhead Bayesian uncertainty calibration to deep neural networks via Laplace Approximations.">
-<meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/guest-students-laplace/www/intro.gif">
+<meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/guest-students-laplace/www/intro.png">
+<meta name="twitter:image-height" content="772">
+<meta name="twitter:image-width" content="1164">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -264,13 +268,13 @@ Guest Blog Post
 <p>This blog post was originally written by Severin Bratus and colleagues from TU Delft and published on <a href="https://medium.com/@sbratus/an-introduction-to-laplace-approximations-for-bayesian-deep-learning-in-julia-c5a30cfaf7b5">Medium</a>. This version of the post includes only minor edits. If you would like to contribute a guest blog post, please get in touch.</p>
 </div>
 </div>
+<p>This post summarizes a quarter-long second-year BSc coursework project at TU Delft. Our team of five students has made multiple improvements to <a href="https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl">LaplaceRedux.jl</a>, due to Patrick Altmeyer. Inspired by its Pythonic counterpart, <a href="https://github.com/AlexImmer/Laplace">laplacet-torch</a>, this Julia library aims to provide low-overhead Bayesian uncertainty calibration to deep neural networks via Laplace Approximations <span class="citation" data-cites="daxberger2021laplace">(<a href="#ref-daxberger2021laplace" role="doc-biblioref">Daxberger et al. 2021</a>)</span>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="www/intro.png" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">A nice image to attract your attention. The exact inverse Fisher information matrix for a MNIST classifier network (left), its block-diagonal and tri-block-diagonal approximations (middle), and the absolute error (right). Source: Martens &amp; Grosse (2015)</figcaption>
 </figure>
 </div>
-<p>This post summarizes a quarter-long second-year BSc coursework project at TU Delft. Our team of five students has made multiple improvements to <a href="https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl">LaplaceRedux.jl</a>, due to Patrick Altmeyer. Inspired by its Pythonic counterpart, <a href="https://github.com/AlexImmer/Laplace">laplacet-torch</a>, this Julia library aims to provide low-overhead Bayesian uncertainty calibration to deep neural networks via Laplace Approximations <span class="citation" data-cites="daxberger2021laplace">(<a href="#ref-daxberger2021laplace" role="doc-biblioref">Daxberger et al. 2021</a>)</span>.</p>
 <p>We will begin by demystifying the technical terms in the last sentence, in order to explain our contributions to the library and highlight some impressions from the experience. Note that our team has begun working on this PhD-tier subject only having had some introductory courses on probability and statistics, machine learning, and computational intelligence, without any prior exposure to Julia.</p>
 <section id="bayesian-learning" class="level2">
 <h2 class="anchored" data-anchor-id="bayesian-learning">Bayesian Learning</h2>
@@ -281,35 +285,35 @@ Guest Blog Post
 <blockquote class="blockquote">
 <p>… it is possible to take a perfectly reasonable network, delete half (or more) of the weights and wind up with a network that works just as well, or better.</p>
 </blockquote>
-<div class="quarto-figure quarto-figure-center">
+<div id="fig-loss" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="www/grad_desc.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">The loss landscape. One can imagine gradient descent as a particle, let’s say a ball, or a grain of sand, rolling to the bottom of a pit. Then for Bayesian Learning, we have as if a pile of sand poured around at that bottom point, with the pile being thicker where loss is lower. This proverbial sand pile would represent the posterior parameter distribution. Figure due to <span class="citation" data-cites="amini2019spatial">Amini et al. (<a href="#ref-amini2019spatial" role="doc-biblioref">2019</a>)</span></figcaption>
+<figcaption class="figure-caption">Figure&nbsp;1: The loss landscape. One can imagine gradient descent as a particle, let’s say a ball, or a grain of sand, rolling to the bottom of a pit. Then for Bayesian Learning, we have as if a pile of sand poured around at that bottom point, with the pile being thicker where loss is lower. This proverbial sand pile would represent the posterior parameter distribution. Figure due to <span class="citation" data-cites="amini2019spatial">Amini et al. (<a href="#ref-amini2019spatial" role="doc-biblioref">2019</a>)</span></figcaption>
 </figure>
 </div>
-<p>The way gradient is usually illustrated is with a picture like the one above a curved terrain of the loss function across the parameter space. Each point of the horizontal plane corresponds to some configuration of parameters. Gradient descent seeks the point at the bottom of this terrain, as the point with the lowest loss, however as the loss-curvature is highly non-convex and high-dimensional there are many directions in which we could move and still maintain a low loss. Thus instead of a singular point we would like to specify a probability distribution around that optimal point. Bayesian methods, and in particular Laplace Approximations, allow us to do this!</p>
+<p>The way gradient is usually illustrated is with a picture like the one shown in <a href="#fig-loss" class="quarto-xref">Figure&nbsp;1</a> above a curved terrain of the loss function across the parameter space. Each point of the horizontal plane corresponds to some configuration of parameters. Gradient descent seeks the point at the bottom of this terrain, as the point with the lowest loss, however as the loss-curvature is highly non-convex and high-dimensional there are many directions in which we could move and still maintain a low loss. Thus instead of a singular point we would like to specify a probability distribution around that optimal point. Bayesian methods, and in particular Laplace Approximations, allow us to do this!</p>
 <p>Firstly, the Bayesian approach to neural network uncertainty calibration is that of modelling the posterior using Bayes’ Theorem:</p>
 <p><span class="math display">\[
-p(\theta \mid D) = \tfrac{1}{Z} \,p(D \mid \theta) \, p(\theta), \qquad Z:= p(D) = \textstyle\int p(D \mid \theta) \, p(\theta) \,d\theta
+p(\theta \mid \mathcal{D}) = \tfrac{1}{Z} \,p(\mathcal{D} \mid \theta) \, p(\theta), \qquad Z:= p(\mathcal{D}) = \textstyle\int p(\mathcal{D} \mid \theta) \, p(\theta) \,d\theta
 \]</span></p>
-<p>Here <span class="math inline">\(p(\D \mid \theta)\)</span> is the likelihood of the data given by the parameters <span class="math inline">\(\theta\)</span>. The prior distribution <span class="math inline">\(p(\theta)\)</span> specifies our beliefs about what the model parameters would be prior to observing the data. Finally, the intractable constant <span class="math inline">\(\Z\)</span> is called the evidence: it characterizes the probability of observing <span class="math inline">\(\D\)</span> as a whole, across all possible parameter settings (see <a href="../../../blog/posts/effortsless-bayesian-dl/index.html">here</a> for details).</p>
+<p>Here <span class="math inline">\(p(\mathcal{D} \mid \theta)\)</span> is the likelihood of the data given by the parameters <span class="math inline">\(\theta\)</span>. The prior distribution <span class="math inline">\(p(\theta)\)</span> specifies our beliefs about what the model parameters would be prior to observing the data. Finally, the intractable constant <span class="math inline">\(\Z\)</span> is called the evidence: it characterizes the probability of observing <span class="math inline">\(\mathcal{D}\)</span> as a whole, across all possible parameter settings (see <a href="../../../blog/posts/effortsless-bayesian-dl/index.html">here</a> for details).</p>
 <p>For models returning a probability distribution (e.g.&nbsp;classifiers), the loss is commonly defined as the negative log-likelihood. Thus if gradient descent minimizes loss, it maximizes the likelihood, producing the maximum likelihood estimate (MLE), which (assuming a uniform prior) also maximizes the posterior. This is why we call this point the <em>maximum a posteriori</em>, or the MAP. It makes sense to model this point as the mode of the posterior distribution, which could, for example, be a normal Gaussian distribution (see also the introductory <a href="../../../blog/posts/effortsless-bayesian-dl/index.html">post</a> on this blog).</p>
 </section>
 <section id="laplace-approximations" class="level2">
 <h2 class="anchored" data-anchor-id="laplace-approximations">Laplace Approximations</h2>
 <p>We do this by a simple-yet-smart trick introduced back in the late 18th century by Pierre-Simon Laplace, the self-proclaimed “greatest French mathematician of his time”. In general, the Laplace Approximation (LA) aims to find a Gaussian approximation to a probability density (in our case, the posterior) defined over a set of continuous variables (in our case, the weights) <span class="citation" data-cites="bishop2006pattern">(<a href="#ref-bishop2006pattern" role="doc-biblioref">Bishop 2006</a>)</span>. We can then estimate the loss (negative log-likelihood) as its second-order Taylor expansion:</p>
 <p><span class="math display">\[
-\mathcal{L}(D; \theta) \approx \mathcal{L}(D; \theta_\text{MAP}) + \tfrac{1}{2} (\theta - \theta_\text{MAP})^\intercal \left( \nabla^2 _\theta \mathcal{L}(D; \theta) \vert_{\theta_\text{MAP}} \right)(\theta - \theta_\text{MAP})
+\mathcal{L}(\mathcal{D}; \theta) \approx \mathcal{L}(\mathcal{D}; \theta_\text{MAP}) + \tfrac{1}{2} (\theta - \theta_\text{MAP})^\intercal \left( \nabla^2 _\theta \mathcal{L}(\mathcal{D}; \theta) \vert_{\theta_\text{MAP}} \right)(\theta - \theta_\text{MAP})
 \]</span></p>
 <p>Note that the first-order Taylor term vanishes at the MAP since it contains the gradient, and the gradient is zero at MAP, since MAP is a maximum, by definition. What remains is the constant (zeroth-order) term, and the second-order term, containing the Hessian, which is a matrix of partial second-order derivatives.</p>
 <p>Then from this approximation, we can derive the long-sought multivariate normal distribution with the MAP as the mean, and the inverted Hessian as the covariance:</p>
 <p><span class="math display">\[
-p(\theta \mid D) \approx N(\theta; \theta_\text{MAP}, \varSigma) \qquad\text{with}\qquad \varSigma := \left( \nabla^2_\theta \mathcal{L}(D;\theta) \vert_{\theta_\text{MAP}} \right)^{-1}
+p(\theta \mid \mathcal{D}) \approx N(\theta; \theta_\text{MAP}, \varSigma) \qquad\text{with}\qquad \varSigma := \left( \nabla^2_\theta \mathcal{L}(\mathcal{D};\theta) \vert_{\theta_\text{MAP}} \right)^{-1}
 \]</span></p>
-<p>The evidence <span class="math inline">\(Z\)</span> is now also tractably approximated in closed form, allowing us to apply the Bayes’ theorem, to obtain the posterior distribution <span class="math inline">\(p(\theta \mid \D)\)</span>. We can then express the <em>posterior predictive</em> distribution, for an input <span class="math inline">\(x_*\)</span>, prediction <span class="math inline">\(f(x_*)\)</span>, to obtain the probability for an output <span class="math inline">\(y\)</span>.</p>
-<p>The evidence <span class="math inline">\(Z\)</span> is now also tractably approximated in closed form, allowing us to apply the Bayes’ theorem, to obtain the posterior distribution <span class="math inline">\(p(\theta \mid \D)\)</span>. We can then express the posterior predictive distribution, to obtain the probability for an output <span class="math inline">\(y\)</span>, given a prediction <span class="math inline">\(f(x_*)\)</span> for an input <span class="math inline">\(x_*\)</span>.</p>
+<p>The evidence <span class="math inline">\(Z\)</span> is now also tractably approximated in closed form, allowing us to apply the Bayes’ theorem, to obtain the posterior distribution <span class="math inline">\(p(\theta \mid \mathcal{D})\)</span>. We can then express the <em>posterior predictive</em> distribution, for an input <span class="math inline">\(x_*\)</span>, prediction <span class="math inline">\(f(x_*)\)</span>, to obtain the probability for an output <span class="math inline">\(y\)</span>.</p>
+<p>The evidence <span class="math inline">\(Z\)</span> is now also tractably approximated in closed form, allowing us to apply the Bayes’ theorem, to obtain the posterior distribution <span class="math inline">\(p(\theta \mid \mathcal{D})\)</span>. We can then express the posterior predictive distribution, to obtain the probability for an output <span class="math inline">\(y\)</span>, given a prediction <span class="math inline">\(f(x_*)\)</span> for an input <span class="math inline">\(x_*\)</span>.</p>
 <p><span class="math display">\[
-p(y \mid f(x_*), D) = \int p(y \mid f_\theta(x_*)) \, p(\theta \mid D) \,d\theta
+p(y \mid f(x_*), \mathcal{D}) = \int p(y \mid f_\theta(x_*)) \, p(\theta \mid \mathcal{D}) \,d\theta
 \]</span></p>
 <p>This is what we are really after, after all — instead of giving one singular point-estimate prediction <span class="math inline">\(\widehat{y} = f(x_*)\)</span>, we make the neural network give a distribution over <span class="math inline">\(y\)</span>.</p>
 <p>However, since the Hessian, a square matrix, defines the covariance between all model parameters (upon inversion), of which there may be millions or billions, the computation and storage of the Hessian (not to speak of inversion!) become intractable, as its size scales quadratically with the number of parameters involved. Thus to apply Laplace approximations to large models, we must make some simplifications — which brings us to…</p>
@@ -324,21 +328,21 @@ F := \textstyle\sum_{n=1}^N \mathbb{E}_{\widehat{y} \sim p(y \mid f_\theta(x_n))
 <p>Note that if instead of sampling the prediction <span class="math inline">\(\widehat{y} ~ p(y \mid f(x_n))\)</span> from the model-defined distribution, we take the actual training-set label <span class="math inline">\(y_n\)</span>, the resulting matrix is called the empirical Fisher, which is distinct from the Fisher, yet aligns with it under some conditions, and does <em>not</em> generally capture second-order information. See Kunstner et al.&nbsp;(2019) for an excellent discussion on the distinction.</p>
 <p>Instead of the Fisher, one can use the Generalized Gauss-Newton (GGN):</p>
 <p><span class="math display">\[
-G := \textstyle\sum_{n=1}^N J(x_n) \left( \nabla^2_{f} \log p(y_n \mid f) \Large\vert_{f=f_{\theta_\text{\textsc{map}}}(x_n)} \right) J(x_n)^\intercal
-\text{with}\qquad J(x_n) := \nabla_\theta f_\theta(x_n) \vert_{\theta_\text{\textsc{map}}}
+G := \textstyle\sum_{n=1}^N J(x_n) \left( \nabla^2_{f} \log p(y_n \mid f) \Large\vert_{f=f_{\theta_\text{map}}(x_n)} \right) J(x_n)^\intercal
+\text{with}\qquad J(x_n) := \nabla_\theta f_\theta(x_n) \vert_{\theta_\text{map}}
 \]</span></p>
 <p>Here <span class="math inline">\(J(x_n)\)</span> represents the Jacobian of the model output w.r.t. the parameters. The middle factor <span class="math inline">\(\nabla^2 …\)</span> is a Hessian of log-likelihood of <span class="math inline">\(y_n\)</span> w.r.t. model output. Note that the model does not necessarily output ready target probabilities — for instance, classifiers output <em>logits</em>, values that define a probability distribution only after the application of the soft-max.</p>
 <p>Unlike the Fisher, GGN does not require the network to define a probabilistic model on its output <span class="citation" data-cites="botev2017practical">(<a href="#ref-botev2017practical" role="doc-biblioref">Botev, Ritter, and Barber 2017</a>)</span>. For models defining an exponential family distribution over the output, the two coincide <span class="citation" data-cites="kunstner2020limitations">(<a href="#ref-kunstner2020limitations" role="doc-biblioref">Kunstner, Balles, and Hennig 2020</a>)</span>. This applies to classifiers since they define a categorical distribution over the output, but not to simple regression models.</p>
 <p>These matrices are quadratically large, it is infeasible to store them in full. The simplest estimation is to model the matrix as a diagonal — however one can easily contemplate how crude this approximation can be: for 100 parameters, only 1% of the full Hessian is captured.</p>
 <p>A more sophisticated approach, due to Martens and Grosse (2015), is inspired by the observation that in practice the covariance matrices (i.e.&nbsp;inverted Hessians) for neural networks are block-diagonal-dominant. Thus we can effectively model the covariance matrix (and hence the Fisher) as a block-diagonal matrix, where blocks correspond to parameters grouped by layers. Additionally, each block is decomposed into two Kronecker factors, reducing the size of data stored several magnitudes more, at a cost of another assumption.</p>
-<p>Lastly, a novel approach is to <em>sketch</em> a low-rank approximation of the Fisher <span class="citation" data-cites="sharma2021sketching">(<a href="#ref-sharma2021sketching" role="doc-biblioref">Sharma, Azizan, and Pavone 2021</a>)</span>. Below is a figure with the four Hessian approximation structures:</p>
-<p>It is also possible to cut the costs by treating only a subset of the model parameters, i.e.&nbsp;a subnetwork, probabilistically, fixing the remaining parameters at their MAP-estimated values. One special case of subnetwork Laplace that was found to perform well in practice is last-layer Laplace, where the selected subnetwork contains only the weights and biases of the last layer.</p>
-<div class="quarto-figure quarto-figure-center">
+<p>Lastly, a novel approach is to <em>sketch</em> a low-rank approximation of the Fisher <span class="citation" data-cites="sharma2021sketching">(<a href="#ref-sharma2021sketching" role="doc-biblioref">Sharma, Azizan, and Pavone 2021</a>)</span>. <a href="#fig-fact" class="quarto-xref">Figure&nbsp;2</a> shows four Hessian approximation structures:</p>
+<div id="fig-fact" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="www/fact.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">(a) Hessian in full, intractable for large networks. (b) Low-rank. (c) Kronecker-factored Approximate Curvature, a block-diagonal method. (d) Diagonal. Source: <span class="citation" data-cites="daxberger2021laplace">Daxberger et al. (<a href="#ref-daxberger2021laplace" role="doc-biblioref">2021</a>)</span></figcaption>
+<figcaption class="figure-caption">Figure&nbsp;2: (a) Hessian in full, intractable for large networks. (b) Low-rank. (c) Kronecker-factored Approximate Curvature, a block-diagonal method. (d) Diagonal. Source: <span class="citation" data-cites="daxberger2021laplace">Daxberger et al. (<a href="#ref-daxberger2021laplace" role="doc-biblioref">2021</a>)</span></figcaption>
 </figure>
 </div>
+<p>It is also possible to cut the costs by treating only a subset of the model parameters, i.e.&nbsp;a subnetwork, probabilistically, fixing the remaining parameters at their MAP-estimated values. One special case of subnetwork Laplace that was found to perform well in practice is last-layer Laplace, where the selected subnetwork contains only the weights and biases of the last layer.</p>
 </section>
 <section id="our-contributions-to-laplaceredux.jl" class="level2">
 <h2 class="anchored" data-anchor-id="our-contributions-to-laplaceredux.jl">Our contributions to LaplaceRedux.jl</h2>
