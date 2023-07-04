@@ -10,7 +10,7 @@
 <atom:link href="https://www.paltmeyer.com/blog/blog/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-99.9.9</generator>
-<lastBuildDate>Thu, 29 Jun 2023 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 03 Jul 2023 22:00:00 GMT</lastBuildDate>
 <item>
   <title>An Accessible Intro to Laplace Approximations in Julia for Bayesian Deep Learning</title>
   <dc:creator>Patrick Altmeyer</dc:creator>
@@ -64,7 +64,7 @@ Guest Blog Post
 <p>The way gradient is usually illustrated is with a picture like the one shown in Figure&nbsp;1 above a curved terrain of the loss function across the parameter space. Each point of the horizontal plane corresponds to some configuration of parameters. Gradient descent seeks the point at the bottom of this terrain, as the point with the lowest loss, however as the loss-curvature is highly non-convex and high-dimensional there are many directions in which we could move and still maintain a low loss. Thus instead of a singular point we would like to specify a probability distribution around that optimal point. Bayesian methods, and in particular Laplace Approximations, allow us to do this!</p>
 <p>Firstly, the Bayesian approach to neural network uncertainty calibration is that of modelling the posterior using Bayes’ Theorem:</p>
 <p><img src="https://latex.codecogs.com/png.latex?%0Ap(%5Ctheta%20%5Cmid%20%5Cmathcal%7BD%7D)%20=%20%5Ctfrac%7B1%7D%7BZ%7D%20%5C,p(%5Cmathcal%7BD%7D%20%5Cmid%20%5Ctheta)%20%5C,%20p(%5Ctheta),%20%5Cqquad%20Z:=%20p(%5Cmathcal%7BD%7D)%20=%20%5Ctextstyle%5Cint%20p(%5Cmathcal%7BD%7D%20%5Cmid%20%5Ctheta)%20%5C,%20p(%5Ctheta)%20%5C,d%5Ctheta%0A"></p>
-<p>Here <img src="https://latex.codecogs.com/png.latex?p(%5Cmathcal%7BD%7D%20%5Cmid%20%5Ctheta)"> is the likelihood of the data given by the parameters <img src="https://latex.codecogs.com/png.latex?%5Ctheta">. The prior distribution <img src="https://latex.codecogs.com/png.latex?p(%5Ctheta)"> specifies our beliefs about what the model parameters would be prior to observing the data. Finally, the intractable constant <img src="https://latex.codecogs.com/png.latex?%5CZ"> is called the evidence: it characterizes the probability of observing <img src="https://latex.codecogs.com/png.latex?%5Cmathcal%7BD%7D"> as a whole, across all possible parameter settings (see <a href="../../../blog/posts/effortsless-bayesian-dl/index.html">here</a> for details).</p>
+<p>Here <img src="https://latex.codecogs.com/png.latex?p(%5Cmathcal%7BD%7D%20%5Cmid%20%5Ctheta)"> is the likelihood of the data given by the parameters <img src="https://latex.codecogs.com/png.latex?%5Ctheta">. The prior distribution <img src="https://latex.codecogs.com/png.latex?p(%5Ctheta)"> specifies our beliefs about what the model parameters would be prior to observing the data. Finally, the intractable constant <img src="https://latex.codecogs.com/png.latex?Z"> is called the evidence: it characterizes the probability of observing <img src="https://latex.codecogs.com/png.latex?%5Cmathcal%7BD%7D"> as a whole, across all possible parameter settings (see <a href="../../../blog/posts/effortsless-bayesian-dl/index.html">here</a> for details).</p>
 <p>For models returning a probability distribution (e.g.&nbsp;classifiers), the loss is commonly defined as the negative log-likelihood. Thus if gradient descent minimizes loss, it maximizes the likelihood, producing the maximum likelihood estimate (MLE), which (assuming a uniform prior) also maximizes the posterior. This is why we call this point the <em>maximum a posteriori</em>, or the MAP. It makes sense to model this point as the mode of the posterior distribution, which could, for example, be a normal Gaussian distribution (see also the introductory <a href="../../../blog/posts/effortsless-bayesian-dl/index.html">post</a> on this blog).</p>
 </section>
 <section id="laplace-approximations" class="level2">
@@ -168,7 +168,7 @@ Sharma, Apoorva, Navid Azizan, and Marco Pavone. 2021. <span>“Sketching <span>
     Patrick},
   title = {An {Accessible} {Intro} to {Laplace} {Approximations} in
     {Julia} for {Bayesian} {Deep} {Learning}},
-  date = {2023-06-30},
+  date = {2023-07-04},
   url = {https://www.paltmeyer.com/blog//blog/posts/guest-students-laplace},
   langid = {en}
 }
@@ -176,14 +176,14 @@ Sharma, Apoorva, Navid Azizan, and Marco Pavone. 2021. <span>“Sketching <span>
 Altmeyer, Patrick, Severin Bratus, Mark Ardman, Adelina Cazacu, Andrei
 Ionescu, Ivan Makarov, and Patrick Altmeyer. 2023. <span>“An Accessible
 Intro to Laplace Approximations in Julia for Bayesian Deep
-Learning.”</span> June 30, 2023. <a href="https://www.paltmeyer.com/blog//blog/posts/guest-students-laplace">https://www.paltmeyer.com/blog//blog/posts/guest-students-laplace</a>.
+Learning.”</span> July 4, 2023. <a href="https://www.paltmeyer.com/blog//blog/posts/guest-students-laplace">https://www.paltmeyer.com/blog//blog/posts/guest-students-laplace</a>.
 </div></div></section></div> ]]></description>
   <category>bayesian deep learning</category>
   <category>laplace approximation</category>
   <category>guest post</category>
   <category>Julia</category>
   <guid>https://www.paltmeyer.com/blog/blog/posts/guest-students-laplace/index.html</guid>
-  <pubDate>Thu, 29 Jun 2023 22:00:00 GMT</pubDate>
+  <pubDate>Mon, 03 Jul 2023 22:00:00 GMT</pubDate>
   <media:content url="https://www.paltmeyer.com/blog/blog/posts/guest-students-laplace/www/intro.png" medium="image" type="image/png" height="96" width="144"/>
 </item>
 <item>

@@ -1,7 +1,7 @@
 ---
 title: An Accessible Intro to Laplace Approximations in Julia for Bayesian Deep Learning
 subtitle: Paving the Way Towards Low-Overhead Uncertainty Calibration
-date: '2023-06-30'
+date: '2023-07-04'
 categories:
   - bayesian deep learning
   - laplace approximation
@@ -56,7 +56,7 @@ p(\theta \mid \mathcal{D}) = \tfrac{1}{Z} \,p(\mathcal{D} \mid \theta) \, p(\the
 $$
 
 Here $p(\mathcal{D} \mid \theta)$ is the likelihood of the data given by the parameters $\theta$.
-The prior distribution $p(\theta)$ specifies our beliefs about what the model parameters would be prior to observing the data. Finally, the intractable constant $\Z$ is called the evidence: it characterizes the probability of observing $\mathcal{D}$ as a whole, across all possible parameter settings (see [here](../effortsless-bayesian-dl/index.qmd) for details).
+The prior distribution $p(\theta)$ specifies our beliefs about what the model parameters would be prior to observing the data. Finally, the intractable constant $Z$ is called the evidence: it characterizes the probability of observing $\mathcal{D}$ as a whole, across all possible parameter settings (see [here](../effortsless-bayesian-dl/index.qmd) for details).
 
 For models returning a probability distribution (e.g. classifiers), the loss is commonly defined as the negative log-likelihood. Thus if gradient descent minimizes loss, it maximizes the likelihood, producing the maximum likelihood estimate (MLE), which (assuming a uniform prior) also maximizes the posterior. This is why we call this point the *maximum a posteriori*, or the MAP. It makes sense to model this point as the mode of the posterior distribution, which could, for example, be a normal Gaussian distribution (see also the introductory [post](../effortsless-bayesian-dl/index.qmd) on this blog).
 
