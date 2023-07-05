@@ -1,7 +1,7 @@
 ---
 title: Building a Conformal Chatbot in Julia
-subtitle: HuggingFace, Transformers, and Conformal Prediction
-date: '2023-06-27'
+subtitle: HuggingFace, Transformers, and Conformal Prediction - Part 1
+date: '2023-07-05'
 categories:
   - conformal prediction
   - transformers
@@ -11,27 +11,58 @@ description: >-
   For this year's edition of the ING Analytics Experiment Week, we put `ConformalPrediction.jl` to work and built a chatbot that can be used for Conformal Intent Recognition.
 image: www/intro.gif
 jupyter: julia-1.9
-draft: true
+draft: false
 ---
 
 ```{julia}
 #| echo: false
 
-using Pkg; Pkg.activate("blog/posts/conformal-llm")
+BLOG_DIR = "blog/posts/conformal-llm"
+using Pkg; Pkg.activate(BLOG_DIR)
+
+using ConformalPrediction
+using CSV
+using DataFrames
+using Flux
+using MLJBase
+using Serialization
+using Transformers
+using Transformers.TextEncoders
+using Transformers.HuggingFace
+using UnicodePlots
 ```
 
 <div class="intro-gif">
   <figure>
-    <img src="www/intro.gif">
+    <img src="www/intro.gif" style="width: 400px; height: 300px;">
     <figcaption>Short demo of our conformal chatbot.</figcaption>
   </figure>
 </div>
 
-# How to Build a Conformal Chatbot
-
 Large Language Models are all the buzz right now. They are used for a variety of tasks, including text classification, question answering, and text generation. In this tutorial, we will show how to conformalize a transformer language model for text classification. We will use the [Banking77](https://arxiv.org/abs/2003.04807) dataset [@casanueva2020efficient], which consists of 13,083 queries from 77 intents. On the model side, we will use the [DistilRoBERTa](https://huggingface.co/mrm8488/distilroberta-finetuned-banking77) model, which is a distilled version of [RoBERTa](https://arxiv.org/abs/1907.11692) [@liu2019roberta] finetuned on the Banking77 dataset.
 
-## HuggingFace Model
+```{julia}
+#| echo: false
+
+# Get labels:
+df_labels = CSV.read(joinpath(BLOG_DIR,"data/labels.csv"), DataFrame, drop=[1])
+labels = df_labels[:,1]
+
+# Get data:
+df_train = CSV.read(joinpath(BLOG_DIR,"data/train.csv"), DataFrame, drop=[1])
+df_cal = CSV.read(joinpath(BLOG_DIR,"data/calibration.csv"), DataFrame, drop=[1])
+df_full_train = vcat(df_train, df_cal)
+train_ratio = round(nrow(df_train)/nrow(df_full_train), digits=2)
+df_test = CSV.read(joinpath(BLOG_DIR,"data/test.csv"), DataFrame, drop=[1])
+
+# Preprocess data:
+queries_train, y_train = collect(df_train.text), categorical(df_train.labels .+ 1)
+queries_cal, y_cal = collect(df_cal.text), categorical(df_cal.labels .+ 1)
+queries, y = collect(df_full_train.text), categorical(df_full_train.labels .+ 1)
+queries_test, y_test = collect(df_test.text), categorical(df_test.labels .+ 1)
+```
+
+## 🤗 HuggingFace Model
 
 The model can be loaded from HF straight into our running Julia session using the [`Transformers.jl`](https://github.com/chengchingwen/Transformers.jl/tree/master) package. Below we load the tokenizer `tkr` and the model `mod`. The tokenizer is used to convert the text into a sequence of integers, which is then fed into the model. The model outputs a hidden state, which is then fed into a classifier to get the logits for each class. Finally, the logits are then passed through a softmax function to get the corresponding predicted probabilities. Below we run a few queries through the model to see how it performs.
 
@@ -55,7 +86,7 @@ d = softmax(c.logit)
 [labels[i] for i in Flux.onecold(d)]
 ```
 
-## `MLJ` Interface
+## 🔁 `MLJ` Interface
 
 Since our package is interfaced to [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/), we need to define a wrapper model that conforms to the `MLJ` interface. In order to add the model for general use, we would probably go through [`MLJFlux.jl`](https://github.com/FluxML/MLJFlux.jl), but for this tutorial, we will make our life easy and simply overload the `MLJBase.fit` and `MLJBase.predict` methods. Since the model from HF is already pre-trained and we are not interested in further fine-tuning, we will simply return the model object in the `MLJBase.fit` method. The `MLJBase.predict` method will then take the model object and the query and return the predicted probabilities. We also need to define the `MLJBase.target_scitype` and `MLJBase.predict_mode` methods. The former tells `MLJ` what the output type of the model is, and the latter can be used to retrieve the label with the highest predicted probability.
 
@@ -100,33 +131,33 @@ MLJBase.predict_mode(clf::IntentClassifier, fitresult, Xnew) = mode.(MLJBase.pre
 To test that everything is working as expected, we fit the model and generated predictions for a subset of the test data:
 
 ```{julia}
+#| output: true
+
 clf = IntentClassifier(tkr, mod)
 top_n = 10
 fitresult, _, _ = MLJBase.fit(clf, 1, nothing, y_test[1:top_n])
 @time ŷ = MLJBase.predict(clf, fitresult, queries_test[1:top_n]);
 ```
 
-## Conformal Chatbot
+## 🤖 Conformal Chatbot
 
 To turn the wrapped, pre-trained model into a conformal intent classifier, we can now rely on standard API calls. We first wrap our atomic model where we also specify the desired coverage rate and method. Since even simple forward passes are computationally expensive for our (small) LLM, we rely on Simple Inductive Conformal Classification.
 
-```{julia}
-#| eval: false
-
+```{.julia}
 conf_model = conformal_model(clf; coverage=0.95, method=:simple_inductive, train_ratio=train_ratio)
 mach = machine(conf_model, queries, y)
 @time fit!(mach)
 Serialization.serialize("dev/artifacts/models/banking77/simple_inductive.jls", mach)
 ```
 
-Finally, we use our conformal LLM to build a simple and yet powerful chatbot that runs directly in the Julia REPL. Without dwelling on the details too much, the `conformal_chatbot` works as follows:
+Finally, we use our conformal LLM to build a simple yet powerful chatbot that runs directly in the Julia REPL. Without dwelling on the details too much, the `conformal_chatbot` works as follows:
 
 1.  Prompt user to explain their intent.
 2.  Feed user input through conformal LLM and present the output to the user.
-3.  If the conformal prediction sets includes more than one label, prompt the user to either refine their input or choose one of the options included in the set.
+3.  If the conformal prediction set includes more than one label, prompt the user to either refine their input or choose one of the options included in the set.
 
 ```{julia}
-mach = Serialization.deserialize("dev/artifacts/models/banking77/simple_inductive.jls")
+mach = Serialization.deserialize("blog/posts/conformal-llm/simple_inductive.jls")
 
 function prediction_set(mach, query::String)
     p̂ = MLJBase.predict(mach, query)[1]
@@ -170,6 +201,8 @@ end
 Below we show the output for two example queries. The first one is very ambiguous. As expected, the size of the prediction set is therefore large. 
 
 ```{julia}
+#| output: true
+
 ambiguous_query = "transfer mondey?"
 prediction_set(mach, ambiguous_query)[2]
 ```
@@ -177,16 +210,20 @@ prediction_set(mach, ambiguous_query)[2]
 The more refined version of the prompt yields a smaller prediction set: less ambiguous prompts result in lower predictive uncertainty. 
 
 ```{julia}
+#| output: true
+
 refined_query = "I tried to transfer money to my friend, but it failed."
 prediction_set(mach, refined_query)[2]
 ```
 
 Below we include a short demo video that shows the REPL-based chatbot in action.
 
-![](/docs/src/www/demo_llm.gif)
+![](www/demo.gif)
 
 ## 🌯 Wrapping Up
 
 This work was done in collaboration with colleagues at ING as part of the ING Analytics 2023 Experiment Week. Our team demonstrated that Conformal Prediction provides a powerful and principled alternative to top-*K* intent classification. We won the first prize by popular vote.
+
+There are a lot of things that can be improved. As far as LLMs are concerned, we have of course used a fairly small model here. In terms of Conformal Prediction, we have relied on simple inductive conformal classification. This is a good starting point, but there are more advanced methods available (and implemented in the package). Another thing we did not take into consideration here is that we have many outcome classes and may in practice be interested in achieving class-conditional coverage. Stay tuned for more!
 
 ## 🎓 References

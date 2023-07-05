@@ -10,7 +10,680 @@
 <atom:link href="https://www.paltmeyer.com/blog/blog/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-99.9.9</generator>
-<lastBuildDate>Mon, 03 Jul 2023 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 04 Jul 2023 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Building a Conformal Chatbot in Julia</title>
+  <dc:creator>Patrick Altmeyer</dc:creator>
+  <link>https://www.paltmeyer.com/blog/blog/posts/conformal-llm/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<div class="intro-gif">
+<figure class="figure">
+<img src="https://www.paltmeyer.com/blog/blog/posts/conformal-llm/www/intro.gif" style="width: 400px; height: 300px;" class="figure-img">
+<figcaption class="figure-caption">
+Short demo of our conformal chatbot.
+</figcaption>
+</figure>
+</div>
+<p>Large Language Models are all the buzz right now. They are used for a variety of tasks, including text classification, question answering, and text generation. In this tutorial, we will show how to conformalize a transformer language model for text classification. We will use the <a href="https://arxiv.org/abs/2003.04807">Banking77</a> dataset <span class="citation" data-cites="casanueva2020efficient">(Casanueva et al. 2020)</span>, which consists of 13,083 queries from 77 intents. On the model side, we will use the <a href="https://huggingface.co/mrm8488/distilroberta-finetuned-banking77">DistilRoBERTa</a> model, which is a distilled version of <a href="https://arxiv.org/abs/1907.11692">RoBERTa</a> <span class="citation" data-cites="liu2019roberta">(Liu et al. 2019)</span> finetuned on the Banking77 dataset.</p>
+<section id="huggingface-model" class="level2">
+<h2 class="anchored" data-anchor-id="huggingface-model">🤗 HuggingFace Model</h2>
+<p>The model can be loaded from HF straight into our running Julia session using the <a href="https://github.com/chengchingwen/Transformers.jl/tree/master"><code>Transformers.jl</code></a> package. Below we load the tokenizer <code>tkr</code> and the model <code>mod</code>. The tokenizer is used to convert the text into a sequence of integers, which is then fed into the model. The model outputs a hidden state, which is then fed into a classifier to get the logits for each class. Finally, the logits are then passed through a softmax function to get the corresponding predicted probabilities. Below we run a few queries through the model to see how it performs.</p>
+<div id="ba65880c" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Load model from HF 🤗:</span></span>
+<span id="cb1-2">tkr <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> hgf<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mrm8488/distilroberta-finetuned-banking77:tokenizer"</span></span>
+<span id="cb1-3">mod <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> hgf<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mrm8488/distilroberta-finetuned-banking77:ForSequenceClassification"</span></span>
+<span id="cb1-4"></span>
+<span id="cb1-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Test model:</span></span>
+<span id="cb1-6">query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb1-7">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What is the base of the exchange rates?"</span>,</span>
+<span id="cb1-8">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Why is my card not working?"</span>,</span>
+<span id="cb1-9">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"My Apple Pay is not working, what should I do?"</span>,</span>
+<span id="cb1-10">]</span>
+<span id="cb1-11">a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">encode</span>(tkr, query)</span>
+<span id="cb1-12">b <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> mod.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">model</span>(a)</span>
+<span id="cb1-13">c <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> mod.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cls</span>(b.hidden_state)</span>
+<span id="cb1-14">d <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">softmax</span>(c.logit)</span>
+<span id="cb1-15">[labels[i] for i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> Flux.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">onecold</span>(d)]</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<pre><code>3-element Vector{String}:
+ "exchange_rate"
+ "card_not_working"
+ "apple_pay_or_google_pay"</code></pre>
+</div>
+</div>
+</section>
+<section id="mlj-interface" class="level2">
+<h2 class="anchored" data-anchor-id="mlj-interface">🔁 <code>MLJ</code> Interface</h2>
+<p>Since our package is interfaced to <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a>, we need to define a wrapper model that conforms to the <code>MLJ</code> interface. In order to add the model for general use, we would probably go through <a href="https://github.com/FluxML/MLJFlux.jl"><code>MLJFlux.jl</code></a>, but for this tutorial, we will make our life easy and simply overload the <code>MLJBase.fit</code> and <code>MLJBase.predict</code> methods. Since the model from HF is already pre-trained and we are not interested in further fine-tuning, we will simply return the model object in the <code>MLJBase.fit</code> method. The <code>MLJBase.predict</code> method will then take the model object and the query and return the predicted probabilities. We also need to define the <code>MLJBase.target_scitype</code> and <code>MLJBase.predict_mode</code> methods. The former tells <code>MLJ</code> what the output type of the model is, and the latter can be used to retrieve the label with the highest predicted probability.</p>
+<div id="d92a0336" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">struct</span> IntentClassifier <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;:</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;"> MLJBase.Probabilistic</span></span>
+<span id="cb3-2">    tkr<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">TextEncoders.AbstractTransformerTextEncoder</span></span>
+<span id="cb3-3">    mod<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">HuggingFace.HGFRobertaForSequenceClassification</span></span>
+<span id="cb3-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">end</span></span>
+<span id="cb3-5"></span>
+<span id="cb3-6"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">IntentClassifier</span>(;</span>
+<span id="cb3-7">    tokenizer<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">TextEncoders.AbstractTransformerTextEncoder</span>, </span>
+<span id="cb3-8">    model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">HuggingFace.HGFRobertaForSequenceClassification</span>,</span>
+<span id="cb3-9">)</span>
+<span id="cb3-10">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">IntentClassifier</span>(tkr, mod)</span>
+<span id="cb3-11"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">end</span></span>
+<span id="cb3-12"></span>
+<span id="cb3-13"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_hidden_state</span>(clf<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">IntentClassifier</span>, query<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Union{AbstractString, Vector{&lt;:AbstractString}}</span>)</span>
+<span id="cb3-14">    token <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">encode</span>(clf.tkr, query)</span>
+<span id="cb3-15">    hidden_state <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> clf.mod.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">model</span>(token).hidden_state</span>
+<span id="cb3-16">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> hidden_state</span>
+<span id="cb3-17"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">end</span></span>
+<span id="cb3-18"></span>
+<span id="cb3-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># This doesn't actually retrain the model, but it retrieves the classifier object</span></span>
+<span id="cb3-20"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span> MLJBase.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fit</span>(clf<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">IntentClassifier</span>, verbosity, X, y)</span>
+<span id="cb3-21">    cache<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">nothing</span></span>
+<span id="cb3-22">    report<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">nothing</span></span>
+<span id="cb3-23">    fitresult <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (clf <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> clf.mod.cls, labels <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">levels</span>(y))</span>
+<span id="cb3-24">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> fitresult, cache, report</span>
+<span id="cb3-25"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">end</span></span>
+<span id="cb3-26"></span>
+<span id="cb3-27"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span> MLJBase.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(clf<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">IntentClassifier</span>, fitresult, Xnew)</span>
+<span id="cb3-28">    output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> fitresult.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">clf</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_hidden_state</span>(clf, Xnew))</span>
+<span id="cb3-29">    p̂ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">UnivariateFinite</span>(fitresult.labels,<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">softmax</span>(output.logit)<span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">',pool=missing)</span></span>
+<span id="cb3-30">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> p̂</span>
+<span id="cb3-31"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">end</span></span>
+<span id="cb3-32"></span>
+<span id="cb3-33">MLJBase.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">target_scitype</span>(clf<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">IntentClassifier</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">AbstractVector</span>{<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;:</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Finite</span>}</span>
+<span id="cb3-34"></span>
+<span id="cb3-35">MLJBase.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict_mode</span>(clf<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">IntentClassifier</span>, fitresult, Xnew) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mode</span>.(MLJBase.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(clf, fitresult, Xnew))</span></code></pre></div>
+</div>
+<p>To test that everything is working as expected, we fit the model and generated predictions for a subset of the test data:</p>
+<div id="9e443ddd" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1">clf <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">IntentClassifier</span>(tkr, mod)</span>
+<span id="cb4-2">top_n <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span></span>
+<span id="cb4-3">fitresult, _, _ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> MLJBase.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fit</span>(clf, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">nothing</span>, y_test[<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>top_n])</span>
+<span id="cb4-4"><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">@time</span> ŷ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> MLJBase.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(clf, fitresult, queries_test[<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>top_n]);</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0.492355 seconds (531.30 k allocations: 80.610 MiB, 4.27% compilation time)</code></pre>
+</div>
+</div>
+</section>
+<section id="conformal-chatbot" class="level2">
+<h2 class="anchored" data-anchor-id="conformal-chatbot">🤖 Conformal Chatbot</h2>
+<p>To turn the wrapped, pre-trained model into a conformal intent classifier, we can now rely on standard API calls. We first wrap our atomic model where we also specify the desired coverage rate and method. Since even simple forward passes are computationally expensive for our (small) LLM, we rely on Simple Inductive Conformal Classification.</p>
+<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#| eval: false</span></span>
+<span id="cb6-2"></span>
+<span id="cb6-3">conf_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">conformal_model</span>(clf; coverage<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.95</span>, method<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=:</span>simple_inductive, train_ratio<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>train_ratio)</span>
+<span id="cb6-4">mach <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">machine</span>(conf_model, queries, y)</span>
+<span id="cb6-5"><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">@time</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fit!</span>(mach)</span>
+<span id="cb6-6"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">Serialization</span>.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">serialize</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"dev/artifacts/models/banking77/simple_inductive.jls"</span>, mach)</span></code></pre></div>
+<p>Finally, we use our conformal LLM to build a simple yet powerful chatbot that runs directly in the Julia REPL. Without dwelling on the details too much, the <code>conformal_chatbot</code> works as follows:</p>
+<ol type="1">
+<li>Prompt user to explain their intent.</li>
+<li>Feed user input through conformal LLM and present the output to the user.</li>
+<li>If the conformal prediction set includes more than one label, prompt the user to either refine their input or choose one of the options included in the set.</li>
+</ol>
+<div id="1a306983" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1">mach <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">Serialization</span>.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">deserialize</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"blog/posts/conformal-llm/simple_inductive.jls"</span>)</span>
+<span id="cb7-2"></span>
+<span id="cb7-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">prediction_set</span>(mach, query<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">String</span>)</span>
+<span id="cb7-4">    p̂ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> MLJBase.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(mach, query)[<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span>
+<span id="cb7-5">    probs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pdf</span>.(p̂, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">collect</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">77</span>))</span>
+<span id="cb7-6">    in_set <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">findall</span>(probs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.!=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span>
+<span id="cb7-7">    labels_in_set <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> labels[in_set]</span>
+<span id="cb7-8">    probs_in_set <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> probs[in_set]</span>
+<span id="cb7-9">    _order <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sortperm</span>(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>probs_in_set)</span>
+<span id="cb7-10">    plt <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> UnicodePlots.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">barplot</span>(labels_in_set[_order], probs_in_set[_order], title<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Possible Intents"</span>)</span>
+<span id="cb7-11">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> labels_in_set, plt</span>
+<span id="cb7-12"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">end</span></span>
+<span id="cb7-13"></span>
+<span id="cb7-14"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">conformal_chatbot</span>()</span>
+<span id="cb7-15">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">println</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"👋 Hi, I'm a Julia, your conformal chatbot. I'm here to help you with your banking query. Ask me anything or type 'exit' to exit ...</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb7-16">    completed <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">false</span></span>
+<span id="cb7-17">    queries <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span></span>
+<span id="cb7-18">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">while</span> !completed</span>
+<span id="cb7-19">        query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">readline</span>()</span>
+<span id="cb7-20">        queries <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> queries <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">","</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> query</span>
+<span id="cb7-21">        labels, plt <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">prediction_set</span>(mach, queries)</span>
+<span id="cb7-22">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(labels) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb7-23">            <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">println</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"🤔 Hmmm ... I can think of several options here. If any of these applies, simply type the corresponding number (e.g. '1' for the first option). Otherwise, can you refine your question, please?</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb7-24">            <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">println</span>(plt)</span>
+<span id="cb7-25">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">else</span></span>
+<span id="cb7-26">            <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">println</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"🥳 I think you mean </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>(labels[<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>])<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">. Correct?"</span>)</span>
+<span id="cb7-27">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">end</span></span>
+<span id="cb7-28"></span>
+<span id="cb7-29">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Exit:</span></span>
+<span id="cb7-30">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"exit"</span></span>
+<span id="cb7-31">            <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">println</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"👋 Bye!"</span>)</span>
+<span id="cb7-32">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">break</span></span>
+<span id="cb7-33">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">end</span></span>
+<span id="cb7-34">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">∈</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">string</span>.(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">collect</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">77</span>))</span>
+<span id="cb7-35">            <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">println</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"👍 Great! You've chosen '</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>(labels[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">parse</span>(<span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Int64</span>, query)])<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'. I'm glad I could help you. Have a nice day!"</span>)</span>
+<span id="cb7-36">            completed <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">true</span></span>
+<span id="cb7-37">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">end</span></span>
+<span id="cb7-38">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">end</span></span>
+<span id="cb7-39"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">end</span></span></code></pre></div>
+</div>
+<p>Below we show the output for two example queries. The first one is very ambiguous. As expected, the size of the prediction set is therefore large.</p>
+<div id="60e95c2f" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1">ambiguous_query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"transfer mondey?"</span></span>
+<span id="cb8-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">prediction_set</span>(mach, ambiguous_query)[<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>]</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<div class="ansi-escaped-output">
+<pre>                                                        <span class="ansi-bright-white-fg ansi-bold">Possible Intents</span>              
+                                           <span class="ansi-bright-black-fg">┌                                        ┐</span> 
+                   beneficiary_not_allowed <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</span> 0.150517 <span class="ansi-bright-black-fg"> </span> 
+   balance_not_updated_after_bank_transfer <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■■■■■■■■■■■■■■■■■■■■</span> 0.111409         <span class="ansi-bright-black-fg"> </span> 
+                     transfer_into_account <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■■■■■■■■■■■■■■■■■</span> 0.0939535           <span class="ansi-bright-black-fg"> </span> 
+        transfer_not_received_by_recipient <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■■■■■■■■■■■■■■■■</span> 0.091163             <span class="ansi-bright-black-fg"> </span> 
+            top_up_by_bank_transfer_charge <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■■■■■■■■■■■■■■■■</span> 0.089306             <span class="ansi-bright-black-fg"> </span> 
+                           failed_transfer <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■■■■■■■■■■■■■■■■</span> 0.0888322            <span class="ansi-bright-black-fg"> </span> 
+                           transfer_timing <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■■■■■■■■■■■</span> 0.0641952                 <span class="ansi-bright-black-fg"> </span> 
+                      transfer_fee_charged <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■■■■■</span> 0.0361131                       <span class="ansi-bright-black-fg"> </span> 
+                          pending_transfer <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■■■</span> 0.0270795                         <span class="ansi-bright-black-fg"> </span> 
+                           receiving_money <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■■■</span> 0.0252126                         <span class="ansi-bright-black-fg"> </span> 
+                         declined_transfer <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■</span> 0.0164443                           <span class="ansi-bright-black-fg"> </span> 
+                           cancel_transfer <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■</span> 0.0150444                           <span class="ansi-bright-black-fg"> </span> 
+                                           <span class="ansi-bright-black-fg">└                                        ┘</span> </pre>
+</div>
+</div>
+</div>
+<p>The more refined version of the prompt yields a smaller prediction set: less ambiguous prompts result in lower predictive uncertainty.</p>
+<div id="2a2aa69d" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1">refined_query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"I tried to transfer money to my friend, but it failed."</span></span>
+<span id="cb9-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">prediction_set</span>(mach, refined_query)[<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>]</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<div class="ansi-escaped-output">
+<pre>                                                        <span class="ansi-bright-white-fg ansi-bold">Possible Intents</span>              
+                                           <span class="ansi-bright-black-fg">┌                                        ┐</span> 
+                           failed_transfer <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</span> 0.59042 <span class="ansi-bright-black-fg"> </span> 
+                   beneficiary_not_allowed <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■■■■■■</span> 0.139806                        <span class="ansi-bright-black-fg"> </span> 
+        transfer_not_received_by_recipient <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■</span> 0.0449783                            <span class="ansi-bright-black-fg"> </span> 
+   balance_not_updated_after_bank_transfer <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■■</span> 0.037894                             <span class="ansi-bright-black-fg"> </span> 
+                         declined_transfer <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■</span> 0.0232856                             <span class="ansi-bright-black-fg"> </span> 
+                     transfer_into_account <span class="ansi-bright-black-fg">┤</span><span class="ansi-green-fg">■</span> 0.0108771                             <span class="ansi-bright-black-fg"> </span> 
+                           cancel_transfer <span class="ansi-bright-black-fg">┤</span> 0.00876369                             <span class="ansi-bright-black-fg"> </span> 
+                                           <span class="ansi-bright-black-fg">└                                        ┘</span> </pre>
+</div>
+</div>
+</div>
+<p>Below we include a short demo video that shows the REPL-based chatbot in action.</p>
+<p><img src="https://www.paltmeyer.com/blog/blog/posts/conformal-llm/www/demo.gif" class="img-fluid"></p>
+</section>
+<section id="wrapping-up" class="level2">
+<h2 class="anchored" data-anchor-id="wrapping-up">🌯 Wrapping Up</h2>
+<p>This work was done in collaboration with colleagues at ING as part of the ING Analytics 2023 Experiment Week. Our team demonstrated that Conformal Prediction provides a powerful and principled alternative to top-<em>K</em> intent classification. We won the first prize by popular vote.</p>
+<p>There are a lot of things that can be improved. As far as LLMs are concerned, we have of course used a fairly small model here. In terms of Conformal Prediction, we have relied on simple inductive conformal classification. This is a good starting point, but there are more advanced methods available (and implemented in the package). Another thing we did not take into consideration here is that we have many outcome classes and may in practice be interested in achieving class-conditional coverage. Stay tuned for more!</p>
+</section>
+<section id="references" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-casanueva2020efficient" class="csl-entry">
+Casanueva, Iñigo, Tadas Temčinas, Daniela Gerz, Matthew Henderson, and Ivan Vulić. 2020. <span>“Efficient <span>Intent</span> <span>Detection</span> with <span>Dual</span> <span>Sentence</span> <span>Encoders</span>.”</span> In <em>Proceedings of the 2nd <span>Workshop</span> on <span>Natural</span> <span>Language</span> <span>Processing</span> for <span>Conversational</span> <span>AI</span></em>, 38–45. Online: Association for Computational Linguistics. <a href="https://doi.org/10.18653/v1/2020.nlp4convai-1.5">https://doi.org/10.18653/v1/2020.nlp4convai-1.5</a>.
+</div>
+<div id="ref-liu2019roberta" class="csl-entry">
+Liu, Yinhan, Myle Ott, Naman Goyal, Jingfei Du, Mandar Joshi, Danqi Chen, Omer Levy, Mike Lewis, Luke Zettlemoyer, and Veselin Stoyanov. 2019. <span>“<span>RoBERTa</span>: <span>A</span> <span>Robustly</span> <span>Optimized</span> <span>BERT</span> <span>Pretraining</span> <span>Approach</span>.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.1907.11692">https://doi.org/10.48550/arXiv.1907.11692</a>.
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
+  author = {Altmeyer, Patrick},
+  title = {Building a {Conformal} {Chatbot} in {Julia}},
+  date = {2023-07-05},
+  url = {https://www.paltmeyer.com/blog//blog/posts/conformal-llm},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2023" class="csl-entry quarto-appendix-citeas">
+Altmeyer, Patrick. 2023. <span>“Building a Conformal Chatbot in
+Julia.”</span> July 5, 2023. <a href="https://www.paltmeyer.com/blog//blog/posts/conformal-llm">https://www.paltmeyer.com/blog//blog/posts/conformal-llm</a>.
+</div></div></section></div> ]]></description>
+  <category>conformal prediction</category>
+  <category>transformers</category>
+  <category>llm</category>
+  <category>Julia</category>
+  <guid>https://www.paltmeyer.com/blog/blog/posts/conformal-llm/index.html</guid>
+  <pubDate>Tue, 04 Jul 2023 22:00:00 GMT</pubDate>
+  <media:content url="https://www.paltmeyer.com/blog/blog/posts/conformal-llm/www/intro.gif" medium="image" type="image/gif"/>
+</item>
 <item>
   <title>An Accessible Intro to Laplace Approximations in Julia for Bayesian Deep Learning</title>
   <dc:creator>Patrick Altmeyer</dc:creator>
