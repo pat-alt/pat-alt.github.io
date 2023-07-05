@@ -289,7 +289,7 @@ Short demo of our conformal chatbot.
 <section id="huggingface-model" class="level2">
 <h2 class="anchored" data-anchor-id="huggingface-model">🤗 HuggingFace Model</h2>
 <p>The model can be loaded from HF straight into our running Julia session using the <a href="https://github.com/chengchingwen/Transformers.jl/tree/master"><code>Transformers.jl</code></a> package. Below we load the tokenizer <code>tkr</code> and the model <code>mod</code>. The tokenizer is used to convert the text into a sequence of integers, which is then fed into the model. The model outputs a hidden state, which is then fed into a classifier to get the logits for each class. Finally, the logits are then passed through a softmax function to get the corresponding predicted probabilities. Below we run a few queries through the model to see how it performs.</p>
-<div id="ba65880c" class="cell" data-execution_count="3">
+<div id="678fb923" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load model from HF 🤗:</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>tkr <span class="op">=</span> hgf<span class="st">"mrm8488/distilroberta-finetuned-banking77:tokenizer"</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>mod <span class="op">=</span> hgf<span class="st">"mrm8488/distilroberta-finetuned-banking77:ForSequenceClassification"</span></span>
@@ -305,7 +305,7 @@ Short demo of our conformal chatbot.
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> mod.<span class="fu">cls</span>(b.hidden_state)</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="fu">softmax</span>(c.logit)</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>[labels[i] for i <span class="kw">in</span> Flux.<span class="fu">onecold</span>(d)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>3-element Vector{String}:
  "exchange_rate"
  "card_not_working"
@@ -316,7 +316,7 @@ Short demo of our conformal chatbot.
 <section id="mlj-interface" class="level2">
 <h2 class="anchored" data-anchor-id="mlj-interface">🔁 <code>MLJ</code> Interface</h2>
 <p>Since our package is interfaced to <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a>, we need to define a wrapper model that conforms to the <code>MLJ</code> interface. In order to add the model for general use, we would probably go through <a href="https://github.com/FluxML/MLJFlux.jl"><code>MLJFlux.jl</code></a>, but for this tutorial, we will make our life easy and simply overload the <code>MLJBase.fit</code> and <code>MLJBase.predict</code> methods. Since the model from HF is already pre-trained and we are not interested in further fine-tuning, we will simply return the model object in the <code>MLJBase.fit</code> method. The <code>MLJBase.predict</code> method will then take the model object and the query and return the predicted probabilities. We also need to define the <code>MLJBase.target_scitype</code> and <code>MLJBase.predict_mode</code> methods. The former tells <code>MLJ</code> what the output type of the model is, and the latter can be used to retrieve the label with the highest predicted probability.</p>
-<div id="d92a0336" class="cell" data-execution_count="4">
+<div id="8636c199" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> IntentClassifier <span class="op">&lt;:</span><span class="dt"> MLJBase.Probabilistic</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    tkr<span class="op">::</span><span class="dt">TextEncoders.AbstractTransformerTextEncoder</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    mod<span class="op">::</span><span class="dt">HuggingFace.HGFRobertaForSequenceClassification</span></span>
@@ -354,32 +354,30 @@ Short demo of our conformal chatbot.
 <span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>MLJBase.<span class="fu">predict_mode</span>(clf<span class="op">::</span><span class="dt">IntentClassifier</span>, fitresult, Xnew) <span class="op">=</span> <span class="fu">mode</span>.(MLJBase.<span class="fu">predict</span>(clf, fitresult, Xnew))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To test that everything is working as expected, we fit the model and generated predictions for a subset of the test data:</p>
-<div id="9e443ddd" class="cell" data-execution_count="5">
+<div id="a3fc6050" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> <span class="fu">IntentClassifier</span>(tkr, mod)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>top_n <span class="op">=</span> <span class="fl">10</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fitresult, _, _ <span class="op">=</span> MLJBase.<span class="fu">fit</span>(clf, <span class="fl">1</span>, <span class="cn">nothing</span>, y_test[<span class="fl">1</span><span class="op">:</span>top_n])</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> ŷ <span class="op">=</span> MLJBase.<span class="fu">predict</span>(clf, fitresult, queries_test[<span class="fl">1</span><span class="op">:</span>top_n]);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  0.492355 seconds (531.30 k allocations: 80.610 MiB, 4.27% compilation time)</code></pre>
+<pre><code>  6.818024 seconds (11.29 M allocations: 799.165 MiB, 2.47% gc time, 91.04% compilation time)</code></pre>
 </div>
 </div>
 </section>
 <section id="conformal-chatbot" class="level2">
 <h2 class="anchored" data-anchor-id="conformal-chatbot">🤖 Conformal Chatbot</h2>
 <p>To turn the wrapped, pre-trained model into a conformal intent classifier, we can now rely on standard API calls. We first wrap our atomic model where we also specify the desired coverage rate and method. Since even simple forward passes are computationally expensive for our (small) LLM, we rely on Simple Inductive Conformal Classification.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(clf; coverage<span class="op">=</span><span class="fl">0.95</span>, method<span class="op">=:</span>simple_inductive, train_ratio<span class="op">=</span>train_ratio)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, queries, y)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> <span class="fu">fit!</span>(mach)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="bu">Serialization</span>.<span class="fu">serialize</span>(<span class="st">"dev/artifacts/models/banking77/simple_inductive.jls"</span>, mach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(clf; coverage<span class="op">=</span><span class="fl">0.95</span>, method<span class="op">=:</span>simple_inductive, train_ratio<span class="op">=</span>train_ratio)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, queries, y)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> <span class="fu">fit!</span>(mach)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="bu">Serialization</span>.<span class="fu">serialize</span>(<span class="st">"dev/artifacts/models/banking77/simple_inductive.jls"</span>, mach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Finally, we use our conformal LLM to build a simple yet powerful chatbot that runs directly in the Julia REPL. Without dwelling on the details too much, the <code>conformal_chatbot</code> works as follows:</p>
 <ol type="1">
 <li>Prompt user to explain their intent.</li>
 <li>Feed user input through conformal LLM and present the output to the user.</li>
 <li>If the conformal prediction set includes more than one label, prompt the user to either refine their input or choose one of the options included in the set.</li>
 </ol>
-<div id="1a306983" class="cell" data-execution_count="6">
+<div id="d18b5d29" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="bu">Serialization</span>.<span class="fu">deserialize</span>(<span class="st">"blog/posts/conformal-llm/simple_inductive.jls"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">prediction_set</span>(mach, query<span class="op">::</span><span class="dt">String</span>)</span>
@@ -421,10 +419,10 @@ Short demo of our conformal chatbot.
 <span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below we show the output for two example queries. The first one is very ambiguous. As expected, the size of the prediction set is therefore large.</p>
-<div id="60e95c2f" class="cell" data-execution_count="7">
+<div id="0fd4b42b" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ambiguous_query <span class="op">=</span> <span class="st">"transfer mondey?"</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_set</span>(mach, ambiguous_query)[<span class="fl">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="38">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <div class="ansi-escaped-output">
 <pre>                                                        <span class="ansi-bright-white-fg ansi-bold">Possible Intents</span>              
                                            <span class="ansi-bright-black-fg">┌                                        ┐</span> 
@@ -445,10 +443,10 @@ Short demo of our conformal chatbot.
 </div>
 </div>
 <p>The more refined version of the prompt yields a smaller prediction set: less ambiguous prompts result in lower predictive uncertainty.</p>
-<div id="2a2aa69d" class="cell" data-execution_count="8">
+<div id="ab02cc12" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>refined_query <span class="op">=</span> <span class="st">"I tried to transfer money to my friend, but it failed."</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_set</span>(mach, refined_query)[<span class="fl">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="39">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div class="ansi-escaped-output">
 <pre>                                                        <span class="ansi-bright-white-fg ansi-bold">Possible Intents</span>              
                                            <span class="ansi-bright-black-fg">┌                                        ┐</span> 
