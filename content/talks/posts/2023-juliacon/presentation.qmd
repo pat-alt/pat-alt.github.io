@@ -1,0 +1,135 @@
+---
+title: "Introducing: [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl)"
+subtitle: Predictive Uncertainty Quantification in Machine Learning
+author: 
+  - name: "Patrick Altmeyer"
+    url: https://www.paltmeyer.com/
+institute: Delft University of Technology
+date: today
+date-format: long
+title-slide-attributes:
+  data-background-image: www/wide_logo.png
+  data-background-size: 20%
+  data-background-position: 95% 95%
+format: 
+  julia-revealjs:
+    theme: custom.scss
+    self-contained: true
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    fig-align: center
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+---
+
+## 🥜 CP in a Nutshell
+
+**Counterfactual Explanation** (CE) explain how inputs into a model need to change for it to produce different outputs.
+
+. . .
+
+Provided the changes are realistic and actionable, they can be used for **Algorithmic Recourse** (AR) to help individuals who face adverse outcomes.
+
+## 🎉 [`ConformalPredictions.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl): Overview
+
+## 🕚 Talk Agenda
+
+1. Whistle-stop tour of **Conformal Prediction** (CP)
+2. Examples
+   1. Conformal Prediction for LLMs
+   2. Conformal Prediction for Explainability ([`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl))
+   3. Conformal Bayesian Neural Networks ([`LaplaceRedux.jl`](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl))
+   4. Conformal Prediction for Time Series
+3. Questions
+
+## 🤖 Conformal Chatbot
+
+## 🔎 Conformal Counterfactual Explanations
+
+## 🌐 Conformal Bayesian Neural Networks
+
+## 📈 Conformal Time Series
+
+## 🐶 [Taija](https://github.com/JuliaTrustworthyAI)
+
+> Methodologies and open-source tools that help researchers and practitioners assess the trustworthiness of predictive models. 
+
+::::{.columns}
+
+:::{.column width="60%"}
+
+##### Towards Trustworthy AI in `Julia`
+
+1. [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl) (JuliaCon 2022)
+2. [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) (JuliaCon 2023 --- I hope!)
+3. [`LaplaceRedudx.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl) (JuliaCon 2022)
+4. [`AlgorithmicRecourseDynamics.jl`](https://github.com/juliatrustworthyai/AlgorithmicRecourseDynamics.jl)
+
+... contributions welcome! 😊
+
+:::
+
+:::{.column width="40%"}
+
+<img src="/www/images/qr.png" height="auto" width="250" style="display: block; margin-left: auto; margin-right: auto;">
+
+<div style="text-align: center;">
+  <p style="display: inline; vertical-align: middle"> 
+    <a href="https://www.linkedin.com/in/patrick-altmeyer-a2a25494/" style="display: inline-block; color: rgb(207, 142, 255) !important;">
+      <font style="">
+        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/d0fc399dee4218d1e0e0399b8947acab.png" alt="LinkedIn (Personal)" style="border: none; max-width: 100%; height: 60px !important;">
+      </font>
+    </a>
+    <a href="https://twitter.com/paltmey" style="display: inline-block; color: rgb(207, 142, 255) !important;">
+      <font style="">
+        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border: none; max-width: 100%; height: 60px !important;">
+      </font>
+    </a>
+    <a href="https://github.com/pat-alt" style="display: inline-block; color: rgb(207, 142, 255) !important;">
+      <font style="">
+        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/47f4eb2d0082a8a3611d614b75a09db8.png" alt="Github" style="border: none; max-width: 100%; height: 60px !important;">
+      </font>
+    </a>
+    <a href="https://medium.com/@patrick.altmeyer" style="display: inline-block; color: rgb(207, 142, 255) !important;">
+      <font style="">
+        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/175f49662614345cb7dbb95fce3f88af.png" alt="Medium" style="border: none; max-width: 100%; height: 60px !important;">
+      </font>
+    </a>
+  </p>
+</div>
+:::
+
+::::
+
+## 📚 More Reading
+
+- Granular results for all of our experiments can be found in this online companion: [https://www.paltmeyer.com/endogenous-macrodynamics-in-algorithmic-recourse/](https://www.paltmeyer.com/endogenous-macrodynamics-in-algorithmic-recourse/). 
+- Many other related posts on my [blog](https://www.paltmeyer.com/blog).
+
+## Image Sources
+
+- Copyright for stock images belongs to TU Delft.
+- All other images, graphics or animations were created by us.
+
+## References 
