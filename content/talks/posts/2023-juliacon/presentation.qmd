@@ -122,16 +122,18 @@ How to Conformalize a Deep Image Classifier ([[blog](https://www.paltmeyer.com/b
 
 ::: {.incremental}
 
-- @stutz2022learning show introduce a smooth set size penalty to explicitly train models for CP. 
+- @stutz2022learning introduce a smooth set size penalty to explicitly train models for efficient CP. 
 - We use this in the context of gradient-based counterfactual search to obtain plausible [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl) (currently under review).
 
 :::
+
+![Conformal Predictions (left), set size (centre) and smooth set size loss (right).](www/diff.svg)
 
 ::: {.callout-note}
 
 ## Contribute
 
-Currently working on full conformal training implementation [[#62](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/issues/62)]
+Currently working on full conformal training implementation [[#62](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/issues/62)].
 
 :::
 
@@ -140,7 +142,18 @@ Currently working on full conformal training implementation [[#62](https://githu
 ::: {.incremental}
 
 1. Conformalised Bayes: simply treat Bayesian predictive posterior as our heuristic [@angelopoulos2021gentle].
-2. Conformal Bayes through importance sampling.
+   - Recently interfaced [`LaplaceRedux.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl) to [`MLJFlux.jl`](), which paves the way for truly effortless conformalized Bayesian Deep Learning.
+2. Conformal Bayes through importance sampling [@fong2021conformal].
+
+:::
+
+
+
+::: {.callout-note}
+
+## Contribute
+
+Planning to add both ideas [[#64](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/issues/64)].
 
 :::
 
