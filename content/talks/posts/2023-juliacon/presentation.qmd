@@ -1,5 +1,5 @@
 ---
-title: "Introducing: [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl)"
+title: "[`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl)"
 subtitle: Predictive Uncertainty Quantification in Machine Learning
 author: 
   - name: "Patrick Altmeyer"
@@ -43,46 +43,121 @@ crossref:
   prp-prefix: RQ
 ---
 
-## 🥜 CP in a Nutshell
+## Conformal Prediction 
 
-**Counterfactual Explanation** (CE) explain how inputs into a model need to change for it to produce different outputs.
+Conformal Prediction (CP) works under the premise of turning heuristic notions of Predictive Uncertainty (PU) into rigorous ones through repeated sampling or the use of calibration data.
 
-. . .
+![](www/intro.gif)
 
-Provided the changes are realistic and actionable, they can be used for **Algorithmic Recourse** (AR) to help individuals who face adverse outcomes.
+## Example: Split CP {.smaller}
 
-## 🎉 [`ConformalPredictions.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl): Overview
+1. Proper training set and separate calibration set: $\mathcal{D}_n=\mathcal{D}^{\text{train}} \cup \mathcal{D}^{\text{cali}}$.
+2. Train model on proper training set: $\hat\mu_{i \in \mathcal{D}^{\text{train}}}(X_i,Y_i)$.
+3. Compute nonconformity scores, $\mathcal{S}$, using calibration data $\mathcal{D}^{\text{cali}}$ and fitted model $\hat\mu_{i \in \mathcal{D}^{\text{train}}}$. 
+4. For user-specified coverage ratio $(1-\alpha)$ compute the corresponding quantile, $\hat{q}$, of $\mathcal{S}$.
+5. For the given quantile and test sample $X_{\text{test}}$, form the corresponding conformal prediction set: $C(X_{\text{test}})=\{y:s(X_{\text{test}},y) \le \hat{q}\}$.
 
-## 🕚 Talk Agenda
+::: {.callout-tip}
+## Blog posts
 
-1. Whistle-stop tour of **Conformal Prediction** (CP)
-2. Examples
-   1. Conformal Prediction for LLMs
-   2. Conformal Prediction for Explainability ([`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl))
-   3. Conformal Bayesian Neural Networks ([`LaplaceRedux.jl`](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl))
-   4. Conformal Prediction for Time Series
-3. Questions
+- Conformal Classification ([[blog](https://www.paltmeyer.com/blog/posts/conformal-prediction/)], [[TDS](https://towardsdatascience.com/conformal-prediction-in-julia-351b81309e30)], [[Forem](https://forem.julialang.org/patalt/conformal-prediction-in-julia-h9n)])
+- Conformal Regression ([[blog](https://www.paltmeyer.com/blog/posts/conformal-regression/)], [[TDS](https://towardsdatascience.com/prediction-intervals-for-any-regression-model-306930d5ad9a)], [[Forem](https://forem.julialang.org/patalt/prediction-intervals-for-any-regression-model-16f5)])
+:::
 
-## 🤖 Conformal Chatbot
+## Talk Agenda {.smaller}
 
-## 🔎 Conformal Counterfactual Explanations
+1. 🏃 Interactive sprint of [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) (15min)
+2. 🔍 Applications (5min)
+   - Conformal Chatbot
+   - Conformal Image Classifier
+3. 🚧 Under Construction (5min)
+   - Differentiability and Conformal [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)
+   - Conformal Bayes and [`LaplaceRedux.jl`](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl)
+4. ❓ Q&A
 
-## 🌐 Conformal Bayesian Neural Networks
+# 🔍 Applications
 
-## 📈 Conformal Time Series
+## Conformal Chatbot {.smaller}
 
-## 🐶 [Taija](https://github.com/JuliaTrustworthyAI)
+::: {.panel-tabset}
 
-> Methodologies and open-source tools that help researchers and practitioners assess the trustworthiness of predictive models. 
+### Overview
+
+![High-level overview of a conformalized intent classifier.](www/llm.jpeg){#fig-llm width=75%}
+
+::: {.callout-tip}
+## Blog post
+
+Building a Conformal Chatbot in Julia ([[blog](https://www.paltmeyer.com/blog/posts/conformal-llm/)], [[TDS](https://medium.com/towards-data-science/building-a-conformal-chatbot-in-julia-1ed23363a280)])
+:::
+
+### Demo
+
+![Demo of a REPL-based conformalized intent classifier.](www/llm-demo.gif){#fig-llm-demo width=50%}
+
+:::
+
+## Conformal Image Classifier
+
+::::{.columns}::::
+:::{.column width='60%'}
+MNIST classifier trained using `MLJFlux.jl`.
+
+![](www/img-clf-res.png){width=80%}
+:::
+:::{.column width='40%'}
+![](www/img-clf.gif){width=80%}
+:::
+::::
+
+::: {.callout-tip}
+## Blog post
+
+How to Conformalize a Deep Image Classifier ([[blog](https://www.paltmeyer.com/blog/posts/conformal-image-classifier/)], [[TDS](https://medium.com/towards-data-science/how-to-conformalize-a-deep-image-classifier-14ead4e1a5a0)], [[Forem](https://forem.julialang.org/patalt/how-to-conformalize-a-deep-image-classifier-50p2)])
+:::
+
+# 🚧 Under Construction
+
+## Differentiability {.smaller}
+
+::: {.incremental}
+
+- @stutz2022learning show introduce a smooth set size penalty to explicitly train models for CP. 
+- We use this in the context of gradient-based counterfactual search to obtain plausible [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl) (currently under review).
+
+:::
+
+::: {.callout-note}
+
+## Contribute
+
+Currently working on full conformal training implementation [[#62](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/issues/62)]
+
+:::
+
+## Conformal Bayes
+
+::: {.incremental}
+
+1. Conformalised Bayes: simply treat Bayesian predictive posterior as our heuristic [@angelopoulos2021gentle].
+2. Conformal Bayes through importance sampling.
+
+:::
+
+# ❓ Q&A
+
+## Towards Trustworthy AI in `Julia` 
+
+> Home of packages geared towards Trustworthy Artificial Intelligence in `Julia`.
 
 ::::{.columns}
 
 :::{.column width="60%"}
 
-##### Towards Trustworthy AI in `Julia`
+##### [`Taija`](https://github.com/JuliaTrustworthyAI)
 
 1. [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl) (JuliaCon 2022)
-2. [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) (JuliaCon 2023 --- I hope!)
+2. [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) (JuliaCon 2023)
 3. [`LaplaceRedudx.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl) (JuliaCon 2022)
 4. [`AlgorithmicRecourseDynamics.jl`](https://github.com/juliatrustworthyai/AlgorithmicRecourseDynamics.jl)
 

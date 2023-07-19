@@ -3017,4 +3017,19 @@
   file      = {Full Text PDF:https\://proceedings.neurips.cc/paper_files/paper/1989/file/6c9882bbac1c7093bd25041881277658-Paper.pdf:application/pdf},
 }
 
+@TechReport{martens2020optimizing,
+  author      = {Martens, James and Grosse, Roger},
+  date        = {2020-06},
+  institution = {arXiv},
+  title       = {Optimizing {Neural} {Networks} with {Kronecker}-factored {Approximate} {Curvature}},
+  doi         = {10.48550/arXiv.1503.05671},
+  note        = {arXiv:1503.05671 [cs, stat] type: article},
+  url         = {http://arxiv.org/abs/1503.05671},
+  urldate     = {2023-06-30},
+  abstract    = {We propose an efficient method for approximating natural gradient descent in neural networks which we call Kronecker-Factored Approximate Curvature (K-FAC). K-FAC is based on an efficiently invertible approximation of a neural network's Fisher information matrix which is neither diagonal nor low-rank, and in some cases is completely non-sparse. It is derived by approximating various large blocks of the Fisher (corresponding to entire layers) as being the Kronecker product of two much smaller matrices. While only several times more expensive to compute than the plain stochastic gradient, the updates produced by K-FAC make much more progress optimizing the objective, which results in an algorithm that can be much faster than stochastic gradient descent with momentum in practice. And unlike some previously proposed approximate natural-gradient/Newton methods which use high-quality non-diagonal curvature matrices (such as Hessian-free optimization), K-FAC works very well in highly stochastic optimization regimes. This is because the cost of storing and inverting K-FAC's approximation to the curvature matrix does not depend on the amount of data used to estimate it, which is a feature typically associated only with diagonal or low-rank approximations to the curvature matrix.},
+  annotation  = {Comment: Reduction ratio formula corrected. Removed incorrect claim about geodesics in footnote},
+  file        = {arXiv Fulltext PDF:https\://arxiv.org/pdf/1503.05671.pdf:application/pdf},
+  keywords    = {Computer Science - Machine Learning, Computer Science - Neural and Evolutionary Computing, Statistics - Machine Learning},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}
