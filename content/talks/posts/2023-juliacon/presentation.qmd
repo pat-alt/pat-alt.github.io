@@ -7,10 +7,6 @@ author:
 institute: Delft University of Technology
 date: today
 date-format: long
-title-slide-attributes:
-  data-background-image: www/wide_logo.png
-  data-background-size: 20%
-  data-background-position: 95% 95%
 format: 
   julia-revealjs:
     theme: custom.scss
@@ -45,7 +41,7 @@ crossref:
 
 ## Conformal Prediction 
 
-Conformal Prediction (CP) works under the premise of turning heuristic notions of Predictive Uncertainty (PU) into rigorous ones through repeated sampling or the use of calibration data.
+Conformal Prediction (CP) works under the premise of turning heuristic measures of Predictive Uncertainty (PU) into rigorous ones through repeated sampling or the use of calibration data.
 
 ![](www/intro.gif)
 
@@ -64,18 +60,35 @@ Conformal Prediction (CP) works under the premise of turning heuristic notions o
 - Conformal Regression ([[blog](https://www.paltmeyer.com/blog/posts/conformal-regression/)], [[TDS](https://towardsdatascience.com/prediction-intervals-for-any-regression-model-306930d5ad9a)], [[Forem](https://forem.julialang.org/patalt/prediction-intervals-for-any-regression-model-16f5)])
 :::
 
+# [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl)
+
+::::{.columns}::::
+:::{.column width='65%'}
+::: {.incremental}
+
+- Fully compatible with [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/) models.
+- Compatible with [`Flux.jl`](https://fluxml.ai/) through [`MLJFlux.jl`](https://github.com/FluxML/MLJFlux.jl).
+- Many state-of-the-art CP methods implemented for regression, classification and time series modelling.
+:::
+:::
+:::{.column width='35%'}
+![](www/wide_logo.png)
+:::
+::::
+
 ## Talk Agenda {.smaller}
 
 1. 🏃 Interactive sprint of [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) (15min)
 2. 🔍 Applications (5min)
    - Conformal Chatbot
    - Conformal Image Classifier
+   - Conformal Times Series Modelling
 3. 🚧 Under Construction (5min)
    - Differentiability and Conformal [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)
    - Conformal Bayes and [`LaplaceRedux.jl`](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl)
 4. ❓ Q&A
 
-# 🔍 Applications
+# 🔍 Applications {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
 
 ## Conformal Chatbot {.smaller}
 
@@ -116,7 +129,11 @@ MNIST classifier trained using `MLJFlux.jl`.
 How to Conformalize a Deep Image Classifier ([[blog](https://www.paltmeyer.com/blog/posts/conformal-image-classifier/)], [[TDS](https://medium.com/towards-data-science/how-to-conformalize-a-deep-image-classifier-14ead4e1a5a0)], [[Forem](https://forem.julialang.org/patalt/how-to-conformalize-a-deep-image-classifier-50p2)])
 :::
 
-# 🚧 Under Construction
+## Time Series
+
+> All credit to Mojtaba Farmanbar ([Twitter](https://twitter.com/m_farmanbar), [GitHub](https://github.com/MojiFarmanbar))
+
+# 🚧 Under Construction {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
 
 ## Differentiability {.smaller}
 
@@ -127,7 +144,9 @@ How to Conformalize a Deep Image Classifier ([[blog](https://www.paltmeyer.com/b
 
 :::
 
-![Conformal Predictions (left), set size (centre) and smooth set size loss (right).](www/diff.svg)
+. . .
+
+![Conformal Predictions (left), set size (centre) and smooth set size loss (right).](www/diff.svg){width=85%}
 
 ::: {.callout-note}
 
@@ -137,17 +156,22 @@ Currently working on full conformal training implementation [[#62](https://githu
 
 :::
 
-## Conformal Bayes
+## Conformal Bayes {.smaller}
 
-::: {.incremental}
+::::{.columns}::::
+:::{.column width='50%'}
 
 1. Conformalised Bayes: simply treat Bayesian predictive posterior as our heuristic [@angelopoulos2021gentle].
-   - Recently interfaced [`LaplaceRedux.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl) to [`MLJFlux.jl`](), which paves the way for truly effortless conformalized Bayesian Deep Learning.
+   - Recently interfaced [`LaplaceRedux.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl) to [`MLJFlux.jl`](https://github.com/FluxML/MLJFlux.jl)
 2. Conformal Bayes through importance sampling [@fong2021conformal].
 
 :::
+:::{.column width='50%'}
 
+![](www/conformal-bayes.png)
 
+:::
+::::
 
 ::: {.callout-note}
 
@@ -157,17 +181,15 @@ Planning to add both ideas [[#64](https://github.com/JuliaTrustworthyAI/Conforma
 
 :::
 
-# ❓ Q&A
+# 🗨️ Q&A {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
 
-## Towards Trustworthy AI in `Julia` 
-
-> Home of packages geared towards Trustworthy Artificial Intelligence in `Julia`.
+## Trustworthy AI in `Julia` {.smaller}
 
 ::::{.columns}
 
 :::{.column width="60%"}
 
-##### [`Taija`](https://github.com/JuliaTrustworthyAI)
+[![](www/taija.png){width=80%   }](https://github.com/JuliaTrustworthyAI)
 
 1. [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl) (JuliaCon 2022)
 2. [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) (JuliaCon 2023)
