@@ -64,15 +64,16 @@ Conformal Prediction (CP) works under the premise of turning heuristic measures 
 
 ::::{.columns}::::
 :::{.column width='65%'}
-::: {.incremental}
 
 - Fully compatible with [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/) models.
 - Compatible with [`Flux.jl`](https://fluxml.ai/) through [`MLJFlux.jl`](https://github.com/FluxML/MLJFlux.jl).
 - Many state-of-the-art CP methods implemented for regression, classification and time series modelling.
-:::
+
 :::
 :::{.column width='35%'}
 ![](www/wide_logo.png)
+
+![](www/qr.svg)
 :::
 ::::
 
@@ -129,9 +130,24 @@ MNIST classifier trained using `MLJFlux.jl`.
 How to Conformalize a Deep Image Classifier ([[blog](https://www.paltmeyer.com/blog/posts/conformal-image-classifier/)], [[TDS](https://medium.com/towards-data-science/how-to-conformalize-a-deep-image-classifier-14ead4e1a5a0)], [[Forem](https://forem.julialang.org/patalt/how-to-conformalize-a-deep-image-classifier-50p2)])
 :::
 
-## Time Series
+## Time Series {.smaller}
 
-> All credit to Mojtaba Farmanbar ([Twitter](https://twitter.com/m_farmanbar), [GitHub](https://github.com/MojiFarmanbar))
+::::{.columns}::::
+:::{.column width='60%'}
+- Ensemble Batch Prediction Intervals (EnbPI) proposed by @xu2022conformal and recently contributed by Mojtaba Farmanbar ([LinkedIn](https://www.linkedin.com/in/mfarmanbar/), [Twitter](https://twitter.com/m_farmanbar), [GitHub](https://github.com/MojiFarmanbar))
+- Residuals are used dynamically to update the nonconformity scores.
+:::
+:::{.column width='40%'}
+![EnbPI for Victoria electricity demand dataset. Data source: [MAPIE](https://mapie.readthedocs.io/en/latest/index.html), @hyndman2018forecasting](www/timeseries.png)
+:::
+::::
+
+::: {.callout-tip}
+## Tutorial
+
+How to Conformalize a Time Series Model)
+:::
+
 
 # 🚧 Under Construction {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
 
@@ -231,15 +247,5 @@ Planning to add both ideas [[#64](https://github.com/JuliaTrustworthyAI/Conforma
 :::
 
 ::::
-
-## 📚 More Reading
-
-- Granular results for all of our experiments can be found in this online companion: [https://www.paltmeyer.com/endogenous-macrodynamics-in-algorithmic-recourse/](https://www.paltmeyer.com/endogenous-macrodynamics-in-algorithmic-recourse/). 
-- Many other related posts on my [blog](https://www.paltmeyer.com/blog).
-
-## Image Sources
-
-- Copyright for stock images belongs to TU Delft.
-- All other images, graphics or animations were created by us.
 
 ## References 
