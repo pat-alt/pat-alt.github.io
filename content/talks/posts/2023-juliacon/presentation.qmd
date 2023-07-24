@@ -79,7 +79,7 @@ Conformal Prediction (CP) works under the premise of turning heuristic measures 
 
 ## Talk Agenda {.smaller}
 
-1. 🏃 Interactive sprint of [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) (15min)
+1. 🏃 Interactive sprint of [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) using [`Pluto.jl`](https://github.com/fonsp/Pluto.jl) 🎈 (15min)
 2. 🔍 Applications (5min)
    - Conformal Chatbot
    - Conformal Image Classifier
@@ -102,7 +102,7 @@ Conformal Prediction (CP) works under the premise of turning heuristic measures 
 ::: {.callout-tip}
 ## Blog post
 
-Building a Conformal Chatbot in Julia ([[blog](https://www.paltmeyer.com/blog/posts/conformal-llm/)], [[TDS](https://medium.com/towards-data-science/building-a-conformal-chatbot-in-julia-1ed23363a280)])
+Building a Conformal Chatbot in Julia ([blog](https://www.paltmeyer.com/blog/posts/conformal-llm/), [TDS](https://medium.com/towards-data-science/building-a-conformal-chatbot-in-julia-1ed23363a280))
 :::
 
 ### Demo
@@ -127,25 +127,26 @@ MNIST classifier trained using `MLJFlux.jl`.
 ::: {.callout-tip}
 ## Blog post
 
-How to Conformalize a Deep Image Classifier ([[blog](https://www.paltmeyer.com/blog/posts/conformal-image-classifier/)], [[TDS](https://medium.com/towards-data-science/how-to-conformalize-a-deep-image-classifier-14ead4e1a5a0)], [[Forem](https://forem.julialang.org/patalt/how-to-conformalize-a-deep-image-classifier-50p2)])
+How to Conformalize a Deep Image Classifier ([blog](https://www.paltmeyer.com/blog/posts/conformal-image-classifier/), [TDS](https://medium.com/towards-data-science/how-to-conformalize-a-deep-image-classifier-14ead4e1a5a0), [Forem](https://forem.julialang.org/patalt/how-to-conformalize-a-deep-image-classifier-50p2))
 :::
 
 ## Time Series {.smaller}
 
 ::::{.columns}::::
 :::{.column width='60%'}
-- Ensemble Batch Prediction Intervals (EnbPI) proposed by @xu2022conformal and recently contributed by Mojtaba Farmanbar ([LinkedIn](https://www.linkedin.com/in/mfarmanbar/), [Twitter](https://twitter.com/m_farmanbar), [GitHub](https://github.com/MojiFarmanbar))
-- Residuals are used dynamically to update the nonconformity scores.
+- Ensemble Batch Prediction Intervals (EnbPI) proposed by @xu2021conformal and recently contributed by Mojtaba Farmanbar ([LinkedIn](https://www.linkedin.com/in/mfarmanbar/), [Twitter](https://twitter.com/m_farmanbar), [GitHub](https://github.com/MojiFarmanbar))
+- Residuals are used sequentially as they become available to update the nonconformity scores (bottom chart of @fig-ts).
+- Data source: [MAPIE](https://mapie.readthedocs.io/en/latest/index.html), @hyndman2018forecasting
 :::
 :::{.column width='40%'}
-![EnbPI for Victoria electricity demand dataset. Data source: [MAPIE](https://mapie.readthedocs.io/en/latest/index.html), @hyndman2018forecasting](www/timeseries.png)
+![EnbPI for Victoria electricity demand dataset.](www/timeseries.png){#fig-ts}
 :::
 ::::
 
 ::: {.callout-tip}
 ## Tutorial
 
-How to Conformalize a Time Series Model)
+How to Conformalize a Time Series Model ([docs](https://juliatrustworthyai.github.io/ConformalPrediction.jl/stable/how_to_guides/timeseries/)) 
 :::
 
 
