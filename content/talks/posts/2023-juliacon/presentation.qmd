@@ -65,7 +65,7 @@ Conformal Prediction (CP) works under the premise of turning heuristic measures 
 ::::{.columns}::::
 :::{.column width='65%'}
 
-- Fully compatible with [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/) models.
+- Built on top of [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/).
 - Compatible with [`Flux.jl`](https://fluxml.ai/) through [`MLJFlux.jl`](https://github.com/FluxML/MLJFlux.jl).
 - Many state-of-the-art CP methods implemented for regression, classification and time series modelling.
 
@@ -91,23 +91,39 @@ Conformal Prediction (CP) works under the premise of turning heuristic measures 
 
 # 🔍 Applications {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
 
-## Conformal Chatbot {.smaller}
+## Conformal Chatbot
 
 ::: {.panel-tabset}
 
 ### Overview
 
-![High-level overview of a conformalized intent classifier.](www/llm.jpeg){#fig-llm width=75%}
+::::{.columns}::::
+:::{.column width='40%'}
+> Conformal Intent Classification and Clarification (CICC) won 1st 🏆 at ING Global Experiment Week 2023.
+:::
+:::{.column width='60%'}
+![High-level overview of Conformal Intent Classifier.](www/llm.jpeg){#fig-llm width=100%}
+:::
+::::
+
+### Demo
+
+::::{.columns}::::
+:::{.column width='55%'}
+![Demo of a REPL-based conformalized intent classifier.](www/llm-demo.gif){#fig-llm-demo width=75%}
+:::
+:::{.column width='45%'}
+
+CICC substantially outperforms baseline approaches (e.g. top-$K$).
 
 ::: {.callout-tip}
+ 
 ## Blog post
 
 Building a Conformal Chatbot in Julia ([blog](https://www.paltmeyer.com/blog/posts/conformal-llm/), [TDS](https://medium.com/towards-data-science/building-a-conformal-chatbot-in-julia-1ed23363a280))
 :::
-
-### Demo
-
-![Demo of a REPL-based conformalized intent classifier.](www/llm-demo.gif){#fig-llm-demo width=50%}
+:::
+::::
 
 :::
 
@@ -120,7 +136,7 @@ MNIST classifier trained using `MLJFlux.jl`.
 ![](www/img-clf-res.png){width=80%}
 :::
 :::{.column width='40%'}
-![](www/img-clf.gif){width=80%}
+![](www/img-clf.png){width=80%}
 :::
 ::::
 
@@ -130,18 +146,11 @@ MNIST classifier trained using `MLJFlux.jl`.
 How to Conformalize a Deep Image Classifier ([blog](https://www.paltmeyer.com/blog/posts/conformal-image-classifier/), [TDS](https://medium.com/towards-data-science/how-to-conformalize-a-deep-image-classifier-14ead4e1a5a0), [Forem](https://forem.julialang.org/patalt/how-to-conformalize-a-deep-image-classifier-50p2))
 :::
 
-## Time Series {.smaller}
+## Time Series
 
 ::::{.columns}::::
-:::{.column width='60%'}
-- Ensemble Batch Prediction Intervals (EnbPI) proposed by @xu2021conformal and recently contributed by Mojtaba Farmanbar ([LinkedIn](https://www.linkedin.com/in/mfarmanbar/), [Twitter](https://twitter.com/m_farmanbar), [GitHub](https://github.com/MojiFarmanbar))
-- Residuals are used sequentially as they become available to update the nonconformity scores (bottom chart of @fig-ts).
-- Data source: [MAPIE](https://mapie.readthedocs.io/en/latest/index.html), @hyndman2018forecasting
-:::
-:::{.column width='40%'}
-![EnbPI for Victoria electricity demand dataset.](www/timeseries.png){#fig-ts}
-:::
-::::
+:::{.column width='45%'}
+Ensemble Batch Prediction Intervals [@xu2021conformal] contributed by [Mojtaba Farmanbar](https://www.linkedin.com/in/mfarmanbar/) 📣.
 
 ::: {.callout-tip}
 ## Tutorial
@@ -149,21 +158,24 @@ How to Conformalize a Deep Image Classifier ([blog](https://www.paltmeyer.com/bl
 How to Conformalize a Time Series Model ([docs](https://juliatrustworthyai.github.io/ConformalPrediction.jl/stable/how_to_guides/timeseries/)) 
 :::
 
+:::
+:::{.column width='55%'}
+![EnbPI for Victoria electricity demand dataset.](www/timeseries.png){#fig-ts}
+:::
+::::
 
 # 🚧 Under Construction {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
 
-## Differentiability {.smaller}
+## Differentiability
 
 ::: {.incremental}
 
-- @stutz2022learning introduce a smooth set size penalty to explicitly train models for efficient CP. 
-- We use this in the context of gradient-based counterfactual search to obtain plausible [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl) (currently under review).
+- @stutz2022learning introduce Conformal Training. ![Conformal Predictions (left), set size (centre) and smooth set size loss (right).](www/diff.svg){width=75%}
+- We use this to generate Conformal [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl).
 
 :::
 
 . . .
-
-![Conformal Predictions (left), set size (centre) and smooth set size loss (right).](www/diff.svg){width=85%}
 
 ::: {.callout-note}
 
@@ -173,14 +185,15 @@ Currently working on full conformal training implementation [[#62](https://githu
 
 :::
 
-## Conformal Bayes {.smaller}
+## Conformal(ised) Bayes 
 
 ::::{.columns}::::
 :::{.column width='50%'}
 
-1. Conformalised Bayes: simply treat Bayesian predictive posterior as our heuristic [@angelopoulos2021gentle].
-   - Recently interfaced [`LaplaceRedux.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl) to [`MLJFlux.jl`](https://github.com/FluxML/MLJFlux.jl)
-2. Conformal Bayes through importance sampling [@fong2021conformal].
+::: {.incremental}
+- Predictive posterior as heuristic [@angelopoulos2021gentle].
+- Importance Sampling [@fong2021conformal].
+:::
 
 :::
 :::{.column width='50%'}
@@ -190,30 +203,33 @@ Currently working on full conformal training implementation [[#62](https://githu
 :::
 ::::
 
+. . .
+
 ::: {.callout-note}
 
 ## Contribute
 
-Planning to add both ideas [[#64](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/issues/64)].
+[`LaplaceRedux.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl) interfaced to [`MLJFlux.jl`](https://github.com/FluxML/MLJFlux.jl). Planning to add both ideas [[#64](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/issues/64)]. 
 
 :::
 
-# 🗨️ Q&A {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
+# 🗨️ and finally ... {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
 
 ## Trustworthy AI in `Julia` {.smaller}
 
 ::::{.columns}
 
-:::{.column width="60%"}
+:::{.column width="60%" .smaller}
 
-[![](www/taija.png){width=80%   }](https://github.com/JuliaTrustworthyAI)
+Taija collects Julia packages geared towards Trustworthy AI:
 
-1. [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl) (JuliaCon 2022)
-2. [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) (JuliaCon 2023)
-3. [`LaplaceRedudx.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl) (JuliaCon 2022)
-4. [`AlgorithmicRecourseDynamics.jl`](https://github.com/juliatrustworthyai/AlgorithmicRecourseDynamics.jl)
+- [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl)
+- [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) 
+- [`LaplaceRedux.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl)
+- [`JointEnergyModels.jl`](https://github.com/juliatrustworthyai/JointEnergyModels.jl)
+- ...
 
-... contributions welcome! 😊
+> Contributions welcome! 😊
 
 :::
 
@@ -245,6 +261,9 @@ Planning to add both ideas [[#64](https://github.com/JuliaTrustworthyAI/Conforma
     </a>
   </p>
 </div>
+
+[![](www/taija.png){width=50%}](https://github.com/JuliaTrustworthyAI)
+
 :::
 
 ::::
