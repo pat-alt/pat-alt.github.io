@@ -51,6 +51,34 @@ draft: true
 
 ## [`SymbolicRegression.jl`](https://pretalx.com/juliacon2023/talk/FGZBBB/)
 
+### Motivation
+
+- Machine Learning should yield a model that we can understand
+- Science already has a modelling language: mathematical equations
+- Using mathematical expressions as priors for ML models
+
+### Method Sketch
+
+- Represent expressions as trees where edges are binary operators and nodes are variables or constants
+- Optimisation boils down to finding the best mutation of the tree using genetic algorithms
+- Can be parallelised easily: every population of trees can independently evolve in a separate thread
+
+### Library
+
+- `SymbolicRegression.jl` is the core library
+- As high-performance as possible. As configurable as possible. As easy-to-use as possible.
+
+## [`PackageExtensions.jl`](https://pretalx.com/juliacon2023/talk/YQQ9ZV/)
+
+- Balancing the trade-off between usefulness and cost of adding dependencies
+  
+Why depend on a package?
+
+1. Strong dependency: direct use of functionality
+2. Weak dependency: Extend methods to dependency types
+
+
+
 
 
 

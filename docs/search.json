@@ -2104,14 +2104,14 @@
     "href": "content/talks/posts/2023-juliacon/presentation.html#talk-agenda",
     "title": "ConformalPrediction.jl",
     "section": "Talk Agenda",
-    "text": "Talk Agenda\n\n\n\nIntroduction (5min)\nInteractive sprint of ConformalPrediction.jl (10min)\nApplications (5min)\nUnder Construction (5min)\nQ&A\n\n\n\nScan this now to follow along … if you’re lucky 😅\n\n\n\n\nQR code redirects to notebook hosted on binder."
+    "text": "Talk Agenda\n\n\n\nIntroduction (5min)\nApplications (5min)\nInteractive demo of ConformalPrediction.jl (10min)\nUnder Construction (5min)\nQ&A\n\n\n\nScan this now to follow along … if you’re lucky 😅\n\n\n\n\nQR code redirects to notebook hosted on binder."
   },
   {
     "objectID": "content/talks/posts/2023-juliacon/presentation.html#conformal-chatbot",
     "href": "content/talks/posts/2023-juliacon/presentation.html#conformal-chatbot",
     "title": "ConformalPrediction.jl",
     "section": "Conformal Chatbot",
-    "text": "Conformal Chatbot\n\nOverviewDemo\n\n\n\n\n\nConformal Intent Classification and Clarification (CICC) won 1st 🏆 at ING Global Experiment Week 2023.\n\n\n\n\n\nFigure 1: High-level overview of Conformal Intent Classifier.\n\n\n\n\n\n\n\n\n\n\n\nFigure 2: Demo of a REPL-based conformalized intent classifier.\n\n\n\nCICC substantially outperforms baseline approaches (e.g. top-\\(K\\)).\n\n\n\n\n\n\nBlog post\n\n\nBuilding a Conformal Chatbot in Julia (blog, TDS)"
+    "text": "Conformal Chatbot\n\nOverviewDemo\n\n\n\n\n\nFigure 1: High-level overview of Conformal Intent Classifier. Won 1st 🏆 at ING Global Experiment Week 2023.\n\n\n\n\n\n\n\n\n\nFigure 2: Demo of a REPL-based conformalized intent classifier.\n\n\n\nCICC substantially outperforms baseline approaches (e.g. top-\\(K\\)).\n\n\n\n\n\n\nBlog post\n\n\nBuilding a Conformal Chatbot in Julia (blog, TDS)"
   },
   {
     "objectID": "content/talks/posts/2023-juliacon/presentation.html#conformal-counterfactual-explanations",
@@ -2160,7 +2160,7 @@
     "href": "content/talks/posts/2023-juliacon/presentation.html#conformal-image-classifier",
     "title": "ConformalPrediction.jl",
     "section": "Conformal Image Classifier",
-    "text": "Conformal Image Classifier\n\n\nMNIST classifier trained using MLJFlux.jl.\n\n\n\n\n\n\n\n\n\n\n\nBlog post\n\n\nHow to Conformalize a Deep Image Classifier (blog, TDS, Forem)"
+    "text": "Conformal Image Classifier\n\n\nA simple MNIST classifier.\n# MLJFlux workflow:\nusing MLJFlux\nImageClassifier = @load ImageClassifier\n\n# Conformalize:\nusing ConformalPrediction\nconf_model = conformal_model(clf)\nmach = machine(conf_model, X, y)\nfit!(mach)\n\n\n\n\nFigure 3: Probably a 7 🤔\n\n\n\n\n\n\n\n\n\n\nBlog post\n\n\nHow to Conformalize a Deep Image Classifier (blog, TDS, Forem)"
   },
   {
     "objectID": "content/talks/posts/2023-juliacon/presentation.html#differentiability-and-conformal-counterfactualexplanations.jl",
@@ -2209,7 +2209,7 @@
     "href": "content/talks/posts/2023-juliacon/presentation.html#differentiability",
     "title": "ConformalPrediction.jl",
     "section": "Differentiability",
-    "text": "Differentiability\n\n\nStutz et al. (2022) introduce Conformal Training. \nWe use this to generate Conformal CounterfactualExplanations.jl.\n\n\n\n\n\n\n\n\n\nContribute\n\n\nCurrently working on full conformal training implementation [#62]."
+    "text": "Differentiability\n\n\n\nStutz et al. (2022) introduce Conformal Training: conformal predictions (left), set size (centre) and smooth set size loss (right).\n\n\n\n\n\n\n\nConformal CounterfactualExplanations.jl.\n\n\n\n\n\n\n\n\n\nContribute\n\n\nCurrently working on full conformal training implementation [#62]."
   },
   {
     "objectID": "content/talks/posts/2023-juliacon/presentation.html#conformal-bayes",
@@ -2223,7 +2223,7 @@
     "href": "content/talks/posts/2023-juliacon/presentation.html#time-series",
     "title": "ConformalPrediction.jl",
     "section": "Time Series",
-    "text": "Time Series\n\n\nEnsemble Batch Prediction Intervals (Xu and Xie 2021) contributed by Mojtaba Farmanbar 📣.\n\n\n\n\n\n\nTutorial\n\n\nHow to Conformalize a Time Series Model (docs)\n\n\n\n\n\n\n\nFigure 3: EnbPI for Victoria electricity demand dataset."
+    "text": "Time Series\n\n\nEnsemble Batch Prediction Intervals (Xu and Xie 2021) contributed by Mojtaba Farmanbar 📣.\n\n\n\n\n\n\nTutorial\n\n\nHow to Conformalize a Time Series Model (docs)\n\n\n\n\n\n\n\nFigure 4: EnbPI for Victoria electricity demand dataset."
   },
   {
     "objectID": "content/talks/posts/2023-juliacon/presentation.html#trustworthy-ai-in-julia---taija",
@@ -2258,6 +2258,27 @@
     "href": "content/talks/posts/2023-juliacon/presentation.html#conformalised-bayes",
     "title": "ConformalPrediction.jl",
     "section": "Conformal(ised) Bayes",
-    "text": "Conformal(ised) Bayes\n\n\n\n\nPredictive posterior as heuristic (Angelopoulos and Bates 2021).\nImportance Sampling (Fong and Holmes 2021).\n\n\n\n\n\n\n\n\n\n\n\n\n\nContribute\n\n\nLaplaceRedux.jl interfaced to MLJFlux.jl. Planning to add both ideas [#64]."
+    "text": "Conformal(ised) Bayes\n\n\n\nPredictive posterior as heuristic (Angelopoulos and Bates 2021).\nImportance Sampling (Fong and Holmes 2021).\n\n\n\n\n\n\n\n\n\n\n\nContribute\n\n\nLaplaceRedux.jl interfaced to MLJFlux.jl. Planning to add both ideas [#64]."
+  },
+  {
+    "objectID": "content/talks/posts/2023-juliacon/presentation.html#conformal-symbolicregression.jl",
+    "href": "content/talks/posts/2023-juliacon/presentation.html#conformal-symbolicregression.jl",
+    "title": "ConformalPrediction.jl",
+    "section": "Conformal SymbolicRegression.jl",
+    "text": "Conformal SymbolicRegression.jl\n\n\n\nusing ConformalPrediction\nusing MLJ\nregressor = @load SRRegressor pkg=SymbolicRegression\nmodel = regressor(\n  niterations=50,\n  binary_operators=[+, -, *],\n  unary_operators=[sin],\n)\nconf_model = conformal_model(model)\nmach = machine(conf_model, X, y)\nfit!(mach, rows=train)"
+  },
+  {
+    "objectID": "content/talks/posts/2023-juliacon/presentation.html#conformal-sr",
+    "href": "content/talks/posts/2023-juliacon/presentation.html#conformal-sr",
+    "title": "ConformalPrediction.jl",
+    "section": "Conformal SR",
+    "text": "Conformal SR\n\nWe had a great talk on SymbolicRegression.jl this week, so I thought I’d take it for ride\n\n\n\n\n# Standard MLJ workflow:\nusing MLJ\nimport SymbolicRegression: SRRegressor\nmodel = SRRegressor(\n  niterations=50,\n  binary_operators=[+, -, *],\n  unary_operators=[sin],\n)\n\n# Conformalize:\nusing ConformalPrediction\nconf_model = conformal_model(model)\nmach = machine(conf_model, X, y)\nfit!(mach, rows=train)"
+  },
+  {
+    "objectID": "content/talks/posts/2023-juliacon/presentation.html#cp-meets-sr",
+    "href": "content/talks/posts/2023-juliacon/presentation.html#cp-meets-sr",
+    "title": "ConformalPrediction.jl",
+    "section": "CP meets SR",
+    "text": "CP meets SR\n\nWe had a great talk on SymbolicRegression.jl this week, so I thought I’d take it for ride\n\n\n\n\n# Standard MLJ workflow:\nusing MLJ\nimport SymbolicRegression: SRRegressor\nmodel = SRRegressor(\n  niterations=50,\n  binary_operators=[+, -, *],\n  unary_operators=[sin],\n)\n\n# Conformalize:\nusing ConformalPrediction\nconf_model = conformal_model(model)\nmach = machine(conf_model, X, y)\nfit!(mach, rows=train)"
   }
 ]

@@ -39,13 +39,20 @@ crossref:
   prp-prefix: RQ
 ---
 
+```{julia}
+#| echo: false
+
+POST_DIR = "content/talks/posts/2023-juliacon"
+using Pkg; Pkg.activate(POST_DIR)
+```
+
 ## Talk Agenda
 
 ::::{.columns}::::
 :::{.column width='60%'}
 1. Introduction (5min)
 2. Applications (5min)
-3. Interactive sprint of [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) (10min)
+3. Interactive demo of [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) (10min)
 4. Under Construction (5min)
 5. Q&A
 :::
@@ -96,20 +103,82 @@ Conformal Prediction (CP) works under the premise of turning heuristic measures 
 
 # 🔍 Applications {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
 
+## CP meets SR 
+
+> We had a great talk on [`SymbolicRegression.jl`](https://github.com/MilesCranmer/SymbolicRegression.jl) this week, so I thought I'd take it for ride
+
+::::{.columns}::::
+:::{.column width='50%'}
+
+```{julia}
+#| echo: false 
+
+using MLJ
+
+# Inputs:
+N = 600
+xmax = 3.0
+using Distributions
+d = Uniform(-xmax, xmax)
+X = rand(d, N)
+X = reshape(X, :, 1)
+
+# Outputs:
+noise = 0.5
+fun(X) = X * sin(X)
+ε = randn(N) .* noise
+y = @.(fun(X)) + ε
+y = vec(y)
+
+# Partition:
+train, test = partition(eachindex(y), 0.4, 0.4, shuffle=true)
+Xtest = selectrows(X, test)
+ytest = y[test]
+```
+
+```{julia}
+#| echo: true
+
+# Standard MLJ workflow:
+using MLJ
+import SymbolicRegression: SRRegressor
+model = SRRegressor(
+  niterations=50,
+  binary_operators=[+, -, *],
+  unary_operators=[sin],
+)
+
+# Conformalize:
+using ConformalPrediction
+conf_model = conformal_model(model)
+mach = machine(conf_model, X, y)
+fit!(mach, rows=train)
+```
+
+:::
+:::{.column width='50%'}
+
+```{julia}
+#| output: true
+#| echo: false
+
+using Plots
+zoom = 0
+plt = plot(mach.model, mach.fitresult, Xtest, ytest, lw=5, zoom=zoom, observed_lab="Test points")
+xrange = range(-xmax+zoom,xmax-zoom,length=N)
+plot!(plt, xrange, @.(fun(xrange)), lw=3, ls=:dash, colour=:black, label="Ground truth", size=(500,400))
+```
+
+:::
+::::
+
 ## Conformal Chatbot
 
 ::: {.panel-tabset}
 
 ### Overview
 
-::::{.columns}::::
-:::{.column width='40%'}
-> Conformal Intent Classification and Clarification (CICC) won 1st 🏆 at ING Global Experiment Week 2023.
-:::
-:::{.column width='60%'}
-![High-level overview of Conformal Intent Classifier.](www/llm.jpeg){#fig-llm width=100%}
-:::
-::::
+![High-level overview of Conformal Intent Classifier. Won 1st 🏆 at ING Global Experiment Week 2023.](www/llm.jpeg){#fig-llm width=80%}
 
 ### Demo
 
@@ -136,12 +205,23 @@ Building a Conformal Chatbot in Julia ([blog](https://www.paltmeyer.com/blog/pos
 
 ::::{.columns}::::
 :::{.column width='60%'}
-MNIST classifier trained using `MLJFlux.jl`.
+A simple MNIST classifier.
 
-![](www/img-clf-res.png){width=80%}
+```{.julia}
+# MLJFlux workflow:
+using MLJFlux
+ImageClassifier = @load ImageClassifier
+
+# Conformalize:
+using ConformalPrediction
+conf_model = conformal_model(clf)
+mach = machine(conf_model, X, y)
+fit!(mach)
+```
+
 :::
 :::{.column width='40%'}
-![](www/img-clf.png){width=80%}
+![Probably a 7 🤔](www/img-clf.png){#fig-mnist width=60%}
 :::
 ::::
 
@@ -175,15 +255,14 @@ How to Conformalize a Time Series Model ([docs](https://juliatrustworthyai.githu
 
 ## Differentiability
 
-::: {.incremental}
+![@stutz2022learning introduce Conformal Training: conformal predictions (left), set size (centre) and smooth set size loss (right).](www/diff.svg){width=65%}
 
-- @stutz2022learning introduce Conformal Training. ![Conformal Predictions (left), set size (centre) and smooth set size loss (right).](www/diff.svg){width=75%}
-- We use this to generate Conformal [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl).
+::::{.columns}::::
+:::{.column width='65%'}
 
+![Conformal [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl).](www/eccco_2.png){width=45%}
 :::
-
-. . .
-
+:::{.column width='35%'}
 ::: {.callout-note}
 
 ## Contribute
@@ -191,16 +270,17 @@ How to Conformalize a Time Series Model ([docs](https://juliatrustworthyai.githu
 Currently working on full conformal training implementation [[#62](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/issues/62)].
 
 :::
+:::
+::::
+
 
 ## Conformal(ised) Bayes 
 
 ::::{.columns}::::
 :::{.column width='50%'}
 
-::: {.incremental}
 - Predictive posterior as heuristic [@angelopoulos2021gentle].
 - Importance Sampling [@fong2021conformal].
-:::
 
 :::
 :::{.column width='50%'}
@@ -209,8 +289,6 @@ Currently working on full conformal training implementation [[#62](https://githu
 
 :::
 ::::
-
-. . .
 
 ::: {.callout-note}
 
