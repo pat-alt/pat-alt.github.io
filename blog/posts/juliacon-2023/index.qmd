@@ -1,0 +1,56 @@
+---
+title: JuliaCon 2023
+subtitle: Notes
+date: today
+categories:
+  - JuliaCon
+  - Julia
+description: >-
+  Notes taken during JuliaCon 2023.
+image: www/intro.gif
+jupyter: julia-1.9
+draft: true
+---
+
+## [Keynote: Tim Davis](https://pretalx.com/juliacon2023/talk/U9ABUR/)
+
+- GraphBLAS: graph algorithms in the language of linear algebra. 
+- Semiring: way of redefining matrix multiplication
+  - conventionally (PLUS, TIMES), sparse case same thing but across intersection of non-zero elements
+- (MIN, PLUS) semiring: minimum of sum across intersection on non-zero elements
+- LAGraph: experimental support for DNN inference
+- 20 times faster than scipy, 20.000 times faster than NetworkX
+- Permion.ai: neurosymbolic AI (trustworthy AI)
+
+## [Keynote: Chris Rackauskas](https://pretalx.com/juliacon2023/talk/YKK7AD/)
+
+- SciML through Symbolic Numerics
+- complex interactions with symbolics and compilers
+- SciML: model-based data-efficient ML -> combining models and data
+- Unversal (Approximator) Differential Equations
+
+## [`Sole.jl`](https://pretalx.com/juliacon2023/talk/LYSQWS/)
+
+- Symbolic learning: inherently interpretable models
+- Example: Decision Tree -> can extract rules from estimated model
+- Today these models find most use in the context of tabular data
+
+### A better idea
+
+- `SoleLogics.jl`: logical formulas
+- `SoleData.jl`: non-tabular datasets
+- `SoleModels.jl`: symbolic models
+
+### Modelling non-tabular data
+
+- *Modal Logic*: strikes the right balance between complexity and interpretability
+
+## [`Progradio.jl`](https://pretalx.com/juliacon2023/talk/QZ3PSY/)
+
+- Projected Gradient Descent is used a lot in Dynamic Optimization (objective over time): `JuDO.jl`
+
+## [`SymbolicRegression.jl`](https://pretalx.com/juliacon2023/talk/FGZBBB/)
+
+
+
+
