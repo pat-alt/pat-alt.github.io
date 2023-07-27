@@ -2104,7 +2104,7 @@
     "href": "content/talks/posts/2023-juliacon/presentation.html#talk-agenda",
     "title": "ConformalPrediction.jl",
     "section": "Talk Agenda",
-    "text": "Talk Agenda\n\n\n\nIntroduction (5min)\nApplications (5min)\nInteractive demo of ConformalPrediction.jl (10min)\nUnder Construction (5min)\nQ&A\n\n\n\nScan this now to follow along … if you’re lucky 😅\n\n\n\n\nQR code redirects to notebook hosted on binder: https://tinyurl.com/cpjcon23"
+    "text": "Talk Agenda\n\n\n\nIntroduction (5min)\nApplications (5min)\nInteractive demo of ConformalPrediction.jl (10min)\nUnder Construction (5min)\nQ&A\n\n\n\nCode along 💻 tinyurl.com/cpjcon2023\n\n\n\n\nFeeling lucky? Use binder!"
   },
   {
     "objectID": "content/talks/posts/2023-juliacon/presentation.html#conformal-chatbot",
@@ -2146,7 +2146,7 @@
     "href": "content/talks/posts/2023-juliacon/presentation.html#conformal-prediction",
     "title": "ConformalPrediction.jl",
     "section": "Conformal Prediction",
-    "text": "Conformal Prediction\nConformal Prediction (CP) works under the premise of turning heuristic measures of Predictive Uncertainty (PU) into rigorous ones through repeated sampling or the use of calibration data."
+    "text": "Conformal Prediction\nConformal Prediction involves turning heuristic measures of Predictive Uncertainty into rigorous ones.\n\n\n\nA first crucial step towards building trustworthy AI systems is to be transparent about predictive uncertainty."
   },
   {
     "objectID": "content/talks/posts/2023-juliacon/presentation.html#conformalprediction.jl-overview",
@@ -2279,6 +2279,20 @@
     "href": "content/talks/posts/2023-juliacon/presentation.html#cp-meets-sr",
     "title": "ConformalPrediction.jl",
     "section": "CP meets SR",
-    "text": "CP meets SR\n\nWe had a great talk on SymbolicRegression.jl this week, so I thought I’d take it for ride\n\n\n\n\n# Standard MLJ workflow:\nusing MLJ\nimport SymbolicRegression: SRRegressor\nmodel = SRRegressor(\n  niterations=50,\n  binary_operators=[+, -, *],\n  unary_operators=[sin],\n)\n\n# Conformalize:\nusing ConformalPrediction\nconf_model = conformal_model(model)\nmach = machine(conf_model, X, y)\nfit!(mach, rows=train)"
+    "text": "CP meets SR\n\nWe had a great talk on SymbolicRegression.jl by Miles Cranmer, so I thought I’d take it for ride 🏎️\n\n\n\n\n# Standard MLJ workflow:\nusing MLJ\nimport SymbolicRegression: SRRegressor\nmodel = SRRegressor(\n  niterations=50,\n  binary_operators=[+, -, *],\n  unary_operators=[sin],\n)\n\n# Conformalize:\nusing ConformalPrediction\nconf_model = conformal_model(model)\nmach = machine(conf_model, X, y)\nfit!(mach, rows=train)"
+  },
+  {
+    "objectID": "content/talks/posts/2023-juliacon/presentation.html#conformal-counterfactuals",
+    "href": "content/talks/posts/2023-juliacon/presentation.html#conformal-counterfactuals",
+    "title": "ConformalPrediction.jl",
+    "section": "Conformal Counterfactuals",
+    "text": "Conformal Counterfactuals\n\n\n\nStutz et al. (2022) introduce Conformal Training: conformal predictions (left), set size (centre) and smooth set size loss (right).\n\n\n\n\n\n\n\nConformal CounterfactualExplanations.jl.\n\n\n\n\n\n\n\n\n\nContribute\n\n\nCurrently working on full conformal training implementation [#62]."
+  },
+  {
+    "objectID": "content/talks/posts/2023-juliacon/presentation.html#conformal-laplaceredux.jl",
+    "href": "content/talks/posts/2023-juliacon/presentation.html#conformal-laplaceredux.jl",
+    "title": "ConformalPrediction.jl",
+    "section": "Conformal LaplaceRedux.jl",
+    "text": "Conformal LaplaceRedux.jl\n\n\n\nPredictive posterior as heuristic (Angelopoulos and Bates 2021).\nImportance Sampling (Fong and Holmes 2021).\n\n\n\n\n\n\n\n\n\n\n\nContribute\n\n\nLaplaceRedux.jl interfaced to MLJFlux.jl. Planning to add both ideas [#64]."
   }
 ]

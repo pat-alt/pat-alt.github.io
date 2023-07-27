@@ -39,35 +39,37 @@ crossref:
   prp-prefix: RQ
 ---
 
-```{julia}
-#| echo: false
-
-POST_DIR = "content/talks/posts/2023-juliacon"
-using Pkg; Pkg.activate(POST_DIR)
-```
-
 ## Talk Agenda
 
 ::::{.columns}::::
-:::{.column width='60%'}
+:::{.column width='52%'}
 1. Introduction (5min)
 2. Applications (5min)
 3. Interactive demo of [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) (10min)
 4. Under Construction (5min)
 5. Q&A
 :::
-:::{.column width='40%'}
-> Scan this now to follow along ... if you're lucky 😅
+:::{.column width='48%'}
+> Code along 💻 [tinyurl.com/cpjcon2023](https://tinyurl.com/cpjcon2023)
 
-![QR code redirects to notebook hosted on [binder](https://mybinder.org/): [https://tinyurl.com/cpjcon23](https://tinyurl.com/cpjcon23)](www/qr_pluto.svg){width=45%}
+![Feeling lucky? Use binder!](www/qr_pluto.svg){width=45%}
 :::
 ::::
 
 ## Conformal Prediction 
 
-Conformal Prediction (CP) works under the premise of turning heuristic measures of Predictive Uncertainty (PU) into rigorous ones through repeated sampling or the use of calibration data.
+Conformal Prediction involves turning heuristic measures of Predictive Uncertainty into rigorous ones.
 
-![](www/intro.gif)
+::::{.columns}::::
+:::{.column width='60%'}
+> A first crucial step towards building trustworthy AI systems is to be transparent about predictive uncertainty. 
+:::
+:::{.column width='40%'}
+![](www/intro.gif){width=95%}
+:::
+::::
+
+
 
 ## Example: Split CP {.smaller}
 
@@ -105,12 +107,12 @@ Conformal Prediction (CP) works under the premise of turning heuristic measures 
 
 ## CP meets SR 
 
-> We had a great talk on [`SymbolicRegression.jl`](https://github.com/MilesCranmer/SymbolicRegression.jl) this week, so I thought I'd take it for ride
+> We had a great talk on [`SymbolicRegression.jl`](https://github.com/MilesCranmer/SymbolicRegression.jl) by Miles Cranmer, so I thought I'd take it for ride 🏎️
 
 ::::{.columns}::::
 :::{.column width='50%'}
 
-```{julia}
+<!-- ```{julia}
 #| echo: false 
 
 using MLJ
@@ -134,11 +136,9 @@ y = vec(y)
 train, test = partition(eachindex(y), 0.4, 0.4, shuffle=true)
 Xtest = selectrows(X, test)
 ytest = y[test]
-```
+``` -->
 
-```{julia}
-#| echo: true
-
+```{.julia code-line-numbers="|6|9"}
 # Standard MLJ workflow:
 using MLJ
 import SymbolicRegression: SRRegressor
@@ -158,7 +158,7 @@ fit!(mach, rows=train)
 :::
 :::{.column width='50%'}
 
-```{julia}
+<!-- ```{julia}
 #| output: true
 #| echo: false
 
@@ -167,7 +167,10 @@ zoom = 0
 plt = plot(mach.model, mach.fitresult, Xtest, ytest, lw=5, zoom=zoom, observed_lab="Test points")
 xrange = range(-xmax+zoom,xmax-zoom,length=N)
 plot!(plt, xrange, @.(fun(xrange)), lw=3, ls=:dash, colour=:black, label="Ground truth", size=(500,400))
-```
+savefig(plt, joinpath(POST_DIR, "www/sr.png"))
+``` -->
+
+![](www/sr.png){width=100%}
 
 :::
 ::::
@@ -253,7 +256,7 @@ How to Conformalize a Time Series Model ([docs](https://juliatrustworthyai.githu
 
 # 🚧 Under Construction {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
 
-## Differentiability
+## Conformal Counterfactuals
 
 ![@stutz2022learning introduce Conformal Training: conformal predictions (left), set size (centre) and smooth set size loss (right).](www/diff.svg){width=65%}
 
@@ -274,7 +277,7 @@ Currently working on full conformal training implementation [[#62](https://githu
 ::::
 
 
-## Conformal(ised) Bayes 
+## Conformal [`LaplaceRedux.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl)
 
 ::::{.columns}::::
 :::{.column width='50%'}

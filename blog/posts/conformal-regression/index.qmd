@@ -230,7 +230,8 @@ anim = @animate for _cov in coverages
     plot(
       _mach.model, _mach.fitresult, Xtest, ytest, zoom=0, observed_lab="Test points",
       axis=([],false), legend=false, bg_color=bg_color, bg_color_inside=bg_color,
-      size = (300, 300)
+      size = (300, 300),
+      dpi = 300,
     )
 end
 gif(anim, joinpath(www_path,"intro.gif"), fps=25)
@@ -246,7 +247,8 @@ anim = @animate for _cov in coverages
     plot(
       _mach.model, _mach.fitresult, Xtest, ytest, zoom=0, observed_lab="Test points",
       axis=([],false), legend=false, bg_color=bg_color, bg_color_inside=bg_color,
-      size = (900, 300)
+      size = (900, 300),
+      dpi = 300,
     )
 end
 gif(anim, joinpath(www_path,"medium.gif"), fps=25)
