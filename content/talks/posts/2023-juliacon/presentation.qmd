@@ -39,7 +39,7 @@ crossref:
   prp-prefix: RQ
 ---
 
-## Talk Agenda
+## Talk Agenda^[Link to slides: [tinyurl.com/cpjcon2023slides](https://tinyurl.com/cpjcon2023slides)]
 
 ::::{.columns}::::
 :::{.column width='52%'}
@@ -94,6 +94,11 @@ Conformal Prediction involves turning heuristic measures of Predictive Uncertain
 
 using MLJ
 using Random
+using ConformalPrediction
+using ConformalPrediction: set_size
+using Plots
+using StatsBase: quantile
+
 Random.seed!(123)
 
 # Data:
@@ -107,41 +112,47 @@ KNNClassifier = @load KNNClassifier pkg=NearestNeighborModels
 model = KNNClassifier(;K=10) 
 
 # Training:
-using ConformalPrediction
 conf_model = conformal_model(model; coverage=.9)
 mach = machine(conf_model, X, y)
 fit!(mach, rows=train)
 
-# Test set:
-s_test = predict(mach, rows=test)
-using ConformalPrediction: set_size
-i_test = rand(findall(set_size.(s_test) .== 2))
-x1, x2 = MLJ.matrix(X)[test,:][i_test,:]
+function my_plot()
 
-# Plotting:
-using Plots
-p1 = contourf(mach.model, mach.fitresult, X, y, cbar=false)
-scatter!([x1], [x2], label="Test point", color=:yellow, ms=10, marker=:star)
-s = mach.model.scores[:calibration]
-n_cal = length(s)
-cov = mach.model.coverage
-x = 1:n_cal
-p2 = bar(x, s, title="Cal. scores: 1 - p̂[y]", label="")
+    # Test set:
+    s_test = predict(mach, rows=test)
+    i_test = rand(findall(set_size.(s_test) .== 2))
+    x1, x2 = MLJ.matrix(X)[test,:][i_test,:]
+    y_test = y[test][i_test]
 
-p3 = bar(x, sort(s), label="", title="(1-α) quantile")
-using StatsBase: quantile
-q̂ = quantile(s, cov)
-hline!([q̂], label="q̂", lw=3, ls=:dash, color=2)
+    # Plotting:
+    p1 = contourf(mach.model, mach.fitresult, X, y, cbar=false)
+    scatter!([x1], [x2], label="Test point", color=:yellow, ms=10, marker=:star)
+    s = mach.model.scores[:calibration]
+    n_cal = length(s)
+    cov = mach.model.coverage
+    x = 1:n_cal
+    p2 = bar(x, s, title="Cal. scores: 1 - p̂[y]", label="")
 
-p̂ = pdf.(predict(mach.model.model, mach.fitresult, [x1 x2])[1], classes(y))
-p4 = bar(1:D, 1 .- p̂, label="", 
-  title="Test scores: 1-p̂",ylim=(0.0,1.0),
-  alpha=map(x -> x < q̂ ? 1.0 : 0.2, 1 .- p̂))
-hline!([q̂], label="q̂", lw=3, ls=:dash, color=2)
-plot(p1,p2,p3,p4,layout=(2,2),size=(700,600),dpi=300)
+    p3 = bar(x, sort(s), label="", title="(1-α) quantile")
+    q̂ = quantile(s, cov)
+    hline!([q̂], label="q̂", lw=3, ls=:dash, color=2)
+
+    p̂ = pdf.(predict(mach.model.model, mach.fitresult, [x1 x2])[1], classes(y))
+    p4 = bar(1:D, 1 .- p̂, label="", 
+      title="Test scores: 1-p̂",ylim=(0.0,1.0),
+      alpha=map(x -> x < q̂ ? 1.0 : 0.2, 1 .- p̂),
+      linecolor=map(y -> y == y_test ? :yellow : :black ,1:D),
+      lw = map(y -> y == y_test ? 5 : 1 ,1:D),)
+    hline!([q̂], label="q̂", lw=3, ls=:dash, color=2)
+    return plot(p1,p2,p3,p4,layout=(2,2),size=(700,600),dpi=300)
+end
+
+anim = @animate for i in 1:10
+    my_plot()
+end
 ```
 
-![Softmax output for class 1 (top left); non-conformity scores for calibration set (top right); (1-α)-quantile (bottom left); non-conformity function applied to test point (bottom right). Solid bars make it into prediction set.](www/scp.svg){#fig-scp width=90%}
+![Softmax output for class 1 (top left); non-conformity scores for calibration set (top right); (1-α)-quantile (bottom left); non-conformity function applied to test point (bottom right). Solid bars make it into prediction set.](www/scp.gif){#fig-scp width=90%}
 
 # [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl)
 
@@ -322,27 +333,6 @@ How to Conformalize a Time Series Model ([docs](https://juliatrustworthyai.githu
 
 # 🚧 Under Construction {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
 
-## Conformal Counterfactuals
-
-![@stutz2022learning introduce Conformal Training: conformal predictions (left), set size (centre) and smooth set size loss (right).](www/diff.svg){width=65%}
-
-::::{.columns}::::
-:::{.column width='65%'}
-
-![Conformal [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl).](www/eccco_2.png){width=45%}
-:::
-:::{.column width='35%'}
-::: {.callout-note}
-
-## Contribute
-
-Currently working on full conformal training implementation [[#62](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/issues/62)].
-
-:::
-:::
-::::
-
-
 ## Conformal [`LaplaceRedux.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl)
 
 ::::{.columns}::::
@@ -366,6 +356,26 @@ Currently working on full conformal training implementation [[#62](https://githu
 [`LaplaceRedux.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl) interfaced to [`MLJFlux.jl`](https://github.com/FluxML/MLJFlux.jl). Planning to add both ideas [[#64](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/issues/64)]. 
 
 :::
+
+## Conformal Counterfactuals
+
+![@stutz2022learning introduce Conformal Training: conformal predictions (left), set size (centre) and smooth set size loss (right).](www/diff.svg){width=65%}
+
+::::{.columns}::::
+:::{.column width='65%'}
+
+![Conformal [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl).](www/eccco_2.png){width=45%}
+:::
+:::{.column width='35%'}
+::: {.callout-note}
+
+## Contribute
+
+Currently working on full conformal training implementation [[#62](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/issues/62)].
+
+:::
+:::
+::::
 
 # 🗨️ and finally ... {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
 
