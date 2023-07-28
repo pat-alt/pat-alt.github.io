@@ -1,0 +1,425 @@
+---
+title: "[`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl)"
+subtitle: Predictive Uncertainty Quantification in Machine Learning
+author: 
+  - name: "Patrick Altmeyer"
+    url: https://www.paltmeyer.com/
+institute: Delft University of Technology
+date: today
+date-format: long
+format: 
+  julia-revealjs:
+    theme: custom.scss
+    self-contained: true
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    fig-align: center
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+---
+
+## Talk Agenda
+
+::::{.columns}::::
+:::{.column width='52%'}
+1. Introduction (5min)
+2. Applications (5min)
+3. Interactive demo of [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) (10min)
+4. Under Construction (5min)
+5. Q&A
+:::
+:::{.column width='48%'}
+> Code along 💻 [tinyurl.com/cpjcon2023](https://tinyurl.com/cpjcon2023)
+
+![Feeling lucky? Use binder!](www/qr_pluto.svg){width=45%}
+:::
+::::
+
+## Conformal Prediction 
+
+Conformal Prediction involves turning heuristic measures of Predictive Uncertainty into rigorous ones.
+
+::::{.columns}::::
+:::{.column width='60%'}
+> A first crucial step towards building trustworthy AI systems is to be transparent about predictive uncertainty. 
+:::
+:::{.column width='40%'}
+![](www/intro.gif){width=95%}
+:::
+::::
+
+
+
+## Example: Split CP {.smaller}
+
+1. Proper training set and separate calibration set: $\mathcal{D}_n=\mathcal{D}^{\text{train}} \cup \mathcal{D}^{\text{cali}}$.
+2. Train model on proper training set: $\hat\mu_{i \in \mathcal{D}^{\text{train}}}(X_i,Y_i)$.
+3. Compute nonconformity scores, $\mathcal{S}$, using calibration data $\mathcal{D}^{\text{cali}}$ and fitted model $\hat\mu_{i \in \mathcal{D}^{\text{train}}}$. 
+4. For user-specified coverage ratio $(1-\alpha)$ compute the corresponding quantile, $\hat{q}$, of $\mathcal{S}$.
+5. For the given quantile and test sample $X_{\text{test}}$, form the corresponding conformal prediction set: $C(X_{\text{test}})=\{y:s(X_{\text{test}},y) \le \hat{q}\}$.
+
+::: {.callout-tip}
+## Blog posts
+
+- Conformal Classification ([[blog](https://www.paltmeyer.com/blog/posts/conformal-prediction/)], [[TDS](https://towardsdatascience.com/conformal-prediction-in-julia-351b81309e30)], [[Forem](https://forem.julialang.org/patalt/conformal-prediction-in-julia-h9n)])
+- Conformal Regression ([[blog](https://www.paltmeyer.com/blog/posts/conformal-regression/)], [[TDS](https://towardsdatascience.com/prediction-intervals-for-any-regression-model-306930d5ad9a)], [[Forem](https://forem.julialang.org/patalt/prediction-intervals-for-any-regression-model-16f5)])
+:::
+
+## Split CP illustrated {.smaller}
+
+```{julia}
+#| eval: false
+#| echo: false
+
+using MLJ
+using Random
+Random.seed!(123)
+
+# Data:
+n = 250
+D = 5
+X, y = make_blobs(n, 2; centers=D, cluster_std=2.0)
+train, test = partition(eachindex(y), 0.8, shuffle=true)
+
+# Model:
+KNNClassifier = @load KNNClassifier pkg=NearestNeighborModels
+model = KNNClassifier(;K=10) 
+
+# Training:
+using ConformalPrediction
+conf_model = conformal_model(model; coverage=.9)
+mach = machine(conf_model, X, y)
+fit!(mach, rows=train)
+
+# Test set:
+s_test = predict(mach, rows=test)
+using ConformalPrediction: set_size
+i_test = rand(findall(set_size.(s_test) .== 2))
+x1, x2 = MLJ.matrix(X)[test,:][i_test,:]
+
+# Plotting:
+using Plots
+p1 = contourf(mach.model, mach.fitresult, X, y, cbar=false)
+scatter!([x1], [x2], label="Test point", color=:yellow, ms=10, marker=:star)
+s = mach.model.scores[:calibration]
+n_cal = length(s)
+cov = mach.model.coverage
+x = 1:n_cal
+p2 = bar(x, s, title="Cal. scores: 1 - p̂[y]", label="")
+
+p3 = bar(x, sort(s), label="", title="(1-α) quantile")
+using StatsBase: quantile
+q̂ = quantile(s, cov)
+hline!([q̂], label="q̂", lw=3, ls=:dash, color=2)
+
+p̂ = pdf.(predict(mach.model.model, mach.fitresult, [x1 x2])[1], classes(y))
+p4 = bar(1:D, 1 .- p̂, label="", 
+  title="Test scores: 1-p̂",ylim=(0.0,1.0),
+  alpha=map(x -> x < q̂ ? 1.0 : 0.2, 1 .- p̂))
+hline!([q̂], label="q̂", lw=3, ls=:dash, color=2)
+plot(p1,p2,p3,p4,layout=(2,2),size=(700,600),dpi=300)
+```
+
+![Softmax output for class 1 (top left); non-conformity scores for calibration set (top right); (1-α)-quantile (bottom left); non-conformity function applied to test point (bottom right). Solid bars make it into prediction set.](www/scp.svg){#fig-scp width=90%}
+
+# [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl)
+
+::::{.columns}::::
+:::{.column width='65%'}
+
+- Built on top of [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/).
+- Compatible with [`Flux.jl`](https://fluxml.ai/) through [`MLJFlux.jl`](https://github.com/FluxML/MLJFlux.jl).
+- Many state-of-the-art CP methods implemented for regression, classification and time series modelling.
+
+:::
+:::{.column width='35%'}
+![](www/wide_logo.png)
+
+![](www/qr.svg)
+:::
+::::
+
+# 🔍 Applications {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
+
+## CP meets SR 
+
+Remember [`SymbolicRegression.jl`](https://github.com/MilesCranmer/SymbolicRegression.jl) by Miles Cranmer?
+
+::::{.columns}::::
+:::{.column width='50%'}
+
+<!-- ```{julia}
+#| echo: false 
+
+using MLJ
+
+# Inputs:
+N = 600
+xmax = 3.0
+using Distributions
+d = Uniform(-xmax, xmax)
+X = rand(d, N)
+X = reshape(X, :, 1)
+
+# Outputs:
+noise = 0.5
+fun(X) = X * sin(X)
+ε = randn(N) .* noise
+y = @.(fun(X)) + ε
+y = vec(y)
+
+# Partition:
+train, test = partition(eachindex(y), 0.4, 0.4, shuffle=true)
+Xtest = selectrows(X, test)
+ytest = y[test]
+``` -->
+
+::: {.fragment}
+
+```{.julia code-line-numbers="|4-8|12|13-14"}
+# Standard MLJ workflow:
+using MLJ
+import SymbolicRegression: SRRegressor
+model = SRRegressor(
+  niterations=50,
+  binary_operators=[+, -, *],
+  unary_operators=[sin],
+)
+
+# Conformalize:
+using ConformalPrediction
+conf_model = conformal_model(model)
+mach = machine(conf_model, X, y)
+fit!(mach, rows=train)
+```
+
+:::
+
+:::
+
+:::{.column width='50%'}
+
+<!-- ```{julia}
+#| output: true
+#| echo: false
+
+using Plots
+zoom = 0
+plt = plot(mach.model, mach.fitresult, Xtest, ytest, lw=5, zoom=zoom, observed_lab="Test points")
+xrange = range(-xmax+zoom,xmax-zoom,length=N)
+plot!(plt, xrange, @.(fun(xrange)), lw=3, ls=:dash, colour=:black, label="Ground truth", size=(500,400))
+savefig(plt, joinpath(POST_DIR, "www/sr.png"))
+``` -->
+
+::: {.fragment}
+
+![](www/sr.png){width=90%}
+
+:::
+
+:::
+::::
+
+## Conformal Chatbot
+
+::: {.panel-tabset}
+
+### Overview
+
+![High-level overview of Conformal Intent Classifier. Won 1st 🏆 at ING Global Experiment Week 2023.](www/llm.jpeg){#fig-llm width=80%}
+
+### Demo
+
+::::{.columns}::::
+:::{.column width='55%'}
+![Demo of a REPL-based conformalized intent classifier.](www/llm-demo.gif){#fig-llm-demo width=75%}
+:::
+:::{.column width='45%'}
+
+CICC substantially outperforms baseline approaches (e.g. top-$K$).
+
+::: {.callout-tip}
+ 
+## Blog post
+
+Building a Conformal Chatbot in Julia ([blog](https://www.paltmeyer.com/blog/posts/conformal-llm/), [TDS](https://medium.com/towards-data-science/building-a-conformal-chatbot-in-julia-1ed23363a280))
+:::
+:::
+::::
+
+:::
+
+## Conformal Image Classifier
+
+::::{.columns}::::
+:::{.column width='60%'}
+A simple MNIST classifier.
+
+```{.julia}
+# MLJFlux workflow:
+using MLJFlux
+ImageClassifier = @load ImageClassifier
+
+# Conformalize:
+using ConformalPrediction
+conf_model = conformal_model(clf)
+mach = machine(conf_model, X, y)
+fit!(mach)
+```
+
+:::
+:::{.column width='40%'}
+![Probably a 7 🤔](www/img-clf.png){#fig-mnist width=60%}
+:::
+::::
+
+::: {.callout-tip}
+## Blog post
+
+How to Conformalize a Deep Image Classifier ([blog](https://www.paltmeyer.com/blog/posts/conformal-image-classifier/), [TDS](https://medium.com/towards-data-science/how-to-conformalize-a-deep-image-classifier-14ead4e1a5a0), [Forem](https://forem.julialang.org/patalt/how-to-conformalize-a-deep-image-classifier-50p2))
+:::
+
+## Time Series
+
+::::{.columns}::::
+:::{.column width='45%'}
+Ensemble Batch Prediction Intervals [@xu2021conformal] contributed by [Mojtaba Farmanbar](https://www.linkedin.com/in/mfarmanbar/) 📣.
+
+::: {.callout-tip}
+## Tutorial
+
+How to Conformalize a Time Series Model ([docs](https://juliatrustworthyai.github.io/ConformalPrediction.jl/stable/how_to_guides/timeseries/)) 
+:::
+
+:::
+:::{.column width='55%'}
+![EnbPI for Victoria electricity demand dataset.](www/timeseries.png){#fig-ts}
+:::
+::::
+
+# 🏃 Interactive Session {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
+
+# 🚧 Under Construction {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
+
+## Conformal Counterfactuals
+
+![@stutz2022learning introduce Conformal Training: conformal predictions (left), set size (centre) and smooth set size loss (right).](www/diff.svg){width=65%}
+
+::::{.columns}::::
+:::{.column width='65%'}
+
+![Conformal [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl).](www/eccco_2.png){width=45%}
+:::
+:::{.column width='35%'}
+::: {.callout-note}
+
+## Contribute
+
+Currently working on full conformal training implementation [[#62](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/issues/62)].
+
+:::
+:::
+::::
+
+
+## Conformal [`LaplaceRedux.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl)
+
+::::{.columns}::::
+:::{.column width='50%'}
+
+- Predictive posterior as heuristic [@angelopoulos2021gentle].
+- Importance Sampling [@fong2021conformal].
+
+:::
+:::{.column width='50%'}
+
+![](www/conformal-bayes.png)
+
+:::
+::::
+
+::: {.callout-note}
+
+## Contribute
+
+[`LaplaceRedux.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl) interfaced to [`MLJFlux.jl`](https://github.com/FluxML/MLJFlux.jl). Planning to add both ideas [[#64](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/issues/64)]. 
+
+:::
+
+# 🗨️ and finally ... {background-image="www/boston.png" background-position="90% 100%" background-size="50%"}
+
+## Trustworthy AI in `Julia` {.smaller}
+
+::::{.columns}
+
+:::{.column width="60%" .smaller}
+
+Taija collects Julia packages geared towards Trustworthy AI:
+
+- [`CounterfactualExplanations.jl`](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl)
+- [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) 
+- [`LaplaceRedux.jl`](https://github.com/juliatrustworthyai/LaplaceRedux.jl)
+- [`JointEnergyModels.jl`](https://github.com/juliatrustworthyai/JointEnergyModels.jl)
+- ...
+
+> Contributions welcome! 😊
+
+:::
+
+:::{.column width="40%"}
+
+<img src="/www/images/qr.png" height="auto" width="250" style="display: block; margin-left: auto; margin-right: auto;">
+
+<div style="text-align: center;">
+  <p style="display: inline; vertical-align: middle"> 
+    <a href="https://www.linkedin.com/in/patrick-altmeyer-a2a25494/" style="display: inline-block; color: rgb(207, 142, 255) !important;">
+      <font style="">
+        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/d0fc399dee4218d1e0e0399b8947acab.png" alt="LinkedIn (Personal)" style="border: none; max-width: 100%; height: 60px !important;">
+      </font>
+    </a>
+    <a href="https://twitter.com/paltmey" style="display: inline-block; color: rgb(207, 142, 255) !important;">
+      <font style="">
+        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border: none; max-width: 100%; height: 60px !important;">
+      </font>
+    </a>
+    <a href="https://github.com/pat-alt" style="display: inline-block; color: rgb(207, 142, 255) !important;">
+      <font style="">
+        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/47f4eb2d0082a8a3611d614b75a09db8.png" alt="Github" style="border: none; max-width: 100%; height: 60px !important;">
+      </font>
+    </a>
+    <a href="https://medium.com/@patrick.altmeyer" style="display: inline-block; color: rgb(207, 142, 255) !important;">
+      <font style="">
+        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/175f49662614345cb7dbb95fce3f88af.png" alt="Medium" style="border: none; max-width: 100%; height: 60px !important;">
+      </font>
+    </a>
+  </p>
+</div>
+
+[![](www/taija.png){width=50%}](https://github.com/JuliaTrustworthyAI)
+
+:::
+
+::::
+
+## References 
