@@ -86,6 +86,63 @@ Conformal Prediction involves turning heuristic measures of Predictive Uncertain
 - Conformal Regression ([[blog](https://www.paltmeyer.com/blog/posts/conformal-regression/)], [[TDS](https://towardsdatascience.com/prediction-intervals-for-any-regression-model-306930d5ad9a)], [[Forem](https://forem.julialang.org/patalt/prediction-intervals-for-any-regression-model-16f5)])
 :::
 
+## Split CP illustrated {.smaller}
+
+```{julia}
+#| eval: false
+#| echo: false
+
+using MLJ
+using Random
+Random.seed!(123)
+
+# Data:
+n = 250
+D = 5
+X, y = make_blobs(n, 2; centers=D, cluster_std=2.0)
+train, test = partition(eachindex(y), 0.8, shuffle=true)
+
+# Model:
+KNNClassifier = @load KNNClassifier pkg=NearestNeighborModels
+model = KNNClassifier(;K=10) 
+
+# Training:
+using ConformalPrediction
+conf_model = conformal_model(model; coverage=.9)
+mach = machine(conf_model, X, y)
+fit!(mach, rows=train)
+
+# Test set:
+s_test = predict(mach, rows=test)
+using ConformalPrediction: set_size
+i_test = rand(findall(set_size.(s_test) .== 2))
+x1, x2 = MLJ.matrix(X)[test,:][i_test,:]
+
+# Plotting:
+using Plots
+p1 = contourf(mach.model, mach.fitresult, X, y, cbar=false)
+scatter!([x1], [x2], label="Test point", color=:yellow, ms=10, marker=:star)
+s = mach.model.scores[:calibration]
+n_cal = length(s)
+cov = mach.model.coverage
+x = 1:n_cal
+p2 = bar(x, s, title="Cal. scores: 1 - p̂[y]", label="")
+
+p3 = bar(x, sort(s), label="", title="(1-α) quantile")
+using StatsBase: quantile
+q̂ = quantile(s, cov)
+hline!([q̂], label="q̂", lw=3, ls=:dash, color=2)
+
+p̂ = pdf.(predict(mach.model.model, mach.fitresult, [x1 x2])[1], classes(y))
+p4 = bar(1:D, 1 .- p̂, label="", 
+  title="Test scores: 1-p̂",ylim=(0.0,1.0),
+  alpha=map(x -> x < q̂ ? 1.0 : 0.2, 1 .- p̂))
+hline!([q̂], label="q̂", lw=3, ls=:dash, color=2)
+plot(p1,p2,p3,p4,layout=(2,2),size=(700,600),dpi=300)
+```
+
+![Softmax output for class 1 (top left); non-conformity scores for calibration set (top right); (1-α)-quantile (bottom left); non-conformity function applied to test point (bottom right). Solid bars make it into prediction set.](www/scp.svg){#fig-scp width=90%}
+
 # [`ConformalPrediction.jl`](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl)
 
 ::::{.columns}::::
@@ -107,7 +164,7 @@ Conformal Prediction involves turning heuristic measures of Predictive Uncertain
 
 ## CP meets SR 
 
-> We had a great talk on [`SymbolicRegression.jl`](https://github.com/MilesCranmer/SymbolicRegression.jl) by Miles Cranmer, so I thought I'd take it for ride 🏎️
+Remember [`SymbolicRegression.jl`](https://github.com/MilesCranmer/SymbolicRegression.jl) by Miles Cranmer?
 
 ::::{.columns}::::
 :::{.column width='50%'}
@@ -138,7 +195,9 @@ Xtest = selectrows(X, test)
 ytest = y[test]
 ``` -->
 
-```{.julia code-line-numbers="|6|9"}
+::: {.fragment}
+
+```{.julia code-line-numbers="|4-8|12|13-14"}
 # Standard MLJ workflow:
 using MLJ
 import SymbolicRegression: SRRegressor
@@ -156,6 +215,9 @@ fit!(mach, rows=train)
 ```
 
 :::
+
+:::
+
 :::{.column width='50%'}
 
 <!-- ```{julia}
@@ -170,7 +232,11 @@ plot!(plt, xrange, @.(fun(xrange)), lw=3, ls=:dash, colour=:black, label="Ground
 savefig(plt, joinpath(POST_DIR, "www/sr.png"))
 ``` -->
 
-![](www/sr.png){width=100%}
+::: {.fragment}
+
+![](www/sr.png){width=90%}
+
+:::
 
 :::
 ::::

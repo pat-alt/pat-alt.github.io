@@ -2,7 +2,7 @@
 
 julia_version = "1.9.2"
 manifest_format = "2.0"
-project_hash = "e29d71581cc09e59e92b0e3ce1130a0451827941"
+project_hash = "1f4ffb81d02649bea009ec264df3abb0509073c4"
 
 [[deps.ARFFFiles]]
 deps = ["CategoricalArrays", "Dates", "Parsers", "Tables"]
@@ -470,11 +470,23 @@ weakdeps = ["ScientificTypes", "ScientificTypesBase", "Unitful"]
     DynamicQuantitiesScientificTypesExt = ["ScientificTypes", "ScientificTypesBase"]
     DynamicQuantitiesUnitfulExt = "Unitful"
 
+[[deps.EarCut_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "e3290f2d49e661fbd94046d7e3726ffcb2d41053"
+uuid = "5ae413db-bbd1-5e63-b57d-d24a61df00f5"
+version = "2.2.4+0"
+
 [[deps.EarlyStopping]]
 deps = ["Dates", "Statistics"]
 git-tree-sha1 = "98fdf08b707aaf69f524a6cd0a67858cefe0cfb6"
 uuid = "792122b4-ca99-40de-a6bc-6742525f08b6"
 version = "0.3.0"
+
+[[deps.EvoTrees]]
+deps = ["BSON", "CUDA", "CategoricalArrays", "Distributions", "MLJModelInterface", "NetworkLayout", "Random", "RecipesBase", "Statistics", "StatsBase", "Tables"]
+git-tree-sha1 = "1b63fdc0acad47c3203398171c138835c1c40d69"
+uuid = "f6006082-12f8-11e9-0c9c-0d5d367ab1e5"
+version = "0.15.0"
 
 [[deps.ExceptionUnwrapping]]
 deps = ["Test"]
@@ -492,6 +504,11 @@ version = "2.5.0+0"
 git-tree-sha1 = "c1d06d129da9f55715c6c212866f5b1bddc5fa00"
 uuid = "e2ba6199-217a-4e67-a87a-7c52f15ade04"
 version = "0.1.9"
+
+[[deps.Extents]]
+git-tree-sha1 = "5e1e4c53fa39afe63a7d356e30452249365fba99"
+uuid = "411431e0-e8b7-467b-b5e0-f676ba4f2910"
+version = "0.1.1"
 
 [[deps.FFMPEG]]
 deps = ["FFMPEG_jll"]
@@ -642,6 +659,18 @@ git-tree-sha1 = "f61f768bf090d97c532d24b64e07b237e9bb7b6b"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
 version = "0.72.9+0"
 
+[[deps.GeoInterface]]
+deps = ["Extents"]
+git-tree-sha1 = "bb198ff907228523f3dee1070ceee63b9359b6ab"
+uuid = "cf35fbd7-0cd7-5166-be24-54bfbe79505f"
+version = "1.3.1"
+
+[[deps.GeometryBasics]]
+deps = ["EarCut_jll", "Extents", "GeoInterface", "IterTools", "LinearAlgebra", "StaticArrays", "StructArrays", "Tables"]
+git-tree-sha1 = "424a5a6ce7c5d97cca7bcc4eac551b97294c54af"
+uuid = "5c1252a2-5f33-56bf-86c9-59e7332b4326"
+version = "0.4.9"
+
 [[deps.Gettext_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "XML2_jll"]
 git-tree-sha1 = "9b02998aba7bf074d14de89f9d37ca24a1a0b046"
@@ -718,6 +747,11 @@ version = "1.3.0"
 git-tree-sha1 = "630b497eafcc20001bba38a4651b327dcfc491d2"
 uuid = "92d709cd-6900-40b7-9082-c6be49f344b6"
 version = "0.2.2"
+
+[[deps.IterTools]]
+git-tree-sha1 = "4ced6667f9974fc5c5943fa5e2ef1ca43ea9e450"
+uuid = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
+version = "1.8.0"
 
 [[deps.IterationControl]]
 deps = ["EarlyStopping", "InteractiveUtils"]
@@ -1124,6 +1158,12 @@ version = "0.1.5"
 git-tree-sha1 = "eda490d06b9f7c00752ee81cfa451efe55521e21"
 uuid = "c020b1a1-e9b0-503a-9c33-f039bfc54a85"
 version = "1.0.0"
+
+[[deps.NetworkLayout]]
+deps = ["GeometryBasics", "LinearAlgebra", "Random", "Requires", "SparseArrays", "StaticArrays"]
+git-tree-sha1 = "2bfd8cd7fba3e46ce48139ae93904ee848153660"
+uuid = "46757867-2c16-5918-afeb-47bfcb05e46a"
+version = "0.4.5"
 
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
