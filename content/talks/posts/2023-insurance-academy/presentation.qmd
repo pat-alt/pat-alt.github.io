@@ -38,7 +38,7 @@ revealjs-plugins:
 crossref: 
   prp-title: RQ
   prp-prefix: RQ
-bibliography: bib.bib
+bibliography: ../../../../bib.bib
 ---
 
 ## Quick Introduction {.smaller}
@@ -89,7 +89,9 @@ bibliography: bib.bib
 
 ## Counterfactual Explanations
 
-**Counterfactual Explanation** (CE) explain how inputs into a model need to change for it to produce different outputs.
+> Born out of the [need for explanations](https://www.turing.ac.uk/research/impact-stories/a-right-to-explanation) ...
+
+**Counterfactual Explanation** (CE) explain how inputs into a model need to change for it to produce different outputs [@wachter2017counterfactual].
 
 . . .
 
@@ -108,26 +110,50 @@ From 'loan denied' to 'loan supplied': [`CounterfactualExplanations.jl`](https:/
 :::
 ::::
 
-## Hypothetical Example: Insurance Premium
-
-For simplicity, we'll stay in the classification setting^[Work on counterfactual regression like @spooner2021counterfactual exists but it is scarce.]:
+## Example: Insurance Premium^[For simplicity, we'll stay in the classification setting. Work on counterfactual regression like @spooner2021counterfactual exists but it is scarce.] {transition="none" .smaller}
 
 :::{.incremental}
-
-## Data
 
 - **Input** $\mathbf{X}$: A dataset of individuals containing demographic and financial information.
 - **Additional Input** $\mathbf{Z}$: Individuals can opt-in to provide their personal Apple Health data to improve their chance of receiving a lower premium.
 - **Binary output** $\mathbf{Y}$: based on the data, the individual is either eligible ($y=1$) or not eligible ($y=0$) for a lower premium.
-
-## Models
-
 - To model $p(y=1|X)$ the insurance provider can rely on an interpretable linear classifier. 
 - To model $p(y=1|X,Z)$ the insurance provider turns to a more accurate but less interpretable black-box model.
-
 :::
 
-> All individuals have a right to an explanation for the model's decision. Those providing more sensitive data can be expected to place higher demands on the quality of the explanation.
+## Example: Insurance Premium {transition="none"}
+
+In the EU, individuals have the right "[...] to *obtain* an explanation of the decision reached after such assessment and to challenge the decision." ([Recital 71 of the General Data Protection Regulation (GDPR)](https://gdpr-info.eu/recitals/no-71/))
+
+. . .
+
+> In our example, who do you think is most likely to ask for an explanation?
+
+# You were promised some maths ... 🌶️🌶️🌶️
+
+## Gradient-based Counterfactual Search
+
+The starting point for most counterfactual generators is as follows,
+
+$$
+\begin{aligned}
+\mathbf{Z}^\prime =& \arg \min_{\mathbf{Z}^\prime \in \mathcal{Z}^L} \{  {\text{yloss}(M_{\theta}(f(\mathbf{Z}^\prime)),\mathbf{y}^+)} \\ &+ \lambda {\text{cost}(f(\mathbf{Z}^\prime)) }  \} 
+\end{aligned} 
+$$ {#eq-cf}
+
+where $\mathbf{Z}^\prime$ is a counterfactual, $M_{\theta}$ is the black-box model and $\mathbf{y}^+$ is the desired output.
+
+## But wait a second ...
+
+@eq-cf looks a lot like an adversarial attack [@goodfellow2014explaining], doesn't it? 
+
+![Adversarial attack on an Image Classifier.](www/panda.png){#fig-adv-example}
+
+In both settings, we take gradients with respect to features $\nabla_{\mathbf{Z}^\prime}\text{yloss}(M_{\theta}(f(\mathbf{Z}^\prime)),\mathbf{y}^+)$ in order to trigger changes in the model's output.
+
+## Gradient Descend Visualized
+
+![Gradient-based counterfactual search.](www/ce_intro.gif){#fig-intro}
 
 # Research Questions
 

@@ -2140,5 +2140,152 @@
     "title": "A Leap of Faith into Julia’s Metaverse",
     "section": "🌯 Wrapping Up",
     "text": "🌯 Wrapping Up\nIn this blog post, I’ve done something I usually try to avoid: talk about things I don’t know. Metaprogramming is an exciting topic and if you’re still here, you just got to experience it through the lens of an absolute novice. During our leap of faith into Julia’s metaverse we’ve learned the following things:\n\nCode in Julia is internally represented as a mutable data structure.\nMacros are a way to take such data structures and transform them before they get evaluated at runtime.\nAn important thing to keep in mind when writing macros is variable scopes.\n\nThroughout this post, I have skipped various important details that (I think) were not immediately relevant to the goal I had in mind: adding my first macro to CounterfactualExplanations.jl. In the future, I may write about this topic again and cover some of these missing details (hopefully with a bit more insight at that point!)."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#quick-introduction",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#quick-introduction",
+    "title": "Echos from the Black Box",
+    "section": "Quick Introduction",
+    "text": "Quick Introduction\n\n\n\nRecently entered the 3rd year of my PhD in Trustworthy Artificial Intelligence at Delft University of Technology.\nPreviously, educational background in Economics and Finance and two years in Monetary Policy at the Bank of England.\nInterested in applying Trustworthy AI to real-world problems, particularly in the financial sector."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#counterfactual-explanations",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#counterfactual-explanations",
+    "title": "Echos from the Black Box",
+    "section": "Counterfactual Explanations",
+    "text": "Counterfactual Explanations\n\nBorn out of the need for explanations …\n\nCounterfactual Explanation (CE) explain how inputs into a model need to change for it to produce different outputs (Wachter, Mittelstadt, and Russell 2017).\n\nProvided the changes are realistic and actionable, they can be used for Algorithmic Recourse (AR) to help individuals who face adverse outcomes."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#example-consumer-credit",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#example-consumer-credit",
+    "title": "Echos from the Black Box",
+    "section": "Example: Consumer Credit",
+    "text": "Example: Consumer Credit\nFrom ‘loan denied’ to ‘loan supplied’: CounterfactualExplanations.jl 📦.\n\n\n\n\n\nFigure 1: Gradient-based counterfactual search.\n\n\n\n\n\n\nFigure 2: Counterfactuals for Give Me Some Credit dataset (Kaggle 2011)."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#hypothetical-example-insurance-premium",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#hypothetical-example-insurance-premium",
+    "title": "Echos from the Black Box",
+    "section": "Hypothetical Example: Insurance Premium",
+    "text": "Hypothetical Example: Insurance Premium\nFor simplicity, we’ll stay in the classification setting1:\n\n\nInput \\(\\mathbf{X}\\): A dataset of individuals containing demographic and financial information.\nAdditional Input \\(\\mathbf{Z}\\): Individuals can opt-in to provide their personal Apple Health data to improve their chance of receiving a lower premium.\nBinary output \\(\\mathbf{Y}\\): based on the data, the individual is either eligible (\\(y=1\\)) or not eligible (\\(y=0\\)) for a lower premium.\n\n\n\n\nTo model \\(p(y=1|X)\\) the insurance provider can rely on an interpretable linear classifier.\nTo model \\(p(y=1|X,Z)\\) the insurance provider turns to a more accurate but less interpretable black-box model.\n\n\n\n\nAll individuals have a right to an explanation for the model’s decision. Those providing more sensitive data can be expected to place higher demands on the quality of the explanation.\n\n\nWork on counterfactual regression like Spooner et al. (2021) exists but it is scarce."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#data",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#data",
+    "title": "Echos from the Black Box",
+    "section": "Data",
+    "text": "Data\n\nInput \\(\\mathbf{X}\\): A dataset of individuals containing demographic and financial information.\nAdditional Input \\(\\mathbf{Z}\\): Individuals can opt-in to provide their personal Apple Health data to improve their chance of receiving a lower premium.\nBinary output \\(\\mathbf{Y}\\): based on the data, the individual is either eligible (\\(y=1\\)) or not eligible (\\(y=0\\)) for a lower premium."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#models",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#models",
+    "title": "Echos from the Black Box",
+    "section": "Models",
+    "text": "Models\n\nTo model \\(p(y=1|X)\\) the insurance provider can rely on an interpretable linear classifier.\nTo model \\(p(y=1|X,Z)\\) the insurance provider turns to a more accurate but less interpretable black-box model."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#recourse-dynamics",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#recourse-dynamics",
+    "title": "Echos from the Black Box",
+    "section": "Recourse Dynamics",
+    "text": "Recourse Dynamics\nWe present evidence suggesting that state-of-the-art applications of Algorithmic Recourse to groups of individuals induce large domain and model shifts and propose ways to mitigate this (IEEE SaTML paper).\nJoint work with Giovan Angela, Karol Dobiczek, Aleksander Buszydlik, Arie van Deursen and Cynthia C. S. Liem (all TU Delft)."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#a-balancing-act",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#a-balancing-act",
+    "title": "Echos from the Black Box",
+    "section": "A Balancing Act",
+    "text": "A Balancing Act\n\n\nMinimizing private costs generates external costs for other stakeholders.\nTo avoid this, counterfactuals need to be plausible, i.e. comply with the data-generating process.\nIn practice, costs to various stakeholders need to be carefully balanced.\n\n\n\n\nIs plausibility really all we need?"
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#pick-your-poison",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#pick-your-poison",
+    "title": "Echos from the Black Box",
+    "section": "Pick your Poison?",
+    "text": "Pick your Poison?\nAll of these counterfactuals are valid explanations for the model’s prediction. Which one would you pick?\n\nFigure 5: Turning a 9 into a 7: Counterfactual Examplanations for an Image Classifier."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#what-do-models-learn",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#what-do-models-learn",
+    "title": "Echos from the Black Box",
+    "section": "What do Models Learn?",
+    "text": "What do Models Learn?\nThese images are sampled from the posterior distribution learned by the model. Looks different, no?\n\nFigure 6: Conditional Generated Images from the Image Classifier"
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#ecccos-from-the-black-box",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#ecccos-from-the-black-box",
+    "title": "Echos from the Black Box",
+    "section": "ECCCos from the Black Box",
+    "text": "ECCCos from the Black Box\n\n\nWe propose a framework for generating Energy-Constrained Conformal Counterfactuals (ECCCos) which explain black-box models faithfully.\nJoint work with Mojtaba Framanbar (ING), Arie van Deursen (TU Delft) and Cynthia C. S. Liem (TU Delft).\n\n\n\n\n\n\n\nFigure 7: Gradient fields and counterfactual paths for different generators."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#conformal-prediction",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#conformal-prediction",
+    "title": "Echos from the Black Box",
+    "section": "Conformal Prediction",
+    "text": "Conformal Prediction\nConformal Prediction is a model-agnostic, distribution-free approach to Predictive Uncertainty Quantification: ConformalPrediction.jl 📦.\n\n\n\n\n\nFigure 8: Conformal Prediction intervals for regression.\n\n\n\n\n\n\nFigure 9: Conformal Prediction sets for an Image Classifier."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#joint-energy-models",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#joint-energy-models",
+    "title": "Echos from the Black Box",
+    "section": "Joint Energy Models",
+    "text": "Joint Energy Models\nJoint Energy Models (JEMs) are hybrid models trained to learn the conditional output and input distribution (Grathwohl et al. 2020): JointEnergyModels.jl 📦.\n\nFigure 10: A JEM trained on Circles data."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#taija",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#taija",
+    "title": "Echos from the Black Box",
+    "section": "🐶 Taija",
+    "text": "🐶 Taija\n\nResearch informs development, development informs research.\n\n\n\n\nTrustworthy Artificial Intelligence in Julia.\n\n\nTaija is a collection of open-source packages for Trustworthy AI in Julia. Our goal is to help researchers and practitioners assess the trustworthiness of predictive models.\nOur work has been presented at JuliaCon 2022 and will be presented again at JuliaCon 2023 and hopefully beyond."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#questions",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#questions",
+    "title": "Echos from the Black Box",
+    "section": "Questions?",
+    "text": "Questions?"
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#references",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#references",
+    "title": "Echos from the Black Box",
+    "section": "References",
+    "text": "References\n\n\n\n\n\n\nGoodfellow, Ian J, Jonathon Shlens, and Christian Szegedy. 2014. “Explaining and Harnessing Adversarial Examples.” https://arxiv.org/abs/1412.6572.\n\n\nGrathwohl, Will, Kuan-Chieh Wang, Joern-Henrik Jacobsen, David Duvenaud, Mohammad Norouzi, and Kevin Swersky. 2020. “Your Classifier Is Secretly an Energy Based Model and You Should Treat It Like One.” In. https://openreview.net/forum?id=Hkxzx0NtDB.\n\n\nKaggle. 2011. “Give Me Some Credit, Improve on the State of the Art in Credit Scoring by Predicting the Probability That Somebody Will Experience Financial Distress in the Next Two Years.” Kaggle. https://www.kaggle.com/c/GiveMeSomeCredit.\n\n\nSpooner, Thomas, Danial Dervovic, Jason Long, Jon Shepard, Jiahao Chen, and Daniele Magazzeni. 2021. “Counterfactual Explanations for Arbitrary Regression Models.” https://arxiv.org/abs/2106.15212.\n\n\nWachter, Sandra, Brent Mittelstadt, and Chris Russell. 2017. “Counterfactual Explanations Without Opening the Black Box: Automated Decisions and the GDPR.” Harv. JL & Tech. 31: 841."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#example-insurance-premium",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#example-insurance-premium",
+    "title": "Echos from the Black Box",
+    "section": "Example: Insurance Premium1",
+    "text": "Example: Insurance Premium1\n\n\nInput \\(\\mathbf{X}\\): A dataset of individuals containing demographic and financial information.\nAdditional Input \\(\\mathbf{Z}\\): Individuals can opt-in to provide their personal Apple Health data to improve their chance of receiving a lower premium.\nBinary output \\(\\mathbf{Y}\\): based on the data, the individual is either eligible (\\(y=1\\)) or not eligible (\\(y=0\\)) for a lower premium.\nTo model \\(p(y=1|X)\\) the insurance provider can rely on an interpretable linear classifier.\nTo model \\(p(y=1|X,Z)\\) the insurance provider turns to a more accurate but less interpretable black-box model.\n\n\nFor simplicity, we’ll stay in the classification setting. Work on counterfactual regression like Spooner et al. (2021) exists but it is scarce."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#example-insurance-premium-1",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#example-insurance-premium-1",
+    "title": "Echos from the Black Box",
+    "section": "Example: Insurance Premium",
+    "text": "Example: Insurance Premium\nIn the EU, individuals have the right “[…] to obtain an explanation of the decision reached after such assessment and to challenge the decision.” (Recital 71 of the General Data Protection Regulation (GDPR))\n\n\nIn our example, who do you think is most likely to ask for an explanation?"
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#gradient-based-counterfactual-search",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#gradient-based-counterfactual-search",
+    "title": "Echos from the Black Box",
+    "section": "Gradient-based Counterfactual Search",
+    "text": "Gradient-based Counterfactual Search\nThe starting point for most counterfactual generators is as follows,\n\\[\n\\begin{aligned}\n\\mathbf{Z}^\\prime =& \\arg \\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {\\text{yloss}(M_{\\theta}(f(\\mathbf{Z}^\\prime)),\\mathbf{y}^+)} \\\\ &+ \\lambda {\\text{cost}(f(\\mathbf{Z}^\\prime)) }  \\}\n\\end{aligned}\n\\tag{1}\\]\nwhere \\(\\mathbf{Z}^\\prime\\) is a counterfactual, \\(M_{\\theta}\\) is the black-box model and \\(\\mathbf{y}^+\\) is the desired output."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#but-wait-a-second",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#but-wait-a-second",
+    "title": "Echos from the Black Box",
+    "section": "But wait a second …",
+    "text": "But wait a second …\nEquation 1 looks a lot like an adversarial attack (Goodfellow, Shlens, and Szegedy 2014), doesn’t it?\n\nFigure 3: Adversarial attack on an Image Classifier.In both settings, we take gradients with respect to features \\(\\nabla_{\\mathbf{Z}^\\prime}\\text{yloss}(M_{\\theta}(f(\\mathbf{Z}^\\prime)),\\mathbf{y}^+)\\) in order to trigger changes in the model’s output."
+  },
+  {
+    "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#gradient-descend-visualized",
+    "href": "content/talks/posts/2023-insurance-academy/presentation.html#gradient-descend-visualized",
+    "title": "Echos from the Black Box",
+    "section": "Gradient Descend Visualized",
+    "text": "Gradient Descend Visualized\n\nFigure 4: Gradient-based counterfactual search."
   }
 ]
