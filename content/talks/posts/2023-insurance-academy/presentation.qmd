@@ -155,13 +155,54 @@ In both settings, we take gradients with respect to features $\nabla_{\mathbf{Z}
 
 ![Gradient-based counterfactual search.](www/ce_intro.gif){#fig-intro}
 
-# Research Questions
+# Our Research
 
-## Recourse Dynamics {.smaller}
+## Open Questions
 
-We present evidence suggesting that state-of-the-art applications of Algorithmic Recourse to groups of individuals induce large domain and model shifts and propose ways to mitigate this (IEEE SaTML [paper](https://openreview.net/forum?id=-LFT2YicI9v)).
+:::{.incremental}
 
-Joint work with Giovan Angela, Karol Dobiczek, Aleksander Buszydlik, Arie van Deursen and Cynthia C. S. Liem (all TU Delft).
+1. What makes a counterfactual **plausible**?
+2. Why do we need plausibility?
+3. Is plausibility all we need?
+4. What makes models more **explainable**?
+
+:::
+
+## Plausibility
+
+There's no consensus on the exact definition of plausibility but we think about it as follows:
+
+::: {#def-plausible}
+
+## Plausible Counterfactuals
+
+Let $\mathcal{X}|\mathbf{y}^+= p(\mathbf{x}|\mathbf{y}^+)$ denote the true conditional distribution of samples in the target class $\mathbf{y}^+$. Then for $\mathbf{x}^{\prime}$ to be considered a plausible counterfactual, we need: $\mathbf{x}^{\prime} \sim \mathcal{X}|\mathbf{y}^+$.
+
+:::
+
+## Counter Example
+
+::::{.columns}::::
+:::{.column width='50%'}
+- The counterfactual in @fig-implausible is valid: it has crossed the decision boundary. 
+- But is it consistent with the data in the target class (blue)?
+:::
+:::{.column width='50%'}
+![A valid but implausible counterfactual. Source: @altmeyer2023explaining](www/implausible.png){#fig-implausible}
+:::
+::::
+
+## Why Plausibility?
+
+- Actionability: If a counterfactual is implausible, it is unlikely to be actionable.
+- Fairness: If a counterfactual is implausible, it is unlikely to be fair.
+- Robustness: If a counterfactual is implausible, it is unlikely to be robust.
+
+**But**: Higher plausibility seems to require larger changes and hence increase costs to individuals. 
+
+## Recourse Dynamics
+
+Moving just across the decision boundary may minimize costs to individuals but it may also generate external costs for other stakeholders [@altmeyer2023endogenous].
 
 ![](www/dynamics_poc.png){align="center" width="100%"}
 
@@ -189,22 +230,66 @@ These images are sampled from the posterior distribution learned by the model. L
 
 ![Conditional Generated Images from the Image Classifier](www/learn.png){#fig-learn}
 
-## ECCCos from the Black Box {.smaller}
+## Faithful Counterfactuals {.smaller}
 
 ::::{.columns}::::
 :::{.column width='60%'}
-We propose a framework for generating **E**nergy-**C**onstrained **C**onformal **Co**unterfactuals (*ECCCos*) which explain black-box models *faithfully*.
+We propose a way to generate counterfactuals that are as plausible as the underlying model permits (under review).
 
-Joint work with Mojtaba Framanbar (ING), Arie van Deursen (TU Delft) and Cynthia C. S. Liem (TU Delft).
+::: {#def-faithful}
+
+## Faithful Counterfactuals
+
+Let $\mathcal{X}_{\theta}|\mathbf{y}^+ = p_{\theta}(\mathbf{x}|\mathbf{y}^+)$ denote the conditional distribution of $\mathbf{x}$ in the target class $\mathbf{y}^+$, where $\theta$ denotes the parameters of model $M_{\theta}$. Then for $\mathbf{x}^{\prime}$ to be considered a faithful counterfactual, we need: $\mathbf{x}^{\prime} \sim \mathcal{X}_{\theta}|\mathbf{y}^+$.
+
+:::
+
 :::
 :::{.column width='40%'}
-![](www/mnist_eccco.png)
+![](www/mnist_eccco_new.png)
 :::
 ::::
 
-![Gradient fields and counterfactual paths for different generators.](www/poc_gradient_fields.png){#fig-poc-gradient-fields}
+![Gradient fields and counterfactual paths for different generators.](www/poc_gradient_fields.png){#fig-poc-gradient-fields width="65%"}
 
-# How can we make models more trustworthy?
+## Improving Models
+
+Now that we have a tool to faithfully explain models we may ask: **how** do models learn plausible explanations? Initial evidence:
+
+1. Incorporating predictive uncertainty (e.g. ensembling). 
+2. Addressing robustness (e.g. adversarial training in @schut2021generating).
+3. Better model architectures.
+4. Hybrid modelling (i.e. combining generative and discriminative models).
+
+## Example: Architecture
+
+![Counterfactuals for LeNet-5 convolutional neural network [@lecun1998gradient].](www/mnist_all_lenet_eccco.png){#fig-mnist-lenets width="100%"}
+
+## Example: JEM Ensemble
+
+![Counterfactuals for an ensemble of Joint Energy Models (JEM) [@grathwohl2020your].](www/mnist_all_jem_ens_eccco.png){#fig-mnist-jem width="100%"}
+
+# Our Open-Source Work in `Julia`
+
+## 🐶 Taija {.smaller}
+
+> Research informs development, development informs research. 
+
+[![Trustworthy Artificial Intelligence in Julia.](www/logo.png){width="50%"}](https://github.com/JuliaTrustworthyAI)
+
+[Taija](https://github.com/JuliaTrustworthyAI) is a collection of open-source packages for Trustworthy AI in Julia. Our goal is to help researchers and practitioners assess the trustworthiness of predictive models.
+
+Our work has been presented online for JuliaCon 2022, at MIT in Boston for JuliaCon 2023 and hopefully beyond. 
+
+## Counterfactual Explanations
+
+All the work presented today is powered by [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) 📦.
+
+There is also a corresponding paper, [*Explaining Black-Box Models through Counterfactuals*](https://proceedings.juliacon.org/papers/10.21105/jcon.00130), which has been published in JuliaCon Proceedings. 
+
+If you decide to use this package in your work, please consider citing the paper:
+
+[![DOI](https://proceedings.juliacon.org/papers/10.21105/jcon.00130/status.svg)](https://doi.org/10.21105/jcon.00130) [![DOI](https://zenodo.org/badge/440782065.svg)](https://zenodo.org/badge/latestdoi/440782065)
 
 ## Conformal Prediction
 
@@ -219,26 +304,33 @@ Conformal Prediction is a model-agnostic, distribution-free approach to Predicti
 :::
 ::::
 
+## Laplace Redux
+
+::::{.columns}::::
+:::{.column width='50%'}
+Effortless Bayesian Deep Learning through Laplace Approximation [@immer2020improving, @daxberger2021laplace]: [`LaplaceRedux.jl`](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl) 📦.
+:::
+:::{.column width='50%'}
+![Predictive interval for neural network with Laplace Approximation.](www/laplace.png){#fig-laplace width="80%"}
+:::
+::::
+
 ## Joint Energy Models
 
 Joint Energy Models (JEMs) are hybrid models trained to learn the conditional output **and** input distribution [@grathwohl2020your]: [`JointEnergyModels.jl`](https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl) 📦.
 
 ![A JEM trained on Circles data.](www/jem.svg){#fig-jem }
 
-# Trustworthy AI in Julia
-
-## 🐶 Taija {.smaller}
-
-> Research informs development, development informs research. 
-
-[![Trustworthy Artificial Intelligence in Julia.](www/logo.png)](https://github.com/JuliaTrustworthyAI)
-
-[Taija](https://github.com/JuliaTrustworthyAI) is a collection of open-source packages for Trustworthy AI in Julia. Our goal is to help researchers and practitioners assess the trustworthiness of predictive models.
-
-Our work has been presented at JuliaCon 2022 and will be presented again at JuliaCon 2023 and hopefully beyond. 
-
 ## Questions? {.smaller}
 
+::::{.columns}::::
+:::{.column width='50%'}
+Includes joint work with Cynthia C. S. Liem, Arie van Deursen, Mojtaba Farmanbar, Aleksander Buszydlik, Karol Dobiczek, Giovan Angela and many other students at TU Delft.
+
+Slides power by [Quarto](https://quarto.org/).
+
+:::
+:::{.column width='50%'}
 <img src="/www/images/qr.png" height="auto" width="250" style="display: block; margin-left: auto; margin-right: auto;">
 
 <div style="text-align: center;">
@@ -265,6 +357,10 @@ Our work has been presented at JuliaCon 2022 and will be presented again at Juli
     </a>
   </p>
 </div>
+:::
+::::
+
+
 
 ## References
 
