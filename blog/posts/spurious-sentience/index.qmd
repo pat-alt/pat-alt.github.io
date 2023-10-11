@@ -58,31 +58,17 @@ end
 df = CSV.read(joinpath(BLOG_DIR, "data/ust_yields.csv"), DataFrame) |>
     x -> @pivot_longer(x, -Date) |>
     x -> @mutate(x, variable=to_year(variable)) |>
-    x -> @mutate(x, year=Dates.year(Date)) |>
     x -> @mutate(x, Date=Dates.format(Date, "yyyy-mm-dd")) |>
     x -> @arrange(x, desc(Date)) |>
     x -> @fill_missing(x, "down")
-time = Observable(minimum(df.year))
-plt_data = @lift((
-  mat = df.variable[df.year.==$time],
-  val = df.value[df.year.==$time],
-  date = df.Date[df.year.==$time],
-))
-# Animation:
-fr = 30
-timestamps = sort(unique(df.year))
-plt = data(plt_data) * 
+plt = data(df[1:2500,:]) * 
     mapping(
-      :mat => "Maturity (years)", 
+      :variable => "Maturity (years)", 
       :value => "Yield (%)", 
-      group=:date
+      group=:Date
     ) *
     visual(Lines, color=:blue, alpha=0.1)
 fig = draw(plt)
-file_path = joinpath(BLOG_DIR, "www/yields.gif")
-record(fig.figure, file_path, timestamps; framerate = fr) do t
-    time[] = t  
-end
 ```
 
 ## 🎓 References
