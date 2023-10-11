@@ -19,11 +19,10 @@ draft: false
 BLOG_DIR = "blog/posts/spurious-sentience"
 using Pkg; Pkg.activate(BLOG_DIR)
 
-using AlgebraOfGraphics
-using CairoMakie
 using CSV
 using DataFrames
 using Dates
+using Plots
 using TidierData
 ```
 
@@ -58,17 +57,27 @@ end
 df = CSV.read(joinpath(BLOG_DIR, "data/ust_yields.csv"), DataFrame) |>
     x -> @pivot_longer(x, -Date) |>
     x -> @mutate(x, variable=to_year(variable)) |>
+    x -> @mutate(x, year=Dates.year(Date)) |>
+    x -> @mutate(x, quarter=Dates.quarter(Date)) |>
     x -> @mutate(x, Date=Dates.format(Date, "yyyy-mm-dd")) |>
-    x -> @arrange(x, desc(Date)) |>
+    x -> @arrange(x, Date) |>
     x -> @fill_missing(x, "down")
-plt = data(df[1:2500,:]) * 
-    mapping(
-      :variable => "Maturity (years)", 
-      :value => "Yield (%)", 
-      group=:Date
-    ) *
-    visual(Lines, color=:blue, alpha=0.1)
-fig = draw(plt)
+ylims = extrema(skipmissing(df.value))
+anim = @animate for grouped_df in zip(@group_by(df, year, quarter))
+    grouped_df = grouped_df[1]
+    plt = plot()
+    for plt_df in zip(@group_by(grouped_df, Date))
+        plt_df = plt_df[1]
+        plot!(
+            plt, plt_df.variable, plt_df.value;
+            label="", color=:blue, alpha=0.1,
+            xlabel="Maturity (years)", ylabel="Yield (%)",
+            title="$(plt_df.year[1]) Q$(plt_df.quarter[1])",
+            ylims=ylims
+        )
+    end
+end
+gif(anim, joinpath(BLOG_DIR, "www/ust_yields.gif"), fps=2)
 ```
 
 ## 🎓 References
