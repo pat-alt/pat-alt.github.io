@@ -16,14 +16,20 @@ draft: false
 ```{julia}
 #| echo: false
 
+# Set up:
 BLOG_DIR = "blog/posts/spurious-sentience"
 using Pkg; Pkg.activate(BLOG_DIR)
 
+# Packages:
 using CSV
 using DataFrames
 using Dates
+using LinearAlgebra
 using Plots
 using TidierData
+
+# Utility functions:
+include("utils.jl")
 ```
 
 We humans are prone to seek patterns everywhere. Meaningful patterns have often proven to help us make sense of our past, navigate our presence and predict the future. Our society is so invested in finding patterns that today it seems we are more willing than ever to outsource this task to an Artificial Intelligence (AI): an omniscient oracle that leads us down the right path. Unfortunately, history has shown time and again that patterns are double-edged swords: if we attribute the wrong meaning to them, they may lead us nowhere at all, or worse, they may lead us down the dark roads. 
@@ -43,14 +49,75 @@ To demonstrate the claim that observing patterns in latent spaces should not gen
 
 ### Yield Curves and Principal Component Analysis
 
-In response to the claims made by Tegmark, numerous commentators on social media have pointed out that even the simplest of models can exhibit structure in their latent spaces. One of the most popular and illustrative examples I remember from my time at the Bank of England is yield curve decomposition through PCA. The yield curve is a popular tool for investors and economists to gauge the health of the economy. It plots the yields of bonds against their maturities. The slope of the yield curve is often used as a predictor of future economic activity: a steep yield curve is associated with a growing economy, while a flat or inverted yield curve is associated with a contracting economy. To deal with the curse of high dimensionality it can be useful to decompose the yield curve into a set of principal components. 
+In response to the claims made by Tegmark, numerous commentators on social media have pointed out that even the simplest of models can exhibit structure in their latent spaces. One of the most popular and illustrative examples I remember from my time at the Bank of England is yield curve decomposition through PCA. The yield curve is a popular tool for investors and economists to gauge the health of the economy. It plots the yields of bonds against their maturities. The slope of the yield curve is often used as a predictor of future economic activity: a steep yield curve is associated with a growing economy, while a flat or inverted yield curve is associated with a contracting economy. 
+
+To understand this better, let us go on a quick detour into economics and look at actual yield curves observed in the US during the Global Financial Crisis (GFC). @fig-gfc-1 shows the yield curve of US Treasury bonds on 27 February 2007, which according to [CNN](https://money.cnn.com/2007/02/27/markets/markets_0630/index.htm?cnn=yes) was a "brutal day on Wall Street".^[The [data](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202310) is taken from the US Department of the Treasury.] This followed [reports](https://money.cnn.com/2007/02/26/news/economy/greenspan/index.htm?postversion=2007022609) on the previous day of former Federal Reserve Chairman Alan Greenspan's warning that the US economy was at risk of a recession. The yield curve was inverted with a sharp negative spread between the 10-year and 3-month yields, indicative of the market's expectation of a recession.
+
+@fig-gfc-2 shows the corresponding yield curve during the aftermath of the GFC on 20 April 2009. On that day the influential Time Magazine [reported](https://content.time.com/time/business/article/0,8599,1890560,00.html) that the "Banking Crisis is Over". The yield curve was steeply sloped with a positive spread between the 10-year and 3-month yields, indicative of the market's expectation of a recovery. The overall level of the yield curve was still very low though, indicative of the fact that US economy had not fully recovered at that point.
 
 ```{julia}
-function to_year(str::String)
-    η = contains(str, "MO") ? 1/12 : 1
-    val = parse(Float64, replace(str, " MO" => "", " YR" => "")) 
-    return val * η
-end
+#| fig-cap: Yield curve of US Treasury bonds.
+#| fig-subcap: 
+#|    - "Onset of GFC: 27 February 2007."
+#|    - "Aftermath of GFC: 20 April 2009."
+#| label: fig-gfc
+
+df = CSV.read(joinpath(BLOG_DIR, "data/ust_yields.csv"), DataFrame) |>
+    x -> @pivot_longer(x, -Date) |>
+    x -> @mutate(x, variable=to_year(variable)) |>
+    x -> @mutate(x, year=Dates.year(Date)) |>
+    x -> @mutate(x, quarter=Dates.quarter(Date)) |>
+    x -> @mutate(x, Date=Dates.format(Date, "yyyy-mm-dd")) |>
+    x -> @arrange(x, Date) |>
+    x -> @fill_missing(x, "down")
+ylims = extrema(skipmissing(df.value))
+
+# Peak-crisis:
+onset_date = "2007-02-27"
+plt_df = df[df.Date .== onset_date, :]
+plt = plot(
+    plt_df.variable, plt_df.value;
+    label="", color=:blue,
+    xlabel="Maturity (years)", ylabel="Yield (%)",
+)
+scatter!(
+    plt_df.variable, plt_df.value;
+    label="", color=:blue, alpha=0.5,
+    ylims=(0,6)
+)
+display(plt)
+
+# Post-crisis:
+aftermath_date = "2009-04-20"
+plt_df = df[df.Date .== aftermath_date, :]
+plt = plot(
+    plt_df.variable, plt_df.value;
+    label="", color=:blue,
+    xlabel="Maturity (years)", ylabel="Yield (%)",
+)
+scatter!(
+    plt_df.variable, plt_df.value;
+    label="", color=:blue, alpha=0.5,
+    ylims=(0,6)
+)
+display(plt)
+```
+
+Of course, US Treasuries are not the only bonds that are traded in the market. To get a more complete picture of the economy, analysts might therefore be interested in looking at the yield curves of other bonds as well. In particular, we might be interested in predicting economic growth based on the yield curves of many different bonds. The problem with that idea is that it is cursed by high dimensionality: we would end up modelling a single variable of interest (economic growth) with a large number of predictors (the yields of many different bonds). To deal with the curse of high dimensionality it can be useful to decompose the yield curves into sets of principal components. 
+
+To compute the principal components we can decompose the matrix of yields $\mathbf{Y}$ into a product of its singular vectors and values: $\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}$. I will not go into the details here, because Professor Gilbert Strang has already done a much better job than I ever could in his [Linear Algebra lectures](https://www.youtube.com/watch?v=mBcLRGuAFUk). To put this into the broader context of the article, however, let us simply refer to $\mathbf{U}$, $\Sigma$ and $\mathbf{V}^{\prime}$ as latent embeddings of the yield curve (they are latent because they are not directly observable).
+
+```{julia}
+df_wide = @select(df, Date, variable, value) |>
+    x -> @pivot_wider(x, names_from = variable, values_from = value) |>
+    x -> dropmissing(x)
+X = @select(df_wide, -Date) |> Matrix
+U, Σ, Vt = svd(X)
+plot(
+    df_wide.Date,
+    U[:,1:3],
+    size=(900, 400),
+)
 ```
 
 ```{julia}
