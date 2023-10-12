@@ -7,9 +7,11 @@ categories:
   - artificial intelligence
   - llm
 description: >-
-  This is an opinionated post that questions the idea that structure in latent embeddings of artificial neural networks is even remotely surprising. 
+  This is an opinionated post that questions the idea that the finding of patterns in latent embeddings of artificial neural networks is surprising. 
 image: www/intro.gif
 jupyter: julia-1.9
+execute: 
+  code-fold: true
 draft: true
 ---
 
@@ -24,14 +26,16 @@ using Pkg; Pkg.activate(BLOG_DIR)
 using CSV
 using DataFrames
 using Dates
+using Flux
 using LinearAlgebra
+using Metal
 using Plots
 using Plots.PlotMeasures
 using Printf
 using TidierData
 
 # Utility functions:
-include(joinpath(BLOG_DIR, "utils.jl"))
+include(joinpath("$(pwd())", BLOG_DIR, "utils.jl"))
 ```
 
 We humans are prone to seek patterns everywhere. Meaningful patterns have often proven to help us make sense of our past, navigate our presence and predict the future. Our society is so invested in finding patterns that today it seems we are more willing than ever to outsource this task to an Artificial Intelligence (AI): an omniscient oracle that leads us down the right path. Unfortunately, history has shown time and again that patterns are double-edged swords: if we attribute the wrong meaning to them, they may lead us nowhere at all, or worse, they may lead us down the dark roads. 
@@ -111,7 +115,7 @@ Of course, US Treasuries are not the only bonds that are traded in the market. T
 
 To compute the principal components we can decompose the matrix of yields $\mathbf{Y}$ into a product of its singular vectors and values: $\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}$. I will not go into the details here, because Professor Gilbert Strang has already done a much better job than I ever could in his [Linear Algebra lectures](https://www.youtube.com/watch?v=mBcLRGuAFUk). To put this into the broader context of the article, however, let us simply refer to $\mathbf{U}$, $\Sigma$ and $\mathbf{V}^{\prime}$ as latent embeddings of the yield curve (they are latent because they are not directly observable).
 
-@fig-pca shows the first two principal components of the yield curves of US Treasury bonds over time. For comparison, @fig-obs shows the average level and spread of the yield curves over time. The first principal component is strongly correlated with the level of the yield curve, while the second principal component is strongly correlated with the spread of the yield curve. To put it in AI-lingo:
+@fig-pca-1 shows the first two principal components of the yield curves of US Treasury bonds over time. Vertical stalks indicate the key dates during the onset and aftermath of the crisis, which we discussed above. For both components, we can observe some marked shifts between the two dates - but can we attribute any meaning to these shifts? It turns out we can: for comparison, @fig-pca-2 shows the average level and spread of the yield curves over time. The first principal component is strongly correlated with the level of the yield curve, while the second principal component is strongly correlated with the spread of the yield curve. To put it in AI-lingo:
 
 > The estimated latent embeddings of the yield curve are characterized by patterns observed in the data. 
 
@@ -139,7 +143,7 @@ plt_pc = plot(
     label=["PC $i" for i in 1:n_pc] |> permutedims,
     size=(1000, 300),
     ylims=(-0.015,0.03),
-    legend=:bottomright
+    legend=:topright
 )
 plot!(xticks=(tick_years,date_tick), xtickfontsize=6, yaxis=(formatter=y->@sprintf("%.2f",y)))
 vline!(Date.([onset_date]), ls=:solid, color=:black, label="Onset of GFC")
@@ -171,7 +175,8 @@ plt_obs = plot(
     label=["Level" "Spread"],
     size=(1000, 300),
     ylims=(-3,9),
-    legend=:bottomright
+    legend=:topright,
+    ylab="Yield (%)"
 )
 plot!(xticks=(tick_years,date_tick), xtickfontsize=6, yaxis=(formatter=y->@sprintf("%.2f",y)))
 vline!(Date.([onset_date]), ls=:solid, color=:black, label="Onset of GFC")
@@ -180,7 +185,9 @@ vline!(Date.([aftermath_date]), ls=:dash, color=:black, label="Aftermath of GFC"
 plot(plt_pc, plt_obs, layout=(2,1), size=(1000, 400), left_margin=5mm, bottom_margin=5mm)
 ```
 
-Not convinced? Let us use $\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}$ in true autoencoder fashion to reconstruct yield curves from principal components. 
+Not convinced? Let us use $\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}$ in true autoencoder fashion to reconstruct yield curves from principal components. Let $z_1$ denote the first principal component and consider the following: we keep all other $M-1$ principal components fixed at zero where $M$ denotes the total number of maturities; next we traverse the latent space by varying the value of $z_1$ over a fixed grid of length $K$ each time storing the full vector $\mathbf{z}$; finally, we vertically concatenate the vectors and end up with a matrix $\mathbf{Z}$ of dimension $(K \times M)$. To reconstruct yields, we simply multiply $Z$ by the singular values and right singular vectors: $\mathbf{Y}=\mathbf{Z}\Sigma\mathbf{V}^{\prime}$. 
+
+@fig-pca-anim shows the result of this exercise in the left panel. As we can see, our generated yield curves shift vertically as we traverse the latent space. The right panel of @fig-pca-anim shows the result of a similar exercise, but this time we keep the first principal component fixed at zero and vary the second principal component. This time the slope of our generated yield curves shifts as we traverse the latent space. 
 
 ```{julia}
 n_vals = 50
@@ -225,6 +232,87 @@ gif(anim, joinpath(BLOG_DIR, "www/pc_anim.gif"), fps=5)
 ![Yield curve decomposition through PCA.](www/pc_anim.gif){#fig-pca-anim}
 
 ### Example: Deep Learning
+
+So far we have considered simple matrix decomposition. You might argue that principal components are not really latent embeddings in the traditional sense of deep learning. To address this, let us now consider a simple deep-learning example. 
+
+[Data](https://fred.stlouisfed.org/series/GDPC1).
+
+```{julia}
+df_gdp = CSV.read(joinpath(BLOG_DIR, "data/gdp.csv"), DataFrame) |>
+    x -> @rename(x, Date=DATE, gdp=GDPC1) |>
+    x -> @mutate(x, gdp_l1=lag(gdp)) |>
+    x -> @mutate(x, growth=log(gdp)-log(gdp_l1)) |>
+    x -> @select(x, Date, growth) |>
+    x -> @mutate(x, year=Dates.year(Date)) |>
+    x -> @mutate(x, quarter=Dates.quarter(Date)) |>
+    x -> @filter(x, year <= 2018)
+
+df_yields_qtr = @group_by(df, year, quarter, variable) |>
+    x -> @mutate(x, value=mean(value)) |>
+    x -> @ungroup(x) |>
+    x -> @select(x, -Date) |>
+    unique
+
+df_all = @inner_join(df_gdp, df_yields_qtr, (year, quarter)) |> 
+    x -> @pivot_wider(x, names_from=variable, values_from=value) |>
+    dropmissing
+
+y = df_all.growth |> 
+    x -> Float32.(x)
+X = @select(df_all, -(Date:quarter)) |> 
+    Matrix |>
+    x -> Float32.(x)
+
+# Plot:
+p_gdp = plot(
+    df_all.Date, y;
+    label="", color=:blue,
+    size=(800,200),
+    ylabel="GDP Growth (%)"
+)
+p_yields = plot(
+    df_all.Date, X;
+    label="", color=:blue,
+    ylabel="Yield (%)",
+    legend=:bottomright,
+    alpha=0.5,
+    size=(800,400)
+)
+plot(p_gdp, p_yields, layout=(2,1), size=(800, 600), left_margin=5mm)
+```
+
+```{julia}
+dl = Flux.MLUtils.DataLoader((permutedims(X), permutedims(y)), batchsize=24, shuffle=true)
+input_dim = size(X,2)
+n_pc = 2
+n_hidden = 24
+epochs = 5000
+activation = tanh_fast
+encoder = Flux.Chain(
+    Dense(input_dim => n_hidden, activation),
+    Dense(n_hidden => n_pc, activation),
+) 
+decoder = Flux.Chain(
+    Dense(n_pc => n_hidden, activation),
+    Dense(n_hidden => input_dim, activation),
+) 
+model = Flux.Chain(
+    encoder,
+    decoder,
+    Dense(input_dim, 1),
+) 
+loss(yhat, y) = Flux.mse(yhat, y)
+opt = Adam()
+opt_state = Flux.setup(opt, model)
+for epoch in 1:epochs
+    Flux.train!(model, dl, opt_state) do m, x, y
+        loss(m(x), y)
+    end
+end
+yhat = model(X')' 
+plt = plot(yhat, label="Predicted", color=:red)
+plot!(y, label="Actual", color=:blue)
+```
 
 ### Example: Variational Autoencoder
 
