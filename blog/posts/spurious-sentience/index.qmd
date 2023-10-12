@@ -31,7 +31,7 @@ using Printf
 using TidierData
 
 # Utility functions:
-include("utils.jl")
+include(joinpath(BLOG_DIR, "utils.jl"))
 ```
 
 We humans are prone to seek patterns everywhere. Meaningful patterns have often proven to help us make sense of our past, navigate our presence and predict the future. Our society is so invested in finding patterns that today it seems we are more willing than ever to outsource this task to an Artificial Intelligence (AI): an omniscient oracle that leads us down the right path. Unfortunately, history has shown time and again that patterns are double-edged swords: if we attribute the wrong meaning to them, they may lead us nowhere at all, or worse, they may lead us down the dark roads. 
@@ -63,6 +63,8 @@ To understand this better, let us go on a quick detour into economics and look a
 #|    - "Onset of GFC: 27 February 2007."
 #|    - "Aftermath of GFC: 20 April 2009."
 #| label: fig-gfc
+#| output: true
+#| layout-ncol: 2
 
 df = CSV.read(joinpath(BLOG_DIR, "data/ust_yields.csv"), DataFrame) |>
     x -> @pivot_longer(x, -Date) |>
@@ -116,6 +118,7 @@ To compute the principal components we can decompose the matrix of yields $\math
 ```{julia}
 #| fig-cap: First two principal components of US Treasury bonds.
 #| label: fig-pca
+#| output: true
 
 df_wide = @select(df, Date, variable, value) |>
     x -> @pivot_wider(x, names_from = variable, values_from = value) |>
@@ -143,6 +146,7 @@ display(plt_pc)
 ```{julia}
 #| fig-cap: Average level and spread of US Treasury bonds.
 #| label: fig-obs
+#| output: true
 
 # Level:
 df_level = @group_by(df, Date) |>
@@ -176,33 +180,6 @@ plot!(xticks=(tick_years,date_tick), xtickfontsize=6, yaxis=(formatter=y->@sprin
 vline!(Date.([onset_date]), ls=:solid, color=:black, label="Onset of GFC")
 vline!(Date.([aftermath_date]), ls=:dash, color=:black, label="Aftermath of GFC")
 display(plt_obs)
-```
-
-```{julia}
-df = CSV.read(joinpath(BLOG_DIR, "data/ust_yields.csv"), DataFrame) |>
-    x -> @pivot_longer(x, -Date) |>
-    x -> @mutate(x, variable=to_year(variable)) |>
-    x -> @mutate(x, year=Dates.year(Date)) |>
-    x -> @mutate(x, quarter=Dates.quarter(Date)) |>
-    x -> @mutate(x, Date=Dates.format(Date, "yyyy-mm-dd")) |>
-    x -> @arrange(x, Date) |>
-    x -> @fill_missing(x, "down")
-ylims = extrema(skipmissing(df.value))
-anim = @animate for grouped_df in zip(@group_by(df, year, quarter))
-    grouped_df = grouped_df[1]
-    plt = plot()
-    for plt_df in zip(@group_by(grouped_df, Date))
-        plt_df = plt_df[1]
-        plot!(
-            plt, plt_df.variable, plt_df.value;
-            label="", color=:blue, alpha=0.1,
-            xlabel="Maturity (years)", ylabel="Yield (%)",
-            title="$(plt_df.year[1]) Q$(plt_df.quarter[1])",
-            ylims=ylims
-        )
-    end
-end
-gif(anim, joinpath(BLOG_DIR, "www/ust_yields.gif"), fps=2)
 ```
 
 Not convinced? Let us use $\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}$ in true autoencoder fashion to reconstruct yield curves from principal components. 
