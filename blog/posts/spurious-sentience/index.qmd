@@ -24,11 +24,11 @@ using Pkg; Pkg.activate(BLOG_DIR)
 
 # Packages:
 using CSV
+using ChainPlots
 using DataFrames
 using Dates
 using Flux
 using LinearAlgebra
-using Metal
 using Plots
 using Plots.PlotMeasures
 using Printf
@@ -297,10 +297,14 @@ decoder = Flux.Chain(
     Dense(n_hidden => input_dim, activation),
 ) 
 model = Flux.Chain(
-    encoder,
-    decoder,
+    encoder.layers...,
+    decoder.layers...,
     Dense(input_dim, 1),
 ) 
+plot(model, rand(input_dim))
+```
+
+```{julia}
 loss(yhat, y) = Flux.mse(yhat, y)
 opt = Adam()
 opt_state = Flux.setup(opt, model)
@@ -312,6 +316,10 @@ end
 yhat = model(X')' 
 plt = plot(yhat, label="Predicted", color=:red)
 plot!(y, label="Actual", color=:blue)
+```
+
+```{julia}
+plot(encoder(X')', label="")
 ```
 
 ### Example: Variational Autoencoder
