@@ -26,6 +26,8 @@ using DataFrames
 using Dates
 using LinearAlgebra
 using Plots
+using Plots.PlotMeasures
+using Printf
 using TidierData
 
 # Utility functions:
@@ -107,17 +109,73 @@ Of course, US Treasuries are not the only bonds that are traded in the market. T
 
 To compute the principal components we can decompose the matrix of yields $\mathbf{Y}$ into a product of its singular vectors and values: $\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}$. I will not go into the details here, because Professor Gilbert Strang has already done a much better job than I ever could in his [Linear Algebra lectures](https://www.youtube.com/watch?v=mBcLRGuAFUk). To put this into the broader context of the article, however, let us simply refer to $\mathbf{U}$, $\Sigma$ and $\mathbf{V}^{\prime}$ as latent embeddings of the yield curve (they are latent because they are not directly observable).
 
+@fig-pca shows the first two principal components of the yield curves of US Treasury bonds over time. For comparison, @fig-obs shows the average level and spread of the yield curves over time. The first principal component is strongly correlated with the level of the yield curve, while the second principal component is strongly correlated with the spread of the yield curve. To put it in AI-lingo:
+
+> The estimated latent embeddings of the yield curve are characterized by patterns observed in the data. 
+
 ```{julia}
+#| fig-cap: First two principal components of US Treasury bonds.
+#| label: fig-pca
+
 df_wide = @select(df, Date, variable, value) |>
     x -> @pivot_wider(x, names_from = variable, values_from = value) |>
     x -> dropmissing(x)
 X = @select(df_wide, -Date) |> Matrix
-U, Σ, Vt = svd(X)
-plot(
-    df_wide.Date,
-    U[:,1:3],
-    size=(900, 400),
+U, Σ, V = svd(X)
+dates = Date.(df_wide.Date)
+tick_years = Date.(unique(Dates.year.(dates)))
+date_tick = Dates.format.(tick_years, "yyyy")
+n_pc = 2
+plt_pc = plot(
+    dates,
+    .-U[:,1:n_pc],
+    label=["PC $i" for i in 1:n_pc] |> permutedims,
+    size=(1000, 400),
+    ylims=(-0.015,0.03),
+    legend=:bottomright
 )
+plot!(xticks=(tick_years,date_tick), xtickfontsize=6, yaxis=(formatter=y->@sprintf("%.2f",y)))
+vline!(Date.([onset_date]), ls=:solid, color=:black, label="Onset of GFC")
+vline!(Date.([aftermath_date]), ls=:dash, color=:black, label="Aftermath of GFC")
+display(plt_pc)
+```
+
+```{julia}
+#| fig-cap: Average level and spread of US Treasury bonds.
+#| label: fig-obs
+
+# Level:
+df_level = @group_by(df, Date) |>
+    x -> @mutate(x, level=sum(value)/length(value)) |>
+    x -> @ungroup(x) |>
+    x -> @select(x, Date, level)
+
+# Spreads:
+df_spread = @filter(df, variable==0.25 || variable==10) |>
+    x -> @select(x, -(year:quarter)) |>
+    x -> @mutate(x, variable=ifelse(variable==0.25,"short","long")) |>
+    x -> @pivot_wider(x, names_from=variable, values_from=value) |>
+    x -> @mutate(x, spread=long-short) |>
+    x -> @select(x, Date, spread)
+
+# Plot:
+plt_mat = @full_join(df_level, df_spread) |> 
+    dropmissing |> 
+    unique |>
+    x -> @select(x, -Date) |>
+    Matrix
+plt_obs = plot(
+    dates,
+    plt_mat,
+    label=["Level" "Spread"],
+    size=(1000, 400),
+    ylims=(-3,9),
+    legend=:bottomright
+)
+plot!(xticks=(tick_years,date_tick), xtickfontsize=6, yaxis=(formatter=y->@sprintf("%.2f",y)))
+vline!(Date.([onset_date]), ls=:solid, color=:black, label="Onset of GFC")
+vline!(Date.([aftermath_date]), ls=:dash, color=:black, label="Aftermath of GFC")
+display(plt_obs)
 ```
 
 ```{julia}
@@ -146,5 +204,53 @@ anim = @animate for grouped_df in zip(@group_by(df, year, quarter))
 end
 gif(anim, joinpath(BLOG_DIR, "www/ust_yields.gif"), fps=2)
 ```
+
+Not convinced? Let us use $\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}$ in true autoencoder fashion to reconstruct yield curves from principal components. 
+
+```{julia}
+n_vals = 50
+pc1_range = range(extrema(U[:,1])..., length=n_vals)
+pc2_range = range(extrema(U[:,2])..., length=n_vals)
+Z_1 = [[pc1, 0, zeros(size(U, 2)-2)...] for pc1 in pc1_range] |> x -> reduce(vcat, x')
+Y_1 = Z_1 * diagm(Σ) * V'
+Z_2 = [[0, pc2, zeros(size(U, 2)-2)...] for pc2 in pc2_range] |> x -> reduce(vcat, x')
+Y_2 = Z_2 * diagm(Σ) * V'
+anim = @animate for i in 1:n_vals
+    # Level shifts:
+    y = Y_1[i,:]
+    p1 = plot(
+        unique(df.variable), y;
+        label="", color=:blue,
+        xlabel="Maturity (years)", ylabel="Yield (%)",
+        title="PC1: $(round(collect(pc1_range)[i], digits=5))",
+        ylims=extrema(Y_1)
+    )
+    scatter!(
+        unique(df.variable), y;
+        label="", color=:blue, alpha=0.5,
+    )
+    # Spread shifts:
+    y = Y_2[i,:]
+    p2 = plot(
+        unique(df.variable), y;
+        label="", color=:blue,
+        xlabel="Maturity (years)", ylabel="Yield (%)",
+        title="PC2: $(round(collect(pc2_range)[i], digits=5))",
+        ylims=extrema(Y_2)
+    )
+    scatter!(
+        unique(df.variable), y;
+        label="", color=:blue, alpha=0.5,
+    )
+    plot(p1, p2, layout=(1,2), size=(1000, 400), left_margin=5mm, bottom_margin=5mm)
+end
+gif(anim, joinpath(BLOG_DIR, "www/pc_anim.gif"), fps=5)
+```
+
+![Yield curve decomposition through PCA.](www/pc_anim.gif){#fig-pca-anim}
+
+### Yield Curves and "Deep Learning"
+
+
 
 ## 🎓 References
