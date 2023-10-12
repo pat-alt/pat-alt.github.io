@@ -284,9 +284,9 @@ plot(p_gdp, p_yields, layout=(2,1), size=(800, 600), left_margin=5mm)
 ```{julia}
 dl = Flux.MLUtils.DataLoader((permutedims(X), permutedims(y)), batchsize=24, shuffle=true)
 input_dim = size(X,2)
-n_pc = 2
+n_pc = 12
 n_hidden = 24
-epochs = 5000
+epochs = 10000
 activation = tanh_fast
 encoder = Flux.Chain(
     Dense(input_dim => n_hidden, activation),
@@ -347,7 +347,10 @@ df_factors = @full_join(df_spread, df_level)
 ```{julia}
 λ = 0.1
 Y = df_factors[:, [:spread, :level]] |> Matrix
-plot(Y)
+W = (A'A + UniformScaling(λ)) \ A'Y
+Ŷ = A * W
+display(plot(Y))
+display(plot(Ŷ))
 ```
 
 ### Example: Variational Autoencoder
