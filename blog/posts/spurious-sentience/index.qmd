@@ -1,6 +1,6 @@
 ---
 title: Spurious Sentience
-subtitle: Overblowing Associational Relationships in Latent Spaces
+subtitle: On the Unsurprising Finding of Patterns in Latent Spaces
 date: '2023-10-06'
 categories:
   - spurious sentience
@@ -10,7 +10,7 @@ description: >-
   This is an opinionated post that questions the idea that structure in latent embeddings of artificial neural networks is even remotely surprising. 
 image: www/intro.gif
 jupyter: julia-1.9
-draft: false
+draft: true
 ---
 
 ```{julia}
@@ -49,7 +49,7 @@ I agree with the premise that in a world full of spurious relationships, causal 
 
 To demonstrate the claim that observing patterns in latent spaces should not generally surprise us, we will now go through a couple of simple examples. 
 
-### Yield Curves and Principal Component Analysis
+### Example: Principal Component Analysis
 
 In response to the claims made by Tegmark, numerous commentators on social media have pointed out that even the simplest of models can exhibit structure in their latent spaces. One of the most popular and illustrative examples I remember from my time at the Bank of England is yield curve decomposition through PCA. The yield curve is a popular tool for investors and economists to gauge the health of the economy. It plots the yields of bonds against their maturities. The slope of the yield curve is often used as a predictor of future economic activity: a steep yield curve is associated with a growing economy, while a flat or inverted yield curve is associated with a contracting economy. 
 
@@ -116,10 +116,14 @@ To compute the principal components we can decompose the matrix of yields $\math
 > The estimated latent embeddings of the yield curve are characterized by patterns observed in the data. 
 
 ```{julia}
-#| fig-cap: First two principal components of US Treasury bonds.
+#| fig-cap: Comparison of observed data and latent embeddings of the US Treasury yield curve.
+#| fig-subcap: 
+#|    - "Principal components of the yield curve."
+#|    - "Average level and spread of the yield curve."
 #| label: fig-pca
 #| output: true
 
+# PCA:
 df_wide = @select(df, Date, variable, value) |>
     x -> @pivot_wider(x, names_from = variable, values_from = value) |>
     x -> dropmissing(x)
@@ -133,20 +137,13 @@ plt_pc = plot(
     dates,
     .-U[:,1:n_pc],
     label=["PC $i" for i in 1:n_pc] |> permutedims,
-    size=(1000, 400),
+    size=(1000, 300),
     ylims=(-0.015,0.03),
     legend=:bottomright
 )
 plot!(xticks=(tick_years,date_tick), xtickfontsize=6, yaxis=(formatter=y->@sprintf("%.2f",y)))
 vline!(Date.([onset_date]), ls=:solid, color=:black, label="Onset of GFC")
 vline!(Date.([aftermath_date]), ls=:dash, color=:black, label="Aftermath of GFC")
-display(plt_pc)
-```
-
-```{julia}
-#| fig-cap: Average level and spread of US Treasury bonds.
-#| label: fig-obs
-#| output: true
 
 # Level:
 df_level = @group_by(df, Date) |>
@@ -172,14 +169,15 @@ plt_obs = plot(
     dates,
     plt_mat,
     label=["Level" "Spread"],
-    size=(1000, 400),
+    size=(1000, 300),
     ylims=(-3,9),
     legend=:bottomright
 )
 plot!(xticks=(tick_years,date_tick), xtickfontsize=6, yaxis=(formatter=y->@sprintf("%.2f",y)))
 vline!(Date.([onset_date]), ls=:solid, color=:black, label="Onset of GFC")
 vline!(Date.([aftermath_date]), ls=:dash, color=:black, label="Aftermath of GFC")
-display(plt_obs)
+
+plot(plt_pc, plt_obs, layout=(2,1), size=(1000, 400), left_margin=5mm, bottom_margin=5mm)
 ```
 
 Not convinced? Let us use $\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}$ in true autoencoder fashion to reconstruct yield curves from principal components. 
@@ -226,7 +224,9 @@ gif(anim, joinpath(BLOG_DIR, "www/pc_anim.gif"), fps=5)
 
 ![Yield curve decomposition through PCA.](www/pc_anim.gif){#fig-pca-anim}
 
-### Yield Curves and "Deep Learning"
+### Example: Deep Learning
+
+### Example: Variational Autoencoder
 
 
 
