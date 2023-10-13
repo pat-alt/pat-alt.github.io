@@ -28,6 +28,7 @@ using ChainPlots
 using DataFrames
 using Dates
 using Flux
+using GLM
 using LinearAlgebra
 using Plots
 using Plots.PlotMeasures
@@ -330,7 +331,6 @@ for epoch in 1:epochs
         loss(m(x), y)
     end
 end
-
 ```
 
 ```{julia}
@@ -355,6 +355,8 @@ df_level = @group_by(df_long, Date) |>
 df_factors = @full_join(df_spread, df_level) 
 ```
 
+#### Linear Probe
+
 ```{julia}
 #| output: true
 
@@ -371,6 +373,7 @@ plot!(
 
 λ = 0.1
 Y = df_factors[:, [:spread, :level]] |> Matrix
+A = encoder(X')'
 W = (A'A + UniformScaling(λ)) \ A'Y
 Ŷ = A * W
 plt_probe = plot(
@@ -388,11 +391,27 @@ plot(plt_gdp, plt_probe, layout=(2,1), size=(800, 600), left_margin=5mm)
 ```
 
 
+#### Ok, but what's the point?
+
+```{julia}
+reg_data = DataFrame(hcat(y, A),["y",["a$i" for i in 1:size(A,2)]...])
+lm(@formula(y ~ a1 + a2 + a3 + a4 + a5 + a6), reg_data)
+```
+
 ```{julia}
 β = (A'A) \ A'y
 ŷ = A * β
 1 - Flux.mse(ŷ,y)/std(y)
-plot(y)
+plt_qtr = plot(y)
+plot!(ŷ)
+```
+
+```{julia}
+yl = hcat(lag(y),A)[2:end,:]
+ϕ = (yl'yl) \ yl'y[2:end]
+ŷ = yl * ϕ
+
+plt_qtr = plot(y[2:end])
 plot!(ŷ)
 ```
 
@@ -407,7 +426,18 @@ plot(y)
 plot!(ŷ)
 ```
 
-### Example: Variational Autoencoder
+```{julia}
+# Daily yields:
+date_min, date_max = extrema(df_all.Date)
+df_daily = df_wide[Date.(df_wide.Date) .>= date_min .&& Date.(df_wide.Date) .<= date_max, :]
+X = df_daily |>
+    x -> @select(x, -Date) |> Matrix
+A = encoder(X')' 
+ŷ = A * β
+plt_daily = plot(ŷ)
+```
+
+### Example: MNIST
 
 
 
