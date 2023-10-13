@@ -122,15 +122,12 @@ Of course, US Treasuries are not the only bonds that are traded in the market. T
 
 To compute the principal components we can decompose the matrix of yields $\mathbf{Y}$ into a product of its singular vectors and values: $\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}$. I will not go into the details here, because Professor Gilbert Strang has already done a much better job than I ever could in his [Linear Algebra lectures](https://www.youtube.com/watch?v=mBcLRGuAFUk). To put this into the broader context of the article, however, let us simply refer to $\mathbf{U}$, $\Sigma$ and $\mathbf{V}^{\prime}$ as latent embeddings of the yield curve (they are latent because they are not directly observable).
 
-@fig-pca-1 shows the first two principal components of the yield curves of US Treasury bonds over time. Vertical stalks indicate the key dates during the onset and aftermath of the crisis, which we discussed above. For both components, we can observe some marked shifts between the two dates - but can we attribute any meaning to these shifts? It turns out we can: for comparison, @fig-pca-2 shows the average level and spread of the yield curves over time. The first principal component is strongly correlated with the level of the yield curve, while the second principal component is strongly correlated with the spread of the yield curve. To put it in AI-lingo:
+The top panel in @fig-pca shows the first two principal components of the yield curves of US Treasury bonds over time. Vertical stalks indicate the key dates during the onset and aftermath of the crisis, which we discussed above. For both components, we can observe some marked shifts between the two dates - but can we attribute any meaning to these shifts? It turns out we can: for comparison, the bottom panel in @fig-pca shows the average level and spread of the yield curves over time. The first principal component is strongly correlated with the level of the yield curve, while the second principal component is strongly correlated with the spread of the yield curve. To put it in AI-lingo:
 
 > The estimated latent embeddings of the yield curve are characterized by patterns observed in the data. 
 
 ```{julia}
-#| fig-cap: Comparison of observed data and latent embeddings of the US Treasury yield curve.
-#| fig-subcap: 
-#|    - "Principal components of the yield curve."
-#|    - "Average level and spread of the yield curve."
+#| fig-cap: Comparison of latent embeddings and observed data of the US Treasury yield curve.
 #| label: fig-pca
 #| output: true
 
