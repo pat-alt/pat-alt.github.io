@@ -10,9 +10,12 @@ description: >-
   This is an opinionated post that questions the idea that the finding of patterns in latent embeddings of artificial neural networks is surprising. 
 image: www/intro.gif
 jupyter: julia-1.9
-execute: 
-  code-fold: true
 draft: true
+format:
+  html:
+    code-fold: true
+    code-tools: true
+    code-line-numbers: true
 ---
 
 ```{julia}
@@ -28,14 +31,14 @@ using ChainPlots
 using DataFrames
 using Dates
 using Flux
-using GLM
+# using GLM
 using LinearAlgebra
 using Plots
 using Plots.PlotMeasures
 using Printf
 using TidierData
 using Random
-using RegressionTables
+# using RegressionTables
 Random.seed!(2023)
 
 # Utility functions:
@@ -72,7 +75,7 @@ To understand this better, let us go on a quick detour into economics and look a
 #|    - "Aftermath of GFC: 20 April 2009."
 #| label: fig-gfc
 #| output: true
-#| layout-ncol: 2
+#| layout-ncol: 1
 
 df = CSV.read(joinpath(BLOG_DIR, "data/ust_yields.csv"), DataFrame) |>
     x -> @pivot_longer(x, -Date) |>
@@ -411,6 +414,8 @@ The finding is not surprising but it is still interesting. In the context of mec
 The results are shown in the table below. The key finding of interest is that the coefficients on the latent embeddings in model (5) are statistically significant. This suggests that the latent embeddings contain information that is useful for predicting GDP growth. 
 
 ```{julia}
+#| eval: false
+
 # Regress on all latent embeddings:
 reg_data = DataFrame(Float64.(hcat(y, A)),["y",["a$i" for i in 1:size(A,2)]...])
 ols_all_latent = lm(@formula(y ~ a1 + a2 + a3 + a4 + a5 + a6), reg_data)
@@ -441,10 +446,14 @@ reg_data = DataFrame(
 ols_best = lm(@formula(y ~ yl + a3 + a5), reg_data)
 
 # Results
-regtable(ols_all_latent, ols_best_latent, ols_ar, ols_factors, ols_best; renderSettings = asciiOutput())
+regtable(ols_all_latent, ols_best_latent, ols_ar, ols_factors, ols_best; renderSettings = RegressionTables.htmlOutput(joinpath(BLOG_DIR, "www/regression.html")))
 ```
 
+<iframe src="www/regression.html" width="550" height="700"></iframe>
+
 ```{julia}
+#| echo: false
+#| eval: false
 yhat = predict(ols_best)
 plt_gdp = plot(
     df_all.Date, y;

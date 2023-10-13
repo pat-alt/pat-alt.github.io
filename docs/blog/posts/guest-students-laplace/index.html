@@ -32,6 +32,7 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -73,12 +74,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -141,41 +143,41 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/software.html" rel="" target="">
- <span class="menu-text">Software</span></a>
+    <a class="nav-link" href="../../../content/software.html"> 
+<span class="menu-text">Software</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html" rel="" target="">
- <span class="menu-text">Talks</span></a>
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/about/index.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../../content/about/index.html"> 
+<span class="menu-text">About</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../blog/index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/pat-alt" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/paltmey" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -204,7 +206,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <li><a href="#acknowedgements" id="toc-acknowedgements" class="nav-link" data-scroll-target="#acknowedgements">Acknowedgements</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -253,7 +255,9 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   </div>
   
 
+
 </header>
+
 
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -272,7 +276,7 @@ Guest Blog Post
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="www/intro.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">A nice image to attract your attention. The exact inverse Fisher information matrix for a MNIST classifier network (left), its block-diagonal and tri-block-diagonal approximations (middle), and the absolute error (right). Source: Martens &amp; Grosse (2015)</figcaption>
+<figcaption>A nice image to attract your attention. The exact inverse Fisher information matrix for a MNIST classifier network (left), its block-diagonal and tri-block-diagonal approximations (middle), and the absolute error (right). Source: Martens &amp; Grosse (2015)</figcaption>
 </figure>
 </div>
 <p>We will begin by demystifying the technical terms in the last sentence, in order to explain our contributions to the library and highlight some impressions from the experience. Note that our team has begun working on this PhD-tier subject only having had some introductory courses on probability and statistics, machine learning, and computational intelligence, without any prior exposure to Julia.</p>
@@ -286,9 +290,13 @@ Guest Blog Post
 <p>… it is possible to take a perfectly reasonable network, delete half (or more) of the weights and wind up with a network that works just as well, or better.</p>
 </blockquote>
 <div id="fig-loss" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="www/grad_desc.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: The loss landscape. One can imagine gradient descent as a particle, let’s say a ball, or a grain of sand, rolling to the bottom of a pit. Then for Bayesian Learning, we have as if a pile of sand poured around at that bottom point, with the pile being thicker where loss is lower. This proverbial sand pile would represent the posterior parameter distribution. Figure due to <span class="citation" data-cites="amini2019spatial">Amini et al. (<a href="#ref-amini2019spatial" role="doc-biblioref">2019</a>)</span></figcaption>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="www/grad_desc.png" class="img-fluid figure-img">
+</div>
+<figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The loss landscape. One can imagine gradient descent as a particle, let’s say a ball, or a grain of sand, rolling to the bottom of a pit. Then for Bayesian Learning, we have as if a pile of sand poured around at that bottom point, with the pile being thicker where loss is lower. This proverbial sand pile would represent the posterior parameter distribution. Figure due to <span class="citation" data-cites="amini2019spatial">Amini et al. (<a href="#ref-amini2019spatial" role="doc-biblioref">2019</a>)</span>
+</figcaption>
 </figure>
 </div>
 <p>The way gradient is usually illustrated is with a picture like the one shown in <a href="#fig-loss" class="quarto-xref">Figure&nbsp;1</a> above a curved terrain of the loss function across the parameter space. Each point of the horizontal plane corresponds to some configuration of parameters. Gradient descent seeks the point at the bottom of this terrain, as the point with the lowest loss, however as the loss-curvature is highly non-convex and high-dimensional there are many directions in which we could move and still maintain a low loss. Thus instead of a singular point we would like to specify a probability distribution around that optimal point. Bayesian methods, and in particular Laplace Approximations, allow us to do this!</p>
@@ -337,9 +345,13 @@ G := \textstyle\sum_{n=1}^N J(x_n) \left( \nabla^2_{f} \log p(y_n \mid f) \Large
 <p>A more sophisticated approach, due to Martens and Grosse (2015), is inspired by the observation that in practice the covariance matrices (i.e.&nbsp;inverted Hessians) for neural networks are block-diagonal-dominant. Thus we can effectively model the covariance matrix (and hence the Fisher) as a block-diagonal matrix, where blocks correspond to parameters grouped by layers. Additionally, each block is decomposed into two Kronecker factors, reducing the size of data stored several magnitudes more, at a cost of another assumption.</p>
 <p>Lastly, a novel approach is to <em>sketch</em> a low-rank approximation of the Fisher <span class="citation" data-cites="sharma2021sketching">(<a href="#ref-sharma2021sketching" role="doc-biblioref">Sharma, Azizan, and Pavone 2021</a>)</span>. <a href="#fig-fact" class="quarto-xref">Figure&nbsp;2</a> shows four Hessian approximation structures:</p>
 <div id="fig-fact" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="www/fact.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: (a) Hessian in full, intractable for large networks. (b) Low-rank. (c) Kronecker-factored Approximate Curvature, a block-diagonal method. (d) Diagonal. Source: <span class="citation" data-cites="daxberger2021laplace">Daxberger et al. (<a href="#ref-daxberger2021laplace" role="doc-biblioref">2021</a>)</span></figcaption>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="www/fact.png" class="img-fluid figure-img">
+</div>
+<figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-fact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: (a) Hessian in full, intractable for large networks. (b) Low-rank. (c) Kronecker-factored Approximate Curvature, a block-diagonal method. (d) Diagonal. Source: <span class="citation" data-cites="daxberger2021laplace">Daxberger et al. (<a href="#ref-daxberger2021laplace" role="doc-biblioref">2021</a>)</span>
+</figcaption>
 </figure>
 </div>
 <p>It is also possible to cut the costs by treating only a subset of the model parameters, i.e.&nbsp;a subnetwork, probabilistically, fixing the remaining parameters at their MAP-estimated values. One special case of subnetwork Laplace that was found to perform well in practice is last-layer Laplace, where the selected subnetwork contains only the weights and biases of the last layer.</p>
@@ -383,7 +395,7 @@ G := \textstyle\sum_{n=1}^N J(x_n) \left( \nabla^2_{f} \log p(y_n \mid f) \Large
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-amini2019spatial" class="csl-entry" role="listitem">
 Amini, Alexander, Ava Soleimany, Sertac Karaman, and Daniela Rus. 2019. <span>“Spatial <span>Uncertainty</span> <span>Sampling</span> for <span>End</span>-to-<span>End</span> <span>Control</span>.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.1805.04829">https://doi.org/10.48550/arXiv.1805.04829</a>.
 </div>
@@ -411,6 +423,7 @@ Sharma, Apoorva, Navid Azizan, and Marco Pavone. 2021. <span>“Sketching <span>
     Patrick},
   title = {An {Accessible} {Intro} to {Laplace} {Approximations} in
     {Julia} for {Bayesian} {Deep} {Learning}},
+  pages = {undefined},
   date = {2023-07-04},
   url = {https://www.paltmeyer.com/blog//blog/posts/guest-students-laplace},
   langid = {en}
@@ -539,18 +552,57 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
   const processXRef = (id, note) => {
-    if (id.startsWith('sec-')) {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    const typesetMath = (el) => {
+      if (window.MathJax) {
+        // MathJax Typeset
+        window.MathJax.typeset([el]);
+      } else if (window.katex) {
+        // KaTeX Render
+        var mathElements = el.getElementsByClassName("math");
+        var macros = [];
+        for (var i = 0; i < mathElements.length; i++) {
+          var texText = mathElements[i].firstChild;
+          if (mathElements[i].tagName == "SPAN") {
+            window.katex.render(texText.data, mathElements[i], {
+              displayMode: mathElements[i].classList.contains('display'),
+              throwOnError: false,
+              macros: macros,
+              fleqn: false
+            });
+          }
+        }
+      }
+    }
+    if (id === null || id.startsWith('sec-')) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
       if (note.children && note.children.length > 2) {
         for (let i = 0; i < 2; i++) {
           container.appendChild(note.children[i].cloneNode(true));
         }
+        typesetMath(container);
         return container.innerHTML
       } else {
+        typesetMath(note);
         return note.innerHTML;
       }
     } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      typesetMath(note);
       return note.innerHTML;
     }
   }
@@ -560,27 +612,56 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       instance.disable();
       let url = xref.getAttribute('href');
       let hash = undefined; 
-      try { hash = new URL(url).hash; } catch {}
-      const id = hash.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note !== null) {
-        try {
-          const html = processXRef(id, note);
-          instance.setContent(html);
-        } finally {
-          instance.enable();
-          instance.show();
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
         }
       } else {
-        // See if we can fetch this
-        fetch(url.split('#')[0])
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
         .then(res => res.text())
         .then(html => {
           const parser = new DOMParser();
           const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.getElementById(id);
+          const note = htmlDoc.querySelector('main.content');
           if (note !== null) {
-            const html = processXRef(id, note);
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
             instance.setContent(html);
           } 
         }).finally(() => {
@@ -658,6 +739,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
