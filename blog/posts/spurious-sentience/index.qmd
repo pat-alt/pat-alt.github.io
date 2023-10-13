@@ -35,6 +35,7 @@ using Plots.PlotMeasures
 using Printf
 using TidierData
 using Random
+using RegressionTables
 Random.seed!(2023)
 
 # Utility functions:
@@ -247,13 +248,14 @@ To estimate economic growth we will rely on a quarterly [series](https://fred.st
 #| fig-cap: GDP growth and yield curve data.
 #| label: fig-dl-data
 
-df_gdp = CSV.read(joinpath(BLOG_DIR, "data/gdp.csv"), DataFrame) |>
+df_gdp_full = CSV.read(joinpath(BLOG_DIR, "data/gdp.csv"), DataFrame) |>
     x -> @rename(x, Date=DATE, gdp=GDPC1) |>
     x -> @mutate(x, gdp_l1=lag(gdp)) |>
     x -> @mutate(x, growth=log(gdp)-log(gdp_l1)) |>
     x -> @select(x, Date, growth) |>
     x -> @mutate(x, year=Dates.year(Date)) |>
-    x -> @mutate(x, quarter=Dates.quarter(Date)) |>
+    x -> @mutate(x, quarter=Dates.quarter(Date)) 
+df_gdp = df_gdp_full |>
     x -> @filter(x, year <= 2018)
 
 df_yields_qtr = @group_by(df, year, quarter, variable) |>
@@ -394,25 +396,83 @@ plot(plt_gdp, plt_probe, layout=(2,1), size=(800, 600), left_margin=5mm)
 #### Ok, but what's the point?
 
 ```{julia}
-reg_data = DataFrame(hcat(y, A),["y",["a$i" for i in 1:size(A,2)]...])
-lm(@formula(y ~ a1 + a2 + a3 + a4 + a5 + a6), reg_data)
+# Regress on all latent embeddings:
+reg_data = DataFrame(Float64.(hcat(y, A)),["y",["a$i" for i in 1:size(A,2)]...])
+ols_all_latent = lm(@formula(y ~ a1 + a2 + a3 + a4 + a5 + a6), reg_data)
+
+# Regress on best latent embeddings:
+reg_data = DataFrame(Float64.(hcat(y, A)),["y",["a$i" for i in 1:size(A,2)]...])
+ols_best_latent = lm(@formula(y ~ a3 + a5), reg_data)
+
+# Simple AR(1) model:
+reg_data = DataFrame(
+    Float64.(hcat(y, lag(y))[2:end,:]),
+    ["y","yl"]
+)
+ols_ar = lm(@formula(y ~ yl), reg_data)
+
+# Regress on factors (spread and level):
+reg_data = DataFrame(
+    Float64.(hcat(y, lag(y), df_factors[:,Not(:Date)] |> Matrix)[2:end,:]),
+    ["y","yl","spread","level"]
+)
+ols_factors = lm(@formula(y ~ yl + spread + level), reg_data)
+
+# Regress on best subset of latent embeddings:
+reg_data = DataFrame(
+    Float64.(hcat(y, lag(y), A)[2:end,:]),
+    ["y","yl",["a$i" for i in 1:size(A,2)]...]
+)
+ols_best = lm(@formula(y ~ yl + a3 + a5), reg_data)
+
+# Results
+regtable(ols_all_latent, ols_best_latent, ols_ar, ols_factors, ols_best; renderSettings = asciiOutput())
 ```
 
 ```{julia}
-β = (A'A) \ A'y
-ŷ = A * β
-1 - Flux.mse(ŷ,y)/std(y)
-plt_qtr = plot(y)
-plot!(ŷ)
+yhat = predict(ols_best)
+plt_gdp = plot(
+    df_all.Date, y;
+    label="Actual", color=:green,
+    title="Modelling GDP Growth",
+)
+plot!(
+    df_all.Date, [missing, yhat...]; 
+    label="Predicted", color=:green, ls=:dash,
+)
 ```
 
 ```{julia}
-yl = hcat(lag(y),A)[2:end,:]
-ϕ = (yl'yl) \ yl'y[2:end]
-ŷ = yl * ϕ
-
-plt_qtr = plot(y[2:end])
-plot!(ŷ)
+df_growth = @select(df_gdp, Date:growth) |>
+    x -> @mutate(x, yl=lag(growth))
+df_daily = @full_join(df_growth, @mutate(df_wide, Date=Date(Date)), Date) |>
+    x -> @arrange(x, Date) |>
+    x -> @filter(x, Date <= Date("2018-12-31")) |>
+    x -> @fill_missing(x, growth, yl, "down") |>
+    dropmissing
+yields = df_daily |>
+    x -> @select(x, -(Date:yl)) |> 
+    Matrix |>
+    x -> Float32.(x) 
+A = encoder(yields')'[:,[3,5]]
+yl = df_daily.yl
+X = hcat(ones(length(yl)),yl, A)
+y = df_daily.growth
+yhat = predict(ols_best, X)
+plt_gdp = plot(
+    df_daily.Date, y;
+    label="Actual", color=:green,
+    title="Modelling GDP Growth",
+)
+plot!(
+    df_daily.Date,yhat; 
+    label="Predicted", color=:blue
+)
+yhat_full = model(yields')'
+plot!(
+    df_daily.Date,yhat_full; 
+    label="Predicted (full)", color=:orange
+)
 ```
 
 ```{julia}
@@ -424,17 +484,6 @@ ŷ = U * β
 1 - Flux.mse(ŷ,y)/std(y)
 plot(y)
 plot!(ŷ)
-```
-
-```{julia}
-# Daily yields:
-date_min, date_max = extrema(df_all.Date)
-df_daily = df_wide[Date.(df_wide.Date) .>= date_min .&& Date.(df_wide.Date) .<= date_max, :]
-X = df_daily |>
-    x -> @select(x, -Date) |> Matrix
-A = encoder(X')' 
-ŷ = A * β
-plt_daily = plot(ŷ)
 ```
 
 ### Example: MNIST
