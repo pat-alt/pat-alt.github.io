@@ -33,6 +33,8 @@ using Plots
 using Plots.PlotMeasures
 using Printf
 using TidierData
+using Random
+Random.seed!(2023)
 
 # Utility functions:
 include(joinpath("$(pwd())", BLOG_DIR, "utils.jl"))
@@ -233,11 +235,17 @@ gif(anim, joinpath(BLOG_DIR, "www/pc_anim.gif"), fps=5)
 
 ### Example: Deep Learning
 
-So far we have considered simple matrix decomposition. You might argue that principal components are not really latent embeddings in the traditional sense of deep learning. To address this, let us now consider a simple deep-learning example. 
+So far we have considered simple matrix decomposition. You might argue that principal components are not really latent embeddings in the traditional sense of deep learning. To address this, let us now consider a simple deep-learning example. Our goal will be to not only predict economic growth from the yield curve but also extract meaningful features at the same time. In particular, we will use a neural network architecture that allows us to recover a compressed latent representation of the yield curve.
 
-[Data](https://fred.stlouisfed.org/series/GDPC1).
+#### Data
+
+To estimate economic growth we will rely on a quarterly [series](https://fred.stlouisfed.org/series/GDPC1) of the real gross domestic product (GDP) provided by the Federal Reserve Bank of St. Louis. The data arrives in terms of levels of real GDP. In order to estimate growth, we will transform the data into log differences. Since our yield curve data is daily, we will need to aggregate it to the quarterly frequency. To do this, we will simply take the average of the daily yields for each maturity. We will also standardize yields since deep learning models tend to perform better with standardized data. Since COVID-19 was a huge structural break, we will also filter out all observations after 2018. @fig-dl-data shows the pre-processed data.
 
 ```{julia}
+#| output: true
+#| fig-cap: GDP growth and yield curve data.
+#| label: fig-dl-data
+
 df_gdp = CSV.read(joinpath(BLOG_DIR, "data/gdp.csv"), DataFrame) |>
     x -> @rename(x, Date=DATE, gdp=GDPC1) |>
     x -> @mutate(x, gdp_l1=lag(gdp)) |>
@@ -261,19 +269,20 @@ y = df_all.growth |>
     x -> Float32.(x)
 X = @select(df_all, -(Date:quarter)) |> 
     Matrix |>
-    x -> Float32.(x)
+    x -> Float32.(x) |>
+    x -> Flux.normalise(x; dims=1)
 
 # Plot:
 p_gdp = plot(
     df_all.Date, y;
     label="", color=:blue,
     size=(800,200),
-    ylabel="GDP Growth (%)"
+    ylabel="GDP Growth (log difference)"
 )
 p_yields = plot(
     df_all.Date, X;
     label="", color=:blue,
-    ylabel="Yield (%)",
+    ylabel="Yield (standardized))",
     legend=:bottomright,
     alpha=0.5,
     size=(800,400)
@@ -281,12 +290,20 @@ p_yields = plot(
 plot(p_gdp, p_yields, layout=(2,1), size=(800, 600), left_margin=5mm)
 ```
 
+#### Model
+
+
+
 ```{julia}
+#| output: true
+#| fig-cap: Model architecture.
+#| label: fig-dl-model
+
 dl = Flux.MLUtils.DataLoader((permutedims(X), permutedims(y)), batchsize=24, shuffle=true)
 input_dim = size(X,2)
-n_pc = 12
-n_hidden = 24
-epochs = 10000
+n_pc = 6
+n_hidden = 32
+epochs = 1000
 activation = tanh_fast
 encoder = Flux.Chain(
     Dense(input_dim => n_hidden, activation),
@@ -313,17 +330,11 @@ for epoch in 1:epochs
         loss(m(x), y)
     end
 end
-yhat = model(X')' 
-plt = plot(yhat, label="Predicted", color=:red)
-plot!(y, label="Actual", color=:blue)
+
 ```
 
 ```{julia}
-A = encoder(X')'
-plot(A, label="")
-```
-
-```{julia}
+#| echo: false
 df_long = @pivot_longer(df_all, -(Date:quarter)) |>
     x -> @arrange(x, Date) |>
     x -> @select(x, -(year:quarter))
@@ -345,12 +356,55 @@ df_factors = @full_join(df_spread, df_level)
 ```
 
 ```{julia}
+#| output: true
+
+yhat = model(X')' 
+plt_gdp = plot(
+    df_all.Date, y;
+    label="Actual", color=:green,
+    title="Modelling GDP Growth",
+)
+plot!(
+    df_all.Date, yhat; 
+    label="Predicted", color=:green, ls=:dash,
+)
+
 λ = 0.1
 Y = df_factors[:, [:spread, :level]] |> Matrix
 W = (A'A + UniformScaling(λ)) \ A'Y
 Ŷ = A * W
-display(plot(Y))
-display(plot(Ŷ))
+plt_probe = plot(
+    df_all.Date, Y;
+    color=[:blue :orange],
+    label=["Spread" "Level"],
+    title="Linear Probe"
+)
+plot!(
+    df_all.Date, Ŷ; 
+    color=[:blue :orange], ls=:dash, 
+    label=["Spread (predicted)" "Level (predicted)"]
+)
+plot(plt_gdp, plt_probe, layout=(2,1), size=(800, 600), left_margin=5mm)
+```
+
+
+```{julia}
+β = (A'A) \ A'y
+ŷ = A * β
+1 - Flux.mse(ŷ,y)/std(y)
+plot(y)
+plot!(ŷ)
+```
+
+```{julia}
+#| echo: false
+
+U = svd(X).U[:,1:6]
+β = (U'U + UniformScaling(λ)) \ U'y
+ŷ = U * β
+1 - Flux.mse(ŷ,y)/std(y)
+plot(y)
+plot!(ŷ)
 ```
 
 ### Example: Variational Autoencoder
