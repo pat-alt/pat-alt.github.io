@@ -295,7 +295,7 @@ plot(p_gdp, p_yields, layout=(2,1), size=(800, 600), left_margin=5mm)
 
 #### Model
 
-
+Let $G_t$ denote growth and $\mathbf{Y}_t$ denote the yield curve at time $t$. Then we are interested in a model for $G_t$ conditional on $\mathbf{Y}_t$. Let $\theta$ denote our model parameters then formally we are interested in maximizing the likelihood $p_{\theta}(G_t|\mathbf{Y}_t)$. To do this, we will use a simple autoencoder architecture that is illustrated in @fig-dl-model. The encoder will consist of a single fully connected hidden layer with 32 neurons and a hyperbolic tangent activation function. The bottleneck layer connecting the encoder to the decoder is a fully connected layer with 6 neurons. This is the compressed latent representation of the yield curve mentioned above. The decoder will consist of two fully connected layers each with a hyperbolic tangent activation function: the first layer will consist of 32 neurons and the second layer will have the same dimension as the input data. The output layer will consist of a single neuron with a linear activation function. The model will be trained using the mean squared error loss function and the Adam optimizer.
 
 ```{julia}
 #| output: true
@@ -321,7 +321,8 @@ model = Flux.Chain(
     decoder.layers...,
     Dense(input_dim, 1),
 ) 
-plot(model, rand(input_dim))
+plt = plot(model, rand(input_dim))
+display(plt)
 ```
 
 ```{julia}
@@ -359,8 +360,18 @@ df_factors = @full_join(df_spread, df_level)
 
 #### Linear Probe
 
+The results are shown in @fig-dl-results. The top panel shows the actual GDP growth and fitted values from the autoencoder model. We observe that the model captures the relationship between economic growth and the yield curve reasonably well. As discussed above, we also know that the relationship between economic growth and the yield curve is characterized by two main factors: the level and the spread. Since the model itself is fully characterized by its parameters, we would expect that these two important factors are reflected somewhere in the latent parameter space. 
+
+The bottleneck layer seems like a good place to start looking. To get the latent embeddings $\mathbf{A}_t$ at time $t$, we simply pass the yield curve data $\mathbf{Y}_t$ through the encoder. Next, we follow [TEGMARK PAPER REFERENCE] and use a linear probe to regress the observed yield curve factors on the latent embeddings. Let $F_t$ denote the vector containing the two factors of interest in time $t$: $f_t^{\text{spread}}$ and $f_t^{\text{level}}$. Formally, we are interested in the following regression model: $p_{w}(F_t|\mathbf{A}_t)$ where $w$ denotes the regression parameters. Following [TEGMARK PAPER REFERENCE] we use Ridge regression with $\lambda$ set to $0.1$. Using the estimated regression parameters $\hat{w}$ we can then predict the yield curve factors from the latent embeddings: $\hat{F}_t=\hat{w}^{\prime}\mathbf{A}_t$.
+
+The results of this experiment are shown in the bottom panel of @fig-dl-results. Solid lines show the observed yield curve factors over time, while dashed lines show predicted values. We find that the latent embeddings predict the two yield curve factors reasonably well, in particular the spread. To put this in true hype-lingo: 
+
+> Not just a parrot! Our autoencoder neural network has an implicit understanding of the yield curve factors and their relationship with economic growth. It's sentient indeed!
+
 ```{julia}
 #| output: true
+#| fig-cap: The top panel shows the actual GDP growth and fitted values from the autoencoder model. The bottom panel shows the observed average level and spread of the yield curve (solid) along with the predicted values from the linear probe based on the latent embedding (dashed).
+#| label: fig-dl-results
 
 yhat = model(X')' 
 plt_gdp = plot(
@@ -393,7 +404,11 @@ plot(plt_gdp, plt_probe, layout=(2,1), size=(800, 600), left_margin=5mm)
 ```
 
 
-#### Ok, but what's the point?
+#### Ok, but truly what's the point?
+
+The finding is not surprising but it is still interesting. In the context of mechanistic interpretability, it demonstrates that the black-box model has evidently learned plausible explanations for the data. Beyond that, in this particular example, the patterns in the latent space that we have just uncovered might actually be useful for downstream tasks. An interesting idea could be to use the latent embeddings as features in a more traditional and interpretable econometric model. To demonstrate this, let us consider a simple linear regression model for GDP growth. We will compare the performance of the following models: (1) regressing growth $G_t$ on the latent embedding $A_t$, (2) regression growth on the best subset of latent embeddings $A_t$, (3) regressing growth on lagged growth, (4) regressing growth on lagged growth and the observed yield curve factors $F_t$, (5) regressing growth on the best subset of yield curve factors $F_t$, and, finally, (5) regressing growth on lagged growth and the best subset of latent embeddings $A_t$. 
+
+The results are shown in the table below. The key finding of interest is that the coefficients on the latent embeddings in model (5) are statistically significant. This suggests that the latent embeddings contain information that is useful for predicting GDP growth. 
 
 ```{julia}
 # Regress on all latent embeddings:
@@ -439,39 +454,6 @@ plt_gdp = plot(
 plot!(
     df_all.Date, [missing, yhat...]; 
     label="Predicted", color=:green, ls=:dash,
-)
-```
-
-```{julia}
-df_growth = @select(df_gdp, Date:growth) |>
-    x -> @mutate(x, yl=lag(growth))
-df_daily = @full_join(df_growth, @mutate(df_wide, Date=Date(Date)), Date) |>
-    x -> @arrange(x, Date) |>
-    x -> @filter(x, Date <= Date("2018-12-31")) |>
-    x -> @fill_missing(x, growth, yl, "down") |>
-    dropmissing
-yields = df_daily |>
-    x -> @select(x, -(Date:yl)) |> 
-    Matrix |>
-    x -> Float32.(x) 
-A = encoder(yields')'[:,[3,5]]
-yl = df_daily.yl
-X = hcat(ones(length(yl)),yl, A)
-y = df_daily.growth
-yhat = predict(ols_best, X)
-plt_gdp = plot(
-    df_daily.Date, y;
-    label="Actual", color=:green,
-    title="Modelling GDP Growth",
-)
-plot!(
-    df_daily.Date,yhat; 
-    label="Predicted", color=:blue
-)
-yhat_full = model(yields')'
-plot!(
-    df_daily.Date,yhat_full; 
-    label="Predicted (full)", color=:orange
 )
 ```
 
