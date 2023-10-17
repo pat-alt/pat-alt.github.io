@@ -12,7 +12,7 @@ In practice, we are often required to generate many explanations for many indivi
 
 ### 🤔 How supercomputing?
 
-Our goal has been to minimize the burden on users by facilitating different forms of parallelization through a simple macro. To multi-process the evaluation of a large set of `counterfactuals` using the [MPI.jl](https://juliaparallel.org/MPI.jl/latest/) backend, for example, users just need to 1) load the backend and instantiate the `MPIParallelizer`,
+Our goal has been to minimize the burden on users by facilitating different forms of parallelization through a simple macro. To multi-process the evaluation of a large set of `counterfactuals` using the [MPI.jl](https://juliaparallel.org/MPI.jl/latest/) backend, for example, users can proceed as follows: firstly, load the backend and instantiate the `MPIParallelizer`,
 
 ```julia
 import MPI
@@ -20,20 +20,24 @@ MPI.Init()
 parallelizer = MPIParallelizer(MPI.COMM_WORLD)
 ```
 
-and 2) use the `@with_parallelizer` followed by the `parallelizer` object and the standard API call to evaluate counterfactuals:
+and then just use the `@with_parallelizer` followed by the `parallelizer` object and the standard API call to evaluate counterfactuals:
 
 ```julia
 @with_parallelizer parallelizer evaluate(counterfactuals)
 ```
 
-Under the hood we ...
+Under the hood we use standard [MPI.jl](https://juliaparallel.org/MPI.jl/latest/) routines for distributed computing. To avoid depending on [MPI.jl](https://juliaparallel.org/MPI.jl/latest/) we use [package extensions](https://www.youtube.com/watch?v=TiIZlQhFzyk). Similarly, the `ThreadsParallelizer` can be used for multi-threading where we rely on `Base.Threads` routines. It is also possible to combine both forms of parallelization by setting the `threaded` keyword argument of the `MPIParallelizer` to `true`. 
+
+### 🏅 Benchmarking Counterfactuals (case study)
+
+To illustrate how this new functionality can be used in practice, the talk will include a brief case study of our own experience of generating large benchmarks for counterfactual explanations on a supercomputer. This will include some discussion of challenges we encountered along the way and the solutions we have come up with. 
 
 ### 🎯 What is next?
 
-Parallelization is also useful for other [Taija](https://github.com/JuliaTrustworthyAI) packages ...
+Parallelization is also useful for other [Taija](https://github.com/JuliaTrustworthyAI) packages. For example, some of the methods for predictive uncertainty quantification used by [ConformalPrediction.jl](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) rely on repeated model training and prediction. This is currently done sequentially and an obvious place for parallelization. To standardize the parallelization API across packages in the [Taija](https://github.com/JuliaTrustworthyAI) ecosystem, we therefore plan to move this functionality into a meta package, TaijaParallelization.jl, much like we have recently moved all plotting functionality into [TaijaPlotting.jl](https://github.com/JuliaTrustworthyAI/TaijaPlotting.jl).
 
 ### 👥 Who is this talk for?
 
-This talk should be useful for anyone interested in either Trustworthy AI or parallel computing or both. 
+This talk should be useful for anyone interested in either Trustworthy AI or parallel computing or both. We are no experts in parallel computing so the level of this talk should also be appropriate for beginners. 
 
 ## Notes
