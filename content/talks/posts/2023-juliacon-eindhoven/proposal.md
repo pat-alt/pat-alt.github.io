@@ -1,10 +1,10 @@
 # Taija meets Supercomputing
 
-**Abstract**: [Taija](https://github.com/JuliaTrustworthyAI) is a growing library of packages geared towards *T*rustworthy *A*rtificial *I*ntelligence in *J*uli*a*.  Various ongoing efforts towards making artificial intelligence more trustworthy have one thing in common: they typically increase the overall computational burden involved in training and using machine learning models. To overcome this burden we can either write more performant software or maximise the utilization of existing hardware through parallelization ... or we can do both! This talk will discuss [Taija](https://github.com/JuliaTrustworthyAI)'s recent venture into supercomputing: challenges, success stories and plans for the future. 
+**Abstract**: [Taija](https://github.com/JuliaTrustworthyAI) is a growing ecosystem of packages geared towards *T*rustworthy *A*rtificial *I*ntelligence in *J*uli*a*.  Various ongoing efforts towards making artificial intelligence more trustworthy have one thing in common: they typically increase the overall computational burden involved in training and using machine learning models. To overcome this burden we can either write more performant software or maximise the utilization of hardware through parallelization ... or we can do both! This talk will discuss [Taija](https://github.com/JuliaTrustworthyAI)'s recent venture into supercomputing: challenges, success stories and plans for the future. 
 
 ## Description
 
-In the wake of recent rapid advances in artificial intelligence (AI), it is more crucial than ever that we take efforts to ensure that the technologies we deploy are trustworthy. Efforts surrounding [Taija](https://github.com/JuliaTrustworthyAI) have so far centered around explainability and uncertainty quantification for supervised machine learning models. [CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl), for example, is a comprehensive package for generating counterfactual explanations for models trained in [Flux.jl](https://fluxml.ai/Flux.jl/dev/), [MLJ.jl](https://alan-turing-institute.github.io/MLJ.jl/dev/) and more. 
+In the wake of recent and rapid advances in artificial intelligence (AI), it is more crucial than ever that we take efforts to ensure that the technologies we deploy are trustworthy. Efforts surrounding [Taija](https://github.com/JuliaTrustworthyAI) have so far centered around explainability and uncertainty quantification for supervised machine learning models. [CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl), for example, is a comprehensive package for generating counterfactual explanations for models trained in [Flux.jl](https://fluxml.ai/Flux.jl/dev/), [MLJ.jl](https://alan-turing-institute.github.io/MLJ.jl/dev/) and more. 
 
 ### 🌐 Why supercomputing?
 
@@ -20,13 +20,13 @@ MPI.Init()
 parallelizer = MPIParallelizer(MPI.COMM_WORLD)
 ```
 
-and then just use the `@with_parallelizer` followed by the `parallelizer` object and the standard API call to evaluate counterfactuals:
+and then just use the `@with_parallelizer` macro followed by the `parallelizer` object and the standard API call to evaluate counterfactuals:
 
 ```julia
 @with_parallelizer parallelizer evaluate(counterfactuals)
 ```
 
-Under the hood we use standard [MPI.jl](https://juliaparallel.org/MPI.jl/latest/) routines for distributed computing. To avoid depending on [MPI.jl](https://juliaparallel.org/MPI.jl/latest/) we use [package extensions](https://www.youtube.com/watch?v=TiIZlQhFzyk). Similarly, the `ThreadsParallelizer` can be used for multi-threading where we rely on `Base.Threads` routines. It is also possible to combine both forms of parallelization by setting the `threaded` keyword argument of the `MPIParallelizer` to `true`. 
+Under the hood we use common [MPI.jl](https://juliaparallel.org/MPI.jl/latest/) routines for distributed computing. To avoid depending on [MPI.jl](https://juliaparallel.org/MPI.jl/latest/) we use [package extensions](https://www.youtube.com/watch?v=TiIZlQhFzyk). Similarly, the `ThreadsParallelizer` can be used for multi-threading where we rely on `Base.Threads` routines. It is also possible to combine both forms of parallelization by setting the `threaded` keyword argument of the `MPIParallelizer` to `true`. 
 
 ### 🏅 Benchmarking Counterfactuals (case study)
 
@@ -38,6 +38,6 @@ Parallelization is also useful for other [Taija](https://github.com/JuliaTrustwo
 
 ### 👥 Who is this talk for?
 
-This talk should be useful for anyone interested in either Trustworthy AI or parallel computing or both. We are no experts in parallel computing so the level of this talk should also be appropriate for beginners. 
+This talk should be useful for anyone interested in either trustworthy AI or parallel computing or both. We are no experts in parallel computing so the level of this talk should also be appropriate for beginners. 
 
 ## Notes
