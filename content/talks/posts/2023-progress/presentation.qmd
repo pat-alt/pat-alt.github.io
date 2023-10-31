@@ -1,0 +1,146 @@
+---
+title: "2nd Year Progress Meeting"
+subtitle: PhD in Trustworthy AI
+author: 
+  - name: "Patrick Altmeyer"
+    url: https://www.paltmeyer.com/
+institute: Delft University of Technology
+date: today
+date-format: long
+format: 
+  julia-revealjs:
+    theme: custom.scss
+    self-contained: true
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    fig-align: center
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+---
+
+## Agenda
+
+1. Stocktaking 
+2. Reflection on the past year
+3. Next steps
+
+# Stocktaking
+
+## Papers {.smaller}
+
+- 1 paper published and presented (SaTML: [*Ch2*]), 1 published in proceedings (JuliaCon: [*Ch1.1*])
+- 1 paper submitted (ECCCo: [*Ch3*])
+- 1 paper in preparation (`LaplaceRedux.jl`: [*Ch1.2*]), 1 about to start (`ConformalPrediction.jl` [*Ch1.3*])
+- 1 paper co-authored (Conformal Intent Recognition)
+
+## Open Source and Science {.smaller}
+
+- 2 new Julia packages published: `ConformalPrediction.jl` and `JointEnergyModels.jl`.
+- Major updates to `CounterfactualExplanations.jl` and `LaplaceRedux.jl`.
+- First steps towards a unified ecosystem for Trustworthy AI in Julia: `Taija.jl`.
+- Published 7 blog posts.
+- Some work on Quarto extensions.
+
+## Talks
+
+A total of 8 talks: 
+
+- Companies (3): DSCC (ING), Bank of England, Verbond van Verzekeraars
+- Software community (2): Julia Eindhoven, JuliaCon
+- Academia (3): SaTML, ICT.Open (demo), Mondai
+
+## Graduate School
+
+- Summer School in Barcelona (5 ECTS: *discipline*)
+- Software project (2nd year BSc): `CounterfactualExplanations.jl` (2 ECTS: *research*)
+- Software project (2nd year BSc): `LaplaceRedux.jl` (2 ECTS: *research*)
+- SaTML and JuliaCon (4 ECTS: *research*)
+
+## Other
+
+- 1st Price at ING Experiment Week
+- 2nd Price at JuliaCon 2023 Pluto Notebook Competition
+- First person at TU Delft to do serious work in Julia on a HPC cluster (as far as I know).
+
+# Reflection
+
+## What went well?
+
+- Very happy with the progress on the open-source projects.
+- Generally also happy with the progress on the papers.
+- Research ideas are becoming more refined and interesting.
+- I am enjoying the work and the people I am working with.
+
+## What could have gone better? {.smaller}
+
+- I am struggling with the balance between research and open-source.
+- I have come to realise that writing truly solid technical papers takes more time than I thought.
+  - Camera-ready version of SaTML paper took about 1 month.
+  - ECCCo took about 2-3 additional months of work after initial submission.
+- At times, seriously overwhelmed, to the extent that I was genuinely concerned about my mental health for the first time in my life.
+  - Nobody's fault if not my own, but not going back to that place again.
+
+## What did I learn?
+
+- You can't have it all.
+- I need to be more selective about what I work on.
+- I need to be more realistic about what I can achieve.
+
+# Next Steps
+
+## Ongoing Papers
+
+- ECCCo [*Ch3*]: only minor revisions left.
+- Conformal Prediction [*Ch1.3*]: start writing.
+- LaplaceRedux [*Ch1.2*]: turn into full paper.
+
+## Planned Papers {.smaller}
+
+- 3rd research paper [*Ch4*]: *What makes models explainable?*
+  - Involve students (ECCCo for trees and model-agnostic).
+  - Candidate venues: NeuRIPS Datasets and Benchmarks (2024/2025), journal paper.
+- 4th research paper [*Ch5*]: 
+  1. *The Cost of Unfaithful Model Explanations*: agent-based simulation of the impact of unfaithful model explanations on human decision-making.
+  2. *Causal ECCCo*: combining ECCCo with Causal Abstraction.
+
+## Open Source
+
+- Maybe: Lightening talk on `JointEnergyModels.jl` at JuliaCon 2024 [*Ch1.4*].
+- Then: "`Taija.jl` 4 years" later at JuliaCon 2025.
+
+## Time Management {.smaller}
+
+- I think it is feasible to have the following papers in (near-) final form by the end of year 3: ECCCo [*Ch3*], LaplaceRedux [*Ch1.2*], Conformal Prediction [*Ch1.3*], 3rd research paper [*Ch4*].
+- At that point, we are looking at a comprehensive thesis: 3 software papers forming the extended introduction and 3 research papers forming the core.
+- 4th year can then be used to:
+  - Collate chapters (thesis).
+  - Write paper on `JointEnergyModels.jl` [potentially *Ch1.4*].
+  - Tackle the 4th research paper without pressure to get it published in time [potentially *Ch5*].
+  - Ensure `Taija.jl` is in a good state.
+  - Job hunting.
+  - Google Summer of Code?
+  - Teaching?
+  - Other?
+
+## References 
