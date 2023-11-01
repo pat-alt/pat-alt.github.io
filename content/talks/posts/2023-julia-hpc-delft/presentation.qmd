@@ -1,0 +1,199 @@
+---
+title: "Julia on HPC"
+subtitle: "CounterfactualExplanations.jl meets Supercomputing"
+author: 
+  - name: "Patrick Altmeyer"
+    url: https://www.paltmeyer.com/
+institute: Delft University of Technology
+date: today
+format: 
+  tudelft-revealjs:
+    theme: custom.scss
+    self-contained: true
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: none
+    background-transition: fade
+    fig-align: center
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+bibliography: ../../../../bib.bib
+---
+
+## Agenda {.smaller}
+
+::: {.incremental}
+
+- Introduction to Parallel Computing (15 min).
+  1. What is parallel computing?
+  2. Parallel computing in Julia.
+  3. Different forms of [parallelization](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/stable/tutorials/parallelization/) offered by [CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl).
+- First interactive session: local parallelization (15 min).
+- Julia on [DelftBlue](https://www.tudelft.nl/dhpc/system) (25 min).
+  1. What is DelftBlue?
+  2. How to use Julia on DelftBlue?
+  3. Challenges and solutions.
+- Second interactive session: remote parallelization (25 min).
+
+:::
+
+# Introduction to Parallel Computing
+
+## What is Parallel Computing?
+
+> Parallel computing is a type of computation in which many calculations or processes are carried out simultaneously.
+> --- [Wikipedia](https://en.wikipedia.org/wiki/Parallel_computing)
+
+![Image by [Kay Jan Wong](https://towardsdatascience.com/multithreading-and-multiprocessing-in-10-minutes-20d9b3c6a867).](www/parallel.png)
+
+## Parallel Computing in Julia
+
+Julia has strong native and external support for parallel computing.
+
+
+::::{.columns}::::
+:::{.column width='50%'}
+
+#### [Multi-Threading](https://docs.julialang.org/en/v1/manual/multi-threading/#man-multithreading)
+
+Command line:
+
+```{.bash}
+julia --threads 4
+```
+
+Julia:
+
+```{.julia}
+Threads.@threads for i = 1:10
+    a[i] = Threads.threadid()
+end
+```
+
+:::
+
+:::{.column width='50%'}
+
+#### [Multi-Processing](https://docs.julialang.org/en/v1/manual/distributed-computing/)
+
+- [Distributed](https://docs.julialang.org/en/v1/stdlib/Distributed/#man-distributed) standard library (not covered here).
+- [MPI.jl](https://juliaparallel.org/MPI.jl/latest/) wrapper for [MPI](https://en.wikipedia.org/wiki/Message_Passing_Interface) (our focus).
+:::
+::::
+
+## Parallelization in [CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) 
+
+::::{.columns}::::
+:::{.column width='50%'}
+::: {.incremental}
+
+- Motivation: often required to generate many explanations. 
+- Goal: native support for both forms of [parallelization](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/stable/tutorials/parallelization/).
+- Desiteratum: minimize the burden on users.
+
+:::
+:::
+:::{.column width='50%'}
+![Usage example.](www/usage.png)
+:::
+::::
+
+# First Interactive Session: Local Parallelization
+
+## Tasks (15 min)
+
+1. If not already done, either fork or clone the [repo](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl).
+2. Open the notebook `docs/src/tutorials/parallelization.qmd`.
+3. Using the `@time` macro, check if multi-threading speeds up computations.
+
+# Julia on DelftBlue
+
+## What is DelftBlue?
+
+> DelftBlue is [one of two] supercomputer[s] at TU Delft [that] will offer 20,000 CPU cores in over 400 compute nodes.
+> --- [DelftBlue](https://www.tudelft.nl/dhpc/system)
+
+- Rich [documentation](https://doc.dhpc.tudelft.nl/delftblue/Accounting-and-shares/) including a small section on [Julia](https://doc.dhpc.tudelft.nl/delftblue/howtos/Julia-with-MPI/).
+- Should be accessible to all of you.
+- You will be among the first to use Julia on DelftBlue.
+- Alternative: [DAIC](https://doc.daic.tudelft.nl/).
+
+## How to Use Julia on DelftBlue? {.smaller}
+
+::::{.columns}::::
+:::{.column width='50%'}
+::: {.incremental}
+
+- Use Julia from the software stack (see [docs](https://doc.dhpc.tudelft.nl/delftblue/howtos/Julia-with-MPI/)).
+- Recommended: install your own Julia version.
+- Get help on [Mattermost](https://mattermost.tudelft.nl/dhpc/channels/julia).
+
+:::
+:::
+:::{.column width='50%'}
+::: {.callout-note appearance="minimal"}
+
+## Self-install
+
+See [julia-hpc-for-dummies](https://github.com/pat-alt/julia-hpc-for-dummies#julia-on-delftblue) for additional details.
+
+1. Sym-link the Julia installation to your home directory.
+
+```{.bash}
+mkdir -p /scratch/${USER}/.julia
+ln -s /scratch/${USER}/.julia $HOME/.julia
+```
+
+2. Sym-link `juliaup` to your home directory.
+
+```{.bash}
+mkdir -p /scratch/${USER}/.juliaup
+ln -s /scratch/${USER}/.juliaup $HOME/.juliaup
+```
+
+3. Install `juliaup` as follows: `curl -fsSL https://install.julialang.org | sh`. Customize location to `/scratch/${USER}/.juliaup`.
+
+:::
+:::
+::::
+
+## Challenges and Solutions {.smaller}
+
+::: {.incremental}
+
+1. Julia version shipped with software stack is outdated. Solution: install your own Julia version.
+2. Login nodes are not meant for computations. Compiling Julia takes a long time. Solution: do as much as possible on your local machine. For anything else, rely mostly on the compute nodes.
+3. Self-installed Julia uses "all the resources!" 🧐 Solution: use this [header](https://github.com/pat-alt/julia-hpc-for-dummies/blob/main/examples/slurm_header.sh) for your scripts. 
+
+:::
+
+. . .
+
+![Whoopsie!](www/whoops.png){width="50%"}
+
+# Second Interactive Session: Remote Parallelization
+
+## Tasks (25 min)
+
+1. Install your own Julia version on DelftBlue.
+2. Fork and/or clone the [julia-hpc-for-dummies](https://github.com/pat-alt/julia-hpc-for-dummies) repo.
+3. Send a job to DelftBlue.

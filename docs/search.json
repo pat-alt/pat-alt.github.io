@@ -2532,5 +2532,82 @@
     "title": "2nd Year Progress Meeting",
     "section": "Other Accomplishments",
     "text": "Other Accomplishments\n\n1st Price at ING Experiment Week.\n2nd Price at JuliaCon 2023 Pluto Notebook Competition.\nFirst person at TU Delft to do serious work in Julia on a HPC cluster (as far as I know)."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#agenda",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#agenda",
+    "title": "Julia on HPC",
+    "section": "Agenda",
+    "text": "Agenda\n\n\nIntroduction to Parallel Computing (15 min).\n\nWhat is parallel computing?\nParallel computing in Julia.\nDifferent forms of parallelization offered by CounterfactualExplanations.jl.\n\nFirst interactive session: local parallelization (15 min).\nJulia on DelftBlue (25 min).\n\nWhat is DelftBlue?\nHow to use Julia on DelftBlue?\nChallenges and solutions.\n\nSecond interactive session: remote parallelization (25 min)."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#what-is-parallel-computing",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#what-is-parallel-computing",
+    "title": "Julia on HPC",
+    "section": "What is Parallel Computing?",
+    "text": "What is Parallel Computing?\n\nParallel computing is a type of computation in which many calculations or processes are carried out simultaneously. — Wikipedia\n\n\nImage by Kay Jan Wong."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#parallel-computing-in-julia",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#parallel-computing-in-julia",
+    "title": "Julia on HPC",
+    "section": "Parallel Computing in Julia",
+    "text": "Parallel Computing in Julia\nJulia has strong native and external support for parallel computing.\n\n\nMulti-Threading\nCommand line:\njulia --threads 4\nJulia:\nThreads.@threads for i = 1:10\n    a[i] = Threads.threadid()\nend\n\nMulti-Processing\n\nDistributed standard library (not covered here).\nMPI.jl wrapper for MPI (our focus)."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#parallelization-in-counterfactualexplanations.jl",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#parallelization-in-counterfactualexplanations.jl",
+    "title": "Julia on HPC",
+    "section": "Parallelization in CounterfactualExplanations.jl",
+    "text": "Parallelization in CounterfactualExplanations.jl\n\n\n\n\nMotivation: often required to generate many explanations.\nGoal: native support for both forms of parallelization.\nDesiteratum: minimize the burden on users.\n\n\n\n\n\n\nUsage example."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks",
+    "title": "Julia on HPC",
+    "section": "Tasks",
+    "text": "Tasks\n\nInstall your own Julia version on DelftBlue.\nFork and/or clone the julia-hpc-for-dummies repo.\nSend a job to DelftBlue."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#what-is-delftblue",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#what-is-delftblue",
+    "title": "Julia on HPC",
+    "section": "What is DelftBlue?",
+    "text": "What is DelftBlue?\n\nDelftBlue is [one of two] supercomputer[s] at TU Delft [that] will offer 20,000 CPU cores in over 400 compute nodes. — DelftBlue\n\n\nRich documentation including a small section on Julia.\nShould be accessible to all of you.\nYou will be among the first to use Julia on DelftBlue.\nAlternative: DAIC."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#how-to-use-julia-on-delftblue",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#how-to-use-julia-on-delftblue",
+    "title": "Julia on HPC",
+    "section": "How to Use Julia on DelftBlue?",
+    "text": "How to Use Julia on DelftBlue?\n\n\n\n\nUse Julia from the software stack (see docs).\nRecommended: install your own Julia version.\nGet help on Mattermost.\n\n\n\n\n\n\nSelf-install\n\n\nSee julia-hpc-for-dummies for additional details.\n\nSym-link the Julia installation to your home directory.\n\nmkdir -p /scratch/${USER}/.julia\nln -s /scratch/${USER}/.julia $HOME/.julia\n\nSym-link juliaup to your home directory.\n\nmkdir -p /scratch/${USER}/.juliaup\nln -s /scratch/${USER}/.juliaup $HOME/.juliaup\n\nInstall juliaup as follows: curl -fsSL https://install.julialang.org | sh. Customize location to /scratch/${USER}/.juliaup."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#challenges-and-solutions",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#challenges-and-solutions",
+    "title": "Julia on HPC",
+    "section": "Challenges and Solutions",
+    "text": "Challenges and Solutions\n\n\nJulia version shipped with software stack is outdated. Solution: install your own Julia version.\nLogin nodes are not meant for computations. Compiling Julia takes a long time. Solution: do as much as possible on your local machine. For anything else, rely mostly on the compute nodes.\nSelf-installed Julia uses “all the resources!” 🧐 Solution: use this header for your scripts.\n\n\n\n\n\n\nWhoopsie!"
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-1",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-1",
+    "title": "Julia on HPC",
+    "section": "Tasks",
+    "text": "Tasks\n\nInstall your own Julia version on DelftBlue.\nFork and/or clone the julia-hpc-for-dummies repo.\nSend a job to DelftBlue."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-15-min",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-15-min",
+    "title": "Julia on HPC",
+    "section": "Tasks (15 min)",
+    "text": "Tasks (15 min)\n\nIf not already done, either fork or clone the repo.\nOpen the notebook docs/src/tutorials/parallelization.qmd.\nUsing the @time macro, check if multi-threading speeds up computations."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-25-min",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-25-min",
+    "title": "Julia on HPC",
+    "section": "Tasks (25 min)",
+    "text": "Tasks (25 min)\n\nInstall your own Julia version on DelftBlue.\nFork and/or clone the julia-hpc-for-dummies repo.\nSend a job to DelftBlue."
   }
 ]
