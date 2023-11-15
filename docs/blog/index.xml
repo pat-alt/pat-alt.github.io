@@ -7919,7 +7919,7 @@ font-style: inherit;">1</span>]</span></code></pre></div>
 <p>Firstly, note that <img src="https://latex.codecogs.com/png.latex?X_1"> (red cross) falls into a region of the domain that is characterized by high predictive uncertainty. It sits right at the bottom-right corner of our class-zero moon 🌜 (orange), a region that is almost entirely enveloped by our class-one moon 🌛 (green). For low coverage rates the prediction set for <img src="https://latex.codecogs.com/png.latex?X_1"> is empty: on the left-hand side this is indicated by the missing contour for the softmax probability; on the right-hand side we can observe that the corresponding set size is indeed zero. For high coverage rates the prediction set includes both <img src="https://latex.codecogs.com/png.latex?y=0"> and <img src="https://latex.codecogs.com/png.latex?y=1">, indicative of the fact that the conformal classifier is uncertain about the true label.</p>
 <p>With respect to <img src="https://latex.codecogs.com/png.latex?X_2">, we observe that while also sitting on the fringe of our class-zero moon, this sample populates a region that is not fully enveloped by data points from the opposite class. In this region, the underlying atomic classifier can be expected to be more certain about its predictions, but still not highly confident. How is this reflected by our corresponding conformal prediction sets?</p>
 <div class="cell" data-execution_count="9">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1">Xtest_2 <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -7976,7 +7976,7 @@ font-style: inherit;">0</span>)</span></code></pre></div>
 </div>
 <p>These two examples illustrate an interesting point: for regions characterised by high predictive uncertainty, conformal prediction sets are typically empty (for low coverage) or large (for high coverage). While set-valued predictions may be something to get used to, this notion is overall intuitive.</p>
 <div class="cell" data-execution_count="11">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -9823,7 +9823,7 @@ A Bayesian Neural Network gradually learns.
 <blockquote class="blockquote">
 <p>How compelling is an explanation really if it competes with many other equally compelling, but potentially very different explanations?</p>
 </blockquote>
-<p>A scenario like this very much calls for treating predictions from deep learning models probabilistically [<span class="citation" data-cites="wilson2020case">Wilson (2020)</span>]<sup>2</sup><sup>3</sup>.</p>
+<p>A scenario like this very much calls for treating predictions from deep learning models probabilistically <span class="citation" data-cites="wilson2020case">(Wilson 2020)</span><sup>2</sup><sup>3</sup>.</p>
 <p>Formally, we are interested in estimating the posterior predictive distribution as the following Bayesian model average (BMA):</p>
 <p><img src="https://latex.codecogs.com/png.latex?%0Ap(y%7Cx,%5Cmathcal%7BD%7D)%20=%20%5Cint%20p(y%7Cx,%5Ctheta)p(%5Ctheta%7C%5Cmathcal%7BD%7D)d%5Ctheta%0A"></p>
 <p>The integral implies that we essentially need many predictions from many different specifications of <img src="https://latex.codecogs.com/png.latex?%5Ctheta">. Unfortunately, this means more work for us or rather our computers. Fortunately though, researchers have proposed many ingenious ways to approximate the equation above in recent years: <span class="citation" data-cites="gal2016dropout">Gal and Ghahramani (2016)</span> propose using dropout at test time while <span class="citation" data-cites="lakshminarayanan2016simple">Lakshminarayanan, Pritzel, and Blundell (2016)</span> show that averaging over an ensemble of just five models seems to do the trick. Still, despite their simplicity and usefulness these approaches involve additional computational costs compared to training just a single network. As we shall see now though, another promising approach has recently entered the limelight: <strong>Laplace approximation</strong> (LA).</p>
@@ -10514,10 +10514,10 @@ Simulation of changing parameter distribution.
 <p>To add a little bit of life to our example we will assume that the binary labels classify samples into cats and dogs, based on their height and tail length. Figure&nbsp;1 shows the synthetic data in the two-dimensional feature domain. Following an introduction to Bayesian Logistic Regression in the next section we will use the synthetic data <img src="https://latex.codecogs.com/png.latex?%5Cmathcal%7BD%7D"> to estimate our model.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-ground" class="quarto-figure quarto-figure-center anchored" data-fig-align="center" width="672">
+<div id="fig-ground" class="quarto-figure quarto-figure-center anchored" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ground-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="https://www.paltmeyer.com/blog/blog/posts/bayesian-logit/index_files/figure-html/fig-ground-1.png" class="img-fluid quarto-figure-center figure-img" width="672">
+<img src="https://www.paltmeyer.com/blog/blog/posts/bayesian-logit/index_files/figure-html/fig-ground-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
 </div>
 <figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-ground-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Ground truth labels.
@@ -10567,10 +10567,10 @@ Figure&nbsp;1: Ground truth labels.
 <p>Fortunately, it turns out that we can trade off a little bit of accuracy in return for a convenient analytical solution. In particular, we have that <img src="https://latex.codecogs.com/png.latex?%5Csigma(a)%20%5Capprox%20%5CPhi(%5Clambda%20a)"> where <img src="https://latex.codecogs.com/png.latex?%5CPhi(.)"> is the standard Gaussian cdf and <img src="https://latex.codecogs.com/png.latex?%5Clambda=%5Cpi/8"> ensures that the two functions have the same slope at the origin (Figure&nbsp;2). Without dwelling further on the details we can use this finding to approximate the integral in Equation&nbsp;5 as a sigmoid function. This is called <strong>probit approximation</strong> and implemented below.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-probit" class="quarto-figure quarto-figure-center anchored" data-fig-align="center" width="672">
+<div id="fig-probit" class="quarto-figure quarto-figure-center anchored" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-probit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="https://www.paltmeyer.com/blog/blog/posts/bayesian-logit/index_files/figure-html/fig-probit-1.png" class="img-fluid quarto-figure-center figure-img" width="672">
+<img src="https://www.paltmeyer.com/blog/blog/posts/bayesian-logit/index_files/figure-html/fig-probit-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
 </div>
 <figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-probit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Demonstration of the probit approximation.

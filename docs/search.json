@@ -74,7 +74,7 @@
     "href": "blog/posts/effortsless-bayesian-dl/index.html#the-case-for-bayesian-deep-learning",
     "title": "Go deep, but also … go Bayesian!",
     "section": "The case for Bayesian Deep Learning",
-    "text": "The case for Bayesian Deep Learning\nWhatever side of this entertaining twitter dispute you find yourself on, the reality is that deep-learning systems have already been deployed at large scale both in academia and industry. More pressing debates therefore revolve around the trustworthiness of these existing systems. How robust are they and in what way exactly do they arrive at decisions that affect each and every one of us? Robustifying deep neural networks generally involves some form of adversarial training, which is costly, can hurt generalization (Raghunathan et al. 2019) and does ultimately not guarantee stability (Bastounis, Hansen, and Vlačić 2021). With respect to interpretability, surrogate explainers like LIME and SHAP are among the most popular tools, but they too have been shown to lack robustness (Slack et al. 2020).\nExactly why are deep neural networks unstable and in-transparent? Let \\(\\mathcal{D}=\\{x,y\\}_{n=1}^N\\) denote our feature-label pairs and let \\(f(x;\\theta)=y\\) denote some deep neural network specified by its parameters \\(\\theta\\). Then the first thing to note is that the number of free parameters \\(\\theta\\) is typically huge (if you ask Mr Sutskever it really probably cannot be huge enough!). That alone makes it very hard to monitor and interpret the inner workings of deep-learning algorithms. Perhaps more importantly though, the number of parameters relative to the size of \\(\\mathcal{D}\\) is generally huge:\n\n[…] deep neural networks are typically very underspecified by the available data, and […] parameters [therefore] correspond to a diverse variety of compelling explanations for the data. (Wilson 2020)\n\nIn other words, training a single deep neural network may (and usually does) lead to one random parameter specification that fits the underlying data very well. But in all likelihood there are many other specifications that also fit the data very well. This is both a strength and vulnerability of deep learning: it is a strength because it typically allows us to find one such “compelling explanation” for the data with ease through stochastic optimization; it is a vulnerability because one has to wonder:\n\nHow compelling is an explanation really if it competes with many other equally compelling, but potentially very different explanations?\n\nA scenario like this very much calls for treating predictions from deep learning models probabilistically [Wilson (2020)]23.\nFormally, we are interested in estimating the posterior predictive distribution as the following Bayesian model average (BMA):\n\\[\np(y|x,\\mathcal{D}) = \\int p(y|x,\\theta)p(\\theta|\\mathcal{D})d\\theta\n\\]\nThe integral implies that we essentially need many predictions from many different specifications of \\(\\theta\\). Unfortunately, this means more work for us or rather our computers. Fortunately though, researchers have proposed many ingenious ways to approximate the equation above in recent years: Gal and Ghahramani (2016) propose using dropout at test time while Lakshminarayanan, Pritzel, and Blundell (2016) show that averaging over an ensemble of just five models seems to do the trick. Still, despite their simplicity and usefulness these approaches involve additional computational costs compared to training just a single network. As we shall see now though, another promising approach has recently entered the limelight: Laplace approximation (LA).\nIf you have read my previous post on Bayesian Logistic Regression, then the term Laplace should already sound familiar to you. As a matter of fact, we will see that all concepts covered in that previous post can be naturally extended to deep learning. While some of these concepts will be revisited below, I strongly recommend you check out the previous post before reading on here. Without further ado let us now see how LA can be used for truly effortless deep learning."
+    "text": "The case for Bayesian Deep Learning\nWhatever side of this entertaining twitter dispute you find yourself on, the reality is that deep-learning systems have already been deployed at large scale both in academia and industry. More pressing debates therefore revolve around the trustworthiness of these existing systems. How robust are they and in what way exactly do they arrive at decisions that affect each and every one of us? Robustifying deep neural networks generally involves some form of adversarial training, which is costly, can hurt generalization (Raghunathan et al. 2019) and does ultimately not guarantee stability (Bastounis, Hansen, and Vlačić 2021). With respect to interpretability, surrogate explainers like LIME and SHAP are among the most popular tools, but they too have been shown to lack robustness (Slack et al. 2020).\nExactly why are deep neural networks unstable and in-transparent? Let \\(\\mathcal{D}=\\{x,y\\}_{n=1}^N\\) denote our feature-label pairs and let \\(f(x;\\theta)=y\\) denote some deep neural network specified by its parameters \\(\\theta\\). Then the first thing to note is that the number of free parameters \\(\\theta\\) is typically huge (if you ask Mr Sutskever it really probably cannot be huge enough!). That alone makes it very hard to monitor and interpret the inner workings of deep-learning algorithms. Perhaps more importantly though, the number of parameters relative to the size of \\(\\mathcal{D}\\) is generally huge:\n\n[…] deep neural networks are typically very underspecified by the available data, and […] parameters [therefore] correspond to a diverse variety of compelling explanations for the data. (Wilson 2020)\n\nIn other words, training a single deep neural network may (and usually does) lead to one random parameter specification that fits the underlying data very well. But in all likelihood there are many other specifications that also fit the data very well. This is both a strength and vulnerability of deep learning: it is a strength because it typically allows us to find one such “compelling explanation” for the data with ease through stochastic optimization; it is a vulnerability because one has to wonder:\n\nHow compelling is an explanation really if it competes with many other equally compelling, but potentially very different explanations?\n\nA scenario like this very much calls for treating predictions from deep learning models probabilistically (Wilson 2020)23.\nFormally, we are interested in estimating the posterior predictive distribution as the following Bayesian model average (BMA):\n\\[\np(y|x,\\mathcal{D}) = \\int p(y|x,\\theta)p(\\theta|\\mathcal{D})d\\theta\n\\]\nThe integral implies that we essentially need many predictions from many different specifications of \\(\\theta\\). Unfortunately, this means more work for us or rather our computers. Fortunately though, researchers have proposed many ingenious ways to approximate the equation above in recent years: Gal and Ghahramani (2016) propose using dropout at test time while Lakshminarayanan, Pritzel, and Blundell (2016) show that averaging over an ensemble of just five models seems to do the trick. Still, despite their simplicity and usefulness these approaches involve additional computational costs compared to training just a single network. As we shall see now though, another promising approach has recently entered the limelight: Laplace approximation (LA).\nIf you have read my previous post on Bayesian Logistic Regression, then the term Laplace should already sound familiar to you. As a matter of fact, we will see that all concepts covered in that previous post can be naturally extended to deep learning. While some of these concepts will be revisited below, I strongly recommend you check out the previous post before reading on here. Without further ado let us now see how LA can be used for truly effortless deep learning."
   },
   {
     "objectID": "blog/posts/effortsless-bayesian-dl/index.html#laplace-approximation",
@@ -511,11 +511,11 @@
     "text": "Graduate School\n\nSummer School in Barcelona (5 ECTS: discipline).\nDeep Learning in Julia study group.\nSoftware project (2nd year BSc): CounterfactualExplanations.jl (2 ECTS: research).\nSoftware project (2nd year BSc): LaplaceRedux.jl (2 ECTS: research).\nSaTML and JuliaCon (4 ECTS: research).\n\nTotal (missing): research (-2.5), discipline (5), transferable (8)"
   },
   {
-    "objectID": "content/talks/posts/2023-progress/presentation.html#other",
-    "href": "content/talks/posts/2023-progress/presentation.html#other",
+    "objectID": "content/talks/posts/2023-progress/presentation.html#other-accomplishments",
+    "href": "content/talks/posts/2023-progress/presentation.html#other-accomplishments",
     "title": "2nd Year Progress Meeting",
-    "section": "Other",
-    "text": "Other\n\n1st Price at ING Experiment Week.\n2nd Price at JuliaCon 2023 Pluto Notebook Competition.\nFirst person at TU Delft to do serious work in Julia on a HPC cluster (as far as I know)."
+    "section": "Other Accomplishments",
+    "text": "Other Accomplishments\n\n1st Price at ING Experiment Week.\n2nd Price at JuliaCon 2023 Pluto Notebook Competition.\nFirst person at TU Delft to do serious work in Julia on a HPC cluster (as far as I know)."
   },
   {
     "objectID": "content/talks/posts/2023-progress/presentation.html#what-went-well",
@@ -567,11 +567,67 @@
     "text": "Time Management\n\nI think it is feasible to have the following papers in (near-) final form by the end of year 3: ECCCo [Ch3], LaplaceRedux [Ch1.2], Conformal Prediction [Ch1.3], 3rd research paper [Ch4].\nAt that point, we are looking at a comprehensive thesis: 3 software papers forming the extended introduction and 3 research papers forming the core.\n4th year can then be used to:\n\nCollate chapters (thesis).\nWrite paper on JointEnergyModels.jl [potentially Ch1.4].\nTackle 4th research paper w/o pressure to publish in time [potentially Ch5].\nEnsure Taija.jl is in a good state.\nEnsure Graduate School credits are in order.\nCareer Planning.\nGoogle Summer of Code? Teaching? Research Visit? Internship? Other?"
   },
   {
-    "objectID": "content/talks/posts/2023-progress/presentation.html#references",
-    "href": "content/talks/posts/2023-progress/presentation.html#references",
-    "title": "2nd Year Progress Meeting",
-    "section": "References",
-    "text": "References"
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#agenda",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#agenda",
+    "title": "Julia on HPC",
+    "section": "Agenda",
+    "text": "Agenda\n\n\nIntroduction to Parallel Computing (15 min).\n\nWhat is parallel computing?\nParallel computing in Julia.\nDifferent forms of parallelization offered by CounterfactualExplanations.jl.\n\nFirst interactive session: local parallelization (15 min).\nJulia on DelftBlue (25 min).\n\nWhat is DelftBlue?\nHow to use Julia on DelftBlue?\nChallenges and solutions.\n\nSecond interactive session: remote parallelization (25 min)."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#what-is-parallel-computing",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#what-is-parallel-computing",
+    "title": "Julia on HPC",
+    "section": "What is Parallel Computing?",
+    "text": "What is Parallel Computing?\n\nParallel computing is a type of computation in which many calculations or processes are carried out simultaneously. — Wikipedia\n\n\nImage by Kay Jan Wong."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#parallel-computing-in-julia",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#parallel-computing-in-julia",
+    "title": "Julia on HPC",
+    "section": "Parallel Computing in Julia",
+    "text": "Parallel Computing in Julia\nJulia has strong native and external support for parallel computing.\n\n\nMulti-Threading\nCommand line:\njulia --threads 4\nJulia:\nThreads.@threads for i = 1:10\n    a[i] = Threads.threadid()\nend\n\nMulti-Processing\n\nDistributed standard library (not covered here).\nMPI.jl wrapper for MPI (our focus)."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#parallelization-in-counterfactualexplanations.jl",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#parallelization-in-counterfactualexplanations.jl",
+    "title": "Julia on HPC",
+    "section": "Parallelization in CounterfactualExplanations.jl",
+    "text": "Parallelization in CounterfactualExplanations.jl\n\n\n\n\nMotivation: often required to generate many explanations.\nGoal: native support for both forms of parallelization.\nDesiteratum: minimize the burden on users.\n\n\n\n\n\n\nUsage example."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-15-min",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-15-min",
+    "title": "Julia on HPC",
+    "section": "Tasks (15 min)",
+    "text": "Tasks (15 min)\n\nIf not already done, either fork or clone the repo.\nOpen the notebook docs/src/tutorials/parallelization.qmd.\nUsing the @time macro, check if multi-threading speeds up computations."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#what-is-delftblue",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#what-is-delftblue",
+    "title": "Julia on HPC",
+    "section": "What is DelftBlue?",
+    "text": "What is DelftBlue?\n\nDelftBlue is [one of two] supercomputer[s] at TU Delft [that] will offer 20,000 CPU cores in over 400 compute nodes. — DelftBlue\n\n\nRich documentation including a small section on Julia.\nShould be accessible to all of you.\nYou will be among the first to use Julia on DelftBlue.\nAlternative: DAIC."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#how-to-use-julia-on-delftblue",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#how-to-use-julia-on-delftblue",
+    "title": "Julia on HPC",
+    "section": "How to Use Julia on DelftBlue?",
+    "text": "How to Use Julia on DelftBlue?\n\n\n\n\nUse Julia from the software stack (see docs).\nRecommended: install your own Julia version.\nGet help on Mattermost.\n\n\n\n\n\n\nSelf-install\n\n\nSee julia-hpc-for-dummies for additional details.\n\nSym-link the Julia installation to your home directory.\n\nmkdir -p /scratch/${USER}/.julia\nln -s /scratch/${USER}/.julia $HOME/.julia\n\nSym-link juliaup to your home directory.\n\nmkdir -p /scratch/${USER}/.juliaup\nln -s /scratch/${USER}/.juliaup $HOME/.juliaup\n\nInstall juliaup as follows: curl -fsSL https://install.julialang.org | sh. Customize location to /scratch/${USER}/.juliaup."
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#challenges-and-solutions",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#challenges-and-solutions",
+    "title": "Julia on HPC",
+    "section": "Challenges and Solutions",
+    "text": "Challenges and Solutions\n\n\nJulia version shipped with software stack is outdated. Solution: install your own Julia version.\nLogin nodes are not meant for computations. Compiling Julia takes a long time. Solution: do as much as possible on your local machine. For anything else, rely mostly on the compute nodes.\nSelf-installed Julia uses “all the resources!” 🧐 Solution: use this header for your scripts.\n\n\n\n\n\n\nWhoopsie!"
+  },
+  {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-25-min",
+    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-25-min",
+    "title": "Julia on HPC",
+    "section": "Tasks (25 min)",
+    "text": "Tasks (25 min)\n\nInstall your own Julia version on DelftBlue.\nFork and/or clone the julia-hpc-for-dummies repo.\nSend a job to DelftBlue."
   },
   {
     "objectID": "content/talks/posts/2023-ieee-satml/long_presentation.html#quick-intro",
@@ -1201,7 +1257,7 @@
     "href": "content/talks/posts/2022-julia-eindhoven/presentation.html#counterfactualexplanations.jl",
     "title": "A year of using Quarto with Julia",
     "section": "CounterfactualExplanations.jl",
-    "text": "CounterfactualExplanations.jl\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        75%\n        75%\n    \n    \n        \n    \n\n\nCounterfactualExplanations.jl is a package for generating Counterfactual Explanations (CE) and Algorithmic Recourse (AR) for black-box algorithms. Both CE and AR are related tools for explainable artificial intelligence (XAI). While the package is written purely in Julia, it can be used to explain machine learning algorithms developed and trained in other popular programming languages like Python and R. See below for short introduction and other resources or dive straight into the docs.\n\n\n\nTurning a nine (9) into a four (4).\n\n\n\n\n\n\nA sad 🐱 on its counterfactual path to its cool dog friends."
+    "text": "CounterfactualExplanations.jl\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        77%\n        77%\n    \n    \n        \n    \n\n\nCounterfactualExplanations.jl is a package for generating Counterfactual Explanations (CE) and Algorithmic Recourse (AR) for black-box algorithms. Both CE and AR are related tools for explainable artificial intelligence (XAI). While the package is written purely in Julia, it can be used to explain machine learning algorithms developed and trained in other popular programming languages like Python and R. See below for short introduction and other resources or dive straight into the docs.\n\n\n\nTurning a nine (9) into a four (4).\n\n\n\n\n\n\nA sad 🐱 on its counterfactual path to its cool dog friends."
   },
   {
     "objectID": "content/talks/posts/2022-julia-eindhoven/presentation.html#laplaceredux.jl-1",
@@ -1215,7 +1271,7 @@
     "href": "content/talks/posts/2022-julia-eindhoven/presentation.html#conformalprediction.jl",
     "title": "A year of using Quarto with Julia",
     "section": "ConformalPrediction.jl",
-    "text": "ConformalPrediction.jl\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        72%\n        72%\n    \n    \n        \n       \nConformalPrediction.jl is a package for Uncertainty Quantification (UQ) through Conformal Prediction (CP) in Julia. It is designed to work with supervised models trained in MLJ (Blaom et al. 2020). Conformal Prediction is distribution-free, easy-to-understand, easy-to-use and model-agnostic.\n\n\n\nConformal Prediction in action: Prediction sets for two different samples and changing coverage rates. As coverage grows, so does the size of the prediction sets."
+    "text": "ConformalPrediction.jl\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        69%\n        69%\n    \n    \n        \n       \nConformalPrediction.jl is a package for Uncertainty Quantification (UQ) through Conformal Prediction (CP) in Julia. It is designed to work with supervised models trained in MLJ (Blaom et al. 2020). Conformal Prediction is distribution-free, easy-to-understand, easy-to-use and model-agnostic.\n\n\n\nConformal Prediction in action: Prediction sets for two different samples and changing coverage rates. As coverage grows, so does the size of the prediction sets."
   },
   {
     "objectID": "content/talks/posts/2022-julia-eindhoven/presentation.html#more-resources",
@@ -1355,7 +1411,7 @@
     "href": "content/talks/posts/2022-dscc/presentation.html#counterfactualexplanations.jl",
     "title": "Explaining Black-Box Models through Counterfactuals",
     "section": "CounterfactualExplanations.jl 📦",
-    "text": "CounterfactualExplanations.jl 📦\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        75%\n        75%\n    \n    \n        \n      \n\n\n\n\nA unifying framework for generating Counterfactual Explanations.\nFast, extensible and composable allowing users and developers to add and combine different counterfactual generators.\nImplements a number of SOTA generators.\nBuilt in Julia, but can be used to explain models built in R and Python (still experimental).\n\n\n\n\n\n\nPhoto by Denise Jans on Unsplash.\n\n\n\n\n\n\nJulia has an edge with respect to Trustworthy AI: it’s open-source, uniquely transparent and interoperable 🔴🟢🟣"
+    "text": "CounterfactualExplanations.jl 📦\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        77%\n        77%\n    \n    \n        \n      \n\n\n\n\nA unifying framework for generating Counterfactual Explanations.\nFast, extensible and composable allowing users and developers to add and combine different counterfactual generators.\nImplements a number of SOTA generators.\nBuilt in Julia, but can be used to explain models built in R and Python (still experimental).\n\n\n\n\n\n\nPhoto by Denise Jans on Unsplash.\n\n\n\n\n\n\nJulia has an edge with respect to Trustworthy AI: it’s open-source, uniquely transparent and interoperable 🔴🟢🟣"
   },
   {
     "objectID": "content/talks/posts/2022-dscc/presentation.html#a-simple-example",
@@ -1439,7 +1495,7 @@
     "href": "content/talks/posts/2022-dscc/presentation.html#conformalprediction.jl",
     "title": "Explaining Black-Box Models through Counterfactuals",
     "section": "ConformalPrediction.jl",
-    "text": "ConformalPrediction.jl\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        72%\n        72%\n    \n    \n        \n       \nConformalPrediction.jl is a package for Uncertainty Quantification (UQ) through Conformal Prediction (CP) in Julia. It is designed to work with supervised models trained in MLJ (Blaom et al. 2020). Conformal Prediction is distribution-free, easy-to-understand, easy-to-use and model-agnostic.\n\n\n\nConformal Prediction in action: Prediction sets for two different samples and changing coverage rates. As coverage grows, so does the size of the prediction sets."
+    "text": "ConformalPrediction.jl\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        69%\n        69%\n    \n    \n        \n       \nConformalPrediction.jl is a package for Uncertainty Quantification (UQ) through Conformal Prediction (CP) in Julia. It is designed to work with supervised models trained in MLJ (Blaom et al. 2020). Conformal Prediction is distribution-free, easy-to-understand, easy-to-use and model-agnostic.\n\n\n\nConformal Prediction in action: Prediction sets for two different samples and changing coverage rates. As coverage grows, so does the size of the prediction sets."
   },
   {
     "objectID": "content/talks/posts/2022-dscc/presentation.html#more-resources",
@@ -1533,11 +1589,53 @@
     "text": "In July 2023, I gave a talk at JuliaCon 2023 on Predictive Uncertainty Quantification in Machine Learning using ConformalPrediction.jl. The conference was held in person at MIT in Cambridge, Massachusetts. See here for the slides."
   },
   {
-    "objectID": "content/recent.html",
-    "href": "content/recent.html",
-    "title": "Patrick Altmeyer",
+    "objectID": "content/publications/index.html",
+    "href": "content/publications/index.html",
+    "title": "Publications",
     "section": "",
-    "text": "Tweets by paltmey"
+    "text": "Below you may find a list of highlighted publications. For a full list, see my Google Scholar profile.\n\n\n\n\n\n\n   \n     \n     \n       Order By\n       Default\n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Title\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\nTitle\n\n\nDate\n\n\nVenue\n\n\nDescription\n\n\n\n\n\n\nExplaining Black-Box Models through Counterfactuals\n\n\n2023\n\n\nJuliaCon Proceedings\n\n\nWe present CounterfactualExplanations.jl: a package for generating Counterfactual Explanations (CE) and Algorithmic Recourse (AR) for black-box models in Julia.\n\n\n\n\nYield curve sensitivity to investor positioning around economic shocks\n\n\n2023\n\n\nBank of England Staff Working Paper\n\n\nUsing granular, daily EMIR Trade Repository data on short sterling futures, we investigate the interaction of speculative trading and macroeconomic shocks on UK yield curve pricing.\n\n\n\n\nEndogenous Macrodynamics in Algorithmic Recourse\n\n\n2023\n\n\nIEEE Conference on Secure and Trustworthy Machine Learning (SaTML)\n\n\nWe present evidence suggesting that state-of-the-art applications of Algorithmic Recourse to groups of individuals induce large domain and model shifts and propose ways to mitigate this.\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "content/publications/posts/satml-2023/index.html",
+    "href": "content/publications/posts/satml-2023/index.html",
+    "title": "Endogenous Macrodynamics in Algorithmic Recourse",
+    "section": "",
+    "text": "Existing work on Counterfactual Explanations (CE) and Algorithmic Recourse (AR) has largely focused on single individuals in a static environment: given some estimated model, the goal is to find valid counterfactuals for an individual instance that fulfill various desiderata. The ability of such counterfactuals to handle dynamics like data and model drift remains a largely unexplored research challenge. There has also been surprisingly little work on the related question of how the actual implementation of recourse by one individual may affect other individuals. Through this work, we aim to close that gap. We first show that many of the existing methodologies can be collectively described by a generalized framework. We then argue that the existing framework does not account for a hidden external cost of recourse, that only reveals itself when studying the endogenous dynamics of recourse at the group level. Through simulation experiments involving various state-of-the-art counterfactual generators and several benchmark datasets, we generate large numbers of counterfactuals and study the resulting domain and model shifts. We find that the induced shifts are substantial enough to likely impede the applicability of Algorithmic Recourse in some situations. Fortunately, we find various strategies to mitigate these concerns. Our simulation framework for studying recourse dynamics is fast and open-sourced.\nFull paper: please find all available versions here.\n\n\n\nPhoto taken during poster session following my presentation at SaTML."
+  },
+  {
+    "objectID": "content/publications/posts/satml-2023/index.html#abstract",
+    "href": "content/publications/posts/satml-2023/index.html#abstract",
+    "title": "Endogenous Macrodynamics in Algorithmic Recourse",
+    "section": "",
+    "text": "Existing work on Counterfactual Explanations (CE) and Algorithmic Recourse (AR) has largely focused on single individuals in a static environment: given some estimated model, the goal is to find valid counterfactuals for an individual instance that fulfill various desiderata. The ability of such counterfactuals to handle dynamics like data and model drift remains a largely unexplored research challenge. There has also been surprisingly little work on the related question of how the actual implementation of recourse by one individual may affect other individuals. Through this work, we aim to close that gap. We first show that many of the existing methodologies can be collectively described by a generalized framework. We then argue that the existing framework does not account for a hidden external cost of recourse, that only reveals itself when studying the endogenous dynamics of recourse at the group level. Through simulation experiments involving various state-of-the-art counterfactual generators and several benchmark datasets, we generate large numbers of counterfactuals and study the resulting domain and model shifts. We find that the induced shifts are substantial enough to likely impede the applicability of Algorithmic Recourse in some situations. Fortunately, we find various strategies to mitigate these concerns. Our simulation framework for studying recourse dynamics is fast and open-sourced.\nFull paper: please find all available versions here.\n\n\n\nPhoto taken during poster session following my presentation at SaTML."
+  },
+  {
+    "objectID": "content/publications/posts/boe/index.html",
+    "href": "content/publications/posts/boe/index.html",
+    "title": "Yield curve sensitivity to investor positioning around economic shocks",
+    "section": "",
+    "text": "Speculative trading activity may either support efficient market functioning or introduce price distortions. Using granular, daily EMIR Trade Repository data on short sterling futures, we investigate the interaction of speculative trading and macroeconomic shocks on UK yield curve pricing over a 16-month sample period from 2018 to 2020. Our results are largely consistent with efficient market functioning throughout the period, although we find some evidence that short speculative positions amplified yield curve moves in response to Brexit shocks, while long speculative positions had a dampening effect.\nFull paper: please find all available versions here."
+  },
+  {
+    "objectID": "content/publications/posts/boe/index.html#abstract",
+    "href": "content/publications/posts/boe/index.html#abstract",
+    "title": "Yield curve sensitivity to investor positioning around economic shocks",
+    "section": "",
+    "text": "Speculative trading activity may either support efficient market functioning or introduce price distortions. Using granular, daily EMIR Trade Repository data on short sterling futures, we investigate the interaction of speculative trading and macroeconomic shocks on UK yield curve pricing over a 16-month sample period from 2018 to 2020. Our results are largely consistent with efficient market functioning throughout the period, although we find some evidence that short speculative positions amplified yield curve moves in response to Brexit shocks, while long speculative positions had a dampening effect.\nFull paper: please find all available versions here."
+  },
+  {
+    "objectID": "content/publications/posts/jcon-ce/index.html",
+    "href": "content/publications/posts/jcon-ce/index.html",
+    "title": "Explaining Black-Box Models through Counterfactuals",
+    "section": "",
+    "text": "We present CounterfactualExplanations.jl: a package for generating Counterfactual Explanations (CE) and Algorithmic Recourse (AR) for black-box models in Julia. CE explain how inputs into a model need to change to yield specific model predictions. Explanations that involve realistic and actionable changes can be used to provide AR: a set of proposed actions for individuals to change an undesirable outcome for the better. In this article, we discuss the usefulness of CE for Explainable Artificial Intelligence and demonstrate the functionality of our package. The package is straightforward to use and designed with a focus on customization and extensibility. We envision it to one day be the go-to place for explaining arbitrary predictive models in Julia through a diverse suite of counterfactual generators.\nFull paper: please find all available versions here."
+  },
+  {
+    "objectID": "content/publications/posts/jcon-ce/index.html#abstract",
+    "href": "content/publications/posts/jcon-ce/index.html#abstract",
+    "title": "Explaining Black-Box Models through Counterfactuals",
+    "section": "",
+    "text": "We present CounterfactualExplanations.jl: a package for generating Counterfactual Explanations (CE) and Algorithmic Recourse (AR) for black-box models in Julia. CE explain how inputs into a model need to change to yield specific model predictions. Explanations that involve realistic and actionable changes can be used to provide AR: a set of proposed actions for individuals to change an undesirable outcome for the better. In this article, we discuss the usefulness of CE for Explainable Artificial Intelligence and demonstrate the functionality of our package. The package is straightforward to use and designed with a focus on customization and extensibility. We envision it to one day be the go-to place for explaining arbitrary predictive models in Julia through a diverse suite of counterfactual generators.\nFull paper: please find all available versions here."
   },
   {
     "objectID": "content/talks/posts/2023-juliacon/presentation.html#talk-agenda",
@@ -1803,7 +1901,7 @@
     "href": "content/talks/posts/2022-juliacon/counterfactuals.html#enter-counterfactualexplanations.jl",
     "title": "Explaining Black-Box Models through Counterfactuals",
     "section": "Enter: CounterfactualExplanations.jl 📦",
-    "text": "Enter: CounterfactualExplanations.jl 📦\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        75%\n        75%\n    \n    \n        \n    \n\n… until now!\n\n\n\n\n\nA unifying framework for generating Counterfactual Explanations.\nBuilt in Julia, but essentially language agnostic:\n\nCurrently supporting explanations for differentiable models built in Julia (e.g. Flux) and torch (R and Python).\n\nDesigned to be easily extensible through dispatch.\nDesigned to be composable allowing users and developers to combine different counterfactual generators.\n\n\n\n\n\n\nPhoto by Denise Jans on Unsplash.\n\n\n\n\n\n\nJulia has an edge with respect to Trustworthy AI: it’s open-source, uniquely transparent and interoperable 🔴🟢🟣"
+    "text": "Enter: CounterfactualExplanations.jl 📦\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        77%\n        77%\n    \n    \n        \n    \n\n… until now!\n\n\n\n\n\nA unifying framework for generating Counterfactual Explanations.\nBuilt in Julia, but essentially language agnostic:\n\nCurrently supporting explanations for differentiable models built in Julia (e.g. Flux) and torch (R and Python).\n\nDesigned to be easily extensible through dispatch.\nDesigned to be composable allowing users and developers to combine different counterfactual generators.\n\n\n\n\n\n\nPhoto by Denise Jans on Unsplash.\n\n\n\n\n\n\nJulia has an edge with respect to Trustworthy AI: it’s open-source, uniquely transparent and interoperable 🔴🟢🟣"
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/counterfactuals.html#overview-1",
@@ -1992,7 +2090,7 @@
     "href": "content/talks/posts/2022-boe/presentation.html#counterfactualexplanations.jl",
     "title": "Explaining Machine Learning Models through Counterfactuals",
     "section": "CounterfactualExplanations.jl 📦",
-    "text": "CounterfactualExplanations.jl 📦\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        75%\n        75%\n    \n    \n        \n      \n\n\n\n\nA unifying framework for generating Counterfactual Explanations.\nFast, extensible and composable allowing users and developers to add and combine different counterfactual generators.\nImplements a number of SOTA generators.\nBuilt in Julia, but can be used to explain models built in R and Python (still experimental).\nStatus 🔁: ready for research, not production. Thought/challenge/contributions welcome!\n\n\n\n\n\n\nPhoto by Denise Jans on Unsplash.\n\n\n\n\n\n\nJulia has an edge with respect to Trustworthy AI: it’s open-source, uniquely transparent and interoperable 🔴🟢🟣"
+    "text": "CounterfactualExplanations.jl 📦\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        77%\n        77%\n    \n    \n        \n      \n\n\n\n\nA unifying framework for generating Counterfactual Explanations.\nFast, extensible and composable allowing users and developers to add and combine different counterfactual generators.\nImplements a number of SOTA generators.\nBuilt in Julia, but can be used to explain models built in R and Python (still experimental).\nStatus 🔁: ready for research, not production. Thought/challenge/contributions welcome!\n\n\n\n\n\n\nPhoto by Denise Jans on Unsplash.\n\n\n\n\n\n\nJulia has an edge with respect to Trustworthy AI: it’s open-source, uniquely transparent and interoperable 🔴🟢🟣"
   },
   {
     "objectID": "content/talks/posts/2022-boe/presentation.html#a-simple-example",
@@ -2097,7 +2195,7 @@
     "href": "content/talks/posts/2022-boe/presentation.html#conformalprediction.jl",
     "title": "Explaining Machine Learning Models through Counterfactuals",
     "section": "ConformalPrediction.jl",
-    "text": "ConformalPrediction.jl\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        72%\n        72%\n    \n    \n        \n       \nConformalPrediction.jl is a package for Uncertainty Quantification (UQ) through Conformal Prediction (CP) in Julia. It is designed to work with supervised models trained in MLJ (Blaom et al. 2020). Conformal Prediction is distribution-free, easy-to-understand, easy-to-use and model-agnostic.\n\n\n\nConformal Prediction in action: Prediction sets for two different samples and changing coverage rates. As coverage grows, so does the size of the prediction sets."
+    "text": "ConformalPrediction.jl\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        69%\n        69%\n    \n    \n        \n       \nConformalPrediction.jl is a package for Uncertainty Quantification (UQ) through Conformal Prediction (CP) in Julia. It is designed to work with supervised models trained in MLJ (Blaom et al. 2020). Conformal Prediction is distribution-free, easy-to-understand, easy-to-use and model-agnostic.\n\n\n\nConformal Prediction in action: Prediction sets for two different samples and changing coverage rates. As coverage grows, so does the size of the prediction sets."
   },
   {
     "objectID": "content/talks/posts/2022-boe/presentation.html#more-resources",
@@ -2261,6 +2359,13 @@
     "text": "In February 2023, I presented our paper “Endogenous Macrodynamics in Algorithmic Recourse” at the first IEEE SaTML conference. You can find the slides here.\n\n\n\nIEEE SaTML Logo"
   },
   {
+    "objectID": "content/talks/posts/2023-julia-hpc-delft/index.html",
+    "href": "content/talks/posts/2023-julia-hpc-delft/index.html",
+    "title": "Julia on HPC",
+    "section": "",
+    "text": "These slides were used for a tutorial introducing a group of bachelor and master students to working with Julia on the DelftBlue supercomputer. The following topics were covered:\n\nNative and intuitive support for different forms of parallelization offered by CounterfactualExplanations.jl.\nCommon challenges and solutions when working with Julia on one of TU Delft’s clusters (see also this unpolished repo with examples).\nInteractive session where students were guided towards running their first benchmark of counterfactual explanations on DelftBlue (see also docs)."
+  },
+  {
     "objectID": "content/about/contact.html",
     "href": "content/about/contact.html",
     "title": "Patrick Altmeyer",
@@ -2279,7 +2384,7 @@
     "href": "index.html",
     "title": "Welcome.",
     "section": "",
-    "text": "Welcome.\nI’m a PhD Candidate in Trustworthy Artificial Intelligence at Delft University of Technology working on the intersection of Computer Science and Finance.\nMy current research revolves around Counterfactual Explanations and Probabilistic Machine Learning. Previously, I worked as an Economist for the Bank of England.\nI primarily code in Julia and publish through Quarto. Occasionally I also use R, Python and C++. As much as possible I contribute to open-source: Github.\nYou can find the code that builds this website using Quarto in this repo.\nTweets by paltmey"
+    "text": "Welcome.\nI’m a PhD Candidate in Trustworthy Artificial Intelligence at Delft University of Technology working on the intersection of Computer Science and Finance.\nMy current research revolves around Counterfactual Explanations and Probabilistic Machine Learning. Previously, I worked as an Economist for the Bank of England.\nI primarily code in Julia and publish through Quarto. Occasionally I also use R, Python and C++. As much as possible I contribute to open-source: Github.\nYou can find the code that builds this website using Quarto in this repo."
   },
   {
     "objectID": "blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks/index.html",
@@ -2525,96 +2630,5 @@
     "title": "A Leap of Faith into Julia’s Metaverse",
     "section": "🌯 Wrapping Up",
     "text": "🌯 Wrapping Up\nIn this blog post, I’ve done something I usually try to avoid: talk about things I don’t know. Metaprogramming is an exciting topic and if you’re still here, you just got to experience it through the lens of an absolute novice. During our leap of faith into Julia’s metaverse we’ve learned the following things:\n\nCode in Julia is internally represented as a mutable data structure.\nMacros are a way to take such data structures and transform them before they get evaluated at runtime.\nAn important thing to keep in mind when writing macros is variable scopes.\n\nThroughout this post, I have skipped various important details that (I think) were not immediately relevant to the goal I had in mind: adding my first macro to CounterfactualExplanations.jl. In the future, I may write about this topic again and cover some of these missing details (hopefully with a bit more insight at that point!)."
-  },
-  {
-    "objectID": "content/talks/posts/2023-progress/presentation.html#other-accomplishments",
-    "href": "content/talks/posts/2023-progress/presentation.html#other-accomplishments",
-    "title": "2nd Year Progress Meeting",
-    "section": "Other Accomplishments",
-    "text": "Other Accomplishments\n\n1st Price at ING Experiment Week.\n2nd Price at JuliaCon 2023 Pluto Notebook Competition.\nFirst person at TU Delft to do serious work in Julia on a HPC cluster (as far as I know)."
-  },
-  {
-    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#agenda",
-    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#agenda",
-    "title": "Julia on HPC",
-    "section": "Agenda",
-    "text": "Agenda\n\n\nIntroduction to Parallel Computing (15 min).\n\nWhat is parallel computing?\nParallel computing in Julia.\nDifferent forms of parallelization offered by CounterfactualExplanations.jl.\n\nFirst interactive session: local parallelization (15 min).\nJulia on DelftBlue (25 min).\n\nWhat is DelftBlue?\nHow to use Julia on DelftBlue?\nChallenges and solutions.\n\nSecond interactive session: remote parallelization (25 min)."
-  },
-  {
-    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#what-is-parallel-computing",
-    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#what-is-parallel-computing",
-    "title": "Julia on HPC",
-    "section": "What is Parallel Computing?",
-    "text": "What is Parallel Computing?\n\nParallel computing is a type of computation in which many calculations or processes are carried out simultaneously. — Wikipedia\n\n\nImage by Kay Jan Wong."
-  },
-  {
-    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#parallel-computing-in-julia",
-    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#parallel-computing-in-julia",
-    "title": "Julia on HPC",
-    "section": "Parallel Computing in Julia",
-    "text": "Parallel Computing in Julia\nJulia has strong native and external support for parallel computing.\n\n\nMulti-Threading\nCommand line:\njulia --threads 4\nJulia:\nThreads.@threads for i = 1:10\n    a[i] = Threads.threadid()\nend\n\nMulti-Processing\n\nDistributed standard library (not covered here).\nMPI.jl wrapper for MPI (our focus)."
-  },
-  {
-    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#parallelization-in-counterfactualexplanations.jl",
-    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#parallelization-in-counterfactualexplanations.jl",
-    "title": "Julia on HPC",
-    "section": "Parallelization in CounterfactualExplanations.jl",
-    "text": "Parallelization in CounterfactualExplanations.jl\n\n\n\n\nMotivation: often required to generate many explanations.\nGoal: native support for both forms of parallelization.\nDesiteratum: minimize the burden on users.\n\n\n\n\n\n\nUsage example."
-  },
-  {
-    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks",
-    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks",
-    "title": "Julia on HPC",
-    "section": "Tasks",
-    "text": "Tasks\n\nInstall your own Julia version on DelftBlue.\nFork and/or clone the julia-hpc-for-dummies repo.\nSend a job to DelftBlue."
-  },
-  {
-    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#what-is-delftblue",
-    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#what-is-delftblue",
-    "title": "Julia on HPC",
-    "section": "What is DelftBlue?",
-    "text": "What is DelftBlue?\n\nDelftBlue is [one of two] supercomputer[s] at TU Delft [that] will offer 20,000 CPU cores in over 400 compute nodes. — DelftBlue\n\n\nRich documentation including a small section on Julia.\nShould be accessible to all of you.\nYou will be among the first to use Julia on DelftBlue.\nAlternative: DAIC."
-  },
-  {
-    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#how-to-use-julia-on-delftblue",
-    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#how-to-use-julia-on-delftblue",
-    "title": "Julia on HPC",
-    "section": "How to Use Julia on DelftBlue?",
-    "text": "How to Use Julia on DelftBlue?\n\n\n\n\nUse Julia from the software stack (see docs).\nRecommended: install your own Julia version.\nGet help on Mattermost.\n\n\n\n\n\n\nSelf-install\n\n\nSee julia-hpc-for-dummies for additional details.\n\nSym-link the Julia installation to your home directory.\n\nmkdir -p /scratch/${USER}/.julia\nln -s /scratch/${USER}/.julia $HOME/.julia\n\nSym-link juliaup to your home directory.\n\nmkdir -p /scratch/${USER}/.juliaup\nln -s /scratch/${USER}/.juliaup $HOME/.juliaup\n\nInstall juliaup as follows: curl -fsSL https://install.julialang.org | sh. Customize location to /scratch/${USER}/.juliaup."
-  },
-  {
-    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#challenges-and-solutions",
-    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#challenges-and-solutions",
-    "title": "Julia on HPC",
-    "section": "Challenges and Solutions",
-    "text": "Challenges and Solutions\n\n\nJulia version shipped with software stack is outdated. Solution: install your own Julia version.\nLogin nodes are not meant for computations. Compiling Julia takes a long time. Solution: do as much as possible on your local machine. For anything else, rely mostly on the compute nodes.\nSelf-installed Julia uses “all the resources!” 🧐 Solution: use this header for your scripts.\n\n\n\n\n\n\nWhoopsie!"
-  },
-  {
-    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-1",
-    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-1",
-    "title": "Julia on HPC",
-    "section": "Tasks",
-    "text": "Tasks\n\nInstall your own Julia version on DelftBlue.\nFork and/or clone the julia-hpc-for-dummies repo.\nSend a job to DelftBlue."
-  },
-  {
-    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-15-min",
-    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-15-min",
-    "title": "Julia on HPC",
-    "section": "Tasks (15 min)",
-    "text": "Tasks (15 min)\n\nIf not already done, either fork or clone the repo.\nOpen the notebook docs/src/tutorials/parallelization.qmd.\nUsing the @time macro, check if multi-threading speeds up computations."
-  },
-  {
-    "objectID": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-25-min",
-    "href": "content/talks/posts/2023-julia-hpc-delft/presentation.html#tasks-25-min",
-    "title": "Julia on HPC",
-    "section": "Tasks (25 min)",
-    "text": "Tasks (25 min)\n\nInstall your own Julia version on DelftBlue.\nFork and/or clone the julia-hpc-for-dummies repo.\nSend a job to DelftBlue."
-  },
-  {
-    "objectID": "content/talks/posts/2023-julia-hpc-delft/index.html",
-    "href": "content/talks/posts/2023-julia-hpc-delft/index.html",
-    "title": "Julia on HPC",
-    "section": "",
-    "text": "These slides were used for a tutorial introducing a group of bachelor and master students to working with Julia on the DelftBlue supercomputer. The following topics were covered:\n\nNative and intuitive support for different forms of parallelization offered by CounterfactualExplanations.jl.\nCommon challenges and solutions when working with Julia on one of TU Delft’s clusters (see also this unpolished repo with examples).\nInteractive session where students were guided towards running their first benchmark of counterfactual explanations on DelftBlue (see also docs)."
   }
 ]

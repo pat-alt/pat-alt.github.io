@@ -90,7 +90,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
@@ -109,6 +109,10 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <li class="nav-item">
     <a class="nav-link active" href="./index.html" aria-current="page"> 
 <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./content/publications/index.html"> 
+<span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./blog/index.html"> 
@@ -161,14 +165,24 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 
 
+<style>
+body {
+  background-image: url("./www/bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: white;
+}
+
+body a{
+    color: lightblue;
+}
+</style>
 <section id="welcome." class="level1">
 <h1>Welcome.</h1>
 <p>I’m a PhD Candidate in <strong>Trustworthy Artificial Intelligence</strong> at Delft University of Technology working on the intersection of Computer Science and Finance.</p>
 <p>My current research revolves around <strong>Counterfactual Explanations</strong> and <strong>Probabilistic Machine Learning</strong>. Previously, I worked as an Economist for the Bank of England.</p>
 <p>I primarily code in <a href="https://github.com/JuliaLang/julia" target="_blank">Julia</a> and publish through <a href="https://github.com/quarto-dev" target="_blank">Quarto</a>. Occasionally I also use R, Python and C++. As much as possible I contribute to <strong>open-source</strong>: <a href="https://github.com/pat-alt" target="_blank">Github</a>.</p>
 <p>You can find the code that builds this website using <a href="https://github.com/quarto-dev" target="_blank">Quarto</a> in this <a href="https://github.com/pat-alt/pat-alt.github.io" target="_blank">repo</a>.</p>
-<a class="twitter-timeline" href="https://twitter.com/paltmey?ref_src=twsrc%5Etfw">Tweets by paltmey</a>
-<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 </section>
@@ -327,8 +341,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
       if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
         }
         typesetMath(container);
         return container.innerHTML
@@ -568,7 +589,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>© 2022, Patrick Altmeyer</p>
+<p>© 2023, Patrick Altmeyer</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

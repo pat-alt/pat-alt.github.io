@@ -151,7 +151,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
@@ -170,6 +170,10 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <li class="nav-item">
     <a class="nav-link" href="../../../index.html"> 
 <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/publications/index.html"> 
+<span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../blog/index.html"> 
@@ -306,7 +310,7 @@ A Bayesian Neural Network gradually learns.
 <blockquote class="blockquote">
 <p>How compelling is an explanation really if it competes with many other equally compelling, but potentially very different explanations?</p>
 </blockquote>
-<p>A scenario like this very much calls for treating predictions from deep learning models probabilistically [<span class="citation" data-cites="wilson2020case">Wilson (<a href="#ref-wilson2020case" role="doc-biblioref">2020</a>)</span>]<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<p>A scenario like this very much calls for treating predictions from deep learning models probabilistically <span class="citation" data-cites="wilson2020case">(<a href="#ref-wilson2020case" role="doc-biblioref">Wilson 2020</a>)</span><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
 <p>Formally, we are interested in estimating the posterior predictive distribution as the following Bayesian model average (BMA):</p>
 <p><span class="math display">\[
 p(y|x,\mathcal{D}) = \int p(y|x,\theta)p(\theta|\mathcal{D})d\theta
@@ -678,8 +682,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
       if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
         }
         typesetMath(container);
         return container.innerHTML
@@ -921,7 +932,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>© 2022, Patrick Altmeyer</p>
+<p>© 2023, Patrick Altmeyer</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

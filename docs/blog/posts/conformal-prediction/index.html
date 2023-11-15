@@ -154,7 +154,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
@@ -173,6 +173,10 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <li class="nav-item">
     <a class="nav-link" href="../../../index.html"> 
 <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/publications/index.html"> 
+<span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../blog/index.html"> 
@@ -469,7 +473,7 @@ Development Status
 <p>Firstly, note that <span class="math inline">\(X_1\)</span> (red cross) falls into a region of the domain that is characterized by high predictive uncertainty. It sits right at the bottom-right corner of our class-zero moon 🌜 (orange), a region that is almost entirely enveloped by our class-one moon 🌛 (green). For low coverage rates the prediction set for <span class="math inline">\(X_1\)</span> is empty: on the left-hand side this is indicated by the missing contour for the softmax probability; on the right-hand side we can observe that the corresponding set size is indeed zero. For high coverage rates the prediction set includes both <span class="math inline">\(y=0\)</span> and <span class="math inline">\(y=1\)</span>, indicative of the fact that the conformal classifier is uncertain about the true label.</p>
 <p>With respect to <span class="math inline">\(X_2\)</span>, we observe that while also sitting on the fringe of our class-zero moon, this sample populates a region that is not fully enveloped by data points from the opposite class. In this region, the underlying atomic classifier can be expected to be more certain about its predictions, but still not highly confident. How is this reflected by our corresponding conformal prediction sets?</p>
 <div class="cell" data-execution_count="9">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Xtest_2 <span class="op">=</span> (x1<span class="op">=</span>[<span class="op">-</span><span class="fl">0.5</span>],x2<span class="op">=</span>[<span class="fl">0.25</span>])</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>cov_ <span class="op">=</span> <span class="fl">.9</span></span>
@@ -486,7 +490,7 @@ Development Status
 </div>
 <p>These two examples illustrate an interesting point: for regions characterised by high predictive uncertainty, conformal prediction sets are typically empty (for low coverage) or large (for high coverage). While set-valued predictions may be something to get used to, this notion is overall intuitive.</p>
 <div class="cell" data-execution_count="11">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>coverages <span class="op">=</span> <span class="fu">range</span>(<span class="fl">0.75</span>,<span class="fl">1.0</span>,length<span class="op">=</span><span class="fl">5</span>)</span>
@@ -738,8 +742,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
       if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
         }
         typesetMath(container);
         return container.innerHTML
@@ -981,7 +992,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>© 2022, Patrick Altmeyer</p>
+<p>© 2023, Patrick Altmeyer</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

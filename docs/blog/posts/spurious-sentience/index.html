@@ -133,7 +133,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
@@ -152,6 +152,10 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <li class="nav-item">
     <a class="nav-link" href="../../../index.html"> 
 <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/publications/index.html"> 
+<span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../blog/index.html"> 
@@ -269,7 +273,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <p>In response to the claims made by Tegmark, numerous commentators on social media have pointed out that even the simplest of models can exhibit structure in their latent spaces. One of the most popular and illustrative examples I remember from my time at the Bank of England is yield curve decomposition through PCA. The yield curve is a popular tool for investors and economists to gauge the health of the economy. It plots the yields of bonds against their maturities. The slope of the yield curve is often used as a predictor of future economic activity: a steep yield curve is associated with a growing economy, while a flat or inverted yield curve is associated with a contracting economy.</p>
 <p>To understand this better, let us go on a quick detour into economics and look at actual yield curves observed in the US during the Global Financial Crisis (GFC). <a href="#fig-gfc-1" class="quarto-xref">Figure&nbsp;1 (a)</a> shows the yield curve of US Treasury bonds on 27 February 2007, which according to <a href="https://money.cnn.com/2007/02/27/markets/markets_0630/index.htm?cnn=yes">CNN</a> was a “brutal day on Wall Street”.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> This followed <a href="https://money.cnn.com/2007/02/26/news/economy/greenspan/index.htm?postversion=2007022609">reports</a> on the previous day of former Federal Reserve Chairman Alan Greenspan’s warning that the US economy was at risk of a recession. The yield curve was inverted with a sharp negative spread between the 10-year and 3-month yields, indicative of the market’s expectation of a recession.</p>
 <p><a href="#fig-gfc-2" class="quarto-xref">Figure&nbsp;1 (b)</a> shows the corresponding yield curve during the aftermath of the GFC on 20 April 2009. On that day the influential Time Magazine <a href="https://content.time.com/time/business/article/0,8599,1890560,00.html">reported</a> that the “Banking Crisis is Over”. The yield curve was steeply sloped with a positive spread between the 10-year and 3-month yields, indicative of the market’s expectation of a recovery. The overall level of the yield curve was still very low though, indicative of the fact that US economy had not fully recovered at that point.</p>
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a>df <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"data/ust_yields.csv"</span>), DataFrame) <span class="op">|&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>    x <span class="op">-&gt;</span> <span class="pp">@pivot_longer</span>(x, <span class="op">-</span><span class="dt">Date</span>) <span class="op">|&gt;</span></span>
@@ -467,7 +471,7 @@ Figure&nbsp;1: Yield curve of US Treasury bonds.
 <p>The estimated latent embeddings of the yield curve are characterized by patterns observed in the data.</p>
 </blockquote>
 <div id="cell-fig-pca" class="cell" data-execution_count="3">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># PCA:</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>df_wide <span class="op">=</span> <span class="pp">@select</span>(df, <span class="dt">Date</span>, variable, value) <span class="op">|&gt;</span></span>
@@ -731,7 +735,7 @@ Figure&nbsp;2: Comparison of latent embeddings and observed data of the US Treas
 <p>Not convinced? Let us use <span class="math inline">\(\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}\)</span> in true autoencoder fashion to reconstruct yield curves from principal components. Let <span class="math inline">\(z_1\)</span> denote the first principal component and consider the following: we keep all other <span class="math inline">\(M-1\)</span> principal components fixed at zero where <span class="math inline">\(M\)</span> denotes the total number of maturities; next we traverse the latent space by varying the value of <span class="math inline">\(z_1\)</span> over a fixed grid of length <span class="math inline">\(K\)</span> each time storing the full vector <span class="math inline">\(\mathbf{z}\)</span>; finally, we vertically concatenate the vectors and end up with a matrix <span class="math inline">\(\mathbf{Z}\)</span> of dimension <span class="math inline">\((K \times M)\)</span>. To reconstruct yields, we simply multiply <span class="math inline">\(Z\)</span> by the singular values and right singular vectors: <span class="math inline">\(\mathbf{Y}=\mathbf{Z}\Sigma\mathbf{V}^{\prime}\)</span>.</p>
 <p><a href="#fig-pca-anim" class="quarto-xref">Figure&nbsp;3</a> shows the result of this exercise in the left panel. As we can see, our generated yield curves shift vertically as we traverse the latent space. The right panel of <a href="#fig-pca-anim" class="quarto-xref">Figure&nbsp;3</a> shows the result of a similar exercise, but this time we keep the first principal component fixed at zero and vary the second principal component. This time the slope of our generated yield curves shifts as we traverse the latent space.</p>
 <div id="7f6e2c18" class="cell" data-execution_count="4">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a>n_vals <span class="op">=</span> <span class="fl">50</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>pc1_range <span class="op">=</span> <span class="fu">range</span>(<span class="fu">extrema</span>(U[<span class="op">:</span>,<span class="fl">1</span>])<span class="op">...</span>, length<span class="op">=</span>n_vals)</span>
@@ -790,7 +794,7 @@ Figure&nbsp;3: Yield curve decomposition through PCA.
 <h4 class="anchored" data-anchor-id="data">Data</h4>
 <p>To estimate economic growth we will rely on a quarterly <a href="https://fred.stlouisfed.org/series/GDPC1">series</a> of the real gross domestic product (GDP) provided by the Federal Reserve Bank of St.&nbsp;Louis. The data arrives in terms of levels of real GDP. In order to estimate growth, we will transform the data into log differences. Since our yield curve data is daily, we will need to aggregate it to the quarterly frequency. To do this, we will simply take the average of the daily yields for each maturity. We will also standardize yields since deep learning models tend to perform better with standardized data. Since COVID-19 was a huge structural break, we will also filter out all observations after 2018. <a href="#fig-dl-data" class="quarto-xref">Figure&nbsp;4</a> shows the pre-processed data.</p>
 <div id="cell-fig-dl-data" class="cell" data-execution_count="5">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a>df_gdp_full <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"data/gdp.csv"</span>), DataFrame) <span class="op">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>    x <span class="op">-&gt;</span> <span class="pp">@rename</span>(x, <span class="dt">Date</span><span class="op">=</span>DATE, gdp<span class="op">=</span>GDPC1) <span class="op">|&gt;</span></span>
@@ -926,7 +930,7 @@ Figure&nbsp;4: GDP growth and yield curve data.
 <h4 class="anchored" data-anchor-id="model">Model</h4>
 <p>Let <span class="math inline">\(G_t\)</span> denote growth and <span class="math inline">\(\mathbf{Y}_t\)</span> denote the yield curve at time <span class="math inline">\(t\)</span>. Then we are interested in a model for <span class="math inline">\(G_t\)</span> conditional on <span class="math inline">\(\mathbf{Y}_t\)</span>. Let <span class="math inline">\(\theta\)</span> denote our model parameters then formally we are interested in maximizing the likelihood <span class="math inline">\(p_{\theta}(G_t|\mathbf{Y}_t)\)</span>. To do this, we will use a simple autoencoder architecture that is illustrated in <a href="#fig-dl-model" class="quarto-xref">Figure&nbsp;5</a>. The encoder will consist of a single fully connected hidden layer with 32 neurons and a hyperbolic tangent activation function. The bottleneck layer connecting the encoder to the decoder is a fully connected layer with 6 neurons. This is the compressed latent representation of the yield curve mentioned above. The decoder will consist of two fully connected layers each with a hyperbolic tangent activation function: the first layer will consist of 32 neurons and the second layer will have the same dimension as the input data. The output layer will consist of a single neuron with a linear activation function. The model will be trained using the mean squared error loss function and the Adam optimizer.</p>
 <div id="cell-fig-dl-model" class="cell" data-execution_count="6">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a>dl <span class="op">=</span> Flux.MLUtils.<span class="fu">DataLoader</span>((<span class="fu">permutedims</span>(X), <span class="fu">permutedims</span>(y)), batchsize<span class="op">=</span><span class="fl">24</span>, shuffle<span class="op">=</span><span class="cn">true</span>)</span>
 <span id="cb5-2"><a href="#cb5-2"></a>input_dim <span class="op">=</span> <span class="fu">size</span>(X,<span class="fl">2</span>)</span>
@@ -2289,7 +2293,7 @@ Figure&nbsp;5: Model architecture.
 </div>
 </div>
 <div id="611df23a" class="cell" data-execution_count="7">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">loss</span>(yhat, y) <span class="op">=</span> Flux.<span class="fu">mse</span>(yhat, y)</span>
 <span id="cb6-2"><a href="#cb6-2"></a>opt <span class="op">=</span> <span class="fu">Adam</span>()</span>
@@ -2311,7 +2315,7 @@ Figure&nbsp;5: Model architecture.
 <p>Not just a parrot! Our autoencoder neural network has an implicit understanding of the yield curve factors and their relationship with economic growth. It’s sentient indeed!</p>
 </blockquote>
 <div id="cell-fig-dl-results" class="cell" data-execution_count="9">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1"></a>yhat <span class="op">=</span> <span class="fu">model</span>(X<span class="op">'</span>)<span class="ch">' </span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>plt_gdp <span class="op">=</span> <span class="fu">plot</span>(</span>
@@ -2438,7 +2442,7 @@ Figure&nbsp;6: The top panel shows the actual GDP growth and fitted values from 
 <p>The finding is not surprising but it is still interesting. In the context of mechanistic interpretability, it demonstrates that the black-box model has evidently learned plausible explanations for the data. Beyond that, in this particular example, the patterns in the latent space that we have just uncovered might actually be useful for downstream tasks. An interesting idea could be to use the latent embeddings as features in a more traditional and interpretable econometric model. To demonstrate this, let us consider a simple linear regression model for GDP growth. We will compare the performance of the following models: (1) regressing growth <span class="math inline">\(G_t\)</span> on the latent embedding <span class="math inline">\(A_t\)</span>, (2) regression growth on the best subset of latent embeddings <span class="math inline">\(A_t\)</span>, (3) regressing growth on lagged growth, (4) regressing growth on lagged growth and the observed yield curve factors <span class="math inline">\(F_t\)</span>, (5) regressing growth on the best subset of yield curve factors <span class="math inline">\(F_t\)</span>, and, finally, (5) regressing growth on lagged growth and the best subset of latent embeddings <span class="math inline">\(A_t\)</span>.</p>
 <p>The results are shown in the table below. The key finding of interest is that the coefficients on the latent embeddings in model (5) are statistically significant. This suggests that the latent embeddings contain information that is useful for predicting GDP growth.</p>
 <div id="4dfe1e3a" class="cell" data-execution_count="10">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Regress on all latent embeddings:</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>reg_data <span class="op">=</span> <span class="fu">DataFrame</span>(<span class="fu">Float64</span>.(<span class="fu">hcat</span>(y, A)),[<span class="st">"y"</span>,[<span class="st">"a</span><span class="sc">$</span>i<span class="st">"</span> for i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu">size</span>(A,<span class="fl">2</span>)]<span class="op">...</span>])</span>
@@ -2712,8 +2716,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
       if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
         }
         typesetMath(container);
         return container.innerHTML
@@ -3438,7 +3449,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>© 2022, Patrick Altmeyer</p>
+<p>© 2023, Patrick Altmeyer</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

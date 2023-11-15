@@ -6,11 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Patrick Altmeyer">
-<meta name="author" content="Marc Agusti">
-<meta name="author" content="Ignacio Vidal-Quadras Costa">
+<meta name="dcterms.date" content="2023-06-30">
+<meta name="description" content="Using granular, daily EMIR Trade Repository data on short sterling futures, we investigate the interaction of speculative trading and macroeconomic shocks on UK yield curve pricing.">
 
-<title>Patrick Altmeyer - Deep Vector Autoregression for Macroeconomic Data</title>
+<title>Patrick Altmeyer - Yield curve sensitivity to investor positioning around economic shocks</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -81,23 +80,19 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 
 <link rel="stylesheet" href="../../../../styles.css">
-<meta property="og:title" content="Patrick Altmeyer - Deep Vector Autoregression for Macroeconomic Data">
-<meta property="og:image" content="https://www.paltmeyer.com/blog/content/publications/posts/deepvars/image.png">
+<meta property="og:title" content="Patrick Altmeyer - Yield curve sensitivity to investor positioning around economic shocks">
+<meta property="og:description" content="Using granular, daily EMIR Trade Repository data on short sterling futures, we investigate the interaction of speculative trading and macroeconomic shocks on UK yield curve pricing.">
 <meta property="og:site_name" content="Patrick Altmeyer">
-<meta property="og:image:height" content="1200">
-<meta property="og:image:width" content="1800">
-<meta name="twitter:title" content="Patrick Altmeyer - Deep Vector Autoregression for Macroeconomic Data">
-<meta name="twitter:image" content="https://www.paltmeyer.com/blog/content/publications/posts/deepvars/image.png">
-<meta name="twitter:image-height" content="1200">
-<meta name="twitter:image-width" content="1800">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Patrick Altmeyer - Yield curve sensitivity to investor positioning around economic shocks">
+<meta name="twitter:description" content="Using granular, daily EMIR Trade Repository data on short sterling futures, we investigate the interaction of speculative trading and macroeconomic shocks on UK yield curve pricing.">
+<meta name="twitter:card" content="summary">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../../../index.html" class="navbar-brand navbar-brand-logo">
@@ -116,6 +111,10 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <li class="nav-item">
     <a class="nav-link" href="../../../../index.html"> 
 <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../content/publications/index.html"> 
+<span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../../blog/index.html"> 
@@ -162,29 +161,43 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#abstract" id="toc-abstract" class="nav-link active" data-scroll-target="#abstract">Abstract</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Deep Vector Autoregression for Macroeconomic Data</h1>
-</div>
+<h1 class="title">Yield curve sensitivity to investor positioning around economic shocks</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">yield curve</div>
+    <div class="quarto-category">speculative positioning</div>
+    <div class="quarto-category">economic shocks</div>
+  </div>
+  </div>
 
+<div>
+  <div class="description">
+    Using granular, daily EMIR Trade Repository data on short sterling futures, we investigate the interaction of speculative trading and macroeconomic shocks on UK yield curve pricing.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Authors</div>
-    <div class="quarto-title-meta-contents">
-             <p>Patrick Altmeyer </p>
-             <p>Marc Agusti </p>
-             <p>Ignacio Vidal-Quadras Costa </p>
-          </div>
-  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 30, 2023</p>
+    </div>
+  </div>
   
     
   </div>
@@ -194,8 +207,13 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 </header>
 
 
+<section id="abstract" class="level2">
+<h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
+<p>Speculative trading activity may either support efficient market functioning or introduce price distortions. Using granular, daily EMIR Trade Repository data on short sterling futures, we investigate the interaction of speculative trading and macroeconomic shocks on UK yield curve pricing over a 16-month sample period from 2018 to 2020. Our results are largely consistent with efficient market functioning throughout the period, although we find some evidence that short speculative positions amplified yield curve moves in response to Brexit shocks, while long speculative positions had a dampening effect.</p>
+<p><strong>Full paper</strong>: please find all available versions <a href="https://scholar.google.com/scholar?oi=bibs&amp;hl=en&amp;cluster=14110223676316187990">here</a>.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -351,8 +369,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
       if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
         }
         typesetMath(container);
         return container.innerHTML
@@ -592,11 +617,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>© 2022, Patrick Altmeyer</p>
+<p>© 2023, Patrick Altmeyer</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
