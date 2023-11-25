@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Patrick Altmeyer">
-<meta name="dcterms.date" content="2023-11-15">
-<meta name="description" content="A small post to demonstrate how to use Quarto for JuliaCon proceedings.">
+<meta name="dcterms.date" content="2023-11-25">
+<meta name="description" content="An opinionated post on outdated publication and peer review practices, as well as modern solutions. It introduces a Quarto extension for JuliaCon Proceedings that I have been working on.">
 
 <title>Patrick Altmeyer - Quarto for JuliaCon Proceedings</title>
 <style>
@@ -22,40 +22,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -114,17 +80,18 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 </script>
 
 
+<link rel="stylesheet" href="../../../styles.css">
 <meta property="og:title" content="Patrick Altmeyer - Quarto for JuliaCon Proceedings">
-<meta property="og:description" content="A small post to demonstrate how to use Quarto for JuliaCon proceedings.">
+<meta property="og:description" content="An opinionated post on outdated publication and peer review practices, as well as modern solutions. It introduces a Quarto extension for JuliaCon Proceedings that I have been working on.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/quarto-juliacon-proceedings/www/intro.gif">
 <meta property="og:site_name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer - Quarto for JuliaCon Proceedings">
-<meta name="twitter:description" content="A small post to demonstrate how to use Quarto for JuliaCon proceedings.">
+<meta name="twitter:description" content="An opinionated post on outdated publication and peer review practices, as well as modern solutions. It introduces a Quarto extension for JuliaCon Proceedings that I have been working on.">
 <meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/quarto-juliacon-proceedings/www/intro.gif">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -196,23 +163,38 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#treating-research-like-software" id="toc-treating-research-like-software" class="nav-link active" data-scroll-target="#treating-research-like-software">Treating Research Like Software</a></li>
+  <li><a href="#signs-of-a-brighter-future" id="toc-signs-of-a-brighter-future" class="nav-link" data-scroll-target="#signs-of-a-brighter-future">Signs of a Brighter Future</a>
+  <ul class="collapse">
+  <li><a href="#peer-review-meets-version-control" id="toc-peer-review-meets-version-control" class="nav-link" data-scroll-target="#peer-review-meets-version-control">Peer Review meets Version Control</a></li>
+  <li><a href="#quarto-journal-extensions" id="toc-quarto-journal-extensions" class="nav-link" data-scroll-target="#quarto-journal-extensions">Quarto Journal Extensions</a></li>
+  </ul></li>
+  <li><a href="#quarto-for-juliacon-proceedings" id="toc-quarto-for-juliacon-proceedings" class="nav-link" data-scroll-target="#quarto-for-juliacon-proceedings">Quarto for JuliaCon Proceedings</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Quarto for JuliaCon Proceedings</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-<p class="subtitle lead">A template for JuliaCon proceedings using Quarto</p>
+<h1 class="title">Quarto for JuliaCon Proceedings</h1>
+<p class="subtitle lead">21st Century Scientific Communication</p>
   <div class="quarto-categories">
-    <div class="quarto-category">quarto</div>
-    <div class="quarto-category">julia</div>
+    <div class="quarto-category">scientific publishing</div>
+    <div class="quarto-category">Quarto</div>
+    <div class="quarto-category">Julia</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    A small post to demonstrate how to use Quarto for JuliaCon proceedings.
+    An opinionated post on outdated publication and peer review practices, as well as modern solutions. It introduces a Quarto extension for JuliaCon Proceedings that I have been working on.
   </div>
 </div>
 
@@ -238,7 +220,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 15, 2023</p>
+      <p class="date">November 25, 2023</p>
     </div>
   </div>
   
@@ -250,12 +232,65 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 </header>
 
 
+<div class="intro-gif">
+<figure class="figure">
+<img src="www/intro.gif" class="figure-img">
+<figcaption>
+Julia and Quarto: a perfect match.
+</figcaption>
+</figure>
+</div>
+<p>I’m officially a third-year PhD student folks! One of my favorite aspects of being a PhD is freedom: the freedom to explore, the freedom to learn, the freedom to create, and, last but not least, the freedom to choose the tools I want to use along the way. On this blog, I have repeatedly advocated for <a href="https://quarto.org">Quarto</a>, my preferred tool for scientific publishing: it is open-source, straightforward to use, backed by an incredibly strong and responsive development team, works well with Julia—see my previous posts <a href="../../../blog/posts/julia-and-quarto-a-match-made-in-heaven/index.html">here</a> and <a href="../../../blog/posts/tips-and-tricks-for-using-quarto-with-julia/index.html">here</a>—and is highly customizable—see my <a href="../../../blog/posts/quarto-extensions/index.html">post</a> on extensions.</p>
+<p>One of my least favorite aspects of being a PhD is the old-fashioned way of publishing scientific papers. Having to deal with clunky LaTeX templates when all I want to do is write up my research is the bloody bain of my existence. It makes me dread the writing process because I know that every time I’m forced to peek inside the LaTeX compiler log, my eyes will bleed. It shouldn’t be this way! I want to be able to look forward to writing! It should really be the part where you finally get to reap the rewards for the hard work you put into your project. A creative process that allows you to communicate your findings in an engaging manner. Ideas should just be allowed to flow out freely, uninterrupted by frustration about formatting issues.</p>
+<p>This frustration is amplified by the fact that I’m so painfully aware of the fact that there are better ways to do this. We have the technology to make the process of scientific publishing so much more enjoyable, efficient, engaging, accessible and reproducible. We also generally seem to agree that science can be much more effectively communicated through modern-day forms of media that involve animated or even interactive content. But for some reason, the academic community still insists on good old-fashioned PDFs as its gold standard for scientific publishing and communication, often enough locked behind paywalls. No wonder that the general public feels disconnected from academia.</p>
+<section id="treating-research-like-software" class="level2">
+<h2 class="anchored" data-anchor-id="treating-research-like-software">Treating Research Like Software</h2>
+<p>Scientists pride themselves in the fact that they are continuously pushing the boundaries of human knowledge, overturning old theories and replacing them with new ones. No idea is ever too good to be challenged. The better the idea, the more challenge it is likely going to attract. The scientific method, in its ideal form, is a transparent process of continuous refinement and creative destruction. And yet we treat our main scientific output, the research paper, as a static artifact: write it up, have it peer-reviewed, publish it, pad yourself on the back—your work is now set in stone, the stamp of approval has been obtained, move on to the next one!</p>
+<blockquote class="blockquote">
+<p>Treating research outputs as static artifacts is fundamentally at odds with the dynamic nature of science.</p>
+</blockquote>
+<p>I have a real issue with this approach and think that treating research outputs as static artifacts is fundamentally at odds with the dynamic nature of science. It incentivizes us to focus on quantity over quality. A static artifact creates the illusion of a finished product, which is not what science is about. It is about the process of discovery, not the end result. Even though we treat papers as if they were end results, they are really just interim results: the current version of knowledge.</p>
+<p>Wait … did I say <em>version</em>? Don’t we have a well-established system for managing versions of digital knowledge artifacts? Yes, we do! It’s called version control and it is the backbone of modern software development. It allows us to keep track of changes to a digital artifact over time, to collaborate with others on the same artifact, and to easily revert to previous versions if necessary. It is a powerful tool that has revolutionized the way we develop software.</p>
+<p>If academia took the paradigm of continuous and transparent improvement seriously, it would treat research outputs like open-source software. It would use version control to keep track of changes to research outputs over time and create an environment that fosters open collaboration. It would not reward researchers for the number of first-author papers they publish but for the quality of their total contributions to the scientific community. Peer review would be a continuous process, not a one-off event. Peer review could come in many forms: from a simple comment on a GitHub issue to a full-blown pull request.</p>
+<p>My dear colleagues and supervisors at TU Delft have recently published a <a href="https://ieeexplore.ieee.org/abstract/document/10173886">position paper</a> that argues for exactly this approach. I highly recommend reading it. It is a well-written and thought-provoking piece that I hope will inspire many to rethink the way we do science. Below is a thread that summarizes some of the key points:</p>
+<blockquote class="twitter-tweet blockquote">
+<p lang="en" dir="ltr">
+Please someone tell me what's stopping us from treating research publications like we treat free open source software? <br><br>Finally managed to take a closer look at this fantastic position paper by my supervisor <a href="https://twitter.com/informusiccs?ref_src=twsrc%5Etfw"><span class="citation" data-cites="informusiccs">(</span></a><a href="#ref-informusiccs" role="doc-biblioref"><strong>informusiccs?</strong></a>) and colleague <a href="https://twitter.com/a_m_demetriou?ref_src=twsrc%5Etfw"><span class="citation" data-cites="a_m_demetriou">(</span></a><a href="#ref-a_m_demetriou" role="doc-biblioref"><strong>a_m_demetriou?</strong></a>): <a href="https://t.co/wjPFO0QnVF">https://t.co/wjPFO0QnVF</a>
+</p>
+— Pat Alt (<span class="citation" data-cites="paltmey">(<a href="#ref-paltmey" role="doc-biblioref"><strong>paltmey?</strong></a>)</span>) <a href="https://twitter.com/paltmey/status/1709134908596088832?ref_src=twsrc%5Etfw">October 3, 2023</a>
+</blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</section>
+<section id="signs-of-a-brighter-future" class="level2">
+<h2 class="anchored" data-anchor-id="signs-of-a-brighter-future">Signs of a Brighter Future</h2>
+<p>This blog post has been a bit of a rant so far and I’m not quite done yet. Some of you may be wondering what all the fuss is about. You may think that ‘publishing through LaTeX and PDF is just what we do, it’s a proven and reliable system, so why should we fix something that isn’t broken?’ You may even refuse to engage with research unless it’s printed out on paper and the LaTeX compiler log doesn’t even scare you anymore. If any of this describes you, then chances are that you’ve already officially made it: you are a seasoned researcher! You are too busy keeping track of grant applications to care about this stuff. This whole discussion is way below your h-index!</p>
+<p>If I’ve rubbed you, seasoned researcher, the wrong way, I do apologize! But if you’re still here reading this, then let me now show you some signs of a brave new world of scientific publishing that is already emerging.</p>
+<section id="peer-review-meets-version-control" class="level3">
+<h3 class="anchored" data-anchor-id="peer-review-meets-version-control">Peer Review meets Version Control</h3>
+</section>
+<section id="quarto-journal-extensions" class="level3">
+<h3 class="anchored" data-anchor-id="quarto-journal-extensions">Quarto Journal Extensions</h3>
+<p>Quarto’s Journal Extensions are a first step in the right direction.</p>
+</section>
+</section>
+<section id="quarto-for-juliacon-proceedings" class="level2">
+<h2 class="anchored" data-anchor-id="quarto-for-juliacon-proceedings">Quarto for JuliaCon Proceedings</h2>
 
 
-<!-- -->
+</section>
 
-
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
+  author = {Altmeyer, Patrick},
+  title = {Quarto for {JuliaCon} {Proceedings}},
+  pages = {undefined},
+  date = {2023-11-25},
+  url = {https://www.paltmeyer.com/blog//blog/posts/quarto-juliacon-proceedings},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2023" class="csl-entry quarto-appendix-citeas" role="listitem">
+Altmeyer, Patrick. 2023. <span>“Quarto for JuliaCon Proceedings.”</span>
+November 25, 2023. <a href="https://www.paltmeyer.com/blog//blog/posts/quarto-juliacon-proceedings">https://www.paltmeyer.com/blog//blog/posts/quarto-juliacon-proceedings</a>.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -335,57 +370,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  const viewSource = window.document.getElementById('quarto-view-source') ||
-                     window.document.getElementById('quarto-code-tools-source');
-  if (viewSource) {
-    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-    viewSource.addEventListener("click", function(e) {
-      if (sourceUrl) {
-        // rstudio viewer pane
-        if (/\bcapabilities=\b/.test(window.location)) {
-          window.open(sourceUrl);
-        } else {
-          window.location.href = sourceUrl;
-        }
-      } else {
-        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-        modal.show();
-      }
-      return false;
-    });
-  }
-  function toggleCodeHandler(show) {
-    return function(e) {
-      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-      for (let i=0; i<detailsSrc.length; i++) {
-        const details = detailsSrc[i].parentElement;
-        if (show) {
-          details.open = true;
-        } else {
-          details.removeAttribute("open");
-        }
-      }
-      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-      const fromCls = show ? "hidden" : "unhidden";
-      const toCls = show ? "unhidden" : "hidden";
-      for (let i=0; i<cellCodeDivs.length; i++) {
-        const codeDiv = cellCodeDivs[i];
-        if (codeDiv.classList.contains(fromCls)) {
-          codeDiv.classList.remove(fromCls);
-          codeDiv.classList.add(toCls);
-        } 
-      }
-      return false;
-    }
-  }
-  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-  if (hideAllCode) {
-    hideAllCode.addEventListener("click", toggleCodeHandler(false));
-  }
-  const showAllCode = window.document.getElementById("quarto-show-all-code");
-  if (showAllCode) {
-    showAllCode.addEventListener("click", toggleCodeHandler(true));
-  }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -705,25 +689,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
-</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="an">title:</span><span class="co"> Quarto for JuliaCon Proceedings</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="an">subtitle:</span><span class="co"> A template for JuliaCon proceedings using Quarto</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="an">date:</span><span class="co"> '2023-11-15'</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="an">categories:</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="co">  - quarto</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co">  - julia</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="an">description:</span><span class="co"> &gt;-</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co">  A small post to demonstrate how to use Quarto for JuliaCon proceedings.</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="an">image:</span><span class="co"> www/intro.gif</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="an">format:</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="co">  html:</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="co">    code-fold: true</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="co">    code-tools: true</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="an">citation:</span><span class="co"> false</span></span>
-<span id="cb1-17"><a href="#cb1-17"></a><span class="co">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div></div></div></div>
+</script>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -732,7 +698,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">

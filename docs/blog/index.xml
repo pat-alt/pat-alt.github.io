@@ -10,7 +10,7 @@
 <atom:link href="https://www.paltmeyer.com/blog/blog/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-99.9.9</generator>
-<lastBuildDate>Tue, 14 Nov 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 24 Nov 2023 23:00:00 GMT</lastBuildDate>
 <item>
   <title>Quarto for JuliaCon Proceedings</title>
   <dc:creator>Patrick Altmeyer</dc:creator>
@@ -20,16 +20,70 @@
 
 
 
+<div class="intro-gif">
+<figure class="figure">
+<img src="https://www.paltmeyer.com/blog/blog/posts/quarto-juliacon-proceedings/www/intro.gif" class="figure-img">
+<figcaption>
+Julia and Quarto: a perfect match.
+</figcaption>
+</figure>
+</div>
+<p>I’m officially a third-year PhD student folks! One of my favorite aspects of being a PhD is freedom: the freedom to explore, the freedom to learn, the freedom to create, and, last but not least, the freedom to choose the tools I want to use along the way. On this blog, I have repeatedly advocated for <a href="https://quarto.org">Quarto</a>, my preferred tool for scientific publishing: it is open-source, straightforward to use, backed by an incredibly strong and responsive development team, works well with Julia—see my previous posts <a href="../../../blog/posts/julia-and-quarto-a-match-made-in-heaven/index.html">here</a> and <a href="../../../blog/posts/tips-and-tricks-for-using-quarto-with-julia/index.html">here</a>—and is highly customizable—see my <a href="../../../blog/posts/quarto-extensions/index.html">post</a> on extensions.</p>
+<p>One of my least favorite aspects of being a PhD is the old-fashioned way of publishing scientific papers. Having to deal with clunky LaTeX templates when all I want to do is write up my research is the bloody bain of my existence. It makes me dread the writing process because I know that every time I’m forced to peek inside the LaTeX compiler log, my eyes will bleed. It shouldn’t be this way! I want to be able to look forward to writing! It should really be the part where you finally get to reap the rewards for the hard work you put into your project. A creative process that allows you to communicate your findings in an engaging manner. Ideas should just be allowed to flow out freely, uninterrupted by frustration about formatting issues.</p>
+<p>This frustration is amplified by the fact that I’m so painfully aware of the fact that there are better ways to do this. We have the technology to make the process of scientific publishing so much more enjoyable, efficient, engaging, accessible and reproducible. We also generally seem to agree that science can be much more effectively communicated through modern-day forms of media that involve animated or even interactive content. But for some reason, the academic community still insists on good old-fashioned PDFs as its gold standard for scientific publishing and communication, often enough locked behind paywalls. No wonder that the general public feels disconnected from academia.</p>
+<section id="treating-research-like-software" class="level2">
+<h2 class="anchored" data-anchor-id="treating-research-like-software">Treating Research Like Software</h2>
+<p>Scientists pride themselves in the fact that they are continuously pushing the boundaries of human knowledge, overturning old theories and replacing them with new ones. No idea is ever too good to be challenged. The better the idea, the more challenge it is likely going to attract. The scientific method, in its ideal form, is a transparent process of continuous refinement and creative destruction. And yet we treat our main scientific output, the research paper, as a static artifact: write it up, have it peer-reviewed, publish it, pad yourself on the back—your work is now set in stone, the stamp of approval has been obtained, move on to the next one!</p>
+<blockquote class="blockquote">
+<p>Treating research outputs as static artifacts is fundamentally at odds with the dynamic nature of science.</p>
+</blockquote>
+<p>I have a real issue with this approach and think that treating research outputs as static artifacts is fundamentally at odds with the dynamic nature of science. It incentivizes us to focus on quantity over quality. A static artifact creates the illusion of a finished product, which is not what science is about. It is about the process of discovery, not the end result. Even though we treat papers as if they were end results, they are really just interim results: the current version of knowledge.</p>
+<p>Wait … did I say <em>version</em>? Don’t we have a well-established system for managing versions of digital knowledge artifacts? Yes, we do! It’s called version control and it is the backbone of modern software development. It allows us to keep track of changes to a digital artifact over time, to collaborate with others on the same artifact, and to easily revert to previous versions if necessary. It is a powerful tool that has revolutionized the way we develop software.</p>
+<p>If academia took the paradigm of continuous and transparent improvement seriously, it would treat research outputs like open-source software. It would use version control to keep track of changes to research outputs over time and create an environment that fosters open collaboration. It would not reward researchers for the number of first-author papers they publish but for the quality of their total contributions to the scientific community. Peer review would be a continuous process, not a one-off event. Peer review could come in many forms: from a simple comment on a GitHub issue to a full-blown pull request.</p>
+<p>My dear colleagues and supervisors at TU Delft have recently published a <a href="https://ieeexplore.ieee.org/abstract/document/10173886">position paper</a> that argues for exactly this approach. I highly recommend reading it. It is a well-written and thought-provoking piece that I hope will inspire many to rethink the way we do science. Below is a thread that summarizes some of the key points:</p>
+<blockquote class="twitter-tweet blockquote">
+<p lang="en" dir="ltr">
+Please someone tell me what's stopping us from treating research publications like we treat free open source software? <br><br>Finally managed to take a closer look at this fantastic position paper by my supervisor <a href="https://twitter.com/informusiccs?ref_src=twsrc%5Etfw"><span class="citation" data-cites="informusiccs">(</span></a><strong>informusiccs?</strong>) and colleague <a href="https://twitter.com/a_m_demetriou?ref_src=twsrc%5Etfw"><span class="citation" data-cites="a_m_demetriou">(</span></a><strong>a_m_demetriou?</strong>): <a href="https://t.co/wjPFO0QnVF">https://t.co/wjPFO0QnVF</a>
+</p>
+— Pat Alt (<span class="citation" data-cites="paltmey">(<strong>paltmey?</strong>)</span>) <a href="https://twitter.com/paltmey/status/1709134908596088832?ref_src=twsrc%5Etfw">October 3, 2023</a>
+</blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</section>
+<section id="signs-of-a-brighter-future" class="level2">
+<h2 class="anchored" data-anchor-id="signs-of-a-brighter-future">Signs of a Brighter Future</h2>
+<p>This blog post has been a bit of a rant so far and I’m not quite done yet. Some of you may be wondering what all the fuss is about. You may think that ‘publishing through LaTeX and PDF is just what we do, it’s a proven and reliable system, so why should we fix something that isn’t broken?’ You may even refuse to engage with research unless it’s printed out on paper and the LaTeX compiler log doesn’t even scare you anymore. If any of this describes you, then chances are that you’ve already officially made it: you are a seasoned researcher! You are too busy keeping track of grant applications to care about this stuff. This whole discussion is way below your h-index!</p>
+<p>If I’ve rubbed you, seasoned researcher, the wrong way, I do apologize! But if you’re still here reading this, then let me now show you some signs of a brave new world of scientific publishing that is already emerging.</p>
+<section id="peer-review-meets-version-control" class="level3">
+<h3 class="anchored" data-anchor-id="peer-review-meets-version-control">Peer Review meets Version Control</h3>
+</section>
+<section id="quarto-journal-extensions" class="level3">
+<h3 class="anchored" data-anchor-id="quarto-journal-extensions">Quarto Journal Extensions</h3>
+<p>Quarto’s Journal Extensions are a first step in the right direction.</p>
+</section>
+</section>
+<section id="quarto-for-juliacon-proceedings" class="level2">
+<h2 class="anchored" data-anchor-id="quarto-for-juliacon-proceedings">Quarto for JuliaCon Proceedings</h2>
 
 
-<!-- -->
+</section>
 
-
- ]]></description>
-  <category>quarto</category>
-  <category>julia</category>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
+  author = {Altmeyer, Patrick},
+  title = {Quarto for {JuliaCon} {Proceedings}},
+  pages = {undefined},
+  date = {2023-11-25},
+  url = {https://www.paltmeyer.com/blog//blog/posts/quarto-juliacon-proceedings},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2023" class="csl-entry quarto-appendix-citeas">
+Altmeyer, Patrick. 2023. <span>“Quarto for JuliaCon Proceedings.”</span>
+November 25, 2023. <a href="https://www.paltmeyer.com/blog//blog/posts/quarto-juliacon-proceedings">https://www.paltmeyer.com/blog//blog/posts/quarto-juliacon-proceedings</a>.
+</div></div></section></div> ]]></description>
+  <category>scientific publishing</category>
+  <category>Quarto</category>
+  <category>Julia</category>
   <guid>https://www.paltmeyer.com/blog/blog/posts/quarto-juliacon-proceedings/</guid>
-  <pubDate>Tue, 14 Nov 2023 23:00:00 GMT</pubDate>
+  <pubDate>Fri, 24 Nov 2023 23:00:00 GMT</pubDate>
   <media:content url="https://www.paltmeyer.com/blog/blog/posts/quarto-juliacon-proceedings/www/intro.gif" medium="image" type="image/gif"/>
 </item>
 <item>
