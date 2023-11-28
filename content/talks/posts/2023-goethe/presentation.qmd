@@ -34,9 +34,13 @@ format:
 revealjs-plugins:
   - pointer
 crossref: 
-  prp-title: RQ
-  prp-prefix: RQ
+  fig-title: Afbeelding
 bibliography: ../../../../bib.bib
+title-slide-attributes: 
+  data-notes: |
+    - Goedemorgen allemaal, ik vertel jullie vandaag over mijn werk. 
+    - Toen ik laatste week gezegt heb, ben ik een PhD student aan de TU Delft.
+    - Ik werk aan betrouwbare kunstmatige intelligentie.
 ---
 
 ## Wat is Kunstmatige Intelligentie?
@@ -53,10 +57,11 @@ bibliography: ../../../../bib.bib
 
 ::: {.notes}
 - In de tijden van ChatGPT heeft iederen een idee van KI maar het is niet heel klar wat het eigenlijk betekent. 
-- Volgens mij bedoelen mensen meestal "machine learning" als ze 'KI' zeggen.
-- "Machine learning", of koort "ML", is niet hetzelfde als "KI" maar het is wel een belangrijk onderdeel van KI.
+- Volgens mij bedoelen mensen meestal "machinaal leren" als ze 'KI' zeggen.
+- "Machinaal leren", of koort "ML", is niet hetzelfde als "KI" maar het is wel een belangrijk onderdeel van KI.
 - "ML" is een manier om een computer te trainen om een taak te doen zonder dat je de computer precies vertelt hoe hij het moet doen.
-- Je geeft de computer aleen een objectief en een hoop voorbeelden. Dan lat je de computer zelf een manier vinden om het objectief te bereiken en ten slotte hoop je dat de computer goed geleerd heeft.
+- Je geeft de computer alleen een objectief en een hoop voorbeelden. Dan lat je de computer zelf een manier vinden om het objectief te bereiken en ten slotte hoop je dat de computer goed geleerd heeft.
+- Bijvoorbeeld, je zie hier aan de rechte kant een algoritme dat leert tussen twee klassen te onderscheiden. Hoe meer data het heeft gezien, hoe beter het zijn werk doet.
 :::
 
 ## "Diep Leren" - de huidige standaard
@@ -76,32 +81,57 @@ De kerntechniek van de sterkste KI systemen van vandaag is "diep leren".
 
 - De kerntechniek van de sterkste KI systemen van vandaag is "diep leren", of "deep learning" in het Engels.
 - In het kort, bij diep leren gebruiken we grote modellen met veel instellingen. Deze waarden worden geleerd en verbeterd via optimalisatie.
-- OpenAI's ChatGPT heeft zoveel succes gehad omdat het een heel groot model is. Eigenlijk is het officiële motto van OpenA: "Scale is all you need", dus "Schaal is alles wat je nodig hebt".
+- OpenAI's ChatGPT heeft zoveel succes gehad omdat het een heel groot model is. Eigenlijk is het inofficiële motto van OpenAI: "Scale is all you need", dus "Schaal is alles wat je nodig hebt".
+- Aan de rechte kant zien jullie een voorbeeld van een diep neuraal netwerk. Die groene punten zijn de instellingen van het model. Kan iemand tellen hoeveel instellingen dit model heeft?
+- Dus er zijn 32 plus 6 plus 32 plus 12 groene punten. Dat is 82 instellingen.
+- Maar dit is erg niet diep. Ter vergelijking: ChatGPT heeft ongeveer 15 miljard instellingen.
+- Sommige mensen geloven dat deze sort modellen de toekomst van KI zijn en ons zullen helpen om de meest complexe problemen op te lossen.
 
 :::
 
-## Klinkt goed, maar ...
+## Klinkt goed, maar ... {.nostretch}
 
 ::::{.columns}::::
-:::{.column width='50%'}
+:::{.column width='40%'}
+Deze modellen hebben ook nadele. Ze zijn:
+
+1. kwetsbaar
+2. niet transparant
+3. ...
 :::
-:::{.column width='50%'}
+:::{.column width='60%'}
+![Stopbord of bloempod? Bron: Wu et al. ([2020](https://jwcn-eurasipjournals.springeropen.com/articles/10.1186/s13638-020-01775-5))](/www/images/stop_sign.png){#fig-stop}
 :::
 ::::
 
+
+
 ::: {.notes}
 
+- Dit klinkt allemaal goed, maar deze modellen hebben ook nadele.
+- Bijvoorbeeld, ze zijn kwetsbaar. Ze kunnen makkelijk misleid worden.
+- In de afbeelding aan de rechte kant zien jullie aan de linke kant een stopbord: eerst erkent het model het stopbord als een stopbord. Maar als de foto een beetje veranderen, dan ziet het model een bloempot. Dit zie je aan de rechte kant.
 - Een van de grootste problemen met diep leren is dat de modellen zo groot zijn dat niemand ze echt begrijpt.
-- Je kan niet makkelijk het model openen en zien hoe het werkt.
-- Het model is een black box.
+- Je kan niet het model zomaar openen en zien hoe het werkt. Als een model niet transparant is, noemen we het een 'black box'.
 - Dit is heel problematisch voor de betrouwbaarheid van KI systemen, vooral als ze gebruikt worden in kritische toepassingen zoals medische diagnoses of autonome voertuigen.
 - Maar ook en mer aldagelijkse toepassingen: heeft iemand hier eermaal een lening aangevraagd? Of een sollicitatie gedaan? Of een verzekering afgesloten? Dan is de kans groot dat een KI systeem een rol heeft gespeld in de beslissing.
 
 :::
 
-## Betrouwbaarheid door Verklaarbaarheid
+## Verklaarbaarheid
 
-![Kan je het katje julpen om een lieve hondje te worden?](/blog/posts/individual-recourse-for-black-box-models/www/revise.gif)
+::::{.columns}::::
+:::{.column width='50%'}
+Betrouwbaarheid door Verklaarbaarheid:
+
+> Wat moeten we veranderen aan de modelinputs om de outputs te veranderen?
+:::
+:::{.column width='50%'}
+![Kan je het katje julpen om een lieve hondje te worden?](/blog/posts/individual-recourse-for-black-box-models/www/revise.gif){#fig-cat width="70%"}
+:::
+::::
+
+
 
 ::: {.notes}
 
@@ -109,9 +139,9 @@ De kerntechniek van de sterkste KI systemen van vandaag is "diep leren".
 - Dit is de focus van mijn onderzoek.
 - Ik richt mij in het bijzonder op een methode die "counterfactual explanations" heet.
 - Intuïtief vragen we wat we moeten veranderen aan de modelinputs om de outputs te veranderen.
-- Bijvorbeeld zien jullie hier en model dat tussen katjes and hondjes kan onderscheiden.
+- Bijvorbeeld zien jullie hier aan de rechte kant en model dat tussen katjes and hondjes kan onderscheiden.
 - Om te begrijpen waarom het model een katje ziet, kunnen we de characteristieken van het katje veranderen en kijken hoe het model reageert.
-- Hier zie je how het katje van links oven naar rechts beneden wandelt.
+- Hier zie je hoe het katje van links oven naar rechts beneden wandelt.
 - Dit betekent in dit geval dat het katje zijn staartje moet inkorten en iets groter moet worden.
 - En dit is dan de verklaring.
 
