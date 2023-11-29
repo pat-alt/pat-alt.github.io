@@ -1,11 +1,10 @@
 ---
 title: Faithful Model Explanations
-subtitle: Counterfactual Explanations and Predictive Uncertainty for Trustworthy Machine Learning
+subtitle: Supervision in the Age of AI
 author: 
   - name: "**Patrick Altmeyer**"
     url: https://www.paltmeyer.com/
-  - name: Arie van Deursen
-  - name: Cynthia C. S. Liem
+  - name: Venkatesh Chandrasekar 
 institute: Delft University of Technology
 date: today
 format: 
@@ -48,8 +47,10 @@ bibliography: ../../../../bib.bib
 :::{.column width="60%"}
 
 - I recently entered the 3rd year of my PhD in Trustworthy Artificial Intelligence at Delft University of Technology.
-- Previously, educational background in Economics and Finance and two years in Monetary Policy at the Bank of England.
-- Interested in applying Trustworthy AI to real-world problems, particularly in the financial sector.
+- Part of the [AI for FinTech Research Lab](https://se.ewi.tudelft.nl/ai4fintech/index.html)---5yr collaboration between TU Delft and ING.
+- Previously, educational background in Economics and Finance and two years in Monetary Policy at the [Bank of England](https://www.bankofengland.co.uk/).
+- Focus on applying Trustworthy AI to real-world problems, particularly in the financial sector.
+- [Blogger](https://www.paltmeyer.com/blog/), Julia [developer](https://github.com/pat-alt) and founder of [Taija](https://github.com/JuliaTrustworthyAI).
 
 :::
 
@@ -87,12 +88,53 @@ bibliography: ../../../../bib.bib
 
 # Delft FinTech Lab
 
+## In A Nutshell
+
+::::{.columns}::::
+:::{.column width='50%'}
+### Background
+
+- Finance at the forefront of digitalization.
+- Over 50 TU Delft researchers in FinTech
+- With dozens of societal partners
+:::
+:::{.column width='50%'}
+### Objective
+
+- Strengthen societal and industrial impact
+- Increase collaboration and visibility
+:::
+::::
+
+## Core Pillars {.smaller}
+
+> "[...] unified front of our expertise in this area formed to help the financial industry solve the growingly complex challenges."
+>
+> ---[Delft FinTech Lab](https://www.tudelft.nl/fintech)
+
+1. [Trustworthy Financial Systems](https://www.tudelft.nl/fintech/expertise#c974723) led by Stefan Buijsman.
+2. [Quantitative Modelling](https://www.tudelft.nl/fintech/expertise#c974723) led by Antonis Papapantoleon.
+3. [Financial Data Intelligence](https://www.tudelft.nl/fintech/expertise#c974723) led by Asterios Katsifodimos.
+4. [Blockchain](https://www.tudelft.nl/fintech/expertise#c974723) led by Jérémie Decouchant.
+
+::: {.notes}
+1. Reliable and trustworthy financial systems are explainable and transparent.
+2. Model development and validation, derivative pricing, and investment analysis. 
+3. Artificial intelligence, data and software analytics.
+4. Development of decentralized systems.
+:::
+
+. . .
+
+> What about topics specific to supervision?
+
 ## Natural language processing 
 
 1. Mine large volumes of text.
 2. Retrieve relevant information from large collections of text.
 3. Long document understanding and track/identify/predict anomaly patterns.
 4. Explainable AI for NLP [@arous2021marta].
+5. Predictive Uncertainty Quantification for LLMs (see [blog](https://www.paltmeyer.com/blog/posts/conformal-llm/) post). 
 
 ## Privacy Enhancing Technologies (PET)
 
@@ -100,12 +142,13 @@ bibliography: ../../../../bib.bib
 2. Statistics/econometrics under privacy constraints ex. differential privacy. 
 3. Multiparty computations and homomorphic encryptions.
 
-## Human-AI Collaboration: Augmenting human experts with AI
+## Human-AI Collaboration
+
+> Augmenting human experts with AI.
 
 1. Hybrid human-AI workflows: amplify human intelligence, reduce human costs, and improve precaution.
 2. Collaborative human-AI knowledge synthesis.
 3. Explainable AI [@anand2022explainable; @leonhardt2023extractive], and human-in-the-loop continual learning [@yang2018leveraging].
-
 
 ## Automated Compliance
 
@@ -158,7 +201,7 @@ In the EU, individuals have the right "[...] to *obtain* an explanation of the d
 
 > In our example, who do you think is most likely to ask for an explanation?
 
-# You were promised some maths ... 🌶️🌶️🌶️
+# Een heel kleen beetje maths ...
 
 ## Gradient-based Counterfactual Search
 
@@ -298,7 +341,11 @@ Now that we have a tool to faithfully explain models we may ask: **how** do mode
 
 ![Counterfactuals for an ensemble of Joint Energy Models (JEM) [@grathwohl2020your].](www/mnist_all_jem_ens_eccco.png){#fig-mnist-jem width="100%"}
 
-# Our Open-Source Work in `Julia`
+# More Research and Open-Source
+
+## 📜 Papers
+
+
 
 ## 🐶 Taija {.smaller}
 
