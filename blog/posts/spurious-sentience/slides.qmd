@@ -77,15 +77,15 @@ include(joinpath("$(pwd())", BLOG_DIR, "utils.jl"))
 
 ## Intro
 
-- No issue with the methodological ideas that form the foundation of the article in question.
-- Surprised that people are surprised by the findings:
+-   No issue with the methodological ideas that form the foundation of the article in question.
+-   Surprised that people are surprised by the findings:
 
 > If we agree that LLMs acquire strong capabilities based on observing information, then where exactly do you expect this information to be stored if not in the parameters of the model?
 
 ## Spurious Sentience
 
-- **Spurious relationships**: purely associational relationships between two or more variables that are not causally related to each other at all.
-- **Spurious sentience**: patterns exhibited by AI that may hint at sentience but are just reflections of the data used to train them.
+-   **Spurious relationships**: purely associational relationships between two or more variables that are not causally related to each other at all.
+-   **Spurious sentience**: patterns exhibited by AI that may hint at sentience but are just reflections of the data used to train them.
 
 # Example: Principal Component Analysis
 
@@ -329,17 +329,14 @@ df_level = @group_by(df_long, Date) |>
 df_factors = @full_join(df_spread, df_level);
 ```
 
-
 ## Linear Probe - Idea
 
-:::{.incremental}
-
-- Linear probe to regress the observed yield curve factors on the latent embeddings.
-- Let $F_t$ denote the vector containing the two factors of interest in time $t$: $f_t^{\text{spread}}$ and $f_t^{\text{level}}$.
-- Formally, we are interested in the following regression model: $p_{w}(F_t|\mathbf{A}_t)$ where $w$ denotes the regression parameters. 
-- Following [TEGMARK PAPER REFERENCE] we use Ridge regression with $\lambda$ set to $0.1$. 
-- Predict the yield curve factors from the latent embeddings: $\hat{F}_t=\hat{w}^{\prime}\mathbf{A}_t$.
-
+::: incremental
+-   Linear probe to regress the observed yield curve factors on the latent embeddings.
+-   Let $F_t$ denote the vector containing the two factors of interest in time $t$: $f_t^{\text{spread}}$ and $f_t^{\text{level}}$.
+-   Formally, we are interested in the following regression model: $p_{w}(F_t|\mathbf{A}_t)$ where $w$ denotes the regression parameters.
+-   Following \[TEGMARK PAPER REFERENCE\] we use Ridge regression with $\lambda$ set to $0.1$.
+-   Predict the yield curve factors from the latent embeddings: $\hat{F}_t=\hat{w}^{\prime}\mathbf{A}_t$.
 :::
 
 ## Linear Probe - Results
@@ -381,33 +378,47 @@ plot(plt_gdp, plt_probe, layout=(2,1), size=(800, 600), left_margin=5mm)
 
 ## What's the Point?
 
-::::{.columns}::::
-:::{.column width='50%'}
-- Demonstrates that the black-box model has learned plausible explanations for the data.
-- Beyond that, patterns in the latent space might actually be useful for downstream tasks.
+::: columns
+::: {.column width="50%"}
+-   Demonstrates that the black-box model has learned plausible explanations for the data.
+-   Beyond that, patterns in the latent space might actually be useful for downstream tasks.
 :::
-:::{.column width='50%'}
-<iframe src="www/regression.html" width="550" height="720"></iframe>
-:::
-::::
 
+::: {.column width="50%"}
+<iframe src="www/regression.html" width="550" height="720">
+
+</iframe>
+:::
+:::
 
 # Example: gEnEraTiVe Ai
 
 ## MNIST VAE
 
-::::{.columns}::::
-:::{.column width='50%'}
-- Train a tokenizer that can map from the entities to the latent spac $A$ of the VAE.
-- Map back from VAE to entities and use another pretrained MLP to predict labels.
-- Linear probe from $A$ to geographical location.
+::: columns
+::: {.column width="50%"}
+-   Train a tokenizer that can map from the entities to the latent spac $A$ of the VAE.
+-   Map back from VAE to entities and use another pretrained MLP to predict labels.
+-   Linear probe from $A$ to geographical location.
 :::
-:::{.column width='50%'}
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">This tweet inspired me. Just as I had feared, even the small VAE I trained on MNIST a while ago is basically sentient. It is so over people!<a href="https://t.co/gQ0sLvhkkS">https://t.co/gQ0sLvhkkS</a> <a href="https://t.co/cANQShuXIK">https://t.co/cANQShuXIK</a> <a href="https://t.co/aHycQ6q9pv">pic.twitter.com/aHycQ6q9pv</a></p>&mdash; Pat Alt (@paltmey) <a href="https://twitter.com/paltmey/status/1709892786927829317?ref_src=twsrc%5Etfw">October 5, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+::: {.column width="50%"}
+<blockquote class="twitter-tweet">
+
+<p lang="en" dir="ltr">
+
+This tweet inspired me. Just as I had feared, even the small VAE I trained on MNIST a while ago is basically sentient. It is so over people!<a href="https://t.co/gQ0sLvhkkS">https://t.co/gQ0sLvhkkS</a> <a href="https://t.co/cANQShuXIK">https://t.co/cANQShuXIK</a> <a href="https://t.co/aHycQ6q9pv">pic.twitter.com/aHycQ6q9pv</a>
+
+</p>
+
+— Pat Alt (@paltmey) <a href="https://twitter.com/paltmey/status/1709892786927829317?ref_src=twsrc%5Etfw">October 5, 2023</a>
+
+</blockquote>
+
+```{=html}
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+```
 :::
-::::
-
-
+:::
 
 ## References
-
