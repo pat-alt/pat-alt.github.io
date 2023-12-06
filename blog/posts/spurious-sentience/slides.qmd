@@ -1,0 +1,392 @@
+---
+title: Spurious Sentience
+subtitle: On the Unsurprising Finding of Patterns in Latent Spaces
+author: 
+  - name: "**Patrick Altmeyer**"
+    url: https://www.paltmeyer.com/
+institute: Delft University of Technology
+date: today
+format: 
+  tudelft-revealjs:
+    theme: custom.scss
+    self-contained: true
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    fig-align: center
+    html-math-method: mathjax
+    code-fold: true
+    code-tools: true
+    code-line-numbers: true
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+execute:
+  freeze: auto
+  eval: true
+  echo: true
+  output: true
+---
+
+```{julia}
+#| echo: false
+#| output: false
+
+# Set up:
+BLOG_DIR = "blog/posts/spurious-sentience"
+using Pkg; Pkg.activate(BLOG_DIR)
+
+# Packages:
+using CSV
+using ChainPlots
+using DataFrames
+using Dates
+using Flux
+# using GLM
+using LinearAlgebra
+using Plots
+using Plots.PlotMeasures
+using Printf
+using TidierData
+using Random
+# using RegressionTables
+Random.seed!(2023)
+
+# Utility functions:
+include(joinpath("$(pwd())", BLOG_DIR, "utils.jl"))
+```
+
+## Intro
+
+- No issue with the methodological ideas that form the foundation of the article in question.
+- Surprised that people are surprised by the findings:
+
+> If we agree that LLMs acquire strong capabilities based on observing information, then where exactly do you expect this information to be stored if not in the parameters of the model?
+
+## Spurious Sentience
+
+- **Spurious relationships**: purely associational relationships between two or more variables that are not causally related to each other at all.
+- **Spurious sentience**: patterns exhibited by AI that may hint at sentience but are just reflections of the data used to train them.
+
+# Example: Principal Component Analysis
+
+## Yield Curve
+
+```{julia}
+#| fig-cap: Yield curve of US Treasury bonds.
+#| fig-subcap: 
+#|    - "Onset of GFC: 27 February 2007."
+#|    - "Aftermath of GFC: 20 April 2009."
+#| label: fig-gfc
+#| output: true
+#| layout-ncol: 2
+
+df = CSV.read(joinpath(BLOG_DIR, "data/ust_yields.csv"), DataFrame) |>
+    x -> @pivot_longer(x, -Date) |>
+    x -> @mutate(x, variable=to_year(variable)) |>
+    x -> @mutate(x, year=Dates.year(Date)) |>
+    x -> @mutate(x, quarter=Dates.quarter(Date)) |>
+    x -> @mutate(x, Date=Dates.format(Date, "yyyy-mm-dd")) |>
+    x -> @arrange(x, Date) |>
+    x -> @fill_missing(x, "down")
+ylims = extrema(skipmissing(df.value))
+
+# Peak-crisis:
+onset_date = "2007-02-27"
+plt_df = df[df.Date .== onset_date, :]
+plt = plot(
+    plt_df.variable, plt_df.value;
+    label="", color=:blue,
+    xlabel="Maturity (years)", ylabel="Yield (%)",
+    size=(500,400)
+)
+scatter!(
+    plt_df.variable, plt_df.value;
+    label="", color=:blue, alpha=0.5,
+    ylims=(0,6)
+)
+display(plt)
+
+# Post-crisis:
+aftermath_date = "2009-04-20"
+plt_df = df[df.Date .== aftermath_date, :]
+plt = plot(
+    plt_df.variable, plt_df.value;
+    label="", color=:blue,
+    xlabel="Maturity (years)", ylabel="Yield (%)",
+    size=(500,400)
+)
+scatter!(
+    plt_df.variable, plt_df.value;
+    label="", color=:blue, alpha=0.5,
+    ylims=(0,6)
+)
+display(plt)
+```
+
+## Latent Embeddings vs. Observed Factors (1)
+
+```{julia}
+#| fig-cap: Comparison of latent embeddings and observed data of the US Treasury yield curve.
+#| label: fig-pca
+#| output: true
+
+# PCA:
+df_wide = @select(df, Date, variable, value) |>
+    x -> @pivot_wider(x, names_from = variable, values_from = value) |>
+    x -> dropmissing(x)
+X = @select(df_wide, -Date) |> Matrix
+U, Σ, V = svd(X)
+dates = Date.(df_wide.Date)
+tick_years = Date.(unique(Dates.year.(dates)))
+date_tick = Dates.format.(tick_years, "yyyy")
+n_pc = 2
+plt_pc = plot(
+    dates,
+    .-U[:,1:n_pc],
+    label=["PC $i" for i in 1:n_pc] |> permutedims,
+    size=(1000, 300),
+    ylims=(-0.015,0.03),
+    legend=:topright
+)
+plot!(xticks=(tick_years,date_tick), xtickfontsize=6, yaxis=(formatter=y->@sprintf("%.2f",y)))
+vline!(Date.([onset_date]), ls=:solid, color=:black, label="Onset of GFC")
+vline!(Date.([aftermath_date]), ls=:dash, color=:black, label="Aftermath of GFC")
+
+# Level:
+df_level = @group_by(df, Date) |>
+    x -> @mutate(x, level=sum(value)/length(value)) |>
+    x -> @ungroup(x) |>
+    x -> @select(x, Date, level)
+
+# Spreads:
+df_spread = @filter(df, variable==0.25 || variable==10) |>
+    x -> @select(x, -(year:quarter)) |>
+    x -> @mutate(x, variable=ifelse(variable==0.25,"short","long")) |>
+    x -> @pivot_wider(x, names_from=variable, values_from=value) |>
+    x -> @mutate(x, spread=long-short) |>
+    x -> @select(x, Date, spread)
+
+# Plot:
+plt_mat = @full_join(df_level, df_spread) |> 
+    dropmissing |> 
+    unique |>
+    x -> @select(x, -Date) |>
+    Matrix
+plt_obs = plot(
+    dates,
+    plt_mat,
+    label=["Level" "Spread"],
+    size=(1000, 300),
+    ylims=(-3,9),
+    legend=:topright,
+    ylab="Yield (%)"
+)
+plot!(xticks=(tick_years,date_tick), xtickfontsize=6, yaxis=(formatter=y->@sprintf("%.2f",y)))
+vline!(Date.([onset_date]), ls=:solid, color=:black, label="Onset of GFC")
+vline!(Date.([aftermath_date]), ls=:dash, color=:black, label="Aftermath of GFC")
+
+plot(plt_pc, plt_obs, layout=(2,1), size=(1000, 400), left_margin=5mm, bottom_margin=5mm)
+```
+
+## Latent Embeddings vs. Observed Factors (1)
+
+![Yield curve decomposition through PCA.](www/pc_anim.gif){#fig-pca-anim}
+
+# Example: Deep Learning
+
+## Economic Growth and Yield Curve
+
+```{julia}
+#| output: true
+#| fig-cap: GDP growth and yield curve data.
+#| label: fig-dl-data
+
+df_gdp_full = CSV.read(joinpath(BLOG_DIR, "data/gdp.csv"), DataFrame) |>
+    x -> @rename(x, Date=DATE, gdp=GDPC1) |>
+    x -> @mutate(x, gdp_l1=lag(gdp)) |>
+    x -> @mutate(x, growth=log(gdp)-log(gdp_l1)) |>
+    x -> @select(x, Date, growth) |>
+    x -> @mutate(x, year=Dates.year(Date)) |>
+    x -> @mutate(x, quarter=Dates.quarter(Date)) 
+df_gdp = df_gdp_full |>
+    x -> @filter(x, year <= 2018)
+
+df_yields_qtr = @group_by(df, year, quarter, variable) |>
+    x -> @mutate(x, value=mean(value)) |>
+    x -> @ungroup(x) |>
+    x -> @select(x, -Date) |>
+    unique
+
+df_all = @inner_join(df_gdp, df_yields_qtr, (year, quarter)) |> 
+    x -> @pivot_wider(x, names_from=variable, values_from=value) |>
+    dropmissing
+
+y = df_all.growth |> 
+    x -> Float32.(x)
+X = @select(df_all, -(Date:quarter)) |> 
+    Matrix |>
+    x -> Float32.(x) |>
+    x -> Flux.normalise(x; dims=1)
+
+# Plot:
+p_gdp = plot(
+    df_all.Date, y;
+    label="", color=:blue,
+    size=(800,200),
+    ylabel="GDP Growth (log difference)"
+)
+p_yields = plot(
+    df_all.Date, X;
+    label="", color=:blue,
+    ylabel="Yield (standardized))",
+    legend=:bottomright,
+    alpha=0.5,
+    size=(800,400)
+)
+plot(p_gdp, p_yields, layout=(2,1), size=(800, 600), left_margin=5mm)
+```
+
+## Autoencoder for Regression
+
+```{julia}
+#| output: true
+#| fig-cap: Model architecture.
+#| label: fig-dl-model
+
+dl = Flux.MLUtils.DataLoader((permutedims(X), permutedims(y)), batchsize=24, shuffle=true)
+input_dim = size(X,2)
+n_pc = 6
+n_hidden = 32
+epochs = 1000
+activation = tanh_fast
+encoder = Flux.Chain(
+    Dense(input_dim => n_hidden, activation),
+    Dense(n_hidden => n_pc, activation),
+) 
+decoder = Flux.Chain(
+    Dense(n_pc => n_hidden, activation),
+    Dense(n_hidden => input_dim, activation),
+) 
+model = Flux.Chain(
+    encoder.layers...,
+    decoder.layers...,
+    Dense(input_dim, 1),
+) 
+plt = plot(model, rand(input_dim))
+display(plt)
+```
+
+```{julia}
+loss(yhat, y) = Flux.mse(yhat, y)
+opt = Adam()
+opt_state = Flux.setup(opt, model)
+for epoch in 1:epochs
+    Flux.train!(model, dl, opt_state) do m, x, y
+        loss(m(x), y)
+    end
+end
+```
+
+```{julia}
+#| echo: false
+df_long = @pivot_longer(df_all, -(Date:quarter)) |>
+    x -> @arrange(x, Date) |>
+    x -> @select(x, -(year:quarter))
+
+df_spread = df_long |>
+    x -> @filter(x, variable=="0.25" || variable=="10.0") |>
+    x -> @mutate(x, variable=ifelse(variable=="0.25","short","long")) |>
+    x -> @pivot_wider(x, names_from=variable, values_from=value) |>
+    x -> @mutate(x, spread=long-short) |>
+    x -> @select(x, Date, spread)
+
+df_level = @group_by(df_long, Date) |>
+    x -> @mutate(x, level=sum(value)/length(value)) |>
+    x -> @ungroup(x) |>
+    x -> @select(x, Date, level) |>
+    unique
+
+df_factors = @full_join(df_spread, df_level);
+```
+
+
+## Linear Probe - Idea
+
+:::{.incremental}
+
+- Linear probe to regress the observed yield curve factors on the latent embeddings.
+- Let $F_t$ denote the vector containing the two factors of interest in time $t$: $f_t^{\text{spread}}$ and $f_t^{\text{level}}$.
+- Formally, we are interested in the following regression model: $p_{w}(F_t|\mathbf{A}_t)$ where $w$ denotes the regression parameters. 
+- Following [TEGMARK PAPER REFERENCE] we use Ridge regression with $\lambda$ set to $0.1$. 
+- Predict the yield curve factors from the latent embeddings: $\hat{F}_t=\hat{w}^{\prime}\mathbf{A}_t$.
+
+:::
+
+## Linear Probe - Results
+
+```{julia}
+#| output: true
+#| fig-cap: The top panel shows the actual GDP growth and fitted values from the autoencoder model. The bottom panel shows the observed average level and spread of the yield curve (solid) along with the predicted values from the linear probe based on the latent embedding (dashed).
+#| label: fig-dl-results
+
+yhat = model(X')' 
+plt_gdp = plot(
+    df_all.Date, y;
+    label="Actual", color=:green,
+    title="Modelling GDP Growth",
+)
+plot!(
+    df_all.Date, yhat; 
+    label="Predicted", color=:green, ls=:dash,
+)
+
+λ = 0.1
+Y = df_factors[:, [:spread, :level]] |> Matrix
+A = encoder(X')'
+W = (A'A + UniformScaling(λ)) \ A'Y
+Ŷ = A * W
+plt_probe = plot(
+    df_all.Date, Y;
+    color=[:blue :orange],
+    label=["Spread" "Level"],
+    title="Linear Probe"
+)
+plot!(
+    df_all.Date, Ŷ; 
+    color=[:blue :orange], ls=:dash, 
+    label=["Spread (predicted)" "Level (predicted)"]
+)
+plot(plt_gdp, plt_probe, layout=(2,1), size=(800, 600), left_margin=5mm)
+```
+
+## What's the Point?
+
+<iframe src="www/regression.html" width="550" height="720"></iframe>
+
+# Example: gEnEraTiVe Ai
+
+## MNIST VAE
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">This tweet inspired me. Just as I had feared, even the small VAE I trained on MNIST a while ago is basically sentient. It is so over people!<a href="https://t.co/gQ0sLvhkkS">https://t.co/gQ0sLvhkkS</a> <a href="https://t.co/cANQShuXIK">https://t.co/cANQShuXIK</a> <a href="https://t.co/aHycQ6q9pv">pic.twitter.com/aHycQ6q9pv</a></p>&mdash; Pat Alt (@paltmey) <a href="https://twitter.com/paltmey/status/1709892786927829317?ref_src=twsrc%5Etfw">October 5, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+## References
+
