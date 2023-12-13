@@ -89,6 +89,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -106,6 +107,33 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 <meta property="og:title" content="Patrick Altmeyer - Paving the Way Towards Low-Overhead Uncertainty Calibration">
@@ -277,7 +305,7 @@ Guest Blog Post
 </div>
 </div>
 <p>This post summarizes a quarter-long second-year BSc coursework project at TU Delft. Our team of five students has made multiple improvements to <a href="https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl">LaplaceRedux.jl</a>, due to Patrick Altmeyer. Inspired by its Pythonic counterpart, <a href="https://github.com/AlexImmer/Laplace">laplacet-torch</a>, this Julia library aims to provide low-overhead Bayesian uncertainty calibration to deep neural networks via Laplace Approximations <span class="citation" data-cites="daxberger2021laplace">(<a href="#ref-daxberger2021laplace" role="doc-biblioref">Daxberger et al. 2021</a>)</span>.</p>
-<div class="quarto-figure quarto-figure-center">
+<div class="img-fluid quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="www/intro.png" class="img-fluid figure-img"></p>
 <figcaption>A nice image to attract your attention. The exact inverse Fisher information matrix for a MNIST classifier network (left), its block-diagonal and tri-block-diagonal approximations (middle), and the absolute error (right). Source: Martens &amp; Grosse (2015)</figcaption>
@@ -298,7 +326,7 @@ Guest Blog Post
 <div aria-describedby="fig-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/grad_desc.png" class="img-fluid figure-img">
 </div>
-<figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: The loss landscape. One can imagine gradient descent as a particle, let’s say a ball, or a grain of sand, rolling to the bottom of a pit. Then for Bayesian Learning, we have as if a pile of sand poured around at that bottom point, with the pile being thicker where loss is lower. This proverbial sand pile would represent the posterior parameter distribution. Figure due to <span class="citation" data-cites="amini2019spatial">Amini et al. (<a href="#ref-amini2019spatial" role="doc-biblioref">2019</a>)</span>
 </figcaption>
 </figure>
@@ -353,7 +381,7 @@ G := \textstyle\sum_{n=1}^N J(x_n) \left( \nabla^2_{f} \log p(y_n \mid f) \Large
 <div aria-describedby="fig-fact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/fact.png" class="img-fluid figure-img">
 </div>
-<figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-fact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: (a) Hessian in full, intractable for large networks. (b) Low-rank. (c) Kronecker-factored Approximate Curvature, a block-diagonal method. (d) Diagonal. Source: <span class="citation" data-cites="daxberger2021laplace">Daxberger et al. (<a href="#ref-daxberger2021laplace" role="doc-biblioref">2021</a>)</span>
 </figcaption>
 </figure>
@@ -399,7 +427,7 @@ Figure&nbsp;2: (a) Hessian in full, intractable for large networks. (b) Low-rank
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-amini2019spatial" class="csl-entry" role="listitem">
 Amini, Alexander, Ava Soleimany, Sertac Karaman, and Daniela Rus. 2019. <span>“Spatial <span>Uncertainty</span> <span>Sampling</span> for <span>End</span>-to-<span>End</span> <span>Control</span>.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.1805.04829">https://doi.org/10.48550/arXiv.1805.04829</a>.
 </div>
@@ -421,13 +449,12 @@ LeCun, Yann, John Denker, and Sara Solla. 1989. <span>“Optimal <span>Brain</sp
 <div id="ref-sharma2021sketching" class="csl-entry" role="listitem">
 Sharma, Apoorva, Navid Azizan, and Marco Pavone. 2021. <span>“Sketching <span>Curvature</span> for <span>Efficient</span> <span>Out</span>-of-<span>Distribution</span> <span>Detection</span> for <span>Deep</span> <span>Neural</span> <span>Networks</span>.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.2102.12567">https://doi.org/10.48550/arXiv.2102.12567</a>.
 </div>
-</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
   author = {Altmeyer, Patrick and Bratus, Severin and Ardman, Mark and
     Cazacu, Adelina and Ionescu, Andrei and Makarov, Ivan and Altmeyer,
     Patrick},
   title = {Paving the {Way} {Towards} {Low-Overhead} {Uncertainty}
     {Calibration}},
-  pages = {undefined},
   date = {2023-07-04},
   url = {https://www.paltmeyer.com/blog//blog/posts/guest-students-laplace},
   langid = {en}
@@ -565,27 +592,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
     }
     stripColumnClz(note)
-    const typesetMath = (el) => {
-      if (window.MathJax) {
-        // MathJax Typeset
-        window.MathJax.typeset([el]);
-      } else if (window.katex) {
-        // KaTeX Render
-        var mathElements = el.getElementsByClassName("math");
-        var macros = [];
-        for (var i = 0; i < mathElements.length; i++) {
-          var texText = mathElements[i].firstChild;
-          if (mathElements[i].tagName == "SPAN") {
-            window.katex.render(texText.data, mathElements[i], {
-              displayMode: mathElements[i].classList.contains('display'),
-              throwOnError: false,
-              macros: macros,
-              fleqn: false
-            });
-          }
-        }
-      }
-    }
     if (id === null || id.startsWith('sec-')) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
@@ -600,10 +606,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             break;
           }
         }
-        typesetMath(container);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
         return container.innerHTML
       } else {
-        typesetMath(note);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
         return note.innerHTML;
       }
     } else {
@@ -612,7 +622,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (anchorLink) {
         anchorLink.remove();
       }
-      typesetMath(note);
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
       return note.innerHTML;
     }
   }
@@ -844,7 +856,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">

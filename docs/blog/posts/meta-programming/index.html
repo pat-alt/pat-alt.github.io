@@ -118,6 +118,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -135,6 +136,33 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 <meta property="og:title" content="Patrick Altmeyer - A Leap of Faith into Julia’s Metaverse">
@@ -274,14 +302,14 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     <div class="quarto-title-meta-contents">
     <p class="author"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> </p>
   </div>
-    <div class="quarto-title-meta-contents">
+  <div class="quarto-title-meta-contents">
         <p class="affiliation">
             <a href="https://www.tudelft.nl/en/">
             Delft University of Technology
             </a>
           </p>
       </div>
-    </div>
+  </div>
 
 <div class="quarto-title-meta">
 
@@ -342,7 +370,7 @@ ChatGPT&gt; Hey hey, can you please explain metaprogramming to me (I have no com
 <div aria-describedby="fig-code-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/code-as-data.png" class="img-fluid figure-img">
 </div>
-<figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-code-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-code-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Key concept: code as a data structure.
 </figcaption>
 </figure>
@@ -436,9 +464,9 @@ end</pre>
 <blockquote class="blockquote">
 <p>A macro maps a tuple of arguments to a returned expression, and the resulting expression is compiled directly rather than requiring a runtime eval call.</p>
 </blockquote>
-<div class="quarto-figure quarto-figure-right">
+<div class="img-fluid quarto-figure quarto-figure-right">
 <figure class="figure">
-<p><img src="www/macroland.png" class="img-fluid figure-img"></p>
+<p><img src="www/macroland.png" class="img-fluid quarto-figure quarto-figure-right figure-img"></p>
 <figcaption>Arrived in Macroland.</figcaption>
 </figure>
 </div>
@@ -460,9 +488,9 @@ end</pre>
 <section id="build-an-advanced-macro" class="level2">
 <h2 class="anchored" data-anchor-id="build-an-advanced-macro">🔥 BUILD AN ADVANCED MACRO</h2>
 <p>I’ll leave it to you to thoroughly read that section in the Julia <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Building-an-advanced-macro">docs</a>. Here, we’ll jump straight into building the macro I want to have for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>. I now think it’ll be less involved than I thought — optimism in the face of uncertainty!</p>
-<div class="quarto-figure quarto-figure-right">
+<div class="img-fluid quarto-figure quarto-figure-right">
 <figure class="figure">
-<p><img src="www/final-boss.png" class="img-fluid figure-img"></p>
+<p><img src="www/final-boss.png" class="img-fluid quarto-figure quarto-figure-right figure-img"></p>
 <figcaption>Advanced Macro: the final boss.</figcaption>
 </figure>
 </div>
@@ -502,7 +530,7 @@ end</pre>
 <section id="define-your-objective" class="level3">
 <h3 class="anchored" data-anchor-id="define-your-objective">Define your <code>@objective</code></h3>
 <p>Our first and most important macro shall define the counterfactual search objective. In particular, the <code>@objective</code> macro should accept an expression that looks much like the right-hand-side of <a href="#eq-general" class="quarto-xref">Equation&nbsp;1</a>, which is essentially just a weighted sum.</p>
-<div class="quarto-figure quarto-figure-center">
+<div class="img-fluid quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="www/objective.png" class="img-fluid figure-img"></p>
 <figcaption>Sketch of the envisioned <code>@objective</code> macro.</figcaption>
@@ -654,7 +682,7 @@ end</pre>
 <div aria-describedby="fig-search-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="index_files/figure-html/fig-search-output-1.svg" class="img-fluid figure-img">
 </div>
-<figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-search-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-search-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Counterfactual search using our composed generator.
 </figcaption>
 </figure>
@@ -693,22 +721,21 @@ Figure&nbsp;2: Counterfactual search using our composed generator.
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-altmeyer2023endogenous" class="csl-entry" role="listitem">
 Altmeyer, Patrick, Giovan Angela, Aleksander Buszydlik, Karol Dobiczek, Arie van Deursen, and Cynthia CS Liem. 2023. <span>“Endogenous Macrodynamics in Algorithmic Recourse.”</span> In <em>2023 IEEE Conference on Secure and Trustworthy Machine Learning (SaTML)</em>, 418–31. IEEE.
 </div>
 <div id="ref-mothilal2020explaining" class="csl-entry" role="listitem">
 Mothilal, Ramaravind K, Amit Sharma, and Chenhao Tan. 2020. <span>“Explaining Machine Learning Classifiers Through Diverse Counterfactual Explanations.”</span> In <em>Proceedings of the 2020 <span>Conference</span> on <span>Fairness</span>, <span>Accountability</span>, and <span>Transparency</span></em>, 607–17. <a href="https://doi.org/10.1145/3351095.3372850">https://doi.org/10.1145/3351095.3372850</a>.
 </div>
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>A very cool package! Funny story, though, I somehow managed to commit my OpenAI API key to GitHub on the first go (<a href="https://github.com/ThatcherC/ReplGPT.jl/issues/8">developing</a>)<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
   author = {Altmeyer, Patrick},
   title = {A {Leap} of {Faith} into {Julia’s} {Metaverse}},
-  pages = {undefined},
   date = {2023-03-13},
   url = {https://www.paltmeyer.com/blog//blog/posts/meta-programming},
   langid = {en}
@@ -845,27 +872,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
     }
     stripColumnClz(note)
-    const typesetMath = (el) => {
-      if (window.MathJax) {
-        // MathJax Typeset
-        window.MathJax.typeset([el]);
-      } else if (window.katex) {
-        // KaTeX Render
-        var mathElements = el.getElementsByClassName("math");
-        var macros = [];
-        for (var i = 0; i < mathElements.length; i++) {
-          var texText = mathElements[i].firstChild;
-          if (mathElements[i].tagName == "SPAN") {
-            window.katex.render(texText.data, mathElements[i], {
-              displayMode: mathElements[i].classList.contains('display'),
-              throwOnError: false,
-              macros: macros,
-              fleqn: false
-            });
-          }
-        }
-      }
-    }
     if (id === null || id.startsWith('sec-')) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
@@ -880,10 +886,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             break;
           }
         }
-        typesetMath(container);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
         return container.innerHTML
       } else {
-        typesetMath(note);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
         return note.innerHTML;
       }
     } else {
@@ -892,7 +902,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (anchorLink) {
         anchorLink.remove();
       }
-      typesetMath(note);
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
       return note.innerHTML;
     }
   }
@@ -1124,7 +1136,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
