@@ -343,7 +343,7 @@ A Bayesian Neural Network gradually learns.
 <p><span class="math display">\[
 p(y|x,\mathcal{D}) = \int p(y|x,\theta)p(\theta|\mathcal{D})d\theta
 \]</span></p>
-<p>The integral implies that we essentially need many predictions from many different specifications of <span class="math inline">\(\theta\)</span>. Unfortunately, this means more work for us or rather our computers. Fortunately though, researchers have proposed many ingenious ways to approximate the equation above in recent years: <span class="citation" data-cites="gal2016dropout">Gal and Ghahramani (<a href="#ref-gal2016dropout" role="doc-biblioref">2016</a>)</span> propose using dropout at test time while <span class="citation" data-cites="lakshminarayanan2016simple">Lakshminarayanan, Pritzel, and Blundell (<a href="#ref-lakshminarayanan2016simple" role="doc-biblioref">2016</a>)</span> show that averaging over an ensemble of just five models seems to do the trick. Still, despite their simplicity and usefulness these approaches involve additional computational costs compared to training just a single network. As we shall see now though, another promising approach has recently entered the limelight: <strong>Laplace approximation</strong> (LA).</p>
+<p>The integral implies that we essentially need many predictions from many different specifications of <span class="math inline">\(\theta\)</span>. Unfortunately, this means more work for us or rather our computers. Fortunately though, researchers have proposed many ingenious ways to approximate the equation above in recent years: <span class="citation" data-cites="gal2016dropout">Gal and Ghahramani (<a href="#ref-gal2016dropout" role="doc-biblioref">2016</a>)</span> propose using dropout at test time while <span class="citation" data-cites="lakshminarayanan2016simple">Lakshminarayanan, Pritzel, and Blundell (<a href="#ref-lakshminarayanan2016simple" role="doc-biblioref">2017</a>)</span> show that averaging over an ensemble of just five models seems to do the trick. Still, despite their simplicity and usefulness these approaches involve additional computational costs compared to training just a single network. As we shall see now though, another promising approach has recently entered the limelight: <strong>Laplace approximation</strong> (LA).</p>
 <p>If you have read my <a href="https://towardsdatascience.com/bayesian-logistic-regression-53df017ba90f">previous post</a> on Bayesian Logistic Regression, then the term Laplace should already sound familiar to you. As a matter of fact, we will see that all concepts covered in that previous post can be naturally extended to deep learning. While some of these concepts will be revisited below, I strongly recommend you check out the previous post before reading on here. Without further ado let us now see how LA can be used for truly effortless deep learning.</p>
 </section>
 <section id="laplace-approximation" class="level2">
@@ -520,7 +520,7 @@ Daxberger, Erik, Agustinus Kristiadi, Alexander Immer, Runa Eschenhagen, Matthia
 Gal, Yarin, and Zoubin Ghahramani. 2016. <span>“Dropout as a Bayesian Approximation: <span>Representing</span> Model Uncertainty in Deep Learning.”</span> In <em>International Conference on Machine Learning</em>, 1050–59. <span>PMLR</span>.
 </div>
 <div id="ref-lakshminarayanan2016simple" class="csl-entry" role="listitem">
-Lakshminarayanan, Balaji, Alexander Pritzel, and Charles Blundell. 2016. <span>“Simple and Scalable Predictive Uncertainty Estimation Using Deep Ensembles.”</span> <a href="https://arxiv.org/abs/1612.01474">https://arxiv.org/abs/1612.01474</a>.
+Lakshminarayanan, Balaji, Alexander Pritzel, and Charles Blundell. 2017. <span>“Simple and Scalable Predictive Uncertainty Estimation Using Deep Ensembles.”</span> <em>Advances in Neural Information Processing Systems</em> 30.
 </div>
 <div id="ref-murphy2022probabilistic" class="csl-entry" role="listitem">
 Murphy, Kevin P. 2022. <em>Probabilistic <span>Machine Learning</span>: <span>An</span> Introduction</em>. <span>MIT Press</span>.
@@ -535,7 +535,7 @@ Raghunathan, Aditi, Sang Michael Xie, Fanny Yang, John C Duchi, and Percy Liang.
 Slack, Dylan, Sophie Hilgard, Emily Jia, Sameer Singh, and Himabindu Lakkaraju. 2020. <span>“Fooling Lime and Shap: <span>Adversarial</span> Attacks on Post Hoc Explanation Methods.”</span> In <em>Proceedings of the <span>AAAI</span>/<span>ACM Conference</span> on <span>AI</span>, <span>Ethics</span>, and <span>Society</span></em>, 180–86.
 </div>
 <div id="ref-wilson2020case" class="csl-entry" role="listitem">
-Wilson, Andrew Gordon. 2020. <span>“The Case for Bayesian Deep Learning.”</span> <em>arXiv Preprint arXiv:2001.10995</em>.
+Wilson, Andrew Gordon. 2020. <span>“The Case for Bayesian Deep Learning.”</span> <a href="https://arxiv.org/abs/2001.10995">https://arxiv.org/abs/2001.10995</a>.
 </div>
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 

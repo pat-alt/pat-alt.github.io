@@ -343,7 +343,7 @@ Conformal Prediction intervals for different<br>coverage rates. As coverage grow
 <p>Before we start, let’s briefly recap what CP is all about. Don’t worry, we’re not about to deep-dive into methodology. But just to give you a high-level description upfront:</p>
 <blockquote class="blockquote">
 <p>Conformal prediction (a.k.a. conformal inference) is a user-friendly paradigm for creating statistically rigorous uncertainty sets/intervals for the predictions of such models. Critically, the sets are valid in a distribution-free sense: they possess explicit, non-asymptotic guarantees even without distributional assumptions or model assumptions.</p>
-<p>— <span class="citation" data-cites="angelopoulos2021gentle">Angelopoulos and Bates (<a href="#ref-angelopoulos2021gentle" role="doc-biblioref">2021</a>)</span> (<a href="https://arxiv.org/pdf/2107.07511.pdf">arXiv</a>)</p>
+<p>— <span class="citation" data-cites="angelopoulos2021gentle">Angelopoulos and Bates (<a href="#ref-angelopoulos2021gentle" role="doc-biblioref">2022</a>)</span> (<a href="https://arxiv.org/pdf/2107.07511.pdf">arXiv</a>)</p>
 </blockquote>
 <p>Intuitively, CP works under the premise of turning heuristic notions of uncertainty into rigorous uncertainty estimates through repeated sampling or the use of dedicated calibration data.</p>
 <p>In what follows we will explore what CP can do by going through a standard machine learning workflow using <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a> and <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a>. There will be less focus on how exactly CP works, but references will point you to additional resources.</p>
@@ -3544,7 +3544,7 @@ Figure&nbsp;4: Prediction intervals for our conformalized machine learning model
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-angelopoulos2021gentle" class="csl-entry" role="listitem">
-Angelopoulos, Anastasios N, and Stephen Bates. 2021. <span>“A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification.”</span> <em>arXiv Preprint arXiv:2107.07511</em>.
+Angelopoulos, Anastasios N., and Stephen Bates. 2022. <span>“A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification.”</span> <a href="https://arxiv.org/abs/2107.07511">https://arxiv.org/abs/2107.07511</a>.
 </div>
 <div id="ref-blaom2020mlj" class="csl-entry" role="listitem">
 Blaom, Anthony D., Franz Kiraly, Thibaut Lienart, Yiannis Simillides, Diego Arenas, and Sebastian J. Vollmer. 2020. <span>“<span>MLJ</span>: <span>A Julia</span> Package for Composable Machine Learning.”</span> <em>Journal of Open Source Software</em> 5 (55): 2704. <a href="https://doi.org/10.21105/joss.02704">https://doi.org/10.21105/joss.02704</a>.

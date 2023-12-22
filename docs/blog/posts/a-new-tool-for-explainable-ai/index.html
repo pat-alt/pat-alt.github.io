@@ -343,7 +343,7 @@ Turning a 9 (nine) into a 4 (four).
 <section id="counterfactuals-for-image-data" class="level2">
 <h2 class="anchored" data-anchor-id="counterfactuals-for-image-data">Counterfactuals for image data 🖼</h2>
 <p>To introduce counterfactual explanations I used a simple binary classification problem in my previous <a href="https://towardsdatascience.com/individual-recourse-for-black-box-models-5e9ed1e4b4cc">post</a>. It involved a linear classifier and a linearly separable, synthetic data set with just two features. This time we are going to step it up a notch: we will generate counterfactual explanations MNIST data. The MNIST dataset contains 60,000 training samples of handwritten digits in the form of 28x28 pixel grey-scale images <span class="citation" data-cites="lecun1998mnist">(<a href="#ref-lecun1998mnist" role="doc-biblioref">LeCun 1998</a>)</span>. Each image is associated with a label indicating the digit (0-9) that the image represents.</p>
-<p>The <a href="https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/"><code>CounterfactualExplanations.jl</code></a> package ships with two black-box models that were trained to predict labels for this data: firstly, a simple multi-layer perceptron (MLP) and, secondly, a corresponding deep ensemble. Originally proposed by <span class="citation" data-cites="lakshminarayanan2016simple">Lakshminarayanan, Pritzel, and Blundell (<a href="#ref-lakshminarayanan2016simple" role="doc-biblioref">2016</a>)</span>, deep ensembles are really just ensembles of deep neural networks. They are still among the most popular approaches to Bayesian deep learning.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>The <a href="https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/"><code>CounterfactualExplanations.jl</code></a> package ships with two black-box models that were trained to predict labels for this data: firstly, a simple multi-layer perceptron (MLP) and, secondly, a corresponding deep ensemble. Originally proposed by <span class="citation" data-cites="lakshminarayanan2016simple">Lakshminarayanan, Pritzel, and Blundell (<a href="#ref-lakshminarayanan2016simple" role="doc-biblioref">2017</a>)</span>, deep ensembles are really just ensembles of deep neural networks. They are still among the most popular approaches to Bayesian deep learning.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <section id="black-box-models" class="level3">
 <h3 class="anchored" data-anchor-id="black-box-models">Black-box models</h3>
 <p>The code below loads relevant packages along with the MNIST data and pre-trained models.</p>
@@ -527,16 +527,16 @@ Figure&nbsp;2: Counterfactual path using the generic counterfactual generator fo
 Antorán, Javier, Umang Bhatt, Tameem Adel, Adrian Weller, and José Miguel Hernández-Lobato. 2020. <span>“Getting a Clue: <span>A</span> Method for Explaining Uncertainty Estimates.”</span> <a href="https://arxiv.org/abs/2006.06848">https://arxiv.org/abs/2006.06848</a>.
 </div>
 <div id="ref-joshi2019realistic" class="csl-entry" role="listitem">
-Joshi, Shalmali, Oluwasanmi Koyejo, Warut Vijitbenjaronk, Been Kim, and Joydeep Ghosh. 2019. <span>“Towards Realistic Individual Recourse and Actionable Explanations in Black-Box Decision Making Systems.”</span> <em>arXiv Preprint arXiv:1907.09615</em>.
+Joshi, Shalmali, Oluwasanmi Koyejo, Warut Vijitbenjaronk, Been Kim, and Joydeep Ghosh. 2019. <span>“Towards Realistic Individual Recourse and Actionable Explanations in Black-Box Decision Making Systems.”</span> <a href="https://arxiv.org/abs/1907.09615">https://arxiv.org/abs/1907.09615</a>.
 </div>
 <div id="ref-lakshminarayanan2016simple" class="csl-entry" role="listitem">
-Lakshminarayanan, Balaji, Alexander Pritzel, and Charles Blundell. 2016. <span>“Simple and Scalable Predictive Uncertainty Estimation Using Deep Ensembles.”</span> <a href="https://arxiv.org/abs/1612.01474">https://arxiv.org/abs/1612.01474</a>.
+Lakshminarayanan, Balaji, Alexander Pritzel, and Charles Blundell. 2017. <span>“Simple and Scalable Predictive Uncertainty Estimation Using Deep Ensembles.”</span> <em>Advances in Neural Information Processing Systems</em> 30.
 </div>
 <div id="ref-lecun1998mnist" class="csl-entry" role="listitem">
 LeCun, Yann. 1998. <span>“The MNIST Database of Handwritten Digits.”</span> <em>Http://Yann. Lecun. Com/Exdb/Mnist/</em>.
 </div>
 <div id="ref-pawelczyk2021carla" class="csl-entry" role="listitem">
-Pawelczyk, Martin, Sascha Bielawski, Johannes van den Heuvel, Tobias Richter, and Gjergji Kasneci. 2021. <span>“Carla: A Python Library to Benchmark Algorithmic Recourse and Counterfactual Explanation Algorithms.”</span> <a href="https://arxiv.org/abs/2108.00783">https://arxiv.org/abs/2108.00783</a>.
+Pawelczyk, Martin, Sascha Bielawski, Johannes van den Heuvel, Tobias Richter, and Gjergji Kasneci. 2021. <span>“CARLA: A Python Library to Benchmark Algorithmic Recourse and Counterfactual Explanation Algorithms.”</span> <a href="https://arxiv.org/abs/2108.00783">https://arxiv.org/abs/2108.00783</a>.
 </div>
 <div id="ref-rudin2019stop" class="csl-entry" role="listitem">
 Rudin, Cynthia. 2019. <span>“Stop Explaining Black Box Machine Learning Models for High Stakes Decisions and Use Interpretable Models Instead.”</span> <em>Nature Machine Intelligence</em> 1 (5): 206–15. <a href="https://doi.org/10.1038/s42256-019-0048-x">https://doi.org/10.1038/s42256-019-0048-x</a>.
