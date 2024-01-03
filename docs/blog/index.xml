@@ -1010,7 +1010,7 @@ A leap of faith into Julia’s metaverse.
 </figure>
 </div>
 <p>On this blog, I typically talk about things that I have <em>some</em> understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly <em>clueless</em> about. There’s an interesting aspect about Julia, which I know embarrassingly little about at this point: <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/">Metaprogramming</a>.</p>
-<p>Having worked with Julia for about 1.5 years now, I have so far employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it never existed. Meanwhile, <a href="https://twitter.com/kdpsinghlab">Karandeep Singh</a> has stepped on the Julia scence around 5 minutes ago and already developed a package that literally oozes macro: <a href="https://kdpsingh.github.io/Tidier.jl/dev/">Tidier.jl</a>. The package API is such a joy to work with that I have felt inspired to finally take a serious look at what metaprogramming is all about.</p>
+<p>Having worked with Julia for about 1.5 years now, I have so far employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it never existed. Meanwhile, <a href="https://twitter.com/kdpsinghlab">Karandeep Singh</a> has stepped on the Julia scence around 5 minutes ago and already developed a package that literally oozes macro: <a href="https://github.com/TidierOrg/Tidier.jl">Tidier.jl</a>. The package API is such a joy to work with that I have felt inspired to finally take a serious look at what metaprogramming is all about.</p>
 <p>My goal for this post is to get to the point where I can confidently write my first macro for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> - more on this below! If you are as clueless and curious about the topic as I am, then follow along on a journey into the metaverse. Buckle in though, it’s going to be a bumpy ride! You have been warned.</p>
 <section id="all-right-where-to-start" class="level2">
 <h2 class="anchored" data-anchor-id="all-right-where-to-start">🤔 All right, where to start?</h2>
@@ -1048,7 +1048,7 @@ Figure&nbsp;1: Key concept: code as a data structure.
 </figure>
 </div>
 <p>And if I understand this correctly, the expression <code>ex::Expr</code> is literally <strong>code as a data structure</strong>:</p>
-<div class="cell" data-execution_count="2">
+<div id="4e84364e" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1">ex <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
@@ -1080,16 +1080,16 @@ font-style: inherit;">dump</span>(ex)</span></code></pre></div>
 </div>
 <p>That data structure can be “manipulated from within the language”.</p>
 <p>Let’s try that! Currently, evaluating this expression yields the <code>sum</code> of the <code>Array</code>:</p>
-<div class="cell" data-execution_count="3">
+<div id="ce19556a" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">eval</span>(ex)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>6</code></pre>
 </div>
 </div>
 <p>Upon manipulation (that sounds weird!), we have:</p>
-<div class="cell" data-execution_count="4">
+<div id="1df5a83b" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1">ex.args[<span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>] <span class="op" style="color: #5E5E5E;
@@ -1100,7 +1100,7 @@ font-style: inherit;">:</span>maximum</span>
 <span id="cb6-2"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">eval</span>(ex)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>3</code></pre>
 </div>
 </div>
@@ -1109,7 +1109,7 @@ font-style: inherit;">eval</span>(ex)</span></code></pre></div>
 <section id="interpolation" class="level3">
 <h3 class="anchored" data-anchor-id="interpolation">Interpolation</h3>
 <p>Back to the Julia documentation and next on the agenda we have <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-expression-interpolation">Interpolation</a>. Skipping the details again, it seems like I can interpolate an expression much like strings. Using interpolation I can recreate the expression from above as follows:</p>
-<div class="cell" data-execution_count="5">
+<div id="fa275c21" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1">fun <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> maximum</span>
@@ -1140,7 +1140,7 @@ background-color: null;
 font-style: inherit;">eval</span>(ex_from_ex_interpoliation)</span></code></pre></div>
 </div>
 <p>Using string interpolation is quite similar:</p>
-<div class="cell" data-execution_count="6">
+<div id="eec9bb60" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1">fun <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> maximum</span>
@@ -1175,12 +1175,12 @@ background-color: null;
 font-style: inherit;">eval</span>(ex_from_string_interpolation) <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> a</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>true</code></pre>
 </div>
 </div>
 <p>And much like with function arguments, we can also use splatting:</p>
-<div class="cell" data-execution_count="7">
+<div id="8fb9f3eb" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">eval</span>(<span class="op" style="color: #5E5E5E;
@@ -1192,7 +1192,7 @@ background-color: null;
 font-style: inherit;">$</span>x<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">...</span>)))</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>1×2×3 Array{Float64, 3}:
 [:, :, 1] =
  0.0  0.0
@@ -1205,7 +1205,7 @@ font-style: inherit;">...</span>)))</span></code></pre></div>
 </div>
 </div>
 <p>Next off, we have <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Nested-quote"><strong>nested quotes</strong></a>. I can’t see myself using these anytime soon but anyway it seems that for each <code>$</code> sign that we prepend to <code>x</code>, an evaluation is trigged:</p>
-<div class="cell" data-execution_count="8">
+<div id="084c541f" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">eval</span>(<span class="kw" style="color: #003B4F;
@@ -1219,10 +1219,10 @@ background-color: null;
 font-style: inherit;">end</span> <span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">end</span>)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div class="ansi-escaped-output">
 <pre>quote
-    <span class="ansi-bright-black-fg">#= In[34]:2 =#</span>
+    <span class="ansi-bright-black-fg">#= In[9]:2 =#</span>
     [1, 2, 3]
 end</pre>
 </div>
@@ -1243,7 +1243,7 @@ end</pre>
 </figure>
 </div>
 <p>Let’s see if we can make sense of this as we move on. The <code>Hello, world!</code> example makes the concept quite clear:</p>
-<div class="cell" data-execution_count="9">
+<div id="2fe0093a" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">macro</span> <span class="fu" style="color: #4758AB;
@@ -1294,7 +1294,7 @@ font-style: inherit;"># ... to be immediately compiled.</span></span></code></pr
 <h3 class="anchored" data-anchor-id="from-off-the-shelf-counterfactual-generators">From Off-the-Shelf Counterfactual Generators …</h3>
 <p><a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> is a package for generating Counterfactual Explanations for predictive models <img src="https://latex.codecogs.com/png.latex?f:%20%5Cmathcal%7BX%7D%20%5Cmapsto%20%5Cmathcal%7BY%7D">. This is a relatively recent approach to Explainable AI that I am (probably a little too) excited about and won’t dwell on here. For what follows, it suffices to say that generating Counterfactual Explanations can be seen as a generative modelling task because it involves generating samples in the input space: <img src="https://latex.codecogs.com/png.latex?x%20%5Csim%20%5Cmathcal%7BX%7D">. To this end, the package has previously shipped with a number of <code>Generators</code>: composite types that contain information about how counterfactuals ought to be generated.</p>
 <p>This has allowed users to specify the type of generator they want to use by instantiating it. For example, the DiCE generator by <span class="citation" data-cites="mothilal2020explaining">Mothilal, Sharma, and Tan (2020)</span> could (and still can) be instantiated as follows:</p>
-<div class="cell" data-execution_count="10">
+<div id="a8a7c466" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1">generator <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
@@ -1334,7 +1334,7 @@ background-color: null;
 font-style: inherit;">CounterfactualExplanations</span></span></code></pre></div>
 <p>By the time you’re reading this, all changes to that branch will have hopefully already been committed and merged.</p>
 <p>Let’s start by instantiating a generic generator:</p>
-<div class="cell" data-execution_count="11">
+<div id="4cf7a11d" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1">generator <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
@@ -1367,7 +1367,7 @@ background-color: null;
 font-style: inherit;">eval</span>(ex)</span></code></pre></div>
 <p>Of course, evaluating this expression throws an error because none of the variables are actually defined. Let’s work on that …</p>
 <p>For the loss and penalty functions, we will use methods available from the <code>CounterfactualExplanations.Objectives</code> module, while for <img src="https://latex.codecogs.com/png.latex?%5Clambda"> we will use a literal:</p>
-<div class="cell" data-execution_count="12">
+<div id="4da47d40" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1">ex <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
@@ -1381,9 +1381,9 @@ background-color: null;
 font-style: inherit;">*</span> distance_l2)</span></code></pre></div>
 </div>
 <p>Let’s try to make sense of the data structure we have created:</p>
-<div class="cell" data-execution_count="13">
+<div id="2c4dd2cb" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1">ex.args</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="39">
+<div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>3-element Vector{Any}:
  :+
  :logitbinarycrossentropy
@@ -1501,7 +1501,7 @@ font-style: inherit;">return</span> ex_generator</span>
 background-color: null;
 font-style: inherit;">end</span></span></code></pre></div>
 <p>Instead of importing the functions, I just get them explicitly from the <code>Objectives</code> module,</p>
-<div class="cell" data-execution_count="14">
+<div id="f180449c" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">macro</span> <span class="fu" style="color: #4758AB;
@@ -1569,7 +1569,7 @@ background-color: null;
 font-style: inherit;">end</span></span></code></pre></div>
 </div>
 <p>and, finally, this works:</p>
-<div class="cell" data-execution_count="15">
+<div id="f1b64467" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><span class="pp" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">@objective</span>(generator, logitbinarycrossentropy <span class="op" style="color: #5E5E5E;
@@ -1577,12 +1577,12 @@ background-color: null;
 font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.1</span>distance_l2)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="41">
-<pre><code>Generator(Flux.Losses.logitbinarycrossentropy, CounterfactualExplanations.Objectives.distance_l2, 0.1, false, Flux.Optimise.Descent(0.1))</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>CounterfactualExplanations.Generators.GradientBasedGenerator(Flux.Losses.logitbinarycrossentropy, CounterfactualExplanations.Objectives.distance_l2, 0.1, false, false, Flux.Optimise.Descent(0.1))</code></pre>
 </div>
 </div>
 <p>But what about adding multiple penalties? The DiCE generator, for example, also takes into account how diverse the counterfactual explanations are <span class="citation" data-cites="mothilal2020explaining">(Mothilal, Sharma, and Tan 2020)</span>. The corresponding penalty is called <code>ddp_diversity</code>. Let’s start with the expression again:</p>
-<div class="cell" data-execution_count="16">
+<div id="44373b5a" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb28-1">ex <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
@@ -1597,7 +1597,7 @@ font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1.0</span>ddp_diversity)</span>
 <span id="cb28-2">ex.args</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="42">
+<div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>4-element Vector{Any}:
  :+
  :logitbinarycrossentropy
@@ -1605,12 +1605,12 @@ font-style: inherit;">1.0</span>ddp_diversity)</span>
  :(1.0ddp_diversity)</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="17">
-<div class="cell-output cell-output-display" data-execution_count="43">
+<div id="3878a24d" class="cell" data-execution_count="17">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="18">
 <p>This time there’s a second nested <code>Expr</code>ession among the arguments: <code>:(1.0ddp_diversity)</code>.</p>
 </div>
 </div>
-<div class="cell" data-execution_count="18">
+<div id="87d69468" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">macro</span> <span class="fu" style="color: #4758AB;
@@ -1710,7 +1710,7 @@ background-color: null;
 font-style: inherit;">end</span></span></code></pre></div>
 </div>
 <p>That works well,</p>
-<div class="cell" data-execution_count="19">
+<div id="9323f3d9" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><span class="pp" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">@objective</span>(generator, logitbinarycrossentropy <span class="op" style="color: #5E5E5E;
@@ -1722,12 +1722,12 @@ background-color: null;
 font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1.0</span>ddp_diversity)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="45">
-<pre><code>Generator(Flux.Losses.logitbinarycrossentropy, Function[CounterfactualExplanations.Objectives.distance_l2, CounterfactualExplanations.Objectives.ddp_diversity], AbstractFloat[0.05, 1.0], false, Flux.Optimise.Descent(0.1))</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>CounterfactualExplanations.Generators.GradientBasedGenerator(Flux.Losses.logitbinarycrossentropy, Function[CounterfactualExplanations.Objectives.distance_l2, CounterfactualExplanations.Objectives.ddp_diversity], AbstractFloat[0.05, 1.0], false, false, Flux.Optimise.Descent(0.1))</code></pre>
 </div>
 </div>
 <p>but we should still make sure that this <code>generator</code> is also compatible with our package. Below we go through some of the typical workflows associated with Counterfactual Explanations. Firstly, we load some synthetic data and fit a black-box model to it.</p>
-<div class="cell" data-execution_count="20">
+<div id="7a06c4c8" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb33-1">n_dim <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
@@ -1767,7 +1767,7 @@ background-color: null;
 font-style: inherit;">plot</span>(M, counterfactual_data)</span></code></pre></div>
 </div>
 <p>Next, we begin by specifying our target and factual label. We then draw a random sample from the non-target (factual) class.</p>
-<div class="cell" data-execution_count="21">
+<div id="4812eaf7" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Factual and target:</span></span>
@@ -1799,7 +1799,7 @@ background-color: null;
 font-style: inherit;">select_factual</span>(counterfactual_data,chosen)</span></code></pre></div>
 </div>
 <p>Finally, we use our <code>generator</code> to generate counterfactuals:</p>
-<div class="cell" data-execution_count="22">
+<div id="6514cb4b" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb35-1">ce <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
@@ -1819,8 +1819,8 @@ font-style: inherit;">:</span>generator_conditions</span>
 <span id="cb35-5">)</span></code></pre></div>
 </div>
 <p>It worked! 🎉 The resulting counterfactual search is illustrated in Figure&nbsp;2. I may have overspecified the size of the <code>ddp_diversity</code> penalty a little bit here, but it sure makes for a cool chart!</p>
-<div class="cell" data-execution_count="23">
-<div class="cell-output cell-output-display" data-execution_count="49">
+<div id="cell-fig-search" class="cell" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="24">
 <div id="fig-search" class="quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-search-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">

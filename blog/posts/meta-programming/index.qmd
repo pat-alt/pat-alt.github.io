@@ -20,6 +20,7 @@ using Pkg; Pkg.activate("blog/posts/meta-programming")
 using CounterfactualExplanations
 using Markdown
 using Plots
+using TaijaPlotting
 ```
 
 <div class="intro-gif">
@@ -31,7 +32,7 @@ using Plots
 
 On this blog, I typically talk about things that I have *some* understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly *clueless* about. There's an interesting aspect about Julia, which I know embarrassingly little about at this point: [Metaprogramming](https://docs.julialang.org/en/v1.8/manual/metaprogramming/). 
 
-Having worked with Julia for about 1.5 years now, I have so far employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it never existed. Meanwhile, [Karandeep Singh](https://twitter.com/kdpsinghlab) has stepped on the Julia scence around 5 minutes ago and already developed a package that literally oozes macro: [Tidier.jl](https://kdpsingh.github.io/Tidier.jl/dev/). The package API is such a joy to work with that I have felt inspired to finally take a serious look at what metaprogramming is all about. 
+Having worked with Julia for about 1.5 years now, I have so far employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it never existed. Meanwhile, [Karandeep Singh](https://twitter.com/kdpsinghlab) has stepped on the Julia scence around 5 minutes ago and already developed a package that literally oozes macro: [Tidier.jl](https://github.com/TidierOrg/Tidier.jl). The package API is such a joy to work with that I have felt inspired to finally take a serious look at what metaprogramming is all about. 
 
 My goal for this post is to get to the point where I can confidently write my first macro for [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) - more on this below! If you are as clueless and curious about the topic as I am, then follow along on a journey into the metaverse. Buckle in though, it's going to be a bumpy ride! You have been warned. 
 
