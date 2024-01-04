@@ -44,16 +44,34 @@ bibliography: ../../../../bib.bib
 classoption: "notheorems"
 ---
 
-## Open Questions
+# Faithfulness first, plausibility second.
+
+We propose *ECCCo*: a new way to generate faithful model explanations that are as plausible as the underlying model permits.
+
+## Summary
 
 :::{.incremental}
 
-1. What makes a counterfactual **plausible**?
-2. Why do we need plausibility?
-3. Is plausibility all we need?
-4. What makes models more **explainable**?
+- **Idea**: generate counterfactuals that are consistent with what the model has learned about the data.
+- **Method**: constrain the model's energy and predictive uncertainty for the counterfactual.
+- **Result**: faithful counterfactuals that are as plausible as the model permits.
+- **Benefits**: enable us to distinguish trustworthy from unreliable models. 
 
 :::
+
+## Pick your Poison?
+
+All of these counterfactuals are valid explanations for the model's prediction. 
+
+> Which one would you pick?
+
+![Turning a 9 into a 7: Counterfactual Examplanations for an Image Classifier.](www/poison.png){#fig-cf-example}
+
+# Reconciling Faithfulness and Plausibility
+
+## Counterfactual Explanations
+
+
 
 ## Plausibility
 
@@ -67,43 +85,9 @@ Let $\mathcal{X}|\mathbf{y}^+= p(\mathbf{x}|\mathbf{y}^+)$ denote the true condi
 
 :::
 
-## Counter Example
+> Plausibility has been linked to actionability, fairness and robustness.
 
-::::{.columns}::::
-:::{.column width='50%'}
-- The counterfactual in @fig-implausible is valid: it has crossed the decision boundary. 
-- But is it consistent with the data in the target class (blue)?
-:::
-:::{.column width='50%'}
-![A valid but implausible counterfactual. Source: @altmeyer2023explaining](www/implausible.png){#fig-implausible}
-:::
-::::
-
-## Why Plausibility?
-
-- Actionability: If a counterfactual is implausible, it is unlikely to be actionable.
-- Fairness: If a counterfactual is implausible, it is unlikely to be fair.
-- Robustness: If a counterfactual is implausible, it is unlikely to be robust.
-
-**But**: Higher plausibility seems to require larger changes and hence increase costs to individuals. 
-
-## Pick your Poison?
-
-All of these counterfactuals are valid explanations for the model's prediction. Which one would you pick?
-
-![Turning a 9 into a 7: Counterfactual Examplanations for an Image Classifier.](www/poison.png){#fig-cf-example}
-
-## What do Models Learn?
-
-These images are sampled from the posterior distribution learned by the model. Looks different, no?
-
-![Conditional Generated Images from the Image Classifier](www/learn.png){#fig-learn}
-
-## Faithful Counterfactuals {.smaller}
-
-::::{.columns}::::
-:::{.column width='60%'}
-We propose a way to generate counterfactuals that are as plausible as the underlying model permits (under review).
+## Faithfulness
 
 ::: {#def-faithful}
 
@@ -113,46 +97,31 @@ Let $\mathcal{X}_{\theta}|\mathbf{y}^+ = p_{\theta}(\mathbf{x}|\mathbf{y}^+)$ de
 
 :::
 
+> If the model posterior approximates the true posterior, faithful counterfactuals are also plausible.
+
+## ECCCo {.nostretch} 
+
+![Gradient fields and counterfactual paths for different generators.](www/poc_gradient_fields.png){#fig-poc-gradient-fields width="65%"}
+
+# Results
+
+## Visual Evidence
+
+::::{.columns}::::
+:::{.column width='60%'}
 :::
 :::{.column width='40%'}
 ![](www/mnist_eccco_new.png)
 :::
 ::::
 
-![Gradient fields and counterfactual paths for different generators.](www/poc_gradient_fields.png){#fig-poc-gradient-fields width="65%"}
+## The Numbers
 
-## Improving Models
+# Questions? {.nostretch} 
 
-Now that we have a tool to faithfully explain models we may ask: **how** do models learn plausible explanations? Initial evidence:
-
-1. Incorporating predictive uncertainty (e.g. ensembling). 
-2. Addressing robustness (e.g. adversarial training in @schut2021generating).
-3. Better model architectures.
-4. Hybrid modelling (i.e. combining generative and discriminative models).
-
-## Example: Architecture
-
-![Counterfactuals for LeNet-5 convolutional neural network [@lecun1998gradient].](www/mnist_all_lenet_eccco.png){#fig-mnist-lenets width="100%"}
-
-## Example: JEM Ensemble
-
-![Counterfactuals for an ensemble of Joint Energy Models (JEM) [@grathwohl2020your].](www/mnist_all_jem_ens_eccco.png){#fig-mnist-jem width="100%"}
-
-## Questions? {.smaller}
-
-::::{.columns}::::
-:::{.column width='50%'}
 With thanks to my co-authors Mojtaba Farmanbar, Arie van Deursen and Cynthia C. S. Liem.
 
-Slides powered by [Quarto](https://quarto.org/).
-
-:::
-:::{.column width='50%'}
-
-![Takes you to my [website](https://www.paltmeyer.com/).](/www/images/qr.png)
-
-:::
-::::
+![](/www/images/qr.png){width="25%" fig-align="center"}
 
 ## Counterfactual Explanations
 
