@@ -4,8 +4,11 @@ listing:
   contents: 
     - "posts/*/index.qmd"
   sort: "date desc"
-  type: default
+  date-format: "YYYY"
+  type: table
   categories: false
-  fields: [image, date, title, description, author, file-modified]
-  image-align: left
+  fields: [title, date, venue, description]
+  field-display-names:
+    venue: "Venue"
+    date: "Year"
 ---

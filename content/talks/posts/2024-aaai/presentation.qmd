@@ -1,0 +1,197 @@
+---
+title: ECCCos from the Black Box
+subtitle: Faithful Model Explanations through Energy-Based Conformal Counterfactuals
+author: 
+  - name: "**Patrick Altmeyer**"
+    url: https://www.paltmeyer.com/
+  - name: Mojtaba Farmanbar
+  - name: Arie van Deursen
+  - name: Cynthia C. S. Liem
+institute: Delft University of Technology
+date: today
+format: 
+  beamer: default
+  tudelft-revealjs:
+    theme: custom.scss
+    self-contained: true
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    fig-align: center
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+bibliography: ../../../../bib.bib
+---
+
+## Open Questions
+
+:::{.incremental}
+
+1. What makes a counterfactual **plausible**?
+2. Why do we need plausibility?
+3. Is plausibility all we need?
+4. What makes models more **explainable**?
+
+:::
+
+## Plausibility
+
+There's no consensus on the exact definition of plausibility but we think about it as follows:
+
+::: {#def-plausible}
+
+## Plausible Counterfactuals
+
+Let $\mathcal{X}|\mathbf{y}^+= p(\mathbf{x}|\mathbf{y}^+)$ denote the true conditional distribution of samples in the target class $\mathbf{y}^+$. Then for $\mathbf{x}^{\prime}$ to be considered a plausible counterfactual, we need: $\mathbf{x}^{\prime} \sim \mathcal{X}|\mathbf{y}^+$.
+
+:::
+
+## Counter Example
+
+::::{.columns}::::
+:::{.column width='50%'}
+- The counterfactual in @fig-implausible is valid: it has crossed the decision boundary. 
+- But is it consistent with the data in the target class (blue)?
+:::
+:::{.column width='50%'}
+![A valid but implausible counterfactual. Source: @altmeyer2023explaining](www/implausible.png){#fig-implausible}
+:::
+::::
+
+## Why Plausibility?
+
+- Actionability: If a counterfactual is implausible, it is unlikely to be actionable.
+- Fairness: If a counterfactual is implausible, it is unlikely to be fair.
+- Robustness: If a counterfactual is implausible, it is unlikely to be robust.
+
+**But**: Higher plausibility seems to require larger changes and hence increase costs to individuals. 
+
+## Pick your Poison?
+
+All of these counterfactuals are valid explanations for the model's prediction. Which one would you pick?
+
+![Turning a 9 into a 7: Counterfactual Examplanations for an Image Classifier.](www/poison.png){#fig-cf-example}
+
+## What do Models Learn?
+
+These images are sampled from the posterior distribution learned by the model. Looks different, no?
+
+![Conditional Generated Images from the Image Classifier](www/learn.png){#fig-learn}
+
+## Faithful Counterfactuals {.smaller}
+
+::::{.columns}::::
+:::{.column width='60%'}
+We propose a way to generate counterfactuals that are as plausible as the underlying model permits (under review).
+
+::: {#def-faithful}
+
+## Faithful Counterfactuals
+
+Let $\mathcal{X}_{\theta}|\mathbf{y}^+ = p_{\theta}(\mathbf{x}|\mathbf{y}^+)$ denote the conditional distribution of $\mathbf{x}$ in the target class $\mathbf{y}^+$, where $\theta$ denotes the parameters of model $M_{\theta}$. Then for $\mathbf{x}^{\prime}$ to be considered a faithful counterfactual, we need: $\mathbf{x}^{\prime} \sim \mathcal{X}_{\theta}|\mathbf{y}^+$.
+
+:::
+
+:::
+:::{.column width='40%'}
+![](www/mnist_eccco_new.png)
+:::
+::::
+
+![Gradient fields and counterfactual paths for different generators.](www/poc_gradient_fields.png){#fig-poc-gradient-fields width="65%"}
+
+## Improving Models
+
+Now that we have a tool to faithfully explain models we may ask: **how** do models learn plausible explanations? Initial evidence:
+
+1. Incorporating predictive uncertainty (e.g. ensembling). 
+2. Addressing robustness (e.g. adversarial training in @schut2021generating).
+3. Better model architectures.
+4. Hybrid modelling (i.e. combining generative and discriminative models).
+
+## Example: Architecture
+
+![Counterfactuals for LeNet-5 convolutional neural network [@lecun1998gradient].](www/mnist_all_lenet_eccco.png){#fig-mnist-lenets width="100%"}
+
+## Example: JEM Ensemble
+
+![Counterfactuals for an ensemble of Joint Energy Models (JEM) [@grathwohl2020your].](www/mnist_all_jem_ens_eccco.png){#fig-mnist-jem width="100%"}
+
+## Questions? {.smaller}
+
+::::{.columns}::::
+:::{.column width='50%'}
+With thanks to my co-authors Mojtaba Farmanbar, Arie van Deursen and Cynthia C. S. Liem.
+
+Slides powered by [Quarto](https://quarto.org/).
+
+:::
+:::{.column width='50%'}
+<img src="/www/images/qr.png" height="auto" width="250" style="display: block; margin-left: auto; margin-right: auto;">
+
+<div style="text-align: center;">
+  <p style="display: inline; vertical-align: middle"> 
+    <a href="https://www.linkedin.com/in/patrick-altmeyer-a2a25494/" style="display: inline-block; color: rgb(207, 142, 255) !important;">
+      <font style="">
+        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/d0fc399dee4218d1e0e0399b8947acab.png" alt="LinkedIn (Personal)" style="border: none; max-width: 100%; height: 60px !important;">
+      </font>
+    </a>
+    <a href="https://twitter.com/paltmey" style="display: inline-block; color: rgb(207, 142, 255) !important;">
+      <font style="">
+        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border: none; max-width: 100%; height: 60px !important;">
+      </font>
+    </a>
+    <a href="https://github.com/pat-alt" style="display: inline-block; color: rgb(207, 142, 255) !important;">
+      <font style="">
+        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/47f4eb2d0082a8a3611d614b75a09db8.png" alt="Github" style="border: none; max-width: 100%; height: 60px !important;">
+      </font>
+    </a>
+    <a href="https://medium.com/@patrick.altmeyer" style="display: inline-block; color: rgb(207, 142, 255) !important;">
+      <font style="">
+        <img width="60" height="60" src="https://s1g.s3.amazonaws.com/175f49662614345cb7dbb95fce3f88af.png" alt="Medium" style="border: none; max-width: 100%; height: 60px !important;">
+      </font>
+    </a>
+  </p>
+</div>
+:::
+::::
+
+## Counterfactual Explanations
+
+All the work presented today is powered by [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) 📦.
+
+There is also a corresponding paper, [*Explaining Black-Box Models through Counterfactuals*](https://proceedings.juliacon.org/papers/10.21105/jcon.00130), which has been published in JuliaCon Proceedings. 
+
+If you decide to use this package in your work, please consider citing the paper:
+
+[![DOI](https://proceedings.juliacon.org/papers/10.21105/jcon.00130/status.svg)](https://doi.org/10.21105/jcon.00130) [![DOI](https://zenodo.org/badge/440782065.svg)](https://zenodo.org/badge/latestdoi/440782065)
+
+## Joint Energy Models
+
+Joint Energy Models (JEMs) are hybrid models trained to learn the conditional output **and** input distribution [@grathwohl2020your]: [`JointEnergyModels.jl`](https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl) 📦.
+
+![A JEM trained on Circles data.](www/jem.svg){#fig-jem }
+
+## References
+
+
