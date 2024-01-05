@@ -1011,43 +1011,43 @@
     "objectID": "content/talks/posts/2024-aaai/presentation.html#pick-your-poison",
     "href": "content/talks/posts/2024-aaai/presentation.html#pick-your-poison",
     "title": "ECCCos from the Black Box",
-    "section": "Pick your Poison?",
-    "text": "Pick your Poison?\nAll of these counterfactuals are valid explanations for the model’s prediction.\n\nWhich one would you pick?\n\n\n\nFigure 1: Turning a 9 into a 7: Counterfactual Examplanations for an Image Classifier."
+    "section": "Pick your Poison",
+    "text": "Pick your Poison\nAll of these counterfactuals are valid explanations for the model’s prediction.\n\nWhich one would you pick?\n\n\n\nFigure 1: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using Wachter (Wachter, Mittelstadt, and Russell 2017), Schut (Schut et al. 2021) and REVISE (Joshi et al. 2019)."
   },
   {
     "objectID": "content/talks/posts/2024-aaai/presentation.html#counterfactual-explanations",
     "href": "content/talks/posts/2024-aaai/presentation.html#counterfactual-explanations",
     "title": "ECCCos from the Black Box",
     "section": "Counterfactual Explanations",
-    "text": "Counterfactual Explanations\n\\[\n\\begin{aligned}\n\\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {\\text{yloss}(M_{\\theta}(f(\\mathbf{Z}^\\prime)),\\mathbf{y}^+)} + \\lambda {\\text{cost}(f(\\mathbf{Z}^\\prime)) }  \\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations (CE) explain how inputs into a model need to change for it to produce different outputs (Wachter, Mittelstadt, and Russell 2017).\n\n\n\n\n\n\n\nFigure 2: Gradient-based counterfactual search."
+    "text": "Counterfactual Explanations\n\\[\n\\begin{aligned}\n\\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {\\text{yloss}(M_{\\theta}(f(\\mathbf{Z}^\\prime)),\\mathbf{y}^+)} + \\lambda {\\text{cost}(f(\\mathbf{Z}^\\prime)) }  \\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations (CE) explain how inputs into a model need to change for it to produce different outputs.\n\n\n\n\n\n\n\nFigure 2: Gradient-based counterfactual search."
   },
   {
     "objectID": "content/talks/posts/2024-aaai/presentation.html#plausibility",
     "href": "content/talks/posts/2024-aaai/presentation.html#plausibility",
     "title": "ECCCos from the Black Box",
     "section": "Plausibility",
-    "text": "Plausibility\nThere’s no consensus on the exact definition of plausibility but we think about it as follows:\n\nDefinition 1 (Plausible Counterfactuals) Let \\(\\mathcal{X}|\\mathbf{y}^+= p(\\mathbf{x}|\\mathbf{y}^+)\\) denote the true conditional distribution of samples in the target class \\(\\mathbf{y}^+\\). Then for \\(\\mathbf{x}^{\\prime}\\) to be considered a plausible counterfactual, we need: \\(\\mathbf{x}^{\\prime} \\sim \\mathcal{X}|\\mathbf{y}^+\\).\n\n\nPlausibility has been linked to actionability, fairness and robustness."
+    "text": "Plausibility\n\n\n\nDefinition 1 (Plausible Counterfactuals) Let \\(\\mathcal{X}|\\mathbf{y}^+= p(\\mathbf{x}|\\mathbf{y}^+)\\) denote the true conditional distribution of samples in the target class \\(\\mathbf{y}^+\\). Then for \\(\\mathbf{x}^{\\prime}\\) to be considered a plausible counterfactual, we need: \\(\\mathbf{x}^{\\prime} \\sim \\mathcal{X}|\\mathbf{y}^+\\).\n\n\n\n\nWhy Plausibility?\n\n\nPlausibility is positively associated with actionability, robustness (Artelt et al. 2021) and causal validity (Mahajan, Tan, and Sharma 2020).\n\n\n\n\n\n\n\n\n\n\nFigure 3: Kernel density estimate (KDE) for the conditional distribution, \\(p(\\mathbf{x}|\\mathbf{y}^+)\\), based on observed data. Counterfactual path as in Figure 2."
   },
   {
     "objectID": "content/talks/posts/2024-aaai/presentation.html#faithfulness",
     "href": "content/talks/posts/2024-aaai/presentation.html#faithfulness",
     "title": "ECCCos from the Black Box",
     "section": "Faithfulness",
-    "text": "Faithfulness\n\nDefinition 2 (Faithful Counterfactuals) Let \\(\\mathcal{X}_{\\theta}|\\mathbf{y}^+ = p_{\\theta}(\\mathbf{x}|\\mathbf{y}^+)\\) denote the conditional distribution of \\(\\mathbf{x}\\) in the target class \\(\\mathbf{y}^+\\), where \\(\\theta\\) denotes the parameters of model \\(M_{\\theta}\\). Then for \\(\\mathbf{x}^{\\prime}\\) to be considered a faithful counterfactual, we need: \\(\\mathbf{x}^{\\prime} \\sim \\mathcal{X}_{\\theta}|\\mathbf{y}^+\\).\n\n\nIf the model posterior approximates the true posterior, faithful counterfactuals are also plausible."
+    "text": "Faithfulness\n\n\n\nDefinition 2 (Faithful Counterfactuals) Let \\(\\mathcal{X}_{\\theta}|\\mathbf{y}^+ = p_{\\theta}(\\mathbf{x}|\\mathbf{y}^+)\\) denote the conditional distribution of \\(\\mathbf{x}\\) in the target class \\(\\mathbf{y}^+\\), where \\(\\theta\\) denotes the parameters of model \\(M_{\\theta}\\). Then for \\(\\mathbf{x}^{\\prime}\\) to be considered a faithful counterfactual, we need: \\(\\mathbf{x}^{\\prime} \\sim \\mathcal{X}_{\\theta}|\\mathbf{y}^+\\).\n\n\n\n\nTrustworthy Models\n\n\nIf the model posterior approximates the true posterior (\\(p_{\\theta}(\\mathbf{x}|\\mathbf{y}^+) \\rightarrow p(\\mathbf{x}|\\mathbf{y}^+)\\)), faithful counterfactuals are also plausible.\n\n\n\n\n\n\n\n\n\n\nFigure 4: KDE for learned conditional distribution, \\(p_{\\theta}(\\mathbf{x}|\\mathbf{y}^+)\\). Yellow stars indicate conditional samples generated through SGLD for a joint energy model (JEM)."
   },
   {
     "objectID": "content/talks/posts/2024-aaai/presentation.html#eccco",
     "href": "content/talks/posts/2024-aaai/presentation.html#eccco",
     "title": "ECCCos from the Black Box",
     "section": "ECCCo",
-    "text": "ECCCo\nEnergy-Constrained (\\(\\mathcal{E}_{\\theta}\\)) Conformal (\\(\\Omega\\)) Counterfactuals:\n\\[\n\\begin{aligned}\n& \\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {L_{\\text{clf}}(f(\\mathbf{Z}^\\prime);M_{\\theta},\\mathbf{y}^+)}+ \\lambda_1 {\\text{cost}(f(\\mathbf{Z}^\\prime)) } \\\\\n&+ \\lambda_2 \\mathcal{E}_{\\theta}(f(\\mathbf{Z}^\\prime)|\\mathbf{y}^+) + \\lambda_3 \\Omega(C_{\\theta}(f(\\mathbf{Z}^\\prime);\\alpha)) \\}\n\\end{aligned}\n\\]\n\n\n\n\n\n\nFigure 3: Gradient fields and counterfactual paths for different generators."
+    "text": "ECCCo\nEnergy-Constrained (\\(\\mathcal{E}_{\\theta}\\)) Conformal (\\(\\Omega\\)) Counterfactuals1:\n\\[\n\\begin{aligned}\n& \\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {L_{\\text{clf}}(f(\\mathbf{Z}^\\prime);M_{\\theta},\\mathbf{y}^+)}+ \\lambda_1 {\\text{cost}(f(\\mathbf{Z}^\\prime)) } \\\\\n&+ \\lambda_2 \\mathcal{E}_{\\theta}(f(\\mathbf{Z}^\\prime)|\\mathbf{y}^+) + \\lambda_3 \\Omega(C_{\\theta}(f(\\mathbf{Z}^\\prime);\\alpha)) \\}\n\\end{aligned}\n\\]\n\n\n\n\n\n\nFigure 5: Gradient fields and counterfactual paths for different generators.\n\n\n\nWe leverage ideas from Grathwohl et al. (2020) and Stutz et al. (2022). See the paper and appendix for a derivation of the objective from first principles."
   },
   {
     "objectID": "content/talks/posts/2024-aaai/presentation.html#visual-evidence",
     "href": "content/talks/posts/2024-aaai/presentation.html#visual-evidence",
     "title": "ECCCos from the Black Box",
     "section": "Visual Evidence",
-    "text": "Visual Evidence\n\n\n\n\n\n\n\n\nFigure 4: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), Joint Energy Model (c), JEM Ensemble (d).\n\n\n\n\nECCCo generates counterfactuals that\n\nfaithfully represent model quality (Figure 4).\nachieve state-of-the-art plausibility (Figure 5).\n\n\n\n\n\n\n\nFigure 5: Results for different generators (from 3 to 5)."
+    "text": "Visual Evidence\n\n\n\n\n\n\n\n\nFigure 6: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\nECCCo generates counterfactuals that\n\nfaithfully represent model quality (Figure 6).\nachieve state-of-the-art plausibility (Figure 7).\n\n\n\n\n\n\n\nFigure 7: Results for different generators (from 3 to 5)."
   },
   {
     "objectID": "content/talks/posts/2024-aaai/presentation.html#the-numbers",
@@ -1068,7 +1068,7 @@
     "href": "content/talks/posts/2024-aaai/presentation.html#references",
     "title": "ECCCos from the Black Box",
     "section": "References",
-    "text": "References\n\n\n\n\nWachter, Sandra, Brent Mittelstadt, and Chris Russell. 2017. “Counterfactual Explanations Without Opening the Black Box: Automated Decisions and the GDPR.” Harv. JL & Tech. 31: 841. https://doi.org/10.2139/ssrn.3063289."
+    "text": "References\n\n\n\n\nArtelt, André, Valerie Vaquet, Riza Velioglu, Fabian Hinder, Johannes Brinkrolf, Malte Schilling, and Barbara Hammer. 2021. “Evaluating Robustness of Counterfactual Explanations.” In 2021 IEEE Symposium Series on Computational Intelligence (SSCI), 01–09. IEEE.\n\n\nGrathwohl, Will, Kuan-Chieh Wang, Joern-Henrik Jacobsen, David Duvenaud, Mohammad Norouzi, and Kevin Swersky. 2020. “Your Classifier Is Secretly an Energy Based Model and You Should Treat It Like One.” In International Conference on Learning Representations.\n\n\nJoshi, Shalmali, Oluwasanmi Koyejo, Warut Vijitbenjaronk, Been Kim, and Joydeep Ghosh. 2019. “Towards Realistic Individual Recourse and Actionable Explanations in Black-Box Decision Making Systems.” https://arxiv.org/abs/1907.09615.\n\n\nMahajan, Divyat, Chenhao Tan, and Amit Sharma. 2020. “Preserving Causal Constraints in Counterfactual Explanations for Machine Learning Classifiers.” https://arxiv.org/abs/1912.03277.\n\n\nSchut, Lisa, Oscar Key, Rory Mc Grath, Luca Costabello, Bogdan Sacaleanu, Yarin Gal, et al. 2021. “Generating Interpretable Counterfactual Explanations By Implicit Minimisation of Epistemic and Aleatoric Uncertainties.” In International Conference on Artificial Intelligence and Statistics, 1756–64. PMLR.\n\n\nStutz, David, Krishnamurthy, Dvijotham, Ali Taylan Cemgil, and Arnaud Doucet. 2022. “Learning Optimal Conformal Classifiers.” https://arxiv.org/abs/2110.09192.\n\n\nWachter, Sandra, Brent Mittelstadt, and Chris Russell. 2017. “Counterfactual Explanations Without Opening the Black Box: Automated Decisions and the GDPR.” Harv. JL & Tech. 31: 841. https://doi.org/10.2139/ssrn.3063289."
   },
   {
     "objectID": "content/talks/posts/2023-insurance-academy/presentation.html#quick-introduction",
@@ -3001,5 +3001,12 @@
     "title": "A Leap of Faith into Julia’s Metaverse",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nA very cool package! Funny story, though, I somehow managed to commit my OpenAI API key to GitHub on the first go (developing)↩︎"
+  },
+  {
+    "objectID": "content/talks/posts/2024-aaai/presentation.html#code",
+    "href": "content/talks/posts/2024-aaai/presentation.html#code",
+    "title": "ECCCos from the Black Box",
+    "section": "Code",
+    "text": "Code\nThe code used to run the analysis for this work is built on top of CounterfactualExplanations.jl.\nThere is also a corresponding paper, Explaining Black-Box Models through Counterfactuals, which has been published in JuliaCon Proceedings."
   }
 ]

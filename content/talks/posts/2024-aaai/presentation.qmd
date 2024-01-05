@@ -12,6 +12,8 @@ date: today
 format: 
   beamer: 
     slide-level: 2
+    theme: Berlin
+    fontsize: 10pt
   tudelft-revealjs:
     theme: custom.scss
     self-contained: true
@@ -60,13 +62,13 @@ We propose *ECCCo*: a new way to generate faithful model explanations that are a
 
 :::
 
-## Pick your Poison?
+## Pick your Poison
 
 All of these counterfactuals are valid explanations for the model's prediction. 
 
 > Which one would you pick?
 
-![Turning a 9 into a 7: Counterfactual Examplanations for an Image Classifier.](www/mnist_motivation.png){#fig-cf-example}
+![Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](www/mnist_motivation.png){#fig-cf-example width="80%"}
 
 # Reconciling Faithfulness and Plausibility
 
@@ -79,18 +81,18 @@ $$
 $$ 
 
 ::::{.columns}::::
-:::{.column width='60%'}
-**Counterfactual Explanations** (CE) explain how inputs into a model need to change for it to produce different outputs [@wachter2017counterfactual].
+:::{.column width='50%'}
+**Counterfactual Explanations** (CE) explain how inputs into a model need to change for it to produce different outputs.
 :::
-:::{.column width='40%'}
-![Gradient-based counterfactual search.](www/ce_intro.png){#fig-ce-intro width="75%"}
+:::{.column width='50%'}
+![Gradient-based counterfactual search.](www/simple_ce.png){#fig-ce-intro width="60%"}
 :::
 ::::
 
-## Plausibility
+## Plausibility {.smaller}
 
-There's no consensus on the exact definition of plausibility but we think about it as follows:
-
+::::{.columns}::::
+:::{.column width='50%'}
 ::: {#def-plausible}
 
 ## Plausible Counterfactuals
@@ -99,10 +101,23 @@ Let $\mathcal{X}|\mathbf{y}^+= p(\mathbf{x}|\mathbf{y}^+)$ denote the true condi
 
 :::
 
-> Plausibility has been linked to actionability, fairness and robustness.
+::: {.callout-note appearance="minimal"}
 
-## Faithfulness
+## Why Plausibility?
 
+Plausibility is positively associated with actionability, robustness [@artelt2021evaluating] and causal validity [@mahajan2019preserving].
+
+:::
+:::
+:::{.column width='50%'}
+![Kernel density estimate (KDE) for the conditional distribution, $p(\mathbf{x}|\mathbf{y}^+)$, based on observed data. Counterfactual path as in @fig-ce-intro.](www/density_true.png){#fig-density-true width="75%"}
+:::
+::::
+
+## Faithfulness {.smaller}
+
+::::{.columns}::::
+:::{.column width='50%'}
 ::: {#def-faithful}
 
 ## Faithful Counterfactuals
@@ -111,11 +126,23 @@ Let $\mathcal{X}_{\theta}|\mathbf{y}^+ = p_{\theta}(\mathbf{x}|\mathbf{y}^+)$ de
 
 :::
 
-> If the model posterior approximates the true posterior, faithful counterfactuals are also plausible.
+::: {.callout-note appearance="minimal"}
 
-## ECCCo {.nostretch} 
+## Trustworthy Models
 
-Energy-Constrained ($\mathcal{E}_{\theta}$) Conformal ($\Omega$) Counterfactuals:
+If the model posterior approximates the true posterior ($p_{\theta}(\mathbf{x}|\mathbf{y}^+) \rightarrow p(\mathbf{x}|\mathbf{y}^+)$), faithful counterfactuals are also plausible.
+:::
+:::
+:::{.column width='50%'}
+![KDE for learned conditional distribution, $p_{\theta}(\mathbf{x}|\mathbf{y}^+)$. Yellow stars indicate conditional samples generated through SGLD for a joint energy model (JEM).](www/density_model.png){#fig-density-true width="75%"}
+:::
+::::
+
+
+
+## ECCCo {.nostretch .smaller} 
+
+Energy-Constrained ($\mathcal{E}_{\theta}$) Conformal ($\Omega$) Counterfactuals^[We leverage ideas from @grathwohl2020your and @stutz2022learning. See the paper and appendix for a derivation of the objective from first principles.]:
 
 $$
 \begin{aligned}
@@ -124,7 +151,7 @@ $$
 \end{aligned} 
 $$
 
-![Gradient fields and counterfactual paths for different generators.](www/poc_gradient_fields.png){#fig-poc-gradient-fields width="65%" fig-align="center"}
+![Gradient fields and counterfactual paths for different generators.](www/poc_gradient_fields.png){#fig-poc-gradient-fields width="85%" fig-align="center"}
 
 # Results
 
@@ -132,7 +159,7 @@ $$
 
 ::::{.columns}::::
 :::{.column width='30%'}
-![Turning a 9 into a 7. *ECCCo* applied to MLP (a), Ensemble (b), Joint Energy Model (c), JEM Ensemble (d).](www/mnist_eccco.png){#fig-mnist-eccco width="75%"}
+![Turning a 9 into a 7. *ECCCo* applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).](www/mnist_eccco.png){#fig-mnist-eccco width="75%"}
 :::
 :::{.column width='70%'}
 *ECCCo* generates counterfactuals that
@@ -157,9 +184,9 @@ With thanks to my co-authors Mojtaba Farmanbar, Arie van Deursen and Cynthia C. 
 
 ![](/www/images/qr.png){width="25%" fig-align="center"}
 
-## `CounterfactualExplanations.jl`
+## Code
 
-All the work presented today is powered by [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) 📦.
+The [code](https://github.com/pat-alt/ECCCo.jl) used to run the analysis for this work is built on top of [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl).
 
 There is also a corresponding paper, [*Explaining Black-Box Models through Counterfactuals*](https://proceedings.juliacon.org/papers/10.21105/jcon.00130), which has been published in JuliaCon Proceedings. 
 
