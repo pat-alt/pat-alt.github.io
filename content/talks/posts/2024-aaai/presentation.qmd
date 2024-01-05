@@ -142,7 +142,19 @@ If the model posterior approximates the true posterior ($p_{\theta}(\mathbf{x}|\
 
 ## ECCCo {.nostretch .smaller} 
 
-Energy-Constrained ($\mathcal{E}_{\theta}$) Conformal ($\Omega$) Counterfactuals^[We leverage ideas from @grathwohl2020your and @stutz2022learning. See the paper and appendix for a derivation of the objective from first principles.]:
+::::{.columns}::::
+:::{.column width='40%'}
+::: {.callout-tip appearance="minimal"}
+
+## Key Idea
+
+Use the hybrid objective of joint energy models (JEM) and a model-agostic penalty for predictive uncertainty^[We leverage ideas from @grathwohl2020your and @stutz2022learning. See the paper and appendix for a derivation of the objective from first principles.]: Energy-Constrained ($\mathcal{E}_{\theta}$) Conformal ($\Omega$) Counterfactuals (*ECCCo*). 
+
+:::
+:::
+:::{.column width='60%'}
+
+*ECCCo* objective:
 
 $$
 \begin{aligned}
@@ -151,7 +163,11 @@ $$
 \end{aligned} 
 $$
 
-![Gradient fields and counterfactual paths for different generators.](www/poc_gradient_fields.png){#fig-poc-gradient-fields width="85%" fig-align="center"}
+:::
+::::
+
+![Gradient fields and counterfactual paths for different generators.](www/poc_gradient_fields.png){#fig-poc-gradient-fields width="75%" fig-align="center"}
+
 
 # Results
 
@@ -171,9 +187,10 @@ $$
 :::
 ::::
 
-## The Numbers
+## The Numbers {.smaller}
 
-**High-Level Finding:** state-of-the-art faithfulness across models and datasets and approaches state-of-the-art plausibility for more trustworthy models. 
+- Large benchmarks on a variety of models and datasets from various domains.
+- *ECCCo* achieves state-of-the-art faithfulness across models and datasets and approaches state-of-the-art plausibility for more trustworthy models. 
 
 ![](www/numbers.png){width="100%" fig-align="center"}
 
@@ -189,6 +206,8 @@ With thanks to my co-authors Mojtaba Farmanbar, Arie van Deursen and Cynthia C. 
 The [code](https://github.com/pat-alt/ECCCo.jl) used to run the analysis for this work is built on top of [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl).
 
 There is also a corresponding paper, [*Explaining Black-Box Models through Counterfactuals*](https://proceedings.juliacon.org/papers/10.21105/jcon.00130), which has been published in JuliaCon Proceedings. 
+
+[![Trustworthy AI in Julia: github.com/JuliaTrustworthyAI](www/logo.png){width="50%" fig-align="center"}](https://github.com/JuliaTrustworthyAI)
 
 ## References {.scrollable .smaller}
 
