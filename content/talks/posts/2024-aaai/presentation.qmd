@@ -62,16 +62,6 @@ We propose *ECCCo*: a new way to generate faithful model explanations that are a
 
 :::
 
-## Pick your Poison
-
-All of these counterfactuals are valid explanations for the model's prediction. 
-
-> Which one would you pick?
-
-![Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](www/mnist_motivation.png){#fig-cf-example width="80%"}
-
-# Reconciling Faithfulness and Plausibility
-
 ## Counterfactual Explanations
 
 $$
@@ -88,6 +78,16 @@ $$
 ![Gradient-based counterfactual search.](www/simple_ce.png){#fig-ce-intro width="60%"}
 :::
 ::::
+
+## Pick your Poison
+
+All of these counterfactuals are valid explanations for the model's prediction. 
+
+> Which one would you pick?
+
+![Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](www/mnist_motivation.png){#fig-cf-example width="80%"}
+
+# Reconciling Faithfulness and Plausibility
 
 ## Plausibility {.smaller}
 
@@ -143,18 +143,18 @@ If the model posterior approximates the true posterior ($p_{\theta}(\mathbf{x}|\
 ## ECCCo {.nostretch .smaller} 
 
 ::::{.columns}::::
-:::{.column width='40%'}
+:::{.column width='30%'}
 ::: {.callout-tip appearance="minimal"}
 
 ## Key Idea
 
-Use the hybrid objective of joint energy models (JEM) and a model-agnostic penalty for predictive uncertainty^[We leverage ideas from @grathwohl2020your and @stutz2022learning. See the paper and appendix for a derivation of the objective from first principles.]: Energy-Constrained ($\mathcal{E}_{\theta}$) Conformal ($\Omega$) Counterfactuals (*ECCCo*). 
+Use the hybrid objective of joint energy models (JEM) and a model-agnostic penalty for predictive uncertainty: Energy-Constrained ($\mathcal{E}_{\theta}$) Conformal ($\Omega$) Counterfactuals (*ECCCo*). 
 
 :::
 :::
-:::{.column width='60%'}
+:::{.column width='70%'}
 
-*ECCCo* objective:
+*ECCCo* objective^[We leverage ideas from @grathwohl2020your and @stutz2022learning. See the paper and appendix for a derivation of the objective from first principles.]:
 
 $$
 \begin{aligned}
@@ -163,10 +163,12 @@ $$
 \end{aligned} 
 $$
 
+![Gradient fields and counterfactual paths for different generators.](www/poc_gradient_fields.png){#fig-poc-gradient-fields width="75%" fig-align="center"}
+
 :::
 ::::
 
-![Gradient fields and counterfactual paths for different generators.](www/poc_gradient_fields.png){#fig-poc-gradient-fields width="75%" fig-align="center"}
+
 
 
 # Results

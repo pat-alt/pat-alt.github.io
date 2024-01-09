@@ -1008,25 +1008,25 @@
     "text": "Summary\n\n\nIdea: generate counterfactuals that are consistent with what the model has learned about the data.\nMethod: constrain the model’s energy and predictive uncertainty for the counterfactual.\nResult: faithful counterfactuals that are as plausible as the model permits.\nBenefits: enable us to distinguish trustworthy from unreliable models."
   },
   {
-    "objectID": "content/talks/posts/2024-aaai/presentation.html#pick-your-poison",
-    "href": "content/talks/posts/2024-aaai/presentation.html#pick-your-poison",
-    "title": "ECCCos from the Black Box",
-    "section": "Pick your Poison",
-    "text": "Pick your Poison\nAll of these counterfactuals are valid explanations for the model’s prediction.\n\nWhich one would you pick?\n\n\n\nFigure 1: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using Wachter (Wachter, Mittelstadt, and Russell 2017), Schut (Schut et al. 2021) and REVISE (Joshi et al. 2019)."
-  },
-  {
     "objectID": "content/talks/posts/2024-aaai/presentation.html#counterfactual-explanations",
     "href": "content/talks/posts/2024-aaai/presentation.html#counterfactual-explanations",
     "title": "ECCCos from the Black Box",
     "section": "Counterfactual Explanations",
-    "text": "Counterfactual Explanations\n\\[\n\\begin{aligned}\n\\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {\\text{yloss}(M_{\\theta}(f(\\mathbf{Z}^\\prime)),\\mathbf{y}^+)} + \\lambda {\\text{cost}(f(\\mathbf{Z}^\\prime)) }  \\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations (CE) explain how inputs into a model need to change for it to produce different outputs.\n\n\n\n\n\n\n\nFigure 2: Gradient-based counterfactual search."
+    "text": "Counterfactual Explanations\n\\[\n\\begin{aligned}\n\\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {\\text{yloss}(M_{\\theta}(f(\\mathbf{Z}^\\prime)),\\mathbf{y}^+)} + \\lambda {\\text{cost}(f(\\mathbf{Z}^\\prime)) }  \\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations (CE) explain how inputs into a model need to change for it to produce different outputs.\n\n\n\n\n\n\n\nFigure 1: Gradient-based counterfactual search."
+  },
+  {
+    "objectID": "content/talks/posts/2024-aaai/presentation.html#pick-your-poison",
+    "href": "content/talks/posts/2024-aaai/presentation.html#pick-your-poison",
+    "title": "ECCCos from the Black Box",
+    "section": "Pick your Poison",
+    "text": "Pick your Poison\nAll of these counterfactuals are valid explanations for the model’s prediction.\n\nWhich one would you pick?\n\n\n\nFigure 2: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using Wachter (Wachter, Mittelstadt, and Russell 2017), Schut (Schut et al. 2021) and REVISE (Joshi et al. 2019)."
   },
   {
     "objectID": "content/talks/posts/2024-aaai/presentation.html#plausibility",
     "href": "content/talks/posts/2024-aaai/presentation.html#plausibility",
     "title": "ECCCos from the Black Box",
     "section": "Plausibility",
-    "text": "Plausibility\n\n\n\nDefinition 1 (Plausible Counterfactuals) Let \\(\\mathcal{X}|\\mathbf{y}^+= p(\\mathbf{x}|\\mathbf{y}^+)\\) denote the true conditional distribution of samples in the target class \\(\\mathbf{y}^+\\). Then for \\(\\mathbf{x}^{\\prime}\\) to be considered a plausible counterfactual, we need: \\(\\mathbf{x}^{\\prime} \\sim \\mathcal{X}|\\mathbf{y}^+\\).\n\n\n\n\nWhy Plausibility?\n\n\nPlausibility is positively associated with actionability, robustness (Artelt et al. 2021) and causal validity (Mahajan, Tan, and Sharma 2020).\n\n\n\n\n\n\n\n\n\n\nFigure 3: Kernel density estimate (KDE) for the conditional distribution, \\(p(\\mathbf{x}|\\mathbf{y}^+)\\), based on observed data. Counterfactual path as in Figure 2."
+    "text": "Plausibility\n\n\n\nDefinition 1 (Plausible Counterfactuals) Let \\(\\mathcal{X}|\\mathbf{y}^+= p(\\mathbf{x}|\\mathbf{y}^+)\\) denote the true conditional distribution of samples in the target class \\(\\mathbf{y}^+\\). Then for \\(\\mathbf{x}^{\\prime}\\) to be considered a plausible counterfactual, we need: \\(\\mathbf{x}^{\\prime} \\sim \\mathcal{X}|\\mathbf{y}^+\\).\n\n\n\n\nWhy Plausibility?\n\n\nPlausibility is positively associated with actionability, robustness (Artelt et al. 2021) and causal validity (Mahajan, Tan, and Sharma 2020).\n\n\n\n\n\n\n\n\n\n\nFigure 3: Kernel density estimate (KDE) for the conditional distribution, \\(p(\\mathbf{x}|\\mathbf{y}^+)\\), based on observed data. Counterfactual path as in Figure 1."
   },
   {
     "objectID": "content/talks/posts/2024-aaai/presentation.html#faithfulness",
@@ -1040,7 +1040,7 @@
     "href": "content/talks/posts/2024-aaai/presentation.html#eccco",
     "title": "ECCCos from the Black Box",
     "section": "ECCCo",
-    "text": "ECCCo\n\n\n\n\n\nKey Idea\n\n\nUse the hybrid objective of joint energy models (JEM) and a model-agostic penalty for predictive uncertainty1: Energy-Constrained (\\(\\mathcal{E}_{\\theta}\\)) Conformal (\\(\\Omega\\)) Counterfactuals (ECCCo).\n\n\n\n\nECCCo objective:\n\\[\n\\begin{aligned}\n& \\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {L_{\\text{clf}}(f(\\mathbf{Z}^\\prime);M_{\\theta},\\mathbf{y}^+)}+ \\lambda_1 {\\text{cost}(f(\\mathbf{Z}^\\prime)) } \\\\\n&+ \\lambda_2 \\mathcal{E}_{\\theta}(f(\\mathbf{Z}^\\prime)|\\mathbf{y}^+) + \\lambda_3 \\Omega(C_{\\theta}(f(\\mathbf{Z}^\\prime);\\alpha)) \\}\n\\end{aligned}\n\\]\n\n\n\n\n\n\n\n\nFigure 5: Gradient fields and counterfactual paths for different generators.\n\n\n\nWe leverage ideas from Grathwohl et al. (2020) and Stutz et al. (2022). See the paper and appendix for a derivation of the objective from first principles."
+    "text": "ECCCo\n\n\n\n\n\nKey Idea\n\n\nUse the hybrid objective of joint energy models (JEM) and a model-agnostic penalty for predictive uncertainty: Energy-Constrained (\\(\\mathcal{E}_{\\theta}\\)) Conformal (\\(\\Omega\\)) Counterfactuals (ECCCo).\n\n\n\n\nECCCo objective1:\n\\[\n\\begin{aligned}\n& \\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {L_{\\text{clf}}(f(\\mathbf{Z}^\\prime);M_{\\theta},\\mathbf{y}^+)}+ \\lambda_1 {\\text{cost}(f(\\mathbf{Z}^\\prime)) } \\\\\n&+ \\lambda_2 \\mathcal{E}_{\\theta}(f(\\mathbf{Z}^\\prime)|\\mathbf{y}^+) + \\lambda_3 \\Omega(C_{\\theta}(f(\\mathbf{Z}^\\prime);\\alpha)) \\}\n\\end{aligned}\n\\]\n\n\n\n\n\n\nFigure 5: Gradient fields and counterfactual paths for different generators.\n\n\n\n\n\nWe leverage ideas from Grathwohl et al. (2020) and Stutz et al. (2022). See the paper and appendix for a derivation of the objective from first principles."
   },
   {
     "objectID": "content/talks/posts/2024-aaai/presentation.html#visual-evidence",
@@ -2447,19 +2447,19 @@
     "href": "content/publications/index.html",
     "title": "Publications",
     "section": "",
-    "text": "Below you may find a list of featured publications. For a full list, see my Google Scholar profile.\n\n\n\n\n\n\n   \n     \n     \n       Order By\n       Default\n         \n          Year - Oldest\n        \n         \n          Year - Newest\n        \n         \n          Title\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\nTitle\n\n\nYear\n\n\nVenue\n\n\nDescription\n\n\n\n\n\n\nEndogenous Macrodynamics in Algorithmic Recourse\n\n\n2024\n\n\nThe 38th Annual AAAI Conference on Artificial Intelligence\n\n\nWe present a novel framework for generating faithful counterfactual explanations that solely on properties defining the black-box model itself by leveraging recent advances in energy-based modelling and conformal prediction.\n\n\n\n\nExplaining Black-Box Models through Counterfactuals\n\n\n2023\n\n\nJuliaCon Proceedings\n\n\nWe present CounterfactualExplanations.jl: a package for generating Counterfactual Explanations (CE) and Algorithmic Recourse (AR) for black-box models in Julia.\n\n\n\n\nYield curve sensitivity to investor positioning around economic shocks\n\n\n2023\n\n\nBank of England Staff Working Paper\n\n\nUsing granular, daily EMIR Trade Repository data on short sterling futures, we investigate the interaction of speculative trading and macroeconomic shocks on UK yield curve pricing.\n\n\n\n\nEndogenous Macrodynamics in Algorithmic Recourse\n\n\n2023\n\n\nIEEE Conference on Secure and Trustworthy Machine Learning (SaTML)\n\n\nWe present evidence suggesting that state-of-the-art applications of Algorithmic Recourse to groups of individuals induce large domain and model shifts and propose ways to mitigate this.\n\n\n\n\n\nNo matching items"
+    "text": "Below you may find a list of featured publications. For a full list, see my Google Scholar profile.\n\n\n\n\n\n\n   \n     \n     \n       Order By\n       Default\n         \n          Year - Oldest\n        \n         \n          Year - Newest\n        \n         \n          Title\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\nTitle\n\n\nYear\n\n\nVenue\n\n\nDescription\n\n\n\n\n\n\nFaithful Model Explanations through Energy-Based Conformal Counterfactuals\n\n\n2024\n\n\nThe 38th Annual AAAI Conference on Artificial Intelligence\n\n\nWe present a novel framework for generating faithful counterfactual explanations that solely on properties defining the black-box model itself by leveraging recent advances in energy-based modelling and conformal prediction.\n\n\n\n\nExplaining Black-Box Models through Counterfactuals\n\n\n2023\n\n\nJuliaCon Proceedings\n\n\nWe present CounterfactualExplanations.jl: a package for generating Counterfactual Explanations (CE) and Algorithmic Recourse (AR) for black-box models in Julia.\n\n\n\n\nYield curve sensitivity to investor positioning around economic shocks\n\n\n2023\n\n\nBank of England Staff Working Paper\n\n\nUsing granular, daily EMIR Trade Repository data on short sterling futures, we investigate the interaction of speculative trading and macroeconomic shocks on UK yield curve pricing.\n\n\n\n\nEndogenous Macrodynamics in Algorithmic Recourse\n\n\n2023\n\n\nIEEE Conference on Secure and Trustworthy Machine Learning (SaTML)\n\n\nWe present evidence suggesting that state-of-the-art applications of Algorithmic Recourse to groups of individuals induce large domain and model shifts and propose ways to mitigate this.\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "content/publications/posts/aaai-2024/index.html",
     "href": "content/publications/posts/aaai-2024/index.html",
-    "title": "Endogenous Macrodynamics in Algorithmic Recourse",
+    "title": "Faithful Model Explanations through Energy-Based Conformal Counterfactuals",
     "section": "",
     "text": "Counterfactual explanations offer an intuitive and straightforward way to explain black-box models and offer algorithmic recourse to individuals. To address the need for plausible explanations, existing work has primarily relied on surrogate models to learn how the input data is distributed. This effectively reallocates the task of learning realistic explanations for the data from the model itself to the surrogate. Consequently, the generated explanations may seem plausible to humans but need not necessarily describe the behaviour of the black-box model faithfully. We formalise this notion of faithfulness through the introduction of a tailored evaluation metric and propose a novel algorithmic framework for generating Energy-Constrained Conformal Counterfactuals that are only as plausible as the model permits. Through extensive empirical studies, we demonstrate that ECCCo reconciles the need for faithfulness and plausibility. In particular, we show that for models with gradient access, it is possible to achieve state-of-the-art performance without the need for surrogate models. To do so, our framework relies solely on properties defining the black-box model itself by leveraging recent advances in energy-based modelling and conformal prediction. To our knowledge, this is the first venture in this direction for generating faithful counterfactual explanations. Thus, we anticipate that ECCCo can serve as a baseline for future research. We believe that our work opens avenues for researchers and practitioners seeking tools to better distinguish trustworthy from unreliable models.\nFull paper: please find all available versions here (preprint)."
   },
   {
     "objectID": "content/publications/posts/aaai-2024/index.html#abstract",
     "href": "content/publications/posts/aaai-2024/index.html#abstract",
-    "title": "Endogenous Macrodynamics in Algorithmic Recourse",
+    "title": "Faithful Model Explanations through Energy-Based Conformal Counterfactuals",
     "section": "",
     "text": "Counterfactual explanations offer an intuitive and straightforward way to explain black-box models and offer algorithmic recourse to individuals. To address the need for plausible explanations, existing work has primarily relied on surrogate models to learn how the input data is distributed. This effectively reallocates the task of learning realistic explanations for the data from the model itself to the surrogate. Consequently, the generated explanations may seem plausible to humans but need not necessarily describe the behaviour of the black-box model faithfully. We formalise this notion of faithfulness through the introduction of a tailored evaluation metric and propose a novel algorithmic framework for generating Energy-Constrained Conformal Counterfactuals that are only as plausible as the model permits. Through extensive empirical studies, we demonstrate that ECCCo reconciles the need for faithfulness and plausibility. In particular, we show that for models with gradient access, it is possible to achieve state-of-the-art performance without the need for surrogate models. To do so, our framework relies solely on properties defining the black-box model itself by leveraging recent advances in energy-based modelling and conformal prediction. To our knowledge, this is the first venture in this direction for generating faithful counterfactual explanations. Thus, we anticipate that ECCCo can serve as a baseline for future research. We believe that our work opens avenues for researchers and practitioners seeking tools to better distinguish trustworthy from unreliable models.\nFull paper: please find all available versions here (preprint)."
   },
@@ -2615,7 +2615,21 @@
     "href": "content/talks/posts/2024-aaai/index.html",
     "title": "Faithful Model Explanations through Energy-Based Conformal Counterfactuals",
     "section": "",
-    "text": "In February 2024, I will present our work on Faithful Model Explanations through Energy-Based Conformal Counterfactuals at AAAI 2024. You can find the slides below or click here to open them in full screen.\nFor the PDF version of the slides use this link instead.\nFor more information about the paper see also here or the preprint of the paper itself."
+    "text": "In February 2024, I will present our work on Faithful Model Explanations through Energy-Based Conformal Counterfactuals at AAAI 2024."
+  },
+  {
+    "objectID": "content/talks/posts/2024-aaai/index.html#slides",
+    "href": "content/talks/posts/2024-aaai/index.html#slides",
+    "title": "Faithful Model Explanations through Energy-Based Conformal Counterfactuals",
+    "section": "Slides",
+    "text": "Slides\nYou can find the slides below or click here to open them in full screen.\nFor the PDF version of the slides use this link instead.\nFor more information about the paper see also here or the preprint of the paper itself."
+  },
+  {
+    "objectID": "content/talks/posts/2024-aaai/index.html#poster",
+    "href": "content/talks/posts/2024-aaai/index.html#poster",
+    "title": "Faithful Model Explanations through Energy-Based Conformal Counterfactuals",
+    "section": "Poster",
+    "text": "Poster\nYou can find the poster below or click here to open it in full screen."
   },
   {
     "objectID": "content/talks/posts/2023-delft-fintech/index.html",
