@@ -204,16 +204,16 @@ window.Quarto = {
 <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../../../blog/index.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/software.html"> 
 <span class="menu-text">Software</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html"> 
-<span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/about/index.html"> 
@@ -406,7 +406,7 @@ Turning a 9 (nine) into a 4 (four).
 </div>
 <p>will generate the results, in this case using the generic generator (<code>generic</code>) for the MLP (<code>M</code>). Since we have specified two different black-box models and two different counterfactual generators, we have four combinations of a model and a generator in total. For each of these combinations I have used the <code>generate_counterfactual</code> function to produce the results in <a href="#fig-mnist-9to4" class="quarto-xref">Figure&nbsp;1</a>.</p>
 <p>In every case the desired label switch is in fact achieved, but arguably from a human perspective only the counterfactuals for the deep ensemble look like a four. The generic generator produces mild perturbations in regions that seem irrelevant from a human perspective, but nonetheless yields a counterfactual that can pass as a four. The greedy approach clearly targets pixels at the top of the handwritten nine and yields the best result overall. For the non-Bayesian MLP, both the generic and the greedy approach generate counterfactuals that look much like adversarial examples: they perturb pixels in seemingly random regions on the image.</p>
-<div id="fig-mnist-9to4" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-mnist-9to4" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-mnist-9to4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/mnist_9_to_4.png" class="img-fluid figure-img">
@@ -483,7 +483,7 @@ Experimental functionality
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> grad</span>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="fig-torch" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-torch" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-torch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/interop_r.gif" class="img-fluid figure-img">

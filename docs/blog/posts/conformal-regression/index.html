@@ -207,16 +207,16 @@ window.Quarto = {
 <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../../../blog/index.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/software.html"> 
 <span class="menu-text">Software</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html"> 
-<span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/about/index.html"> 
@@ -384,7 +384,7 @@ Interactive Version
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(X) <span class="op">=</span> X <span class="op">*</span> <span class="fu">cos</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-fig-data" class="cell" data-execution_count="4">
-<div id="fig-data" class="cell-output cell-output-display quarto-figure quarto-figure-center anchored" data-execution_count="5">
+<div id="fig-data" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored" data-execution_count="5">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <!--?xml version="1.0" encoding="utf-8"?-->
@@ -1478,7 +1478,7 @@ Have it your way!
 </div>
 <p><a href="#fig-point" class="quarto-xref">Figure&nbsp;2</a> below shows the resulting point predictions for the test data set:</p>
 <div id="cell-fig-point" class="cell" data-execution_count="9">
-<div id="fig-point" class="cell-output cell-output-display quarto-figure quarto-figure-center anchored" data-execution_count="10">
+<div id="fig-point" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored" data-execution_count="10">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-point-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <!--?xml version="1.0" encoding="utf-8"?-->
@@ -1956,7 +1956,7 @@ Figure&nbsp;2: Point predictions for our machine learning model.
 </div>
 <p>Now let us look at the predictions for our test data again. The chart below shows the results for our conformalized model. Predictions from conformal regressors are range-valued: for each new sample the model returns an interval <span class="math inline">\((y_{\text{lb}},y_{\text{ub}})\in\mathcal{Y}\)</span> that covers the test sample with a user-specified probability <span class="math inline">\((1-\alpha)\)</span>, where <span class="math inline">\(\alpha\)</span> is the expected error rate. This is known as the <strong>marginal coverage guarantee</strong> and it is proven to hold under the assumption that training and test data are exchangeable.</p>
 <div id="cell-fig-interval" class="cell" data-execution_count="13">
-<div id="fig-interval" class="cell-output cell-output-display quarto-figure quarto-figure-center anchored" data-execution_count="14">
+<div id="fig-interval" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored" data-execution_count="14">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-interval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <!--?xml version="1.0" encoding="utf-8"?-->
@@ -2456,7 +2456,7 @@ Coverage per fold: [0.94, 0.904, 0.874, 0.874, 0.898, 0.922]</code></pre>
 <p>Quite cool, right? Using a single API call we are able to generate rigorous prediction intervals for all kinds of different regression models. Have we just solved predictive uncertainty quantification once and for all? Do we even need to bother with anything else? Conformal Prediction is a very useful tool, but like so many other things, it is not the final answer to all our problems. In fact, let’s see if we can take CP to its limits.</p>
 <p>The helper function to generate data from above takes an optional argument <code>xmax</code>. By increasing that value, we effectively expand the domain of our input. Let’s do that and see how our conformal model does on this new out-of-domain data.</p>
 <div id="cell-fig-ood" class="cell" data-execution_count="18">
-<div id="fig-ood" class="cell-output cell-output-display quarto-figure quarto-figure-center anchored" data-execution_count="19">
+<div id="fig-ood" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored" data-execution_count="19">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ood-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <!--?xml version="1.0" encoding="utf-8"?-->

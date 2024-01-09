@@ -204,16 +204,16 @@ window.Quarto = {
 <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../../../blog/index.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/software.html"> 
 <span class="menu-text">Software</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html"> 
-<span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/about/index.html"> 
@@ -338,7 +338,7 @@ window.Quarto = {
 <section id="from-to" class="level2">
 <h2 class="anchored" data-anchor-id="from-to">From 🐱 to 🐶</h2>
 <p>We will explain <code>REVISE</code> through a short tale of cats and dogs. The protagonist of this tale is Kitty 🐱, a young cat that identifies as a dog. Unfortunately, Kitty is not very tall and her tail, though short for a cat, is longer than that of the average dog (<a href="#fig-density" class="quarto-xref">Figure&nbsp;1</a>).</p>
-<div id="fig-density" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-density" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/density.png" class="img-fluid figure-img">
@@ -349,7 +349,7 @@ Figure&nbsp;1: Empirical distributions of simulated data set describing cats and
 </figure>
 </div>
 <p>Much to her dismay, Kitty has been recognized as a cat by a linear classifier <span class="math inline">\(g_n(X)\)</span> that we trained through stochastic gradient descent using the data on animals’ height and tail length. Once again interested readers may find technical details and code in the annex below. <a href="#fig-class" class="quarto-xref">Figure&nbsp;2</a> shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty’s location indicated by a red circle. Can we provide individual recourse to Kitty?</p>
-<div id="fig-class" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-class" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-class-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/class.png" class="img-fluid figure-img">
@@ -367,7 +367,7 @@ Figure&nbsp;2: Linear separation of cats and dogs in the 2-dimensional attribute
 </ol>
 <p><a href="#fig-revise" class="quarto-xref">Figure&nbsp;3</a> illustrates what happens when this approach is applied to Kitty’s problem. The different panels show the results for different values of a regularization parameter <span class="math inline">\(\lambda\)</span> that governs the trade-off between achieving the desired label switch and keeping the distance between the original (<span class="math inline">\(\mathbf{x}_i\)</span>) and revised (<span class="math inline">\(\mathbf{x}_i'\)</span>) attributes small. In all but one case, <code>REVISE</code> converges: a decrease in tail length along with an increase in height eventually allows Kitty to cross the decision boundary. In other words, we have successfully turned Kitty into a dog - at least in the eyes of the linear classifier!</p>
 <p>We also observe that as we increase <span class="math inline">\(\lambda\)</span> for a fixed learning rate, <code>REVISE</code> takes longer to converge. This should come as no surprise, since higher values of <span class="math inline">\(\lambda\)</span> lead to greater regularization with respect to the penalty we place on the distance that Kitty has to travel. When we penalize too much (<span class="math inline">\(\lambda=10\)</span>), Kitty never reaches the decision boundary, because she is reluctant to change her characteristics beyond a certain point. While not visible to the naked eye, in this particular example <span class="math inline">\(\lambda=0.001\)</span> corresponds to the best choice among the candidate values.</p>
-<div id="fig-revise" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-revise" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-revise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/revise.gif" class="img-fluid figure-img">

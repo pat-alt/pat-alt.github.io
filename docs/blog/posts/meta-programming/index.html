@@ -208,16 +208,16 @@ window.Quarto = {
 <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../../../blog/index.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/software.html"> 
 <span class="menu-text">Software</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html"> 
-<span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/about/index.html"> 
@@ -365,7 +365,7 @@ ChatGPT&gt; Hey hey, can you please explain metaprogramming to me (I have no com
 <section id="code-as-data-structures" class="level3">
 <h3 class="anchored" data-anchor-id="code-as-data-structures">Code as Data Structures</h3>
 <p>Skipping the details here, it turns out that when I write <code>1 + 1</code> in the REPL, Julia first parses this program as a string <code>"1 + 1</code> into an expression <code>ex=:(1 + 1)::Expr</code>, which is then evaluated <code>eval(ex)</code> (<a href="#fig-code" class="quarto-xref">Figure&nbsp;1</a>). I’ve used a <code>quote</code> here to generate the expression because I’ve used <strong>quoting</strong> before for use with <code>Documenter.jl</code>.</p>
-<div id="fig-code" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-code" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-code-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/code-as-data.png" class="img-fluid figure-img">
@@ -677,7 +677,7 @@ end</pre>
 <p>It worked! 🎉 The resulting counterfactual search is illustrated in <a href="#fig-search" class="quarto-xref">Figure&nbsp;2</a>. I may have overspecified the size of the <code>ddp_diversity</code> penalty a little bit here, but it sure makes for a cool chart!</p>
 <div id="cell-fig-search" class="cell" data-execution_count="23">
 <div class="cell-output cell-output-display" data-execution_count="24">
-<div id="fig-search" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-search" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-search-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="index_files/figure-html/fig-search-output-1.svg" class="img-fluid figure-img">

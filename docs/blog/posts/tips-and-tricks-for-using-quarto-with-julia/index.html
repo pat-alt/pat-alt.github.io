@@ -184,16 +184,16 @@ window.Quarto = {
 <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../../../blog/index.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/software.html"> 
 <span class="menu-text">Software</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html"> 
-<span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/about/index.html"> 
@@ -368,7 +368,7 @@ A year of using Quarto with Julia.
 <p>In practice, one would of course set <code>#| echo: false</code> in this case. Whatever content you publish, this approach will keep it up-to-date. This practice of simply re-rendering the source notebook also ensures that any other output remains up-to-date (e.g. <a href="#fig-snp" class="quarto-xref">Figure&nbsp;1</a>)</p>
 <div class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display" data-execution_count="4">
-<div id="fig-snp" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-snp" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-snp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="index_files/figure-html/fig-snp-output-1.svg" class="img-fluid figure-img">
@@ -393,7 +393,7 @@ Figure&nbsp;1: Price history of the S&amp;P 500.
 <section id="reproducibility" class="level3">
 <h3 class="anchored" data-anchor-id="reproducibility">Reproducibility</h3>
 <p>To ensure that your content can be repoduced easily, it may additionally be helpful to explicitly specify the Julia version you used (<code>jupyter: julia-1.8</code>) and set up a global or local Julia environments. Inserting the following at the beginning of your Quarto notebook</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Pkg; Pkg</span>.<span class="fu">activate</span>(<span class="st">"&lt;path&gt;"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Pkg;</span> Pkg.activate("&lt;path&gt;")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>ensures that the desired environemnt that lives in <code>&lt;path&gt;</code> is actually activated and used.</p>
 </section>
 </section>

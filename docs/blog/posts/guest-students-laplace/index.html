@@ -179,16 +179,16 @@ window.Quarto = {
 <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../../../blog/index.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/software.html"> 
 <span class="menu-text">Software</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html"> 
-<span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../content/about/index.html"> 
@@ -321,7 +321,7 @@ Guest Blog Post
 <blockquote class="blockquote">
 <p>… it is possible to take a perfectly reasonable network, delete half (or more) of the weights and wind up with a network that works just as well, or better.</p>
 </blockquote>
-<div id="fig-loss" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-loss" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/grad_desc.png" class="img-fluid figure-img">
@@ -376,7 +376,7 @@ G := \textstyle\sum_{n=1}^N J(x_n) \left( \nabla^2_{f} \log p(y_n \mid f) \Large
 <p>These matrices are quadratically large, it is infeasible to store them in full. The simplest estimation is to model the matrix as a diagonal — however one can easily contemplate how crude this approximation can be: for 100 parameters, only 1% of the full Hessian is captured.</p>
 <p>A more sophisticated approach, due to Martens and Grosse (2015), is inspired by the observation that in practice the covariance matrices (i.e.&nbsp;inverted Hessians) for neural networks are block-diagonal-dominant. Thus we can effectively model the covariance matrix (and hence the Fisher) as a block-diagonal matrix, where blocks correspond to parameters grouped by layers. Additionally, each block is decomposed into two Kronecker factors, reducing the size of data stored several magnitudes more, at a cost of another assumption.</p>
 <p>Lastly, a novel approach is to <em>sketch</em> a low-rank approximation of the Fisher <span class="citation" data-cites="sharma2021sketching">(<a href="#ref-sharma2021sketching" role="doc-biblioref">Sharma, Azizan, and Pavone 2021</a>)</span>. <a href="#fig-fact" class="quarto-xref">Figure&nbsp;2</a> shows four Hessian approximation structures:</p>
-<div id="fig-fact" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-fact" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-fact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/fact.png" class="img-fluid figure-img">
