@@ -1,7 +1,21 @@
 ---
 title: Spurious Sentience
 subtitle: On the Unsurprising Finding of Patterns in Latent Spaces
-date: '2023-10-06'
+author: 
+  - name: "Patrick Altmeyer"
+    affiliation:
+      - id: delft
+        name: Delft University of Technology
+  - name: "Anthony Bartlett"
+    affiliation:
+      - ref: delft
+  - name: "Andrew M. Demetriou"
+    affiliation:
+      - ref: delft
+  - name: "Cynthia C. S. Liem"
+    affiliation:
+      - ref: delft
+date: '2024-01-10'
 categories:
   - spurious sentience
   - artificial intelligence
@@ -9,7 +23,7 @@ categories:
 description: >-
   This is an opinionated post that questions the idea that the finding of patterns in latent embeddings of artificial neural networks is surprising. 
 image: www/intro.gif
-jupyter: julia-1.9
+jupyter: julia-1.10
 draft: true
 format:
   html:
@@ -481,6 +495,51 @@ plot!(ŷ)
 - Use FOMC headlines and corresponding interest rate decisions and see if embeddings contain information about the decision.
 - Based on fitted linear model, predict interest decisions for random headlines about hawks and doves (animals, not people).
 - If headlines about hawks tend to be associated with rate hikes, then we the model can be said to have learned a spurious relationship between hawks and rate hikes.
+
+### Data
+
+```{julia}
+using HuggingFaceDatasets
+data = load_dataset("gtfintechlab/fomc_communication", split = "train")
+set_format!(data, "julia")
+data = vcat([DataFrame(data[i]) for i in 1:length(data)]...)
+```
+
+### Model 
+
+```{julia}
+using Transformers
+using Transformers.TextEncoders
+using Transformers.HuggingFace
+
+# Load model from HF 🤗:
+tkr = hgf"mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis:tokenizer"
+mod = hgf"mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis:ForSequenceClassification"
+```
+
+```{julia}
+query = data.sentence[1:10]
+a = encode(tkr, query)
+b = mod.model(a)
+```
+
+```{julia}
+labels = ["negative", "neutral", "positive"]
+query = [
+    "The number of hawks decreased by 1MIO in the last quarter.",
+    "The number of doves increased by 1MIO in the last quarter.",
+    "Profits went up significantly for all companies last year.",
+    "Low interest rates are here to stay.",
+    "Operating profit totaled EUR 9.4 mn, down from EUR 11.7 mn in 2004 .",
+    "Unemployment went down but the economy was stagnant.",
+]
+a = encode(tkr, query)
+b = mod.model(a)
+c = mod.cls(b.hidden_state)
+d = softmax(c.logit)
+yhat = [labels[i] for i in Flux.onecold(d)]
+DataFrame(query=query,predicted=yhat,probability=vec(maximum(d,dims=1)))
+```
 
 
 
