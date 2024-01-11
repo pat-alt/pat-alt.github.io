@@ -52,6 +52,7 @@ using Plots.PlotMeasures
 using Printf
 using TidierData
 using Random
+using Serialization
 # using RegressionTables
 Random.seed!(2023)
 
@@ -518,9 +519,40 @@ mod = hgf"mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis:ForS
 ```
 
 ```{julia}
-query = data.sentence[1:10]
+# Labels:
+labels = ["negative", "neutral", "positive"]
+
+# Encode:
+n = 100
+train_data = data |> shuffle |> df -> df[1:n,:]
+y = train_data.label |> 
+    y -> Flux.OneHotArrays.onehotbatch(y, [0,1,2]) 
+query = train_data.sentence
 a = encode(tkr, query)
 b = mod.model(a)
+A = b.hidden_state
+A = reshape(A, (size(A,1)*size(A,2), size(A,3)))
+Serialization.serialize("$BLOG_DIR/output/encodings.jls", A)
+```
+
+### Linear Classifier Probe
+
+```{julia}
+dl = Flux.DataLoader((A, y), batchsize=10)
+model = Flux.Chain(
+    Dense(size(A,1), length(labels))
+)
+loss(y_hat, y) = Flux.logitcrossentropy(y_hat, y)
+rule = Flux.Adam()
+opt_state = Flux.setup(rule, model)
+```
+
+```{julia}
+for epoch in 1:100
+  Flux.train!(model, dl, opt_state) do m, x, y
+    loss(m(x), y)
+  end
+end
 ```
 
 ```{julia}
@@ -529,13 +561,15 @@ query = [
     "The number of hawks decreased by 1MIO in the last quarter.",
     "The number of doves increased by 1MIO in the last quarter.",
     "Profits went up significantly for all companies last year.",
-    "Low interest rates are here to stay.",
-    "Operating profit totaled EUR 9.4 mn, down from EUR 11.7 mn in 2004 .",
-    "Unemployment went down but the economy was stagnant.",
+    # "Low interest rates are here to stay.",
+    # "Operating profit totaled EUR 9.4 mn, down from EUR 11.7 mn in 2004 .",
+    # "Unemployment went down but the economy was stagnant.",
 ]
 a = encode(tkr, query)
 b = mod.model(a)
-c = mod.cls(b.hidden_state)
+A = b.hidden_state
+A = reshape(A, (size(A,1)*size(A,2), size(A,3)))
+c = model(A)
 d = softmax(c.logit)
 yhat = [labels[i] for i in Flux.onecold(d)]
 DataFrame(query=query,predicted=yhat,probability=vec(maximum(d,dims=1)))
