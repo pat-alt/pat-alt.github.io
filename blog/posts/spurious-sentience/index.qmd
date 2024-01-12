@@ -519,9 +519,6 @@ mod = hgf"mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis:ForS
 ```
 
 ```{julia}
-# Labels:
-labels = ["negative", "neutral", "positive"]
-
 # Encode:
 n = 100
 train_data = data |> shuffle |> df -> df[1:n,:]
@@ -531,7 +528,6 @@ query = train_data.sentence
 a = encode(tkr, query)
 b = mod.model(a)
 A = b.hidden_state
-A = reshape(A, (size(A,1)*size(A,2), size(A,3)))
 Serialization.serialize("$BLOG_DIR/output/encodings.jls", A)
 ```
 
@@ -540,6 +536,7 @@ Serialization.serialize("$BLOG_DIR/output/encodings.jls", A)
 ```{julia}
 dl = Flux.DataLoader((A, y), batchsize=10)
 model = Flux.Chain(
+    Transformers.HuggingFace.FirstTokenPooler(),
     Dense(size(A,1), length(labels))
 )
 loss(y_hat, y) = Flux.logitcrossentropy(y_hat, y)
@@ -556,21 +553,21 @@ end
 ```
 
 ```{julia}
-labels = ["negative", "neutral", "positive"]
+labels = ["dovish", "hawkish", "neutral"]
 query = [
     "The number of hawks decreased by 1MIO in the last quarter.",
     "The number of doves increased by 1MIO in the last quarter.",
-    "Profits went up significantly for all companies last year.",
-    # "Low interest rates are here to stay.",
-    # "Operating profit totaled EUR 9.4 mn, down from EUR 11.7 mn in 2004 .",
-    # "Unemployment went down but the economy was stagnant.",
+    "The doves had interest in flying increased.",
+    "The hawks had interest in flying decreased.",
+    "Unemployment of postal doves is at an all-time low.",
+    "Unemployment of postal doves is at an all-time high.",
+    "Thus, avoiding a further substantial fall in inflation should be a priority of monetary policy.",
 ]
 a = encode(tkr, query)
 b = mod.model(a)
-A = b.hidden_state
-A = reshape(A, (size(A,1)*size(A,2), size(A,3)))
-c = model(A)
-d = softmax(c.logit)
+_A = b.hidden_state
+c = model(_A)
+d = softmax(c)
 yhat = [labels[i] for i in Flux.onecold(d)]
 DataFrame(query=query,predicted=yhat,probability=vec(maximum(d,dims=1)))
 ```
