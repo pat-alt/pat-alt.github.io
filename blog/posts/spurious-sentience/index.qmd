@@ -47,6 +47,7 @@ using Dates
 using Flux
 # using GLM
 using LinearAlgebra
+using Metal
 using Plots
 using Plots.PlotMeasures
 using Printf
@@ -319,7 +320,7 @@ Let $G_t$ denote growth and $\mathbf{Y}_t$ denote the yield curve at time $t$. T
 #| fig-cap: Model architecture.
 #| label: fig-dl-model
 
-dl = Flux.MLUtils.DataLoader((permutedims(X), permutedims(y)), batchsize=24, shuffle=true)
+dl = Flux.MLUtils.DataLoader((permutedims(X), permutedims(y)), batchsize=24, shuffle=true) 
 input_dim = size(X,2)
 n_pc = 6
 n_hidden = 32
@@ -504,6 +505,7 @@ using HuggingFaceDatasets
 data = load_dataset("gtfintechlab/fomc_communication", split = "train")
 set_format!(data, "julia")
 data = vcat([DataFrame(data[i]) for i in 1:length(data)]...)
+labels = ["dovish", "hawkish", "neutral"]
 ```
 
 ### Model 
@@ -515,33 +517,39 @@ using Transformers.HuggingFace
 
 # Load model from HF 🤗:
 tkr = hgf"mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis:tokenizer"
-mod = hgf"mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis:ForSequenceClassification"
+model_name = "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis"
+cfg = HuggingFace.HGFConfig(load_config(model_name); output_hidden_states = true)
+tfm = load_model(model_name; config = cfg)
 ```
 
 ```{julia}
 # Encode:
 n = 100
-train_data = data |> shuffle |> df -> df[1:n,:]
+train_data = data |> shuffle |> df -> df[1:n,:] 
 y = train_data.label |> 
     y -> Flux.OneHotArrays.onehotbatch(y, [0,1,2]) 
 query = train_data.sentence
 a = encode(tkr, query)
-b = mod.model(a)
-A = b.hidden_state
-Serialization.serialize("$BLOG_DIR/output/encodings.jls", A)
+b = tfm(a)
 ```
 
 ### Linear Classifier Probe
 
 ```{julia}
-dl = Flux.DataLoader((A, y), batchsize=10)
+n_layers = cfg.num_hidden_layers
+k = n_layers - 1
+@assert k > 0 && k <= n_layers
+A = b.outputs[k].hidden_state 
+dl = Flux.DataLoader((A, y), batchsize=10) 
+n_in = size(A,1)
+n_out = length(labels)
 model = Flux.Chain(
     Transformers.HuggingFace.FirstTokenPooler(),
-    Dense(size(A,1), length(labels))
+    Dense(n_in, n_out)
 )
 loss(y_hat, y) = Flux.logitcrossentropy(y_hat, y)
 rule = Flux.Adam()
-opt_state = Flux.setup(rule, model)
+opt_state = Flux.setup(OptimiserChain(WeightDecay(λ), rule), model) # weight decay is L2 regularization
 ```
 
 ```{julia}
@@ -553,25 +561,30 @@ end
 ```
 
 ```{julia}
-labels = ["dovish", "hawkish", "neutral"]
+sum(Flux.onecold(softmax(model(A)), [0,1,2]) .== train_data.label)/n
+```
+
+```{julia}
 query = [
-    "The number of hawks decreased by 1MIO in the last quarter.",
-    "The number of doves increased by 1MIO in the last quarter.",
-    "The doves had interest in flying increased.",
-    "The hawks had interest in flying decreased.",
-    "Unemployment of postal doves is at an all-time low.",
-    "Unemployment of postal doves is at an all-time high.",
-    "Thus, avoiding a further substantial fall in inflation should be a priority of monetary policy.",
+    "This raised the hawks' interest in prey.",
+    "This raised the hawks' interest by 10 basis points.",
+    "This raised the hawks' interest by 50 basis points.",
+    "This raised the hawks' interest by 100 basis points.",
+    "This lowered the hawks' interest by 10 basis points.",
+    "This lowered the hawks' interest by 50 basis points.",
+    "This lowered the hawks' interest by 100 basis points.",
 ]
 a = encode(tkr, query)
-b = mod.model(a)
+b = tfm(a)
 _A = b.hidden_state
 c = model(_A)
 d = softmax(c)
 yhat = [labels[i] for i in Flux.onecold(d)]
-DataFrame(query=query,predicted=yhat,probability=vec(maximum(d,dims=1)))
+res = DataFrame(query=query,predicted=yhat,probability=vec(maximum(d,dims=1)))
 ```
 
+## Limitations of Probes
 
+- Also worth looking at @rudin2019stop
 
 ## 🎓 References
