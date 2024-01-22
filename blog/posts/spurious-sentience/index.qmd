@@ -35,30 +35,7 @@ format:
 ```{julia}
 #| echo: false
 
-# Set up:
-BLOG_DIR = "blog/posts/spurious-sentience"
-using Pkg; Pkg.activate(BLOG_DIR)
-
-# Packages:
-using CSV
-using ChainPlots
-using DataFrames
-using Dates
-using Flux
-# using GLM
-using LinearAlgebra
-using Metal
-using Plots
-using Plots.PlotMeasures
-using Printf
-using TidierData
-using Random
-using Serialization
-# using RegressionTables
-Random.seed!(2023)
-
-# Utility functions:
-include(joinpath("$(pwd())", BLOG_DIR, "utils.jl"))
+include("$(pwd())/blog/posts/spurious-sentience/src/setup.jl")
 ```
 
 *For the slides see [here](slides.qmd).*
@@ -67,16 +44,18 @@ We humans are prone to seek patterns everywhere. Meaningful patterns have often 
 
 In statistics, misleading patterns are referred to as **spurious relationships**: purely associational relationships between two or more variables that are not causally related to each other at all. The world is full of these and as good as we as species may be at recognizing patterns, we typically have a much harder time discerning spurious relationships from causal ones. Despite new and increased momentum in scientific fields concerned with causal inference and discovery, I am also willing to go out on a limb and claim that we are not about to finally reach the top of Judea Pearl's Causal Ladder through the means of Causal AI.
 
-I agree with the premise that in a world full of spurious relationships, causal reasoning is our only remedy. But I am very skeptical of claims that AI will magically provide that remedy. This leads me to the title and topic of this post: **spurious sentience** - patterns exhibited by artificial intelligence that may hint at sentience but are just reflections of the data used to train them. The article is written in response to a recent paper and claims by one of the authors, Max Tegmark, that revealed structure in the latent embeddings of Llama 2 should finally have us believe that LLMs are more than just parrots. Since this is an opinionated post, I feel that I should start with a few disclaimers:
+I agree with the premise that in a world full of spurious relationships, causal reasoning is our only remedy. But I am very skeptical of claims that AI will magically provide that remedy. This leads me to the title and topic of this post: **spurious sentience**---patterns exhibited by artificial intelligence that may hint at sentience but are just reflections of the data used to train them. The article is written in response to a recent paper that extracts a 'world model' from Llama 2---a popular open-source large language model (LLM)---using mechanistic interpretability [@gurnee2023language]. In light of these findings, one of the authors, Max Tegmark, was quick to claim on [social media](https://x.com/tegmark/status/1709572469978231063?s=20) that "No, LLM's aren't mere stochastic parrots [...]". 
+
+Since this is an opinionated post, I feel that I should start with a few disclaimers:
 
 1. I take no issue with the methodological ideas that form the foundation of the article in question: on the contrary, I think that mechanistic interpretability is an interesting and important toolkit that can help us better understand the intrinsics and behavior of opaque artificial intelligence.
 2. The visualizations are intriguing, the code is open-sourced and the findings are interesting. 
-3. I am surprised that people are surprised by the findings: if we agree that LLMs exhibit strong capabilities that can only be connected to the patterns observed in the data they were trained with, then where exactly do you expect this information to be stored if not in the parameters of the model?^[I would be very surprised---concerned even---if our search for patterns in latent spaces of capable LLMs revealed nothing at all.]
-4. I therefore do take issue with the way that these findings are being overblown by people with clout. Perhaps the parrot metaphor should not be taken too literally either, but if anything the paper's findings seem to support the notion that LLMs are remarkably capable of memorizing explicit and implicit knowledge contained in text. 
+3. I am surprised that people are surprised by the findings: if we agree that LLMs exhibit strong capabilities that can only be connected to the patterns observed in the data they were trained with, then where exactly should we expect this information to be stored if not in the parameters of the model?^[I would be very surprised---concerned even---if our search for patterns in latent spaces of capable LLMs revealed nothing at all.]
+4. I therefore do take issue with the way that these findings are being overblown by people with clout. Perhaps the parrot metaphor should not be taken too literally either, but if anything the paper's findings seem to support the notion that LLMs are remarkably capable of memorizing and regurgitating explicit and implicit knowledge contained in text. 
 
 ## Patterns in Latent Spaces and How to Find Them
 
-To demonstrate the claim that observing patterns in latent spaces should not generally surprise us, we will now go through a couple of simple examples. 
+To support my claim that observing patterns in latent spaces should not generally surprise us, we will now go through a couple of simple examples. To illustrate further that this phenomenon is neither surprising nor unique to the field of computer science, I will draw on my background in economics and finance in this section. 
 
 ### Example: Principal Component Analysis
 
@@ -380,7 +359,7 @@ df_factors = @full_join(df_spread, df_level)
 
 The results are shown in @fig-dl-results. The top panel shows the actual GDP growth and fitted values from the autoencoder model. We observe that the model captures the relationship between economic growth and the yield curve reasonably well. As discussed above, we also know that the relationship between economic growth and the yield curve is characterized by two main factors: the level and the spread. Since the model itself is fully characterized by its parameters, we would expect that these two important factors are reflected somewhere in the latent parameter space. 
 
-The bottleneck layer seems like a good place to start looking. To get the latent embeddings $\mathbf{A}_t$ at time $t$, we simply pass the yield curve data $\mathbf{Y}_t$ through the encoder. Next, we follow [TEGMARK PAPER REFERENCE] and use a linear probe to regress the observed yield curve factors on the latent embeddings. Let $F_t$ denote the vector containing the two factors of interest in time $t$: $f_t^{\text{spread}}$ and $f_t^{\text{level}}$. Formally, we are interested in the following regression model: $p_{w}(F_t|\mathbf{A}_t)$ where $w$ denotes the regression parameters. Following [TEGMARK PAPER REFERENCE] we use Ridge regression with $\lambda$ set to $0.1$. Using the estimated regression parameters $\hat{w}$ we can then predict the yield curve factors from the latent embeddings: $\hat{F}_t=\hat{w}^{\prime}\mathbf{A}_t$.
+The bottleneck layer seems like a good place to start looking. To get the latent embeddings $\mathbf{A}_t$ at time $t$, we simply pass the yield curve data $\mathbf{Y}_t$ through the encoder. Next, we follow @gurnee2023language and use a linear probe to regress the observed yield curve factors on the latent embeddings. Let $F_t$ denote the vector containing the two factors of interest in time $t$: $f_t^{\text{spread}}$ and $f_t^{\text{level}}$. Formally, we are interested in the following regression model: $p_{w}(F_t|\mathbf{A}_t)$ where $w$ denotes the regression parameters. Following @gurnee2023language, we use Ridge regression with $\lambda$ set to $0.1$. Using the estimated regression parameters $\hat{w}$ we can then predict the yield curve factors from the latent embeddings: $\hat{F}_t=\hat{w}^{\prime}\mathbf{A}_t$.
 
 The results of this experiment are shown in the bottom panel of @fig-dl-results. Solid lines show the observed yield curve factors over time, while dashed lines show predicted values. We find that the latent embeddings predict the two yield curve factors reasonably well, in particular the spread. To put this in true hype-lingo: 
 
@@ -466,122 +445,25 @@ regtable(ols_all_latent, ols_best_latent, ols_ar, ols_factors, ols_best; renderS
 
 <iframe src="www/regression.html" width="550" height="720"></iframe>
 
-```{julia}
-#| echo: false
-#| eval: false
-yhat = predict(ols_best)
-plt_gdp = plot(
-    df_all.Date, y;
-    label="Actual", color=:green,
-    title="Modelling GDP Growth",
-)
-plot!(
-    df_all.Date, [missing, yhat...]; 
-    label="Predicted", color=:green, ls=:dash,
-)
-```
+### Example: Large Language Model
 
-```{julia}
-#| echo: false
+To round up this section, we will jump back on the hype train and consider an example involving an LLM. In particular, we will closely follow the approach in @gurnee2023language and apply it to a novel financial dataset: the *Trillion Dollar Words* dataset introduced by @shah2023trillion. The dataset contains a curated selection of sentences formulated by central bankers of the US Federal Reserve and communicated to the public in speeches, meeting minutes and press conferences. The authors of the paper use this dataset to train LLMs to classify sentences as either 'dovish', 'hawkish' or 'neutral'. To this end, they first manually annotate a subsample of the available data and then fine-tune various foundation models. Their model of choice, *FOMC-RoBERTa* (a fine-tuned version of RoBERTa [@liu2019roberta]), achieves an $F_1$ score of around $>0.7$ for the classification task. To illustrate the potential usefulness of the learned classifier, they use predicted labels for the entire dataset to compute an ad-hoc, count-based measure of 'hawkishness'. They then go on to show that this measure correlates with key economic indicators in the expected direction: when inflationary pressures rise, the measured level of 'hawkishness' increases as central bankers need to raise interest rates to bring inflation back to target. 
 
-U = svd(X).U[:,1:6]
-β = (U'U + UniformScaling(λ)) \ U'y
-ŷ = U * β
-1 - Flux.mse(ŷ,y)/std(y)
-plot(y)
-plot!(ŷ)
-```
+#### Linear Probes
 
-### LLM
+Instead of computing a measure based on predicted labels, we can use linear probes to assess if the fine-tuned model has learned associative patterns between central bank communications and key economic indicators. To this end, we have further pre-processed the data provided by @shah2023trillion and used their proposed model to compute layer-wise embeddings for all available sentences. We have made these available and easily accessible through a small Julia package: [TrillionDollarWords.jl](https://github.com/pat-alt/TrillionDollarWords.jl). For each layer, we have then computed linear probes on two inflation indicators---the Consumer Price Index (CPI) and the Producer Price Index (PPI)---as well as US Treasury yields at different levels of maturity. To mitigate issues related to over-parameterization, we follow the recommendation in @alain2018understanding to first reduce the dimensionality of the embeddings each time. In particular, we restrict the linear probes to the first 128 principal components of the embeddings of each layer. 
 
-- Use FOMC headlines and corresponding interest rate decisions and see if embeddings contain information about the decision.
-- Based on fitted linear model, predict interest decisions for random headlines about hawks and doves (animals, not people).
-- If headlines about hawks tend to be associated with rate hikes, then we the model can be said to have learned a spurious relationship between hawks and rate hikes.
+Detailed results of this experiment will be released in an upcoming paper. @fig-fomc highlights the result for the linear probe on the CPI. The chart shows various performance measures plotted against *FOMC-RoBERTa*'s $n$-th layer. Shaded areas show the variation across cross-validation folds, where we have used an expanding window approach to split the time series. Results for the linear probes are shown along with results for autoregressive models (AR) used as our baseline. 
 
-### Data
+The first column shows the correlations between model predictions and observed inflation. We observe that this correlation is strictly positive for the baseline models and the linear probes. Consistent with the findings in @gurnee2023language and @alain2018understanding, we also observe that this correlation tends to be higher for layers near the end of the transformer model. Those layers produce predictions that are more positively correlated with observed inflation than those produced by the corresponding autoregressive models. 
 
-```{julia}
-using HuggingFaceDatasets
-data = load_dataset("gtfintechlab/fomc_communication", split = "train")
-set_format!(data, "julia")
-data = vcat([DataFrame(data[i]) for i in 1:length(data)]...)
-labels = ["dovish", "hawkish", "neutral"]
-```
+Similarly, we observe that the (root) mean squared error of the linear probe is largely on par with the baseline. The average prediction error is gradually reduced as we move along the horizontal axis, which is again indicative of the notion that layers closer to the end of the neural network have distilled more useful representations. 
 
-### Model 
+![Various performance measures (correlation and (root) mean squared error) plotted against *FOMC-RoBERTa*'s $n$-th layer. Shaded areas indicate variation across cross-validation folds, where we have used an expanding window approach to split the time series. Results for the linear probes are shown along with results for autoregressive models (AR). The optimal lag length was determined using the Bayes Information Criterium.](www/fomc_probe.png){#fig-fomc}
 
-```{julia}
-using Transformers
-using Transformers.TextEncoders
-using Transformers.HuggingFace
+#### Discussion
 
-# Load model from HF 🤗:
-tkr = hgf"mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis:tokenizer"
-model_name = "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis"
-cfg = HuggingFace.HGFConfig(load_config(model_name); output_hidden_states = true)
-tfm = load_model(model_name; config = cfg)
-```
 
-```{julia}
-# Encode:
-n = 100
-train_data = data |> shuffle |> df -> df[1:n,:] 
-y = train_data.label |> 
-    y -> Flux.OneHotArrays.onehotbatch(y, [0,1,2]) 
-query = train_data.sentence
-a = encode(tkr, query)
-b = tfm(a)
-```
-
-### Linear Classifier Probe
-
-```{julia}
-n_layers = cfg.num_hidden_layers
-k = n_layers - 1
-@assert k > 0 && k <= n_layers
-A = b.outputs[k].hidden_state 
-dl = Flux.DataLoader((A, y), batchsize=10) 
-n_in = size(A,1)
-n_out = length(labels)
-model = Flux.Chain(
-    Transformers.HuggingFace.FirstTokenPooler(),
-    Dense(n_in, n_out)
-)
-loss(y_hat, y) = Flux.logitcrossentropy(y_hat, y)
-rule = Flux.Adam()
-opt_state = Flux.setup(OptimiserChain(WeightDecay(λ), rule), model) # weight decay is L2 regularization
-```
-
-```{julia}
-for epoch in 1:100
-  Flux.train!(model, dl, opt_state) do m, x, y
-    loss(m(x), y)
-  end
-end
-```
-
-```{julia}
-sum(Flux.onecold(softmax(model(A)), [0,1,2]) .== train_data.label)/n
-```
-
-```{julia}
-query = [
-    "This raised the hawks' interest in prey.",
-    "This raised the hawks' interest by 10 basis points.",
-    "This raised the hawks' interest by 50 basis points.",
-    "This raised the hawks' interest by 100 basis points.",
-    "This lowered the hawks' interest by 10 basis points.",
-    "This lowered the hawks' interest by 50 basis points.",
-    "This lowered the hawks' interest by 100 basis points.",
-]
-a = encode(tkr, query)
-b = tfm(a)
-_A = b.hidden_state
-c = model(_A)
-d = softmax(c)
-yhat = [labels[i] for i in Flux.onecold(d)]
-res = DataFrame(query=query,predicted=yhat,probability=vec(maximum(d,dims=1)))
-```
 
 ## Limitations of Probes
 
