@@ -453,14 +453,48 @@ reg_data = DataFrame(
 )
 ols_best = lm(GLM.Term(:y) ~ sum(GLM.Term.(Symbol.(["yl",regressors...]))), reg_data)
 
+reg_stats = regression_statistics = [
+    Nobs => "Obs.",
+    BIC,
+    R2 => "R²",
+]
+labels = Dict(
+    "y" => "GDP Growth",
+    "yl" => "Lagged Growth",
+    "spread" => "Spread",
+    "level" => "Level",
+    "a1" => "Embedding 1",
+    "a2" => "Embedding 2",
+    "a3" => "Embedding 3",
+    "a4" => "Embedding 4",
+    "a5" => "Embedding 5",
+    "a6" => "Embedding 6",
+)
+
 # Results
 regtable(
     ols_all_latent, ols_best_latent, ols_ar, ols_factors, ols_best; 
-    renderSettings = RegressionTables.htmlOutput(joinpath(BLOG_DIR, "results/regression.html"))
+    renderSettings = RegressionTables.htmlOutput(joinpath(BLOG_DIR, "results/regression_full.html")),
+    regression_statistics = reg_stats,
+    labels = labels,
 )
 regtable(
     ols_all_latent, ols_best_latent, ols_ar, ols_factors, ols_best; 
-    renderSettings = RegressionTables.latexOutput(joinpath(BLOG_DIR, "results/regression.tex"))
+    renderSettings = RegressionTables.latexOutput(joinpath(BLOG_DIR, "results/regression_full.tex")),
+    regression_statistics = reg_stats,
+    labels = labels,
+)
+regtable(
+    ols_factors, ols_best; 
+    renderSettings = RegressionTables.htmlOutput(joinpath(BLOG_DIR, "results/regression.html")),
+    regression_statistics = reg_stats,
+    labels = labels,
+)
+regtable(
+    ols_factors, ols_best; 
+    renderSettings = RegressionTables.latexOutput(joinpath(BLOG_DIR, "results/regression.tex")),
+    regression_statistics = reg_stats,
+    labels = labels,
 )
 ```
 
