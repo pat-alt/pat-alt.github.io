@@ -9,7 +9,7 @@ using ChainPlots
 using DataFrames
 using Dates
 using Flux
-# using GLM
+using GLM
 using LinearAlgebra
 using Metal
 using Plots
@@ -18,8 +18,14 @@ using Printf
 using TidierData
 using Random
 using Serialization
-# using RegressionTables
-Random.seed!(2023)
+using RegressionTables
+Random.seed!(2024)
 
 # Utility functions:
 include("utils.jl")
+
+RESULTS_DIR = joinpath(BLOG_DIR, "results")
+if !isdir(RESULTS_DIR)
+    mkdir(RESULTS_DIR)
+end
+FIGURE_DIR = joinpath(RESULTS_DIR, "figures")

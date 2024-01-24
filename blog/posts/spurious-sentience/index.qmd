@@ -22,7 +22,7 @@ categories:
   - llm
 description: >-
   This is an opinionated post that questions the idea that the finding of patterns in latent embeddings of artificial neural networks is surprising. 
-image: www/intro.gif
+image: results/figures/intro.gif
 jupyter: julia-1.10
 draft: true
 format:
@@ -30,6 +30,10 @@ format:
     code-fold: true
     code-tools: true
     code-line-numbers: true
+  pdf:
+    keep-tex: true
+    execute: 
+      echo: false
 ---
 
 ```{julia}
@@ -124,9 +128,7 @@ The top panel in @fig-pca shows the first two principal components of the yield 
 > The estimated latent embeddings of the yield curve are characterized by patterns observed in the data. 
 
 ```{julia}
-#| fig-cap: Comparison of latent embeddings and observed data of the US Treasury yield curve.
-#| label: fig-pca
-#| output: true
+#| output: false
 
 # PCA:
 df_wide = @select(df, Date, variable, value) |>
@@ -183,8 +185,11 @@ plot!(xticks=(tick_years,date_tick), xtickfontsize=6, yaxis=(formatter=y->@sprin
 vline!(Date.([onset_date]), ls=:solid, color=:black, label="Onset of GFC")
 vline!(Date.([aftermath_date]), ls=:dash, color=:black, label="Aftermath of GFC")
 
-plot(plt_pc, plt_obs, layout=(2,1), size=(1000, 400), left_margin=5mm, bottom_margin=5mm)
+plt = plot(plt_pc, plt_obs, layout=(2,1), size=(1000, 400), left_margin=5mm, bottom_margin=5mm)
+savefig(plt, joinpath(FIGURE_DIR, "pca.png"))
 ```
+
+![Comparison of latent embeddings and observed data of the US Treasury yield curve.](results/figures/pca.png){#fig-pca}
 
 Not convinced? Let us use $\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}$ in true autoencoder fashion to reconstruct yield curves from principal components. Let $z_1$ denote the first principal component and consider the following: we keep all other $M-1$ principal components fixed at zero where $M$ denotes the total number of maturities; next we traverse the latent space by varying the value of $z_1$ over a fixed grid of length $K$ each time storing the full vector $\mathbf{z}$; finally, we vertically concatenate the vectors and end up with a matrix $\mathbf{Z}$ of dimension $(K \times M)$. To reconstruct yields, we simply multiply $Z$ by the singular values and right singular vectors: $\mathbf{Y}=\mathbf{Z}\Sigma\mathbf{V}^{\prime}$. 
 
@@ -227,10 +232,14 @@ anim = @animate for i in 1:n_vals
     )
     plot(p1, p2, layout=(1,2), size=(1000, 400), left_margin=5mm, bottom_margin=5mm)
 end
-gif(anim, joinpath(BLOG_DIR, "www/pc_anim.gif"), fps=5)
+gif(anim, joinpath(BLOG_DIR, "results/figures/pc_anim.gif"), fps=5)
 ```
 
-![Yield curve decomposition through PCA.](www/pc_anim.gif){#fig-pca-anim}
+::: {.content-visible when-format="html"}
+
+![Yield curve decomposition through PCA.](results/figures/pc_anim.gif){#fig-pca-anim}
+
+:::
 
 ### Example: Deep Learning
 
@@ -366,9 +375,7 @@ The results of this experiment are shown in the bottom panel of @fig-dl-results.
 > Not just a parrot! Our autoencoder neural network has an implicit understanding of the yield curve factors and their relationship with economic growth. It's sentient indeed!
 
 ```{julia}
-#| output: true
-#| fig-cap: The top panel shows the actual GDP growth and fitted values from the autoencoder model. The bottom panel shows the observed average level and spread of the yield curve (solid) along with the predicted values from the linear probe based on the latent embedding (dashed).
-#| label: fig-dl-results
+#| output: false
 
 yhat = model(X')' 
 plt_gdp = plot(
@@ -381,7 +388,7 @@ plot!(
     label="Predicted", color=:green, ls=:dash,
 )
 
-λ = 0.1
+λ = 1.0
 Y = df_factors[:, [:spread, :level]] |> Matrix
 A = encoder(X')'
 W = (A'A + UniformScaling(λ)) \ A'Y
@@ -397,8 +404,11 @@ plot!(
     color=[:blue :orange], ls=:dash, 
     label=["Spread (predicted)" "Level (predicted)"]
 )
-plot(plt_gdp, plt_probe, layout=(2,1), size=(800, 600), left_margin=5mm)
+plt = plot(plt_gdp, plt_probe, layout=(2,1), size=(800, 600), left_margin=5mm)
+savefig(plt, joinpath(FIGURE_DIR, "dl.png"))
 ```
+
+![The top panel shows the actual GDP growth and fitted values from the autoencoder model. The bottom panel shows the observed average level and spread of the yield curve (solid) along with the predicted values from the linear probe based on the latent embedding (dashed).](results/figures/dl.png){#fig-dl-results}
 
 
 #### Ok, but truly what's the point?
@@ -408,15 +418,19 @@ The finding is not surprising but it is still interesting. In the context of mec
 The results are shown in the table below. The key finding of interest is that the coefficients on the latent embeddings in model (5) are statistically significant. This suggests that the latent embeddings contain information that is useful for predicting GDP growth. 
 
 ```{julia}
-#| eval: false
+#| eval: true
 
 # Regress on all latent embeddings:
 reg_data = DataFrame(Float64.(hcat(y, A)),["y",["a$i" for i in 1:size(A,2)]...])
 ols_all_latent = lm(@formula(y ~ a1 + a2 + a3 + a4 + a5 + a6), reg_data)
 
 # Regress on best latent embeddings:
+top_n = 1
+pvals = coeftable(ols_all_latent).cols[4][2:end]
+best_idx = findall([x in sort(pvals)[1:top_n] for x in pvals])
+regressors = ["a$i" for i in best_idx]
 reg_data = DataFrame(Float64.(hcat(y, A)),["y",["a$i" for i in 1:size(A,2)]...])
-ols_best_latent = lm(@formula(y ~ a3 + a5), reg_data)
+ols_best_latent = lm(GLM.Term(:y) ~ sum(GLM.Term.(Symbol.(regressors))), reg_data)
 
 # Simple AR(1) model:
 reg_data = DataFrame(
@@ -437,13 +451,31 @@ reg_data = DataFrame(
     Float64.(hcat(y, lag(y), A)[2:end,:]),
     ["y","yl",["a$i" for i in 1:size(A,2)]...]
 )
-ols_best = lm(@formula(y ~ yl + a3 + a5), reg_data)
+ols_best = lm(GLM.Term(:y) ~ sum(GLM.Term.(Symbol.(["yl",regressors...]))), reg_data)
 
 # Results
-regtable(ols_all_latent, ols_best_latent, ols_ar, ols_factors, ols_best; renderSettings = RegressionTables.htmlOutput(joinpath(BLOG_DIR, "www/regression.html")))
+regtable(
+    ols_all_latent, ols_best_latent, ols_ar, ols_factors, ols_best; 
+    renderSettings = RegressionTables.htmlOutput(joinpath(BLOG_DIR, "results/regression.html"))
+)
+regtable(
+    ols_all_latent, ols_best_latent, ols_ar, ols_factors, ols_best; 
+    renderSettings = RegressionTables.latexOutput(joinpath(BLOG_DIR, "results/regression.tex"))
+)
 ```
 
-<iframe src="www/regression.html" width="550" height="720"></iframe>
+::: {.content-visible when-format="html"}
+
+<iframe src="results/regression.html" width="550" height="720"></iframe>
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+\input{results/regression.tex}
+
+:::
+
 
 ### Example: Large Language Model {#ex-llm}
 
@@ -459,7 +491,7 @@ The first column shows the correlations between model predictions and observed i
 
 Similarly, we observe that the (root) mean squared error of the linear probe is largely on par with the baseline. The average prediction error is gradually reduced as we move along the horizontal axis, which is again indicative of the notion that layers closer to the end of the neural network have distilled more useful representations. 
 
-![Various performance measures (correlation and (root) mean squared error) plotted against *FOMC-RoBERTa*'s $n$-th layer. Shaded areas indicate variation across cross-validation folds, where we have used an expanding window approach to split the time series. Results for the linear probes are shown along with results for autoregressive models (AR). The optimal lag length was determined using the Bayes Information Criterium.](www/fomc_probe.png){#fig-fomc}
+![Various performance measures (correlation and (root) mean squared error) plotted against *FOMC-RoBERTa*'s $n$-th layer. Shaded areas indicate variation across cross-validation folds, where we have used an expanding window approach to split the time series. Results for the linear probes are shown along with results for autoregressive models (AR). The optimal lag length was determined using the Bayes Information Criterium.](results/figures/fomc_probe.png){#fig-fomc}
 
 #### Stochastic Parrots After All?
 
@@ -481,9 +513,9 @@ Next, I propose the following hypothesis test as a minimum viable testing framew
 
 ## Parrot Test
 
-- *H0* (Null): The probe never predicts values that are statistically significantly different from $\mathbb{E}[f(\varepsilon)]$
-- *H1* (Stochastic Parrots): The probe predicts values that are statistically significantly different from $\mathbb{E}[f(\varepsilon)]$ for sentences in all categories (IP,DP,IB,DB).
-- *H2* (More than Mere Stochastic Parrots): The probe predicts values that are statistically significantly different from $\mathbb{E}[f(\varepsilon)]$ for sentences in categories IP and DP, but not for sentences in IB and DB.
+- *H0* (Null *WEAK*): The probe never predicts values that are statistically significantly different from $\mathbb{E}[f(\varepsilon)]$
+- *H1* (Stochastic Parrots *RISKIER*): The probe predicts values that are statistically significantly different from $\mathbb{E}[f(\varepsilon)]$ for sentences in all categories (IP,DP,IB,DB).
+- *H2* (More than Mere Stochastic Parrots *RISKIEST*): The probe predicts values that are statistically significantly different from $\mathbb{E}[f(\varepsilon)]$ for sentences in categories IP and DP, but not for sentences in IB and DB.
 
 ::: 
 
@@ -493,10 +525,9 @@ In this particular case, @fig-attack demonstrates that we find some evidence to 
 
 I should note that the number of sentences in each category is very small here (10), so the results in @fig-attack cannot be used to establish statistical significance. That being said, even a handful of convincing counter-examples should be enough for us to seriously question the claim that results from linear probes provide evidence against the parrot metaphor. In fact, if there's even a single sentence for which any
 
-![Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB) and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted inflation level for the whole sample period (train and test set).](www/attack_inflation.png){#fig-attack}
+> Strong alternative hypothesis to address own confirmation bias
+> Articulating a test to better differentiate
 
-## Limitations of Probes
+![Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB) and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted inflation level for the whole sample period (train and test set).](results/figures/attack_inflation.png){#fig-attack}
 
-- Also worth looking at @rudin2019stop
-
-## 🎓 References
+## References
