@@ -168,6 +168,7 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../../styles.css">
+<link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Patrick Altmeyer - Conformal Prediction in Julia 🟣🔴🟢">
 <meta property="og:description" content="A (very) gentle introduction to Conformal Prediction in Julia using my new package ConformalPrediction.jl.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/conformal-prediction/www/intro.gif">
@@ -270,7 +271,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Conformal Prediction in Julia 🟣🔴🟢</h1>
+<div class="quarto-title-block"><div><h1 class="title">Conformal Prediction in Julia 🟣🔴🟢</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 <p class="subtitle lead">Conformal Prediction in Julia — Part 1</p>
   <div class="quarto-categories">
     <div class="quarto-category">conformal prediction</div>
@@ -392,13 +393,16 @@ Note
 <h3 class="anchored" data-anchor-id="sec-scp">Split Conformal Classification</h3>
 <p>We consider a simple binary classification problem. Let <span class="math inline">\((X_i, Y_i), \ i=1,...,n\)</span> denote our feature-label pairs and let <span class="math inline">\(\mu: \mathcal{X} \mapsto \mathcal{Y}\)</span> denote the mapping from features to labels. For illustration purposes we will use the moons dataset 🌙. Using <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.18/"><code>MLJ.jl</code></a> we first generate the data and split into into a training and test set:</p>
 <div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MLJ</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Random</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">123</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Data:</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> <span class="fu">make_moons</span>(<span class="fl">500</span>; noise<span class="op">=</span><span class="fl">0.15</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>train, test <span class="op">=</span> <span class="fu">partition</span>(<span class="fu">eachindex</span>(y), <span class="fl">0.8</span>, shuffle<span class="op">=</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">using</span> <span class="bu">MLJ</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">using</span> <span class="bu">Random</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">123</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># Data:</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>X, y <span class="op">=</span> <span class="fu">make_moons</span>(<span class="fl">500</span>; noise<span class="op">=</span><span class="fl">0.15</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>train, test <span class="op">=</span> <span class="fu">partition</span>(<span class="fu">eachindex</span>(y), <span class="fl">0.8</span>, shuffle<span class="op">=</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>Here we will use a specific case of CP called <em>split conformal prediction</em> which can then be summarized as follows:<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <ol type="1">
@@ -428,20 +432,23 @@ Development Status
 </div>
 <p>Now let’s take this to our 🌙 data. To illustrate the package functionality we will demonstrate the envisioned workflow. We first define our atomic machine learning model following standard <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.18/"><code>MLJ.jl</code></a> conventions. Using <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a> we then wrap our atomic model in a conformal model using the standard API call <code>conformal_model(model::Supervised; kwargs...)</code>. To train and predict from our conformal model we can then rely on the conventional <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.18/"><code>MLJ.jl</code></a> procedure again. In particular, we wrap our conformal model in data (turning it into a machine) and then fit it on the training set. Finally, we use our machine to predict the label for a new test sample <code>Xtest</code>:</p>
 <div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>KNNClassifier <span class="op">=</span> <span class="pp">@load</span> KNNClassifier pkg<span class="op">=</span>NearestNeighborModels</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> <span class="fu">KNNClassifier</span>(;K<span class="op">=</span><span class="fl">50</span>) </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Training:</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">ConformalPrediction</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(model; coverage<span class="op">=</span><span class="fl">.9</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">fit!</span>(mach, rows<span class="op">=</span>train)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Conformal Prediction:</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>Xtest <span class="op">=</span> <span class="fu">selectrows</span>(X, <span class="fu">first</span>(test))</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>ytest <span class="op">=</span> y[<span class="fu">first</span>(test)]</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mach, Xtest)[<span class="fl">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Model:</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>KNNClassifier <span class="op">=</span> <span class="pp">@load</span> KNNClassifier pkg<span class="op">=</span>NearestNeighborModels</span>
+<span id="cb2-3"><a href="#cb2-3"></a>model <span class="op">=</span> <span class="fu">KNNClassifier</span>(;K<span class="op">=</span><span class="fl">50</span>) </span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co"># Training:</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="im">using</span> <span class="bu">ConformalPrediction</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(model; coverage<span class="op">=</span><span class="fl">.9</span>)</span>
+<span id="cb2-8"><a href="#cb2-8"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="fu">fit!</span>(mach, rows<span class="op">=</span>train)</span>
+<span id="cb2-10"><a href="#cb2-10"></a></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co"># Conformal Prediction:</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>Xtest <span class="op">=</span> <span class="fu">selectrows</span>(X, <span class="fu">first</span>(test))</span>
+<span id="cb2-13"><a href="#cb2-13"></a>ytest <span class="op">=</span> y[<span class="fu">first</span>(test)]</span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="fu">predict</span>(mach, Xtest)[<span class="fl">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>import NearestNeighborModels</code></pre>
 </div>
@@ -464,13 +471,16 @@ Development Status
 </div>
 </div>
 <div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(model; coverage<span class="op">=</span>coverage)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fit!</span>(mach, rows<span class="op">=</span>train)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Conformal Prediction:</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>Xtest <span class="op">=</span> (x1<span class="op">=</span>[<span class="fl">1</span>],x2<span class="op">=</span>[<span class="fl">0</span>])</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mach, Xtest)[<span class="fl">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(model; coverage<span class="op">=</span>coverage)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="fu">fit!</span>(mach, rows<span class="op">=</span>train)</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># Conformal Prediction:</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>Xtest <span class="op">=</span> (x1<span class="op">=</span>[<span class="fl">1</span>],x2<span class="op">=</span>[<span class="fl">0</span>])</span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="fu">predict</span>(mach, Xtest)[<span class="fl">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <div class="ansi-escaped-output">
 <pre>           <span class="ansi-bright-white-fg ansi-bold">UnivariateFinite{Multiclass{2}}</span>      
@@ -487,12 +497,15 @@ Development Status
 </div>
 </div>
 <div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(model; coverage<span class="op">=</span>coverage)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fit!</span>(mach, rows<span class="op">=</span>train)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Conformal Prediction:</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mach, Xtest)[<span class="fl">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(model; coverage<span class="op">=</span>coverage)</span>
+<span id="cb6-2"><a href="#cb6-2"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="fu">fit!</span>(mach, rows<span class="op">=</span>train)</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co"># Conformal Prediction:</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="fu">predict</span>(mach, Xtest)[<span class="fl">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>missing</code></pre>
 </div>
@@ -503,12 +516,12 @@ Development Status
 <div class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Xtest_2 <span class="op">=</span> (x1<span class="op">=</span>[<span class="op">-</span><span class="fl">0.5</span>],x2<span class="op">=</span>[<span class="fl">0.25</span>])</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>cov_ <span class="op">=</span> <span class="fl">.9</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(model; coverage<span class="op">=</span>cov_)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">fit!</span>(mach, rows<span class="op">=</span>train)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>p̂_2 <span class="op">=</span> <span class="fu">pdf</span>(<span class="fu">predict</span>(mach, Xtest_2)[<span class="fl">1</span>], <span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a>Xtest_2 <span class="op">=</span> (x1<span class="op">=</span>[<span class="op">-</span><span class="fl">0.5</span>],x2<span class="op">=</span>[<span class="fl">0.25</span>])</span>
+<span id="cb8-2"><a href="#cb8-2"></a>cov_ <span class="op">=</span> <span class="fl">.9</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(model; coverage<span class="op">=</span>cov_)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="fu">fit!</span>(mach, rows<span class="op">=</span>train)</span>
+<span id="cb8-6"><a href="#cb8-6"></a>p̂_2 <span class="op">=</span> <span class="fu">pdf</span>(<span class="fu">predict</span>(mach, Xtest_2)[<span class="fl">1</span>], <span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell" data-execution_count="10">
@@ -520,28 +533,28 @@ Development Status
 <div class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>coverages <span class="op">=</span> <span class="fu">range</span>(<span class="fl">0.75</span>,<span class="fl">1.0</span>,length<span class="op">=</span><span class="fl">5</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="fl">100</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>x1_range <span class="op">=</span> <span class="fu">range</span>(<span class="fu">extrema</span>(X.x1)<span class="op">...</span>,length<span class="op">=</span>n)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>x2_range <span class="op">=</span> <span class="fu">range</span>(<span class="fu">extrema</span>(X.x2)<span class="op">...</span>,length<span class="op">=</span>n)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>anim <span class="op">=</span> <span class="pp">@animate</span> <span class="cf">for</span> coverage <span class="kw">in</span> coverages</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(model; coverage<span class="op">=</span>coverage)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fit!</span>(mach, rows<span class="op">=</span>train)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    p1 <span class="op">=</span> <span class="fu">contourf_cp</span>(mach, x1_range, x2_range; <span class="kw">type</span><span class="op">=:</span>proba, title<span class="op">=</span><span class="st">"Softmax"</span>, axis<span class="op">=</span><span class="cn">nothing</span>)</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scatter!</span>(p1, X.x1, X.x2, group<span class="op">=</span>y, ms<span class="op">=</span><span class="fl">2</span>, msw<span class="op">=</span><span class="fl">0</span>, alpha<span class="op">=</span><span class="fl">0.75</span>)</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scatter!</span>(p1, Xtest.x1, Xtest.x2, ms<span class="op">=</span><span class="fl">6</span>, c<span class="op">=:</span>red, label<span class="op">=</span><span class="st">"X₁"</span>, shape<span class="op">=:</span>cross, msw<span class="op">=</span><span class="fl">6</span>)</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scatter!</span>(p1, Xtest_2.x1, Xtest_2.x2, ms<span class="op">=</span><span class="fl">6</span>, c<span class="op">=:</span>red, label<span class="op">=</span><span class="st">"X₂"</span>, shape<span class="op">=:</span>diamond, msw<span class="op">=</span><span class="fl">6</span>)</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    p2 <span class="op">=</span> <span class="fu">contourf_cp</span>(mach, x1_range, x2_range; <span class="kw">type</span><span class="op">=:</span>set_size, title<span class="op">=</span><span class="st">"Set size"</span>, axis<span class="op">=</span><span class="cn">nothing</span>)</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scatter!</span>(p2, X.x1, X.x2, group<span class="op">=</span>y, ms<span class="op">=</span><span class="fl">2</span>, msw<span class="op">=</span><span class="fl">0</span>, alpha<span class="op">=</span><span class="fl">0.75</span>)</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scatter!</span>(p2, Xtest.x1, Xtest.x2, ms<span class="op">=</span><span class="fl">6</span>, c<span class="op">=:</span>red, label<span class="op">=</span><span class="st">"X₁"</span>, shape<span class="op">=:</span>cross, msw<span class="op">=</span><span class="fl">6</span>)</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scatter!</span>(p2, Xtest_2.x1, Xtest_2.x2, ms<span class="op">=</span><span class="fl">6</span>, c<span class="op">=:</span>red, label<span class="op">=</span><span class="st">"X₂"</span>, shape<span class="op">=:</span>diamond, msw<span class="op">=</span><span class="fl">6</span>)</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(p1, p2, plot_title<span class="op">=</span><span class="st">"(1-α)=</span><span class="sc">$</span>(<span class="fu">round</span>(coverage,digits<span class="op">=</span><span class="fl">2</span>))<span class="st">"</span>, size<span class="op">=</span>(<span class="fl">800</span>,<span class="fl">300</span>))</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="fu">gif</span>(anim, fps<span class="op">=</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Setup</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>coverages <span class="op">=</span> <span class="fu">range</span>(<span class="fl">0.75</span>,<span class="fl">1.0</span>,length<span class="op">=</span><span class="fl">5</span>)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>n <span class="op">=</span> <span class="fl">100</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>x1_range <span class="op">=</span> <span class="fu">range</span>(<span class="fu">extrema</span>(X.x1)<span class="op">...</span>,length<span class="op">=</span>n)</span>
+<span id="cb9-5"><a href="#cb9-5"></a>x2_range <span class="op">=</span> <span class="fu">range</span>(<span class="fu">extrema</span>(X.x2)<span class="op">...</span>,length<span class="op">=</span>n)</span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a>anim <span class="op">=</span> <span class="pp">@animate</span> <span class="cf">for</span> coverage <span class="kw">in</span> coverages</span>
+<span id="cb9-8"><a href="#cb9-8"></a>    conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(model; coverage<span class="op">=</span>coverage)</span>
+<span id="cb9-9"><a href="#cb9-9"></a>    mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
+<span id="cb9-10"><a href="#cb9-10"></a>    <span class="fu">fit!</span>(mach, rows<span class="op">=</span>train)</span>
+<span id="cb9-11"><a href="#cb9-11"></a>    p1 <span class="op">=</span> <span class="fu">contourf_cp</span>(mach, x1_range, x2_range; <span class="kw">type</span><span class="op">=:</span>proba, title<span class="op">=</span><span class="st">"Softmax"</span>, axis<span class="op">=</span><span class="cn">nothing</span>)</span>
+<span id="cb9-12"><a href="#cb9-12"></a>    <span class="fu">scatter!</span>(p1, X.x1, X.x2, group<span class="op">=</span>y, ms<span class="op">=</span><span class="fl">2</span>, msw<span class="op">=</span><span class="fl">0</span>, alpha<span class="op">=</span><span class="fl">0.75</span>)</span>
+<span id="cb9-13"><a href="#cb9-13"></a>    <span class="fu">scatter!</span>(p1, Xtest.x1, Xtest.x2, ms<span class="op">=</span><span class="fl">6</span>, c<span class="op">=:</span>red, label<span class="op">=</span><span class="st">"X₁"</span>, shape<span class="op">=:</span>cross, msw<span class="op">=</span><span class="fl">6</span>)</span>
+<span id="cb9-14"><a href="#cb9-14"></a>    <span class="fu">scatter!</span>(p1, Xtest_2.x1, Xtest_2.x2, ms<span class="op">=</span><span class="fl">6</span>, c<span class="op">=:</span>red, label<span class="op">=</span><span class="st">"X₂"</span>, shape<span class="op">=:</span>diamond, msw<span class="op">=</span><span class="fl">6</span>)</span>
+<span id="cb9-15"><a href="#cb9-15"></a>    p2 <span class="op">=</span> <span class="fu">contourf_cp</span>(mach, x1_range, x2_range; <span class="kw">type</span><span class="op">=:</span>set_size, title<span class="op">=</span><span class="st">"Set size"</span>, axis<span class="op">=</span><span class="cn">nothing</span>)</span>
+<span id="cb9-16"><a href="#cb9-16"></a>    <span class="fu">scatter!</span>(p2, X.x1, X.x2, group<span class="op">=</span>y, ms<span class="op">=</span><span class="fl">2</span>, msw<span class="op">=</span><span class="fl">0</span>, alpha<span class="op">=</span><span class="fl">0.75</span>)</span>
+<span id="cb9-17"><a href="#cb9-17"></a>    <span class="fu">scatter!</span>(p2, Xtest.x1, Xtest.x2, ms<span class="op">=</span><span class="fl">6</span>, c<span class="op">=:</span>red, label<span class="op">=</span><span class="st">"X₁"</span>, shape<span class="op">=:</span>cross, msw<span class="op">=</span><span class="fl">6</span>)</span>
+<span id="cb9-18"><a href="#cb9-18"></a>    <span class="fu">scatter!</span>(p2, Xtest_2.x1, Xtest_2.x2, ms<span class="op">=</span><span class="fl">6</span>, c<span class="op">=:</span>red, label<span class="op">=</span><span class="st">"X₂"</span>, shape<span class="op">=:</span>diamond, msw<span class="op">=</span><span class="fl">6</span>)</span>
+<span id="cb9-19"><a href="#cb9-19"></a>    <span class="fu">plot</span>(p1, p2, plot_title<span class="op">=</span><span class="st">"(1-α)=</span><span class="sc">$</span>(<span class="fu">round</span>(coverage,digits<span class="op">=</span><span class="fl">2</span>))<span class="st">"</span>, size<span class="op">=</span>(<span class="fl">800</span>,<span class="fl">300</span>))</span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="cf">end</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a></span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="fu">gif</span>(anim, fps<span class="op">=</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div id="fig-anim" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored" data-execution_count="12">
 <figure class="quarto-float quarto-float-fig figure">
@@ -572,6 +585,8 @@ Figure&nbsp;1: The effect of the coverage rate on the conformal prediction set. 
 <h2 class="anchored" data-anchor-id="further-resources">📚 Further Resources</h2>
 <p>Chances are that you have already come across the Awesome Conformal Prediction <a href="https://github.com/valeman/awesome-conformal-prediction">repo</a>: <span class="citation" data-cites="manokhin2022awesome">Manokhin (<a href="#ref-manokhin2022awesome" role="doc-biblioref">2022</a>)</span> provides a comprehensive, up-to-date overview of resources related to the conformal prediction. Among the listed articles you will also find <span class="citation" data-cites="angelopoulos2021gentle">Angelopoulos and Bates (<a href="#ref-angelopoulos2021gentle" role="doc-biblioref">2022</a>)</span>, which inspired much of this post. The repo also points to open-source implementations in other popular programming languages including Python and R.</p>
 
+
+<!-- -->
 
 
 </section>
@@ -695,6 +710,57 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -999,7 +1065,364 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
-</script>
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb10" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">---</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="an">title:</span><span class="co"> Conformal Prediction in Julia 🟣🔴🟢</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="an">subtitle:</span><span class="co"> Conformal Prediction in Julia --- Part 1</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="an">date:</span><span class="co"> '2022-10-25'</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="an">categories:</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">  - conformal prediction</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">  - uncertainty</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">  - Julia</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="an">description:</span><span class="co"> &gt;-</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">  A (very) gentle introduction to Conformal Prediction in Julia using my new package [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl).</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="an">image:</span><span class="co"> www/intro.gif</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="an">jupyter:</span><span class="co"> julia-1.8</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="an">draft:</span><span class="co"> false</span></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co">---</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a></span>
+<span id="cb10-18"><a href="#cb10-18"></a><span class="in">```{julia}</span></span>
+<span id="cb10-19"><a href="#cb10-19"></a><span class="in">#| echo: false</span></span>
+<span id="cb10-20"><a href="#cb10-20"></a></span>
+<span id="cb10-21"><a href="#cb10-21"></a><span class="in">using Pkg; Pkg.activate("blog/posts/conformal-prediction")</span></span>
+<span id="cb10-22"><a href="#cb10-22"></a><span class="in">```</span></span>
+<span id="cb10-23"><a href="#cb10-23"></a></span>
+<span id="cb10-24"><a href="#cb10-24"></a>&lt;div class="intro-gif"&gt;</span>
+<span id="cb10-25"><a href="#cb10-25"></a>  &lt;figure&gt;</span>
+<span id="cb10-26"><a href="#cb10-26"></a>    &lt;img src="www/intro.gif"&gt;</span>
+<span id="cb10-27"><a href="#cb10-27"></a>    &lt;figcaption&gt;Prediction sets for two different samples &lt;br&gt; and changing coverage rates. &lt;br&gt; As coverage grows, so does the size of the &lt;br&gt; prediction sets.&lt;/figcaption&gt;</span>
+<span id="cb10-28"><a href="#cb10-28"></a>  &lt;/figure&gt;</span>
+<span id="cb10-29"><a href="#cb10-29"></a>&lt;/div&gt;</span>
+<span id="cb10-30"><a href="#cb10-30"></a></span>
+<span id="cb10-31"><a href="#cb10-31"></a>A first crucial step towards building trustworthy AI systems is to be transparent about predictive uncertainty. Model parameters are random variables and their values are estimated from noisy data. That inherent stochasticity feeds through to model predictions and should to be addressed, at the very least in order to avoid overconfidence in models. </span>
+<span id="cb10-32"><a href="#cb10-32"></a></span>
+<span id="cb10-33"><a href="#cb10-33"></a>Beyond that obvious concern, it turns out that quantifying model uncertainty actually opens up a myriad of possibilities to improve up- and down-stream modeling tasks like active learning and robustness. In Bayesian Active Learning, for example, uncertainty estimates are used to guide the search for new input samples, which can make ground-truthing tasks more efficient <span class="co">[</span><span class="ot">@houlsby2011bayesian</span><span class="co">]</span>. With respect to model performance in downstream tasks, uncertainty quantification can be used to improve model calibration and robustness <span class="co">[</span><span class="ot">@lakshminarayanan2016simple</span><span class="co">]</span>. </span>
+<span id="cb10-34"><a href="#cb10-34"></a></span>
+<span id="cb10-35"><a href="#cb10-35"></a>In previous posts we have looked at how uncertainty can be quantified in the Bayesian context (see <span class="co">[</span><span class="ot">here</span><span class="co">](https://www.paltmeyer.com/blog/posts/bayesian-logit/)</span> and <span class="co">[</span><span class="ot">here</span><span class="co">](https://www.paltmeyer.com/blog/posts/effortsless-bayesian-dl/)</span>). Since in Bayesian modeling we are generally concerned with estimating posterior distributions, we get uncertainty estimates almost as a byproduct. This is great for all intends and purposes, but it hinges on assumptions about prior distributions. Personally, I have no quarrel with the idea of making prior distributional assumptions. On the contrary, I think the Bayesian framework formalizes the idea of integrating prior information in models and therefore provides a powerful toolkit for conducting science. Still, in some cases this requirement may be seen as too restrictive or we may simply lack prior information. </span>
+<span id="cb10-36"><a href="#cb10-36"></a></span>
+<span id="cb10-37"><a href="#cb10-37"></a>Enter: Conformal Prediction (CP) --- a scalable frequentist approach to uncertainty quantification and coverage control. In this post we will go through the basic concepts underlying CP. A number of hands-on usage examples in Julia should hopefully help to convey some intuition and ideally attract people interested in contributing to a new and exciting open-source development. </span>
+<span id="cb10-38"><a href="#cb10-38"></a></span>
+<span id="cb10-39"><a href="#cb10-39"></a>:::{.callout-tip}</span>
+<span id="cb10-40"><a href="#cb10-40"></a></span>
+<span id="cb10-41"><a href="#cb10-41"></a><span class="fu">## 🏃‍♀️ TL;DR</span></span>
+<span id="cb10-42"><a href="#cb10-42"></a></span>
+<span id="cb10-43"><a href="#cb10-43"></a><span class="ss">1. </span>Conformal Prediction is an interesting frequentist approach to uncertainty quantification that can even be combined with Bayes (@sec-background).</span>
+<span id="cb10-44"><a href="#cb10-44"></a><span class="ss">2. </span>It is scalable and model-agnostic and therefore well applicable to machine learning (@sec-background).</span>
+<span id="cb10-45"><a href="#cb10-45"></a><span class="ss">3. </span><span class="co">[</span><span class="ot">`ConformalPrediction.jl`</span><span class="co">](https://github.com/juliatrustworthyai/ConformalPrediction.jl)</span> implements CP in pure Julia and can be used with any supervised model available from <span class="co">[</span><span class="ot">`MLJ.jl`</span><span class="co">](https://alan-turing-institute.github.io/MLJ.jl/v0.18/)</span> (@sec-julia).</span>
+<span id="cb10-46"><a href="#cb10-46"></a><span class="ss">4. </span>Implementing CP directly on top of an existing, powerful machine learning toolkit demonstrates the potential usefulness of this framework to the ML community (@sec-julia). </span>
+<span id="cb10-47"><a href="#cb10-47"></a><span class="ss">5. </span>Standard conformal classifiers produce set-valued predictions: for ambiguous samples these sets are typically large (for high coverage) or empty (for low coverage) (@sec-scp).</span>
+<span id="cb10-48"><a href="#cb10-48"></a>:::</span>
+<span id="cb10-49"><a href="#cb10-49"></a></span>
+<span id="cb10-50"><a href="#cb10-50"></a><span class="fu">## 📖 Background {#sec-background}</span></span>
+<span id="cb10-51"><a href="#cb10-51"></a></span>
+<span id="cb10-52"><a href="#cb10-52"></a>Conformal Prediction promises to be an easy-to-understand, distribution-free and model-agnostic way to generate statistically rigorous uncertainty estimates. That's quite a mouthful, so let's break it down: firstly, as I will hopefully manage to illustrate in this post, the underlying concepts truly are fairly straight-forward to understand; secondly, CP indeed relies on only minimal distributional assumptions; thirdly, common procedures to generate conformal predictions really do apply almost universally to all supervised models, therefore making the framework very intriguing to the ML community; and, finally, CP does in fact come with a frequentist coverage guarantee that ensures that conformal prediction sets contain the true value with a user-chosen probability. For a formal proof of this *marginal coverage* property and a detailed introduction to the topic, I recommend @angelopoulos2021gentle. </span>
+<span id="cb10-53"><a href="#cb10-53"></a></span>
+<span id="cb10-54"><a href="#cb10-54"></a>:::{.callout-note}</span>
+<span id="cb10-55"><a href="#cb10-55"></a>In what follows we will loosely treat the tutorial by @angelopoulos2021gentle and the general framework it sets as a reference. You are not expected to have read the paper, but I also won't reiterate any details here.</span>
+<span id="cb10-56"><a href="#cb10-56"></a>:::</span>
+<span id="cb10-57"><a href="#cb10-57"></a></span>
+<span id="cb10-58"><a href="#cb10-58"></a>CP can be used to generate prediction intervals for regression models and prediction sets for classification models (more on this later). There is also some recent work on conformal predictive distributions and probabilistic predictions. Interestingly, it can even be used to complement Bayesian methods. @angelopoulos2021gentle, for example, point out that prior information should be incorporated into prediction sets and demonstrate how Bayesian predictive distributions can be conformalized in order to comply with the frequentist notion of coverage. Relatedly, @hoff2021bayesoptimal proposes a Bayes-optimal prediction procedure. And finally, @stanton2022bayesian very recently proposed a way to introduce conformal prediction in Bayesian Optimization. I find this type of work that combines different schools of thought very promising, but I'm drifting off a little ... So, without further ado, let us look at some code. </span>
+<span id="cb10-59"><a href="#cb10-59"></a></span>
+<span id="cb10-60"><a href="#cb10-60"></a><span class="fu">## 📦 Conformal Prediction in Julia {#sec-julia}</span></span>
+<span id="cb10-61"><a href="#cb10-61"></a></span>
+<span id="cb10-62"><a href="#cb10-62"></a>In this section of this first short post on CP we will look at how conformal prediction can be implemented in Julia. In particular, we will look at an approach that is compatible with any of the many supervised machine learning models available in <span class="co">[</span><span class="ot">MLJ</span><span class="co">](https://alan-turing-institute.github.io/MLJ.jl/dev/)</span>: a beautiful, comprehensive machine learning framework funded by the <span class="co">[</span><span class="ot">Alan Turing Institute</span><span class="co">](https://www.turing.ac.uk/)</span> and the <span class="co">[</span><span class="ot">New Zealand Strategic Science Investment Fund</span><span class="co">](https://www.mbie.govt.nz/science-and-technology/science-and-innovation/funding-information-and-opportunities/investment-funds/strategic-science-investment-fund/ssif-funded-programmes/university-of-auckland/)</span> @blaom2020mlj. We will go through some basic usage examples employing a new Julia package that I have been working on: <span class="co">[</span><span class="ot">`ConformalPrediction.jl`</span><span class="co">](https://github.com/juliatrustworthyai/ConformalPrediction.jl)</span>.  </span>
+<span id="cb10-63"><a href="#cb10-63"></a></span>
+<span id="cb10-64"><a href="#cb10-64"></a>:::{.callout-note}</span>
+<span id="cb10-65"><a href="#cb10-65"></a><span class="fu">## [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl)</span></span>
+<span id="cb10-66"><a href="#cb10-66"></a></span>
+<span id="cb10-67"><a href="#cb10-67"></a><span class="in">`ConformalPrediction.jl`</span> is a package for uncertainty quantification through conformal prediction for machine learning models trained in <span class="co">[</span><span class="ot">MLJ</span><span class="co">](https://alan-turing-institute.github.io/MLJ.jl/dev/)</span>. At the time of writing it is still in its early stages of development, but already implements a range of different approaches to CP. Contributions are very much welcome:</span>
+<span id="cb10-68"><a href="#cb10-68"></a></span>
+<span id="cb10-69"><a href="#cb10-69"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Documentation</span><span class="co">](https://www.paltmeyer.com/ConformalPrediction.jl/stable/)</span></span>
+<span id="cb10-70"><a href="#cb10-70"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Contributor's Guide</span><span class="co">](https://www.paltmeyer.com/ConformalPrediction.jl/stable/#Contribute)</span></span>
+<span id="cb10-71"><a href="#cb10-71"></a>:::</span>
+<span id="cb10-72"><a href="#cb10-72"></a></span>
+<span id="cb10-73"><a href="#cb10-73"></a><span class="fu">### Split Conformal Classification {#sec-scp}</span></span>
+<span id="cb10-74"><a href="#cb10-74"></a></span>
+<span id="cb10-75"><a href="#cb10-75"></a>We consider a simple binary classification problem. Let $(X_i, Y_i), \ i=1,...,n$ denote our feature-label pairs and let $\mu: \mathcal{X} \mapsto \mathcal{Y}$ denote the mapping from features to labels. For illustration purposes we will use the moons dataset 🌙. Using <span class="co">[</span><span class="ot">`MLJ.jl`</span><span class="co">](https://alan-turing-institute.github.io/MLJ.jl/v0.18/)</span> we first generate the data and split into into a training and test set:</span>
+<span id="cb10-76"><a href="#cb10-76"></a></span>
+<span id="cb10-79"><a href="#cb10-79"></a><span class="in">```{julia}</span></span>
+<span id="cb10-80"><a href="#cb10-80"></a><span class="in">using MLJ</span></span>
+<span id="cb10-81"><a href="#cb10-81"></a><span class="in">using Random</span></span>
+<span id="cb10-82"><a href="#cb10-82"></a><span class="in">Random.seed!(123)</span></span>
+<span id="cb10-83"><a href="#cb10-83"></a></span>
+<span id="cb10-84"><a href="#cb10-84"></a><span class="in"># Data:</span></span>
+<span id="cb10-85"><a href="#cb10-85"></a><span class="in">X, y = make_moons(500; noise=0.15)</span></span>
+<span id="cb10-86"><a href="#cb10-86"></a><span class="in">train, test = partition(eachindex(y), 0.8, shuffle=true)</span></span>
+<span id="cb10-87"><a href="#cb10-87"></a><span class="in">```</span></span>
+<span id="cb10-88"><a href="#cb10-88"></a></span>
+<span id="cb10-89"><a href="#cb10-89"></a>Here we will use a specific case of CP called *split conformal prediction* which can then be summarized as follows:^[In other places split conformal prediction is sometimes referred to as *inductive* conformal prediction.]</span>
+<span id="cb10-90"><a href="#cb10-90"></a></span>
+<span id="cb10-91"><a href="#cb10-91"></a><span class="ss">1. </span>Partition the training into a proper training set and a separate calibration set: $\mathcal{D}_n=\mathcal{D}^{\text{train}} \cup \mathcal{D}^{\text{cali}}$.</span>
+<span id="cb10-92"><a href="#cb10-92"></a><span class="ss">2. </span>Train the machine learning model on the proper training set: $\hat\mu_{i \in \mathcal{D}^{\text{train}}}(X_i,Y_i)$.</span>
+<span id="cb10-93"><a href="#cb10-93"></a><span class="ss">3. </span>Compute nonconformity scores, $\mathcal{S}$, using the calibration data $\mathcal{D}^{\text{cali}}$ and the fitted model $\hat\mu_{i \in \mathcal{D}^{\text{train}}}$. </span>
+<span id="cb10-94"><a href="#cb10-94"></a><span class="ss">4. </span>For a user-specified desired coverage ratio $(1-\alpha)$ compute the corresponding quantile, $\hat{q}$, of the empirical distribution of nonconformity scores, $\mathcal{S}$.</span>
+<span id="cb10-95"><a href="#cb10-95"></a><span class="ss">5. </span>For the given quantile and test sample $X_{\text{test}}$, form the corresponding conformal prediction set: </span>
+<span id="cb10-96"><a href="#cb10-96"></a></span>
+<span id="cb10-97"><a href="#cb10-97"></a>$$</span>
+<span id="cb10-98"><a href="#cb10-98"></a>C(X_{\text{test}})=<span class="sc">\{</span>y:s(X_{\text{test}},y) \le \hat{q}<span class="sc">\}</span></span>
+<span id="cb10-99"><a href="#cb10-99"></a>$$ {#eq-set}</span>
+<span id="cb10-100"><a href="#cb10-100"></a></span>
+<span id="cb10-101"><a href="#cb10-101"></a>This is the default procedure used for classification and regression in <span class="co">[</span><span class="ot">`ConformalPrediction.jl`</span><span class="co">](https://github.com/juliatrustworthyai/ConformalPrediction.jl)</span>. </span>
+<span id="cb10-102"><a href="#cb10-102"></a></span>
+<span id="cb10-103"><a href="#cb10-103"></a>You may want to take a look at the source code for the classification case <span class="co">[</span><span class="ot">here</span><span class="co">](https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L1)</span>. As a <span class="co">[</span><span class="ot">first</span><span class="co">](https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L3)</span> important step, we begin by defining a concrete type <span class="in">`SimpleInductiveClassifier`</span> that wraps a supervised model from <span class="co">[</span><span class="ot">`MLJ.jl`</span><span class="co">](https://alan-turing-institute.github.io/MLJ.jl/v0.18/)</span> and reserves additional fields for a few hyperparameters. As a <span class="co">[</span><span class="ot">second</span><span class="co">](https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L26)</span> step, we define the training procedure, which includes the data-splitting and calibration step. Finally, as a <span class="co">[</span><span class="ot">third</span><span class="co">](https://github.com/juliatrustworthyai/ConformalPrediction.jl/blob/67712e870dc3a438bf0846d376fa48480612f042/src/ConformalModels/inductive_classification.jl#L56)</span> step we implement the procedure in @eq-set to compute the conformal prediction set.</span>
+<span id="cb10-104"><a href="#cb10-104"></a></span>
+<span id="cb10-105"><a href="#cb10-105"></a>:::{.callout-warning}</span>
+<span id="cb10-106"><a href="#cb10-106"></a><span class="fu">## Development Status</span></span>
+<span id="cb10-107"><a href="#cb10-107"></a></span>
+<span id="cb10-108"><a href="#cb10-108"></a>The permalinks above take you to the version of the package that was up-to-date at the time of writing. Since the package is in its early stages of development, the code base and API can be expected to change.</span>
+<span id="cb10-109"><a href="#cb10-109"></a>:::</span>
+<span id="cb10-110"><a href="#cb10-110"></a></span>
+<span id="cb10-111"><a href="#cb10-111"></a>Now let's take this to our 🌙 data. To illustrate the package functionality we will demonstrate the envisioned workflow. We first define our atomic machine learning model following standard <span class="co">[</span><span class="ot">`MLJ.jl`</span><span class="co">](https://alan-turing-institute.github.io/MLJ.jl/v0.18/)</span> conventions. Using <span class="co">[</span><span class="ot">`ConformalPrediction.jl`</span><span class="co">](https://github.com/juliatrustworthyai/ConformalPrediction.jl)</span> we then wrap our atomic model in a conformal model using the standard API call <span class="in">`conformal_model(model::Supervised; kwargs...)`</span>. To train and predict from our conformal model we can then rely on the conventional <span class="co">[</span><span class="ot">`MLJ.jl`</span><span class="co">](https://alan-turing-institute.github.io/MLJ.jl/v0.18/)</span> procedure again. In particular, we wrap our conformal model in data (turning it into a machine) and then fit it on the training set. Finally, we use our machine to predict the label for a new test sample <span class="in">`Xtest`</span>:</span>
+<span id="cb10-112"><a href="#cb10-112"></a></span>
+<span id="cb10-115"><a href="#cb10-115"></a><span class="in">```{julia}</span></span>
+<span id="cb10-116"><a href="#cb10-116"></a><span class="in">#| output: true</span></span>
+<span id="cb10-117"><a href="#cb10-117"></a></span>
+<span id="cb10-118"><a href="#cb10-118"></a><span class="in"># Model:</span></span>
+<span id="cb10-119"><a href="#cb10-119"></a><span class="in">KNNClassifier = @load KNNClassifier pkg=NearestNeighborModels</span></span>
+<span id="cb10-120"><a href="#cb10-120"></a><span class="in">model = KNNClassifier(;K=50) </span></span>
+<span id="cb10-121"><a href="#cb10-121"></a></span>
+<span id="cb10-122"><a href="#cb10-122"></a><span class="in"># Training:</span></span>
+<span id="cb10-123"><a href="#cb10-123"></a><span class="in">using ConformalPrediction</span></span>
+<span id="cb10-124"><a href="#cb10-124"></a><span class="in">conf_model = conformal_model(model; coverage=.9)</span></span>
+<span id="cb10-125"><a href="#cb10-125"></a><span class="in">mach = machine(conf_model, X, y)</span></span>
+<span id="cb10-126"><a href="#cb10-126"></a><span class="in">fit!(mach, rows=train)</span></span>
+<span id="cb10-127"><a href="#cb10-127"></a></span>
+<span id="cb10-128"><a href="#cb10-128"></a><span class="in"># Conformal Prediction:</span></span>
+<span id="cb10-129"><a href="#cb10-129"></a><span class="in">Xtest = selectrows(X, first(test))</span></span>
+<span id="cb10-130"><a href="#cb10-130"></a><span class="in">ytest = y[first(test)]</span></span>
+<span id="cb10-131"><a href="#cb10-131"></a><span class="in">predict(mach, Xtest)[1]</span></span>
+<span id="cb10-132"><a href="#cb10-132"></a><span class="in">```</span></span>
+<span id="cb10-133"><a href="#cb10-133"></a></span>
+<span id="cb10-134"><a href="#cb10-134"></a>The final predictions are set-valued. While the softmax output remains unchanged for the <span class="in">`SimpleInductiveClassifier`</span>, the size of the prediction set depends on the chosen coverage rate, $(1-\alpha)$. </span>
+<span id="cb10-137"><a href="#cb10-137"></a><span class="in">```{julia}</span></span>
+<span id="cb10-138"><a href="#cb10-138"></a><span class="in">#| echo: false</span></span>
+<span id="cb10-139"><a href="#cb10-139"></a><span class="in">#| output: true</span></span>
+<span id="cb10-140"><a href="#cb10-140"></a></span>
+<span id="cb10-141"><a href="#cb10-141"></a><span class="in">coverage = 1.0</span></span>
+<span id="cb10-142"><a href="#cb10-142"></a><span class="in">using Markdown</span></span>
+<span id="cb10-143"><a href="#cb10-143"></a><span class="in">Markdown.parse("""</span></span>
+<span id="cb10-144"><a href="#cb10-144"></a><span class="in">When specifying a coverage rate very close to one, the prediction set will typically include many (in some cases all) of the possible labels. Below, for example, both classes are included in the prediction set when setting the coverage rate equal to ``(1-\\alpha)``=$coverage. This is intuitive, since high coverage quite literally requires that the true label is covered by the prediction set with high probability.</span></span>
+<span id="cb10-145"><a href="#cb10-145"></a><span class="in">""")</span></span>
+<span id="cb10-146"><a href="#cb10-146"></a><span class="in">```</span></span>
+<span id="cb10-147"><a href="#cb10-147"></a></span>
+<span id="cb10-150"><a href="#cb10-150"></a><span class="in">```{julia}</span></span>
+<span id="cb10-151"><a href="#cb10-151"></a><span class="in">#| output: true</span></span>
+<span id="cb10-152"><a href="#cb10-152"></a></span>
+<span id="cb10-153"><a href="#cb10-153"></a><span class="in">conf_model = conformal_model(model; coverage=coverage)</span></span>
+<span id="cb10-154"><a href="#cb10-154"></a><span class="in">mach = machine(conf_model, X, y)</span></span>
+<span id="cb10-155"><a href="#cb10-155"></a><span class="in">fit!(mach, rows=train)</span></span>
+<span id="cb10-156"><a href="#cb10-156"></a></span>
+<span id="cb10-157"><a href="#cb10-157"></a><span class="in"># Conformal Prediction:</span></span>
+<span id="cb10-158"><a href="#cb10-158"></a><span class="in">Xtest = (x1=[1],x2=[0])</span></span>
+<span id="cb10-159"><a href="#cb10-159"></a><span class="in">predict(mach, Xtest)[1]</span></span>
+<span id="cb10-160"><a href="#cb10-160"></a><span class="in">```</span></span>
+<span id="cb10-161"><a href="#cb10-161"></a></span>
+<span id="cb10-164"><a href="#cb10-164"></a><span class="in">```{julia}</span></span>
+<span id="cb10-165"><a href="#cb10-165"></a><span class="in">#| echo: false</span></span>
+<span id="cb10-166"><a href="#cb10-166"></a><span class="in">#| output: true</span></span>
+<span id="cb10-167"><a href="#cb10-167"></a></span>
+<span id="cb10-168"><a href="#cb10-168"></a><span class="in">coverage = .1</span></span>
+<span id="cb10-169"><a href="#cb10-169"></a><span class="in">using Markdown</span></span>
+<span id="cb10-170"><a href="#cb10-170"></a><span class="in">Markdown.parse("""</span></span>
+<span id="cb10-171"><a href="#cb10-171"></a><span class="in">Conversely, for low coverage rates, prediction sets can also be empty. For a choice of ``(1-\\alpha)``=$coverage, for example, the prediction set for our test sample is empty. This is a bit difficult to think about intuitively and I have not yet come across a satisfactory, intuitive interpretation.^[Any thoughts/comments welcome!] When the prediction set is empty, the `predict` call currently returns `missing`:</span></span>
+<span id="cb10-172"><a href="#cb10-172"></a><span class="in">""")</span></span>
+<span id="cb10-173"><a href="#cb10-173"></a><span class="in">```</span></span>
+<span id="cb10-174"><a href="#cb10-174"></a></span>
+<span id="cb10-177"><a href="#cb10-177"></a><span class="in">```{julia}</span></span>
+<span id="cb10-178"><a href="#cb10-178"></a><span class="in">#| output: true</span></span>
+<span id="cb10-179"><a href="#cb10-179"></a></span>
+<span id="cb10-180"><a href="#cb10-180"></a><span class="in">conf_model = conformal_model(model; coverage=coverage)</span></span>
+<span id="cb10-181"><a href="#cb10-181"></a><span class="in">mach = machine(conf_model, X, y)</span></span>
+<span id="cb10-182"><a href="#cb10-182"></a><span class="in">fit!(mach, rows=train)</span></span>
+<span id="cb10-183"><a href="#cb10-183"></a></span>
+<span id="cb10-184"><a href="#cb10-184"></a><span class="in"># Conformal Prediction:</span></span>
+<span id="cb10-185"><a href="#cb10-185"></a><span class="in">predict(mach, Xtest)[1]</span></span>
+<span id="cb10-186"><a href="#cb10-186"></a><span class="in">```</span></span>
+<span id="cb10-187"><a href="#cb10-187"></a></span>
+<span id="cb10-190"><a href="#cb10-190"></a><span class="in">```{julia}</span></span>
+<span id="cb10-191"><a href="#cb10-191"></a><span class="in">#| echo: false</span></span>
+<span id="cb10-192"><a href="#cb10-192"></a><span class="in">using Plots</span></span>
+<span id="cb10-193"><a href="#cb10-193"></a></span>
+<span id="cb10-194"><a href="#cb10-194"></a><span class="in">function contourf_cp(mach::Machine, x1_range, x2_range; type=:set_size, kwargs...)</span></span>
+<span id="cb10-195"><a href="#cb10-195"></a><span class="in">    set_size = []</span></span>
+<span id="cb10-196"><a href="#cb10-196"></a><span class="in">    proba = []</span></span>
+<span id="cb10-197"><a href="#cb10-197"></a><span class="in">    for x2 in x2_range, x1 in x1_range</span></span>
+<span id="cb10-198"><a href="#cb10-198"></a><span class="in">        Xnew = (x1 = [x1], x2 = [x2])</span></span>
+<span id="cb10-199"><a href="#cb10-199"></a><span class="in">        p̂ = predict(mach, Xnew)[1]</span></span>
+<span id="cb10-200"><a href="#cb10-200"></a><span class="in">        # Set size:</span></span>
+<span id="cb10-201"><a href="#cb10-201"></a><span class="in">        z = ismissing(p̂) ? 0 : sum(pdf.(p̂, p̂.decoder.classes) .&gt; 0)</span></span>
+<span id="cb10-202"><a href="#cb10-202"></a><span class="in">        push!(set_size, z)</span></span>
+<span id="cb10-203"><a href="#cb10-203"></a><span class="in">        # Probability:</span></span>
+<span id="cb10-204"><a href="#cb10-204"></a><span class="in">        p = ismissing(p̂) ? p̂ : pdf.(p̂, 1)</span></span>
+<span id="cb10-205"><a href="#cb10-205"></a><span class="in">        push!(proba, p)</span></span>
+<span id="cb10-206"><a href="#cb10-206"></a><span class="in">    end</span></span>
+<span id="cb10-207"><a href="#cb10-207"></a><span class="in">    if type == :set_size</span></span>
+<span id="cb10-208"><a href="#cb10-208"></a><span class="in">        plt = contourf(x1_range, x2_range, set_size; clim=(0,2), c=cgrad(:blues, 3, categorical = true),  kwargs...)</span></span>
+<span id="cb10-209"><a href="#cb10-209"></a><span class="in">    elseif type == :proba</span></span>
+<span id="cb10-210"><a href="#cb10-210"></a><span class="in">        plt = contourf(x1_range, x2_range, proba; c=:thermal, kwargs...)</span></span>
+<span id="cb10-211"><a href="#cb10-211"></a><span class="in">    end</span></span>
+<span id="cb10-212"><a href="#cb10-212"></a><span class="in">    return plt</span></span>
+<span id="cb10-213"><a href="#cb10-213"></a><span class="in">end</span></span>
+<span id="cb10-214"><a href="#cb10-214"></a><span class="in">```</span></span>
+<span id="cb10-215"><a href="#cb10-215"></a></span>
+<span id="cb10-216"><a href="#cb10-216"></a>@fig-anim should provide some more intuition as to what exactly is happening here. It illustrates the effect of the chosen coverage rate on the predicted softmax output and the set size in the two-dimensional feature space. Contours are overlayed with the moon data points (including test data). The two samples highlighted in red, $X_1$ and $X_2$, have been manually added for illustration purposes. Let's look at these one by one.</span>
+<span id="cb10-217"><a href="#cb10-217"></a></span>
+<span id="cb10-218"><a href="#cb10-218"></a>Firstly, note that $X_1$ (red cross) falls into a region of the domain that is characterized by high predictive uncertainty. It sits right at the bottom-right corner of our class-zero moon 🌜 (orange), a region that is almost entirely enveloped by our class-one moon 🌛 (green). For low coverage rates the prediction set for $X_1$ is empty: on the left-hand side this is indicated by the missing contour for the softmax probability; on the right-hand side we can observe that the corresponding set size is indeed zero. For high coverage rates the prediction set includes both $y=0$ and $y=1$, indicative of the fact that the conformal classifier is uncertain about the true label.</span>
+<span id="cb10-219"><a href="#cb10-219"></a></span>
+<span id="cb10-220"><a href="#cb10-220"></a>With respect to $X_2$, we observe that while also sitting on the fringe of our class-zero moon, this sample populates a region that is not fully enveloped by data points from the opposite class. In this region, the underlying atomic classifier can be expected to be more certain about its predictions, but still not highly confident. How is this reflected by our corresponding conformal prediction sets? </span>
+<span id="cb10-221"><a href="#cb10-221"></a></span>
+<span id="cb10-224"><a href="#cb10-224"></a><span class="in">```{julia}</span></span>
+<span id="cb10-225"><a href="#cb10-225"></a><span class="in">#| code-fold: true</span></span>
+<span id="cb10-226"><a href="#cb10-226"></a></span>
+<span id="cb10-227"><a href="#cb10-227"></a><span class="in">Xtest_2 = (x1=[-0.5],x2=[0.25])</span></span>
+<span id="cb10-228"><a href="#cb10-228"></a><span class="in">cov_ = .9</span></span>
+<span id="cb10-229"><a href="#cb10-229"></a><span class="in">conf_model = conformal_model(model; coverage=cov_)</span></span>
+<span id="cb10-230"><a href="#cb10-230"></a><span class="in">mach = machine(conf_model, X, y)</span></span>
+<span id="cb10-231"><a href="#cb10-231"></a><span class="in">fit!(mach, rows=train)</span></span>
+<span id="cb10-232"><a href="#cb10-232"></a><span class="in">p̂_2 = pdf(predict(mach, Xtest_2)[1], 0)</span></span>
+<span id="cb10-233"><a href="#cb10-233"></a><span class="in">```</span></span>
+<span id="cb10-234"><a href="#cb10-234"></a></span>
+<span id="cb10-237"><a href="#cb10-237"></a><span class="in">```{julia}</span></span>
+<span id="cb10-238"><a href="#cb10-238"></a><span class="in">#| echo: false</span></span>
+<span id="cb10-239"><a href="#cb10-239"></a><span class="in">#| output: true</span></span>
+<span id="cb10-240"><a href="#cb10-240"></a></span>
+<span id="cb10-241"><a href="#cb10-241"></a><span class="in">Markdown.parse("""</span></span>
+<span id="cb10-242"><a href="#cb10-242"></a><span class="in">Well, for low coverage rates (roughly ``&lt;0.9``) the conformal prediction set does not include ``y=0``: the set size is zero (right panel). Only for higher coverage rates do we have ``C(X_2)=\\{0\\}``: the coverage rate is high enough to include ``y=0``, but the corresponding softmax probability is still fairly low. For example, for ``(1-\\alpha)=$(cov_)`` we have ``\\hat{p}(y=0|X_2)=$(p̂_2).``</span></span>
+<span id="cb10-243"><a href="#cb10-243"></a><span class="in">""")</span></span>
+<span id="cb10-244"><a href="#cb10-244"></a><span class="in">```</span></span>
+<span id="cb10-245"><a href="#cb10-245"></a></span>
+<span id="cb10-246"><a href="#cb10-246"></a>These two examples illustrate an interesting point: for regions characterised by high predictive uncertainty, conformal prediction sets are typically empty (for low coverage) or large (for high coverage). While set-valued predictions may be something to get used to, this notion is overall intuitive. </span>
+<span id="cb10-247"><a href="#cb10-247"></a></span>
+<span id="cb10-250"><a href="#cb10-250"></a><span class="in">```{julia}</span></span>
+<span id="cb10-251"><a href="#cb10-251"></a><span class="in">#| output: true</span></span>
+<span id="cb10-252"><a href="#cb10-252"></a><span class="in">#| label: fig-anim</span></span>
+<span id="cb10-253"><a href="#cb10-253"></a><span class="in">#| fig-cap: "The effect of the coverage rate on the conformal prediction set. Softmax probabilities are shown on the left. The size of the prediction set is shown on the right."</span></span>
+<span id="cb10-254"><a href="#cb10-254"></a><span class="in">#| code-fold: true</span></span>
+<span id="cb10-255"><a href="#cb10-255"></a></span>
+<span id="cb10-256"><a href="#cb10-256"></a><span class="in"># Setup</span></span>
+<span id="cb10-257"><a href="#cb10-257"></a><span class="in">coverages = range(0.75,1.0,length=5)</span></span>
+<span id="cb10-258"><a href="#cb10-258"></a><span class="in">n = 100</span></span>
+<span id="cb10-259"><a href="#cb10-259"></a><span class="in">x1_range = range(extrema(X.x1)...,length=n)</span></span>
+<span id="cb10-260"><a href="#cb10-260"></a><span class="in">x2_range = range(extrema(X.x2)...,length=n)</span></span>
+<span id="cb10-261"><a href="#cb10-261"></a></span>
+<span id="cb10-262"><a href="#cb10-262"></a><span class="in">anim = @animate for coverage in coverages</span></span>
+<span id="cb10-263"><a href="#cb10-263"></a><span class="in">    conf_model = conformal_model(model; coverage=coverage)</span></span>
+<span id="cb10-264"><a href="#cb10-264"></a><span class="in">    mach = machine(conf_model, X, y)</span></span>
+<span id="cb10-265"><a href="#cb10-265"></a><span class="in">    fit!(mach, rows=train)</span></span>
+<span id="cb10-266"><a href="#cb10-266"></a><span class="in">    p1 = contourf_cp(mach, x1_range, x2_range; type=:proba, title="Softmax", axis=nothing)</span></span>
+<span id="cb10-267"><a href="#cb10-267"></a><span class="in">    scatter!(p1, X.x1, X.x2, group=y, ms=2, msw=0, alpha=0.75)</span></span>
+<span id="cb10-268"><a href="#cb10-268"></a><span class="in">    scatter!(p1, Xtest.x1, Xtest.x2, ms=6, c=:red, label="X₁", shape=:cross, msw=6)</span></span>
+<span id="cb10-269"><a href="#cb10-269"></a><span class="in">    scatter!(p1, Xtest_2.x1, Xtest_2.x2, ms=6, c=:red, label="X₂", shape=:diamond, msw=6)</span></span>
+<span id="cb10-270"><a href="#cb10-270"></a><span class="in">    p2 = contourf_cp(mach, x1_range, x2_range; type=:set_size, title="Set size", axis=nothing)</span></span>
+<span id="cb10-271"><a href="#cb10-271"></a><span class="in">    scatter!(p2, X.x1, X.x2, group=y, ms=2, msw=0, alpha=0.75)</span></span>
+<span id="cb10-272"><a href="#cb10-272"></a><span class="in">    scatter!(p2, Xtest.x1, Xtest.x2, ms=6, c=:red, label="X₁", shape=:cross, msw=6)</span></span>
+<span id="cb10-273"><a href="#cb10-273"></a><span class="in">    scatter!(p2, Xtest_2.x1, Xtest_2.x2, ms=6, c=:red, label="X₂", shape=:diamond, msw=6)</span></span>
+<span id="cb10-274"><a href="#cb10-274"></a><span class="in">    plot(p1, p2, plot_title="(1-α)=$(round(coverage,digits=2))", size=(800,300))</span></span>
+<span id="cb10-275"><a href="#cb10-275"></a><span class="in">end</span></span>
+<span id="cb10-276"><a href="#cb10-276"></a></span>
+<span id="cb10-277"><a href="#cb10-277"></a><span class="in">gif(anim, fps=0.5)</span></span>
+<span id="cb10-278"><a href="#cb10-278"></a><span class="in">```</span></span>
+<span id="cb10-279"><a href="#cb10-279"></a></span>
+<span id="cb10-282"><a href="#cb10-282"></a><span class="in">```{julia}</span></span>
+<span id="cb10-283"><a href="#cb10-283"></a><span class="in">#| echo: false</span></span>
+<span id="cb10-284"><a href="#cb10-284"></a><span class="in">#| eval: false</span></span>
+<span id="cb10-285"><a href="#cb10-285"></a></span>
+<span id="cb10-286"><a href="#cb10-286"></a><span class="in">using Plots.PlotMeasures</span></span>
+<span id="cb10-287"><a href="#cb10-287"></a></span>
+<span id="cb10-288"><a href="#cb10-288"></a><span class="in"># Setup</span></span>
+<span id="cb10-289"><a href="#cb10-289"></a><span class="in">coverages = range(0.75,1.0,length=25)</span></span>
+<span id="cb10-290"><a href="#cb10-290"></a><span class="in">n = 100</span></span>
+<span id="cb10-291"><a href="#cb10-291"></a><span class="in">x1_range = range(extrema(X.x1)...,length=n)</span></span>
+<span id="cb10-292"><a href="#cb10-292"></a><span class="in">x2_range = range(extrema(X.x2)...,length=n)</span></span>
+<span id="cb10-293"><a href="#cb10-293"></a><span class="in">anim = @animate for coverage in coverages</span></span>
+<span id="cb10-294"><a href="#cb10-294"></a><span class="in">    conf_model = conformal_model(model; coverage=coverage)</span></span>
+<span id="cb10-295"><a href="#cb10-295"></a><span class="in">    mach = machine(conf_model, X, y)</span></span>
+<span id="cb10-296"><a href="#cb10-296"></a><span class="in">    fit!(mach, rows=train)</span></span>
+<span id="cb10-297"><a href="#cb10-297"></a><span class="in">    plt = contourf_cp(mach, x1_range, x2_range; type=:proba, axis=nothing, size=(500,500), background_color=:transparent, colorbar=false, margin=-1.5mm)</span></span>
+<span id="cb10-298"><a href="#cb10-298"></a></span>
+<span id="cb10-299"><a href="#cb10-299"></a><span class="in">    # Annotations</span></span>
+<span id="cb10-300"><a href="#cb10-300"></a></span>
+<span id="cb10-301"><a href="#cb10-301"></a><span class="in">    # First:</span></span>
+<span id="cb10-302"><a href="#cb10-302"></a><span class="in">    p̂ = predict(mach, Xtest)[1]</span></span>
+<span id="cb10-303"><a href="#cb10-303"></a><span class="in">    if ismissing(p̂)</span></span>
+<span id="cb10-304"><a href="#cb10-304"></a><span class="in">        z = "∅"</span></span>
+<span id="cb10-305"><a href="#cb10-305"></a><span class="in">    else</span></span>
+<span id="cb10-306"><a href="#cb10-306"></a><span class="in">        L = p̂.decoder.classes</span></span>
+<span id="cb10-307"><a href="#cb10-307"></a><span class="in">        set_contents = reduce((x,y) -&gt; x * ", " * y, string.(L[pdf.(p̂, L) .&gt; 0]))</span></span>
+<span id="cb10-308"><a href="#cb10-308"></a><span class="in">        z = "{$(set_contents)}"</span></span>
+<span id="cb10-309"><a href="#cb10-309"></a><span class="in">    end</span></span>
+<span id="cb10-310"><a href="#cb10-310"></a><span class="in">    ann_Xtest = (Xtest.x1, Xtest.x2, ("ŷ₁=$z", 20, :white))</span></span>
+<span id="cb10-311"><a href="#cb10-311"></a><span class="in">    annotate!(plt, ann_Xtest)</span></span>
+<span id="cb10-312"><a href="#cb10-312"></a></span>
+<span id="cb10-313"><a href="#cb10-313"></a><span class="in">    # Second</span></span>
+<span id="cb10-314"><a href="#cb10-314"></a><span class="in">    p̂ = predict(mach, Xtest_2)[1]</span></span>
+<span id="cb10-315"><a href="#cb10-315"></a><span class="in">    if ismissing(p̂)</span></span>
+<span id="cb10-316"><a href="#cb10-316"></a><span class="in">        z = "∅"</span></span>
+<span id="cb10-317"><a href="#cb10-317"></a><span class="in">    else</span></span>
+<span id="cb10-318"><a href="#cb10-318"></a><span class="in">        L = p̂.decoder.classes</span></span>
+<span id="cb10-319"><a href="#cb10-319"></a><span class="in">        set_contents = reduce((x,y) -&gt; x * ", " * y, string.(L[pdf.(p̂, L) .&gt; 0]))</span></span>
+<span id="cb10-320"><a href="#cb10-320"></a><span class="in">        z = "{$(set_contents)}"</span></span>
+<span id="cb10-321"><a href="#cb10-321"></a><span class="in">    end</span></span>
+<span id="cb10-322"><a href="#cb10-322"></a><span class="in">    ann_Xtest = (Xtest_2.x1, Xtest_2.x2, ("ŷ₂=$z", 20, :white))</span></span>
+<span id="cb10-323"><a href="#cb10-323"></a><span class="in">    annotate!(plt, ann_Xtest)</span></span>
+<span id="cb10-324"><a href="#cb10-324"></a><span class="in">end</span></span>
+<span id="cb10-325"><a href="#cb10-325"></a><span class="in">gif(anim, "blog/posts/conformal-prediction/www/intro.gif", fps=5)</span></span>
+<span id="cb10-326"><a href="#cb10-326"></a></span>
+<span id="cb10-327"><a href="#cb10-327"></a><span class="in">anim = @animate for coverage in coverages</span></span>
+<span id="cb10-328"><a href="#cb10-328"></a><span class="in">    conf_model = conformal_model(model; coverage=coverage)</span></span>
+<span id="cb10-329"><a href="#cb10-329"></a><span class="in">    mach = machine(conf_model, X, y)</span></span>
+<span id="cb10-330"><a href="#cb10-330"></a><span class="in">    fit!(mach, rows=train)</span></span>
+<span id="cb10-331"><a href="#cb10-331"></a><span class="in">    plt = contourf_cp(mach, x1_range, x2_range; type=:proba, axis=nothing, size=(1200,400), background_color=:transparent, colorbar=false, margin=-1.5mm)</span></span>
+<span id="cb10-332"><a href="#cb10-332"></a><span class="in">    </span></span>
+<span id="cb10-333"><a href="#cb10-333"></a><span class="in">    # Annotations</span></span>
+<span id="cb10-334"><a href="#cb10-334"></a></span>
+<span id="cb10-335"><a href="#cb10-335"></a><span class="in">    # First:</span></span>
+<span id="cb10-336"><a href="#cb10-336"></a><span class="in">    p̂ = predict(mach, Xtest)[1]</span></span>
+<span id="cb10-337"><a href="#cb10-337"></a><span class="in">    if ismissing(p̂)</span></span>
+<span id="cb10-338"><a href="#cb10-338"></a><span class="in">        z = "∅"</span></span>
+<span id="cb10-339"><a href="#cb10-339"></a><span class="in">    else</span></span>
+<span id="cb10-340"><a href="#cb10-340"></a><span class="in">        L = p̂.decoder.classes</span></span>
+<span id="cb10-341"><a href="#cb10-341"></a><span class="in">        set_contents = reduce((x,y) -&gt; x * ", " * y, string.(L[pdf.(p̂, L) .&gt; 0]))</span></span>
+<span id="cb10-342"><a href="#cb10-342"></a><span class="in">        z = "{$(set_contents)}"</span></span>
+<span id="cb10-343"><a href="#cb10-343"></a><span class="in">    end</span></span>
+<span id="cb10-344"><a href="#cb10-344"></a><span class="in">    ann_Xtest = (Xtest.x1, Xtest.x2, ("ŷ₁=$z", 20, :white))</span></span>
+<span id="cb10-345"><a href="#cb10-345"></a><span class="in">    annotate!(plt, ann_Xtest)</span></span>
+<span id="cb10-346"><a href="#cb10-346"></a></span>
+<span id="cb10-347"><a href="#cb10-347"></a><span class="in">    # Second</span></span>
+<span id="cb10-348"><a href="#cb10-348"></a><span class="in">    p̂ = predict(mach, Xtest_2)[1]</span></span>
+<span id="cb10-349"><a href="#cb10-349"></a><span class="in">    if ismissing(p̂)</span></span>
+<span id="cb10-350"><a href="#cb10-350"></a><span class="in">        z = "∅"</span></span>
+<span id="cb10-351"><a href="#cb10-351"></a><span class="in">    else</span></span>
+<span id="cb10-352"><a href="#cb10-352"></a><span class="in">        L = p̂.decoder.classes</span></span>
+<span id="cb10-353"><a href="#cb10-353"></a><span class="in">        set_contents = reduce((x,y) -&gt; x * ", " * y, string.(L[pdf.(p̂, L) .&gt; 0]))</span></span>
+<span id="cb10-354"><a href="#cb10-354"></a><span class="in">        z = "{$(set_contents)}"</span></span>
+<span id="cb10-355"><a href="#cb10-355"></a><span class="in">    end</span></span>
+<span id="cb10-356"><a href="#cb10-356"></a><span class="in">    ann_Xtest = (Xtest_2.x1, Xtest_2.x2, ("ŷ₂=$z", 20, :white))</span></span>
+<span id="cb10-357"><a href="#cb10-357"></a><span class="in">    annotate!(plt, ann_Xtest)</span></span>
+<span id="cb10-358"><a href="#cb10-358"></a><span class="in">end</span></span>
+<span id="cb10-359"><a href="#cb10-359"></a><span class="in">gif(anim, "blog/posts/conformal-prediction/www/medium.gif", fps=5)</span></span>
+<span id="cb10-360"><a href="#cb10-360"></a><span class="in">```</span></span>
+<span id="cb10-361"><a href="#cb10-361"></a></span>
+<span id="cb10-362"><a href="#cb10-362"></a></span>
+<span id="cb10-363"><a href="#cb10-363"></a><span class="fu">## 🏁 Conclusion</span></span>
+<span id="cb10-364"><a href="#cb10-364"></a></span>
+<span id="cb10-365"><a href="#cb10-365"></a>This has really been a whistle-stop tour of Conformal Prediction: an active area of research that probably deserves much more attention. Hopefully, though, this post has helped to provide some color and, if anything, made you more curious about the topic. Let's recap the TL;DR from above:</span>
+<span id="cb10-366"><a href="#cb10-366"></a></span>
+<span id="cb10-367"><a href="#cb10-367"></a><span class="ss">1. </span>Conformal Prediction is an interesting frequentist approach to uncertainty quantification that can even be combined with Bayes (@sec-background).</span>
+<span id="cb10-368"><a href="#cb10-368"></a><span class="ss">2. </span>It is scalable and model-agnostic and therefore well applicable to machine learning (@sec-background).</span>
+<span id="cb10-369"><a href="#cb10-369"></a><span class="ss">3. </span><span class="co">[</span><span class="ot">`ConformalPrediction.jl`</span><span class="co">](https://github.com/juliatrustworthyai/ConformalPrediction.jl)</span> implements CP in pure Julia and can be used with any supervised model available from <span class="co">[</span><span class="ot">`MLJ.jl`</span><span class="co">](https://alan-turing-institute.github.io/MLJ.jl/v0.18/)</span> (@sec-julia).</span>
+<span id="cb10-370"><a href="#cb10-370"></a><span class="ss">4. </span>Implementing CP directly on top of an existing, powerful machine learning toolkit demonstrates the potential usefulness of this framework to the ML community (@sec-julia). </span>
+<span id="cb10-371"><a href="#cb10-371"></a><span class="ss">5. </span>Standard conformal classifiers produce set-valued predictions: for ambiguous samples these sets are typically large (for high coverage) or empty (for low coverage) (@sec-scp).</span>
+<span id="cb10-372"><a href="#cb10-372"></a></span>
+<span id="cb10-373"><a href="#cb10-373"></a>Below I will leave you with some further resources.</span>
+<span id="cb10-374"><a href="#cb10-374"></a></span>
+<span id="cb10-375"><a href="#cb10-375"></a><span class="fu">## 📚 Further Resources</span></span>
+<span id="cb10-376"><a href="#cb10-376"></a></span>
+<span id="cb10-377"><a href="#cb10-377"></a>Chances are that you have already come across the Awesome Conformal Prediction <span class="co">[</span><span class="ot">repo</span><span class="co">](https://github.com/valeman/awesome-conformal-prediction)</span>: @manokhin2022awesome provides a comprehensive, up-to-date overview of resources related to the conformal prediction. Among the listed articles you will also find @angelopoulos2021gentle, which inspired much of this post. The repo also points to open-source implementations in other popular programming languages including Python and R.</span>
+<span id="cb10-378"><a href="#cb10-378"></a></span>
+<span id="cb10-379"><a href="#cb10-379"></a></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
