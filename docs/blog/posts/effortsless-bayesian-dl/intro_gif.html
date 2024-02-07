@@ -114,6 +114,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 
 <link rel="stylesheet" href="../../../styles.css">
+<link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Patrick Altmeyer">
 <meta property="og:site_name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer">
@@ -203,7 +204,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content"><div class="quarto-title-block"><div class="quarto-title-tools-only"><h1></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -241,80 +242,97 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <section id="train-model" class="level3">
 <h3 class="anchored" data-anchor-id="train-model">Train model</h3>
 <div class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import libraries.</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Flux</span>, <span class="bu">Plots</span>, <span class="bu">Random</span>, <span class="bu">Statistics</span>, <span class="bu">LaplaceRedux</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="op">:</span>wong)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of points to generate.</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>xs, y <span class="op">=</span> <span class="fu">toy_data_non_linear</span>(<span class="fl">200</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> <span class="fu">hcat</span>(xs<span class="op">...</span>); <span class="co"># bring into tabular format</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> <span class="fu">zip</span>(xs,y);</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Neural network:</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>n_hidden <span class="op">=</span> <span class="fl">32</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> <span class="fu">size</span>(X)[<span class="fl">1</span>]</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>nn <span class="op">=</span> <span class="fu">Chain</span>(</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Dense</span>(D, n_hidden, σ),</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Dense</span>(n_hidden, <span class="fl">1</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>)  </span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>λ <span class="op">=</span> <span class="fl">0.01</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">sqnorm</span>(x) <span class="op">=</span> <span class="fu">sum</span>(abs2, x)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">weight_regularization</span>(λ<span class="op">=</span>λ) <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span> <span class="op">*</span> λ<span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="fu">sum</span>(sqnorm, Flux.<span class="fu">params</span>(nn))</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">loss</span>(x, y) <span class="op">=</span> Flux.Losses.<span class="fu">logitbinarycrossentropy</span>(<span class="fu">nn</span>(x), y) <span class="op">+</span> <span class="fu">weight_regularization</span>()</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Training:</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Flux.Optimise</span>: update!, ADAM</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>opt <span class="op">=</span> <span class="fu">ADAM</span>()</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="fl">200</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoch <span class="op">=</span> <span class="fl">1</span><span class="op">:</span>epochs</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> d <span class="kw">in</span> data</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    gs <span class="op">=</span> <span class="fu">gradient</span>(<span class="fu">params</span>(nn)) <span class="cf">do</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>      l <span class="op">=</span> <span class="fu">loss</span>(d<span class="op">...</span>)</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">update!</span>(opt, <span class="fu">params</span>(nn), gs)</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Import libraries.</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">using</span> <span class="bu">Flux</span>, <span class="bu">Plots</span>, <span class="bu">Random</span>, <span class="bu">Statistics</span>, <span class="bu">LaplaceRedux</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">theme</span>(<span class="op">:</span>wong)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># Number of points to generate.</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>xs, y <span class="op">=</span> <span class="fu">toy_data_non_linear</span>(<span class="fl">200</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>X <span class="op">=</span> <span class="fu">hcat</span>(xs<span class="op">...</span>); <span class="co"># bring into tabular format</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>data <span class="op">=</span> <span class="fu">zip</span>(xs,y);</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># Neural network:</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>n_hidden <span class="op">=</span> <span class="fl">32</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>D <span class="op">=</span> <span class="fu">size</span>(X)[<span class="fl">1</span>]</span>
+<span id="cb1-12"><a href="#cb1-12"></a>nn <span class="op">=</span> <span class="fu">Chain</span>(</span>
+<span id="cb1-13"><a href="#cb1-13"></a>    <span class="fu">Dense</span>(D, n_hidden, σ),</span>
+<span id="cb1-14"><a href="#cb1-14"></a>    <span class="fu">Dense</span>(n_hidden, <span class="fl">1</span>)</span>
+<span id="cb1-15"><a href="#cb1-15"></a>)  </span>
+<span id="cb1-16"><a href="#cb1-16"></a>λ <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="fu">sqnorm</span>(x) <span class="op">=</span> <span class="fu">sum</span>(abs2, x)</span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="fu">weight_regularization</span>(λ<span class="op">=</span>λ) <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span> <span class="op">*</span> λ<span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="fu">sum</span>(sqnorm, Flux.<span class="fu">params</span>(nn))</span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="fu">loss</span>(x, y) <span class="op">=</span> Flux.Losses.<span class="fu">logitbinarycrossentropy</span>(<span class="fu">nn</span>(x), y) <span class="op">+</span> <span class="fu">weight_regularization</span>()</span>
+<span id="cb1-20"><a href="#cb1-20"></a></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="co"># Training:</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="im">using</span> <span class="bu">Flux.Optimise</span>: update!, ADAM</span>
+<span id="cb1-23"><a href="#cb1-23"></a>opt <span class="op">=</span> <span class="fu">ADAM</span>()</span>
+<span id="cb1-24"><a href="#cb1-24"></a>epochs <span class="op">=</span> <span class="fl">200</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="cf">for</span> epoch <span class="op">=</span> <span class="fl">1</span><span class="op">:</span>epochs</span>
+<span id="cb1-26"><a href="#cb1-26"></a>  <span class="cf">for</span> d <span class="kw">in</span> data</span>
+<span id="cb1-27"><a href="#cb1-27"></a>    gs <span class="op">=</span> <span class="fu">gradient</span>(<span class="fu">params</span>(nn)) <span class="cf">do</span></span>
+<span id="cb1-28"><a href="#cb1-28"></a>      l <span class="op">=</span> <span class="fu">loss</span>(d<span class="op">...</span>)</span>
+<span id="cb1-29"><a href="#cb1-29"></a>    <span class="cf">end</span></span>
+<span id="cb1-30"><a href="#cb1-30"></a>    <span class="fu">update!</span>(opt, <span class="fu">params</span>(nn), gs)</span>
+<span id="cb1-31"><a href="#cb1-31"></a>  <span class="cf">end</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 </section>
 <section id="chart" class="level3">
 <h3 class="anchored" data-anchor-id="chart">Chart</h3>
 <div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">123</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>shuffled_indices <span class="op">=</span> <span class="fu">randperm</span>(<span class="fl">200</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> <span class="fu">zip</span>(xs[shuffled_indices], y[shuffled_indices]);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">123</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>shuffled_indices <span class="op">=</span> <span class="fu">randperm</span>(<span class="fl">200</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>data <span class="op">=</span> <span class="fu">zip</span>(xs[shuffled_indices], y[shuffled_indices]);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>xlim <span class="op">=</span> (<span class="fu">minimum</span>(X[<span class="fl">1</span>,<span class="op">:</span>]),<span class="fu">maximum</span>(X[<span class="fl">1</span>,<span class="op">:</span>]))</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ylim <span class="op">=</span> (<span class="fu">minimum</span>(X[<span class="fl">2</span>,<span class="op">:</span>]),<span class="fu">maximum</span>(X[<span class="fl">2</span>,<span class="op">:</span>]))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>anim <span class="op">=</span> <span class="fu">Animation</span>()</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> N <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(data)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    la <span class="op">=</span> <span class="fu">laplace</span>(nn, λ<span class="op">=</span>λ, subset_of_weights<span class="op">=:</span>last_layer)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fit!</span>(la, <span class="bu">Iterators</span>.<span class="fu">take</span>(data,N))</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    Xᵢ <span class="op">=</span> <span class="fu">reduce</span>(vcat,<span class="fu">map</span>(d <span class="op">-&gt;</span> <span class="fu">reshape</span>(d[<span class="fl">1</span>],<span class="fl">1</span>,<span class="fu">length</span>(d[<span class="fl">1</span>])),<span class="bu">Iterators</span>.<span class="fu">take</span>(data, N)))</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    yᵢ <span class="op">=</span> <span class="fu">map</span>(d <span class="op">-&gt;</span> d[<span class="fl">2</span>],<span class="bu">Iterators</span>.<span class="fu">take</span>(data, N))</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    plt <span class="op">=</span> <span class="fu">plot_contour</span>(Xᵢ,yᵢ,la;xlim<span class="op">=</span>xlim,ylim<span class="op">=</span>ylim,zoom<span class="op">=-</span><span class="fl">2</span>,clegend<span class="op">=</span><span class="cn">false</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    plt <span class="op">=</span> <span class="fu">plot</span>(plt, axis<span class="op">=</span><span class="cn">nothing</span>,background_color<span class="op">=:</span>transparent, size<span class="op">=</span>(<span class="fl">500</span>,<span class="fl">500</span>))</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">frame</span>(anim, plt)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a>xlim <span class="op">=</span> (<span class="fu">minimum</span>(X[<span class="fl">1</span>,<span class="op">:</span>]),<span class="fu">maximum</span>(X[<span class="fl">1</span>,<span class="op">:</span>]))</span>
+<span id="cb3-2"><a href="#cb3-2"></a>ylim <span class="op">=</span> (<span class="fu">minimum</span>(X[<span class="fl">2</span>,<span class="op">:</span>]),<span class="fu">maximum</span>(X[<span class="fl">2</span>,<span class="op">:</span>]))</span>
+<span id="cb3-3"><a href="#cb3-3"></a>anim <span class="op">=</span> <span class="fu">Animation</span>()</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="cf">for</span> N <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(data)</span>
+<span id="cb3-5"><a href="#cb3-5"></a>    la <span class="op">=</span> <span class="fu">laplace</span>(nn, λ<span class="op">=</span>λ, subset_of_weights<span class="op">=:</span>last_layer)</span>
+<span id="cb3-6"><a href="#cb3-6"></a>    <span class="fu">fit!</span>(la, <span class="bu">Iterators</span>.<span class="fu">take</span>(data,N))</span>
+<span id="cb3-7"><a href="#cb3-7"></a>    Xᵢ <span class="op">=</span> <span class="fu">reduce</span>(vcat,<span class="fu">map</span>(d <span class="op">-&gt;</span> <span class="fu">reshape</span>(d[<span class="fl">1</span>],<span class="fl">1</span>,<span class="fu">length</span>(d[<span class="fl">1</span>])),<span class="bu">Iterators</span>.<span class="fu">take</span>(data, N)))</span>
+<span id="cb3-8"><a href="#cb3-8"></a>    yᵢ <span class="op">=</span> <span class="fu">map</span>(d <span class="op">-&gt;</span> d[<span class="fl">2</span>],<span class="bu">Iterators</span>.<span class="fu">take</span>(data, N))</span>
+<span id="cb3-9"><a href="#cb3-9"></a>    plt <span class="op">=</span> <span class="fu">plot_contour</span>(Xᵢ,yᵢ,la;xlim<span class="op">=</span>xlim,ylim<span class="op">=</span>ylim,zoom<span class="op">=-</span><span class="fl">2</span>,clegend<span class="op">=</span><span class="cn">false</span>)</span>
+<span id="cb3-10"><a href="#cb3-10"></a>    plt <span class="op">=</span> <span class="fu">plot</span>(plt, axis<span class="op">=</span><span class="cn">nothing</span>,background_color<span class="op">=:</span>transparent, size<span class="op">=</span>(<span class="fl">500</span>,<span class="fl">500</span>))</span>
+<span id="cb3-11"><a href="#cb3-11"></a>    <span class="fu">frame</span>(anim, plt)</span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gif</span>(anim, <span class="st">"www/intro.gif"</span>, fps<span class="op">=</span><span class="fl">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">gif</span>(anim, <span class="st">"www/intro.gif"</span>, fps<span class="op">=</span><span class="fl">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>xlim <span class="op">=</span> (<span class="fu">minimum</span>(X[<span class="fl">1</span>,<span class="op">:</span>]),<span class="fu">maximum</span>(X[<span class="fl">1</span>,<span class="op">:</span>]))</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ylim <span class="op">=</span> (<span class="fu">minimum</span>(X[<span class="fl">2</span>,<span class="op">:</span>]),<span class="fu">maximum</span>(X[<span class="fl">2</span>,<span class="op">:</span>]))</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>anim <span class="op">=</span> <span class="fu">Animation</span>()</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> N <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(data)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    la <span class="op">=</span> <span class="fu">laplace</span>(nn, λ<span class="op">=</span>λ, subset_of_weights<span class="op">=:</span>last_layer)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fit!</span>(la, <span class="bu">Iterators</span>.<span class="fu">take</span>(data,N))</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    Xᵢ <span class="op">=</span> <span class="fu">reduce</span>(vcat,<span class="fu">map</span>(d <span class="op">-&gt;</span> <span class="fu">reshape</span>(d[<span class="fl">1</span>],<span class="fl">1</span>,<span class="fu">length</span>(d[<span class="fl">1</span>])),<span class="bu">Iterators</span>.<span class="fu">take</span>(data, N)))</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    yᵢ <span class="op">=</span> <span class="fu">map</span>(d <span class="op">-&gt;</span> d[<span class="fl">2</span>],<span class="bu">Iterators</span>.<span class="fu">take</span>(data, N))</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    plt <span class="op">=</span> <span class="fu">plot_contour</span>(Xᵢ,yᵢ,la;xlim<span class="op">=</span>xlim,ylim<span class="op">=</span>ylim,zoom<span class="op">=-</span><span class="fl">2</span>,clegend<span class="op">=</span><span class="cn">false</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    plt <span class="op">=</span> <span class="fu">plot</span>(plt, axis<span class="op">=</span><span class="cn">nothing</span>,background_color<span class="op">=:</span>transparent, size<span class="op">=</span>(<span class="fl">1200</span>,<span class="fl">400</span>))</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">frame</span>(anim, plt)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">gif</span>(anim, <span class="st">"www/medium.gif"</span>, fps<span class="op">=</span><span class="fl">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a>xlim <span class="op">=</span> (<span class="fu">minimum</span>(X[<span class="fl">1</span>,<span class="op">:</span>]),<span class="fu">maximum</span>(X[<span class="fl">1</span>,<span class="op">:</span>]))</span>
+<span id="cb5-2"><a href="#cb5-2"></a>ylim <span class="op">=</span> (<span class="fu">minimum</span>(X[<span class="fl">2</span>,<span class="op">:</span>]),<span class="fu">maximum</span>(X[<span class="fl">2</span>,<span class="op">:</span>]))</span>
+<span id="cb5-3"><a href="#cb5-3"></a>anim <span class="op">=</span> <span class="fu">Animation</span>()</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="cf">for</span> N <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(data)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>    la <span class="op">=</span> <span class="fu">laplace</span>(nn, λ<span class="op">=</span>λ, subset_of_weights<span class="op">=:</span>last_layer)</span>
+<span id="cb5-6"><a href="#cb5-6"></a>    <span class="fu">fit!</span>(la, <span class="bu">Iterators</span>.<span class="fu">take</span>(data,N))</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    Xᵢ <span class="op">=</span> <span class="fu">reduce</span>(vcat,<span class="fu">map</span>(d <span class="op">-&gt;</span> <span class="fu">reshape</span>(d[<span class="fl">1</span>],<span class="fl">1</span>,<span class="fu">length</span>(d[<span class="fl">1</span>])),<span class="bu">Iterators</span>.<span class="fu">take</span>(data, N)))</span>
+<span id="cb5-8"><a href="#cb5-8"></a>    yᵢ <span class="op">=</span> <span class="fu">map</span>(d <span class="op">-&gt;</span> d[<span class="fl">2</span>],<span class="bu">Iterators</span>.<span class="fu">take</span>(data, N))</span>
+<span id="cb5-9"><a href="#cb5-9"></a>    plt <span class="op">=</span> <span class="fu">plot_contour</span>(Xᵢ,yᵢ,la;xlim<span class="op">=</span>xlim,ylim<span class="op">=</span>ylim,zoom<span class="op">=-</span><span class="fl">2</span>,clegend<span class="op">=</span><span class="cn">false</span>)</span>
+<span id="cb5-10"><a href="#cb5-10"></a>    plt <span class="op">=</span> <span class="fu">plot</span>(plt, axis<span class="op">=</span><span class="cn">nothing</span>,background_color<span class="op">=:</span>transparent, size<span class="op">=</span>(<span class="fl">1200</span>,<span class="fl">400</span>))</span>
+<span id="cb5-11"><a href="#cb5-11"></a>    <span class="fu">frame</span>(anim, plt)</span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="cf">end</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="fu">gif</span>(anim, <span class="st">"www/medium.gif"</span>, fps<span class="op">=</span><span class="fl">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 
+
+<!-- -->
 
 </section>
 
@@ -405,6 +423,57 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -709,7 +778,96 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
-</script>
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">---</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="an">draft:</span><span class="co"> true</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="an">jupyter:</span><span class="co"> julia-1.8</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="an">execute:</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">  eval: false</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">---</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="fu">### Train model</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="in">```{julia}</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="in"># Import libraries.</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="in">using Flux, Plots, Random, Statistics, LaplaceRedux</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="in">theme(:wong)</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="in"># Number of points to generate.</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="in">xs, y = toy_data_non_linear(200)</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="in">X = hcat(xs...); # bring into tabular format</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="in">data = zip(xs,y);</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="in"># Neural network:</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="in">n_hidden = 32</span></span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="in">D = size(X)[1]</span></span>
+<span id="cb6-24"><a href="#cb6-24"></a><span class="in">nn = Chain(</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="in">    Dense(D, n_hidden, σ),</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="in">    Dense(n_hidden, 1)</span></span>
+<span id="cb6-27"><a href="#cb6-27"></a><span class="in">)  </span></span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="in">λ = 0.01</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a><span class="in">sqnorm(x) = sum(abs2, x)</span></span>
+<span id="cb6-30"><a href="#cb6-30"></a><span class="in">weight_regularization(λ=λ) = 1/2 * λ^2 * sum(sqnorm, Flux.params(nn))</span></span>
+<span id="cb6-31"><a href="#cb6-31"></a><span class="in">loss(x, y) = Flux.Losses.logitbinarycrossentropy(nn(x), y) + weight_regularization()</span></span>
+<span id="cb6-32"><a href="#cb6-32"></a></span>
+<span id="cb6-33"><a href="#cb6-33"></a><span class="in"># Training:</span></span>
+<span id="cb6-34"><a href="#cb6-34"></a><span class="in">using Flux.Optimise: update!, ADAM</span></span>
+<span id="cb6-35"><a href="#cb6-35"></a><span class="in">opt = ADAM()</span></span>
+<span id="cb6-36"><a href="#cb6-36"></a><span class="in">epochs = 200</span></span>
+<span id="cb6-37"><a href="#cb6-37"></a><span class="in">for epoch = 1:epochs</span></span>
+<span id="cb6-38"><a href="#cb6-38"></a><span class="in">  for d in data</span></span>
+<span id="cb6-39"><a href="#cb6-39"></a><span class="in">    gs = gradient(params(nn)) do</span></span>
+<span id="cb6-40"><a href="#cb6-40"></a><span class="in">      l = loss(d...)</span></span>
+<span id="cb6-41"><a href="#cb6-41"></a><span class="in">    end</span></span>
+<span id="cb6-42"><a href="#cb6-42"></a><span class="in">    update!(opt, params(nn), gs)</span></span>
+<span id="cb6-43"><a href="#cb6-43"></a><span class="in">  end</span></span>
+<span id="cb6-44"><a href="#cb6-44"></a><span class="in">end</span></span>
+<span id="cb6-45"><a href="#cb6-45"></a><span class="in">```</span></span>
+<span id="cb6-46"><a href="#cb6-46"></a></span>
+<span id="cb6-47"><a href="#cb6-47"></a><span class="fu">### Chart</span></span>
+<span id="cb6-48"><a href="#cb6-48"></a></span>
+<span id="cb6-51"><a href="#cb6-51"></a><span class="in">```{julia}</span></span>
+<span id="cb6-52"><a href="#cb6-52"></a><span class="in">Random.seed!(123)</span></span>
+<span id="cb6-53"><a href="#cb6-53"></a><span class="in">shuffled_indices = randperm(200)</span></span>
+<span id="cb6-54"><a href="#cb6-54"></a><span class="in">data = zip(xs[shuffled_indices], y[shuffled_indices]);</span></span>
+<span id="cb6-55"><a href="#cb6-55"></a><span class="in">```</span></span>
+<span id="cb6-56"><a href="#cb6-56"></a></span>
+<span id="cb6-59"><a href="#cb6-59"></a><span class="in">```{julia}</span></span>
+<span id="cb6-60"><a href="#cb6-60"></a><span class="in">xlim = (minimum(X[1,:]),maximum(X[1,:]))</span></span>
+<span id="cb6-61"><a href="#cb6-61"></a><span class="in">ylim = (minimum(X[2,:]),maximum(X[2,:]))</span></span>
+<span id="cb6-62"><a href="#cb6-62"></a><span class="in">anim = Animation()</span></span>
+<span id="cb6-63"><a href="#cb6-63"></a><span class="in">for N in 1:1:length(data)</span></span>
+<span id="cb6-64"><a href="#cb6-64"></a><span class="in">    la = laplace(nn, λ=λ, subset_of_weights=:last_layer)</span></span>
+<span id="cb6-65"><a href="#cb6-65"></a><span class="in">    fit!(la, Iterators.take(data,N))</span></span>
+<span id="cb6-66"><a href="#cb6-66"></a><span class="in">    Xᵢ = reduce(vcat,map(d -&gt; reshape(d[1],1,length(d[1])),Iterators.take(data, N)))</span></span>
+<span id="cb6-67"><a href="#cb6-67"></a><span class="in">    yᵢ = map(d -&gt; d[2],Iterators.take(data, N))</span></span>
+<span id="cb6-68"><a href="#cb6-68"></a><span class="in">    plt = plot_contour(Xᵢ,yᵢ,la;xlim=xlim,ylim=ylim,zoom=-2,clegend=false)</span></span>
+<span id="cb6-69"><a href="#cb6-69"></a><span class="in">    plt = plot(plt, axis=nothing,background_color=:transparent, size=(500,500))</span></span>
+<span id="cb6-70"><a href="#cb6-70"></a><span class="in">    frame(anim, plt)</span></span>
+<span id="cb6-71"><a href="#cb6-71"></a><span class="in">end</span></span>
+<span id="cb6-72"><a href="#cb6-72"></a><span class="in">```</span></span>
+<span id="cb6-73"><a href="#cb6-73"></a></span>
+<span id="cb6-76"><a href="#cb6-76"></a><span class="in">```{julia}</span></span>
+<span id="cb6-77"><a href="#cb6-77"></a><span class="in">gif(anim, "www/intro.gif", fps=50)</span></span>
+<span id="cb6-78"><a href="#cb6-78"></a><span class="in">```</span></span>
+<span id="cb6-79"><a href="#cb6-79"></a></span>
+<span id="cb6-82"><a href="#cb6-82"></a><span class="in">```{julia}</span></span>
+<span id="cb6-83"><a href="#cb6-83"></a><span class="in">xlim = (minimum(X[1,:]),maximum(X[1,:]))</span></span>
+<span id="cb6-84"><a href="#cb6-84"></a><span class="in">ylim = (minimum(X[2,:]),maximum(X[2,:]))</span></span>
+<span id="cb6-85"><a href="#cb6-85"></a><span class="in">anim = Animation()</span></span>
+<span id="cb6-86"><a href="#cb6-86"></a><span class="in">for N in 1:1:length(data)</span></span>
+<span id="cb6-87"><a href="#cb6-87"></a><span class="in">    la = laplace(nn, λ=λ, subset_of_weights=:last_layer)</span></span>
+<span id="cb6-88"><a href="#cb6-88"></a><span class="in">    fit!(la, Iterators.take(data,N))</span></span>
+<span id="cb6-89"><a href="#cb6-89"></a><span class="in">    Xᵢ = reduce(vcat,map(d -&gt; reshape(d[1],1,length(d[1])),Iterators.take(data, N)))</span></span>
+<span id="cb6-90"><a href="#cb6-90"></a><span class="in">    yᵢ = map(d -&gt; d[2],Iterators.take(data, N))</span></span>
+<span id="cb6-91"><a href="#cb6-91"></a><span class="in">    plt = plot_contour(Xᵢ,yᵢ,la;xlim=xlim,ylim=ylim,zoom=-2,clegend=false)</span></span>
+<span id="cb6-92"><a href="#cb6-92"></a><span class="in">    plt = plot(plt, axis=nothing,background_color=:transparent, size=(1200,400))</span></span>
+<span id="cb6-93"><a href="#cb6-93"></a><span class="in">    frame(anim, plt)</span></span>
+<span id="cb6-94"><a href="#cb6-94"></a><span class="in">end</span></span>
+<span id="cb6-95"><a href="#cb6-95"></a><span class="in">gif(anim, "www/medium.gif", fps=50)</span></span>
+<span id="cb6-96"><a href="#cb6-96"></a><span class="in">```</span></span>
+<span id="cb6-97"><a href="#cb6-97"></a></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">

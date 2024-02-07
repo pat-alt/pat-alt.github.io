@@ -13,15 +13,10 @@ categories:
   - anthropomorphism
   - large language models
 description: >-
-  This is an opinionated post that questions the idea that the finding of patterns in latent embeddings of artificial neural networks is surprising. We back this claim using examples from Economics, a discipline that does not typically anthropomorphize the models it produces. This is also a companion blog post to our recent paper on the topic.
-image: results/figures/intro.gif
+  This post questions the idea that finding patterns in latent embeddings of models is indicative of AGI or even surprising. I illustrate this using examples from Economics, a discipline that does not typically anthropomorphize the models it produces. 
+image: results/figures/intro.jpeg
 jupyter: julia-1.10
-draft: true
-format:
-  html:
-    code-fold: true
-    code-tools: true
-    code-line-numbers: true
+draft: false
 ---
 
 ```{julia}
@@ -30,13 +25,22 @@ format:
 include("$(pwd())/blog/posts/spurious-sentience/src/setup.jl")
 ```
 
+<div class="intro-gif">
+  <figure>
+    <img src="results/figures/intro.jpeg">
+    <figcaption>Photo by <a href="https://unsplash.com/@jake_oates2000?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Jake Oates</a> on <a href="https://unsplash.com/photos/steel-wool-photography-MovsEr-Bgts?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a></figcaption>
+  </figure>
+</div> 
+
+We humans are prone to seek patterns everywhere. Meaningful patterns have often proven to help us make sense of our past, navigate our presence and predict the future. Our society is so invested in finding patterns that today it seems we are more willing than ever to outsource this task to an Artificial Intelligence (AI): an omniscient oracle that leads us down the right path. 
+
+Unfortunately, history has shown time and again that patterns are double-edged swords: if we attribute the wrong meaning to them, they may lead us nowhere at all, or worse, they may lead us down dark roads. I think that the current debate around large language models (LLMs) is a prime example of this.
+
 ::: {.callout-note}
 
-This article was the original starting point for our recent paper on the topic co-authored with Andrew M. Demetriou, Antony Bartlett and Cynthia C. S. Liem. The paper is a more formal and detailed treatment of the topic and is available [here](https://arxiv.org/abs/2402.03962). While this blog post focuses in particular on practical examples of finding patterns in latent spaces, the paper includes a detailed review of social science findings that underline how prone humans are to be enticed by patterns that are not really there. For a set of slides see [here](slides.qmd).
+This article was the original starting point for our recent paper on the topic co-authored with [Andrew M. Demetriou](https://www.amdemetriou.com/), [Antony Bartlett](https://codegonewild.com/) and [Cynthia C. S. Liem](https://www.cynthialiem.com/). The paper is a more formal and detailed treatment of the topic and is available [here](https://arxiv.org/abs/2402.03962). While this blog post focuses in particular on practical examples of finding patterns in latent spaces, the paper includes a detailed review of social science findings that underline how prone humans are to be enticed by patterns that are not really there.
 
 :::
-
-We humans are prone to seek patterns everywhere. Meaningful patterns have often proven to help us make sense of our past, navigate our presence and predict the future. Our society is so invested in finding patterns that today it seems we are more willing than ever to outsource this task to an Artificial Intelligence (AI): an omniscient oracle that leads us down the right path. Unfortunately, history has shown time and again that patterns are double-edged swords: if we attribute the wrong meaning to them, they may lead us nowhere at all, or worse, they may lead us down dark roads. 
 
 ## Models are Tools, Treat Them as Such
 
@@ -105,7 +109,7 @@ To understand this better, let us go on a quick detour into economics and look a
 #|    - "Aftermath of GFC: 20 April 2009."
 #| label: fig-gfc
 #| output: true
-#| layout-ncol: 1
+#| layout-ncol: 2
 
 df = CSV.read(joinpath(BLOG_DIR, "data/ust_yields.csv"), DataFrame) |>
     x -> @pivot_longer(x, -Date) |>
@@ -124,6 +128,7 @@ plt = plot(
     plt_df.variable, plt_df.value;
     label="", color=:blue,
     xlabel="Maturity (years)", ylabel="Yield (%)",
+    size=(380, 350)
 )
 scatter!(
     plt_df.variable, plt_df.value;
@@ -139,6 +144,7 @@ plt = plot(
     plt_df.variable, plt_df.value;
     label="", color=:blue,
     xlabel="Maturity (years)", ylabel="Yield (%)",
+    size=(380, 350)
 )
 scatter!(
     plt_df.variable, plt_df.value;
@@ -152,9 +158,7 @@ Of course, US Treasuries are not the only bonds that are traded in the market. T
 
 To compute the principal components we can decompose the matrix of yields $\mathbf{Y}$ into a product of its singular vectors and values: $\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}$. I will not go into the details here, because Professor Gilbert Strang has already done a much better job than I ever could in his [Linear Algebra lectures](https://www.youtube.com/watch?v=mBcLRGuAFUk). To put this into the broader context of the article, however, let us simply refer to $\mathbf{U}$, $\Sigma$ and $\mathbf{V}^{\prime}$ as latent embeddings of the yield curve (they are latent because they are not directly observable).
 
-The top panel in @fig-pca shows the first two principal components of the yield curves of US Treasury bonds over time. Vertical stalks indicate the key dates during the onset and aftermath of the crisis, which we discussed above. For both components, we can observe some marked shifts between the two dates - but can we attribute any meaning to these shifts? It turns out we can: for comparison, the bottom panel in @fig-pca shows the average level and spread of the yield curves over time. The first principal component is strongly correlated with the level of the yield curve, while the second principal component is strongly correlated with the spread of the yield curve. To put it in AI-lingo:
-
-> The estimated latent embeddings of the yield curve are characterized by patterns observed in the data. 
+The top panel in @fig-pca shows the first two principal components of the yield curves of US Treasury bonds over time. Vertical stalks indicate the key dates during the onset and aftermath of the crisis, which we discussed above. For both components, we can observe some marked shifts between the two dates - but can we attribute any meaning to these shifts? It turns out we can: for comparison, the bottom panel in @fig-pca shows the average level and spread of the yield curves over time. The first principal component is strongly correlated with the level of the yield curve, while the second principal component is strongly correlated with the spread of the yield curve.
 
 ```{julia}
 #| output: false
@@ -279,7 +283,9 @@ plot(p_gdp, p_yields, layout=(2,1), size=(800, 600), left_margin=5mm)
 
 #### Model
 
-Let $G_t$ denote growth and $\mathbf{Y}_t$ denote the yield curve at time $t$. Then we are interested in a model for $G_t$ conditional on $\mathbf{Y}_t$. Let $\theta$ denote our model parameters then formally we are interested in maximizing the likelihood $p_{\theta}(G_t|\mathbf{Y}_t)$. To do this, we will use a simple autoencoder architecture that is illustrated in @fig-dl-model. The encoder will consist of a single fully connected hidden layer with 32 neurons and a hyperbolic tangent activation function. The bottleneck layer connecting the encoder to the decoder is a fully connected layer with 6 neurons. This is the compressed latent representation of the yield curve mentioned above. The decoder will consist of two fully connected layers each with a hyperbolic tangent activation function: the first layer will consist of 32 neurons and the second layer will have the same dimension as the input data. The output layer will consist of a single neuron with a linear activation function. The model will be trained using the mean squared error loss function and the Adam optimizer.
+Using a simple autoencoder architecture (@fig-dl-model), we let our model $g_t$ denote growth and our conditional $\mathbf{r}_t$ the matrix of aggregated Treasury yield rates at time $t$. Finally, we let $\theta$ denote our model parameters. Formally, we are interested in maximizing the likelihood $p_{\theta}(g_t|\mathbf{r}_t)$. 
+
+The encoder consists of a single fully connected hidden layer with 32 neurons and a hyperbolic tangent activation function. The bottleneck layer connecting the encoder to the decoder, is a fully connected layer with 6 neurons. The decoder consists of two fully connected layers, each with a hyperbolic tangent activation function: the first layer consists of 32 neurons and the second layer will have the same dimension as the input data. The output layer consists of a single neuron for our output variable, $g_t$. We train the model over 1,000 epochs to minimize mean squared error loss using the Adam optimizer~\citep{kingma2017adam}.
 
 ```{julia}
 #| output: true
@@ -309,6 +315,9 @@ plt = plot(model, rand(input_dim))
 display(plt)
 ```
 
+The in-sample fit of the model is shown in the left chart of @fig-dl-results, which shows actual GDP growth and fitted values from the autoencoder
+model. The model has a large number of free parameters and captures the relationship between economic growth and the yield curve reasonably well, as expected. Since our primary goal is not out-of-sample prediction accuracy but feature extraction for inference, we use all of the available data instead of reserving a hold-out set. As discussed above, we also know that the relationship between economic growth and the yield curve is characterized by two main factors: the level and the spread. Since the model itself is fully characterized by its parameters, we would expect that these two important factors are reflected somewhere in the latent parameter space. 
+
 #### Linear Probe
 
 While the loss function applies most direct pressure on layers near the final output layer, any information useful for the downstream task first needs to pass through the bottleneck layer [@alain2018understanding]. On a per-neuron basis, the pressure to distill useful representation is therefore likely maximized there. Consequently, the bottleneck layer activations seem like a natural place to start looking for compact, meaningful representations of distilled information.  I compute and extract these activations $A_t$ for all time periods $t=1,...,T$. Next, we use a linear probe to regress the observed
@@ -316,16 +325,17 @@ yield curve factors on the latent embeddings. Let $Y_t$ denote the vector contai
 
 The in-sample predictions of the probe are shown in the right chart of @fig-dl-results. Solid lines show the observed yield curve factors over time, while dashed lines show predicted values. We can observe that the latent embeddings predict the two yield curve factors reasonably well, in particular the spread. 
 
-Did the neural network now learn an intrinsic understanding of the economic relationship between growth and the yield curve? To us, that would be too big of a statement. Still, the current form of information distillation can be useful, even beyond its intended use for monitoring models. For example, an interesting idea could be to use the latent embeddings as features in a more traditional and interpretable econometric model. To demonstrate this, let us consider a simple linear regression model for GDP growth. We might be interested in understanding to what degree economic growth in the past is associated with economic growth today. As we might expect, linearly regressing economic growth on lagged growth, as in column (1) of Table \ref{tab-reg}, yields a statistically significant coefficient. However, this coefficient suffers from confounding bias since there are many other confounding variables at play, of which some may be readily observable and measurable, but others may not.
+![The left chart shows the actual GDP growth and fitted values from the autoencoder model. The right chart shows the observed average level and spread of the yield curve (solid) along with the predicted values (in-sample) from the linear probe based on the latent embeddings (dashed).](results/figures/dl.png){#fig-dl-results}
 
-I already mentioned the relationship between interest rates and economic growth. To account for that, while keeping our regression model as parsimonious as possible, we could include the level and the spread of the US Treasury yield curve as additional regressors. While this slightly changes the estimated magnitude of the coefficient on lagged growth, the coefficients on the observed level and spread are statistically insignificant (column (2) in Table \ref{tab-reg}). This indicates that these measures may be too crude to capture valuable information about the relationship between yields and economic growth. Because we have included two additional regressors with little to no predictive power, the model fit as measured by the Bayes Information Criterium (BIC) has actually deteriorated.
+Did the neural network now learn an intrinsic understanding of the economic relationship between growth and the yield curve? To me, that would be too big of a statement. Still, the current form of information distillation can be useful, even beyond its intended use for monitoring models. 
 
-Column (3) of Table \ref{tab-reg} shows the effect of instead including one of the latent embeddings that we recovered above in the regression model. In particular, we pick the one latent embedding that we have found to exhibit the most significant effect on the output variable in a separate regression of growth on all latent embeddings. The estimated coefficient on this latent factor is small in magnitude, but statistically significant. The overall model fit, as measured by the BIC has improved and the magnitude of the coefficient on lagged growth has changed quite a bit. While this is still a very incomplete toy model of economic growth, it appears that the compact latent representation we recovered can be used in order to mitigate confounding bias.
+<iframe src="results/regression.html" width="400" height="455" style='float:right;'></iframe>
 
-![The top panel shows the actual GDP growth and fitted values from the autoencoder model. The bottom panel shows the observed average level and spread of the yield curve (solid) along with the predicted values from the linear probe based on the latent embedding (dashed).](results/figures/dl.png){#fig-dl-results}
+For example, an interesting idea could be to use the latent embeddings as features in a more traditional and interpretable econometric model. To demonstrate this, let us consider a simple linear regression model for GDP growth. We might be interested in understanding to what degree economic growth in the past is associated with economic growth today. As we might expect, linearly regressing economic growth on lagged growth, as in column (1) of the table below, yields a statistically significant coefficient. However, this coefficient suffers from confounding bias since there are many other confounding variables at play, of which some may be readily observable and measurable, but others may not.
 
-<iframe src="results/regression.html" width="550" height="720"></iframe>
+I already mentioned the relationship between interest rates and economic growth. To account for that, while keeping our regression model as parsimonious as possible, we could include the level and the spread of the US Treasury yield curve as additional regressors. While this slightly changes the estimated magnitude of the coefficient on lagged growth, the coefficients on the observed level and spread are statistically insignificant (column (2) in the table). This indicates that these measures may be too crude to capture valuable information about the relationship between yields and economic growth. Because we have included two additional regressors with little to no predictive power, the model fit as measured by the Bayes Information Criterium (BIC) has actually deteriorated.
 
+Column (3) of the table shows the effect of instead including one of the latent embeddings that we recovered above in the regression model. In particular, we pick the one latent embedding that we have found to exhibit the most significant effect on the output variable in a separate regression of growth on all latent embeddings. The estimated coefficient on this latent factor is small in magnitude, but statistically significant. The overall model fit, as measured by the BIC has improved and the magnitude of the coefficient on lagged growth has changed quite a bit. While this is still a very incomplete toy model of economic growth, it appears that the compact latent representation we recovered can be used in order to mitigate confounding bias.
 
 ### LLMs for Economic Sentiment Prediction {#ex-llm}
 
@@ -380,5 +390,11 @@ Linear probes and related tools from mechanistic interpretability were proposed 
 I want to conclude this blog post just as we conclude in our paper:
 
 > "We as academic researchers carry great responsibility for how the narrative will unfold, and what claims are believed. We call upon our colleagues to be explicitly mindful of this. As attractive as it may be to beat the state-of-the-art with a grander claim, let us return to the Mertonian norms, and thus safeguard our academic legitimacy in a world that only will be eager to run with made claims."
+>
+> --- @altmeyer2024position
+
+## Acknowledgements
+
+A huge thank you to my co-authors [Andrew M. Demetriou](https://www.amdemetriou.com/), [Antony Bartlett](https://codegonewild.com/) and [Cynthia C. S. Liem](https://www.cynthialiem.com/) who are also my colleagues at TU Delft and (in the case of Cynthia) my supervisor. It's been a real pleasure working with you on this project.
 
 ## References

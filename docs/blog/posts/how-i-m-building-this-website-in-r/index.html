@@ -145,6 +145,7 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../../styles.css">
+<link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Patrick Altmeyer - How I’m building this website in R">
 <meta property="og:description" content="A small post on how I (used to!) build this website using blogdown.">
 <meta property="og:site_name" content="Patrick Altmeyer">
@@ -244,7 +245,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">How I’m building this website in R</h1>
+<div class="quarto-title-block"><div><h1 class="title">How I’m building this website in R</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
   <div class="quarto-categories">
     <div class="quarto-category">blogdown</div>
     <div class="quarto-category">rmarkdown</div>
@@ -343,7 +344,10 @@ patalt.github.io/
 <h2 class="anchored" data-anchor-id="why-all-the-trouble">Why all the trouble?</h2>
 <p>There are certainly easier ways to build a website. But if like me you do pretty much all your work in R Markdown and want to share some of it, then you will love <code>blogdown</code>. The beauty of it is that once the basic infrastructure is set up, adding content is as simple as running the following wrapper function</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>blogdown<span class="sc">::</span><span class="fu">new_post</span>(<span class="st">"Your new post"</span>, <span class="at">ext =</span> <span class="st">".Rmd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>blogdown<span class="sc">::</span><span class="fu">new_post</span>(<span class="st">"Your new post"</span>, <span class="at">ext =</span> <span class="st">".Rmd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>where the first argument is just the title of your post and the <code>ext</code> argument can be used to specify that you want to create an R Markdown document that can include code chucks. The wrapper function will automatically set up a directory for your post under <code>/post/</code>. R Studio will redirect you to the relevant <code>.Rmd</code> file that you can then fill with content. By default that folder will look roughly like this:</p>
 <pre><code>├── index.Rmd
@@ -357,49 +361,55 @@ patalt.github.io/
 <p>As you can probably tell from the code chunks above this post was created just in the way I described. So I thought I might as well go ahead with a simple coding example to add some flavour. Suppose you have built some function that you think is worth sharing with the world or simply learned something new and interesting. As a case in point, I recently had a look at the <code>Rcpp</code> package and wrote a small program in C++ to be used in R. Since R Markdown supports <code>Rcpp</code> code chunks (along with Python, bash, SQL, …) it is straight-forward to show-case that code on this website.</p>
 <p>The program can be used to simulate data from a categorical distribution. This distribution describes the possible results of a random variable that can take on one of <span class="math inline">\(K\)</span> possible categories with different probabilities. In base R we could use <code>rmultinom(n=1000,1,p=c(0.5,0.1,0.4))</code> to simulate draws from one such distribution with three different categories. Alternatively, we could write the program in C++ as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> Rcpp<span class="op">;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>NumericMatrix simCategorical<span class="op">(</span><span class="dt">int</span> n<span class="op">,</span> NumericVector p<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> k <span class="op">=</span> p<span class="op">.</span>size<span class="op">();</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  NumericMatrix mat<span class="op">(</span>k<span class="op">,</span> n<span class="op">);</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Normalise prob if necessary:</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>sum<span class="op">(</span>p<span class="op">)!=</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> p<span class="op">/</span>sum<span class="op">(</span>p<span class="op">);</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  NumericVector emp_cdf <span class="op">=</span> cumsum<span class="op">(</span>p<span class="op">);</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  NumericVector u <span class="op">=</span> Rcpp<span class="op">::</span>runif<span class="op">(</span>n<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">);</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Matrix for 1-hot-encoding:</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> n<span class="op">;</span> j<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Perform binary search:</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> l <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> r <span class="op">=</span> k<span class="op">;</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> target <span class="op">=</span> u<span class="op">[</span>j<span class="op">];</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>l <span class="op">&lt;</span> r<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>      <span class="dt">int</span> m <span class="op">=</span> floor<span class="op">((</span>l<span class="op">+</span>r<span class="op">)/</span><span class="dv">2</span><span class="op">);</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> <span class="op">(</span>emp_cdf<span class="op">[</span>m<span class="op">]</span> <span class="op">&gt;</span> target<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        r <span class="op">=</span> m<span class="op">;</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        l <span class="op">=</span> m<span class="op">+</span><span class="dv">1</span><span class="op">;</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    mat<span class="op">(</span>r<span class="op">,</span>j<span class="op">)</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> mat<span class="op">;</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource cpp number-lines code-with-copy"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">using</span> <span class="kw">namespace</span> Rcpp<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>NumericMatrix simCategorical<span class="op">(</span><span class="dt">int</span> n<span class="op">,</span> NumericVector p<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>  <span class="dt">int</span> k <span class="op">=</span> p<span class="op">.</span>size<span class="op">();</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>  NumericMatrix mat<span class="op">(</span>k<span class="op">,</span> n<span class="op">);</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>  <span class="co">// Normalise prob if necessary:</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>  <span class="cf">if</span> <span class="op">(</span>sum<span class="op">(</span>p<span class="op">)!=</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>    p <span class="op">=</span> p<span class="op">/</span>sum<span class="op">(</span>p<span class="op">);</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a>  <span class="op">}</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>  NumericVector emp_cdf <span class="op">=</span> cumsum<span class="op">(</span>p<span class="op">);</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>  NumericVector u <span class="op">=</span> Rcpp<span class="op">::</span>runif<span class="op">(</span>n<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>  <span class="co">// Matrix for 1-hot-encoding:</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a>  <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> n<span class="op">;</span> j<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a>    <span class="co">// Perform binary search:</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a>    <span class="dt">int</span> l <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a>    <span class="dt">int</span> r <span class="op">=</span> k<span class="op">;</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a>    <span class="dt">double</span> target <span class="op">=</span> u<span class="op">[</span>j<span class="op">];</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a>    <span class="cf">while</span> <span class="op">(</span>l <span class="op">&lt;</span> r<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a>      <span class="dt">int</span> m <span class="op">=</span> floor<span class="op">((</span>l<span class="op">+</span>r<span class="op">)/</span><span class="dv">2</span><span class="op">);</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a>      <span class="cf">if</span> <span class="op">(</span>emp_cdf<span class="op">[</span>m<span class="op">]</span> <span class="op">&gt;</span> target<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a>        r <span class="op">=</span> m<span class="op">;</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a>      <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a>        l <span class="op">=</span> m<span class="op">+</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a>      <span class="op">}</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a>    <span class="op">}</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a>    mat<span class="op">(</span>r<span class="op">,</span>j<span class="op">)</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-29"><a href="#cb4-29"></a>  <span class="op">}</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a>  <span class="cf">return</span> mat<span class="op">;</span></span>
+<span id="cb4-31"><a href="#cb4-31"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>In terms of performance it turns out that the simple C++ program actually does somewhat better than the base R alternative:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(microbenchmark)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.1</span>,<span class="fl">0.4</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>mb <span class="ot">&lt;-</span> <span class="fu">microbenchmark</span>(</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rmultinom"</span> <span class="ot">=</span> {<span class="fu">rmultinom</span>(n, <span class="dv">1</span>, p)},</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rcpp"</span> <span class="ot">=</span> {<span class="fu">simCategorical</span>(n, p)}</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(mb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">library</span>(microbenchmark)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.1</span>,<span class="fl">0.4</span>)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>mb <span class="ot">&lt;-</span> <span class="fu">microbenchmark</span>(</span>
+<span id="cb5-6"><a href="#cb5-6"></a>    <span class="st">"rmultinom"</span> <span class="ot">=</span> {<span class="fu">rmultinom</span>(n, <span class="dv">1</span>, p)},</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="st">"Rcpp"</span> <span class="ot">=</span> {<span class="fu">simCategorical</span>(n, p)}</span>
+<span id="cb5-8"><a href="#cb5-8"></a>)</span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="fu">autoplot</span>(mb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 </section>
 <section id="embedding-existing-work" class="level2">
@@ -410,6 +420,8 @@ patalt.github.io/
 <h2 class="anchored" data-anchor-id="resources">Resources</h2>
 <p>For more information about <code>blogdown</code> see <a href="https://bookdown.org/yihui/blogdown/">here</a>. To inspect the code that builds this website check out my <a href="https://github.com/pat-alt/patalt">GitHub repository</a>.</p>
 
+
+<!-- -->
 
 </section>
 
@@ -503,6 +515,57 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -807,7 +870,145 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
-</script>
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">---</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="an">title:</span><span class="co"> How I'm building this website in R</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="an">date:</span><span class="co"> '2021-02-02'</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="an">categories:</span><span class="co"> </span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">  - blogdown</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">  - rmarkdown</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">  - C++</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="an">description:</span><span class="co"> &gt;-</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">  A small post on how I (used to!) build this website using `blogdown`.</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">---</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a>:::{.callout-note}</span>
+<span id="cb6-13"><a href="#cb6-13"></a></span>
+<span id="cb6-14"><a href="#cb6-14"></a>**Update on Feb 20, 2022**</span>
+<span id="cb6-15"><a href="#cb6-15"></a></span>
+<span id="cb6-16"><a href="#cb6-16"></a>The post below was written when I still used <span class="in">`blogdown`</span> in combination with Hugo to build this blog. I have recently migrated the blog (along pretty much everything else I do) to <span class="co">[</span><span class="ot">quarto</span><span class="co">](https://quarto.org/)</span>. </span>
+<span id="cb6-17"><a href="#cb6-17"></a></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="at">&gt; Quarto® is an open-source scientific and technical publishing system built on Pandoc.</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a></span>
+<span id="cb6-20"><a href="#cb6-20"></a>Based on my first few experiences I would go further and say that quarto is *the only* open-source scientific and technical publishing system you'll ever need. The project is supported by RStudio and (unsurprisingly) Yihui Xie is one of the contributors. Go check it out!</span>
+<span id="cb6-21"><a href="#cb6-21"></a>:::</span>
+<span id="cb6-22"><a href="#cb6-22"></a></span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="fu">## Getting started</span></span>
+<span id="cb6-24"><a href="#cb6-24"></a></span>
+<span id="cb6-25"><a href="#cb6-25"></a>It turns out building a static website in R is remarkably easy, as long as you know your way around R Markdown. Knowledge of HTML and CSS helps, but is not strictly necessary and can be acquired along the way. My package of choice for this website is <span class="in">`blogdown`</span> by <span class="co">[</span><span class="ot">Yihui Xie</span><span class="co">](https://yihui.org/)</span> who has had a major impact on the R community through his many package contributions (<span class="in">`knitr`</span>, <span class="in">`bookdown`</span>, <span class="in">`pagedown`</span>, ...) and certainly made my life a lot easier on many occasions. </span>
+<span id="cb6-26"><a href="#cb6-26"></a></span>
+<span id="cb6-27"><a href="#cb6-27"></a>To get started just follow the instructions on <span class="in">`blogdown`</span>'s <span class="co">[</span><span class="ot">GitHub repository</span><span class="co">](https://github.com/rstudio/blogdown)</span> or keep reading here for a high-level overview. Setting up a basic website in R requires exactly two steps:</span>
+<span id="cb6-28"><a href="#cb6-28"></a></span>
+<span id="cb6-29"><a href="#cb6-29"></a><span class="ss">1. </span>Set up a local directory for the website. Let's suppose you create it here <span class="in">`~/Documents/myAwesomeWebsite`</span>.</span>
+<span id="cb6-30"><a href="#cb6-30"></a></span>
+<span id="cb6-31"><a href="#cb6-31"></a><span class="ss">2. </span>In R, navigate to the directory and simply run <span class="in">`blogdown::newsite()`</span>.</span>
+<span id="cb6-32"><a href="#cb6-32"></a></span>
+<span id="cb6-33"><a href="#cb6-33"></a>This will set up a basic template which you can develop. Changing the theme and playing with the basic structure of the website is relatively straight-forward. Personally I have so far managed to work things out based on a working knowledge of HTML and CSS that I've developed in the past through my work with R Shiny.</span>
+<span id="cb6-34"><a href="#cb6-34"></a></span>
+<span id="cb6-35"><a href="#cb6-35"></a><span class="fu">## Deploying your website</span></span>
+<span id="cb6-36"><a href="#cb6-36"></a></span>
+<span id="cb6-37"><a href="#cb6-37"></a>There are various ways to deploy your website, i.e. make it accessible to the public. This website is deployed through GitHub pages. Detailed instructions on how to do this can be found <span class="co">[</span><span class="ot">here</span><span class="co">](https://bookdown.org/yihui/blogdown/github-pages.html)</span>. Since I already had an existing local clone of my <span class="in">`pat-alt.github.io`</span> repo, I just dropped it in the source directory of the website:</span>
+<span id="cb6-38"><a href="#cb6-38"></a></span>
+<span id="cb6-39"><a href="#cb6-39"></a><span class="in">```</span></span>
+<span id="cb6-40"><a href="#cb6-40"></a><span class="in">source/</span></span>
+<span id="cb6-41"><a href="#cb6-41"></a><span class="in">│</span></span>
+<span id="cb6-42"><a href="#cb6-42"></a><span class="in">├── config.yaml</span></span>
+<span id="cb6-43"><a href="#cb6-43"></a><span class="in">├── content/</span></span>
+<span id="cb6-44"><a href="#cb6-44"></a><span class="in">├── themes/</span></span>
+<span id="cb6-45"><a href="#cb6-45"></a><span class="in">└── ...</span></span>
+<span id="cb6-46"><a href="#cb6-46"></a></span>
+<span id="cb6-47"><a href="#cb6-47"></a><span class="in">patalt.github.io/</span></span>
+<span id="cb6-48"><a href="#cb6-48"></a><span class="in">│</span></span>
+<span id="cb6-49"><a href="#cb6-49"></a><span class="in">├── .git/</span></span>
+<span id="cb6-50"><a href="#cb6-50"></a><span class="in">├── .nojekyll</span></span>
+<span id="cb6-51"><a href="#cb6-51"></a><span class="in">├── index.html</span></span>
+<span id="cb6-52"><a href="#cb6-52"></a><span class="in">├── about/</span></span>
+<span id="cb6-53"><a href="#cb6-53"></a><span class="in">└── ...</span></span>
+<span id="cb6-54"><a href="#cb6-54"></a><span class="in">```</span></span>
+<span id="cb6-55"><a href="#cb6-55"></a></span>
+<span id="cb6-56"><a href="#cb6-56"></a>After adding <span class="in">`publishDir: pat-alt.github.io`</span> to my <span class="in">`config.yaml`</span> and then running <span class="in">`blogdown::hugo_build()`</span> the website was built inside the clone. All that was left to do was to commit changes from the local clone to the <span class="in">`pat-alt.github.io`</span> remote repo. A few moments later the website was already up and running.</span>
+<span id="cb6-57"><a href="#cb6-57"></a></span>
+<span id="cb6-58"><a href="#cb6-58"></a><span class="fu">## Why all the trouble?</span></span>
+<span id="cb6-59"><a href="#cb6-59"></a></span>
+<span id="cb6-60"><a href="#cb6-60"></a>There are certainly easier ways to build a website. But if like me you do pretty much all your work in R Markdown and want to share some of it, then you will love <span class="in">`blogdown`</span>. The beauty of it is that once the basic infrastructure is set up, adding content is as simple as running the following wrapper function</span>
+<span id="cb6-61"><a href="#cb6-61"></a></span>
+<span id="cb6-62"><a href="#cb6-62"></a><span class="in">```{r, eval=FALSE}</span></span>
+<span id="cb6-63"><a href="#cb6-63"></a><span class="in">blogdown::new_post("Your new post", ext = ".Rmd")</span></span>
+<span id="cb6-64"><a href="#cb6-64"></a><span class="in">```</span></span>
+<span id="cb6-65"><a href="#cb6-65"></a></span>
+<span id="cb6-66"><a href="#cb6-66"></a>where the first argument is just the title of your post and the <span class="in">`ext`</span> argument can be used to specify that you want to create an R Markdown document that can include code chucks. The wrapper function will automatically set up a directory for your post under <span class="in">`/post/`</span>. R Studio will redirect you to the relevant <span class="in">`.Rmd`</span> file that you can then fill with content. By default that folder will look roughly like this:</span>
+<span id="cb6-67"><a href="#cb6-67"></a></span>
+<span id="cb6-68"><a href="#cb6-68"></a><span class="in">```</span></span>
+<span id="cb6-69"><a href="#cb6-69"></a><span class="in">├── index.Rmd</span></span>
+<span id="cb6-70"><a href="#cb6-70"></a><span class="in">├── index.html</span></span>
+<span id="cb6-71"><a href="#cb6-71"></a><span class="in">└── index_files</span></span>
+<span id="cb6-72"><a href="#cb6-72"></a><span class="in">    └── header-attrs</span></span>
+<span id="cb6-73"><a href="#cb6-73"></a><span class="in">        └── header-attrs.js</span></span>
+<span id="cb6-74"><a href="#cb6-74"></a><span class="in">```</span></span>
+<span id="cb6-75"><a href="#cb6-75"></a></span>
+<span id="cb6-76"><a href="#cb6-76"></a><span class="fu">## A simple coding example</span></span>
+<span id="cb6-77"><a href="#cb6-77"></a></span>
+<span id="cb6-78"><a href="#cb6-78"></a>As you can probably tell from the code chunks above this post was created just in the way I described. So I thought I might as well go ahead with a simple coding example to add some flavour. Suppose you have built some function that you think is worth sharing with the world or simply learned something new and interesting. As a case in point, I recently had a look at the <span class="in">`Rcpp`</span> package and wrote a small program in C++ to be used in R. Since R Markdown supports <span class="in">`Rcpp`</span> code chunks (along with Python, bash, SQL, ...) it is straight-forward to show-case that code on this website. </span>
+<span id="cb6-79"><a href="#cb6-79"></a></span>
+<span id="cb6-80"><a href="#cb6-80"></a>The program can be used to simulate data from a categorical distribution. This distribution describes the possible results of a random variable that can take on one of $K$ possible categories with different probabilities. In base R we could use <span class="in">`rmultinom(n=1000,1,p=c(0.5,0.1,0.4))`</span> to simulate draws from one such distribution with three different categories. Alternatively, we could write the program in C++ as follows:</span>
+<span id="cb6-81"><a href="#cb6-81"></a></span>
+<span id="cb6-84"><a href="#cb6-84"></a><span class="in">```{Rcpp}</span></span>
+<span id="cb6-85"><a href="#cb6-85"></a><span class="in">#include &lt;Rcpp.h&gt;</span></span>
+<span id="cb6-86"><a href="#cb6-86"></a><span class="in">using namespace Rcpp;</span></span>
+<span id="cb6-87"><a href="#cb6-87"></a></span>
+<span id="cb6-88"><a href="#cb6-88"></a><span class="in">// [[Rcpp::export]]</span></span>
+<span id="cb6-89"><a href="#cb6-89"></a><span class="in">NumericMatrix simCategorical(int n, NumericVector p) {</span></span>
+<span id="cb6-90"><a href="#cb6-90"></a><span class="in">  int k = p.size();</span></span>
+<span id="cb6-91"><a href="#cb6-91"></a><span class="in">  NumericMatrix mat(k, n);</span></span>
+<span id="cb6-92"><a href="#cb6-92"></a><span class="in">  // Normalise prob if necessary:</span></span>
+<span id="cb6-93"><a href="#cb6-93"></a><span class="in">  if (sum(p)!=1) {</span></span>
+<span id="cb6-94"><a href="#cb6-94"></a><span class="in">    p = p/sum(p);</span></span>
+<span id="cb6-95"><a href="#cb6-95"></a><span class="in">  }</span></span>
+<span id="cb6-96"><a href="#cb6-96"></a><span class="in">  NumericVector emp_cdf = cumsum(p);</span></span>
+<span id="cb6-97"><a href="#cb6-97"></a><span class="in">  NumericVector u = Rcpp::runif(n, 0, 1);</span></span>
+<span id="cb6-98"><a href="#cb6-98"></a><span class="in">  // Matrix for 1-hot-encoding:</span></span>
+<span id="cb6-99"><a href="#cb6-99"></a><span class="in">  for (int j = 0; j &lt; n; j++) {</span></span>
+<span id="cb6-100"><a href="#cb6-100"></a><span class="in">    // Perform binary search:</span></span>
+<span id="cb6-101"><a href="#cb6-101"></a><span class="in">    int l = 0;</span></span>
+<span id="cb6-102"><a href="#cb6-102"></a><span class="in">    int r = k;</span></span>
+<span id="cb6-103"><a href="#cb6-103"></a><span class="in">    double target = u[j];</span></span>
+<span id="cb6-104"><a href="#cb6-104"></a><span class="in">    while (l &lt; r) {</span></span>
+<span id="cb6-105"><a href="#cb6-105"></a><span class="in">      int m = floor((l+r)/2);</span></span>
+<span id="cb6-106"><a href="#cb6-106"></a><span class="in">      if (emp_cdf[m] &gt; target) {</span></span>
+<span id="cb6-107"><a href="#cb6-107"></a><span class="in">        r = m;</span></span>
+<span id="cb6-108"><a href="#cb6-108"></a><span class="in">      } else {</span></span>
+<span id="cb6-109"><a href="#cb6-109"></a><span class="in">        l = m+1;</span></span>
+<span id="cb6-110"><a href="#cb6-110"></a><span class="in">      }</span></span>
+<span id="cb6-111"><a href="#cb6-111"></a><span class="in">    }</span></span>
+<span id="cb6-112"><a href="#cb6-112"></a><span class="in">    mat(r,j) = 1;</span></span>
+<span id="cb6-113"><a href="#cb6-113"></a><span class="in">  }</span></span>
+<span id="cb6-114"><a href="#cb6-114"></a><span class="in">  return mat;</span></span>
+<span id="cb6-115"><a href="#cb6-115"></a><span class="in">}</span></span>
+<span id="cb6-116"><a href="#cb6-116"></a><span class="in">```</span></span>
+<span id="cb6-117"><a href="#cb6-117"></a></span>
+<span id="cb6-118"><a href="#cb6-118"></a>In terms of performance it turns out that the simple C++ program actually does somewhat better than the base R alternative:</span>
+<span id="cb6-119"><a href="#cb6-119"></a></span>
+<span id="cb6-120"><a href="#cb6-120"></a><span class="in">```{r, message=F, warning=F}</span></span>
+<span id="cb6-121"><a href="#cb6-121"></a><span class="in">library(microbenchmark)</span></span>
+<span id="cb6-122"><a href="#cb6-122"></a><span class="in">library(ggplot2)</span></span>
+<span id="cb6-123"><a href="#cb6-123"></a><span class="in">n &lt;- 1000</span></span>
+<span id="cb6-124"><a href="#cb6-124"></a><span class="in">p &lt;- c(0.5,0.1,0.4)</span></span>
+<span id="cb6-125"><a href="#cb6-125"></a><span class="in">mb &lt;- microbenchmark(</span></span>
+<span id="cb6-126"><a href="#cb6-126"></a><span class="in">    "rmultinom" = {rmultinom(n, 1, p)},</span></span>
+<span id="cb6-127"><a href="#cb6-127"></a><span class="in">    "Rcpp" = {simCategorical(n, p)}</span></span>
+<span id="cb6-128"><a href="#cb6-128"></a><span class="in">)</span></span>
+<span id="cb6-129"><a href="#cb6-129"></a><span class="in">autoplot(mb)</span></span>
+<span id="cb6-130"><a href="#cb6-130"></a><span class="in">```</span></span>
+<span id="cb6-131"><a href="#cb6-131"></a></span>
+<span id="cb6-132"><a href="#cb6-132"></a><span class="fu">## Embedding existing work</span></span>
+<span id="cb6-133"><a href="#cb6-133"></a></span>
+<span id="cb6-134"><a href="#cb6-134"></a>If you have some existing work that you would like to share you can just use it to overwrite the <span class="in">`index.Rmd`</span> file. <span class="in">`blogdown`</span> supports any kind of R Markdown documents so you can use all of your favourite markdown packages (<span class="in">`bookdown`</span>, <span class="in">`pagedown`</span>, ...). Just make sure to specify HTML output in the YAML header.</span>
+<span id="cb6-135"><a href="#cb6-135"></a></span>
+<span id="cb6-136"><a href="#cb6-136"></a><span class="fu">## Resources</span></span>
+<span id="cb6-137"><a href="#cb6-137"></a></span>
+<span id="cb6-138"><a href="#cb6-138"></a>For more information about <span class="in">`blogdown`</span> see <span class="co">[</span><span class="ot">here</span><span class="co">](https://bookdown.org/yihui/blogdown/)</span>. To inspect the code that builds this website check out my <span class="co">[</span><span class="ot">GitHub repository</span><span class="co">](https://github.com/pat-alt/patalt)</span>.</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">

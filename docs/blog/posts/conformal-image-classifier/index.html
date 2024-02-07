@@ -168,6 +168,7 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../../styles.css">
+<link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Patrick Altmeyer - How to Conformalize a Deep Image Classifier">
 <meta property="og:description" content="A guide demonstrating how to use ConformalPrediction.jl to conformalize a deep image classifier in a few lines of code.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/www/intro.gif">
@@ -270,7 +271,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">How to Conformalize a Deep Image Classifier</h1>
+<div class="quarto-title-block"><div><h1 class="title">How to Conformalize a Deep Image Classifier</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 <p class="subtitle lead">Conformal Prediction in Julia — Part 2</p>
   <div class="quarto-categories">
     <div class="quarto-category">conformal prediction</div>
@@ -334,21 +335,27 @@ Conformalized prediction sets for a<br>simple Deep Image Classifier.
 <h2 class="anchored" data-anchor-id="the-task-at-hand">🎯 The Task at Hand</h2>
 <p>The task at hand is to predict the labels of handwritten images of digits using the famous MNIST dataset <span class="citation" data-cites="lecun1998mnist">(<a href="#ref-lecun1998mnist" role="doc-biblioref">LeCun 1998</a>)</span>. Importing this popular machine learning dataset in Julia is made remarkably easy through <code>MLDatasets.jl</code>:</p>
 <div id="bd034eae" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MLDatasets</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="fl">1000</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Xraw, yraw <span class="op">=</span> <span class="fu">MNIST</span>(split<span class="op">=:</span>train)[<span class="op">:</span>]</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>Xraw <span class="op">=</span> Xraw[<span class="op">:</span>,<span class="op">:</span>,<span class="fl">1</span><span class="op">:</span>N]</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>yraw <span class="op">=</span> yraw[<span class="fl">1</span><span class="op">:</span>N]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">using</span> <span class="bu">MLDatasets</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>N <span class="op">=</span> <span class="fl">1000</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>Xraw, yraw <span class="op">=</span> <span class="fu">MNIST</span>(split<span class="op">=:</span>train)[<span class="op">:</span>]</span>
+<span id="cb1-4"><a href="#cb1-4"></a>Xraw <span class="op">=</span> Xraw[<span class="op">:</span>,<span class="op">:</span>,<span class="fl">1</span><span class="op">:</span>N]</span>
+<span id="cb1-5"><a href="#cb1-5"></a>yraw <span class="op">=</span> yraw[<span class="fl">1</span><span class="op">:</span>N]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p><a href="#fig-samples" class="quarto-xref">Figure&nbsp;1</a> below shows a few random samples from the training data:</p>
 <div id="cell-fig-samples" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MLJ</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Images</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> <span class="fu">map</span>(x <span class="op">-&gt;</span> <span class="fu">convert2image</span>(MNIST, x), <span class="fu">eachslice</span>(Xraw, dims<span class="op">=</span><span class="fl">3</span>))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="fu">coerce</span>(yraw, Multiclass)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="fl">10</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaic</span>(<span class="fu">rand</span>(X, n_samples)<span class="op">...</span>, ncol<span class="op">=</span>n_samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">using</span> <span class="bu">MLJ</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="im">using</span> <span class="bu">Images</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>X <span class="op">=</span> <span class="fu">map</span>(x <span class="op">-&gt;</span> <span class="fu">convert2image</span>(MNIST, x), <span class="fu">eachslice</span>(Xraw, dims<span class="op">=</span><span class="fl">3</span>))</span>
+<span id="cb2-4"><a href="#cb2-4"></a>y <span class="op">=</span> <span class="fu">coerce</span>(yraw, Multiclass)</span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a>n_samples <span class="op">=</span> <span class="fl">10</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="fu">mosaic</span>(<span class="fu">rand</span>(X, n_samples)<span class="op">...</span>, ncol<span class="op">=</span>n_samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div id="fig-samples" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored" data-execution_count="4">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-samples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -366,44 +373,56 @@ Figure&nbsp;1: Random samples from the MNIST dataset.
 <p>To model the mapping from image inputs to labels will rely on a simple Multi-Layer Perceptron (MLP). A great Julia library for Deep Learning is <code>Flux.jl</code>. But wait … doesn’t <code>ConformalPrediction.jl</code> work with models trained in <code>MLJ.jl</code>? That’s right, but fortunately there exists a <code>Flux.jl</code> interface to <code>MLJ.jl</code>, namely <code>MLJFlux.jl</code>. The interface is still in its early stages, but already very powerful and easily accessible for anyone (like myself) who is used to building Neural Networks in <code>Flux.jl</code>.</p>
 <p>In <code>Flux.jl</code>, you could build an MLP for this task as follows,</p>
 <div id="54a23c26" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Flux</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>mlp <span class="op">=</span> <span class="fu">Chain</span>(</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    Flux.flatten,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Dense</span>(<span class="fu">prod</span>((<span class="fl">28</span>,<span class="fl">28</span>)), <span class="fl">32</span>, relu),</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Dense</span>(<span class="fl">32</span>, <span class="fl">10</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">using</span> <span class="bu">Flux</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a>mlp <span class="op">=</span> <span class="fu">Chain</span>(</span>
+<span id="cb3-4"><a href="#cb3-4"></a>    Flux.flatten,</span>
+<span id="cb3-5"><a href="#cb3-5"></a>    <span class="fu">Dense</span>(<span class="fu">prod</span>((<span class="fl">28</span>,<span class="fl">28</span>)), <span class="fl">32</span>, relu),</span>
+<span id="cb3-6"><a href="#cb3-6"></a>    <span class="fu">Dense</span>(<span class="fl">32</span>, <span class="fl">10</span>)</span>
+<span id="cb3-7"><a href="#cb3-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>where <code>(28,28)</code> is just the input dimension (28x28 pixel images). Since we have ten digits, our output dimension is ten.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>We can do the exact same thing in <code>MLJFlux.jl</code> as follows,</p>
 <div id="d8c0328d" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MLJFlux</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>builder <span class="op">=</span> MLJFlux.<span class="pp">@builder</span> <span class="fu">Chain</span>(</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    Flux.flatten,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Dense</span>(<span class="fu">prod</span>(n_in), <span class="fl">32</span>, relu),</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Dense</span>(<span class="fl">32</span>, n_out)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">using</span> <span class="bu">MLJFlux</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a>builder <span class="op">=</span> MLJFlux.<span class="pp">@builder</span> <span class="fu">Chain</span>(</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    Flux.flatten,</span>
+<span id="cb4-5"><a href="#cb4-5"></a>    <span class="fu">Dense</span>(<span class="fu">prod</span>(n_in), <span class="fl">32</span>, relu),</span>
+<span id="cb4-6"><a href="#cb4-6"></a>    <span class="fu">Dense</span>(<span class="fl">32</span>, n_out)</span>
+<span id="cb4-7"><a href="#cb4-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>where here we rely on the <code>@builder</code> macro to make the transition from <code>Flux.jl</code> to <code>MLJ.jl</code> as seamless as possible. Finally, <code>MLJFlux.jl</code> already comes with a number of helper functions to define plain-vanilla networks. In this case, we will use the <code>ImageClassifier</code> with our custom builder and cross-entropy loss:</p>
 <div id="f86f7202" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ImageClassifier <span class="op">=</span> <span class="pp">@load</span> ImageClassifier</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> <span class="fu">ImageClassifier</span>(</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    builder<span class="op">=</span>builder,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    epochs<span class="op">=</span><span class="fl">10</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    loss<span class="op">=</span>Flux.crossentropy</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a>ImageClassifier <span class="op">=</span> <span class="pp">@load</span> ImageClassifier</span>
+<span id="cb5-2"><a href="#cb5-2"></a>clf <span class="op">=</span> <span class="fu">ImageClassifier</span>(</span>
+<span id="cb5-3"><a href="#cb5-3"></a>    builder<span class="op">=</span>builder,</span>
+<span id="cb5-4"><a href="#cb5-4"></a>    epochs<span class="op">=</span><span class="fl">10</span>,</span>
+<span id="cb5-5"><a href="#cb5-5"></a>    loss<span class="op">=</span>Flux.crossentropy</span>
+<span id="cb5-6"><a href="#cb5-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>The generated instance <code>clf</code> is a model (in the <code>MLJ.jl</code> sense) so from this point on we can rely on standard <code>MLJ.jl</code> workflows. For example, we can wrap our model in data to create a machine and then evaluate it on a holdout set as follows:</p>
 <div id="dde6d57d" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(clf, X, y)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">evaluate!</span>(</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    mach,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    resampling<span class="op">=</span><span class="fu">Holdout</span>(rng<span class="op">=</span><span class="fl">123</span>, fraction_train<span class="op">=</span><span class="fl">0.8</span>),</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    operation<span class="op">=</span>predict_mode,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    measure<span class="op">=</span>[accuracy]</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(clf, X, y)</span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="fu">evaluate!</span>(</span>
+<span id="cb6-4"><a href="#cb6-4"></a>    mach,</span>
+<span id="cb6-5"><a href="#cb6-5"></a>    resampling<span class="op">=</span><span class="fu">Holdout</span>(rng<span class="op">=</span><span class="fl">123</span>, fraction_train<span class="op">=</span><span class="fl">0.8</span>),</span>
+<span id="cb6-6"><a href="#cb6-6"></a>    operation<span class="op">=</span>predict_mode,</span>
+<span id="cb6-7"><a href="#cb6-7"></a>    measure<span class="op">=</span>[accuracy]</span>
+<span id="cb6-8"><a href="#cb6-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>The accuracy of our very simple model is not amazing, but good enough for the purpose of this tutorial. For each image, our MLP returns a softmax output for each possible digit: 0,1,2,3,…,9. Since each individual softmax output is valued between zero and one, <span class="math inline">\(y_k\in(0,1)\)</span>, this is commonly interpreted as a probability: <span class="math inline">\(y_k \coloneqq p(y=k|X)\)</span>. Edge cases – that is values close to either zero or one – indicate high predictive certainty. But this is only a heuristic notion of predictive uncertainty <span class="citation" data-cites="angelopoulos2021gentle">(<a href="#ref-angelopoulos2021gentle" role="doc-biblioref">A. N. Angelopoulos and Bates 2022</a>)</span>. Next, we will turn this heuristic notion of uncertainty into a rigorous one using Conformal Prediction.</p>
 </section>
@@ -411,10 +430,13 @@ Figure&nbsp;1: Random samples from the MNIST dataset.
 <h2 class="anchored" data-anchor-id="conformalizing-the-network">🔥 Conformalizing the Network</h2>
 <p>Since <code>clf</code> is a model, it is also compatible with our package: <code>ConformalPrediction.jl</code>. To conformalize our MLP, we therefore only need to call <code>conformal_model(clf)</code>. Since the generated instance <code>conf_model</code> is also just a model, we can still rely on standard <code>MLJ.jl</code> workflows. Below we first wrap it in data and then fit it. Aaaand … we’re done! Let’s look at the results in the next section.</p>
 <div id="d2083aac" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">ConformalPrediction</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(clf; method<span class="op">=:</span>simple_inductive, coverage<span class="op">=</span><span class="fl">.95</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">fit!</span>(mach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1"></a><span class="im">using</span> <span class="bu">ConformalPrediction</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(clf; method<span class="op">=:</span>simple_inductive, coverage<span class="op">=</span><span class="fl">.95</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="fu">fit!</span>(mach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 </section>
 <section id="results" class="level2">
@@ -1659,15 +1681,18 @@ Figure&nbsp;2: Conformalized predictions from an image classifier.
 <p>As for many other things, <code>ConformalPrediction.jl</code> taps into the existing functionality of <code>MLJ.jl</code> for model evaluation. In particular, we will see below how we can use the generic <code>evaluate!</code> method on our machine. To assess the correctness of our conformal predictor, we can compute the empirical coverage rate using the custom performance measure <code>emp_coverage</code>. With respect to model calibration we will look at the model’s conditional coverage. For adaptive, well-calibrated conformal models, conditional coverage is high. One general go-to measure for assessing conditional coverage is size-stratified coverage. The custom measure for this purpose is just called <code>size_stratified_coverage</code>, aliased by <code>ssc</code>.</p>
 <p>The code below implements the model evaluation using cross-validation. The Simple Inductive Classifier that we used above is not adaptive and hence the attained conditional coverage is low compared to the overall empirical coverage, which is close to <span class="math inline">\(0.95\)</span>, so in line with the desired coverage rate specified above.</p>
 <div id="553ad995" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>_eval <span class="op">=</span> <span class="fu">evaluate!</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    mach,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    resampling<span class="op">=</span><span class="fu">CV</span>(),</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    operation<span class="op">=</span>predict,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    measure<span class="op">=</span>[emp_coverage, ssc]</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(_eval)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Empirical coverage: </span><span class="sc">$</span>(<span class="fu">round</span>(_eval.measurement[<span class="fl">1</span>], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"SSC: </span><span class="sc">$</span>(<span class="fu">round</span>(_eval.measurement[<span class="fl">2</span>], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a>_eval <span class="op">=</span> <span class="fu">evaluate!</span>(</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    mach,</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    resampling<span class="op">=</span><span class="fu">CV</span>(),</span>
+<span id="cb8-4"><a href="#cb8-4"></a>    operation<span class="op">=</span>predict,</span>
+<span id="cb8-5"><a href="#cb8-5"></a>    measure<span class="op">=</span>[emp_coverage, ssc]</span>
+<span id="cb8-6"><a href="#cb8-6"></a>)</span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="fu">display</span>(_eval)</span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="fu">println</span>(<span class="st">"Empirical coverage: </span><span class="sc">$</span>(<span class="fu">round</span>(_eval.measurement[<span class="fl">1</span>], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="fu">println</span>(<span class="st">"SSC: </span><span class="sc">$</span>(<span class="fu">round</span>(_eval.measurement[<span class="fl">2</span>], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display">
 <div class="ansi-escaped-output">
 <pre>PerformanceEvaluation object with these fields:
@@ -1692,19 +1717,22 @@ SSC: 0.867</code></pre>
 </div>
 <p>We can attain higher adaptivity (SSC) when using adaptive prediction sets:</p>
 <div id="5136749f" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(clf; method<span class="op">=:</span>adaptive_inductive, coverage<span class="op">=</span><span class="fl">.95</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fit!</span>(mach)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>_eval <span class="op">=</span> <span class="fu">evaluate!</span>(</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    mach,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    resampling<span class="op">=</span><span class="fu">CV</span>(),</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    operation<span class="op">=</span>predict,</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    measure<span class="op">=</span>[emp_coverage, ssc]</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>results[<span class="op">:</span>adaptive_inductive] <span class="op">=</span> mach</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(_eval)</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Empirical coverage: </span><span class="sc">$</span>(<span class="fu">round</span>(_eval.measurement[<span class="fl">1</span>], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"SSC: </span><span class="sc">$</span>(<span class="fu">round</span>(_eval.measurement[<span class="fl">2</span>], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(clf; method<span class="op">=:</span>adaptive_inductive, coverage<span class="op">=</span><span class="fl">.95</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="fu">fit!</span>(mach)</span>
+<span id="cb10-4"><a href="#cb10-4"></a>_eval <span class="op">=</span> <span class="fu">evaluate!</span>(</span>
+<span id="cb10-5"><a href="#cb10-5"></a>    mach,</span>
+<span id="cb10-6"><a href="#cb10-6"></a>    resampling<span class="op">=</span><span class="fu">CV</span>(),</span>
+<span id="cb10-7"><a href="#cb10-7"></a>    operation<span class="op">=</span>predict,</span>
+<span id="cb10-8"><a href="#cb10-8"></a>    measure<span class="op">=</span>[emp_coverage, ssc]</span>
+<span id="cb10-9"><a href="#cb10-9"></a>)</span>
+<span id="cb10-10"><a href="#cb10-10"></a>results[<span class="op">:</span>adaptive_inductive] <span class="op">=</span> mach</span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="fu">display</span>(_eval)</span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="fu">println</span>(<span class="st">"Empirical coverage: </span><span class="sc">$</span>(<span class="fu">round</span>(_eval.measurement[<span class="fl">1</span>], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="fu">println</span>(<span class="st">"SSC: </span><span class="sc">$</span>(<span class="fu">round</span>(_eval.measurement[<span class="fl">2</span>], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display">
 <div class="ansi-escaped-output">
 <pre>PerformanceEvaluation object with these fields:
@@ -1729,12 +1757,15 @@ SSC: 0.97</code></pre>
 </div>
 <p>We can also have a look at the resulting set size for both approaches using a custom <code>Plots.jl</code> recipe (fig-setsize). In line with the above, the spread is wider for the adaptive approach, which reflects that “the procedure is effectively distinguishing between easy and hard inputs” <span class="citation" data-cites="angelopoulos2021gentle">(<a href="#ref-angelopoulos2021gentle" role="doc-biblioref">A. N. Angelopoulos and Bates 2022</a>)</span>.</p>
 <div id="cell-fig-setsize" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plt_list <span class="op">=</span> []</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (_mod, mach) <span class="kw">in</span> results</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">push!</span>(plt_list, <span class="fu">bar</span>(mach.model, mach.fitresult, X; title<span class="op">=</span><span class="fu">String</span>(_mod)))</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(plt_list<span class="op">...</span>, size<span class="op">=</span>(<span class="fl">800</span>,<span class="fl">300</span>))</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(plt_list<span class="op">...</span>, size<span class="op">=</span>(<span class="fl">800</span>,<span class="fl">300</span>),bg_colour<span class="op">=:</span>transparent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a>plt_list <span class="op">=</span> []</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="cf">for</span> (_mod, mach) <span class="kw">in</span> results</span>
+<span id="cb12-3"><a href="#cb12-3"></a>    <span class="fu">push!</span>(plt_list, <span class="fu">bar</span>(mach.model, mach.fitresult, X; title<span class="op">=</span><span class="fu">String</span>(_mod)))</span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="cf">end</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="fu">plot</span>(plt_list<span class="op">...</span>, size<span class="op">=</span>(<span class="fl">800</span>,<span class="fl">300</span>))</span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="fu">plot</span>(plt_list<span class="op">...</span>, size<span class="op">=</span>(<span class="fl">800</span>,<span class="fl">300</span>),bg_colour<span class="op">=:</span>transparent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div id="fig-setsize" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored" data-execution_count="16">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-setsize-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1855,6 +1886,8 @@ Figure&nbsp;3: Distribution of set sizes for both approaches.
 
 
 
+<!-- -->
+
 
 </section>
 
@@ -1967,6 +2000,57 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -2271,7 +2355,287 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
-</script>
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb13" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1"></a><span class="co">---</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="an">title:</span><span class="co"> How to Conformalize a Deep Image Classifier</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="an">subtitle:</span><span class="co"> Conformal Prediction in Julia --- Part 2</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="an">date:</span><span class="co"> '2022-12-05'</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="an">categories:</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">  - conformal prediction</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="co">  - uncertainty</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="co">  - Julia</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="an">description:</span><span class="co"> &gt;-</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a><span class="co">  A guide demonstrating how to use [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl) to conformalize a deep image classifier in a few lines of code.</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="an">image:</span><span class="co"> www/intro.gif</span></span>
+<span id="cb13-12"><a href="#cb13-12"></a><span class="an">jupyter:</span><span class="co"> julia-1.9</span></span>
+<span id="cb13-13"><a href="#cb13-13"></a><span class="an">draft:</span><span class="co"> false</span></span>
+<span id="cb13-14"><a href="#cb13-14"></a><span class="co">---</span></span>
+<span id="cb13-15"><a href="#cb13-15"></a></span>
+<span id="cb13-18"><a href="#cb13-18"></a><span class="in">```{julia}</span></span>
+<span id="cb13-19"><a href="#cb13-19"></a><span class="in">#| echo: false</span></span>
+<span id="cb13-20"><a href="#cb13-20"></a></span>
+<span id="cb13-21"><a href="#cb13-21"></a><span class="in">using Pkg; Pkg.activate("blog/posts/conformal-image-classifier/")</span></span>
+<span id="cb13-22"><a href="#cb13-22"></a><span class="in">using Plots</span></span>
+<span id="cb13-23"><a href="#cb13-23"></a><span class="in">using Random</span></span>
+<span id="cb13-24"><a href="#cb13-24"></a><span class="in">Random.seed!(2022)</span></span>
+<span id="cb13-25"><a href="#cb13-25"></a><span class="in">www_path = "blog/posts/conformal-image-classifier/www"</span></span>
+<span id="cb13-26"><a href="#cb13-26"></a><span class="in">```</span></span>
+<span id="cb13-27"><a href="#cb13-27"></a></span>
+<span id="cb13-28"><a href="#cb13-28"></a>&lt;div class="intro-gif"&gt;</span>
+<span id="cb13-29"><a href="#cb13-29"></a>  &lt;figure&gt;</span>
+<span id="cb13-30"><a href="#cb13-30"></a>    &lt;img src="www/intro.gif"&gt;</span>
+<span id="cb13-31"><a href="#cb13-31"></a>    &lt;figcaption&gt;Conformalized prediction sets for a&lt;br&gt;simple Deep Image Classifier.&lt;/figcaption&gt;</span>
+<span id="cb13-32"><a href="#cb13-32"></a>  &lt;/figure&gt;</span>
+<span id="cb13-33"><a href="#cb13-33"></a>&lt;/div&gt;</span>
+<span id="cb13-34"><a href="#cb13-34"></a></span>
+<span id="cb13-35"><a href="#cb13-35"></a>Deep Learning is popular and --- for some tasks like image classification --- remarkably powerful. But it is also well-known that Deep Neural Networks (DNN) can be unstable <span class="co">[</span><span class="ot">@goodfellow2014explaining</span><span class="co">]</span> and poorly calibrated. Conformal Prediction can be used to mitigate these pitfalls. </span>
+<span id="cb13-36"><a href="#cb13-36"></a></span>
+<span id="cb13-37"><a href="#cb13-37"></a>In the <span class="co">[</span><span class="ot">first part</span><span class="co">](../conformal-prediction/index.qmd)</span> of this series of posts on Conformal Prediction, we looked at the basic underlying methodology and how CP can be implemented in Julia using <span class="co">[</span><span class="ot">`ConformalPrediction.jl`</span><span class="co">](https://github.com/juliatrustworthyai/ConformalPrediction.jl)</span>. This second part of the series is a more goal-oriented how-to guide: it demonstrates how you can conformalize a deep learning image classifier built in <span class="in">`Flux.jl`</span> in just a few lines of code. </span>
+<span id="cb13-38"><a href="#cb13-38"></a></span>
+<span id="cb13-39"><a href="#cb13-39"></a>Since this is meant to be more of a hands-on article, we will avoid diving too deeply into methodological concepts. If you need more colour on this, be sure to check out the <span class="co">[</span><span class="ot">first article</span><span class="co">](../conformal-prediction/index.qmd)</span> on this topic and also @angelopoulos2021gentle. For a more formal treatment of Conformal Prediction see also @angelopoulos2022uncertainty.</span>
+<span id="cb13-40"><a href="#cb13-40"></a></span>
+<span id="cb13-41"><a href="#cb13-41"></a><span class="fu">## 🎯 The Task at Hand </span></span>
+<span id="cb13-42"><a href="#cb13-42"></a></span>
+<span id="cb13-43"><a href="#cb13-43"></a>The task at hand is to predict the labels of handwritten images of digits using the famous MNIST dataset <span class="co">[</span><span class="ot">@lecun1998mnist</span><span class="co">]</span>. Importing this popular machine learning dataset in Julia is made remarkably easy through <span class="in">`MLDatasets.jl`</span>:</span>
+<span id="cb13-44"><a href="#cb13-44"></a></span>
+<span id="cb13-47"><a href="#cb13-47"></a><span class="in">```{julia}</span></span>
+<span id="cb13-48"><a href="#cb13-48"></a><span class="in">using MLDatasets</span></span>
+<span id="cb13-49"><a href="#cb13-49"></a><span class="in">N = 1000</span></span>
+<span id="cb13-50"><a href="#cb13-50"></a><span class="in">Xraw, yraw = MNIST(split=:train)[:]</span></span>
+<span id="cb13-51"><a href="#cb13-51"></a><span class="in">Xraw = Xraw[:,:,1:N]</span></span>
+<span id="cb13-52"><a href="#cb13-52"></a><span class="in">yraw = yraw[1:N]</span></span>
+<span id="cb13-53"><a href="#cb13-53"></a><span class="in">```</span></span>
+<span id="cb13-54"><a href="#cb13-54"></a></span>
+<span id="cb13-55"><a href="#cb13-55"></a>@fig-samples below shows a few random samples from the training data:</span>
+<span id="cb13-56"><a href="#cb13-56"></a></span>
+<span id="cb13-59"><a href="#cb13-59"></a><span class="in">```{julia}</span></span>
+<span id="cb13-60"><a href="#cb13-60"></a><span class="in">#| output: true</span></span>
+<span id="cb13-61"><a href="#cb13-61"></a><span class="in">#| label: fig-samples</span></span>
+<span id="cb13-62"><a href="#cb13-62"></a><span class="in">#| fig-cap: Random samples from the MNIST dataset.</span></span>
+<span id="cb13-63"><a href="#cb13-63"></a></span>
+<span id="cb13-64"><a href="#cb13-64"></a><span class="in">using MLJ</span></span>
+<span id="cb13-65"><a href="#cb13-65"></a><span class="in">using Images</span></span>
+<span id="cb13-66"><a href="#cb13-66"></a><span class="in">X = map(x -&gt; convert2image(MNIST, x), eachslice(Xraw, dims=3))</span></span>
+<span id="cb13-67"><a href="#cb13-67"></a><span class="in">y = coerce(yraw, Multiclass)</span></span>
+<span id="cb13-68"><a href="#cb13-68"></a></span>
+<span id="cb13-69"><a href="#cb13-69"></a><span class="in">n_samples = 10</span></span>
+<span id="cb13-70"><a href="#cb13-70"></a><span class="in">mosaic(rand(X, n_samples)..., ncol=n_samples)</span></span>
+<span id="cb13-71"><a href="#cb13-71"></a><span class="in">```</span></span>
+<span id="cb13-72"><a href="#cb13-72"></a></span>
+<span id="cb13-73"><a href="#cb13-73"></a><span class="fu">## 🚧 Building the Network</span></span>
+<span id="cb13-74"><a href="#cb13-74"></a></span>
+<span id="cb13-75"><a href="#cb13-75"></a>To model the mapping from image inputs to labels will rely on a simple Multi-Layer Perceptron (MLP). A great Julia library for Deep Learning is <span class="in">`Flux.jl`</span>. But wait ... doesn't <span class="in">`ConformalPrediction.jl`</span> work with models trained in <span class="in">`MLJ.jl`</span>? That's right, but fortunately there exists a <span class="in">`Flux.jl`</span> interface to <span class="in">`MLJ.jl`</span>, namely <span class="in">`MLJFlux.jl`</span>. The interface is still in its early stages, but already very powerful and easily accessible for anyone (like myself) who is used to building Neural Networks in <span class="in">`Flux.jl`</span>. </span>
+<span id="cb13-76"><a href="#cb13-76"></a></span>
+<span id="cb13-77"><a href="#cb13-77"></a>In <span class="in">`Flux.jl`</span>, you could build an MLP for this task as follows,</span>
+<span id="cb13-78"><a href="#cb13-78"></a></span>
+<span id="cb13-81"><a href="#cb13-81"></a><span class="in">```{julia}</span></span>
+<span id="cb13-82"><a href="#cb13-82"></a><span class="in">using Flux</span></span>
+<span id="cb13-83"><a href="#cb13-83"></a></span>
+<span id="cb13-84"><a href="#cb13-84"></a><span class="in">mlp = Chain(</span></span>
+<span id="cb13-85"><a href="#cb13-85"></a><span class="in">    Flux.flatten,</span></span>
+<span id="cb13-86"><a href="#cb13-86"></a><span class="in">    Dense(prod((28,28)), 32, relu),</span></span>
+<span id="cb13-87"><a href="#cb13-87"></a><span class="in">    Dense(32, 10)</span></span>
+<span id="cb13-88"><a href="#cb13-88"></a><span class="in">)</span></span>
+<span id="cb13-89"><a href="#cb13-89"></a><span class="in">```</span></span>
+<span id="cb13-90"><a href="#cb13-90"></a></span>
+<span id="cb13-91"><a href="#cb13-91"></a>where <span class="in">`(28,28)`</span> is just the input dimension (28x28 pixel images). Since we have ten digits, our output dimension is ten.^<span class="co">[</span><span class="ot">For a full tutorial on how to build an MNIST image classifier relying solely on `Flux.jl`, check out this [tutorial](https://fluxml.ai/Flux.jl/stable/tutorials/2021-01-26-mlp/).</span><span class="co">]</span></span>
+<span id="cb13-92"><a href="#cb13-92"></a></span>
+<span id="cb13-93"><a href="#cb13-93"></a>We can do the exact same thing in <span class="in">`MLJFlux.jl`</span> as follows,</span>
+<span id="cb13-94"><a href="#cb13-94"></a></span>
+<span id="cb13-97"><a href="#cb13-97"></a><span class="in">```{julia}</span></span>
+<span id="cb13-98"><a href="#cb13-98"></a><span class="in">using MLJFlux</span></span>
+<span id="cb13-99"><a href="#cb13-99"></a></span>
+<span id="cb13-100"><a href="#cb13-100"></a><span class="in">builder = MLJFlux.@builder Chain(</span></span>
+<span id="cb13-101"><a href="#cb13-101"></a><span class="in">    Flux.flatten,</span></span>
+<span id="cb13-102"><a href="#cb13-102"></a><span class="in">    Dense(prod(n_in), 32, relu),</span></span>
+<span id="cb13-103"><a href="#cb13-103"></a><span class="in">    Dense(32, n_out)</span></span>
+<span id="cb13-104"><a href="#cb13-104"></a><span class="in">)</span></span>
+<span id="cb13-105"><a href="#cb13-105"></a><span class="in">```</span></span>
+<span id="cb13-106"><a href="#cb13-106"></a></span>
+<span id="cb13-107"><a href="#cb13-107"></a>where here we rely on the <span class="in">`@builder`</span> macro to make the transition from <span class="in">`Flux.jl`</span> to <span class="in">`MLJ.jl`</span> as seamless as possible. Finally, <span class="in">`MLJFlux.jl`</span> already comes with a number of helper functions to define plain-vanilla networks. In this case, we will use the <span class="in">`ImageClassifier`</span> with our custom builder and cross-entropy loss:</span>
+<span id="cb13-108"><a href="#cb13-108"></a></span>
+<span id="cb13-111"><a href="#cb13-111"></a><span class="in">```{julia}</span></span>
+<span id="cb13-112"><a href="#cb13-112"></a><span class="in">ImageClassifier = @load ImageClassifier</span></span>
+<span id="cb13-113"><a href="#cb13-113"></a><span class="in">clf = ImageClassifier(</span></span>
+<span id="cb13-114"><a href="#cb13-114"></a><span class="in">    builder=builder,</span></span>
+<span id="cb13-115"><a href="#cb13-115"></a><span class="in">    epochs=10,</span></span>
+<span id="cb13-116"><a href="#cb13-116"></a><span class="in">    loss=Flux.crossentropy</span></span>
+<span id="cb13-117"><a href="#cb13-117"></a><span class="in">)</span></span>
+<span id="cb13-118"><a href="#cb13-118"></a><span class="in">```</span></span>
+<span id="cb13-119"><a href="#cb13-119"></a></span>
+<span id="cb13-120"><a href="#cb13-120"></a>The generated instance <span class="in">`clf`</span> is a model (in the <span class="in">`MLJ.jl`</span> sense) so from this point on we can rely on standard <span class="in">`MLJ.jl`</span> workflows. For example, we can wrap our model in data to create a machine and then evaluate it on a holdout set as follows:</span>
+<span id="cb13-121"><a href="#cb13-121"></a></span>
+<span id="cb13-124"><a href="#cb13-124"></a><span class="in">```{julia}</span></span>
+<span id="cb13-125"><a href="#cb13-125"></a><span class="in">mach = machine(clf, X, y)</span></span>
+<span id="cb13-126"><a href="#cb13-126"></a></span>
+<span id="cb13-127"><a href="#cb13-127"></a><span class="in">evaluate!(</span></span>
+<span id="cb13-128"><a href="#cb13-128"></a><span class="in">    mach,</span></span>
+<span id="cb13-129"><a href="#cb13-129"></a><span class="in">    resampling=Holdout(rng=123, fraction_train=0.8),</span></span>
+<span id="cb13-130"><a href="#cb13-130"></a><span class="in">    operation=predict_mode,</span></span>
+<span id="cb13-131"><a href="#cb13-131"></a><span class="in">    measure=[accuracy]</span></span>
+<span id="cb13-132"><a href="#cb13-132"></a><span class="in">)</span></span>
+<span id="cb13-133"><a href="#cb13-133"></a><span class="in">```</span></span>
+<span id="cb13-134"><a href="#cb13-134"></a></span>
+<span id="cb13-135"><a href="#cb13-135"></a>The accuracy of our very simple model is not amazing, but good enough for the purpose of this tutorial. For each image, our MLP returns a softmax output for each possible digit: 0,1,2,3,...,9. Since each individual softmax output is valued between zero and one, $y_k\in(0,1)$, this is commonly interpreted as a probability: $y_k \coloneqq p(y=k|X)$. Edge cases -- that is values close to either zero or one -- indicate high predictive certainty. But this is only a heuristic notion of predictive uncertainty <span class="co">[</span><span class="ot">@angelopoulos2021gentle</span><span class="co">]</span>. Next, we will turn this heuristic notion of uncertainty into a rigorous one using Conformal Prediction.</span>
+<span id="cb13-136"><a href="#cb13-136"></a></span>
+<span id="cb13-137"><a href="#cb13-137"></a><span class="fu">## 🔥 Conformalizing the Network</span></span>
+<span id="cb13-138"><a href="#cb13-138"></a></span>
+<span id="cb13-139"><a href="#cb13-139"></a>Since <span class="in">`clf`</span> is a model, it is also compatible with our package: <span class="in">`ConformalPrediction.jl`</span>. To conformalize our MLP, we therefore only need to call <span class="in">`conformal_model(clf)`</span>. Since the generated instance <span class="in">`conf_model`</span> is also just a model, we can still rely on standard <span class="in">`MLJ.jl`</span> workflows. Below we first wrap it in data and then fit it. Aaaand ... we're done! Let's look at the results in the next section.</span>
+<span id="cb13-140"><a href="#cb13-140"></a></span>
+<span id="cb13-143"><a href="#cb13-143"></a><span class="in">```{julia}</span></span>
+<span id="cb13-144"><a href="#cb13-144"></a><span class="in">using ConformalPrediction</span></span>
+<span id="cb13-145"><a href="#cb13-145"></a><span class="in">conf_model = conformal_model(clf; method=:simple_inductive, coverage=.95)</span></span>
+<span id="cb13-146"><a href="#cb13-146"></a><span class="in">mach = machine(conf_model, X, y)</span></span>
+<span id="cb13-147"><a href="#cb13-147"></a><span class="in">fit!(mach)</span></span>
+<span id="cb13-148"><a href="#cb13-148"></a><span class="in">```</span></span>
+<span id="cb13-149"><a href="#cb13-149"></a></span>
+<span id="cb13-150"><a href="#cb13-150"></a><span class="fu">## 📊 Results</span></span>
+<span id="cb13-151"><a href="#cb13-151"></a></span>
+<span id="cb13-154"><a href="#cb13-154"></a><span class="in">```{julia}</span></span>
+<span id="cb13-155"><a href="#cb13-155"></a><span class="in">#| echo: false</span></span>
+<span id="cb13-156"><a href="#cb13-156"></a></span>
+<span id="cb13-157"><a href="#cb13-157"></a><span class="in">using Plots</span></span>
+<span id="cb13-158"><a href="#cb13-158"></a><span class="in">using Plots.PlotMeasures</span></span>
+<span id="cb13-159"><a href="#cb13-159"></a><span class="in">using StatsBase: sample</span></span>
+<span id="cb13-160"><a href="#cb13-160"></a></span>
+<span id="cb13-161"><a href="#cb13-161"></a><span class="in">cw = [1, 253, 253] |&gt; (x -&gt; x./sum(x))</span></span>
+<span id="cb13-162"><a href="#cb13-162"></a><span class="in">function plot_results(mach, X, y; set_size=1, n_samples=3, c_weights=cw, c_inv=0, kwargs...)</span></span>
+<span id="cb13-163"><a href="#cb13-163"></a></span>
+<span id="cb13-164"><a href="#cb13-164"></a><span class="in">    # Choose images:</span></span>
+<span id="cb13-165"><a href="#cb13-165"></a><span class="in">    set_sizes = ConformalPrediction.set_size.(predict(mach, X))</span></span>
+<span id="cb13-166"><a href="#cb13-166"></a><span class="in">    candidates = findall(set_sizes .== set_size)</span></span>
+<span id="cb13-167"><a href="#cb13-167"></a><span class="in">    @assert length(candidates) &gt; 0 "No sets of size $set_size."</span></span>
+<span id="cb13-168"><a href="#cb13-168"></a><span class="in">    chosen = sample(candidates, n_samples, replace=false)</span></span>
+<span id="cb13-169"><a href="#cb13-169"></a></span>
+<span id="cb13-170"><a href="#cb13-170"></a><span class="in">    plt_lst = []</span></span>
+<span id="cb13-171"><a href="#cb13-171"></a><span class="in">    for i in chosen</span></span>
+<span id="cb13-172"><a href="#cb13-172"></a><span class="in">        ytrue = y[i]</span></span>
+<span id="cb13-173"><a href="#cb13-173"></a><span class="in">        x = X[i]</span></span>
+<span id="cb13-174"><a href="#cb13-174"></a><span class="in">        ŷ = predict(mach, x)[1]</span></span>
+<span id="cb13-175"><a href="#cb13-175"></a><span class="in">        title = join(["$(Int(key)-1) ($(Int(round(val*100)))%)" for (key, val) in ŷ.prob_given_ref], ", ")</span></span>
+<span id="cb13-176"><a href="#cb13-176"></a><span class="in">        title = "C={$title}\nytrue=$ytrue"</span></span>
+<span id="cb13-177"><a href="#cb13-177"></a><span class="in">        # Colouring:</span></span>
+<span id="cb13-178"><a href="#cb13-178"></a><span class="in">        x = abs.(c_inv .- (c_weights .* channelview(RGB.(x))))</span></span>
+<span id="cb13-179"><a href="#cb13-179"></a><span class="in">        prominent_col = median(x, dims=(2,3))</span></span>
+<span id="cb13-180"><a href="#cb13-180"></a><span class="in">        x = colorview(RGB, eachslice(x, dims=1)...)</span></span>
+<span id="cb13-181"><a href="#cb13-181"></a><span class="in">        bg_color = RGB(prominent_col...)            # most common image colour</span></span>
+<span id="cb13-182"><a href="#cb13-182"></a><span class="in">        plt = plot(x; axis=([],false), bottom_margin=10mm, bg_color=bg_color, bg_color_inside=bg_color, kwargs...)</span></span>
+<span id="cb13-183"><a href="#cb13-183"></a><span class="in">        ann_colour = RGB((1 .- prominent_col)...)   # opposite of background</span></span>
+<span id="cb13-184"><a href="#cb13-184"></a><span class="in">        annotate!(plt, (14, 31, (title, 14-set_size), ann_colour))</span></span>
+<span id="cb13-185"><a href="#cb13-185"></a><span class="in">        push!(plt_lst, plt)</span></span>
+<span id="cb13-186"><a href="#cb13-186"></a><span class="in">    end</span></span>
+<span id="cb13-187"><a href="#cb13-187"></a></span>
+<span id="cb13-188"><a href="#cb13-188"></a><span class="in">    plot(plt_lst..., size=(n_samples*300, 300), layout=(1,n_samples))</span></span>
+<span id="cb13-189"><a href="#cb13-189"></a><span class="in">end</span></span>
+<span id="cb13-190"><a href="#cb13-190"></a><span class="in">```</span></span>
+<span id="cb13-191"><a href="#cb13-191"></a></span>
+<span id="cb13-192"><a href="#cb13-192"></a>@fig-plots below presents the results. @fig-plots-1 displays highly certain predictions, now defined in the rigorous sense of Conformal Prediction: in each case, the conformal set (just beneath the image) includes only one label. </span>
+<span id="cb13-193"><a href="#cb13-193"></a></span>
+<span id="cb13-194"><a href="#cb13-194"></a>@fig-plots-2 and @fig-plots-3 display increasingly uncertain predictions of set size two and three, respectively. They demonstrate that CP is well equipped to deal with samples characterized by high aleatoric uncertainty: digits four (4), seven (7) and nine (9) share certain similarities. So do digits five (5) and six (6) as well as three (3) and eight (8). These may be hard to distinguish from each other even after seeing many examples (and even for a human). It is therefore unsurprising to see that these digits often end up together in conformal sets. </span>
+<span id="cb13-195"><a href="#cb13-195"></a></span>
+<span id="cb13-198"><a href="#cb13-198"></a><span class="in">```{julia}</span></span>
+<span id="cb13-199"><a href="#cb13-199"></a><span class="in">#| output: true</span></span>
+<span id="cb13-200"><a href="#cb13-200"></a><span class="in">#| label: fig-plots</span></span>
+<span id="cb13-201"><a href="#cb13-201"></a><span class="in">#| fig-cap: Conformalized predictions from an image classifier.</span></span>
+<span id="cb13-202"><a href="#cb13-202"></a><span class="in">#| fig-subcap:</span></span>
+<span id="cb13-203"><a href="#cb13-203"></a><span class="in">#|   - "Randomly selected prediction sets of size $|C|=1$."</span></span>
+<span id="cb13-204"><a href="#cb13-204"></a><span class="in">#|   - "Randomly selected prediction sets of size $|C|=2$."</span></span>
+<span id="cb13-205"><a href="#cb13-205"></a><span class="in">#|   - "Randomly selected prediction sets of size $|C|=3$."</span></span>
+<span id="cb13-206"><a href="#cb13-206"></a><span class="in">#| layout-nrow: 3</span></span>
+<span id="cb13-207"><a href="#cb13-207"></a><span class="in">#| echo: false</span></span>
+<span id="cb13-208"><a href="#cb13-208"></a></span>
+<span id="cb13-209"><a href="#cb13-209"></a><span class="in">display(plot_results(mach, X, y; set_size=1))</span></span>
+<span id="cb13-210"><a href="#cb13-210"></a><span class="in">display(plot_results(mach, X, y; set_size=2))</span></span>
+<span id="cb13-211"><a href="#cb13-211"></a><span class="in">display(plot_results(mach, X, y; set_size=3))</span></span>
+<span id="cb13-212"><a href="#cb13-212"></a><span class="in">```</span></span>
+<span id="cb13-213"><a href="#cb13-213"></a></span>
+<span id="cb13-216"><a href="#cb13-216"></a><span class="in">```{julia}</span></span>
+<span id="cb13-217"><a href="#cb13-217"></a><span class="in">#| echo: false</span></span>
+<span id="cb13-218"><a href="#cb13-218"></a><span class="in">#| output: false</span></span>
+<span id="cb13-219"><a href="#cb13-219"></a></span>
+<span id="cb13-220"><a href="#cb13-220"></a><span class="in">n_total = 10</span></span>
+<span id="cb13-221"><a href="#cb13-221"></a></span>
+<span id="cb13-222"><a href="#cb13-222"></a><span class="in">anim = @animate for i in repeat([1,2,3],n_total)</span></span>
+<span id="cb13-223"><a href="#cb13-223"></a><span class="in">    plot_results(mach, X, y; set_size=i, n_samples=1, c_weights=rand(3), c_inv=rand([0,1],3))</span></span>
+<span id="cb13-224"><a href="#cb13-224"></a><span class="in">end</span></span>
+<span id="cb13-225"><a href="#cb13-225"></a><span class="in">gif(anim, joinpath(www_path, "intro.gif"), fps=1)</span></span>
+<span id="cb13-226"><a href="#cb13-226"></a></span>
+<span id="cb13-227"><a href="#cb13-227"></a><span class="in">anim = @animate for i in repeat([1,2,3],n_total)</span></span>
+<span id="cb13-228"><a href="#cb13-228"></a><span class="in">    plot_results(mach, X, y; set_size=i, n_samples=3, c_weights=rand(3), c_inv=rand([0,1],3))</span></span>
+<span id="cb13-229"><a href="#cb13-229"></a><span class="in">end</span></span>
+<span id="cb13-230"><a href="#cb13-230"></a><span class="in">gif(anim, joinpath(www_path, "medium.gif"), fps=1)</span></span>
+<span id="cb13-231"><a href="#cb13-231"></a><span class="in">```</span></span>
+<span id="cb13-232"><a href="#cb13-232"></a></span>
+<span id="cb13-233"><a href="#cb13-233"></a><span class="fu">## 🧐 Evaluation</span></span>
+<span id="cb13-234"><a href="#cb13-234"></a></span>
+<span id="cb13-235"><a href="#cb13-235"></a>To evaluate the performance of conformal models, specific performance measures can be used to assess if the model is correctly specified and well-calibrated <span class="co">[</span><span class="ot">@angelopoulos2021gentle</span><span class="co">]</span>. We will look at this in some more detail in another post in the future. For now, just be aware that these measures are already available in <span class="in">`ConformalPrediction.jl`</span> and we will briefly showcase them here.</span>
+<span id="cb13-236"><a href="#cb13-236"></a></span>
+<span id="cb13-237"><a href="#cb13-237"></a>As for many other things, <span class="in">`ConformalPrediction.jl`</span> taps into the existing functionality of <span class="in">`MLJ.jl`</span> for model evaluation. In particular, we will see below how we can use the generic <span class="in">`evaluate!`</span> method on our machine. To assess the correctness of our conformal predictor, we can compute the empirical coverage rate using the custom performance measure <span class="in">`emp_coverage`</span>. With respect to model calibration we will look at the model's conditional coverage. For adaptive, well-calibrated conformal models, conditional coverage is high. One general go-to measure for assessing conditional coverage is size-stratified coverage. The custom measure for this purpose is just called <span class="in">`size_stratified_coverage`</span>, aliased by <span class="in">`ssc`</span>. </span>
+<span id="cb13-238"><a href="#cb13-238"></a></span>
+<span id="cb13-239"><a href="#cb13-239"></a>The code below implements the model evaluation using cross-validation. The Simple Inductive Classifier that we used above is not adaptive and hence the attained conditional coverage is low compared to the overall empirical coverage, which is close to $0.95$, so in line with the desired coverage rate specified above.</span>
+<span id="cb13-240"><a href="#cb13-240"></a></span>
+<span id="cb13-243"><a href="#cb13-243"></a><span class="in">```{julia}</span></span>
+<span id="cb13-244"><a href="#cb13-244"></a><span class="in">#| output: true</span></span>
+<span id="cb13-245"><a href="#cb13-245"></a></span>
+<span id="cb13-246"><a href="#cb13-246"></a><span class="in">_eval = evaluate!(</span></span>
+<span id="cb13-247"><a href="#cb13-247"></a><span class="in">    mach,</span></span>
+<span id="cb13-248"><a href="#cb13-248"></a><span class="in">    resampling=CV(),</span></span>
+<span id="cb13-249"><a href="#cb13-249"></a><span class="in">    operation=predict,</span></span>
+<span id="cb13-250"><a href="#cb13-250"></a><span class="in">    measure=[emp_coverage, ssc]</span></span>
+<span id="cb13-251"><a href="#cb13-251"></a><span class="in">)</span></span>
+<span id="cb13-252"><a href="#cb13-252"></a><span class="in">display(_eval)</span></span>
+<span id="cb13-253"><a href="#cb13-253"></a><span class="in">println("Empirical coverage: $(round(_eval.measurement[1], digits=3))")</span></span>
+<span id="cb13-254"><a href="#cb13-254"></a><span class="in">println("SSC: $(round(_eval.measurement[2], digits=3))")</span></span>
+<span id="cb13-255"><a href="#cb13-255"></a><span class="in">```</span></span>
+<span id="cb13-256"><a href="#cb13-256"></a></span>
+<span id="cb13-259"><a href="#cb13-259"></a><span class="in">```{julia}</span></span>
+<span id="cb13-260"><a href="#cb13-260"></a><span class="in">#| echo: false</span></span>
+<span id="cb13-261"><a href="#cb13-261"></a></span>
+<span id="cb13-262"><a href="#cb13-262"></a><span class="in">results = Dict{Symbol,Any}(:simple_inductive =&gt; mach) # store results</span></span>
+<span id="cb13-263"><a href="#cb13-263"></a><span class="in">```</span></span>
+<span id="cb13-264"><a href="#cb13-264"></a></span>
+<span id="cb13-265"><a href="#cb13-265"></a>We can attain higher adaptivity (SSC) when using adaptive prediction sets:</span>
+<span id="cb13-266"><a href="#cb13-266"></a></span>
+<span id="cb13-269"><a href="#cb13-269"></a><span class="in">```{julia}</span></span>
+<span id="cb13-270"><a href="#cb13-270"></a><span class="in">#| output: true</span></span>
+<span id="cb13-271"><a href="#cb13-271"></a></span>
+<span id="cb13-272"><a href="#cb13-272"></a><span class="in">conf_model = conformal_model(clf; method=:adaptive_inductive, coverage=.95)</span></span>
+<span id="cb13-273"><a href="#cb13-273"></a><span class="in">mach = machine(conf_model, X, y)</span></span>
+<span id="cb13-274"><a href="#cb13-274"></a><span class="in">fit!(mach)</span></span>
+<span id="cb13-275"><a href="#cb13-275"></a><span class="in">_eval = evaluate!(</span></span>
+<span id="cb13-276"><a href="#cb13-276"></a><span class="in">    mach,</span></span>
+<span id="cb13-277"><a href="#cb13-277"></a><span class="in">    resampling=CV(),</span></span>
+<span id="cb13-278"><a href="#cb13-278"></a><span class="in">    operation=predict,</span></span>
+<span id="cb13-279"><a href="#cb13-279"></a><span class="in">    measure=[emp_coverage, ssc]</span></span>
+<span id="cb13-280"><a href="#cb13-280"></a><span class="in">)</span></span>
+<span id="cb13-281"><a href="#cb13-281"></a><span class="in">results[:adaptive_inductive] = mach</span></span>
+<span id="cb13-282"><a href="#cb13-282"></a><span class="in">display(_eval)</span></span>
+<span id="cb13-283"><a href="#cb13-283"></a><span class="in">println("Empirical coverage: $(round(_eval.measurement[1], digits=3))")</span></span>
+<span id="cb13-284"><a href="#cb13-284"></a><span class="in">println("SSC: $(round(_eval.measurement[2], digits=3))")</span></span>
+<span id="cb13-285"><a href="#cb13-285"></a><span class="in">```</span></span>
+<span id="cb13-286"><a href="#cb13-286"></a></span>
+<span id="cb13-287"><a href="#cb13-287"></a>We can also have a look at the resulting set size for both approaches using a custom <span class="in">`Plots.jl`</span> recipe (fig-setsize). In line with the above, the spread is wider for the adaptive approach, which reflects that "the procedure is effectively distinguishing between easy and hard inputs" <span class="co">[</span><span class="ot">@angelopoulos2021gentle</span><span class="co">]</span>.</span>
+<span id="cb13-288"><a href="#cb13-288"></a></span>
+<span id="cb13-291"><a href="#cb13-291"></a><span class="in">```{julia}</span></span>
+<span id="cb13-292"><a href="#cb13-292"></a><span class="in">#| output: true</span></span>
+<span id="cb13-293"><a href="#cb13-293"></a><span class="in">#| label: fig-setsize</span></span>
+<span id="cb13-294"><a href="#cb13-294"></a><span class="in">#| fig-cap: "Distribution of set sizes for both approaches."</span></span>
+<span id="cb13-295"><a href="#cb13-295"></a></span>
+<span id="cb13-296"><a href="#cb13-296"></a><span class="in">plt_list = []</span></span>
+<span id="cb13-297"><a href="#cb13-297"></a><span class="in">for (_mod, mach) in results</span></span>
+<span id="cb13-298"><a href="#cb13-298"></a><span class="in">    push!(plt_list, bar(mach.model, mach.fitresult, X; title=String(_mod)))</span></span>
+<span id="cb13-299"><a href="#cb13-299"></a><span class="in">end</span></span>
+<span id="cb13-300"><a href="#cb13-300"></a><span class="in">plot(plt_list..., size=(800,300))</span></span>
+<span id="cb13-301"><a href="#cb13-301"></a><span class="in">plot(plt_list..., size=(800,300),bg_colour=:transparent)</span></span>
+<span id="cb13-302"><a href="#cb13-302"></a><span class="in">```</span></span>
+<span id="cb13-303"><a href="#cb13-303"></a></span>
+<span id="cb13-304"><a href="#cb13-304"></a><span class="fu">## 🔁 Recap</span></span>
+<span id="cb13-305"><a href="#cb13-305"></a></span>
+<span id="cb13-306"><a href="#cb13-306"></a>In this short guide, we have seen how easy it is to conformalize a deep learning image classifier in Julia using <span class="in">`ConformalPrediction.jl`</span>. Almost any deep neural network trained in <span class="in">`Flux.jl`</span> is compatible with <span class="in">`MLJ.jl`</span> and can therefore be conformalized in just a few lines of code. This makes it remarkably easy to move uncertainty heuristics to rigorous predictive uncertainty estimates. We have also seen a sneak peek at the performance evaluation of conformal predictors. Stay tuned for more!</span>
+<span id="cb13-307"><a href="#cb13-307"></a></span>
+<span id="cb13-308"><a href="#cb13-308"></a><span class="fu">## 🎓 References</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
