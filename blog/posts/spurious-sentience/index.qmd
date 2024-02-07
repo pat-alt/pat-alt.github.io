@@ -1,27 +1,19 @@
 ---
-title: Spurious Sentience
+title: Spurious Sparks of AGI
 subtitle: On the Unsurprising Finding of Patterns in Latent Spaces
 author: 
   - name: "Patrick Altmeyer"
     affiliation:
       - id: delft
         name: Delft University of Technology
-#   - name: "Anthony Bartlett"
-#     affiliation:
-#       - ref: delft
-#   - name: "Andrew M. Demetriou"
-#     affiliation:
-#       - ref: delft
-#   - name: "Cynthia C. S. Liem"
-#     affiliation:
-#       - ref: delft
-date: '2024-01-10'
+date: '2024-02-07'
 categories:
-  - spurious sentience
-  - artificial intelligence
-  - llm
+  - spurious sparks
+  - artificial general intelligence
+  - anthropomorphism
+  - large language models
 description: >-
-  This is an opinionated post that questions the idea that the finding of patterns in latent embeddings of artificial neural networks is surprising. 
+  This is an opinionated post that questions the idea that the finding of patterns in latent embeddings of artificial neural networks is surprising. We back this claim using examples from Economics, a discipline that does not typically anthropomorphize the models it produces. This is also a companion blog post to our recent paper on the topic.
 image: results/figures/intro.gif
 jupyter: julia-1.10
 draft: true
@@ -30,10 +22,6 @@ format:
     code-fold: true
     code-tools: true
     code-line-numbers: true
-  pdf:
-    keep-tex: true
-    execute: 
-      echo: false
 ---
 
 ```{julia}
@@ -42,26 +30,67 @@ format:
 include("$(pwd())/blog/posts/spurious-sentience/src/setup.jl")
 ```
 
-*For the slides see [here](slides.qmd).*
+::: {.callout-note}
 
-We humans are prone to seek patterns everywhere. Meaningful patterns have often proven to help us make sense of our past, navigate our presence and predict the future. Our society is so invested in finding patterns that today it seems we are more willing than ever to outsource this task to an Artificial Intelligence (AI): an omniscient oracle that leads us down the right path. Unfortunately, history has shown time and again that patterns are double-edged swords: if we attribute the wrong meaning to them, they may lead us nowhere at all, or worse, they may lead us down the dark roads. 
+This article was the original starting point for our recent paper on the topic co-authored with Andrew M. Demetriou, Antony Bartlett and Cynthia C. S. Liem. The paper is a more formal and detailed treatment of the topic and is available [here](https://arxiv.org/abs/2402.03962). While this blog post focuses in particular on practical examples of finding patterns in latent spaces, the paper includes a detailed review of social science findings that underline how prone humans are to be enticed by patterns that are not really there. For a set of slides see [here](slides.qmd).
 
-In statistics, misleading patterns are referred to as **spurious relationships**: purely associational relationships between two or more variables that are not causally related to each other at all. The world is full of these and as good as we as species may be at recognizing patterns, we typically have a much harder time discerning spurious relationships from causal ones. Despite new and increased momentum in scientific fields concerned with causal inference and discovery, I am also willing to go out on a limb and claim that we are not about to finally reach the top of Judea Pearl's Causal Ladder through the means of Causal AI.
+:::
 
-I agree with the premise that in a world full of spurious relationships, causal reasoning is our only remedy. But I am very skeptical of claims that AI will magically provide that remedy. This leads me to the title and topic of this post: **spurious sentience**---patterns exhibited by artificial intelligence that may hint at sentience but are just reflections of the data used to train them. The article is written in response to a recent paper that extracts a 'world model' from Llama 2---a popular open-source large language model (LLM)---using mechanistic interpretability [@gurnee2023language]. In light of these findings, one of the authors, Max Tegmark, was quick to claim on [social media](https://x.com/tegmark/status/1709572469978231063?s=20) that "No, LLM's aren't mere stochastic parrots [...]". 
+We humans are prone to seek patterns everywhere. Meaningful patterns have often proven to help us make sense of our past, navigate our presence and predict the future. Our society is so invested in finding patterns that today it seems we are more willing than ever to outsource this task to an Artificial Intelligence (AI): an omniscient oracle that leads us down the right path. Unfortunately, history has shown time and again that patterns are double-edged swords: if we attribute the wrong meaning to them, they may lead us nowhere at all, or worse, they may lead us down dark roads. 
 
-Since this is an opinionated post, I feel that I should start with a few disclaimers:
+## Models are Tools, Treat Them as Such
 
-1. I take no issue with the methodological ideas that form the foundation of the article in question: on the contrary, I think that mechanistic interpretability is an interesting and important toolkit that can help us better understand the intrinsics and behavior of opaque artificial intelligence.
-2. The visualizations are intriguing, the code is open-sourced and the findings are interesting. 
-3. I am surprised that people are surprised by the findings: if we agree that LLMs exhibit strong capabilities that can only be connected to the patterns observed in the data they were trained with, then where exactly should we expect this information to be stored if not in the parameters of the model?^[I would be very surprised---concerned even---if our search for patterns in latent spaces of capable LLMs revealed nothing at all.]
+In statistics, misleading patterns are referred to as **spurious relationships**: purely associational relationships between two or more variables that are not causally related to each other at all. The world is full of these and as good as we as species may be at recognizing patterns, we typically have a much harder time discerning spurious relationships from causal ones. Despite new and increased momentum in scientific fields concerned with causal inference and discovery, I am also willing to go out on a limb and claim that we are not about to finally reach the top of Judea Pearl's Causal Ladder through the means of Causal AI (although I do think it is a step in the right direction).
+
+I agree with the premise that in a world full of spurious relationships, causal reasoning is our only remedy. But I am very skeptical of claims that AI will magically provide that remedy. This leads me to the title and topic of this post: **spurious sparks of AGI**---patterns exhibited by AI that may hint at Artificial General Intelligence (AGI) but are really just reflections of the associational patterns found in the data used to train them. The article is written in response to a recent paper that finds a 'world model' from Llama-2---a popular open-source large language model (LLM)---using mechanistic interpretability [@gurnee2023language]. In light of these findings, one of the authors, Max Tegmark, was quick to claim on [social media](https://x.com/tegmark/status/1709572469978231063?s=20) that "No, LLM's aren't mere stochastic parrots [...]". 
+
+Since this is an opinionated post, I feel that I should start by laying out my position on the paper and related claims. 
+
+::: {.callout-important}
+
+## Position
+
+1. I take no issue with the methodological ideas that form the foundation of the article in question. On the contrary, I think that mechanistic interpretability is an interesting and important toolkit that can help us better understand the intrinsics and behavior of opaque artificial intelligence.
+2. Linear probes are straightforward, the visualizations in @gurnee2023language are intriguing, the code is open-sourced and the findings are interesting. 
+3. I am surprised that people are surprised by the findings: if we agree that LLMs exhibit strong capabilities that can only be connected to the patterns observed in the data they were trained on, then where exactly should we expect this information to be stored if not in the parameters of the model?^[I would be very surprised---concerned even---if our search for patterns in latent spaces of capable LLMs revealed nothing at all.]
 4. I therefore do take issue with the way that these findings are being overblown by people with clout. Perhaps the parrot metaphor should not be taken too literally either, but if anything the paper's findings seem to support the notion that LLMs are remarkably capable of memorizing and regurgitating explicit and implicit knowledge contained in text. 
+5. I want to point out that linear probes were proposed in the context of monitoring models and diagnosing potential problems @alain2018understanding. Favorable outcomes from probes merely indicate that the model in question "has learned information relevant for the property [of interest]" [@belinkov2021probing]. This is useful but not the same as demonstrating that the model has attained a true "understanding" of the world.
+
+:::
+
+In summary, I wish people used mechanistic interpretability to better understand the behavior and shortcomings of AI models, rather than chasing pipe dreams of AGI. Models are tools that need to be monitored and diagnosed, not anthropomorphized. This post should not be understood as a bash on the paper that originally inspired it, but rather as a call for more responsible and realistic interpretations of the findings in particular on social media.
 
 ## Patterns in Latent Spaces and How to Find Them
 
-To support my claim that observing patterns in latent spaces should not generally surprise us, we will now go through a couple of simple examples. To illustrate further that this phenomenon is neither surprising nor unique to the field of computer science, I will draw on my background in economics and finance in this section. We will start with very simple examples to demonstrate that even small and simple models can learn meaningful representations of the data. The final example in @sec-ex-llm is a bit more involved and closer in spirit to the experiments conducted by @gurnee2023language. As we go along, we will try to discuss both the benefits and potential pitfalls of finding patterns in latent spaces.
+To support my claim that observing patterns in latent spaces should not generally surprise us, we will now go through a couple of simple examples. To illustrate further that this phenomenon is neither surprising nor unique to the field of Computer Science, I will draw on my background in Economics and Finance in this section. We will start with very simple examples to demonstrate that even small and simple models can learn meaningful representations of the data. The final example in @sec-ex-llm is a bit more involved and closer in spirit to the experiments conducted by @gurnee2023language. As we go along, we will try to discuss both the benefits and potential pitfalls of finding patterns in latent spaces.
 
-### Example: Principal Component Analysis
+### Are Neural Networks Born with World Models?
+
+Before diving into the world of Economics, let's start with a somewhat contrived and yet very illustrative example underpinning my point that patterns in latent spaces should not surprise us.
+
+@gurnee2023language extract and visualize the alleged geographical world model by training linear regression probes on internal activations in LLMs (including Llama-2) for the names of places, to predict geographical coordinates associated with these places. Now, the Llama-2 model has ingested huge amounts of publicly available data from the internet, including Wikipedia dumps from the June-August 2022 period [@touvron2023llama]. It is therefore highly likely that the training data contains geographical coordinates, either directly or indirectly. At the very least, we should expect that the model has seen features during training that are highly correlated with geographical coordinates. The model itself is essentially a very large latent space to which all features are randomly projected in the very first instance before being passed through a series of layers which are gradually trained for its downstream task (next token prediction).
+
+In our first example, we simulate this scenario, stopping short of training the model. In particular, we take the [world_place.csv](https://github.com/wesg52/world-models/blob/main/data/entity_datasets/world_place.csv) that was used in @gurnee2023language, which maps locations/areas to their latitude and longitude. For each place, it also indicates the corresponding country. From this, we take the subset that contains countries that are currently part of the top 10 [FIFA world ranking](https://www.fifa.com/fifa-world-ranking/men?dateId=id14142), and assign the current rank to each country (i.e., Argentina gets 1, France gets 2, ...). To ensure that the training data only involves a noisy version of the coordinates, we transform the longitude and latitude data as follows: $\rho \cdot \text{coord} + (1-\rho) \cdot \epsilon$ where $\rho=0.5$ and $\epsilon \sim \mathcal{N}(0, 5)$.
+
+::: {.callout-note}
+
+## Code
+
+In the process of writing the paper, most of the code has been moved into scripts in a designated repository to ensure reproducibility. The code for this example can be found [here](https://anonymous.4open.science/r/spurious_sentience/src/world_map/run_experiment.jl).
+
+:::
+
+Next, we encode all features except the FIFA world rank indicator as continuous variables: $X^{(n \times m)}$ where $n$ is the number of samples and $m$ is the number of resulting features. Additionally, we add a large number of random features to $X$ to simulate the fact that not all features ingested by Llama-2 are necessarily correlated with geographical coordinates. Let $d$ denote the final number of features, i.e.~$d=m+k$ where $k$ is the number of random features.
+
+We then initialize a small neural network, considered a \emph{projector}, mapping from $X$ to a single hidden layer with $h<d$ hidden units and sigmoid activation, and from there, to a lower-dimensional output space. Without performing any training on the \emph{projector}, we simply compute a forward pass of $X$ and retrieve activations $\mathbf{Z}^{(n\times h)}$. Next, we perform the linear probe on a subset of $\mathbf{Z}$ through Ridge regression: $\mathbf{W} = (\mathbf{Z}_{\text{train}}'\mathbf{Z}_{\text{train}} + \lambda \mathbf{I}) (\mathbf{Z}_{\text{train}}'\textbf{coord})^{-1}$, where $\textbf{coord}$ is the $(n \times 2)$ matrix containing the longitude and latitude for each sample. A hold-out set is reserved for testing, on which we compute predicted coordinates for each sample as $\widehat{\textbf{coord}}=\mathbf{Z}_{\text{test}}\mathbf{W}$ and plot these on a world map (@fig-map).   
+
+> If we can expect even random projections to contain useful representations, then should we really be surprised that a large language model, trained on a diverse set of data, contains representations that are useful for a wide range of tasks? 🤔
+
+While the fit certainly is not perfect, the results do indicate that the random projection contains representations that are useful for the task at hand. Thus, this simple example illustrates that meaningful target representations should be recoverable from a sufficiently large latent space, given the *random* projection of a small number of highly correlated features. Similarly, @alain2018understanding observe that even before training a convolutional neural network on MNIST data, the layer-wise activations can already be used to perform binary classification. In fact, it is well-known that random projections can be used for prediction tasks [@dasgupta2013experiments]. 
+
+![Predicted coordinate values (out-of-sample) from a linear probe on final-layer activations of an untrained neural network.](results/figures/map.png){#fig-map}
+
+### PCA as a Yield Curve Interpreter
 
 In response to the claims made by Tegmark, numerous commentators on social media have pointed out that even the simplest of models can exhibit structure in their latent spaces. One of the most popular and illustrative examples I remember from my time at the Bank of England is yield curve decomposition through PCA. The yield curve is a popular tool for investors and economists to gauge the health of the economy. It plots the yields of bonds against their maturities. The slope of the yield curve is often used as a predictor of future economic activity: a steep yield curve is associated with a growing economy, while a flat or inverted yield curve is associated with a contracting economy. 
 
@@ -136,57 +165,6 @@ df_wide = @select(df, Date, variable, value) |>
     x -> dropmissing(x)
 X = @select(df_wide, -Date) |> Matrix
 U, Σ, V = svd(X)
-dates = Date.(df_wide.Date)
-tick_years = Date.(unique(Dates.year.(dates)))
-date_tick = Dates.format.(tick_years, "yyyy")
-n_pc = 2
-plt_pc = plot(
-    dates,
-    .-U[:,1:n_pc],
-    label=["PC $i" for i in 1:n_pc] |> permutedims,
-    size=(1000, 300),
-    ylims=(-0.015,0.03),
-    legend=:topright
-)
-plot!(xticks=(tick_years,date_tick), xtickfontsize=6, yaxis=(formatter=y->@sprintf("%.2f",y)))
-vline!(Date.([onset_date]), ls=:solid, color=:black, label="Onset of GFC")
-vline!(Date.([aftermath_date]), ls=:dash, color=:black, label="Aftermath of GFC")
-
-# Level:
-df_level = @group_by(df, Date) |>
-    x -> @mutate(x, level=sum(value)/length(value)) |>
-    x -> @ungroup(x) |>
-    x -> @select(x, Date, level)
-
-# Spreads:
-df_spread = @filter(df, variable==0.25 || variable==10) |>
-    x -> @select(x, -(year:quarter)) |>
-    x -> @mutate(x, variable=ifelse(variable==0.25,"short","long")) |>
-    x -> @pivot_wider(x, names_from=variable, values_from=value) |>
-    x -> @mutate(x, spread=long-short) |>
-    x -> @select(x, Date, spread)
-
-# Plot:
-plt_mat = @full_join(df_level, df_spread) |> 
-    dropmissing |> 
-    unique |>
-    x -> @select(x, -Date) |>
-    Matrix
-plt_obs = plot(
-    dates,
-    plt_mat,
-    label=["Level" "Spread"],
-    size=(1000, 300),
-    ylims=(-3,9),
-    legend=:topright,
-    ylab="Yield (%)"
-)
-plot!(xticks=(tick_years,date_tick), xtickfontsize=6, yaxis=(formatter=y->@sprintf("%.2f",y)))
-vline!(Date.([onset_date]), ls=:solid, color=:black, label="Onset of GFC")
-vline!(Date.([aftermath_date]), ls=:dash, color=:black, label="Aftermath of GFC")
-
-plt = plot(plt_pc, plt_obs, layout=(2,1), size=(1000, 400), left_margin=5mm, bottom_margin=5mm)
-savefig(plt, joinpath(FIGURE_DIR, "pca.png"))
 ```
 
 ![Comparison of latent embeddings and observed data of the US Treasury yield curve.](results/figures/pca.png){#fig-pca}
@@ -241,7 +219,7 @@ gif(anim, joinpath(BLOG_DIR, "results/figures/pc_anim.gif"), fps=5)
 
 :::
 
-### Example: Deep Learning
+### Autoencoders as Economic Growth Predictors
 
 So far we have considered simple matrix decomposition. You might argue that principal components are not really latent embeddings in the traditional sense of deep learning. To address this, let us now consider a simple deep-learning example. Our goal will be to not only predict economic growth from the yield curve but also extract meaningful features at the same time. In particular, we will use a neural network architecture that allows us to recover a compressed latent representation of the yield curve.
 
@@ -331,187 +309,25 @@ plt = plot(model, rand(input_dim))
 display(plt)
 ```
 
-```{julia}
-loss(yhat, y) = Flux.mse(yhat, y)
-opt = Adam()
-opt_state = Flux.setup(opt, model)
-for epoch in 1:epochs
-    Flux.train!(model, dl, opt_state) do m, x, y
-        loss(m(x), y)
-    end
-end
-```
-
-```{julia}
-#| echo: false
-df_long = @pivot_longer(df_all, -(Date:quarter)) |>
-    x -> @arrange(x, Date) |>
-    x -> @select(x, -(year:quarter))
-
-df_spread = df_long |>
-    x -> @filter(x, variable=="0.25" || variable=="10.0") |>
-    x -> @mutate(x, variable=ifelse(variable=="0.25","short","long")) |>
-    x -> @pivot_wider(x, names_from=variable, values_from=value) |>
-    x -> @mutate(x, spread=long-short) |>
-    x -> @select(x, Date, spread)
-
-df_level = @group_by(df_long, Date) |>
-    x -> @mutate(x, level=sum(value)/length(value)) |>
-    x -> @ungroup(x) |>
-    x -> @select(x, Date, level) |>
-    unique
-
-df_factors = @full_join(df_spread, df_level) 
-```
-
 #### Linear Probe
 
-The results are shown in @fig-dl-results. The top panel shows the actual GDP growth and fitted values from the autoencoder model. We observe that the model captures the relationship between economic growth and the yield curve reasonably well. As discussed above, we also know that the relationship between economic growth and the yield curve is characterized by two main factors: the level and the spread. Since the model itself is fully characterized by its parameters, we would expect that these two important factors are reflected somewhere in the latent parameter space. 
+While the loss function applies most direct pressure on layers near the final output layer, any information useful for the downstream task first needs to pass through the bottleneck layer [@alain2018understanding]. On a per-neuron basis, the pressure to distill useful representation is therefore likely maximized there. Consequently, the bottleneck layer activations seem like a natural place to start looking for compact, meaningful representations of distilled information.  I compute and extract these activations $A_t$ for all time periods $t=1,...,T$. Next, we use a linear probe to regress the observed
+yield curve factors on the latent embeddings. Let $Y_t$ denote the vector containing the two factors of interest in time $t$: $y_{t,l}$ and $y_{t,s}$ for the level and spread, respectively. Formally, we are interested in the following regression model: $p_{w}(Y_t|A_t)$ where $w$ denotes the regression parameters. I use Ridge regression with $\lambda$ set to $0.1$. Using the estimated regression parameters $\hat{w}$, we then predict the yield curve factors from the latent embeddings: $\hat{Y}_t=\hat{w}^{\prime}A_t$.
 
-The bottleneck layer seems like a good place to start looking. To get the latent embeddings $\mathbf{A}_t$ at time $t$, we simply pass the yield curve data $\mathbf{Y}_t$ through the encoder. Next, we follow @gurnee2023language and use a linear probe to regress the observed yield curve factors on the latent embeddings. Let $F_t$ denote the vector containing the two factors of interest in time $t$: $f_t^{\text{spread}}$ and $f_t^{\text{level}}$. Formally, we are interested in the following regression model: $p_{w}(F_t|\mathbf{A}_t)$ where $w$ denotes the regression parameters. Following @gurnee2023language, we use Ridge regression with $\lambda$ set to $0.1$. Using the estimated regression parameters $\hat{w}$ we can then predict the yield curve factors from the latent embeddings: $\hat{F}_t=\hat{w}^{\prime}\mathbf{A}_t$.
+The in-sample predictions of the probe are shown in the right chart of @fig-dl-results. Solid lines show the observed yield curve factors over time, while dashed lines show predicted values. We can observe that the latent embeddings predict the two yield curve factors reasonably well, in particular the spread. 
 
-The results of this experiment are shown in the bottom panel of @fig-dl-results. Solid lines show the observed yield curve factors over time, while dashed lines show predicted values. We find that the latent embeddings predict the two yield curve factors reasonably well, in particular the spread. To put this in true hype-lingo: 
+Did the neural network now learn an intrinsic understanding of the economic relationship between growth and the yield curve? To us, that would be too big of a statement. Still, the current form of information distillation can be useful, even beyond its intended use for monitoring models. For example, an interesting idea could be to use the latent embeddings as features in a more traditional and interpretable econometric model. To demonstrate this, let us consider a simple linear regression model for GDP growth. We might be interested in understanding to what degree economic growth in the past is associated with economic growth today. As we might expect, linearly regressing economic growth on lagged growth, as in column (1) of Table \ref{tab-reg}, yields a statistically significant coefficient. However, this coefficient suffers from confounding bias since there are many other confounding variables at play, of which some may be readily observable and measurable, but others may not.
 
-> Not just a parrot! Our autoencoder neural network has an implicit understanding of the yield curve factors and their relationship with economic growth. It's sentient indeed!
+I already mentioned the relationship between interest rates and economic growth. To account for that, while keeping our regression model as parsimonious as possible, we could include the level and the spread of the US Treasury yield curve as additional regressors. While this slightly changes the estimated magnitude of the coefficient on lagged growth, the coefficients on the observed level and spread are statistically insignificant (column (2) in Table \ref{tab-reg}). This indicates that these measures may be too crude to capture valuable information about the relationship between yields and economic growth. Because we have included two additional regressors with little to no predictive power, the model fit as measured by the Bayes Information Criterium (BIC) has actually deteriorated.
 
-```{julia}
-#| output: false
-
-yhat = model(X')' 
-plt_gdp = plot(
-    df_all.Date, y;
-    label="Actual", color=:green,
-    title="Modelling GDP Growth",
-)
-plot!(
-    df_all.Date, yhat; 
-    label="Predicted", color=:green, ls=:dash,
-)
-
-λ = 1.0
-Y = df_factors[:, [:spread, :level]] |> Matrix
-A = encoder(X')'
-W = (A'A + UniformScaling(λ)) \ A'Y
-Ŷ = A * W
-plt_probe = plot(
-    df_all.Date, Y;
-    color=[:blue :orange],
-    label=["Spread" "Level"],
-    title="Linear Probe"
-)
-plot!(
-    df_all.Date, Ŷ; 
-    color=[:blue :orange], ls=:dash, 
-    label=["Spread (predicted)" "Level (predicted)"]
-)
-plt = plot(plt_gdp, plt_probe, layout=(2,1), size=(800, 600), left_margin=5mm)
-savefig(plt, joinpath(FIGURE_DIR, "dl.png"))
-```
+Column (3) of Table \ref{tab-reg} shows the effect of instead including one of the latent embeddings that we recovered above in the regression model. In particular, we pick the one latent embedding that we have found to exhibit the most significant effect on the output variable in a separate regression of growth on all latent embeddings. The estimated coefficient on this latent factor is small in magnitude, but statistically significant. The overall model fit, as measured by the BIC has improved and the magnitude of the coefficient on lagged growth has changed quite a bit. While this is still a very incomplete toy model of economic growth, it appears that the compact latent representation we recovered can be used in order to mitigate confounding bias.
 
 ![The top panel shows the actual GDP growth and fitted values from the autoencoder model. The bottom panel shows the observed average level and spread of the yield curve (solid) along with the predicted values from the linear probe based on the latent embedding (dashed).](results/figures/dl.png){#fig-dl-results}
 
-
-#### Ok, but truly what's the point?
-
-The finding is not surprising but it is still interesting. In the context of mechanistic interpretability, it demonstrates that the black-box model has evidently learned plausible explanations for the data. Beyond that, in this particular example, the patterns in the latent space that we have just uncovered might actually be useful for downstream tasks. An interesting idea could be to use the latent embeddings as features in a more traditional and interpretable econometric model. To demonstrate this, let us consider a simple linear regression model for GDP growth. We will compare the performance of the following models: (1) regressing growth $G_t$ on the latent embedding $A_t$, (2) regression growth on the best subset of latent embeddings $A_t$, (3) regressing growth on lagged growth, (4) regressing growth on lagged growth and the observed yield curve factors $F_t$, (5) regressing growth on the best subset of yield curve factors $F_t$, and, finally, (5) regressing growth on lagged growth and the best subset of latent embeddings $A_t$. 
-
-The results are shown in the table below. The key finding of interest is that the coefficients on the latent embeddings in model (5) are statistically significant. This suggests that the latent embeddings contain information that is useful for predicting GDP growth. 
-
-```{julia}
-#| eval: true
-
-# Regress on all latent embeddings:
-reg_data = DataFrame(Float64.(hcat(y, A)),["y",["a$i" for i in 1:size(A,2)]...])
-ols_all_latent = lm(@formula(y ~ a1 + a2 + a3 + a4 + a5 + a6), reg_data)
-
-# Regress on best latent embeddings:
-top_n = 1
-pvals = coeftable(ols_all_latent).cols[4][2:end]
-best_idx = findall([x in sort(pvals)[1:top_n] for x in pvals])
-regressors = ["a$i" for i in best_idx]
-reg_data = DataFrame(Float64.(hcat(y, A)),["y",["a$i" for i in 1:size(A,2)]...])
-ols_best_latent = lm(GLM.Term(:y) ~ sum(GLM.Term.(Symbol.(regressors))), reg_data)
-
-# Simple AR(1) model:
-reg_data = DataFrame(
-    Float64.(hcat(y, lag(y))[2:end,:]),
-    ["y","yl"]
-)
-ols_ar = lm(@formula(y ~ yl), reg_data)
-
-# Regress on factors (spread and level):
-reg_data = DataFrame(
-    Float64.(hcat(y, lag(y), df_factors[:,Not(:Date)] |> Matrix)[2:end,:]),
-    ["y","yl","spread","level"]
-)
-ols_factors = lm(@formula(y ~ yl + spread + level), reg_data)
-
-# Regress on best subset of latent embeddings:
-reg_data = DataFrame(
-    Float64.(hcat(y, lag(y), A)[2:end,:]),
-    ["y","yl",["a$i" for i in 1:size(A,2)]...]
-)
-ols_best = lm(GLM.Term(:y) ~ sum(GLM.Term.(Symbol.(["yl",regressors...]))), reg_data)
-
-reg_stats = regression_statistics = [
-    Nobs => "Obs.",
-    BIC,
-    R2 => "R²",
-]
-labels = Dict(
-    "y" => "GDP Growth",
-    "yl" => "Lagged Growth",
-    "spread" => "Spread",
-    "level" => "Level",
-    "a1" => "Embedding 1",
-    "a2" => "Embedding 2",
-    "a3" => "Embedding 3",
-    "a4" => "Embedding 4",
-    "a5" => "Embedding 5",
-    "a6" => "Embedding 6",
-)
-
-# Results
-regtable(
-    ols_all_latent, ols_best_latent, ols_ar, ols_factors, ols_best; 
-    renderSettings = RegressionTables.htmlOutput(joinpath(BLOG_DIR, "results/regression_full.html")),
-    regression_statistics = reg_stats,
-    labels = labels,
-)
-regtable(
-    ols_all_latent, ols_best_latent, ols_ar, ols_factors, ols_best; 
-    renderSettings = RegressionTables.latexOutput(joinpath(BLOG_DIR, "results/regression_full.tex")),
-    regression_statistics = reg_stats,
-    labels = labels,
-)
-regtable(
-    ols_factors, ols_best; 
-    renderSettings = RegressionTables.htmlOutput(joinpath(BLOG_DIR, "results/regression.html")),
-    regression_statistics = reg_stats,
-    labels = labels,
-)
-regtable(
-    ols_factors, ols_best; 
-    renderSettings = RegressionTables.latexOutput(joinpath(BLOG_DIR, "results/regression.tex")),
-    regression_statistics = reg_stats,
-    labels = labels,
-)
-```
-
-::: {.content-visible when-format="html"}
-
 <iframe src="results/regression.html" width="550" height="720"></iframe>
 
-:::
 
-::: {.content-visible when-format="pdf"}
-
-\input{results/regression.tex}
-
-:::
-
-
-### Example: Large Language Model {#ex-llm}
+### LLMs for Economic Sentiment Prediction {#ex-llm}
 
 To round up this section, we will jump back on the hype train and consider an example involving an LLM. In particular, we will closely follow the approach in @gurnee2023language and apply it to a novel financial dataset: the *Trillion Dollar Words* dataset introduced by @shah2023trillion. The dataset contains a curated selection of sentences formulated by central bankers of the US Federal Reserve and communicated to the public in speeches, meeting minutes and press conferences. The authors of the paper use this dataset to train LLMs to classify sentences as either 'dovish', 'hawkish' or 'neutral'. To this end, they first manually annotate a subsample of the available data and then fine-tune various foundation models. Their model of choice, *FOMC-RoBERTa* (a fine-tuned version of RoBERTa [@liu2019roberta]), achieves an $F_1$ score of around $>0.7$ for the classification task. To illustrate the potential usefulness of the learned classifier, they use predicted labels for the entire dataset to compute an ad-hoc, count-based measure of 'hawkishness'. They then go on to show that this measure correlates with key economic indicators in the expected direction: when inflationary pressures rise, the measured level of 'hawkishness' increases as central bankers need to raise interest rates to bring inflation back to target. 
 
@@ -519,23 +335,19 @@ To round up this section, we will jump back on the hype train and consider an ex
 
 Instead of computing a measure based on predicted labels, we can use linear probes to assess if the fine-tuned model has learned associative patterns between central bank communications and key economic indicators. To this end, I have further pre-processed the data provided by @shah2023trillion and used their proposed model to compute layer-wise embeddings for all available sentences. I have made these available and easily accessible through a small Julia package: [TrillionDollarWords.jl](https://github.com/pat-alt/TrillionDollarWords.jl). For each layer, I have then computed linear probes on two inflation indicators---the Consumer Price Index (CPI) and the Producer Price Index (PPI)---as well as US Treasury yields at different levels of maturity. To mitigate issues related to over-parameterization, I follow the recommendation in @alain2018understanding to first reduce the dimensionality of the embeddings each time. In particular, linear probes are restricted to the first 128 principal components of the embeddings of each layer. 
 
-Detailed results of this experiment will be released in an upcoming paper. @fig-fomc highlights the result for the linear probe on the CPI. The chart shows various performance measures plotted against *FOMC-RoBERTa*'s $n$-th layer. Shaded areas show the variation across cross-validation folds, where we have used an expanding window approach to split the time series. To avoid look-ahead bias, we run PCA separately for each training set. Results for the linear probes are shown along with results for autoregressive models (AR) used as our baseline. 
+@fig-fomc shows the out-of-sample root mean squared error (RMSE) for the linear probe, plotted against *FOMC-RoBERTa*'s $n$-th layer. The values correspond to averages across cross-validation folds where I have used an expanding window scheme. Consistent with related work [@alain2018understanding,@gurnee2023language], we can observe that model performance tends to be higher for layers near the end of the transformer model. Curiously, for yields at longer maturities, we see that performance eventually deteriorates for the very final layers. This is not the case for the training data, so I would attribute this to overfitting. A detailed discussion of all our results including a benchmark of these probes against baseline autoregressive models can be found in the paper.
 
-The first column shows the correlations between model predictions and observed inflation. One can observe that this correlation is strictly positive for the baseline models and the linear probes. Consistent with the findings in @gurnee2023language and @alain2018understanding, we also observe that this correlation tends to be higher for layers near the end of the transformer model. Those layers produce predictions that are more positively correlated with observed inflation than those produced by the corresponding autoregressive models. 
-
-Similarly, we observe that the (root) mean squared error of the linear probe is largely on par with the baseline. The average prediction error is gradually reduced as we move along the horizontal axis, which is again indicative of the notion that layers closer to the end of the neural network have distilled more useful representations. 
-
-![Various performance measures (correlation and (root) mean squared error) plotted against *FOMC-RoBERTa*'s $n$-th layer. Shaded areas indicate variation across cross-validation folds, where we have used an expanding window approach to split the time series. Results for the linear probes are shown along with results for autoregressive models (AR). The optimal lag length was determined using the Bayes Information Criterium.](results/figures/fomc_probe.png){#fig-fomc}
+![Out-of-sample root mean squared error (RMSE) for the linear probe plotted against*FOMC-RoBERTa*'s $n$-th layer for different indicators. The values correspond to averages computed across cross-validation folds, where we have used an expanding window approach to split the time series.](results/figures/rmse_pca_128.png){#fig-fomc}
 
 #### Stochastic Parrots After All?
 
-These results from the linear probe shown in @fig-fomc are certainly not unimpressive: even though *FOMC-RoBERTa* was not explicitly trained to uncover associations between central bank communications and the level of consumer prices, it appears that the model has distilled representations that can be used to predict inflation. It is worth pointing out here that this model is substantially smaller than the models tested in @gurnee2023language. This begs the following question: 
+These results from the linear probe shown in @fig-fomc are certainly not unimpressive: even though *FOMC-RoBERTa* was not explicitly trained to uncover associations between central bank communications and prices, it appears that the model has distilled representations that can be used to predict inflation and yields. It is worth pointing out here that this model is substantially smaller than the models tested in @gurnee2023language. This begs the following question: 
 
 > Have we uncovered further evidence that LLMs "aren't mere stochastic parrots"? Has *FOMC-RoBERTa* developed an intrinsic understanding of the economy just by 'reading' central bank communications? 
 
 Personally, I am having a very hard time believing this. To argue my case, I will now produce a counter-example demonstrating that, if anything, these findings are very much in line with the parrot metaphor. The counter-example is based on the following premise: if the results from the linear probe truly were indicative of some intrinsic understanding of the economy, then the probe should not be sensitive to random sentences that are most definitely not related to consumer prices. 
 
-To test this, I select the best-performing probe trained on the final-layer activations to predict changes in the CPI. I then make up sentences that fall into one of these four categories: *Inflation/Prices* (IP)---sentences about price inflation, *Deflation/Prices* (DP)---sentences about price deflation, *Inflation/Birds* (IB)---sentences about an inflation in the number of birds and *Deflation/Birds* (DB)---sentences about a deflation in the number of birds. A sensible sentence for category DP, for example, could be: "It is essential to bring inflation back to target to avoid drifting into deflation territory.". Analogically, we could construct the following sentence for the DB category: "It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.".
+To test this, I select the best-performing probe trained on the final-layer activations to predict changes in the CPI. I then make up sentences that fall into one of these four categories: *Inflation/Prices* (IP)---sentences about price inflation, *Deflation/Prices* (DP)---sentences about price deflation, *Inflation/Birds* (IB)---sentences about inflation in the number of birds and *Deflation/Birds* (DB)---sentences about deflation in the number of birds. A sensible sentence for category DP, for example, could be: "It is essential to bring inflation back to target to avoid drifting into deflation territory.". Analogically, we could construct the following sentence for the DB category: "It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.".
 
 In light of the encouraging results for the probe in @fig-fomc, we should expect the probe to predict higher levels of inflation for activations for sentences in the IP category than for sentences in the DP category. If this was indicative of true intrinsic understanding, we would not expect to see any significant difference in predicted inflation levels for sentences about birds, independent of whether or not their numbers are increasing. More specifically, we would not expect the probe to predict values for sentences about birds that are substantially different from the values it can be expected to predict when using actual white noise as inputs.
 
@@ -547,9 +359,9 @@ Next, I propose the following hypothesis test as a minimum viable testing framew
 
 ## Parrot Test
 
-- *H0* (Null *WEAK*): The probe never predicts values that are statistically significantly different from $\mathbb{E}[f(\varepsilon)]$
-- *H1* (Stochastic Parrots *RISKIER*): The probe predicts values that are statistically significantly different from $\mathbb{E}[f(\varepsilon)]$ for sentences in all categories (IP,DP,IB,DB).
-- *H2* (More than Mere Stochastic Parrots *RISKIEST*): The probe predicts values that are statistically significantly different from $\mathbb{E}[f(\varepsilon)]$ for sentences in categories IP and DP, but not for sentences in IB and DB.
+- *H0* (Null): The probe never predicts values that are statistically significantly different from $\mathbb{E}[f(\varepsilon)]$.
+- *H1* (Stochastic Parrots): The probe predicts values that are statistically significantly different from $\mathbb{E}[f(\varepsilon)]$ for sentences related to the outcome of interest *and* those that are independent (i.e. sentences in all categories).
+- *H2* (More than Mere Stochastic Parrots): The probe predicts values that are statistically significantly different from $\mathbb{E} [f(\varepsilon)]$ for sentences that are related to the outcome variable (IP and DP), but not for sentences that are independent of the outcome (IB and DB).
 
 ::: 
 
@@ -557,11 +369,16 @@ To be clear, if in such a test we did find substantial evidence in favour of rej
 
 In this particular case, @fig-attack demonstrates that we find some evidence to reject *H0* but not *H1* for *FOMC-RoBERTa*. The median linear probe predictions for sentences about inflation and deflation are indeed substantially higher and lower, respectively than for random noise. Unfortunately, the same is true for sentences about the inflation and deflation in the number of birds, albeit to a somewhat lower degree. 
 
-I should note that the number of sentences in each category is very small here (10), so the results in @fig-attack cannot be used to establish statistical significance. That being said, even a handful of convincing counter-examples should be enough for us to seriously question the claim that results from linear probes provide evidence against the parrot metaphor. In fact, if there's even a single sentence for which any
+I should note that the number of sentences in each category is very small here (10), so the results in @fig-attack cannot be used to establish statistical significance. That being said, even a handful of convincing counter-examples should be enough for us to seriously question the claim that results from linear probes provide evidence against the parrot metaphor. In fact, even a handful of sentences for which any human annotator would easily arrive at the conclusion of independence, a prediction by the probe in either direction casts doubt.
 
-> Strong alternative hypothesis to address own confirmation bias
-> Articulating a test to better differentiate
+![Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB) and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted value of the probe for random noise.](results/figures/attack_all_measures.png){#fig-attack}
 
-![Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB) and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted inflation level for the whole sample period (train and test set).](results/figures/attack_inflation.png){#fig-attack}
+## Conclusion
+
+Linear probes and related tools from mechanistic interpretability were proposed in the context of monitoring models and diagnosing potential problems @alain2018understanding. Favorable outcomes from probes merely indicate that the model "has learned information relevant for the property [of interest]" @belinkov2021probing. The examples shown here demonstrate that this is achievable even for small models, while these have certainly not developed an intrinsic "understanding" of the world. Thus, my co-authors and I argue that more conservative and rigorous tests for emerging capabilities of AI model are needed.
+
+I want to conclude this blog post just as we conclude in our paper:
+
+> "We as academic researchers carry great responsibility for how the narrative will unfold, and what claims are believed. We call upon our colleagues to be explicitly mindful of this. As attractive as it may be to beat the state-of-the-art with a grander claim, let us return to the Mertonian norms, and thus safeguard our academic legitimacy in a world that only will be eager to run with made claims."
 
 ## References

@@ -10626,7 +10626,7 @@ Simulation of changing parameter distribution.
 <p>To add a little bit of life to our example we will assume that the binary labels classify samples into cats and dogs, based on their height and tail length. Figure&nbsp;1 shows the synthetic data in the two-dimensional feature domain. Following an introduction to Bayesian Logistic Regression in the next section we will use the synthetic data <img src="https://latex.codecogs.com/png.latex?%5Cmathcal%7BD%7D"> to estimate our model.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-ground" class="quarto-figure quarto-figure-center quarto-float anchored" width="672" data-fig-align="center">
+<div id="fig-ground" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center" width="672">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ground-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="https://www.paltmeyer.com/blog/blog/posts/bayesian-logit/index_files/figure-html/fig-ground-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
@@ -10679,7 +10679,7 @@ Figure&nbsp;1: Ground truth labels.
 <p>Fortunately, it turns out that we can trade off a little bit of accuracy in return for a convenient analytical solution. In particular, we have that <img src="https://latex.codecogs.com/png.latex?%5Csigma(a)%20%5Capprox%20%5CPhi(%5Clambda%20a)"> where <img src="https://latex.codecogs.com/png.latex?%5CPhi(.)"> is the standard Gaussian cdf and <img src="https://latex.codecogs.com/png.latex?%5Clambda=%5Cpi/8"> ensures that the two functions have the same slope at the origin (Figure&nbsp;2). Without dwelling further on the details we can use this finding to approximate the integral in Equation&nbsp;5 as a sigmoid function. This is called <strong>probit approximation</strong> and implemented below.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-probit" class="quarto-figure quarto-figure-center quarto-float anchored" width="672" data-fig-align="center">
+<div id="fig-probit" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center" width="672">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-probit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="https://www.paltmeyer.com/blog/blog/posts/bayesian-logit/index_files/figure-html/fig-probit-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
