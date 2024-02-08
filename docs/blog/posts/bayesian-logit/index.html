@@ -350,7 +350,7 @@ Simulation of changing parameter distribution.
 <p>To add a little bit of life to our example we will assume that the binary labels classify samples into cats and dogs, based on their height and tail length. <a href="#fig-ground" class="quarto-xref">Figure&nbsp;1</a> shows the synthetic data in the two-dimensional feature domain. Following an introduction to Bayesian Logistic Regression in the next section we will use the synthetic data <span class="math inline">\(\mathcal{D}\)</span> to estimate our model.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-ground" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center" width="672">
+<div id="fig-ground" class="quarto-figure quarto-figure-center quarto-float anchored" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ground-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="index_files/figure-html/fig-ground-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
@@ -434,7 +434,7 @@ Figure&nbsp;1: Ground truth labels.
 <p>Fortunately, it turns out that we can trade off a little bit of accuracy in return for a convenient analytical solution. In particular, we have that <span class="math inline">\(\sigma(a) \approx \Phi(\lambda a)\)</span> where <span class="math inline">\(\Phi(.)\)</span> is the standard Gaussian cdf and <span class="math inline">\(\lambda=\pi/8\)</span> ensures that the two functions have the same slope at the origin (<a href="#fig-probit" class="quarto-xref">Figure&nbsp;2</a>). Without dwelling further on the details we can use this finding to approximate the integral in <a href="#eq-posterior-pred" class="quarto-xref">Equation&nbsp;5</a> as a sigmoid function. This is called <strong>probit approximation</strong> and implemented below.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-probit" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center" width="672">
+<div id="fig-probit" class="quarto-figure quarto-figure-center quarto-float anchored" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-probit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="index_files/figure-html/fig-probit-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
