@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-99.9.9">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -83,13 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -98,7 +92,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -120,7 +113,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <meta property="og:title" content="Patrick Altmeyer - Quarto on Steroids: Advanced Customization through Quarto Extensions">
 <meta property="og:description" content="A short introduction to using, building and contributing Quarto Extensions.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/quarto-extensions/www/intro.gif">
-<meta property="og:site_name" content="Patrick Altmeyer">
+<meta property="og:site-name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer - Quarto on Steroids: Advanced Customization through Quarto Extensions">
 <meta name="twitter:description" content="A short introduction to using, building and contributing Quarto Extensions.">
 <meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/quarto-extensions/www/intro.gif">
@@ -131,9 +124,9 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
@@ -148,50 +141,50 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html"> 
-<span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/publications/index.html"> 
-<span class="menu-text">Publications</span></a>
+    <a class="nav-link" href="../../../content/publications/index.html" rel="" target="">
+ <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html"> 
-<span class="menu-text">Talks</span></a>
+    <a class="nav-link" href="../../../content/talks/index.html" rel="" target="">
+ <span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html"> 
-<span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/software.html"> 
-<span class="menu-text">Software</span></a>
+    <a class="nav-link" href="../../../content/software.html" rel="" target="">
+ <span class="menu-text">Software</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/about/index.html"> 
-<span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../../content/about/index.html" rel="" target="">
+ <span class="menu-text">About</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../blog/index.xml" rel="" target=""><i class="bi bi-rss" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/pat-alt" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/paltmey" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -213,7 +206,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   </ul></li>
   <li><a href="#example-presentation---using-quarto-extensions" id="toc-example-presentation---using-quarto-extensions" class="nav-link" data-scroll-target="#example-presentation---using-quarto-extensions">📋 Example Presentation - Using Quarto Extensions</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -242,14 +235,14 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     <div class="quarto-title-meta-contents">
     <p class="author"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> </p>
   </div>
-  <div class="quarto-title-meta-contents">
+    <div class="quarto-title-meta-contents">
         <p class="affiliation">
             <a href="https://www.tudelft.nl/en/">
             Delft University of Technology
             </a>
           </p>
       </div>
-  </div>
+    </div>
 
 <div class="quarto-title-meta">
 
@@ -265,14 +258,12 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   </div>
   
 
-
 </header>
-
 
 <div class="intro-gif">
 <figure class="figure">
 <img src="www/intro.gif" class="figure-img">
-<figcaption>
+<figcaption class="figure-caption">
 A TU Delft Theme for Quarto.
 </figcaption>
 </figure>
@@ -344,7 +335,7 @@ A TU Delft Theme for Quarto.
 <ol>
 <li id="fn1"><p>Not entirely true: I’ve also used <code>Pluto.jl</code> 🎈 and had to resort to <code>.Rmd</code> in one particular case.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
   author = {Altmeyer, Patrick},
   title = {Quarto on {Steroids:} {Advanced} {Customization} Through
     {Quarto} {Extensions}},
@@ -486,9 +477,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -498,17 +490,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -521,120 +504,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      return note.innerHTML;
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -678,7 +547,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -704,32 +572,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -805,12 +647,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-12"><a href="#cb7-12"></a><span class="an">draft:</span><span class="co"> false</span></span>
 <span id="cb7-13"><a href="#cb7-13"></a><span class="co">---</span></span>
 <span id="cb7-14"><a href="#cb7-14"></a></span>
-<span id="cb7-15"><a href="#cb7-15"></a>&lt;div class="intro-gif"&gt;</span>
-<span id="cb7-16"><a href="#cb7-16"></a>  &lt;figure&gt;</span>
-<span id="cb7-17"><a href="#cb7-17"></a>    &lt;img src="www/intro.gif"&gt;</span>
-<span id="cb7-18"><a href="#cb7-18"></a>    &lt;figcaption&gt;A TU Delft Theme for Quarto.&lt;/figcaption&gt;</span>
-<span id="cb7-19"><a href="#cb7-19"></a>  &lt;/figure&gt;</span>
-<span id="cb7-20"><a href="#cb7-20"></a>&lt;/div&gt; </span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">"intro-gif"</span><span class="kw">&gt;</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a>  <span class="kw">&lt;figure&gt;</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a>    <span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"www/intro.gif"</span><span class="kw">&gt;</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a>    <span class="kw">&lt;figcaption&gt;</span>A TU Delft Theme for Quarto.<span class="kw">&lt;/figcaption&gt;</span></span>
+<span id="cb7-19"><a href="#cb7-19"></a>  <span class="kw">&lt;/figure&gt;</span></span>
+<span id="cb7-20"><a href="#cb7-20"></a><span class="kw">&lt;/div&gt;</span> </span>
 <span id="cb7-21"><a href="#cb7-21"></a></span>
 <span id="cb7-22"><a href="#cb7-22"></a>I've said it before and I'll say it again: <span class="co">[</span><span class="ot">Quarto</span><span class="co">](https://quarto.org/)</span> is amazing! Since the beginning of my PhD I haven't used any other tool for prototyping, writing and publishing any of my work.^<span class="co">[</span><span class="ot">Not entirely true: I've also used `Pluto.jl` 🎈 and had to resort to `.Rmd` in one particular case.</span><span class="co">]</span> That work has included: this website, presentations, academic articles, notebooks and more. By highlighting useful features of Quarto in articles like this one, I hope to encourage more people to try it out. </span>
 <span id="cb7-23"><a href="#cb7-23"></a></span>
@@ -837,8 +679,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-44"><a href="#cb7-44"></a>To get started with building the TU Delft Custom Format I followed the official <span class="co">[</span><span class="ot">Quarto docs</span><span class="co">](https://quarto.org/docs/extensions/formats.html#quick-start)</span>. I first used the appropriate Quarto command, which initiates an interactive process in the command line:</span>
 <span id="cb7-45"><a href="#cb7-45"></a></span>
 <span id="cb7-46"><a href="#cb7-46"></a><span class="in">```{.zsh}</span></span>
-<span id="cb7-47"><a href="#cb7-47"></a><span class="in">$ quarto create extension format:revealjs</span></span>
-<span id="cb7-48"><a href="#cb7-48"></a><span class="in"> ? Extension Name › lexdoc</span></span>
+<span id="cb7-47"><a href="#cb7-47"></a><span class="ex">$</span> quarto create extension format:revealjs</span>
+<span id="cb7-48"><a href="#cb7-48"></a> <span class="ex">?</span> Extension Name › lexdoc</span>
 <span id="cb7-49"><a href="#cb7-49"></a><span class="in">```</span></span>
 <span id="cb7-50"><a href="#cb7-50"></a></span>
 <span id="cb7-51"><a href="#cb7-51"></a>Once done, the basic folder structure for my extension was set up and ready to be pushed to a remote Github repository for distribution: <span class="co">[</span><span class="ot">https://github.com/pat-alt/quarto-tudelft</span><span class="co">](https://github.com/pat-alt/quarto-tudelft)</span>. Even though I had not yet added any custom formatting rules, anyone would now be able to use this empty extension for their work.</span>
@@ -850,7 +692,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-57"><a href="#cb7-57"></a>I am no expert in CSS (far from it!), so this was very much trial-and-error based, but I got there eventually. One feature I am particularly happy about is the custom transition slides: by default all slides at level 1, so slides that initiate a new section, </span>
 <span id="cb7-58"><a href="#cb7-58"></a></span>
 <span id="cb7-59"><a href="#cb7-59"></a><span class="in">```{.md}</span></span>
-<span id="cb7-60"><a href="#cb7-60"></a><span class="in"># Transition Slide</span></span>
+<span id="cb7-60"><a href="#cb7-60"></a><span class="fu"># Transition Slide</span></span>
 <span id="cb7-61"><a href="#cb7-61"></a><span class="in">```</span></span>
 <span id="cb7-62"><a href="#cb7-62"></a></span>
 <span id="cb7-63"><a href="#cb7-63"></a>will be formatted in a standardized way. The relevant CSS rule can be found <span class="co">[</span><span class="ot">here</span><span class="co">](https://github.com/pat-alt/quarto-tudelft/blob/b324cee4a6860a5ed5385dc607330d49de052875/_extensions/tudelft/custom.scss#L96)</span></span>
@@ -868,13 +710,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-75"><a href="#cb7-75"></a>This part is truly a walk in the park. As outlined in the <span class="co">[</span><span class="ot">README</span><span class="co">](https://github.com/pat-alt/quarto-tudelft)</span> users can either work directly with the template, </span>
 <span id="cb7-76"><a href="#cb7-76"></a></span>
 <span id="cb7-77"><a href="#cb7-77"></a><span class="in">```{.zsh}</span></span>
-<span id="cb7-78"><a href="#cb7-78"></a><span class="in">quarto use template pat-alt/quarto-tudelft</span></span>
+<span id="cb7-78"><a href="#cb7-78"></a><span class="ex">quarto</span> use template pat-alt/quarto-tudelft</span>
 <span id="cb7-79"><a href="#cb7-79"></a><span class="in">```</span></span>
 <span id="cb7-80"><a href="#cb7-80"></a></span>
 <span id="cb7-81"><a href="#cb7-81"></a>or add the template to an existing Quarto project:</span>
 <span id="cb7-82"><a href="#cb7-82"></a></span>
 <span id="cb7-83"><a href="#cb7-83"></a><span class="in">```{.zsh}</span></span>
-<span id="cb7-84"><a href="#cb7-84"></a><span class="in">quarto add pat-alt/quarto-tudelft</span></span>
+<span id="cb7-84"><a href="#cb7-84"></a><span class="ex">quarto</span> add pat-alt/quarto-tudelft</span>
 <span id="cb7-85"><a href="#cb7-85"></a><span class="in">```</span></span>
 <span id="cb7-86"><a href="#cb7-86"></a></span>
 <span id="cb7-87"><a href="#cb7-87"></a>The first option will get you started with a working document straight away. For my paper presentation, I worked with the second option. At the time of writing, I am building and hosting all of my presentations in my website repository (the repo that also builds this very article you're reading): <span class="co">[</span><span class="ot">https://github.com/pat-alt/pat-alt.github.io</span><span class="co">](https://github.com/pat-alt/pat-alt.github.io)</span>. </span>
@@ -882,7 +724,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-89"><a href="#cb7-89"></a>With the extension added to the project, I can now use it anywhere within that project by simply specifying,</span>
 <span id="cb7-90"><a href="#cb7-90"></a></span>
 <span id="cb7-91"><a href="#cb7-91"></a><span class="in">```{.yaml}</span></span>
-<span id="cb7-92"><a href="#cb7-92"></a><span class="in">format: tudelft-revealjs</span></span>
+<span id="cb7-92"><a href="#cb7-92"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> tudelft-revealjs</span></span>
 <span id="cb7-93"><a href="#cb7-93"></a><span class="in">```</span></span>
 <span id="cb7-94"><a href="#cb7-94"></a></span>
 <span id="cb7-95"><a href="#cb7-95"></a>in the YAML header of my Quarto document where <span class="in">`tudelft-revealjs`</span> is just the name of the custom format. </span>
@@ -890,15 +732,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-97"><a href="#cb7-97"></a>It gets better ... The extension can be extended further by providing yet another <span class="co">[</span><span class="ot">custom style sheet</span><span class="co">](https://github.com/pat-alt/pat-alt.github.io/blob/b6207a616f6ef9c7ec09cf8ad3383db788b9148b/content/talks/posts/2023-ieee-satml/custom.scss#L1)</span>, as I have done for my paper presentation:</span>
 <span id="cb7-98"><a href="#cb7-98"></a></span>
 <span id="cb7-99"><a href="#cb7-99"></a><span class="in">```{.yaml}</span></span>
-<span id="cb7-100"><a href="#cb7-100"></a><span class="in">format: </span></span>
-<span id="cb7-101"><a href="#cb7-101"></a><span class="in">  tudelft-revealjs:</span></span>
-<span id="cb7-102"><a href="#cb7-102"></a><span class="in">    theme: custom.scss</span></span>
+<span id="cb7-100"><a href="#cb7-100"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb7-101"><a href="#cb7-101"></a><span class="at">  </span><span class="fu">tudelft-revealjs</span><span class="kw">:</span></span>
+<span id="cb7-102"><a href="#cb7-102"></a><span class="at">    </span><span class="fu">theme</span><span class="kw">:</span><span class="at"> custom.scss</span></span>
 <span id="cb7-103"><a href="#cb7-103"></a><span class="in">```</span></span>
 <span id="cb7-104"><a href="#cb7-104"></a></span>
 <span id="cb7-105"><a href="#cb7-105"></a>Check out the final presentation <span class="co">[</span><span class="ot">here</span><span class="co">](../../../content/talks/posts/2023-ieee-satml/presentation.qmd)</span>{target="_blank"} or see the embedded version below:</span>
 <span id="cb7-106"><a href="#cb7-106"></a></span>
 <span id="cb7-107"><a href="#cb7-107"></a></span>
-<span id="cb7-108"><a href="#cb7-108"></a>&lt;iframe src="https://www.paltmeyer.com/content/talks/posts/2023-ieee-satml/presentation.html#/title-slide" width="100%" height="350"&gt;&lt;/iframe&gt;</span>
+<span id="cb7-108"><a href="#cb7-108"></a><span class="kw">&lt;iframe</span> <span class="er">src</span><span class="ot">=</span><span class="st">"https://www.paltmeyer.com/content/talks/posts/2023-ieee-satml/presentation.html#/title-slide"</span> <span class="er">width</span><span class="ot">=</span><span class="st">"100%"</span> <span class="er">height</span><span class="ot">=</span><span class="st">"350"</span><span class="kw">&gt;&lt;/iframe&gt;</span></span>
 <span id="cb7-109"><a href="#cb7-109"></a></span>
 <span id="cb7-110"><a href="#cb7-110"></a></span>
 <span id="cb7-111"><a href="#cb7-111"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -906,12 +748,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">
-<p>© 2023, Patrick Altmeyer</p>
-</div>   
+    <div class="nav-footer-left">© 2023, Patrick Altmeyer</div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
@@ -942,7 +782,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-
 
 
 

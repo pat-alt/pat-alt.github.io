@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-99.9.9">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -61,7 +61,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -80,7 +79,7 @@ div.csl-indent {
 }</style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -103,13 +102,7 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -118,7 +111,6 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -134,45 +126,18 @@ gtag('js', new Date());
 gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous" data-relocate-top="true"></script>
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Patrick Altmeyer - Spurious Sparks of AGI">
 <meta property="og:description" content="This post questions the idea that finding patterns in latent embeddings of models is indicative of AGI or even surprising. I illustrate this using examples from Economics, a discipline that does not typically anthropomorphize the models it produces.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/spurious-sparks/results/figures/intro.jpeg">
-<meta property="og:site_name" content="Patrick Altmeyer">
+<meta property="og:site-name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer - Spurious Sparks of AGI">
 <meta name="twitter:description" content="This post questions the idea that finding patterns in latent embeddings of models is indicative of AGI or even surprising. I illustrate this using examples from Economics, a discipline that does not typically anthropomorphize the models it produces.">
 <meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/spurious-sparks/results/figures/intro.jpeg">
@@ -183,9 +148,9 @@ window.Quarto = {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
@@ -200,50 +165,50 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html"> 
-<span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/publications/index.html"> 
-<span class="menu-text">Publications</span></a>
+    <a class="nav-link" href="../../../content/publications/index.html" rel="" target="">
+ <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html"> 
-<span class="menu-text">Talks</span></a>
+    <a class="nav-link" href="../../../content/talks/index.html" rel="" target="">
+ <span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html"> 
-<span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/software.html"> 
-<span class="menu-text">Software</span></a>
+    <a class="nav-link" href="../../../content/software.html" rel="" target="">
+ <span class="menu-text">Software</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/about/index.html"> 
-<span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../../content/about/index.html" rel="" target="">
+ <span class="menu-text">About</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../blog/index.xml" rel="" target=""><i class="bi bi-rss" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/pat-alt" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/paltmey" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -268,7 +233,7 @@ window.Quarto = {
   <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -298,12 +263,12 @@ window.Quarto = {
     <div class="quarto-title-meta-contents">
     <p class="author">Patrick Altmeyer </p>
   </div>
-  <div class="quarto-title-meta-contents">
+    <div class="quarto-title-meta-contents">
         <p class="affiliation">
             Delft University of Technology
           </p>
       </div>
-  </div>
+    </div>
 
 <div class="quarto-title-meta">
 
@@ -319,14 +284,12 @@ window.Quarto = {
   </div>
   
 
-
 </header>
-
 
 <div class="intro-gif">
 <figure class="figure">
 <img src="results/figures/intro.jpeg" class="figure-img">
-<figcaption>
+<figcaption class="figure-caption">
 Photo by <a href="https://unsplash.com/@jake_oates2000?utm_content=creditCopyText&amp;utm_medium=referral&amp;utm_source=unsplash">Jake Oates</a> on <a href="https://unsplash.com/photos/steel-wool-photography-MovsEr-Bgts?utm_content=creditCopyText&amp;utm_medium=referral&amp;utm_source=unsplash">Unsplash</a>
 </figcaption>
 </figure>
@@ -394,28 +357,25 @@ Code
 </div>
 </div>
 <p>Next, we encode all features except the FIFA world rank indicator as continuous variables: <span class="math inline">\(X^{(n \times m)}\)</span> where <span class="math inline">\(n\)</span> is the number of samples and <span class="math inline">\(m\)</span> is the number of resulting features. Additionally, we add a large number of random features to <span class="math inline">\(X\)</span> to simulate the fact that not all features ingested by Llama-2 are necessarily correlated with geographical coordinates. Let <span class="math inline">\(d\)</span> denote the final number of features, i.e.~<span class="math inline">\(d=m+k\)</span> where <span class="math inline">\(k\)</span> is the number of random features.</p>
-<p>We then initialize a small neural network, considered a , mapping from <span class="math inline">\(X\)</span> to a single hidden layer with <span class="math inline">\(h&lt;d\)</span> hidden units and sigmoid activation, and from there, to a lower-dimensional output space. Without performing any training on the , we simply compute a forward pass of <span class="math inline">\(X\)</span> and retrieve activations <span class="math inline">\(\mathbf{Z}^{(n\times h)}\)</span>. Next, we perform the linear probe on a subset of <span class="math inline">\(\mathbf{Z}\)</span> through Ridge regression: <span class="math inline">\(\mathbf{W} = (\mathbf{Z}_{\text{train}}'\mathbf{Z}_{\text{train}} + \lambda \mathbf{I}) (\mathbf{Z}_{\text{train}}'\textbf{coord})^{-1}\)</span>, where <span class="math inline">\(\textbf{coord}\)</span> is the <span class="math inline">\((n \times 2)\)</span> matrix containing the longitude and latitude for each sample. A hold-out set is reserved for testing, on which we compute predicted coordinates for each sample as <span class="math inline">\(\widehat{\textbf{coord}}=\mathbf{Z}_{\text{test}}\mathbf{W}\)</span> and plot these on a world map (<a href="#fig-map" class="quarto-xref">Figure&nbsp;1</a>).</p>
+<p>We then initialize a small neural network, considered a , mapping from <span class="math inline">\(X\)</span> to a single hidden layer with <span class="math inline">\(h&lt;d\)</span> hidden units and sigmoid activation, and from there, to a lower-dimensional output space. Without performing any training on the , we simply compute a forward pass of <span class="math inline">\(X\)</span> and retrieve activations <span class="math inline">\(\mathbf{Z}^{(n\times h)}\)</span>. Next, we perform the linear probe on a subset of <span class="math inline">\(\mathbf{Z}\)</span> through Ridge regression: <span class="math inline">\(\mathbf{W} = (\mathbf{Z}_{\text{train}}'\mathbf{Z}_{\text{train}} + \lambda \mathbf{I}) (\mathbf{Z}_{\text{train}}'\textbf{coord})^{-1}\)</span>, where <span class="math inline">\(\textbf{coord}\)</span> is the <span class="math inline">\((n \times 2)\)</span> matrix containing the longitude and latitude for each sample. A hold-out set is reserved for testing, on which we compute predicted coordinates for each sample as <span class="math inline">\(\widehat{\textbf{coord}}=\mathbf{Z}_{\text{test}}\mathbf{W}\)</span> and plot these on a world map (<a href="#fig-map">Figure&nbsp;1</a>).</p>
 <blockquote class="blockquote">
 <p>If we can expect even random projections to contain useful representations, then should we really be surprised that a large language model, trained on a diverse set of data, contains representations that are useful for a wide range of tasks? 🤔</p>
 </blockquote>
 <p>While the fit certainly is not perfect, the results do indicate that the random projection contains representations that are useful for the task at hand. Thus, this simple example illustrates that meaningful target representations should be recoverable from a sufficiently large latent space, given the <em>random</em> projection of a small number of highly correlated features. Similarly, <span class="citation" data-cites="alain2018understanding">Alain and Bengio (<a href="#ref-alain2018understanding" role="doc-biblioref">2018</a>)</span> observe that even before training a convolutional neural network on MNIST data, the layer-wise activations can already be used to perform binary classification. In fact, it is well-known that random projections can be used for prediction tasks <span class="citation" data-cites="dasgupta2013experiments">(<a href="#ref-dasgupta2013experiments" role="doc-biblioref">Dasgupta 2013</a>)</span>.</p>
-<div id="fig-map" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="results/figures/map.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Predicted coordinate values (out-of-sample) from a linear probe on final-layer activations of an untrained neural network.
-</figcaption>
+<div id="fig-map" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="results/figures/map.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Predicted coordinate values (out-of-sample) from a linear probe on final-layer activations of an untrained neural network.</figcaption>
 </figure>
 </div>
 </section>
 <section id="pca-as-a-yield-curve-interpreter" class="level3">
 <h3 class="anchored" data-anchor-id="pca-as-a-yield-curve-interpreter">PCA as a Yield Curve Interpreter</h3>
 <p>In response to the claims made by Tegmark, numerous commentators on social media have pointed out that even the simplest of models can exhibit structure in their latent spaces. One of the most popular and illustrative examples I remember from my time at the Bank of England is yield curve decomposition through PCA. The yield curve is a popular tool for investors and economists to gauge the health of the economy. It plots the yields of bonds against their maturities. The slope of the yield curve is often used as a predictor of future economic activity: a steep yield curve is associated with a growing economy, while a flat or inverted yield curve is associated with a contracting economy.</p>
-<p>To understand this better, let us go on a quick detour into economics and look at actual yield curves observed in the US during the Global Financial Crisis (GFC). <a href="#fig-gfc-1" class="quarto-xref">Figure&nbsp;2 (a)</a> shows the yield curve of US Treasury bonds on 27 February 2007, which according to <a href="https://money.cnn.com/2007/02/27/markets/markets_0630/index.htm?cnn=yes">CNN</a> was a “brutal day on Wall Street”.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> This followed <a href="https://money.cnn.com/2007/02/26/news/economy/greenspan/index.htm?postversion=2007022609">reports</a> on the previous day of former Federal Reserve Chairman Alan Greenspan’s warning that the US economy was at risk of a recession. The yield curve was inverted with a sharp negative spread between the 10-year and 3-month yields, indicative of the market’s expectation of a recession.</p>
-<p><a href="#fig-gfc-2" class="quarto-xref">Figure&nbsp;2 (b)</a> shows the corresponding yield curve during the aftermath of the GFC on 20 April 2009. On that day the influential Time Magazine <a href="https://content.time.com/time/business/article/0,8599,1890560,00.html">reported</a> that the “Banking Crisis is Over”. The yield curve was steeply sloped with a positive spread between the 10-year and 3-month yields, indicative of the market’s expectation of a recovery. The overall level of the yield curve was still very low though, indicative of the fact that US economy had not fully recovered at that point.</p>
-<details class="code-fold">
+<p>To understand this better, let us go on a quick detour into economics and look at actual yield curves observed in the US during the Global Financial Crisis (GFC). <a href="#fig-gfc-1">Figure&nbsp;2 (a)</a> shows the yield curve of US Treasury bonds on 27 February 2007, which according to <a href="https://money.cnn.com/2007/02/27/markets/markets_0630/index.htm?cnn=yes">CNN</a> was a “brutal day on Wall Street”.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> This followed <a href="https://money.cnn.com/2007/02/26/news/economy/greenspan/index.htm?postversion=2007022609">reports</a> on the previous day of former Federal Reserve Chairman Alan Greenspan’s warning that the US economy was at risk of a recession. The yield curve was inverted with a sharp negative spread between the 10-year and 3-month yields, indicative of the market’s expectation of a recession.</p>
+<p><a href="#fig-gfc-2">Figure&nbsp;2 (b)</a> shows the corresponding yield curve during the aftermath of the GFC on 20 April 2009. On that day the influential Time Magazine <a href="https://content.time.com/time/business/article/0,8599,1890560,00.html">reported</a> that the “Banking Crisis is Over”. The yield curve was steeply sloped with a positive spread between the 10-year and 3-month yields, indicative of the market’s expectation of a recovery. The overall level of the yield curve was still very low though, indicative of the fact that US economy had not fully recovered at that point.</p>
+<div>
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a>df <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"data/ust_yields.csv"</span>), DataFrame) <span class="op">|&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>    x <span class="op">-&gt;</span> <span class="pp">@pivot_longer</span>(x, <span class="op">-</span><span class="dt">Date</span>) <span class="op">|&gt;</span></span>
@@ -459,14 +419,11 @@ Figure&nbsp;1: Predicted coordinate values (out-of-sample) from a linear probe o
 <span id="cb1-40"><a href="#cb1-40"></a>)</span>
 <span id="cb1-41"><a href="#cb1-41"></a><span class="fu">display</span>(plt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="fig-gfc" class="quarto-layout-panel">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-gfc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-gfc" style="flex-basis: 50.0%;justify-content: flex-start;display: flex;">
-<div id="fig-gfc-1" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-gfc-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div id="fig-gfc" class="cell quarto-layout-panel" data-execution_count="2">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div id="fig-gfc-1" class="quarto-figure quarto-figure-center anchored" style="flex-basis: 50.0%;justify-content: center;">
+<figure class="figure">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="380" height="350" viewbox="0 0 1520 1400">
 <defs>
@@ -524,17 +481,11 @@ Figure&nbsp;1: Predicted coordinate values (out-of-sample) from a linear probe o
 <circle clip-path="url(#clip822)" cx="1030.15" cy="289.944" r="14.4" fill="#0000ff" fill-rule="evenodd" fill-opacity="0.5" stroke="#000000" stroke-opacity="0.5" stroke-width="2.8"></circle>
 <circle clip-path="url(#clip822)" cx="1436.3" cy="310.966" r="14.4" fill="#0000ff" fill-rule="evenodd" fill-opacity="0.5" stroke="#000000" stroke-opacity="0.5" stroke-width="2.8"></circle>
 </svg>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-gfc-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) Onset of GFC: 27 February 2007.
-</figcaption>
+<figcaption class="figure-caption">(a) Onset of GFC: 27 February 2007.</figcaption>
 </figure>
 </div>
-</div>
-<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-gfc" style="flex-basis: 50.0%;justify-content: flex-start;display: flex;">
-<div id="fig-gfc-2" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-gfc-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div id="fig-gfc-2" class="quarto-figure quarto-figure-center anchored" style="flex-basis: 50.0%;justify-content: center;">
+<figure class="figure">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="380" height="350" viewbox="0 0 1520 1400">
 <defs>
@@ -592,25 +543,19 @@ Figure&nbsp;1: Predicted coordinate values (out-of-sample) from a linear probe o
 <circle clip-path="url(#clip912)" cx="1030.15" cy="467.67" r="14.4" fill="#0000ff" fill-rule="evenodd" fill-opacity="0.5" stroke="#000000" stroke-opacity="0.5" stroke-width="2.8"></circle>
 <circle clip-path="url(#clip912)" cx="1436.3" cy="488.691" r="14.4" fill="#0000ff" fill-rule="evenodd" fill-opacity="0.5" stroke="#000000" stroke-opacity="0.5" stroke-width="2.8"></circle>
 </svg>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-gfc-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) Aftermath of GFC: 20 April 2009.
-</figcaption>
+<figcaption class="figure-caption">(b) Aftermath of GFC: 20 April 2009.</figcaption>
 </figure>
 </div>
 </div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gfc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Yield curve of US Treasury bonds.
-</figcaption>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Yield curve of US Treasury bonds.</figcaption><p></p>
 </figure>
+</div>
 </div>
 <p>Of course, US Treasuries are not the only bonds that are traded in the market. To get a more complete picture of the economy, analysts might therefore be interested in looking at the yield curves of other bonds as well. In particular, we might be interested in predicting economic growth based on the yield curves of many different bonds. The problem with that idea is that it is cursed by high dimensionality: we would end up modelling a single variable of interest (economic growth) with a large number of predictors (the yields of many different bonds). To deal with the curse of high dimensionality it can be useful to decompose the yield curves into sets of principal components.</p>
 <p>To compute the principal components we can decompose the matrix of yields <span class="math inline">\(\mathbf{Y}\)</span> into a product of its singular vectors and values: <span class="math inline">\(\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}\)</span>. I will not go into the details here, because Professor Gilbert Strang has already done a much better job than I ever could in his <a href="https://www.youtube.com/watch?v=mBcLRGuAFUk">Linear Algebra lectures</a>. To put this into the broader context of the article, however, let us simply refer to <span class="math inline">\(\mathbf{U}\)</span>, <span class="math inline">\(\Sigma\)</span> and <span class="math inline">\(\mathbf{V}^{\prime}\)</span> as latent embeddings of the yield curve (they are latent because they are not directly observable).</p>
-<p>The top panel in <a href="#fig-pca" class="quarto-xref">Figure&nbsp;3</a> shows the first two principal components of the yield curves of US Treasury bonds over time. Vertical stalks indicate the key dates during the onset and aftermath of the crisis, which we discussed above. For both components, we can observe some marked shifts between the two dates - but can we attribute any meaning to these shifts? It turns out we can: for comparison, the bottom panel in <a href="#fig-pca" class="quarto-xref">Figure&nbsp;3</a> shows the average level and spread of the yield curves over time. The first principal component is strongly correlated with the level of the yield curve, while the second principal component is strongly correlated with the spread of the yield curve.</p>
+<p>The top panel in <a href="#fig-pca">Figure&nbsp;3</a> shows the first two principal components of the yield curves of US Treasury bonds over time. Vertical stalks indicate the key dates during the onset and aftermath of the crisis, which we discussed above. For both components, we can observe some marked shifts between the two dates - but can we attribute any meaning to these shifts? It turns out we can: for comparison, the bottom panel in <a href="#fig-pca">Figure&nbsp;3</a> shows the average level and spread of the yield curves over time. The first principal component is strongly correlated with the level of the yield curve, while the second principal component is strongly correlated with the spread of the yield curve.</p>
 <div id="ef0d53c9" class="cell" data-execution_count="3">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># PCA:</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>df_wide <span class="op">=</span> <span class="pp">@select</span>(df, <span class="dt">Date</span>, variable, value) <span class="op">|&gt;</span></span>
@@ -620,20 +565,16 @@ Figure&nbsp;2: Yield curve of US Treasury bonds.
 <span id="cb2-6"><a href="#cb2-6"></a>U, Σ, V <span class="op">=</span> <span class="fu">svd</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="fig-pca" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-pca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="results/figures/pca.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Comparison of latent embeddings and observed data of the US Treasury yield curve.
-</figcaption>
+<div id="fig-pca" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="results/figures/pca.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;3: Comparison of latent embeddings and observed data of the US Treasury yield curve.</figcaption>
 </figure>
 </div>
 <p>Not convinced? Let us use <span class="math inline">\(\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}\)</span> in true autoencoder fashion to reconstruct yield curves from principal components. Let <span class="math inline">\(z_1\)</span> denote the first principal component and consider the following: we keep all other <span class="math inline">\(M-1\)</span> principal components fixed at zero where <span class="math inline">\(M\)</span> denotes the total number of maturities; next we traverse the latent space by varying the value of <span class="math inline">\(z_1\)</span> over a fixed grid of length <span class="math inline">\(K\)</span> each time storing the full vector <span class="math inline">\(\mathbf{z}\)</span>; finally, we vertically concatenate the vectors and end up with a matrix <span class="math inline">\(\mathbf{Z}\)</span> of dimension <span class="math inline">\((K \times M)\)</span>. To reconstruct yields, we simply multiply <span class="math inline">\(Z\)</span> by the singular values and right singular vectors: <span class="math inline">\(\mathbf{Y}=\mathbf{Z}\Sigma\mathbf{V}^{\prime}\)</span>.</p>
-<p><a href="#fig-pca-anim" class="quarto-xref">Figure&nbsp;4</a> shows the result of this exercise in the left panel. As we can see, our generated yield curves shift vertically as we traverse the latent space. The right panel of <a href="#fig-pca-anim" class="quarto-xref">Figure&nbsp;4</a> shows the result of a similar exercise, but this time we keep the first principal component fixed at zero and vary the second principal component. This time the slope of our generated yield curves shifts as we traverse the latent space.</p>
+<p><a href="#fig-pca-anim">Figure&nbsp;4</a> shows the result of this exercise in the left panel. As we can see, our generated yield curves shift vertically as we traverse the latent space. The right panel of <a href="#fig-pca-anim">Figure&nbsp;4</a> shows the result of a similar exercise, but this time we keep the first principal component fixed at zero and vary the second principal component. This time the slope of our generated yield curves shifts as we traverse the latent space.</p>
 <div id="6ed277fb" class="cell" data-execution_count="4">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a>n_vals <span class="op">=</span> <span class="fl">50</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>pc1_range <span class="op">=</span> <span class="fu">range</span>(<span class="fu">extrema</span>(U[<span class="op">:</span>,<span class="fl">1</span>])<span class="op">...</span>, length<span class="op">=</span>n_vals)</span>
@@ -674,14 +615,10 @@ Figure&nbsp;3: Comparison of latent embeddings and observed data of the US Treas
 <span id="cb3-37"><a href="#cb3-37"></a><span class="fu">gif</span>(anim, <span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"results/figures/pc_anim.gif"</span>), fps<span class="op">=</span><span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="fig-pca-anim" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-pca-anim-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="results/figures/pc_anim.gif" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pca-anim-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Yield curve decomposition through PCA.
-</figcaption>
+<div id="fig-pca-anim" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="results/figures/pc_anim.gif" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;4: Yield curve decomposition through PCA.</figcaption>
 </figure>
 </div>
 </section>
@@ -690,9 +627,9 @@ Figure&nbsp;4: Yield curve decomposition through PCA.
 <p>So far we have considered simple matrix decomposition. You might argue that principal components are not really latent embeddings in the traditional sense of deep learning. To address this, let us now consider a simple deep-learning example. Our goal will be to not only predict economic growth from the yield curve but also extract meaningful features at the same time. In particular, we will use a neural network architecture that allows us to recover a compressed latent representation of the yield curve.</p>
 <section id="data" class="level4">
 <h4 class="anchored" data-anchor-id="data">Data</h4>
-<p>To estimate economic growth we will rely on a quarterly <a href="https://fred.stlouisfed.org/series/GDPC1">series</a> of the real gross domestic product (GDP) provided by the Federal Reserve Bank of St.&nbsp;Louis. The data arrives in terms of levels of real GDP. In order to estimate growth, we will transform the data into log differences. Since our yield curve data is daily, we will need to aggregate it to the quarterly frequency. To do this, we will simply take the average of the daily yields for each maturity. We will also standardize yields since deep learning models tend to perform better with standardized data. Since COVID-19 was a huge structural break, we will also filter out all observations after 2018. <a href="#fig-dl-data" class="quarto-xref">Figure&nbsp;5</a> shows the pre-processed data.</p>
+<p>To estimate economic growth we will rely on a quarterly <a href="https://fred.stlouisfed.org/series/GDPC1">series</a> of the real gross domestic product (GDP) provided by the Federal Reserve Bank of St.&nbsp;Louis. The data arrives in terms of levels of real GDP. In order to estimate growth, we will transform the data into log differences. Since our yield curve data is daily, we will need to aggregate it to the quarterly frequency. To do this, we will simply take the average of the daily yields for each maturity. We will also standardize yields since deep learning models tend to perform better with standardized data. Since COVID-19 was a huge structural break, we will also filter out all observations after 2018. <a href="#fig-dl-data">Figure&nbsp;5</a> shows the pre-processed data.</p>
 <div id="cell-fig-dl-data" class="cell" data-execution_count="5">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a>df_gdp_full <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"data/gdp.csv"</span>), DataFrame) <span class="op">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>    x <span class="op">-&gt;</span> <span class="pp">@rename</span>(x, <span class="dt">Date</span><span class="op">=</span>DATE, gdp<span class="op">=</span>GDPC1) <span class="op">|&gt;</span></span>
@@ -738,9 +675,8 @@ Figure&nbsp;4: Yield curve decomposition through PCA.
 <span id="cb4-42"><a href="#cb4-42"></a>)</span>
 <span id="cb4-43"><a href="#cb4-43"></a><span class="fu">plot</span>(p_gdp, p_yields, layout<span class="op">=</span>(<span class="fl">2</span>,<span class="fl">1</span>), size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">600</span>), left_margin<span class="op">=</span><span class="fl">5</span>mm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="fig-dl-data" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored" data-execution_count="6">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-dl-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div id="fig-dl-data" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="800" height="600" viewbox="0 0 3200 2400">
 <defs>
@@ -816,20 +752,17 @@ Figure&nbsp;4: Yield curve decomposition through PCA.
 <polyline clip-path="url(#clip503)" style="stroke:#0000ff; stroke-linecap:round; stroke-linejoin:round; stroke-width:4; stroke-opacity:0.5; fill:none" points="442.025,1324.89 465.03,1321.2 488.289,1361.37 511.548,1413.49 534.301,1399.53 557.307,1423.4 580.566,1505.7 603.825,1510.87 626.83,1501.47 649.836,1604.49 673.095,1587.95 696.354,1653.54 719.107,1690.28 742.113,1740.99 765.372,1649.76 788.63,1597.59 811.384,1486.26 834.39,1455.02 857.648,1404.66 880.907,1451.39 903.66,1553.04 926.666,1583.12 949.925,1647.35 973.184,1636.42 996.19,1539.39 1019.2,1540.26 1042.45,1591.42 1065.71,1564.64 1088.47,1549.29 1111.47,1608.15 1134.73,1658.91 1157.99,1695.26 1180.74,1697.9 1203.75,1741.86 1227.01,1773.66 1250.27,1733.31 1273.02,1676.57 1296.03,1633.91 1319.28,1604.8 1342.54,1609.24 1365.55,1641.61 1388.55,1675.1 1411.81,1703.78 1435.07,1745.2 1457.83,1709.87 1480.83,1739.89 1504.09,1760.32 1527.35,1723.4 1550.1,1719.44 1573.11,1797.64 1596.37,1822.57 1619.63,1837.79 1642.38,1880.3 1665.38,1801.55 1688.64,1802.54 1711.9,1841.31 1734.91,1776.32 1757.91,1815.41 1781.17,1841.72 1804.43,1856.79 1827.18,1886.08 1850.19,1891.67 1873.45,1856.32 1896.71,1855.44 1919.46,1785.16 1942.47,1813.08 1965.73,1847.43 1988.98,1839.55 2011.74,1815.3 2034.74,1822.99 2058,1871.08 2081.26,1906.45 2104.27,1880.88 2127.27,1893.31 2150.53,1968.04 2173.79,2002.75 2196.54,1934.17 2219.55,1922.17 2242.81,1924.16 2266.07,1894.01 2288.82,1933.35 2311.83,2016.12 2335.08,1981.22 2358.34,1917.31 2381.1,1952.35 2404.1,2052.24 2427.36,2130.73 2450.62,2124.08 2473.63,2158.09 2496.63,2183.16 2519.89,2170.89 2543.15,2131.09 2565.9,2127.35 2588.91,2037.21 2612.17,2028.57 2635.43,2039.79 2658.18,2072.56 2681.18,2095.66 2704.44,2138.72 2727.7,2189.63 2750.46,2148.23 2773.46,2144.97 2796.72,2151.71 2819.98,2189.67 2842.98,2212.84 2865.99,2245.07 2889.25,2162.13 2912.51,2126.19 2935.26,2146.71 2958.27,2154.4 2981.53,2148.94 3004.78,2109.75 3027.54,2097.15 3050.54,2097.26 3073.8,2072.75 "></polyline>
 <polyline clip-path="url(#clip503)" style="stroke:#0000ff; stroke-linecap:round; stroke-linejoin:round; stroke-width:4; stroke-opacity:0.5; fill:none" points="442.025,1320.79 465.03,1300.48 488.289,1333.91 511.548,1383.98 534.301,1368.39 557.307,1385.76 580.566,1433.6 603.825,1440.28 626.83,1426.91 649.836,1490.84 673.095,1480.18 696.354,1544.38 719.107,1573.88 742.113,1650.67 765.372,1675.85 788.63,1613.19 811.384,1502.63 834.39,1470.5 857.648,1417.93 880.907,1465.24 903.66,1562.03 926.666,1593.84 949.925,1661.89 973.184,1652.81 996.19,1564.78 1019.2,1558.79 1042.45,1607.37 1065.71,1579.6 1088.47,1562.9 1111.47,1620.66 1134.73,1674.92 1157.99,1711.49 1180.74,1716.82 1203.75,1769.23 1227.01,1822.48 1250.27,1782.72 1273.02,1723.84 1296.03,1689.41 1319.28,1659.02 1342.54,1654.03 1365.55,1698.14 1388.55,1724.43 1411.81,1738.7 1435.07,1774.05 1457.83,1737.63 1480.83,1762.04 1504.09,1793.6 1527.35,1749.43 1550.1,1727.29 1573.11,1808.59 1596.37,1834.5 1619.63,1850.33 1642.38,1894.52 1665.38,1812.65 1688.64,1813.68 1711.9,1853.98 1734.91,1786.42 1757.91,1827.06 1781.17,1854.42 1804.43,1870.08 1827.18,1900.54 1850.19,1906.35 1873.45,1869.59 1896.71,1883.94 1919.46,1816.49 1942.47,1837.53 1965.73,1873.21 1988.98,1865.5 2011.74,1838.29 2034.74,1843.95 2058,1891.55 2081.26,1919.86 2104.27,1896.96 2127.27,1914.61 2150.53,2025.98 2173.79,2054.98 2196.54,1953.77 2219.55,1932.53 2242.81,1930.68 2266.07,1889.83 2288.82,1925.6 2311.83,1998.5 2335.08,1954.51 2358.34,1899.06 2381.1,1930.31 2404.1,2021.86 2427.36,2113.78 2450.62,2099.3 2473.63,2128.39 2496.63,2155.78 2519.89,2138.93 2543.15,2100.53 2565.9,2099.69 2588.91,2018.54 2612.17,2008.39 2635.43,2022.71 2658.18,2056.99 2681.18,2082.05 2704.44,2124.36 2727.7,2183.01 2750.46,2136.26 2773.46,2125.23 2796.72,2125.14 2819.98,2159.38 2842.98,2180.96 2865.99,2221.4 2889.25,2143.62 2912.51,2113.05 2935.26,2134.14 2958.27,2145.39 2981.53,2145.49 3004.78,2115.31 3027.54,2107.51 3050.54,2110.66 3073.8,2081.3 "></polyline>
 </svg>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dl-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: GDP growth and yield curve data.
-</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;5: GDP growth and yield curve data.</figcaption>
 </figure>
 </div>
 </div>
 </section>
 <section id="model" class="level4">
 <h4 class="anchored" data-anchor-id="model">Model</h4>
-<p>Using a simple autoencoder architecture (<a href="#fig-dl-model" class="quarto-xref">Figure&nbsp;6</a>), we let our model <span class="math inline">\(g_t\)</span> denote growth and our conditional <span class="math inline">\(\mathbf{r}_t\)</span> the matrix of aggregated Treasury yield rates at time <span class="math inline">\(t\)</span>. Finally, we let <span class="math inline">\(\theta\)</span> denote our model parameters. Formally, we are interested in maximizing the likelihood <span class="math inline">\(p_{\theta}(g_t|\mathbf{r}_t)\)</span>.</p>
+<p>Using a simple autoencoder architecture (<a href="#fig-dl-model">Figure&nbsp;6</a>), we let our model <span class="math inline">\(g_t\)</span> denote growth and our conditional <span class="math inline">\(\mathbf{r}_t\)</span> the matrix of aggregated Treasury yield rates at time <span class="math inline">\(t\)</span>. Finally, we let <span class="math inline">\(\theta\)</span> denote our model parameters. Formally, we are interested in maximizing the likelihood <span class="math inline">\(p_{\theta}(g_t|\mathbf{r}_t)\)</span>.</p>
 <p>The encoder consists of a single fully connected hidden layer with 32 neurons and a hyperbolic tangent activation function. The bottleneck layer connecting the encoder to the decoder, is a fully connected layer with 6 neurons. The decoder consists of two fully connected layers, each with a hyperbolic tangent activation function: the first layer consists of 32 neurons and the second layer will have the same dimension as the input data. The output layer consists of a single neuron for our output variable, <span class="math inline">\(g_t\)</span>. We train the model over 1,000 epochs to minimize mean squared error loss using the Adam optimizer~.</p>
 <div id="cell-fig-dl-model" class="cell" data-execution_count="6">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a>dl <span class="op">=</span> Flux.MLUtils.<span class="fu">DataLoader</span>((<span class="fu">permutedims</span>(X), <span class="fu">permutedims</span>(y)), batchsize<span class="op">=</span><span class="fl">24</span>, shuffle<span class="op">=</span><span class="cn">true</span>) </span>
 <span id="cb5-2"><a href="#cb5-2"></a>input_dim <span class="op">=</span> <span class="fu">size</span>(X,<span class="fl">2</span>)</span>
@@ -853,9 +786,8 @@ Figure&nbsp;5: GDP growth and yield curve data.
 <span id="cb5-20"><a href="#cb5-20"></a>plt <span class="op">=</span> <span class="fu">plot</span>(model, <span class="fu">rand</span>(input_dim))</span>
 <span id="cb5-21"><a href="#cb5-21"></a><span class="fu">display</span>(plt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="fig-dl-model" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-dl-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div id="fig-dl-model" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="672" height="480" viewbox="0 0 2688 1920">
 <defs>
@@ -2184,27 +2116,20 @@ Figure&nbsp;5: GDP growth and yield curve data.
 <text style="fill:#000000; fill-opacity:1; font-family:Century Gothic,CenturyGothic,AppleGothic,sans-serif; font-size:47px; text-anchor:middle;" transform="rotate(-20, 2276.24, 901.153)" x="2276.24" y="901.153">Dense(12 =&gt; 1)</text>
 </g>
 </svg>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dl-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6: Model architecture.
-</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;6: Model architecture.</figcaption>
 </figure>
 </div>
 </div>
-<p>The in-sample fit of the model is shown in the left chart of <a href="#fig-dl-results" class="quarto-xref">Figure&nbsp;7</a>, which shows actual GDP growth and fitted values from the autoencoder model. The model has a large number of free parameters and captures the relationship between economic growth and the yield curve reasonably well, as expected. Since our primary goal is not out-of-sample prediction accuracy but feature extraction for inference, we use all of the available data instead of reserving a hold-out set. As discussed above, we also know that the relationship between economic growth and the yield curve is characterized by two main factors: the level and the spread. Since the model itself is fully characterized by its parameters, we would expect that these two important factors are reflected somewhere in the latent parameter space.</p>
+<p>The in-sample fit of the model is shown in the left chart of <a href="#fig-dl-results">Figure&nbsp;7</a>, which shows actual GDP growth and fitted values from the autoencoder model. The model has a large number of free parameters and captures the relationship between economic growth and the yield curve reasonably well, as expected. Since our primary goal is not out-of-sample prediction accuracy but feature extraction for inference, we use all of the available data instead of reserving a hold-out set. As discussed above, we also know that the relationship between economic growth and the yield curve is characterized by two main factors: the level and the spread. Since the model itself is fully characterized by its parameters, we would expect that these two important factors are reflected somewhere in the latent parameter space.</p>
 </section>
 <section id="linear-probe" class="level4">
 <h4 class="anchored" data-anchor-id="linear-probe">Linear Probe</h4>
 <p>While the loss function applies most direct pressure on layers near the final output layer, any information useful for the downstream task first needs to pass through the bottleneck layer <span class="citation" data-cites="alain2018understanding">(<a href="#ref-alain2018understanding" role="doc-biblioref">Alain and Bengio 2018</a>)</span>. On a per-neuron basis, the pressure to distill useful representation is therefore likely maximized there. Consequently, the bottleneck layer activations seem like a natural place to start looking for compact, meaningful representations of distilled information. I compute and extract these activations <span class="math inline">\(A_t\)</span> for all time periods <span class="math inline">\(t=1,...,T\)</span>. Next, we use a linear probe to regress the observed yield curve factors on the latent embeddings. Let <span class="math inline">\(Y_t\)</span> denote the vector containing the two factors of interest in time <span class="math inline">\(t\)</span>: <span class="math inline">\(y_{t,l}\)</span> and <span class="math inline">\(y_{t,s}\)</span> for the level and spread, respectively. Formally, we are interested in the following regression model: <span class="math inline">\(p_{w}(Y_t|A_t)\)</span> where <span class="math inline">\(w\)</span> denotes the regression parameters. I use Ridge regression with <span class="math inline">\(\lambda\)</span> set to <span class="math inline">\(0.1\)</span>. Using the estimated regression parameters <span class="math inline">\(\hat{w}\)</span>, we then predict the yield curve factors from the latent embeddings: <span class="math inline">\(\hat{Y}_t=\hat{w}^{\prime}A_t\)</span>.</p>
-<p>The in-sample predictions of the probe are shown in the right chart of <a href="#fig-dl-results" class="quarto-xref">Figure&nbsp;7</a>. Solid lines show the observed yield curve factors over time, while dashed lines show predicted values. We can observe that the latent embeddings predict the two yield curve factors reasonably well, in particular the spread.</p>
-<div id="fig-dl-results" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-dl-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="results/figures/dl.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dl-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7: The left chart shows the actual GDP growth and fitted values from the autoencoder model. The right chart shows the observed average level and spread of the yield curve (solid) along with the predicted values (in-sample) from the linear probe based on the latent embeddings (dashed).
-</figcaption>
+<p>The in-sample predictions of the probe are shown in the right chart of <a href="#fig-dl-results">Figure&nbsp;7</a>. Solid lines show the observed yield curve factors over time, while dashed lines show predicted values. We can observe that the latent embeddings predict the two yield curve factors reasonably well, in particular the spread.</p>
+<div id="fig-dl-results" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="results/figures/dl.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;7: The left chart shows the actual GDP growth and fitted values from the autoencoder model. The right chart shows the observed average level and spread of the yield curve (solid) along with the predicted values (in-sample) from the linear probe based on the latent embeddings (dashed).</figcaption>
 </figure>
 </div>
 <p>Did the neural network now learn an intrinsic understanding of the economic relationship between growth and the yield curve? To me, that would be too big of a statement. Still, the current form of information distillation can be useful, even beyond its intended use for monitoring models.</p>
@@ -2221,31 +2146,27 @@ Figure&nbsp;7: The left chart shows the actual GDP growth and fitted values from
 <section id="linear-probes" class="level4">
 <h4 class="anchored" data-anchor-id="linear-probes">Linear Probes</h4>
 <p>Instead of computing a measure based on predicted labels, we can use linear probes to assess if the fine-tuned model has learned associative patterns between central bank communications and key economic indicators. To this end, I have further pre-processed the data provided by <span class="citation" data-cites="shah2023trillion">Shah, Paturi, and Chava (<a href="#ref-shah2023trillion" role="doc-biblioref">2023</a>)</span> and used their proposed model to compute layer-wise embeddings for all available sentences. I have made these available and easily accessible through a small Julia package: <a href="https://github.com/pat-alt/TrillionDollarWords.jl">TrillionDollarWords.jl</a>. For each layer, I have then computed linear probes on two inflation indicators—the Consumer Price Index (CPI) and the Producer Price Index (PPI)—as well as US Treasury yields at different levels of maturity. To mitigate issues related to over-parameterization, I follow the recommendation in <span class="citation" data-cites="alain2018understanding">Alain and Bengio (<a href="#ref-alain2018understanding" role="doc-biblioref">2018</a>)</span> to first reduce the dimensionality of the embeddings each time. In particular, linear probes are restricted to the first 128 principal components of the embeddings of each layer.</p>
-<p><a href="#fig-fomc" class="quarto-xref">Figure&nbsp;8</a> shows the out-of-sample root mean squared error (RMSE) for the linear probe, plotted against <em>FOMC-RoBERTa</em>’s <span class="math inline">\(n\)</span>-th layer. The values correspond to averages across cross-validation folds where I have used an expanding window scheme. Consistent with related work <span class="citation" data-cites="alain2018understanding">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span>, we can observe that model performance tends to be higher for layers near the end of the transformer model. Curiously, for yields at longer maturities, we see that performance eventually deteriorates for the very final layers. This is not the case for the training data, so I would attribute this to overfitting. A detailed discussion of all our results including a benchmark of these probes against baseline autoregressive models can be found in the paper.</p>
-<div id="fig-fomc" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-fomc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="results/figures/rmse_pca_128.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fomc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8: Out-of-sample root mean squared error (RMSE) for the linear probe plotted against<em>FOMC-RoBERTa</em>’s <span class="math inline">\(n\)</span>-th layer for different indicators. The values correspond to averages computed across cross-validation folds, where we have used an expanding window approach to split the time series.
-</figcaption>
+<p><a href="#fig-fomc">Figure&nbsp;8</a> shows the out-of-sample root mean squared error (RMSE) for the linear probe, plotted against <em>FOMC-RoBERTa</em>’s <span class="math inline">\(n\)</span>-th layer. The values correspond to averages across cross-validation folds where I have used an expanding window scheme. Consistent with related work <span class="citation" data-cites="alain2018understanding">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span>, we can observe that model performance tends to be higher for layers near the end of the transformer model. Curiously, for yields at longer maturities, we see that performance eventually deteriorates for the very final layers. This is not the case for the training data, so I would attribute this to overfitting. A detailed discussion of all our results including a benchmark of these probes against baseline autoregressive models can be found in the paper.</p>
+<div id="fig-fomc" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="results/figures/rmse_pca_128.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;8: Out-of-sample root mean squared error (RMSE) for the linear probe plotted against<em>FOMC-RoBERTa</em>’s <span class="math inline">\(n\)</span>-th layer for different indicators. The values correspond to averages computed across cross-validation folds, where we have used an expanding window approach to split the time series.</figcaption>
 </figure>
 </div>
 </section>
 <section id="stochastic-parrots-after-all" class="level4">
 <h4 class="anchored" data-anchor-id="stochastic-parrots-after-all">Stochastic Parrots After All?</h4>
-<p>These results from the linear probe shown in <a href="#fig-fomc" class="quarto-xref">Figure&nbsp;8</a> are certainly not unimpressive: even though <em>FOMC-RoBERTa</em> was not explicitly trained to uncover associations between central bank communications and prices, it appears that the model has distilled representations that can be used to predict inflation and yields. It is worth pointing out here that this model is substantially smaller than the models tested in <span class="citation" data-cites="gurnee2023language">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span>. This begs the following question:</p>
+<p>These results from the linear probe shown in <a href="#fig-fomc">Figure&nbsp;8</a> are certainly not unimpressive: even though <em>FOMC-RoBERTa</em> was not explicitly trained to uncover associations between central bank communications and prices, it appears that the model has distilled representations that can be used to predict inflation and yields. It is worth pointing out here that this model is substantially smaller than the models tested in <span class="citation" data-cites="gurnee2023language">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span>. This begs the following question:</p>
 <blockquote class="blockquote">
 <p>Have we uncovered further evidence that LLMs “aren’t mere stochastic parrots”? Has <em>FOMC-RoBERTa</em> developed an intrinsic understanding of the economy just by ‘reading’ central bank communications?</p>
 </blockquote>
 <p>Personally, I am having a very hard time believing this. To argue my case, I will now produce a counter-example demonstrating that, if anything, these findings are very much in line with the parrot metaphor. The counter-example is based on the following premise: if the results from the linear probe truly were indicative of some intrinsic understanding of the economy, then the probe should not be sensitive to random sentences that are most definitely not related to consumer prices.</p>
 <p>To test this, I select the best-performing probe trained on the final-layer activations to predict changes in the CPI. I then make up sentences that fall into one of these four categories: <em>Inflation/Prices</em> (IP)—sentences about price inflation, <em>Deflation/Prices</em> (DP)—sentences about price deflation, <em>Inflation/Birds</em> (IB)—sentences about inflation in the number of birds and <em>Deflation/Birds</em> (DB)—sentences about deflation in the number of birds. A sensible sentence for category DP, for example, could be: “It is essential to bring inflation back to target to avoid drifting into deflation territory.”. Analogically, we could construct the following sentence for the DB category: “It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.”.</p>
-<p>In light of the encouraging results for the probe in <a href="#fig-fomc" class="quarto-xref">Figure&nbsp;8</a>, we should expect the probe to predict higher levels of inflation for activations for sentences in the IP category than for sentences in the DP category. If this was indicative of true intrinsic understanding, we would not expect to see any significant difference in predicted inflation levels for sentences about birds, independent of whether or not their numbers are increasing. More specifically, we would not expect the probe to predict values for sentences about birds that are substantially different from the values it can be expected to predict when using actual white noise as inputs.</p>
+<p>In light of the encouraging results for the probe in <a href="#fig-fomc">Figure&nbsp;8</a>, we should expect the probe to predict higher levels of inflation for activations for sentences in the IP category than for sentences in the DP category. If this was indicative of true intrinsic understanding, we would not expect to see any significant difference in predicted inflation levels for sentences about birds, independent of whether or not their numbers are increasing. More specifically, we would not expect the probe to predict values for sentences about birds that are substantially different from the values it can be expected to predict when using actual white noise as inputs.</p>
 <p>To get to this last point, I also generate many probe predictions for samples of noise. Let <span class="math inline">\(f: \mathcal{A}^k \mapsto \mathcal{Y}\)</span> denote the linear probe that maps from the <span class="math inline">\(k\)</span>-dimensional space spanned by <span class="math inline">\(k\)</span> first principal components of the final-layer activations to the output variable of interest (CPI growth in this case). Then I sample <span class="math inline">\(\varepsilon_i \sim \mathcal{N}(\mathbf{0},\mathbf{I}^{(k \times k)})\)</span> for <span class="math inline">\(i \in [1,1000]\)</span> and compute the sample average. I repeat this process <span class="math inline">\(10000\)</span> times and compute the median-of-means to get an estimate for <span class="math inline">\(\mathbb{E}[f(\varepsilon)]=\mathbb{E}[y|\varepsilon]\)</span>, that is the predicted value of the probe conditional on white noise.</p>
 <p>Next, I propose the following hypothesis test as a minimum viable testing framework to assess if the probe results (may) provide evidence for an actual understanding of key economic relationships learned purely from text:</p>
 <div id="prp-line" class="theorem proposition">
-<p><span class="theorem-title"><strong>Proposition 1 (Parrot Test)</strong></span> &nbsp;</p>
+<p><span class="theorem-title"><strong>Proposition 1 (Parrot Test) </strong></span>&nbsp;</p>
 <ul>
 <li><em>H0</em> (Null): The probe never predicts values that are statistically significantly different from <span class="math inline">\(\mathbb{E}[f(\varepsilon)]\)</span>.</li>
 <li><em>H1</em> (Stochastic Parrots): The probe predicts values that are statistically significantly different from <span class="math inline">\(\mathbb{E}[f(\varepsilon)]\)</span> for sentences related to the outcome of interest <em>and</em> those that are independent (i.e.&nbsp;sentences in all categories).</li>
@@ -2253,16 +2174,12 @@ Figure&nbsp;8: Out-of-sample root mean squared error (RMSE) for the linear probe
 </ul>
 </div>
 <p>To be clear, if in such a test we did find substantial evidence in favour of rejecting both <em>HO</em> and <em>H1</em>, this would not automatically imply that <em>H2</em> is true. But to even continue investigating if based on having learned meaningful representation the underlying LLM is more than just a parrot, it should be able to pass this simple test.</p>
-<p>In this particular case, <a href="#fig-attack" class="quarto-xref">Figure&nbsp;9</a> demonstrates that we find some evidence to reject <em>H0</em> but not <em>H1</em> for <em>FOMC-RoBERTa</em>. The median linear probe predictions for sentences about inflation and deflation are indeed substantially higher and lower, respectively than for random noise. Unfortunately, the same is true for sentences about the inflation and deflation in the number of birds, albeit to a somewhat lower degree.</p>
-<p>I should note that the number of sentences in each category is very small here (10), so the results in <a href="#fig-attack" class="quarto-xref">Figure&nbsp;9</a> cannot be used to establish statistical significance. That being said, even a handful of convincing counter-examples should be enough for us to seriously question the claim that results from linear probes provide evidence against the parrot metaphor. In fact, even a handful of sentences for which any human annotator would easily arrive at the conclusion of independence, a prediction by the probe in either direction casts doubt.</p>
-<div id="fig-attack" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-attack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="results/figures/attack_all_measures.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-attack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9: Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB) and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted value of the probe for random noise.
-</figcaption>
+<p>In this particular case, <a href="#fig-attack">Figure&nbsp;9</a> demonstrates that we find some evidence to reject <em>H0</em> but not <em>H1</em> for <em>FOMC-RoBERTa</em>. The median linear probe predictions for sentences about inflation and deflation are indeed substantially higher and lower, respectively than for random noise. Unfortunately, the same is true for sentences about the inflation and deflation in the number of birds, albeit to a somewhat lower degree.</p>
+<p>I should note that the number of sentences in each category is very small here (10), so the results in <a href="#fig-attack">Figure&nbsp;9</a> cannot be used to establish statistical significance. That being said, even a handful of convincing counter-examples should be enough for us to seriously question the claim that results from linear probes provide evidence against the parrot metaphor. In fact, even a handful of sentences for which any human annotator would easily arrive at the conclusion of independence, a prediction by the probe in either direction casts doubt.</p>
+<div id="fig-attack" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="results/figures/attack_all_measures.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;9: Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB) and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted value of the probe for random noise.</figcaption>
 </figure>
 </div>
 </section>
@@ -2291,7 +2208,7 @@ Figure&nbsp;9: Probe predictions for sentences about inflation of prices (IP), d
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-alain2018understanding" class="csl-entry" role="listitem">
 Alain, Guillaume, and Yoshua Bengio. 2018. <span>“Understanding Intermediate Layers Using Linear Classifier Probes.”</span> <a href="https://arxiv.org/abs/1610.01644">https://arxiv.org/abs/1610.01644</a>.
 </div>
@@ -2322,7 +2239,7 @@ Touvron, Hugo, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne Lach
 <li id="fn1"><p>I would be very surprised—concerned even—if our search for patterns in latent spaces of capable LLMs revealed nothing at all.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>The <a href="https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&amp;field_tdr_date_value_month=202310">data</a> is taken from the US Department of the Treasury.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2024,
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2024,
   author = {Altmeyer, Patrick and Altmeyer, Patrick},
   title = {Spurious {Sparks} of {AGI}},
   date = {2024-02-07},
@@ -2463,9 +2380,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -2475,17 +2393,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -2498,120 +2407,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      return note.innerHTML;
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2655,7 +2450,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2681,32 +2475,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -2790,17 +2558,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-20"><a href="#cb6-20"></a><span class="co">---</span></span>
 <span id="cb6-21"><a href="#cb6-21"></a></span>
 <span id="cb6-24"><a href="#cb6-24"></a><span class="in">```{julia}</span></span>
-<span id="cb6-25"><a href="#cb6-25"></a><span class="in">#| echo: false</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="co">#| echo: false</span></span>
 <span id="cb6-26"><a href="#cb6-26"></a></span>
-<span id="cb6-27"><a href="#cb6-27"></a><span class="in">include("$(pwd())/blog/posts/spurious-sparks/src/setup.jl")</span></span>
+<span id="cb6-27"><a href="#cb6-27"></a>include(<span class="ot">"</span><span class="wa">$(</span><span class="st">pwd())/blog/posts/spurious-sparks/src/setup.jl</span><span class="ot">"</span>)</span>
 <span id="cb6-28"><a href="#cb6-28"></a><span class="in">```</span></span>
 <span id="cb6-29"><a href="#cb6-29"></a></span>
-<span id="cb6-30"><a href="#cb6-30"></a>&lt;div class="intro-gif"&gt;</span>
-<span id="cb6-31"><a href="#cb6-31"></a>  &lt;figure&gt;</span>
-<span id="cb6-32"><a href="#cb6-32"></a>    &lt;img src="results/figures/intro.jpeg"&gt;</span>
-<span id="cb6-33"><a href="#cb6-33"></a>    &lt;figcaption&gt;Photo by &lt;a href="https://unsplash.com/@jake_oates2000?utm_content=creditCopyText&amp;utm_medium=referral&amp;utm_source=unsplash"&gt;Jake Oates&lt;/a&gt; on &lt;a href="https://unsplash.com/photos/steel-wool-photography-MovsEr-Bgts?utm_content=creditCopyText&amp;utm_medium=referral&amp;utm_source=unsplash"&gt;Unsplash&lt;/a&gt;&lt;/figcaption&gt;</span>
-<span id="cb6-34"><a href="#cb6-34"></a>  &lt;/figure&gt;</span>
-<span id="cb6-35"><a href="#cb6-35"></a>&lt;/div&gt; </span>
+<span id="cb6-30"><a href="#cb6-30"></a><span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">"intro-gif"</span><span class="kw">&gt;</span></span>
+<span id="cb6-31"><a href="#cb6-31"></a>  <span class="kw">&lt;figure&gt;</span></span>
+<span id="cb6-32"><a href="#cb6-32"></a>    <span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"results/figures/intro.jpeg"</span><span class="kw">&gt;</span></span>
+<span id="cb6-33"><a href="#cb6-33"></a>    <span class="kw">&lt;figcaption&gt;</span>Photo by <span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://unsplash.com/@jake_oates2000?utm_content=creditCopyText</span><span class="er">&amp;</span><span class="st">utm_medium=referral</span><span class="er">&amp;</span><span class="st">utm_source=unsplash"</span><span class="kw">&gt;</span>Jake Oates<span class="kw">&lt;/a&gt;</span> on <span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://unsplash.com/photos/steel-wool-photography-MovsEr-Bgts?utm_content=creditCopyText</span><span class="er">&amp;</span><span class="st">utm_medium=referral</span><span class="er">&amp;</span><span class="st">utm_source=unsplash"</span><span class="kw">&gt;</span>Unsplash<span class="kw">&lt;/a&gt;&lt;/figcaption&gt;</span></span>
+<span id="cb6-34"><a href="#cb6-34"></a>  <span class="kw">&lt;/figure&gt;</span></span>
+<span id="cb6-35"><a href="#cb6-35"></a><span class="kw">&lt;/div&gt;</span> </span>
 <span id="cb6-36"><a href="#cb6-36"></a></span>
 <span id="cb6-37"><a href="#cb6-37"></a>We humans are prone to seek patterns everywhere. Meaningful patterns have often proven to help us make sense of our past, navigate our presence and predict the future. Our society is so invested in finding patterns that today it seems we are more willing than ever to outsource this task to an Artificial Intelligence (AI): an omniscient oracle that leads us down the right path. </span>
 <span id="cb6-38"><a href="#cb6-38"></a></span>
@@ -2873,55 +2641,55 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-105"><a href="#cb6-105"></a>@fig-gfc-2 shows the corresponding yield curve during the aftermath of the GFC on 20 April 2009. On that day the influential Time Magazine <span class="co">[</span><span class="ot">reported</span><span class="co">](https://content.time.com/time/business/article/0,8599,1890560,00.html)</span> that the "Banking Crisis is Over". The yield curve was steeply sloped with a positive spread between the 10-year and 3-month yields, indicative of the market's expectation of a recovery. The overall level of the yield curve was still very low though, indicative of the fact that US economy had not fully recovered at that point.</span>
 <span id="cb6-106"><a href="#cb6-106"></a></span>
 <span id="cb6-109"><a href="#cb6-109"></a><span class="in">```{julia}</span></span>
-<span id="cb6-110"><a href="#cb6-110"></a><span class="in">#| fig-cap: Yield curve of US Treasury bonds.</span></span>
-<span id="cb6-111"><a href="#cb6-111"></a><span class="in">#| fig-subcap: </span></span>
-<span id="cb6-112"><a href="#cb6-112"></a><span class="in">#|    - "Onset of GFC: 27 February 2007."</span></span>
-<span id="cb6-113"><a href="#cb6-113"></a><span class="in">#|    - "Aftermath of GFC: 20 April 2009."</span></span>
-<span id="cb6-114"><a href="#cb6-114"></a><span class="in">#| label: fig-gfc</span></span>
-<span id="cb6-115"><a href="#cb6-115"></a><span class="in">#| output: true</span></span>
-<span id="cb6-116"><a href="#cb6-116"></a><span class="in">#| layout-ncol: 2</span></span>
+<span id="cb6-110"><a href="#cb6-110"></a><span class="co">#| fig-cap: Yield curve of US Treasury bonds.</span></span>
+<span id="cb6-111"><a href="#cb6-111"></a><span class="co">#| fig-subcap: </span></span>
+<span id="cb6-112"><a href="#cb6-112"></a><span class="co">#|    - "Onset of GFC: 27 February 2007."</span></span>
+<span id="cb6-113"><a href="#cb6-113"></a><span class="co">#|    - "Aftermath of GFC: 20 April 2009."</span></span>
+<span id="cb6-114"><a href="#cb6-114"></a><span class="co">#| label: fig-gfc</span></span>
+<span id="cb6-115"><a href="#cb6-115"></a><span class="co">#| output: true</span></span>
+<span id="cb6-116"><a href="#cb6-116"></a><span class="co">#| layout-ncol: 2</span></span>
 <span id="cb6-117"><a href="#cb6-117"></a></span>
-<span id="cb6-118"><a href="#cb6-118"></a><span class="in">df = CSV.read(joinpath(BLOG_DIR, "data/ust_yields.csv"), DataFrame) |&gt;</span></span>
-<span id="cb6-119"><a href="#cb6-119"></a><span class="in">    x -&gt; @pivot_longer(x, -Date) |&gt;</span></span>
-<span id="cb6-120"><a href="#cb6-120"></a><span class="in">    x -&gt; @mutate(x, variable=to_year(variable)) |&gt;</span></span>
-<span id="cb6-121"><a href="#cb6-121"></a><span class="in">    x -&gt; @mutate(x, year=Dates.year(Date)) |&gt;</span></span>
-<span id="cb6-122"><a href="#cb6-122"></a><span class="in">    x -&gt; @mutate(x, quarter=Dates.quarter(Date)) |&gt;</span></span>
-<span id="cb6-123"><a href="#cb6-123"></a><span class="in">    x -&gt; @mutate(x, Date=Dates.format(Date, "yyyy-mm-dd")) |&gt;</span></span>
-<span id="cb6-124"><a href="#cb6-124"></a><span class="in">    x -&gt; @arrange(x, Date) |&gt;</span></span>
-<span id="cb6-125"><a href="#cb6-125"></a><span class="in">    x -&gt; @fill_missing(x, "down")</span></span>
-<span id="cb6-126"><a href="#cb6-126"></a><span class="in">ylims = extrema(skipmissing(df.value))</span></span>
+<span id="cb6-118"><a href="#cb6-118"></a>df = CSV.<span class="fu">read</span>(joinpath(BLOG_DIR, <span class="ot">"</span><span class="st">data/ust_yields.csv</span><span class="ot">"</span>), DataFrame) |&gt;</span>
+<span id="cb6-119"><a href="#cb6-119"></a>    x -&gt; <span class="dt">@pivot_longer</span>(x, -Date) |&gt;</span>
+<span id="cb6-120"><a href="#cb6-120"></a>    x -&gt; <span class="dt">@mutate</span>(x, variable=to_year(variable)) |&gt;</span>
+<span id="cb6-121"><a href="#cb6-121"></a>    x -&gt; <span class="dt">@mutate</span>(x, year=Dates.year(Date)) |&gt;</span>
+<span id="cb6-122"><a href="#cb6-122"></a>    x -&gt; <span class="dt">@mutate</span>(x, quarter=Dates.quarter(Date)) |&gt;</span>
+<span id="cb6-123"><a href="#cb6-123"></a>    x -&gt; <span class="dt">@mutate</span>(x, Date=Dates.<span class="fu">format</span>(Date, <span class="ot">"</span><span class="st">yyyy-mm-dd</span><span class="ot">"</span>)) |&gt;</span>
+<span id="cb6-124"><a href="#cb6-124"></a>    x -&gt; <span class="dt">@arrange</span>(x, Date) |&gt;</span>
+<span id="cb6-125"><a href="#cb6-125"></a>    x -&gt; <span class="dt">@fill_missing</span>(x, <span class="ot">"</span><span class="st">down</span><span class="ot">"</span>)</span>
+<span id="cb6-126"><a href="#cb6-126"></a>ylims = extrema(skipmissing(df.value))</span>
 <span id="cb6-127"><a href="#cb6-127"></a></span>
-<span id="cb6-128"><a href="#cb6-128"></a><span class="in"># Peak-crisis:</span></span>
-<span id="cb6-129"><a href="#cb6-129"></a><span class="in">onset_date = "2007-02-27"</span></span>
-<span id="cb6-130"><a href="#cb6-130"></a><span class="in">plt_df = df[df.Date .== onset_date, :]</span></span>
-<span id="cb6-131"><a href="#cb6-131"></a><span class="in">plt = plot(</span></span>
-<span id="cb6-132"><a href="#cb6-132"></a><span class="in">    plt_df.variable, plt_df.value;</span></span>
-<span id="cb6-133"><a href="#cb6-133"></a><span class="in">    label="", color=:blue,</span></span>
-<span id="cb6-134"><a href="#cb6-134"></a><span class="in">    xlabel="Maturity (years)", ylabel="Yield (%)",</span></span>
-<span id="cb6-135"><a href="#cb6-135"></a><span class="in">    size=(380, 350)</span></span>
-<span id="cb6-136"><a href="#cb6-136"></a><span class="in">)</span></span>
-<span id="cb6-137"><a href="#cb6-137"></a><span class="in">scatter!(</span></span>
-<span id="cb6-138"><a href="#cb6-138"></a><span class="in">    plt_df.variable, plt_df.value;</span></span>
-<span id="cb6-139"><a href="#cb6-139"></a><span class="in">    label="", color=:blue, alpha=0.5,</span></span>
-<span id="cb6-140"><a href="#cb6-140"></a><span class="in">    ylims=(0,6)</span></span>
-<span id="cb6-141"><a href="#cb6-141"></a><span class="in">)</span></span>
-<span id="cb6-142"><a href="#cb6-142"></a><span class="in">display(plt)</span></span>
+<span id="cb6-128"><a href="#cb6-128"></a><span class="co"># Peak-crisis:</span></span>
+<span id="cb6-129"><a href="#cb6-129"></a>onset_date = <span class="ot">"</span><span class="st">2007-02-27</span><span class="ot">"</span></span>
+<span id="cb6-130"><a href="#cb6-130"></a>plt_df = df[df.Date .== onset_date, :]</span>
+<span id="cb6-131"><a href="#cb6-131"></a>plt = plot(</span>
+<span id="cb6-132"><a href="#cb6-132"></a>    plt_df.variable, plt_df.value;</span>
+<span id="cb6-133"><a href="#cb6-133"></a>    label=<span class="ot">""</span>, color=:blue,</span>
+<span id="cb6-134"><a href="#cb6-134"></a>    xlabel=<span class="ot">"</span><span class="st">Maturity (years)</span><span class="ot">"</span>, ylabel=<span class="ot">"</span><span class="st">Yield (%)</span><span class="ot">"</span>,</span>
+<span id="cb6-135"><a href="#cb6-135"></a>    size=(<span class="dv">380</span>, <span class="dv">350</span>)</span>
+<span id="cb6-136"><a href="#cb6-136"></a>)</span>
+<span id="cb6-137"><a href="#cb6-137"></a>scatter!(</span>
+<span id="cb6-138"><a href="#cb6-138"></a>    plt_df.variable, plt_df.value;</span>
+<span id="cb6-139"><a href="#cb6-139"></a>    label=<span class="ot">""</span>, color=:blue, alpha=<span class="fl">0.5</span>,</span>
+<span id="cb6-140"><a href="#cb6-140"></a>    ylims=(<span class="dv">0</span>,<span class="dv">6</span>)</span>
+<span id="cb6-141"><a href="#cb6-141"></a>)</span>
+<span id="cb6-142"><a href="#cb6-142"></a>display(plt)</span>
 <span id="cb6-143"><a href="#cb6-143"></a></span>
-<span id="cb6-144"><a href="#cb6-144"></a><span class="in"># Post-crisis:</span></span>
-<span id="cb6-145"><a href="#cb6-145"></a><span class="in">aftermath_date = "2009-04-20"</span></span>
-<span id="cb6-146"><a href="#cb6-146"></a><span class="in">plt_df = df[df.Date .== aftermath_date, :]</span></span>
-<span id="cb6-147"><a href="#cb6-147"></a><span class="in">plt = plot(</span></span>
-<span id="cb6-148"><a href="#cb6-148"></a><span class="in">    plt_df.variable, plt_df.value;</span></span>
-<span id="cb6-149"><a href="#cb6-149"></a><span class="in">    label="", color=:blue,</span></span>
-<span id="cb6-150"><a href="#cb6-150"></a><span class="in">    xlabel="Maturity (years)", ylabel="Yield (%)",</span></span>
-<span id="cb6-151"><a href="#cb6-151"></a><span class="in">    size=(380, 350)</span></span>
-<span id="cb6-152"><a href="#cb6-152"></a><span class="in">)</span></span>
-<span id="cb6-153"><a href="#cb6-153"></a><span class="in">scatter!(</span></span>
-<span id="cb6-154"><a href="#cb6-154"></a><span class="in">    plt_df.variable, plt_df.value;</span></span>
-<span id="cb6-155"><a href="#cb6-155"></a><span class="in">    label="", color=:blue, alpha=0.5,</span></span>
-<span id="cb6-156"><a href="#cb6-156"></a><span class="in">    ylims=(0,6)</span></span>
-<span id="cb6-157"><a href="#cb6-157"></a><span class="in">)</span></span>
-<span id="cb6-158"><a href="#cb6-158"></a><span class="in">display(plt)</span></span>
+<span id="cb6-144"><a href="#cb6-144"></a><span class="co"># Post-crisis:</span></span>
+<span id="cb6-145"><a href="#cb6-145"></a>aftermath_date = <span class="ot">"</span><span class="st">2009-04-20</span><span class="ot">"</span></span>
+<span id="cb6-146"><a href="#cb6-146"></a>plt_df = df[df.Date .== aftermath_date, :]</span>
+<span id="cb6-147"><a href="#cb6-147"></a>plt = plot(</span>
+<span id="cb6-148"><a href="#cb6-148"></a>    plt_df.variable, plt_df.value;</span>
+<span id="cb6-149"><a href="#cb6-149"></a>    label=<span class="ot">""</span>, color=:blue,</span>
+<span id="cb6-150"><a href="#cb6-150"></a>    xlabel=<span class="ot">"</span><span class="st">Maturity (years)</span><span class="ot">"</span>, ylabel=<span class="ot">"</span><span class="st">Yield (%)</span><span class="ot">"</span>,</span>
+<span id="cb6-151"><a href="#cb6-151"></a>    size=(<span class="dv">380</span>, <span class="dv">350</span>)</span>
+<span id="cb6-152"><a href="#cb6-152"></a>)</span>
+<span id="cb6-153"><a href="#cb6-153"></a>scatter!(</span>
+<span id="cb6-154"><a href="#cb6-154"></a>    plt_df.variable, plt_df.value;</span>
+<span id="cb6-155"><a href="#cb6-155"></a>    label=<span class="ot">""</span>, color=:blue, alpha=<span class="fl">0.5</span>,</span>
+<span id="cb6-156"><a href="#cb6-156"></a>    ylims=(<span class="dv">0</span>,<span class="dv">6</span>)</span>
+<span id="cb6-157"><a href="#cb6-157"></a>)</span>
+<span id="cb6-158"><a href="#cb6-158"></a>display(plt)</span>
 <span id="cb6-159"><a href="#cb6-159"></a><span class="in">```</span></span>
 <span id="cb6-160"><a href="#cb6-160"></a></span>
 <span id="cb6-161"><a href="#cb6-161"></a>Of course, US Treasuries are not the only bonds that are traded in the market. To get a more complete picture of the economy, analysts might therefore be interested in looking at the yield curves of other bonds as well. In particular, we might be interested in predicting economic growth based on the yield curves of many different bonds. The problem with that idea is that it is cursed by high dimensionality: we would end up modelling a single variable of interest (economic growth) with a large number of predictors (the yields of many different bonds). To deal with the curse of high dimensionality it can be useful to decompose the yield curves into sets of principal components. </span>
@@ -2931,14 +2699,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-165"><a href="#cb6-165"></a>The top panel in @fig-pca shows the first two principal components of the yield curves of US Treasury bonds over time. Vertical stalks indicate the key dates during the onset and aftermath of the crisis, which we discussed above. For both components, we can observe some marked shifts between the two dates - but can we attribute any meaning to these shifts? It turns out we can: for comparison, the bottom panel in @fig-pca shows the average level and spread of the yield curves over time. The first principal component is strongly correlated with the level of the yield curve, while the second principal component is strongly correlated with the spread of the yield curve.</span>
 <span id="cb6-166"><a href="#cb6-166"></a></span>
 <span id="cb6-169"><a href="#cb6-169"></a><span class="in">```{julia}</span></span>
-<span id="cb6-170"><a href="#cb6-170"></a><span class="in">#| output: false</span></span>
+<span id="cb6-170"><a href="#cb6-170"></a><span class="co">#| output: false</span></span>
 <span id="cb6-171"><a href="#cb6-171"></a></span>
-<span id="cb6-172"><a href="#cb6-172"></a><span class="in"># PCA:</span></span>
-<span id="cb6-173"><a href="#cb6-173"></a><span class="in">df_wide = @select(df, Date, variable, value) |&gt;</span></span>
-<span id="cb6-174"><a href="#cb6-174"></a><span class="in">    x -&gt; @pivot_wider(x, names_from = variable, values_from = value) |&gt;</span></span>
-<span id="cb6-175"><a href="#cb6-175"></a><span class="in">    x -&gt; dropmissing(x)</span></span>
-<span id="cb6-176"><a href="#cb6-176"></a><span class="in">X = @select(df_wide, -Date) |&gt; Matrix</span></span>
-<span id="cb6-177"><a href="#cb6-177"></a><span class="in">U, Σ, V = svd(X)</span></span>
+<span id="cb6-172"><a href="#cb6-172"></a><span class="co"># PCA:</span></span>
+<span id="cb6-173"><a href="#cb6-173"></a>df_wide = <span class="dt">@select</span>(df, Date, variable, value) |&gt;</span>
+<span id="cb6-174"><a href="#cb6-174"></a>    x -&gt; <span class="dt">@pivot_wider</span>(x, names_from = variable, values_from = value) |&gt;</span>
+<span id="cb6-175"><a href="#cb6-175"></a>    x -&gt; dropmissing(x)</span>
+<span id="cb6-176"><a href="#cb6-176"></a>X = <span class="dt">@select</span>(df_wide, -Date) |&gt; Matrix</span>
+<span id="cb6-177"><a href="#cb6-177"></a>U, Σ, V = svd(X)</span>
 <span id="cb6-178"><a href="#cb6-178"></a><span class="in">```</span></span>
 <span id="cb6-179"><a href="#cb6-179"></a></span>
 <span id="cb6-180"><a href="#cb6-180"></a><span class="al">![Comparison of latent embeddings and observed data of the US Treasury yield curve.](results/figures/pca.png)</span>{#fig-pca}</span>
@@ -2948,43 +2716,43 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-184"><a href="#cb6-184"></a>@fig-pca-anim shows the result of this exercise in the left panel. As we can see, our generated yield curves shift vertically as we traverse the latent space. The right panel of @fig-pca-anim shows the result of a similar exercise, but this time we keep the first principal component fixed at zero and vary the second principal component. This time the slope of our generated yield curves shifts as we traverse the latent space. </span>
 <span id="cb6-185"><a href="#cb6-185"></a></span>
 <span id="cb6-188"><a href="#cb6-188"></a><span class="in">```{julia}</span></span>
-<span id="cb6-189"><a href="#cb6-189"></a><span class="in">n_vals = 50</span></span>
-<span id="cb6-190"><a href="#cb6-190"></a><span class="in">pc1_range = range(extrema(U[:,1])..., length=n_vals)</span></span>
-<span id="cb6-191"><a href="#cb6-191"></a><span class="in">pc2_range = range(extrema(U[:,2])..., length=n_vals)</span></span>
-<span id="cb6-192"><a href="#cb6-192"></a><span class="in">Z_1 = [[pc1, 0, zeros(size(U, 2)-2)...] for pc1 in pc1_range] |&gt; x -&gt; reduce(vcat, x')</span></span>
-<span id="cb6-193"><a href="#cb6-193"></a><span class="in">Y_1 = Z_1 * diagm(Σ) * V'</span></span>
-<span id="cb6-194"><a href="#cb6-194"></a><span class="in">Z_2 = [[0, pc2, zeros(size(U, 2)-2)...] for pc2 in pc2_range] |&gt; x -&gt; reduce(vcat, x')</span></span>
-<span id="cb6-195"><a href="#cb6-195"></a><span class="in">Y_2 = Z_2 * diagm(Σ) * V'</span></span>
-<span id="cb6-196"><a href="#cb6-196"></a><span class="in">anim = @animate for i in 1:n_vals</span></span>
-<span id="cb6-197"><a href="#cb6-197"></a><span class="in">    # Level shifts:</span></span>
-<span id="cb6-198"><a href="#cb6-198"></a><span class="in">    y = Y_1[i,:]</span></span>
-<span id="cb6-199"><a href="#cb6-199"></a><span class="in">    p1 = plot(</span></span>
-<span id="cb6-200"><a href="#cb6-200"></a><span class="in">        unique(df.variable), y;</span></span>
-<span id="cb6-201"><a href="#cb6-201"></a><span class="in">        label="", color=:blue,</span></span>
-<span id="cb6-202"><a href="#cb6-202"></a><span class="in">        xlabel="Maturity (years)", ylabel="Yield (%)",</span></span>
-<span id="cb6-203"><a href="#cb6-203"></a><span class="in">        title="PC1: $(round(collect(pc1_range)[i], digits=5))",</span></span>
-<span id="cb6-204"><a href="#cb6-204"></a><span class="in">        ylims=extrema(Y_1)</span></span>
-<span id="cb6-205"><a href="#cb6-205"></a><span class="in">    )</span></span>
-<span id="cb6-206"><a href="#cb6-206"></a><span class="in">    scatter!(</span></span>
-<span id="cb6-207"><a href="#cb6-207"></a><span class="in">        unique(df.variable), y;</span></span>
-<span id="cb6-208"><a href="#cb6-208"></a><span class="in">        label="", color=:blue, alpha=0.5,</span></span>
-<span id="cb6-209"><a href="#cb6-209"></a><span class="in">    )</span></span>
-<span id="cb6-210"><a href="#cb6-210"></a><span class="in">    # Spread shifts:</span></span>
-<span id="cb6-211"><a href="#cb6-211"></a><span class="in">    y = Y_2[i,:]</span></span>
-<span id="cb6-212"><a href="#cb6-212"></a><span class="in">    p2 = plot(</span></span>
-<span id="cb6-213"><a href="#cb6-213"></a><span class="in">        unique(df.variable), y;</span></span>
-<span id="cb6-214"><a href="#cb6-214"></a><span class="in">        label="", color=:blue,</span></span>
-<span id="cb6-215"><a href="#cb6-215"></a><span class="in">        xlabel="Maturity (years)", ylabel="Yield (%)",</span></span>
-<span id="cb6-216"><a href="#cb6-216"></a><span class="in">        title="PC2: $(round(collect(pc2_range)[i], digits=5))",</span></span>
-<span id="cb6-217"><a href="#cb6-217"></a><span class="in">        ylims=extrema(Y_2)</span></span>
-<span id="cb6-218"><a href="#cb6-218"></a><span class="in">    )</span></span>
-<span id="cb6-219"><a href="#cb6-219"></a><span class="in">    scatter!(</span></span>
-<span id="cb6-220"><a href="#cb6-220"></a><span class="in">        unique(df.variable), y;</span></span>
-<span id="cb6-221"><a href="#cb6-221"></a><span class="in">        label="", color=:blue, alpha=0.5,</span></span>
-<span id="cb6-222"><a href="#cb6-222"></a><span class="in">    )</span></span>
-<span id="cb6-223"><a href="#cb6-223"></a><span class="in">    plot(p1, p2, layout=(1,2), size=(1000, 400), left_margin=5mm, bottom_margin=5mm)</span></span>
-<span id="cb6-224"><a href="#cb6-224"></a><span class="in">end</span></span>
-<span id="cb6-225"><a href="#cb6-225"></a><span class="in">gif(anim, joinpath(BLOG_DIR, "results/figures/pc_anim.gif"), fps=5)</span></span>
+<span id="cb6-189"><a href="#cb6-189"></a>n_vals = <span class="dv">50</span></span>
+<span id="cb6-190"><a href="#cb6-190"></a>pc1_range = range(extrema(U[:,<span class="dv">1</span>])..., <span class="fu">length</span>=n_vals)</span>
+<span id="cb6-191"><a href="#cb6-191"></a>pc2_range = range(extrema(U[:,<span class="dv">2</span>])..., <span class="fu">length</span>=n_vals)</span>
+<span id="cb6-192"><a href="#cb6-192"></a>Z_1 = [[pc1, <span class="dv">0</span>, zeros(size(U, <span class="dv">2</span>)-<span class="dv">2</span>)...] <span class="kw">for</span> pc1 in pc1_range] |&gt; x -&gt; reduce(vcat, x<span class="ot">'</span><span class="ss">)</span></span>
+<span id="cb6-193"><a href="#cb6-193"></a><span class="ss">Y_1 = Z_1 * diagm(Σ) * V</span><span class="ot">'</span></span>
+<span id="cb6-194"><a href="#cb6-194"></a>Z_2 = [[<span class="dv">0</span>, pc2, zeros(size(U, <span class="dv">2</span>)-<span class="dv">2</span>)...] <span class="kw">for</span> pc2 in pc2_range] |&gt; x -&gt; reduce(vcat, x<span class="ot">'</span><span class="ss">)</span></span>
+<span id="cb6-195"><a href="#cb6-195"></a><span class="ss">Y_2 = Z_2 * diagm(Σ) * V</span><span class="ot">'</span></span>
+<span id="cb6-196"><a href="#cb6-196"></a>anim = <span class="dt">@animate</span> <span class="kw">for</span> i in <span class="dv">1</span>:n_vals</span>
+<span id="cb6-197"><a href="#cb6-197"></a>    <span class="co"># Level shifts:</span></span>
+<span id="cb6-198"><a href="#cb6-198"></a>    <span class="ot">y </span>= Y_1[i,:]</span>
+<span id="cb6-199"><a href="#cb6-199"></a>    p1 = plot(</span>
+<span id="cb6-200"><a href="#cb6-200"></a>        unique(df.variable), <span class="ot">y</span>;</span>
+<span id="cb6-201"><a href="#cb6-201"></a>        label=<span class="ot">""</span>, color=:blue,</span>
+<span id="cb6-202"><a href="#cb6-202"></a>        xlabel=<span class="ot">"</span><span class="st">Maturity (years)</span><span class="ot">"</span>, ylabel=<span class="ot">"</span><span class="st">Yield (%)</span><span class="ot">"</span>,</span>
+<span id="cb6-203"><a href="#cb6-203"></a>        title=<span class="ot">"</span><span class="st">PC1: </span><span class="wa">$(</span><span class="st">round(collect(pc1_range)[i], digits=5))</span><span class="ot">"</span>,</span>
+<span id="cb6-204"><a href="#cb6-204"></a>        ylims=extrema(Y_1)</span>
+<span id="cb6-205"><a href="#cb6-205"></a>    )</span>
+<span id="cb6-206"><a href="#cb6-206"></a>    scatter!(</span>
+<span id="cb6-207"><a href="#cb6-207"></a>        unique(df.variable), <span class="ot">y</span>;</span>
+<span id="cb6-208"><a href="#cb6-208"></a>        label=<span class="ot">""</span>, color=:blue, alpha=<span class="fl">0.5</span>,</span>
+<span id="cb6-209"><a href="#cb6-209"></a>    )</span>
+<span id="cb6-210"><a href="#cb6-210"></a>    <span class="co"># Spread shifts:</span></span>
+<span id="cb6-211"><a href="#cb6-211"></a>    <span class="ot">y </span>= Y_2[i,:]</span>
+<span id="cb6-212"><a href="#cb6-212"></a>    p2 = plot(</span>
+<span id="cb6-213"><a href="#cb6-213"></a>        unique(df.variable), <span class="ot">y</span>;</span>
+<span id="cb6-214"><a href="#cb6-214"></a>        label=<span class="ot">""</span>, color=:blue,</span>
+<span id="cb6-215"><a href="#cb6-215"></a>        xlabel=<span class="ot">"</span><span class="st">Maturity (years)</span><span class="ot">"</span>, ylabel=<span class="ot">"</span><span class="st">Yield (%)</span><span class="ot">"</span>,</span>
+<span id="cb6-216"><a href="#cb6-216"></a>        title=<span class="ot">"</span><span class="st">PC2: </span><span class="wa">$(</span><span class="st">round(collect(pc2_range)[i], digits=5))</span><span class="ot">"</span>,</span>
+<span id="cb6-217"><a href="#cb6-217"></a>        ylims=extrema(Y_2)</span>
+<span id="cb6-218"><a href="#cb6-218"></a>    )</span>
+<span id="cb6-219"><a href="#cb6-219"></a>    scatter!(</span>
+<span id="cb6-220"><a href="#cb6-220"></a>        unique(df.variable), <span class="ot">y</span>;</span>
+<span id="cb6-221"><a href="#cb6-221"></a>        label=<span class="ot">""</span>, color=:blue, alpha=<span class="fl">0.5</span>,</span>
+<span id="cb6-222"><a href="#cb6-222"></a>    )</span>
+<span id="cb6-223"><a href="#cb6-223"></a>    plot(p1, p2, layout=(<span class="dv">1</span>,<span class="dv">2</span>), size=(<span class="dv">1000</span>, <span class="dv">400</span>), left_margin=<span class="dv">5</span>mm, bottom_margin=<span class="dv">5</span>mm)</span>
+<span id="cb6-224"><a href="#cb6-224"></a>end</span>
+<span id="cb6-225"><a href="#cb6-225"></a>gif(anim, joinpath(BLOG_DIR, <span class="ot">"</span><span class="st">results/figures/pc_anim.gif</span><span class="ot">"</span>), fps=<span class="dv">5</span>)</span>
 <span id="cb6-226"><a href="#cb6-226"></a><span class="in">```</span></span>
 <span id="cb6-227"><a href="#cb6-227"></a></span>
 <span id="cb6-228"><a href="#cb6-228"></a>::: {.content-visible when-format="html"}</span>
@@ -3002,53 +2770,53 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-240"><a href="#cb6-240"></a>To estimate economic growth we will rely on a quarterly <span class="co">[</span><span class="ot">series</span><span class="co">](https://fred.stlouisfed.org/series/GDPC1)</span> of the real gross domestic product (GDP) provided by the Federal Reserve Bank of St. Louis. The data arrives in terms of levels of real GDP. In order to estimate growth, we will transform the data into log differences. Since our yield curve data is daily, we will need to aggregate it to the quarterly frequency. To do this, we will simply take the average of the daily yields for each maturity. We will also standardize yields since deep learning models tend to perform better with standardized data. Since COVID-19 was a huge structural break, we will also filter out all observations after 2018. @fig-dl-data shows the pre-processed data.</span>
 <span id="cb6-241"><a href="#cb6-241"></a></span>
 <span id="cb6-244"><a href="#cb6-244"></a><span class="in">```{julia}</span></span>
-<span id="cb6-245"><a href="#cb6-245"></a><span class="in">#| output: true</span></span>
-<span id="cb6-246"><a href="#cb6-246"></a><span class="in">#| fig-cap: GDP growth and yield curve data.</span></span>
-<span id="cb6-247"><a href="#cb6-247"></a><span class="in">#| label: fig-dl-data</span></span>
+<span id="cb6-245"><a href="#cb6-245"></a><span class="co">#| output: true</span></span>
+<span id="cb6-246"><a href="#cb6-246"></a><span class="co">#| fig-cap: GDP growth and yield curve data.</span></span>
+<span id="cb6-247"><a href="#cb6-247"></a><span class="co">#| label: fig-dl-data</span></span>
 <span id="cb6-248"><a href="#cb6-248"></a></span>
-<span id="cb6-249"><a href="#cb6-249"></a><span class="in">df_gdp_full = CSV.read(joinpath(BLOG_DIR, "data/gdp.csv"), DataFrame) |&gt;</span></span>
-<span id="cb6-250"><a href="#cb6-250"></a><span class="in">    x -&gt; @rename(x, Date=DATE, gdp=GDPC1) |&gt;</span></span>
-<span id="cb6-251"><a href="#cb6-251"></a><span class="in">    x -&gt; @mutate(x, gdp_l1=lag(gdp)) |&gt;</span></span>
-<span id="cb6-252"><a href="#cb6-252"></a><span class="in">    x -&gt; @mutate(x, growth=log(gdp)-log(gdp_l1)) |&gt;</span></span>
-<span id="cb6-253"><a href="#cb6-253"></a><span class="in">    x -&gt; @select(x, Date, growth) |&gt;</span></span>
-<span id="cb6-254"><a href="#cb6-254"></a><span class="in">    x -&gt; @mutate(x, year=Dates.year(Date)) |&gt;</span></span>
-<span id="cb6-255"><a href="#cb6-255"></a><span class="in">    x -&gt; @mutate(x, quarter=Dates.quarter(Date)) </span></span>
-<span id="cb6-256"><a href="#cb6-256"></a><span class="in">df_gdp = df_gdp_full |&gt;</span></span>
-<span id="cb6-257"><a href="#cb6-257"></a><span class="in">    x -&gt; @filter(x, year &lt;= 2018)</span></span>
+<span id="cb6-249"><a href="#cb6-249"></a>df_gdp_full = CSV.<span class="fu">read</span>(joinpath(BLOG_DIR, <span class="ot">"</span><span class="st">data/gdp.csv</span><span class="ot">"</span>), DataFrame) |&gt;</span>
+<span id="cb6-250"><a href="#cb6-250"></a>    x -&gt; <span class="dt">@rename</span>(x, Date=DATE, gdp=GDPC1) |&gt;</span>
+<span id="cb6-251"><a href="#cb6-251"></a>    x -&gt; <span class="dt">@mutate</span>(x, gdp_l1=lag(gdp)) |&gt;</span>
+<span id="cb6-252"><a href="#cb6-252"></a>    x -&gt; <span class="dt">@mutate</span>(x, growth=<span class="fu">log</span>(gdp)<span class="ot">-l</span>og(gdp_l1)) |&gt;</span>
+<span id="cb6-253"><a href="#cb6-253"></a>    x -&gt; <span class="dt">@select</span>(x, Date, growth) |&gt;</span>
+<span id="cb6-254"><a href="#cb6-254"></a>    x -&gt; <span class="dt">@mutate</span>(x, year=Dates.year(Date)) |&gt;</span>
+<span id="cb6-255"><a href="#cb6-255"></a>    x -&gt; <span class="dt">@mutate</span>(x, quarter=Dates.quarter(Date)) </span>
+<span id="cb6-256"><a href="#cb6-256"></a>df_gdp = df_gdp_full |&gt;</span>
+<span id="cb6-257"><a href="#cb6-257"></a>    x -&gt; <span class="dt">@filter</span>(x, year &lt;= <span class="dv">2018</span>)</span>
 <span id="cb6-258"><a href="#cb6-258"></a></span>
-<span id="cb6-259"><a href="#cb6-259"></a><span class="in">df_yields_qtr = @group_by(df, year, quarter, variable) |&gt;</span></span>
-<span id="cb6-260"><a href="#cb6-260"></a><span class="in">    x -&gt; @mutate(x, value=mean(value)) |&gt;</span></span>
-<span id="cb6-261"><a href="#cb6-261"></a><span class="in">    x -&gt; @ungroup(x) |&gt;</span></span>
-<span id="cb6-262"><a href="#cb6-262"></a><span class="in">    x -&gt; @select(x, -Date) |&gt;</span></span>
-<span id="cb6-263"><a href="#cb6-263"></a><span class="in">    unique</span></span>
+<span id="cb6-259"><a href="#cb6-259"></a>df_yields_qtr = <span class="dt">@group_by</span>(df, year, quarter, variable) |&gt;</span>
+<span id="cb6-260"><a href="#cb6-260"></a>    x -&gt; <span class="dt">@mutate</span>(x, value=mean(value)) |&gt;</span>
+<span id="cb6-261"><a href="#cb6-261"></a>    x -&gt; <span class="dt">@ungroup</span>(x) |&gt;</span>
+<span id="cb6-262"><a href="#cb6-262"></a>    x -&gt; <span class="dt">@select</span>(x, -Date) |&gt;</span>
+<span id="cb6-263"><a href="#cb6-263"></a>    unique</span>
 <span id="cb6-264"><a href="#cb6-264"></a></span>
-<span id="cb6-265"><a href="#cb6-265"></a><span class="in">df_all = @inner_join(df_gdp, df_yields_qtr, (year, quarter)) |&gt; </span></span>
-<span id="cb6-266"><a href="#cb6-266"></a><span class="in">    x -&gt; @pivot_wider(x, names_from=variable, values_from=value) |&gt;</span></span>
-<span id="cb6-267"><a href="#cb6-267"></a><span class="in">    dropmissing</span></span>
+<span id="cb6-265"><a href="#cb6-265"></a>df_all = <span class="dt">@inner_join</span>(df_gdp, df_yields_qtr, (year, quarter)) |&gt; </span>
+<span id="cb6-266"><a href="#cb6-266"></a>    x -&gt; <span class="dt">@pivot_wider</span>(x, names_from=variable, values_from=value) |&gt;</span>
+<span id="cb6-267"><a href="#cb6-267"></a>    dropmissing</span>
 <span id="cb6-268"><a href="#cb6-268"></a></span>
-<span id="cb6-269"><a href="#cb6-269"></a><span class="in">y = df_all.growth |&gt; </span></span>
-<span id="cb6-270"><a href="#cb6-270"></a><span class="in">    x -&gt; Float32.(x)</span></span>
-<span id="cb6-271"><a href="#cb6-271"></a><span class="in">X = @select(df_all, -(Date:quarter)) |&gt; </span></span>
-<span id="cb6-272"><a href="#cb6-272"></a><span class="in">    Matrix |&gt;</span></span>
-<span id="cb6-273"><a href="#cb6-273"></a><span class="in">    x -&gt; Float32.(x) |&gt;</span></span>
-<span id="cb6-274"><a href="#cb6-274"></a><span class="in">    x -&gt; Flux.normalise(x; dims=1)</span></span>
+<span id="cb6-269"><a href="#cb6-269"></a><span class="ot">y </span>= df_all.growth |&gt; </span>
+<span id="cb6-270"><a href="#cb6-270"></a>    x -&gt; Float32.(x)</span>
+<span id="cb6-271"><a href="#cb6-271"></a>X = <span class="dt">@select</span>(df_all, -(Date:quarter)) |&gt; </span>
+<span id="cb6-272"><a href="#cb6-272"></a>    Matrix |&gt;</span>
+<span id="cb6-273"><a href="#cb6-273"></a>    x -&gt; Float32.(x) |&gt;</span>
+<span id="cb6-274"><a href="#cb6-274"></a>    x -&gt; Flux.normalise(x; dims=<span class="dv">1</span>)</span>
 <span id="cb6-275"><a href="#cb6-275"></a></span>
-<span id="cb6-276"><a href="#cb6-276"></a><span class="in"># Plot:</span></span>
-<span id="cb6-277"><a href="#cb6-277"></a><span class="in">p_gdp = plot(</span></span>
-<span id="cb6-278"><a href="#cb6-278"></a><span class="in">    df_all.Date, y;</span></span>
-<span id="cb6-279"><a href="#cb6-279"></a><span class="in">    label="", color=:blue,</span></span>
-<span id="cb6-280"><a href="#cb6-280"></a><span class="in">    size=(800,200),</span></span>
-<span id="cb6-281"><a href="#cb6-281"></a><span class="in">    ylabel="GDP Growth (log difference)"</span></span>
-<span id="cb6-282"><a href="#cb6-282"></a><span class="in">)</span></span>
-<span id="cb6-283"><a href="#cb6-283"></a><span class="in">p_yields = plot(</span></span>
-<span id="cb6-284"><a href="#cb6-284"></a><span class="in">    df_all.Date, X;</span></span>
-<span id="cb6-285"><a href="#cb6-285"></a><span class="in">    label="", color=:blue,</span></span>
-<span id="cb6-286"><a href="#cb6-286"></a><span class="in">    ylabel="Yield (standardized))",</span></span>
-<span id="cb6-287"><a href="#cb6-287"></a><span class="in">    legend=:bottomright,</span></span>
-<span id="cb6-288"><a href="#cb6-288"></a><span class="in">    alpha=0.5,</span></span>
-<span id="cb6-289"><a href="#cb6-289"></a><span class="in">    size=(800,400)</span></span>
-<span id="cb6-290"><a href="#cb6-290"></a><span class="in">)</span></span>
-<span id="cb6-291"><a href="#cb6-291"></a><span class="in">plot(p_gdp, p_yields, layout=(2,1), size=(800, 600), left_margin=5mm)</span></span>
+<span id="cb6-276"><a href="#cb6-276"></a><span class="co"># Plot:</span></span>
+<span id="cb6-277"><a href="#cb6-277"></a>p_gdp = plot(</span>
+<span id="cb6-278"><a href="#cb6-278"></a>    df_all.Date, <span class="ot">y</span>;</span>
+<span id="cb6-279"><a href="#cb6-279"></a>    label=<span class="ot">""</span>, color=:blue,</span>
+<span id="cb6-280"><a href="#cb6-280"></a>    size=(<span class="dv">800</span>,<span class="dv">200</span>),</span>
+<span id="cb6-281"><a href="#cb6-281"></a>    ylabel=<span class="ot">"</span><span class="st">GDP Growth (log difference)</span><span class="ot">"</span></span>
+<span id="cb6-282"><a href="#cb6-282"></a>)</span>
+<span id="cb6-283"><a href="#cb6-283"></a>p_yields = plot(</span>
+<span id="cb6-284"><a href="#cb6-284"></a>    df_all.Date, X;</span>
+<span id="cb6-285"><a href="#cb6-285"></a>    label=<span class="ot">""</span>, color=:blue,</span>
+<span id="cb6-286"><a href="#cb6-286"></a>    ylabel=<span class="ot">"</span><span class="st">Yield (standardized))</span><span class="ot">"</span>,</span>
+<span id="cb6-287"><a href="#cb6-287"></a>    legend=:bottomright,</span>
+<span id="cb6-288"><a href="#cb6-288"></a>    alpha=<span class="fl">0.5</span>,</span>
+<span id="cb6-289"><a href="#cb6-289"></a>    size=(<span class="dv">800</span>,<span class="dv">400</span>)</span>
+<span id="cb6-290"><a href="#cb6-290"></a>)</span>
+<span id="cb6-291"><a href="#cb6-291"></a>plot(p_gdp, p_yields, layout=(<span class="dv">2</span>,<span class="dv">1</span>), size=(<span class="dv">800</span>, <span class="dv">600</span>), left_margin=<span class="dv">5</span>mm)</span>
 <span id="cb6-292"><a href="#cb6-292"></a><span class="in">```</span></span>
 <span id="cb6-293"><a href="#cb6-293"></a></span>
 <span id="cb6-294"><a href="#cb6-294"></a><span class="fu">#### Model</span></span>
@@ -3058,31 +2826,31 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-298"><a href="#cb6-298"></a>The encoder consists of a single fully connected hidden layer with 32 neurons and a hyperbolic tangent activation function. The bottleneck layer connecting the encoder to the decoder, is a fully connected layer with 6 neurons. The decoder consists of two fully connected layers, each with a hyperbolic tangent activation function: the first layer consists of 32 neurons and the second layer will have the same dimension as the input data. The output layer consists of a single neuron for our output variable, $g_t$. We train the model over 1,000 epochs to minimize mean squared error loss using the Adam optimizer~\citep{kingma2017adam}.</span>
 <span id="cb6-299"><a href="#cb6-299"></a></span>
 <span id="cb6-302"><a href="#cb6-302"></a><span class="in">```{julia}</span></span>
-<span id="cb6-303"><a href="#cb6-303"></a><span class="in">#| output: true</span></span>
-<span id="cb6-304"><a href="#cb6-304"></a><span class="in">#| fig-cap: Model architecture.</span></span>
-<span id="cb6-305"><a href="#cb6-305"></a><span class="in">#| label: fig-dl-model</span></span>
+<span id="cb6-303"><a href="#cb6-303"></a><span class="co">#| output: true</span></span>
+<span id="cb6-304"><a href="#cb6-304"></a><span class="co">#| fig-cap: Model architecture.</span></span>
+<span id="cb6-305"><a href="#cb6-305"></a><span class="co">#| label: fig-dl-model</span></span>
 <span id="cb6-306"><a href="#cb6-306"></a></span>
-<span id="cb6-307"><a href="#cb6-307"></a><span class="in">dl = Flux.MLUtils.DataLoader((permutedims(X), permutedims(y)), batchsize=24, shuffle=true) </span></span>
-<span id="cb6-308"><a href="#cb6-308"></a><span class="in">input_dim = size(X,2)</span></span>
-<span id="cb6-309"><a href="#cb6-309"></a><span class="in">n_pc = 6</span></span>
-<span id="cb6-310"><a href="#cb6-310"></a><span class="in">n_hidden = 32</span></span>
-<span id="cb6-311"><a href="#cb6-311"></a><span class="in">epochs = 1000</span></span>
-<span id="cb6-312"><a href="#cb6-312"></a><span class="in">activation = tanh_fast</span></span>
-<span id="cb6-313"><a href="#cb6-313"></a><span class="in">encoder = Flux.Chain(</span></span>
-<span id="cb6-314"><a href="#cb6-314"></a><span class="in">    Dense(input_dim =&gt; n_hidden, activation),</span></span>
-<span id="cb6-315"><a href="#cb6-315"></a><span class="in">    Dense(n_hidden =&gt; n_pc, activation),</span></span>
-<span id="cb6-316"><a href="#cb6-316"></a><span class="in">) </span></span>
-<span id="cb6-317"><a href="#cb6-317"></a><span class="in">decoder = Flux.Chain(</span></span>
-<span id="cb6-318"><a href="#cb6-318"></a><span class="in">    Dense(n_pc =&gt; n_hidden, activation),</span></span>
-<span id="cb6-319"><a href="#cb6-319"></a><span class="in">    Dense(n_hidden =&gt; input_dim, activation),</span></span>
-<span id="cb6-320"><a href="#cb6-320"></a><span class="in">) </span></span>
-<span id="cb6-321"><a href="#cb6-321"></a><span class="in">model = Flux.Chain(</span></span>
-<span id="cb6-322"><a href="#cb6-322"></a><span class="in">    encoder.layers...,</span></span>
-<span id="cb6-323"><a href="#cb6-323"></a><span class="in">    decoder.layers...,</span></span>
-<span id="cb6-324"><a href="#cb6-324"></a><span class="in">    Dense(input_dim, 1),</span></span>
-<span id="cb6-325"><a href="#cb6-325"></a><span class="in">) </span></span>
-<span id="cb6-326"><a href="#cb6-326"></a><span class="in">plt = plot(model, rand(input_dim))</span></span>
-<span id="cb6-327"><a href="#cb6-327"></a><span class="in">display(plt)</span></span>
+<span id="cb6-307"><a href="#cb6-307"></a>dl = Flux.MLUtils.DataLoader((permutedims(X), permutedims(y)), batchsize=<span class="dv">24</span>, shuffle=true) </span>
+<span id="cb6-308"><a href="#cb6-308"></a>input_dim = size(X,<span class="dv">2</span>)</span>
+<span id="cb6-309"><a href="#cb6-309"></a>n_pc = <span class="dv">6</span></span>
+<span id="cb6-310"><a href="#cb6-310"></a>n_hidden = <span class="dv">32</span></span>
+<span id="cb6-311"><a href="#cb6-311"></a>epochs = <span class="dv">1000</span></span>
+<span id="cb6-312"><a href="#cb6-312"></a>activation = tanh_fast</span>
+<span id="cb6-313"><a href="#cb6-313"></a>encoder = Flux.Chain(</span>
+<span id="cb6-314"><a href="#cb6-314"></a>    Dense(input_dim =&gt; n_hidden, activation),</span>
+<span id="cb6-315"><a href="#cb6-315"></a>    Dense(n_hidden =&gt; n_pc, activation),</span>
+<span id="cb6-316"><a href="#cb6-316"></a>) </span>
+<span id="cb6-317"><a href="#cb6-317"></a>decoder = Flux.Chain(</span>
+<span id="cb6-318"><a href="#cb6-318"></a>    Dense(n_pc =&gt; n_hidden, activation),</span>
+<span id="cb6-319"><a href="#cb6-319"></a>    Dense(n_hidden =&gt; input_dim, activation),</span>
+<span id="cb6-320"><a href="#cb6-320"></a>) </span>
+<span id="cb6-321"><a href="#cb6-321"></a>model = Flux.Chain(</span>
+<span id="cb6-322"><a href="#cb6-322"></a>    encoder.layers...,</span>
+<span id="cb6-323"><a href="#cb6-323"></a>    decoder.layers...,</span>
+<span id="cb6-324"><a href="#cb6-324"></a>    Dense(input_dim, <span class="dv">1</span>),</span>
+<span id="cb6-325"><a href="#cb6-325"></a>) </span>
+<span id="cb6-326"><a href="#cb6-326"></a>plt = plot(model, <span class="fu">rand</span>(input_dim))</span>
+<span id="cb6-327"><a href="#cb6-327"></a>display(plt)</span>
 <span id="cb6-328"><a href="#cb6-328"></a><span class="in">```</span></span>
 <span id="cb6-329"><a href="#cb6-329"></a></span>
 <span id="cb6-330"><a href="#cb6-330"></a>The in-sample fit of the model is shown in the left chart of @fig-dl-results, which shows actual GDP growth and fitted values from the autoencoder</span>
@@ -3099,7 +2867,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-341"><a href="#cb6-341"></a></span>
 <span id="cb6-342"><a href="#cb6-342"></a>Did the neural network now learn an intrinsic understanding of the economic relationship between growth and the yield curve? To me, that would be too big of a statement. Still, the current form of information distillation can be useful, even beyond its intended use for monitoring models. </span>
 <span id="cb6-343"><a href="#cb6-343"></a></span>
-<span id="cb6-344"><a href="#cb6-344"></a>&lt;iframe src="results/regression.html" width="400" height="455" style='float:right;'&gt;&lt;/iframe&gt;</span>
+<span id="cb6-344"><a href="#cb6-344"></a><span class="kw">&lt;iframe</span> <span class="er">src</span><span class="ot">=</span><span class="st">"results/regression.html"</span> <span class="er">width</span><span class="ot">=</span><span class="st">"400"</span> <span class="er">height</span><span class="ot">=</span><span class="st">"455"</span> <span class="er">style</span><span class="ot">=</span><span class="st">'float:right;'</span><span class="kw">&gt;&lt;/iframe&gt;</span></span>
 <span id="cb6-345"><a href="#cb6-345"></a></span>
 <span id="cb6-346"><a href="#cb6-346"></a>For example, an interesting idea could be to use the latent embeddings as features in a more traditional and interpretable econometric model. To demonstrate this, let us consider a simple linear regression model for GDP growth. We might be interested in understanding to what degree economic growth in the past is associated with economic growth today. As we might expect, linearly regressing economic growth on lagged growth, as in column (1) of the table below, yields a statistically significant coefficient. However, this coefficient suffers from confounding bias since there are many other confounding variables at play, of which some may be readily observable and measurable, but others may not.</span>
 <span id="cb6-347"><a href="#cb6-347"></a></span>
@@ -3173,12 +2941,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">
-<p>© 2023, Patrick Altmeyer</p>
-</div>   
+    <div class="nav-footer-left">© 2023, Patrick Altmeyer</div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
@@ -3209,7 +2975,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-
 
 
 

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-99.9.9">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -66,7 +66,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -108,13 +107,7 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -123,7 +116,6 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -142,39 +134,12 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Patrick Altmeyer - Paving the Way Towards Low-Overhead Uncertainty Calibration">
 <meta property="og:description" content="A guest blog post by a team of students from TU Delft, who have contributed multiple improvements to LaplaceRedux.jl.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/guest-students-laplace/www/intro.png">
-<meta property="og:site_name" content="Patrick Altmeyer">
+<meta property="og:site-name" content="Patrick Altmeyer">
 <meta property="og:image:height" content="772">
 <meta property="og:image:width" content="1164">
 <meta name="twitter:title" content="Patrick Altmeyer - Paving the Way Towards Low-Overhead Uncertainty Calibration">
@@ -189,9 +154,9 @@ window.Quarto = {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
@@ -206,50 +171,50 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html"> 
-<span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/publications/index.html"> 
-<span class="menu-text">Publications</span></a>
+    <a class="nav-link" href="../../../content/publications/index.html" rel="" target="">
+ <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html"> 
-<span class="menu-text">Talks</span></a>
+    <a class="nav-link" href="../../../content/talks/index.html" rel="" target="">
+ <span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html"> 
-<span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/software.html"> 
-<span class="menu-text">Software</span></a>
+    <a class="nav-link" href="../../../content/software.html" rel="" target="">
+ <span class="menu-text">Software</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/about/index.html"> 
-<span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../../content/about/index.html" rel="" target="">
+ <span class="menu-text">About</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../blog/index.xml" rel="" target=""><i class="bi bi-rss" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/pat-alt" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/paltmey" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -273,7 +238,7 @@ window.Quarto = {
   <li><a href="#acknowedgements" id="toc-acknowedgements" class="nav-link" data-scroll-target="#acknowedgements">Acknowedgements</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -322,9 +287,7 @@ window.Quarto = {
   </div>
   
 
-
 </header>
-
 
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -340,10 +303,10 @@ Guest Blog Post
 </div>
 </div>
 <p>This post summarizes a quarter-long second-year BSc coursework project at TU Delft. Our team of five students has made multiple improvements to <a href="https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl">LaplaceRedux.jl</a>, due to Patrick Altmeyer. Inspired by its Pythonic counterpart, <a href="https://github.com/AlexImmer/Laplace">laplacet-torch</a>, this Julia library aims to provide low-overhead Bayesian uncertainty calibration to deep neural networks via Laplace Approximations <span class="citation" data-cites="daxberger2021laplace">(<a href="#ref-daxberger2021laplace" role="doc-biblioref">Daxberger et al. 2021</a>)</span>.</p>
-<div class="img-fluid quarto-figure quarto-figure-center">
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="www/intro.png" class="img-fluid figure-img"></p>
-<figcaption>A nice image to attract your attention. The exact inverse Fisher information matrix for a MNIST classifier network (left), its block-diagonal and tri-block-diagonal approximations (middle), and the absolute error (right). Source: Martens &amp; Grosse (2015)</figcaption>
+<figcaption class="figure-caption">A nice image to attract your attention. The exact inverse Fisher information matrix for a MNIST classifier network (left), its block-diagonal and tri-block-diagonal approximations (middle), and the absolute error (right). Source: Martens &amp; Grosse (2015)</figcaption>
 </figure>
 </div>
 <p>We will begin by demystifying the technical terms in the last sentence, in order to explain our contributions to the library and highlight some impressions from the experience. Note that our team has begun working on this PhD-tier subject only having had some introductory courses on probability and statistics, machine learning, and computational intelligence, without any prior exposure to Julia.</p>
@@ -356,17 +319,13 @@ Guest Blog Post
 <blockquote class="blockquote">
 <p>… it is possible to take a perfectly reasonable network, delete half (or more) of the weights and wind up with a network that works just as well, or better.</p>
 </blockquote>
-<div id="fig-loss" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="www/grad_desc.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: The loss landscape. One can imagine gradient descent as a particle, let’s say a ball, or a grain of sand, rolling to the bottom of a pit. Then for Bayesian Learning, we have as if a pile of sand poured around at that bottom point, with the pile being thicker where loss is lower. This proverbial sand pile would represent the posterior parameter distribution. Figure due to <span class="citation" data-cites="amini2019spatial">Amini et al. (<a href="#ref-amini2019spatial" role="doc-biblioref">2019</a>)</span>
-</figcaption>
+<div id="fig-loss" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="www/grad_desc.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: The loss landscape. One can imagine gradient descent as a particle, let’s say a ball, or a grain of sand, rolling to the bottom of a pit. Then for Bayesian Learning, we have as if a pile of sand poured around at that bottom point, with the pile being thicker where loss is lower. This proverbial sand pile would represent the posterior parameter distribution. Figure due to <span class="citation" data-cites="amini2019spatial">Amini et al. (<a href="#ref-amini2019spatial" role="doc-biblioref">2019</a>)</span></figcaption>
 </figure>
 </div>
-<p>The way gradient is usually illustrated is with a picture like the one shown in <a href="#fig-loss" class="quarto-xref">Figure&nbsp;1</a> above a curved terrain of the loss function across the parameter space. Each point of the horizontal plane corresponds to some configuration of parameters. Gradient descent seeks the point at the bottom of this terrain, as the point with the lowest loss, however as the loss-curvature is highly non-convex and high-dimensional there are many directions in which we could move and still maintain a low loss. Thus instead of a singular point we would like to specify a probability distribution around that optimal point. Bayesian methods, and in particular Laplace Approximations, allow us to do this!</p>
+<p>The way gradient is usually illustrated is with a picture like the one shown in <a href="#fig-loss">Figure&nbsp;1</a> above a curved terrain of the loss function across the parameter space. Each point of the horizontal plane corresponds to some configuration of parameters. Gradient descent seeks the point at the bottom of this terrain, as the point with the lowest loss, however as the loss-curvature is highly non-convex and high-dimensional there are many directions in which we could move and still maintain a low loss. Thus instead of a singular point we would like to specify a probability distribution around that optimal point. Bayesian methods, and in particular Laplace Approximations, allow us to do this!</p>
 <p>Firstly, the Bayesian approach to neural network uncertainty calibration is that of modelling the posterior using Bayes’ Theorem:</p>
 <p><span class="math display">\[
 p(\theta \mid \mathcal{D}) = \tfrac{1}{Z} \,p(\mathcal{D} \mid \theta) \, p(\theta), \qquad Z:= p(\mathcal{D}) = \textstyle\int p(\mathcal{D} \mid \theta) \, p(\theta) \,d\theta
@@ -410,15 +369,11 @@ G := \textstyle\sum_{n=1}^N J(x_n) \left( \nabla^2_{f} \log p(y_n \mid f) \Large
 <p>Unlike the Fisher, GGN does not require the network to define a probabilistic model on its output <span class="citation" data-cites="botev2017practical">(<a href="#ref-botev2017practical" role="doc-biblioref">Botev, Ritter, and Barber 2017</a>)</span>. For models defining an exponential family distribution over the output, the two coincide <span class="citation" data-cites="kunstner2020limitations">(<a href="#ref-kunstner2020limitations" role="doc-biblioref">Kunstner, Balles, and Hennig 2020</a>)</span>. This applies to classifiers since they define a categorical distribution over the output, but not to simple regression models.</p>
 <p>These matrices are quadratically large, it is infeasible to store them in full. The simplest estimation is to model the matrix as a diagonal — however one can easily contemplate how crude this approximation can be: for 100 parameters, only 1% of the full Hessian is captured.</p>
 <p>A more sophisticated approach, due to Martens and Grosse (2015), is inspired by the observation that in practice the covariance matrices (i.e.&nbsp;inverted Hessians) for neural networks are block-diagonal-dominant. Thus we can effectively model the covariance matrix (and hence the Fisher) as a block-diagonal matrix, where blocks correspond to parameters grouped by layers. Additionally, each block is decomposed into two Kronecker factors, reducing the size of data stored several magnitudes more, at a cost of another assumption.</p>
-<p>Lastly, a novel approach is to <em>sketch</em> a low-rank approximation of the Fisher <span class="citation" data-cites="sharma2021sketching">(<a href="#ref-sharma2021sketching" role="doc-biblioref">Sharma, Azizan, and Pavone 2021</a>)</span>. <a href="#fig-fact" class="quarto-xref">Figure&nbsp;2</a> shows four Hessian approximation structures:</p>
-<div id="fig-fact" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-fact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="www/fact.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: (a) Hessian in full, intractable for large networks. (b) Low-rank. (c) Kronecker-factored Approximate Curvature, a block-diagonal method. (d) Diagonal. Source: <span class="citation" data-cites="daxberger2021laplace">Daxberger et al. (<a href="#ref-daxberger2021laplace" role="doc-biblioref">2021</a>)</span>
-</figcaption>
+<p>Lastly, a novel approach is to <em>sketch</em> a low-rank approximation of the Fisher <span class="citation" data-cites="sharma2021sketching">(<a href="#ref-sharma2021sketching" role="doc-biblioref">Sharma, Azizan, and Pavone 2021</a>)</span>. <a href="#fig-fact">Figure&nbsp;2</a> shows four Hessian approximation structures:</p>
+<div id="fig-fact" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="www/fact.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: (a) Hessian in full, intractable for large networks. (b) Low-rank. (c) Kronecker-factored Approximate Curvature, a block-diagonal method. (d) Diagonal. Source: <span class="citation" data-cites="daxberger2021laplace">Daxberger et al. (<a href="#ref-daxberger2021laplace" role="doc-biblioref">2021</a>)</span></figcaption>
 </figure>
 </div>
 <p>It is also possible to cut the costs by treating only a subset of the model parameters, i.e.&nbsp;a subnetwork, probabilistically, fixing the remaining parameters at their MAP-estimated values. One special case of subnetwork Laplace that was found to perform well in practice is last-layer Laplace, where the selected subnetwork contains only the weights and biases of the last layer.</p>
@@ -464,7 +419,7 @@ Figure&nbsp;2: (a) Hessian in full, intractable for large networks. (b) Low-rank
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-amini2019spatial" class="csl-entry" role="listitem">
 Amini, Alexander, Ava Soleimany, Sertac Karaman, and Daniela Rus. 2019. <span>“Spatial <span>Uncertainty</span> <span>Sampling</span> for <span>End</span>-to-<span>End</span> <span>Control</span>.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.1805.04829">https://doi.org/10.48550/arXiv.1805.04829</a>.
 </div>
@@ -486,7 +441,7 @@ LeCun, Yann, John Denker, and Sara Solla. 1989. <span>“Optimal <span>Brain</sp
 <div id="ref-sharma2021sketching" class="csl-entry" role="listitem">
 Sharma, Apoorva, Navid Azizan, and Marco Pavone. 2021. <span>“Sketching <span>Curvature</span> for <span>Efficient</span> <span>Out</span>-of-<span>Distribution</span> <span>Detection</span> for <span>Deep</span> <span>Neural</span> <span>Networks</span>.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.2102.12567">https://doi.org/10.48550/arXiv.2102.12567</a>.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
   author = {Altmeyer, Patrick and Bratus, Severin and Ardman, Mark and
     Cazacu, Adelina and Ionescu, Andrei and Makarov, Ivan and Altmeyer,
     Patrick},
@@ -631,9 +586,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -643,17 +599,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -666,120 +613,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      return note.innerHTML;
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -823,7 +656,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -849,32 +681,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1128,12 +934,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">
-<p>© 2023, Patrick Altmeyer</p>
-</div>   
+    <div class="nav-footer-left">© 2023, Patrick Altmeyer</div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
@@ -1164,7 +968,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-
 
 
 
