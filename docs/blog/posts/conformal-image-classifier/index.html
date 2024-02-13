@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-99.9.9">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -61,7 +61,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -103,13 +102,7 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -118,7 +111,6 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -140,39 +132,12 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Patrick Altmeyer - How to Conformalize a Deep Image Classifier">
 <meta property="og:description" content="A guide demonstrating how to use ConformalPrediction.jl to conformalize a deep image classifier in a few lines of code.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/www/intro.gif">
-<meta property="og:site_name" content="Patrick Altmeyer">
+<meta property="og:site-name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer - How to Conformalize a Deep Image Classifier">
 <meta name="twitter:description" content="A guide demonstrating how to use ConformalPrediction.jl to conformalize a deep image classifier in a few lines of code.">
 <meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/conformal-image-classifier/www/intro.gif">
@@ -183,9 +148,9 @@ window.Quarto = {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
@@ -200,50 +165,50 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html"> 
-<span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/publications/index.html"> 
-<span class="menu-text">Publications</span></a>
+    <a class="nav-link" href="../../../content/publications/index.html" rel="" target="">
+ <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html"> 
-<span class="menu-text">Talks</span></a>
+    <a class="nav-link" href="../../../content/talks/index.html" rel="" target="">
+ <span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html"> 
-<span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/software.html"> 
-<span class="menu-text">Software</span></a>
+    <a class="nav-link" href="../../../content/software.html" rel="" target="">
+ <span class="menu-text">Software</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/about/index.html"> 
-<span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../../content/about/index.html" rel="" target="">
+ <span class="menu-text">About</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../blog/index.xml" rel="" target=""><i class="bi bi-rss" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/pat-alt" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/paltmey" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -264,7 +229,7 @@ window.Quarto = {
   <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap">🔁 Recap</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">🎓 References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -293,14 +258,14 @@ window.Quarto = {
     <div class="quarto-title-meta-contents">
     <p class="author"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> </p>
   </div>
-  <div class="quarto-title-meta-contents">
+    <div class="quarto-title-meta-contents">
         <p class="affiliation">
             <a href="https://www.tudelft.nl/en/">
             Delft University of Technology
             </a>
           </p>
       </div>
-  </div>
+    </div>
 
 <div class="quarto-title-meta">
 
@@ -316,14 +281,12 @@ window.Quarto = {
   </div>
   
 
-
 </header>
-
 
 <div class="intro-gif">
 <figure class="figure">
 <img src="www/intro.gif" class="figure-img">
-<figcaption>
+<figcaption class="figure-caption">
 Conformalized prediction sets for a<br>simple Deep Image Classifier.
 </figcaption>
 </figure>
@@ -335,7 +298,7 @@ Conformalized prediction sets for a<br>simple Deep Image Classifier.
 <h2 class="anchored" data-anchor-id="the-task-at-hand">🎯 The Task at Hand</h2>
 <p>The task at hand is to predict the labels of handwritten images of digits using the famous MNIST dataset <span class="citation" data-cites="lecun1998mnist">(<a href="#ref-lecun1998mnist" role="doc-biblioref">LeCun 1998</a>)</span>. Importing this popular machine learning dataset in Julia is made remarkably easy through <code>MLDatasets.jl</code>:</p>
 <div id="bd034eae" class="cell" data-execution_count="2">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">using</span> <span class="bu">MLDatasets</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>N <span class="op">=</span> <span class="fl">1000</span></span>
@@ -344,9 +307,9 @@ Conformalized prediction sets for a<br>simple Deep Image Classifier.
 <span id="cb1-5"><a href="#cb1-5"></a>yraw <span class="op">=</span> yraw[<span class="fl">1</span><span class="op">:</span>N]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p><a href="#fig-samples" class="quarto-xref">Figure&nbsp;1</a> below shows a few random samples from the training data:</p>
+<p><a href="#fig-samples">Figure&nbsp;1</a> below shows a few random samples from the training data:</p>
 <div id="cell-fig-samples" class="cell" data-execution_count="3">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">using</span> <span class="bu">MLJ</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">using</span> <span class="bu">Images</span></span>
@@ -356,14 +319,10 @@ Conformalized prediction sets for a<br>simple Deep Image Classifier.
 <span id="cb2-6"><a href="#cb2-6"></a>n_samples <span class="op">=</span> <span class="fl">10</span></span>
 <span id="cb2-7"><a href="#cb2-7"></a><span class="fu">mosaic</span>(<span class="fu">rand</span>(X, n_samples)<span class="op">...</span>, ncol<span class="op">=</span>n_samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="fig-samples" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored" data-execution_count="4">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-samples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div id="fig-samples" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAjAAAAA4CAAAAADGVp33AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAACJhJREFUeAHtwQuQVeVhAODvumcBJywQiTxEQIEllCCCxioochcwwceoPLQkwUY0mNFKNdUWtTK7aAZhzNRKmphUUZkMREJAECHNiNm7UQk4QUx4VB61EsEVkYfoAqJwOmd2cJe4d/f+KzaaOd8XSaUCRFKpAJFUKkAklQoQSaUCRFKpAJG/qMh3TNHJCY7YbLLF/npFZjvXBd70eRZJpQJEjqOM4QYZ5GLPqLBC0+52t3X+V0sD9TJdBw/7a/U14/zRQZ8fWeWypqpQJ5JKBYgcNyd6yDe9ZqP7TDRXf/s05XYTLPKuli7xU6Wm+ZVtwnTUyxm+it6GiDFMTojnPWaWEO296HQlahRuDNbY69PX0xZzjPdJZWUxVH2RVCpA5Lj5W1sMtF5ii0d0tE9TSlVLvO9Jb1nqJEuNVK0QJb5qtOHa6ixWKxbjl8qslU+xftao08MAsTB3OM12h4Uow3rhSvQ12rnut1RhznTEOPMs8UnEalWpL5JKBYh85ALtbPCq5qpS5agLvOoNTatW5wX3+IF+uqtWiLW6atgMa+U3Vn9r1GnhRGHuc5vYeAcV7gxdMVOoFhYpkxjs39yhEE+63Q9cbonmyqrUsEgqFSDykfucL1FtuaWetUvznW2XGqGedr9YITr4jW5ivGW3F2zGRrcZghUe1pjRdmq+yDT/JLFLiFsVmesDIbro7U7n+LmFGGeS1eZrWuzXyl3lfps0R4VydcoNVeaoSCoVIPKRiR7VChnjjPeSOy3XPF31cINwm7xkoL+zUlPe9SHm+Imttktc7xeKcdAkezVmjJ1uUqdU4YpMc5twnYx1wE3C3OtaNa4zX2KUE91lvkJssF0fnWwSLlarTBbljhVJpQJEPvKKwWr11dpjFvhHszXHGF/wsuY4S6yzph0wQJ07TNZWYoY7NSXjMcfKyChEd98zSa0d3lG4AVpbbJ8QV/qmg661QK2rsUGIa/xWqEqJnCo5OZQjq04klQoQacAGTDfblzTPeOu8JkQ7JUpNkXHIcoUp1tYI/YzWRyx2WLkfa1osVl9/sVjTrjRdqUOmm6Cb9V5XuLFYIMxMkTEWq/WSyBsm+nRVykpMldOwSCoVIJJXRvMM18dEB4RYqZdEbKN5CnG9bztffQd8UX88J0yJQkz0L3o4ZICN/h67FK6ta6z1c51VK8wJHtDFfRajWG/LnILOLrZAYZbrI1RWVqJMTn05dSKpVIBIHmPEmudbiqwWplSsVj+P+r4/aEx3D7tQC7H6WrvNLQ4aa7Xd8mnn4/aaqzEnG+RBLVW610aDdcIcheuu2BF3uUdGjZnut0fjvmaS501V5G8sdrrpfu0Z1RYo1CI36+sERxSqUlaiTM5RlRJl6kRSqQCRBp3qy5qnrYsss0mY7mpNcb1RLtJOY0qdq1hDikX+y2+VyWe0o3obIsYYCx2UX1tPGoTH3WEnLtLKsUb4ise9I5+zxHq600rzDTBZezc6oimv6+NuVzlgiRkGKRLieW87T5EjCpWVmCrnqKwscuqLpFIBIg2Y5iYl3rBUuPN18aBQ29T6riV+qJtFrpRfd61kZLDLKgtlxBKlJuiAM/WyRcOuk3Gxs41ARizR00T5PWUwDpivRImdLpSx3Xo90MnVzjFYjVctkU8WrS00zmEt1PiuR63SlG/4BjabZjbudoJtCveBJSYY4wmFiSWmqlCnUqJKfZFUKkCkASO1wbVeEe4Wu23UfE/r7x4DNWaWKkUS79muvhI3Yq+35DPHYGfYZ5m1HpdY4VmN+YUvGKiVpRJ/1EWsi83qbDDFEvm1wXbXO4xDZrhKH6s0ZpVZOqDGrd6S6CU2V6iTFSKrUmKqCnUqJaaqUF8klQoQacAVlunrCn+w07GKdfYn+fV1oWV26Kq9lzVtgLdtc6zN6GCY38hvi4a94Eac5BT7NOwhp1lruTcdddg7GvMjs11quDI90F+dg+bgYVvs0ZTZ9qm11buassdE9Y3S3n5zheqpEFm1KtSplJXIOVYklQoQacDrhnnMdUapskat050vVqylUvkN19KDvmW6DoZ4UeMecrlLbHOspd7U2UnCtTNLYoNX5DdZfSWKNOU988zTUpEbnGYStvqKxH6FyNhqijoZodoqMtMeIVaZYISmVSiXyKgTS+SU+XORVCpApEE7XaafS40xTkYskfF7T3hEYy7Df+jjZ0Za4B/UuNRwg9X4uKvcoMZFtjmknV32q3WZzjLCPeASrcRmmapww7RTmPfx79oZrq8j9itcjVidr+tgvzDF2C/MywozVKLMURXKJXLKfFwklQoQyWuddWYYobNaP9O0luhnvHnO8aRF2O07ajTkd9bpZ7qb7Xam39mO56x2tdguK+VzqiGGW2qFHWq1cY7JRiBjhe/brnAvqxFirx36mifEAmNcYbHEKD/ygoXCfE+4N1QrdZ6VGpOVRU4OWVlDZZFTpUJDIqlUgEgTlitcG73xQ/MctlIv7Q2z2B4N22akB7RX5lScJzFWLHGXbfKZoAIT7LDXs17HTboixk/d4pAQ3bQQooPueFqIZ/zJAz6w3yQjbTTZYSHOdgqeEma75a5xqZUak5PIqlCuTpUKDYukUgEix9EQnexyr8MSNWo8rjHVxmnpZGe5UIyzDVXtCWvMlc8kt6vVSUdflsiIsd5Mjwj1nH1CdNQDK4R4z3n+2WQ9/dLX/d5BYbpog/8W6kP00LisnCzKHVUmJ79IKhUgchy9ZqdbvC3E+7bZ5imFWuZftfbndlmt3Is+q/a4yyd1uQXCzPBtXxL5UH45iSxyquTkNC6SSgWIHEfrdfRp+x8XO1FboyW6GWGThf7TVs21SYiNHjLIX8KtFgiz2TxfFGtcTk7hIqlUgMjnzhqJXzleLhDikJv9f9timUvcI9x4x1sklQoQSX3mbXCZz4pIKhUgkkoFiKRSAf4PfAZkZk+WBM0AAAAASUVORK5C" class="figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-samples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Random samples from the MNIST dataset.
-</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;1: Random samples from the MNIST dataset.</figcaption>
 </figure>
 </div>
 </div>
@@ -373,7 +332,7 @@ Figure&nbsp;1: Random samples from the MNIST dataset.
 <p>To model the mapping from image inputs to labels will rely on a simple Multi-Layer Perceptron (MLP). A great Julia library for Deep Learning is <code>Flux.jl</code>. But wait … doesn’t <code>ConformalPrediction.jl</code> work with models trained in <code>MLJ.jl</code>? That’s right, but fortunately there exists a <code>Flux.jl</code> interface to <code>MLJ.jl</code>, namely <code>MLJFlux.jl</code>. The interface is still in its early stages, but already very powerful and easily accessible for anyone (like myself) who is used to building Neural Networks in <code>Flux.jl</code>.</p>
 <p>In <code>Flux.jl</code>, you could build an MLP for this task as follows,</p>
 <div id="54a23c26" class="cell" data-execution_count="4">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">using</span> <span class="bu">Flux</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
@@ -387,7 +346,7 @@ Figure&nbsp;1: Random samples from the MNIST dataset.
 <p>where <code>(28,28)</code> is just the input dimension (28x28 pixel images). Since we have ten digits, our output dimension is ten.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>We can do the exact same thing in <code>MLJFlux.jl</code> as follows,</p>
 <div id="d8c0328d" class="cell" data-execution_count="5">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">using</span> <span class="bu">MLJFlux</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
@@ -400,7 +359,7 @@ Figure&nbsp;1: Random samples from the MNIST dataset.
 </div>
 <p>where here we rely on the <code>@builder</code> macro to make the transition from <code>Flux.jl</code> to <code>MLJ.jl</code> as seamless as possible. Finally, <code>MLJFlux.jl</code> already comes with a number of helper functions to define plain-vanilla networks. In this case, we will use the <code>ImageClassifier</code> with our custom builder and cross-entropy loss:</p>
 <div id="f86f7202" class="cell" data-execution_count="6">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a>ImageClassifier <span class="op">=</span> <span class="pp">@load</span> ImageClassifier</span>
 <span id="cb5-2"><a href="#cb5-2"></a>clf <span class="op">=</span> <span class="fu">ImageClassifier</span>(</span>
@@ -412,7 +371,7 @@ Figure&nbsp;1: Random samples from the MNIST dataset.
 </div>
 <p>The generated instance <code>clf</code> is a model (in the <code>MLJ.jl</code> sense) so from this point on we can rely on standard <code>MLJ.jl</code> workflows. For example, we can wrap our model in data to create a machine and then evaluate it on a holdout set as follows:</p>
 <div id="dde6d57d" class="cell" data-execution_count="7">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(clf, X, y)</span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
@@ -430,7 +389,7 @@ Figure&nbsp;1: Random samples from the MNIST dataset.
 <h2 class="anchored" data-anchor-id="conformalizing-the-network">🔥 Conformalizing the Network</h2>
 <p>Since <code>clf</code> is a model, it is also compatible with our package: <code>ConformalPrediction.jl</code>. To conformalize our MLP, we therefore only need to call <code>conformal_model(clf)</code>. Since the generated instance <code>conf_model</code> is also just a model, we can still rely on standard <code>MLJ.jl</code> workflows. Below we first wrap it in data and then fit it. Aaaand … we’re done! Let’s look at the results in the next section.</p>
 <div id="d2083aac" class="cell" data-execution_count="8">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1"></a><span class="im">using</span> <span class="bu">ConformalPrediction</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(clf; method<span class="op">=:</span>simple_inductive, coverage<span class="op">=</span><span class="fl">.95</span>)</span>
@@ -441,17 +400,13 @@ Figure&nbsp;1: Random samples from the MNIST dataset.
 </section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">📊 Results</h2>
-<p><a href="#fig-plots" class="quarto-xref">Figure&nbsp;2</a> below presents the results. <a href="#fig-plots-1" class="quarto-xref">Figure&nbsp;2 (a)</a> displays highly certain predictions, now defined in the rigorous sense of Conformal Prediction: in each case, the conformal set (just beneath the image) includes only one label.</p>
-<p><a href="#fig-plots-2" class="quarto-xref">Figure&nbsp;2 (b)</a> and <a href="#fig-plots-3" class="quarto-xref">Figure&nbsp;2 (c)</a> display increasingly uncertain predictions of set size two and three, respectively. They demonstrate that CP is well equipped to deal with samples characterized by high aleatoric uncertainty: digits four (4), seven (7) and nine (9) share certain similarities. So do digits five (5) and six (6) as well as three (3) and eight (8). These may be hard to distinguish from each other even after seeing many examples (and even for a human). It is therefore unsurprising to see that these digits often end up together in conformal sets.</p>
-<div class="cell" data-layout-nrow="3" data-execution_count="10">
-<div id="fig-plots" class="quarto-layout-panel">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-plots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-plots" style="flex-basis: 100.0%;justify-content: flex-start;display: flex;">
-<div id="fig-plots-1" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-plots-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<p><a href="#fig-plots">Figure&nbsp;2</a> below presents the results. <a href="#fig-plots-1">Figure&nbsp;2 (a)</a> displays highly certain predictions, now defined in the rigorous sense of Conformal Prediction: in each case, the conformal set (just beneath the image) includes only one label.</p>
+<p><a href="#fig-plots-2">Figure&nbsp;2 (b)</a> and <a href="#fig-plots-3">Figure&nbsp;2 (c)</a> display increasingly uncertain predictions of set size two and three, respectively. They demonstrate that CP is well equipped to deal with samples characterized by high aleatoric uncertainty: digits four (4), seven (7) and nine (9) share certain similarities. So do digits five (5) and six (6) as well as three (3) and eight (8). These may be hard to distinguish from each other even after seeing many examples (and even for a human). It is therefore unsurprising to see that these digits often end up together in conformal sets.</p>
+<div id="fig-plots" class="cell quarto-layout-panel" data-execution_count="10">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div id="fig-plots-1" class="quarto-figure quarto-figure-center anchored" style="flex-basis: 100.0%;justify-content: center;">
+<figure class="figure">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="900" height="300" viewbox="0 0 3600 1200">
 <defs>
@@ -848,19 +803,13 @@ kgQxAAAASYIYAACAJEEMAABA0r8BKCC3IOGaACwAAAAASUVORK5CYII=
 " transform="translate(2518, 47)"></image>
 </g>
 <path clip-path="url(#clip120)" d="M2749.95 1031.2 L2749.95 1039.21 Q2746.11 1035.64 2741.75 1033.87 Q2737.42 1032.1 2732.53 1032.1 Q2722.9 1032.1 2717.79 1038.01 Q2712.67 1043.88 2712.67 1055.01 Q2712.67 1066.11 2717.79 1072.01 Q2722.9 1077.88 2732.53 1077.88 Q2737.42 1077.88 2741.75 1076.11 Q2746.11 1074.35 2749.95 1070.77 L2749.95 1078.71 Q2745.96 1081.42 2741.49 1082.77 Q2737.05 1084.13 2732.08 1084.13 Q2719.33 1084.13 2712 1076.34 Q2704.66 1068.52 2704.66 1055.01 Q2704.66 1041.47 2712 1033.68 Q2719.33 1025.86 2732.08 1025.86 Q2737.12 1025.86 2741.56 1027.21 Q2746.04 1028.53 2749.95 1031.2 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M2762.29 1048.05 L2810.51 1048.05 L2810.51 1054.37 L2762.29 1054.37 L2762.29 1048.05 M2762.29 1063.4 L2810.51 1063.4 L2810.51 1069.79 L2762.29 1069.79 L2762.29 1063.4 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M2858.06 1090.18 L2858.06 1095.6 L2855.72 1095.6 Q2846.36 1095.6 2843.16 1092.82 Q2840 1090.03 2840 1081.72 L2840 1072.73 Q2840 1067.05 2837.97 1064.87 Q2835.94 1062.69 2830.6 1062.69 L2828.3 1062.69 L2828.3 1057.31 L2830.6 1057.31 Q2835.98 1057.31 2837.97 1055.16 Q2840 1052.98 2840 1047.38 L2840 1038.35 Q2840 1030.04 2843.16 1027.29 Q2846.36 1024.51 2855.72 1024.51 L2858.06 1024.51 L2858.06 1029.88 L2855.5 1029.88 Q2850.19 1029.88 2848.58 1031.54 Q2846.96 1033.19 2846.96 1038.5 L2846.96 1047.83 Q2846.96 1053.73 2845.23 1056.4 Q2843.54 1059.07 2839.4 1060.01 Q2843.57 1061.03 2845.27 1063.7 Q2846.96 1066.37 2846.96 1072.24 L2846.96 1081.57 Q2846.96 1086.87 2848.58 1088.53 Q2850.19 1090.18 2855.5 1090.18 L2858.06 1090.18 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M2892.17 1031.88 Q2886.31 1031.88 2883.33 1037.67 Q2880.4 1043.43 2880.4 1055.01 Q2880.4 1066.56 2883.33 1072.35 Q2886.31 1078.11 2892.17 1078.11 Q2898.08 1078.11 2901.01 1072.35 Q2903.99 1066.56 2903.99 1055.01 Q2903.99 1043.43 2901.01 1037.67 Q2898.08 1031.88 2892.17 1031.88 M2892.17 1025.86 Q2901.62 1025.86 2906.58 1033.35 Q2911.58 1040.79 2911.58 1055.01 Q2911.58 1069.19 2906.58 1076.68 Q2901.62 1084.13 2892.17 1084.13 Q2882.73 1084.13 2877.73 1076.68 Q2872.76 1069.19 2872.76 1055.01 Q2872.76 1040.79 2877.73 1033.35 Q2882.73 1025.86 2892.17 1025.86 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M2965.07 1024.58 Q2960.03 1033.23 2957.59 1041.7 Q2955.14 1050.16 2955.14 1058.85 Q2955.14 1067.54 2957.59 1076.08 Q2960.07 1084.58 2965.07 1093.19 L2959.05 1093.19 Q2953.41 1084.35 2950.59 1075.81 Q2947.81 1067.27 2947.81 1058.85 Q2947.81 1050.46 2950.59 1041.96 Q2953.37 1033.46 2959.05 1024.58 L2965.07 1024.58 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M2980.8 1076.64 L2993.21 1076.64 L2993.21 1033.8 L2979.71 1036.5 L2979.71 1029.58 L2993.13 1026.88 L3000.73 1026.88 L3000.73 1076.64 L3013.15 1076.64 L3013.15 1083.04 L2980.8 1083.04 L2980.8 1076.64 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M3044.74 1031.88 Q3038.87 1031.88 3035.9 1037.67 Q3032.97 1043.43 3032.97 1055.01 Q3032.97 1066.56 3035.9 1072.35 Q3038.87 1078.11 3044.74 1078.11 Q3050.65 1078.11 3053.58 1072.35 Q3056.55 1066.56 3056.55 1055.01 Q3056.55 1043.43 3053.58 1037.67 Q3050.65 1031.88 3044.74 1031.88 M3044.74 1025.86 Q3054.18 1025.86 3059.15 1033.35 Q3064.15 1040.79 3064.15 1055.01 Q3064.15 1069.19 3059.15 1076.68 Q3054.18 1084.13 3044.74 1084.13 Q3035.3 1084.13 3030.3 1076.68 Q3025.33 1069.19 3025.33 1055.01 Q3025.33 1040.79 3030.3 1033.35 Q3035.3 1025.86 3044.74 1025.86 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M3093.76 1031.88 Q3087.89 1031.88 3084.92 1037.67 Q3081.98 1043.43 3081.98 1055.01 Q3081.98 1066.56 3084.92 1072.35 Q3087.89 1078.11 3093.76 1078.11 Q3099.66 1078.11 3102.6 1072.35 Q3105.57 1066.56 3105.57 1055.01 Q3105.57 1043.43 3102.6 1037.67 Q3099.66 1031.88 3093.76 1031.88 M3093.76 1025.86 Q3103.2 1025.86 3108.16 1033.35 Q3113.17 1040.79 3113.17 1055.01 Q3113.17 1069.19 3108.16 1076.68 Q3103.2 1084.13 3093.76 1084.13 Q3084.31 1084.13 3079.31 1076.68 Q3074.35 1069.19 3074.35 1055.01 Q3074.35 1040.79 3079.31 1033.35 Q3084.31 1025.86 3093.76 1025.86 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M3174.29 1058.32 Q3171.02 1058.32 3169.14 1061.11 Q3167.29 1063.89 3167.29 1068.85 Q3167.29 1073.74 3169.14 1076.57 Q3171.02 1079.35 3174.29 1079.35 Q3177.49 1079.35 3179.33 1076.57 Q3181.21 1073.74 3181.21 1068.85 Q3181.21 1063.93 3179.33 1061.14 Q3177.49 1058.32 3174.29 1058.32 M3174.29 1053.54 Q3180.23 1053.54 3183.73 1057.68 Q3187.23 1061.82 3187.23 1068.85 Q3187.23 1075.89 3183.69 1080.03 Q3180.2 1084.13 3174.29 1084.13 Q3168.27 1084.13 3164.77 1080.03 Q3161.28 1075.89 3161.28 1068.85 Q3161.28 1061.78 3164.77 1057.68 Q3168.31 1053.54 3174.29 1053.54 M3135.47 1030.64 Q3132.24 1030.64 3130.36 1033.46 Q3128.51 1036.24 3128.51 1041.13 Q3128.51 1046.1 3130.36 1048.88 Q3132.2 1051.66 3135.47 1051.66 Q3138.74 1051.66 3140.59 1048.88 Q3142.47 1046.1 3142.47 1041.13 Q3142.47 1036.28 3140.59 1033.46 Q3138.71 1030.64 3135.47 1030.64 M3169.44 1025.86 L3175.46 1025.86 L3140.32 1084.13 L3134.31 1084.13 L3169.44 1025.86 M3135.47 1025.86 Q3141.41 1025.86 3144.95 1030 Q3148.49 1034.1 3148.49 1041.13 Q3148.49 1048.24 3144.95 1052.34 Q3141.45 1056.44 3135.47 1056.44 Q3129.49 1056.44 3125.99 1052.34 Q3122.53 1048.2 3122.53 1041.13 Q3122.53 1034.14 3126.03 1030 Q3129.53 1025.86 3135.47 1025.86 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M3197.65 1024.58 L3203.67 1024.58 Q3209.31 1033.46 3212.09 1041.96 Q3214.92 1050.46 3214.92 1058.85 Q3214.92 1067.27 3212.09 1075.81 Q3209.31 1084.35 3203.67 1093.19 L3197.65 1093.19 Q3202.65 1084.58 3205.1 1076.08 Q3207.58 1067.54 3207.58 1058.85 Q3207.58 1050.16 3205.1 1041.7 Q3202.65 1033.23 3197.65 1024.58 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M3231.17 1090.18 L3233.8 1090.18 Q3239.06 1090.18 3240.64 1088.56 Q3242.26 1086.95 3242.26 1081.57 L3242.26 1072.24 Q3242.26 1066.37 3243.95 1063.7 Q3245.65 1061.03 3249.82 1060.01 Q3245.65 1059.07 3243.95 1056.4 Q3242.26 1053.73 3242.26 1047.83 L3242.26 1038.5 Q3242.26 1033.16 3240.64 1031.54 Q3239.06 1029.88 3233.8 1029.88 L3231.17 1029.88 L3231.17 1024.51 L3233.53 1024.51 Q3242.9 1024.51 3246.02 1027.29 Q3249.18 1030.04 3249.18 1038.35 L3249.18 1047.38 Q3249.18 1052.98 3251.21 1055.16 Q3253.25 1057.31 3258.59 1057.31 L3260.92 1057.31 L3260.92 1062.69 L3258.59 1062.69 Q3253.25 1062.69 3251.21 1064.87 Q3249.18 1067.05 3249.18 1072.73 L3249.18 1081.72 Q3249.18 1090.03 3246.02 1092.82 Q3242.9 1095.6 3233.53 1095.6 L3231.17 1095.6 L3231.17 1090.18 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M2850.36 1171.19 Q2847.43 1178.71 2844.65 1181.01 Q2841.86 1183.3 2837.2 1183.3 L2831.67 1183.3 L2831.67 1177.51 L2835.73 1177.51 Q2838.59 1177.51 2840.17 1176.15 Q2841.75 1174.8 2843.67 1169.76 L2844.91 1166.6 L2827.87 1125.15 L2835.21 1125.15 L2848.37 1158.1 L2861.54 1125.15 L2868.87 1125.15 L2850.36 1171.19 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M2885.27 1113.18 L2885.27 1125.15 L2899.53 1125.15 L2899.53 1130.52 L2885.27 1130.52 L2885.27 1153.4 Q2885.27 1158.55 2886.66 1160.02 Q2888.09 1161.48 2892.42 1161.48 L2899.53 1161.48 L2899.53 1167.28 L2892.42 1167.28 Q2884.41 1167.28 2881.36 1164.3 Q2878.31 1161.29 2878.31 1153.4 L2878.31 1130.52 L2873.23 1130.52 L2873.23 1125.15 L2878.31 1125.15 L2878.31 1113.18 L2885.27 1113.18 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M2933.04 1131.62 Q2931.88 1130.94 2930.49 1130.64 Q2929.13 1130.3 2927.48 1130.3 Q2921.61 1130.3 2918.45 1134.14 Q2915.33 1137.94 2915.33 1145.08 L2915.33 1167.28 L2908.37 1167.28 L2908.37 1125.15 L2915.33 1125.15 L2915.33 1131.69 Q2917.51 1127.85 2921.01 1126.01 Q2924.5 1124.13 2929.51 1124.13 Q2930.22 1124.13 2931.09 1124.24 Q2931.95 1124.32 2933.01 1124.51 L2933.04 1131.62 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M2939.59 1150.65 L2939.59 1125.15 L2946.51 1125.15 L2946.51 1150.39 Q2946.51 1156.37 2948.84 1159.38 Q2951.17 1162.35 2955.84 1162.35 Q2961.44 1162.35 2964.68 1158.77 Q2967.95 1155.2 2967.95 1149.03 L2967.95 1125.15 L2974.87 1125.15 L2974.87 1167.28 L2967.95 1167.28 L2967.95 1160.81 Q2965.43 1164.64 2962.08 1166.52 Q2958.77 1168.37 2954.37 1168.37 Q2947.11 1168.37 2943.35 1163.85 Q2939.59 1159.34 2939.59 1150.65 M2957 1124.13 L2957 1124.13 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M3025.16 1144.48 L3025.16 1147.87 L2993.34 1147.87 Q2993.79 1155.01 2997.63 1158.77 Q3001.5 1162.5 3008.39 1162.5 Q3012.37 1162.5 3016.1 1161.52 Q3019.86 1160.54 3023.55 1158.59 L3023.55 1165.13 Q3019.82 1166.71 3015.91 1167.54 Q3012 1168.37 3007.97 1168.37 Q2997.89 1168.37 2991.99 1162.5 Q2986.12 1156.63 2986.12 1146.62 Q2986.12 1136.28 2991.69 1130.22 Q2997.29 1124.13 3006.77 1124.13 Q3015.27 1124.13 3020.2 1129.62 Q3025.16 1135.08 3025.16 1144.48 M3018.24 1142.45 Q3018.17 1136.77 3015.04 1133.38 Q3011.96 1130 3006.84 1130 Q3001.05 1130 2997.55 1133.27 Q2994.09 1136.54 2993.57 1142.49 L3018.24 1142.45 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M3037.43 1132.29 L3085.65 1132.29 L3085.65 1138.61 L3037.43 1138.61 L3037.43 1132.29 M3037.43 1147.64 L3085.65 1147.64 L3085.65 1154.03 L3037.43 1154.03 L3037.43 1147.64 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip120)" d="M3118.3 1116.12 Q3112.43 1116.12 3109.46 1121.91 Q3106.53 1127.67 3106.53 1139.25 Q3106.53 1150.8 3109.46 1156.59 Q3112.43 1162.35 3118.3 1162.35 Q3124.21 1162.35 3127.14 1156.59 Q3130.11 1150.8 3130.11 1139.25 Q3130.11 1127.67 3127.14 1121.91 Q3124.21 1116.12 3118.3 1116.12 M3118.3 1110.1 Q3127.74 1110.1 3132.71 1117.59 Q3137.71 1125.03 3137.71 1139.25 Q3137.71 1153.43 3132.71 1160.92 Q3127.74 1168.37 3118.3 1168.37 Q3108.86 1168.37 3103.86 1160.92 Q3098.89 1153.43 3098.89 1139.25 Q3098.89 1125.03 3103.86 1117.59 Q3108.86 1110.1 3118.3 1110.1 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path></svg>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-plots-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) Randomly selected prediction sets of size <span class="math inline">\(|C|=1\)</span>.
-</figcaption>
+<figcaption class="figure-caption">(a) Randomly selected prediction sets of size <span class="math inline">\(|C|=1\)</span>.</figcaption>
 </figure>
 </div>
 </div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-plots" style="flex-basis: 100.0%;justify-content: flex-start;display: flex;">
-<div id="fig-plots-2" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-plots-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div id="fig-plots-2" class="quarto-figure quarto-figure-center anchored" style="flex-basis: 100.0%;justify-content: center;">
+<figure class="figure">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="900" height="300" viewbox="0 0 3600 1200">
 <defs>
@@ -1247,19 +1196,13 @@ AIAkQQwAAEDS/wCZe5CnSGWeyAAAAABJRU5ErkJggg==
 " transform="translate(2518, 47)"></image>
 </g>
 <path clip-path="url(#clip180)" d="M2627.18 1036.27 L2627.18 1043.66 Q2623.64 1040.37 2619.61 1038.73 Q2615.62 1037.1 2611.11 1037.1 Q2602.22 1037.1 2597.5 1042.55 Q2592.77 1047.97 2592.77 1058.25 Q2592.77 1068.49 2597.5 1073.94 Q2602.22 1079.36 2611.11 1079.36 Q2615.62 1079.36 2619.61 1077.73 Q2623.64 1076.09 2627.18 1072.8 L2627.18 1080.12 Q2623.5 1082.62 2619.37 1083.87 Q2615.27 1085.12 2610.69 1085.12 Q2598.92 1085.12 2592.15 1077.93 Q2585.38 1070.71 2585.38 1058.25 Q2585.38 1045.75 2592.15 1038.56 Q2598.92 1031.34 2610.69 1031.34 Q2615.34 1031.34 2619.44 1032.59 Q2623.57 1033.8 2627.18 1036.27 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M2638.57 1051.82 L2683.09 1051.82 L2683.09 1057.66 L2638.57 1057.66 L2638.57 1051.82 M2638.57 1065.99 L2683.09 1065.99 L2683.09 1071.89 L2638.57 1071.89 L2638.57 1065.99 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M2726.98 1090.71 L2726.98 1095.71 L2724.82 1095.71 Q2716.18 1095.71 2713.23 1093.14 Q2710.31 1090.57 2710.31 1082.9 L2710.31 1074.6 Q2710.31 1069.36 2708.43 1067.34 Q2706.56 1065.33 2701.63 1065.33 L2699.51 1065.33 L2699.51 1060.37 L2701.63 1060.37 Q2706.59 1060.37 2708.43 1058.39 Q2710.31 1056.37 2710.31 1051.2 L2710.31 1042.87 Q2710.31 1035.19 2713.23 1032.66 Q2716.18 1030.09 2724.82 1030.09 L2726.98 1030.09 L2726.98 1035.05 L2724.61 1035.05 Q2719.72 1035.05 2718.23 1036.58 Q2716.73 1038.11 2716.73 1043 L2716.73 1051.62 Q2716.73 1057.07 2715.13 1059.53 Q2713.57 1062 2709.75 1062.87 Q2713.61 1063.8 2715.17 1066.27 Q2716.73 1068.73 2716.73 1074.15 L2716.73 1082.76 Q2716.73 1087.66 2718.23 1089.18 Q2719.72 1090.71 2724.61 1090.71 L2726.98 1090.71 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M2743.54 1032.28 L2771.07 1032.28 L2771.07 1038.18 L2749.96 1038.18 L2749.96 1050.89 Q2751.49 1050.37 2753.02 1050.12 Q2754.54 1049.84 2756.07 1049.84 Q2764.75 1049.84 2769.82 1054.6 Q2774.89 1059.36 2774.89 1067.48 Q2774.89 1075.85 2769.68 1080.5 Q2764.47 1085.12 2755 1085.12 Q2751.73 1085.12 2748.33 1084.57 Q2744.96 1084.01 2741.35 1082.9 L2741.35 1075.85 Q2744.47 1077.55 2747.81 1078.39 Q2751.14 1079.22 2754.86 1079.22 Q2760.86 1079.22 2764.37 1076.06 Q2767.88 1072.9 2767.88 1067.48 Q2767.88 1062.07 2764.37 1058.91 Q2760.86 1055.75 2754.86 1055.75 Q2752.04 1055.75 2749.23 1056.37 Q2746.45 1057 2743.54 1058.32 L2743.54 1032.28 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M2825.76 1030.16 Q2821.11 1038.14 2818.85 1045.96 Q2816.59 1053.77 2816.59 1061.79 Q2816.59 1069.81 2818.85 1077.69 Q2821.14 1085.54 2825.76 1093.49 L2820.2 1093.49 Q2815 1085.33 2812.39 1077.45 Q2809.82 1069.57 2809.82 1061.79 Q2809.82 1054.05 2812.39 1046.2 Q2814.96 1038.35 2820.2 1030.16 L2825.76 1030.16 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M2854.06 1059.5 Q2849.06 1059.5 2846.18 1062.17 Q2843.33 1064.84 2843.33 1069.53 Q2843.33 1074.22 2846.18 1076.89 Q2849.06 1079.57 2854.06 1079.57 Q2859.06 1079.57 2861.94 1076.89 Q2864.82 1074.18 2864.82 1069.53 Q2864.82 1064.84 2861.94 1062.17 Q2859.09 1059.5 2854.06 1059.5 M2847.04 1056.51 Q2842.53 1055.4 2840 1052.31 Q2837.5 1049.22 2837.5 1044.78 Q2837.5 1038.56 2841.9 1034.95 Q2846.35 1031.34 2854.06 1031.34 Q2861.8 1031.34 2866.21 1034.95 Q2870.62 1038.56 2870.62 1044.78 Q2870.62 1049.22 2868.09 1052.31 Q2865.59 1055.4 2861.11 1056.51 Q2866.18 1057.69 2868.99 1061.13 Q2871.84 1064.57 2871.84 1069.53 Q2871.84 1077.07 2867.22 1081.09 Q2862.63 1085.12 2854.06 1085.12 Q2845.48 1085.12 2840.86 1081.09 Q2836.28 1077.07 2836.28 1069.53 Q2836.28 1064.57 2839.13 1061.13 Q2841.97 1057.69 2847.04 1056.51 M2844.47 1045.44 Q2844.47 1049.46 2846.97 1051.72 Q2849.51 1053.98 2854.06 1053.98 Q2858.57 1053.98 2861.11 1051.72 Q2863.68 1049.46 2863.68 1045.44 Q2863.68 1041.41 2861.11 1039.15 Q2858.57 1036.89 2854.06 1036.89 Q2849.51 1036.89 2846.97 1039.15 Q2844.47 1041.41 2844.47 1045.44 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M2905.55 1056.16 Q2910.59 1057.24 2913.4 1060.64 Q2916.24 1064.05 2916.24 1069.05 Q2916.24 1076.72 2910.97 1080.92 Q2905.69 1085.12 2895.97 1085.12 Q2892.7 1085.12 2889.23 1084.46 Q2885.79 1083.84 2882.11 1082.55 L2882.11 1075.78 Q2885.03 1077.48 2888.5 1078.35 Q2891.97 1079.22 2895.76 1079.22 Q2902.36 1079.22 2905.79 1076.62 Q2909.27 1074.01 2909.27 1069.05 Q2909.27 1064.46 2906.04 1061.89 Q2902.84 1059.29 2897.11 1059.29 L2891.07 1059.29 L2891.07 1053.53 L2897.39 1053.53 Q2902.56 1053.53 2905.31 1051.48 Q2908.05 1049.39 2908.05 1045.5 Q2908.05 1041.51 2905.2 1039.39 Q2902.39 1037.24 2897.11 1037.24 Q2894.23 1037.24 2890.93 1037.87 Q2887.63 1038.49 2883.68 1039.81 L2883.68 1033.56 Q2887.67 1032.45 2891.14 1031.89 Q2894.65 1031.34 2897.74 1031.34 Q2905.72 1031.34 2910.38 1034.98 Q2915.03 1038.59 2915.03 1044.78 Q2915.03 1049.08 2912.56 1052.07 Q2910.1 1055.02 2905.55 1056.16 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M2973.64 1061.3 Q2970.62 1061.3 2968.88 1063.87 Q2967.18 1066.44 2967.18 1071.03 Q2967.18 1075.54 2968.88 1078.14 Q2970.62 1080.71 2973.64 1080.71 Q2976.59 1080.71 2978.29 1078.14 Q2980.03 1075.54 2980.03 1071.03 Q2980.03 1066.48 2978.29 1063.91 Q2976.59 1061.3 2973.64 1061.3 M2973.64 1056.89 Q2979.13 1056.89 2982.36 1060.71 Q2985.58 1064.53 2985.58 1071.03 Q2985.58 1077.52 2982.32 1081.34 Q2979.09 1085.12 2973.64 1085.12 Q2968.08 1085.12 2964.86 1081.34 Q2961.63 1077.52 2961.63 1071.03 Q2961.63 1064.5 2964.86 1060.71 Q2968.12 1056.89 2973.64 1056.89 M2937.81 1035.75 Q2934.82 1035.75 2933.09 1038.35 Q2931.38 1040.92 2931.38 1045.44 Q2931.38 1050.02 2933.09 1052.59 Q2934.79 1055.16 2937.81 1055.16 Q2940.83 1055.16 2942.53 1052.59 Q2944.27 1050.02 2944.27 1045.44 Q2944.27 1040.96 2942.53 1038.35 Q2940.79 1035.75 2937.81 1035.75 M2969.16 1031.34 L2974.72 1031.34 L2942.29 1085.12 L2936.73 1085.12 L2969.16 1031.34 M2937.81 1031.34 Q2943.29 1031.34 2946.56 1035.16 Q2949.82 1038.94 2949.82 1045.44 Q2949.82 1052 2946.56 1055.78 Q2943.33 1059.57 2937.81 1059.57 Q2932.29 1059.57 2929.06 1055.78 Q2925.86 1051.96 2925.86 1045.44 Q2925.86 1038.98 2929.09 1035.16 Q2932.32 1031.34 2937.81 1031.34 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M2995.2 1030.16 L3000.76 1030.16 Q3005.97 1038.35 3008.54 1046.2 Q3011.14 1054.05 3011.14 1061.79 Q3011.14 1069.57 3008.54 1077.45 Q3005.97 1085.33 3000.76 1093.49 L2995.2 1093.49 Q2999.82 1085.54 3002.08 1077.69 Q3004.37 1069.81 3004.37 1061.79 Q3004.37 1053.77 3002.08 1045.96 Q2999.82 1038.14 2995.2 1030.16 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M3025.58 1075.3 L3032.91 1075.3 L3032.91 1081.27 L3027.22 1092.38 L3022.74 1092.38 L3025.58 1081.27 L3025.58 1075.3 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M3085.06 1059.5 Q3080.06 1059.5 3077.18 1062.17 Q3074.33 1064.84 3074.33 1069.53 Q3074.33 1074.22 3077.18 1076.89 Q3080.06 1079.57 3085.06 1079.57 Q3090.06 1079.57 3092.95 1076.89 Q3095.83 1074.18 3095.83 1069.53 Q3095.83 1064.84 3092.95 1062.17 Q3090.1 1059.5 3085.06 1059.5 M3078.05 1056.51 Q3073.54 1055.4 3071 1052.31 Q3068.5 1049.22 3068.5 1044.78 Q3068.5 1038.56 3072.91 1034.95 Q3077.36 1031.34 3085.06 1031.34 Q3092.81 1031.34 3097.22 1034.95 Q3101.63 1038.56 3101.63 1044.78 Q3101.63 1049.22 3099.09 1052.31 Q3096.59 1055.4 3092.11 1056.51 Q3097.18 1057.69 3099.99 1061.13 Q3102.84 1064.57 3102.84 1069.53 Q3102.84 1077.07 3098.22 1081.09 Q3093.64 1085.12 3085.06 1085.12 Q3076.49 1085.12 3071.87 1081.09 Q3067.29 1077.07 3067.29 1069.53 Q3067.29 1064.57 3070.13 1061.13 Q3072.98 1057.69 3078.05 1056.51 M3075.48 1045.44 Q3075.48 1049.46 3077.98 1051.72 Q3080.51 1053.98 3085.06 1053.98 Q3089.58 1053.98 3092.11 1051.72 Q3094.68 1049.46 3094.68 1045.44 Q3094.68 1041.41 3092.11 1039.15 Q3089.58 1036.89 3085.06 1036.89 Q3080.51 1036.89 3077.98 1039.15 Q3075.48 1041.41 3075.48 1045.44 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M3152.35 1030.16 Q3147.7 1038.14 3145.45 1045.96 Q3143.19 1053.77 3143.19 1061.79 Q3143.19 1069.81 3145.45 1077.69 Q3147.74 1085.54 3152.35 1093.49 L3146.8 1093.49 Q3141.59 1085.33 3138.99 1077.45 Q3136.42 1069.57 3136.42 1061.79 Q3136.42 1054.05 3138.99 1046.2 Q3141.56 1038.35 3146.8 1030.16 L3152.35 1030.16 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M3166.87 1078.21 L3178.33 1078.21 L3178.33 1038.66 L3165.86 1041.16 L3165.86 1034.78 L3178.26 1032.28 L3185.27 1032.28 L3185.27 1078.21 L3196.73 1078.21 L3196.73 1084.12 L3166.87 1084.12 L3166.87 1078.21 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M3210.97 1032.28 L3238.5 1032.28 L3238.5 1038.18 L3217.39 1038.18 L3217.39 1050.89 Q3218.92 1050.37 3220.44 1050.12 Q3221.97 1049.84 3223.5 1049.84 Q3232.18 1049.84 3237.25 1054.6 Q3242.32 1059.36 3242.32 1067.48 Q3242.32 1075.85 3237.11 1080.5 Q3231.9 1085.12 3222.42 1085.12 Q3219.16 1085.12 3215.76 1084.57 Q3212.39 1084.01 3208.78 1082.9 L3208.78 1075.85 Q3211.9 1077.55 3215.24 1078.39 Q3218.57 1079.22 3222.28 1079.22 Q3228.29 1079.22 3231.8 1076.06 Q3235.31 1072.9 3235.31 1067.48 Q3235.31 1062.07 3231.8 1058.91 Q3228.29 1055.75 3222.28 1055.75 Q3219.47 1055.75 3216.66 1056.37 Q3213.88 1057 3210.97 1058.32 L3210.97 1032.28 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M3300.24 1061.3 Q3297.22 1061.3 3295.48 1063.87 Q3293.78 1066.44 3293.78 1071.03 Q3293.78 1075.54 3295.48 1078.14 Q3297.22 1080.71 3300.24 1080.71 Q3303.19 1080.71 3304.89 1078.14 Q3306.62 1075.54 3306.62 1071.03 Q3306.62 1066.48 3304.89 1063.91 Q3303.19 1061.3 3300.24 1061.3 M3300.24 1056.89 Q3305.72 1056.89 3308.95 1060.71 Q3312.18 1064.53 3312.18 1071.03 Q3312.18 1077.52 3308.92 1081.34 Q3305.69 1085.12 3300.24 1085.12 Q3294.68 1085.12 3291.45 1081.34 Q3288.22 1077.52 3288.22 1071.03 Q3288.22 1064.5 3291.45 1060.71 Q3294.72 1056.89 3300.24 1056.89 M3264.4 1035.75 Q3261.42 1035.75 3259.68 1038.35 Q3257.98 1040.92 3257.98 1045.44 Q3257.98 1050.02 3259.68 1052.59 Q3261.38 1055.16 3264.4 1055.16 Q3267.42 1055.16 3269.12 1052.59 Q3270.86 1050.02 3270.86 1045.44 Q3270.86 1040.96 3269.12 1038.35 Q3267.39 1035.75 3264.4 1035.75 M3295.76 1031.34 L3301.31 1031.34 L3268.88 1085.12 L3263.33 1085.12 L3295.76 1031.34 M3264.4 1031.34 Q3269.89 1031.34 3273.15 1035.16 Q3276.42 1038.94 3276.42 1045.44 Q3276.42 1052 3273.15 1055.78 Q3269.92 1059.57 3264.4 1059.57 Q3258.88 1059.57 3255.65 1055.78 Q3252.46 1051.96 3252.46 1045.44 Q3252.46 1038.98 3255.69 1035.16 Q3258.92 1031.34 3264.4 1031.34 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M3321.8 1030.16 L3327.35 1030.16 Q3332.56 1038.35 3335.13 1046.2 Q3337.74 1054.05 3337.74 1061.79 Q3337.74 1069.57 3335.13 1077.45 Q3332.56 1085.33 3327.35 1093.49 L3321.8 1093.49 Q3326.42 1085.54 3328.67 1077.69 Q3330.96 1069.81 3330.96 1061.79 Q3330.96 1053.77 3328.67 1045.96 Q3326.42 1038.14 3321.8 1030.16 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M3352.74 1090.71 L3355.17 1090.71 Q3360.03 1090.71 3361.49 1089.22 Q3362.98 1087.73 3362.98 1082.76 L3362.98 1074.15 Q3362.98 1068.73 3364.54 1066.27 Q3366.1 1063.8 3369.96 1062.87 Q3366.1 1062 3364.54 1059.53 Q3362.98 1057.07 3362.98 1051.62 L3362.98 1043 Q3362.98 1038.07 3361.49 1036.58 Q3360.03 1035.05 3355.17 1035.05 L3352.74 1035.05 L3352.74 1030.09 L3354.92 1030.09 Q3363.57 1030.09 3366.45 1032.66 Q3369.37 1035.19 3369.37 1042.87 L3369.37 1051.2 Q3369.37 1056.37 3371.24 1058.39 Q3373.12 1060.37 3378.05 1060.37 L3380.2 1060.37 L3380.2 1065.33 L3378.05 1065.33 Q3373.12 1065.33 3371.24 1067.34 Q3369.37 1069.36 3369.37 1074.6 L3369.37 1082.9 Q3369.37 1090.57 3366.45 1093.14 Q3363.57 1095.71 3354.92 1095.71 L3352.74 1095.71 L3352.74 1090.71 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M2861.3 1165.49 Q2858.59 1172.43 2856.02 1174.55 Q2853.45 1176.67 2849.14 1176.67 L2844.04 1176.67 L2844.04 1171.32 L2847.79 1171.32 Q2850.43 1171.32 2851.89 1170.07 Q2853.35 1168.82 2855.12 1164.17 L2856.26 1161.25 L2840.53 1122.99 L2847.3 1122.99 L2859.46 1153.4 L2871.61 1122.99 L2878.38 1122.99 L2861.3 1165.49 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M2893.52 1111.95 L2893.52 1122.99 L2906.68 1122.99 L2906.68 1127.95 L2893.52 1127.95 L2893.52 1149.06 Q2893.52 1153.82 2894.8 1155.17 Q2896.12 1156.53 2900.12 1156.53 L2906.68 1156.53 L2906.68 1161.88 L2900.12 1161.88 Q2892.72 1161.88 2889.91 1159.13 Q2887.1 1156.35 2887.1 1149.06 L2887.1 1127.95 L2882.41 1127.95 L2882.41 1122.99 L2887.1 1122.99 L2887.1 1111.95 L2893.52 1111.95 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M2937.62 1128.96 Q2936.54 1128.33 2935.26 1128.06 Q2934.01 1127.74 2932.48 1127.74 Q2927.06 1127.74 2924.14 1131.29 Q2921.26 1134.79 2921.26 1141.39 L2921.26 1161.88 L2914.84 1161.88 L2914.84 1122.99 L2921.26 1122.99 L2921.26 1129.03 Q2923.28 1125.49 2926.51 1123.79 Q2929.73 1122.05 2934.35 1122.05 Q2935.01 1122.05 2935.81 1122.15 Q2936.61 1122.22 2937.58 1122.4 L2937.62 1128.96 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M2943.66 1146.53 L2943.66 1122.99 L2950.05 1122.99 L2950.05 1146.29 Q2950.05 1151.81 2952.2 1154.58 Q2954.35 1157.33 2958.66 1157.33 Q2963.83 1157.33 2966.82 1154.03 Q2969.84 1150.73 2969.84 1145.04 L2969.84 1122.99 L2976.23 1122.99 L2976.23 1161.88 L2969.84 1161.88 L2969.84 1155.9 Q2967.51 1159.44 2964.42 1161.18 Q2961.37 1162.88 2957.3 1162.88 Q2950.6 1162.88 2947.13 1158.72 Q2943.66 1154.55 2943.66 1146.53 M2959.73 1122.05 L2959.73 1122.05 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M3022.65 1140.83 L3022.65 1143.96 L2993.28 1143.96 Q2993.69 1150.56 2997.23 1154.03 Q3000.81 1157.47 3007.16 1157.47 Q3010.85 1157.47 3014.28 1156.56 Q3017.75 1155.66 3021.16 1153.85 L3021.16 1159.9 Q3017.72 1161.35 3014.11 1162.12 Q3010.5 1162.88 3006.78 1162.88 Q2997.48 1162.88 2992.03 1157.47 Q2986.61 1152.05 2986.61 1142.81 Q2986.61 1133.26 2991.75 1127.67 Q2996.92 1122.05 3005.67 1122.05 Q3013.52 1122.05 3018.07 1127.12 Q3022.65 1132.15 3022.65 1140.83 M3016.26 1138.96 Q3016.19 1133.72 3013.31 1130.59 Q3010.46 1127.47 3005.74 1127.47 Q3000.39 1127.47 2997.16 1130.49 Q2993.97 1133.51 2993.48 1138.99 L3016.26 1138.96 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M3033.97 1129.58 L3078.48 1129.58 L3078.48 1135.42 L3033.97 1135.42 L3033.97 1129.58 M3033.97 1143.75 L3078.48 1143.75 L3078.48 1149.65 L3033.97 1149.65 L3033.97 1143.75 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip180)" d="M3093.69 1110.04 L3121.23 1110.04 L3121.23 1115.94 L3100.12 1115.94 L3100.12 1128.65 Q3101.64 1128.13 3103.17 1127.88 Q3104.7 1127.6 3106.23 1127.6 Q3114.91 1127.6 3119.98 1132.36 Q3125.05 1137.12 3125.05 1145.24 Q3125.05 1153.61 3119.84 1158.26 Q3114.63 1162.88 3105.15 1162.88 Q3101.89 1162.88 3098.48 1162.33 Q3095.12 1161.77 3091.5 1160.66 L3091.5 1153.61 Q3094.63 1155.31 3097.96 1156.15 Q3101.3 1156.98 3105.01 1156.98 Q3111.02 1156.98 3114.53 1153.82 Q3118.03 1150.66 3118.03 1145.24 Q3118.03 1139.83 3114.53 1136.67 Q3111.02 1133.51 3105.01 1133.51 Q3102.2 1133.51 3099.39 1134.13 Q3096.61 1134.76 3093.69 1136.08 L3093.69 1110.04 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path></svg>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-plots-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) Randomly selected prediction sets of size <span class="math inline">\(|C|=2\)</span>.
-</figcaption>
+<figcaption class="figure-caption">(b) Randomly selected prediction sets of size <span class="math inline">\(|C|=2\)</span>.</figcaption>
 </figure>
 </div>
 </div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-plots" style="flex-basis: 100.0%;justify-content: flex-start;display: flex;">
-<div id="fig-plots-3" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-plots-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div id="fig-plots-3" class="quarto-figure quarto-figure-center anchored" style="flex-basis: 100.0%;justify-content: center;">
+<figure class="figure">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="900" height="300" viewbox="0 0 3600 1200">
 <defs>
@@ -1659,20 +1602,12 @@ AQAASBLEAAAAJP0HssqKGeGF0f4AAAAASUVORK5CYII=
 " transform="translate(2518, 47)"></image>
 </g>
 <path clip-path="url(#clip240)" d="M2548.6 1041.34 L2548.6 1048.12 Q2545.35 1045.09 2541.66 1043.6 Q2538 1042.1 2533.86 1042.1 Q2525.72 1042.1 2521.39 1047.1 Q2517.06 1052.06 2517.06 1061.48 Q2517.06 1070.87 2521.39 1075.87 Q2525.72 1080.83 2533.86 1080.83 Q2538 1080.83 2541.66 1079.34 Q2545.35 1077.84 2548.6 1074.82 L2548.6 1081.54 Q2545.23 1083.83 2541.44 1084.97 Q2537.68 1086.12 2533.48 1086.12 Q2522.69 1086.12 2516.49 1079.53 Q2510.28 1072.91 2510.28 1061.48 Q2510.28 1050.02 2516.49 1043.44 Q2522.69 1036.82 2533.48 1036.82 Q2537.75 1036.82 2541.5 1037.96 Q2545.29 1039.08 2548.6 1041.34 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2559.04 1055.59 L2599.84 1055.59 L2599.84 1060.94 L2559.04 1060.94 L2559.04 1055.59 M2559.04 1068.58 L2599.84 1068.58 L2599.84 1073.99 L2559.04 1073.99 L2559.04 1068.58 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2640.08 1091.24 L2640.08 1095.83 L2638.1 1095.83 Q2630.18 1095.83 2627.47 1093.47 Q2624.8 1091.12 2624.8 1084.08 L2624.8 1076.47 Q2624.8 1071.67 2623.08 1069.82 Q2621.36 1067.98 2616.84 1067.98 L2614.9 1067.98 L2614.9 1063.42 L2616.84 1063.42 Q2621.39 1063.42 2623.08 1061.61 Q2624.8 1059.76 2624.8 1055.02 L2624.8 1047.38 Q2624.8 1040.35 2627.47 1038.03 Q2630.18 1035.67 2638.1 1035.67 L2640.08 1035.67 L2640.08 1040.22 L2637.91 1040.22 Q2633.42 1040.22 2632.06 1041.62 Q2630.69 1043.02 2630.69 1047.51 L2630.69 1055.4 Q2630.69 1060.4 2629.22 1062.66 Q2627.79 1064.92 2624.29 1065.72 Q2627.82 1066.58 2629.25 1068.84 Q2630.69 1071.1 2630.69 1076.06 L2630.69 1083.95 Q2630.69 1088.44 2632.06 1089.84 Q2633.42 1091.24 2637.91 1091.24 L2640.08 1091.24 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2655.26 1037.68 L2680.5 1037.68 L2680.5 1043.09 L2661.15 1043.09 L2661.15 1054.74 Q2662.55 1054.26 2663.95 1054.04 Q2665.35 1053.78 2666.75 1053.78 Q2674.71 1053.78 2679.35 1058.14 Q2684 1062.5 2684 1069.95 Q2684 1077.62 2679.23 1081.89 Q2674.45 1086.12 2665.76 1086.12 Q2662.77 1086.12 2659.65 1085.61 Q2656.56 1085.1 2653.25 1084.08 L2653.25 1077.62 Q2656.12 1079.18 2659.17 1079.94 Q2662.23 1080.71 2665.63 1080.71 Q2671.14 1080.71 2674.36 1077.81 Q2677.57 1074.91 2677.57 1069.95 Q2677.57 1064.98 2674.36 1062.09 Q2671.14 1059.19 2665.63 1059.19 Q2663.06 1059.19 2660.48 1059.76 Q2657.93 1060.34 2655.26 1061.55 L2655.26 1037.68 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2730.63 1035.73 Q2726.36 1043.05 2724.29 1050.22 Q2722.23 1057.38 2722.23 1064.73 Q2722.23 1072.08 2724.29 1079.31 Q2726.39 1086.5 2730.63 1093.79 L2725.54 1093.79 Q2720.76 1086.31 2718.37 1079.08 Q2716.02 1071.86 2716.02 1064.73 Q2716.02 1057.63 2718.37 1050.44 Q2720.73 1043.25 2725.54 1035.73 L2730.63 1035.73 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2762.3 1059.57 Q2766.91 1060.56 2769.49 1063.68 Q2772.1 1066.8 2772.1 1071.38 Q2772.1 1078.42 2767.26 1082.27 Q2762.42 1086.12 2753.51 1086.12 Q2750.52 1086.12 2747.34 1085.51 Q2744.19 1084.94 2740.81 1083.76 L2740.81 1077.56 Q2743.49 1079.12 2746.67 1079.91 Q2749.85 1080.71 2753.32 1080.71 Q2759.37 1080.71 2762.52 1078.32 Q2765.7 1075.93 2765.7 1071.38 Q2765.7 1067.18 2762.74 1064.83 Q2759.81 1062.44 2754.56 1062.44 L2749.02 1062.44 L2749.02 1057.15 L2754.82 1057.15 Q2759.56 1057.15 2762.07 1055.28 Q2764.59 1053.37 2764.59 1049.8 Q2764.59 1046.14 2761.98 1044.2 Q2759.4 1042.23 2754.56 1042.23 Q2751.92 1042.23 2748.9 1042.8 Q2745.87 1043.37 2742.25 1044.58 L2742.25 1038.85 Q2745.91 1037.83 2749.09 1037.33 Q2752.3 1036.82 2755.14 1036.82 Q2762.46 1036.82 2766.72 1040.16 Q2770.99 1043.47 2770.99 1049.13 Q2770.99 1053.08 2768.73 1055.82 Q2766.47 1058.52 2762.3 1059.57 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2824.71 1064.28 Q2821.94 1064.28 2820.35 1066.64 Q2818.79 1068.99 2818.79 1073.2 Q2818.79 1077.33 2820.35 1079.72 Q2821.94 1082.08 2824.71 1082.08 Q2827.42 1082.08 2828.98 1079.72 Q2830.57 1077.33 2830.57 1073.2 Q2830.57 1069.03 2828.98 1066.67 Q2827.42 1064.28 2824.71 1064.28 M2824.71 1060.24 Q2829.74 1060.24 2832.7 1063.74 Q2835.66 1067.24 2835.66 1073.2 Q2835.66 1079.15 2832.67 1082.65 Q2829.71 1086.12 2824.71 1086.12 Q2819.62 1086.12 2816.66 1082.65 Q2813.7 1079.15 2813.7 1073.2 Q2813.7 1067.21 2816.66 1063.74 Q2819.65 1060.24 2824.71 1060.24 M2791.87 1040.86 Q2789.13 1040.86 2787.54 1043.25 Q2785.98 1045.6 2785.98 1049.74 Q2785.98 1053.94 2787.54 1056.3 Q2789.1 1058.65 2791.87 1058.65 Q2794.64 1058.65 2796.19 1056.3 Q2797.79 1053.94 2797.79 1049.74 Q2797.79 1045.63 2796.19 1043.25 Q2794.6 1040.86 2791.87 1040.86 M2820.61 1036.82 L2825.7 1036.82 L2795.97 1086.12 L2790.88 1086.12 L2820.61 1036.82 M2791.87 1036.82 Q2796.9 1036.82 2799.89 1040.32 Q2802.88 1043.79 2802.88 1049.74 Q2802.88 1055.75 2799.89 1059.22 Q2796.93 1062.69 2791.87 1062.69 Q2786.81 1062.69 2783.85 1059.22 Q2780.92 1055.72 2780.92 1049.74 Q2780.92 1043.82 2783.88 1040.32 Q2786.84 1036.82 2791.87 1036.82 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2844.48 1035.73 L2849.57 1035.73 Q2854.35 1043.25 2856.7 1050.44 Q2859.09 1057.63 2859.09 1064.73 Q2859.09 1071.86 2856.7 1079.08 Q2854.35 1086.31 2849.57 1093.79 L2844.48 1093.79 Q2848.71 1086.5 2850.78 1079.31 Q2852.88 1072.08 2852.88 1064.73 Q2852.88 1057.38 2850.78 1050.22 Q2848.71 1043.05 2844.48 1035.73 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2872.33 1077.11 L2879.04 1077.11 L2879.04 1082.59 L2873.82 1092.77 L2869.72 1092.77 L2872.33 1082.59 L2872.33 1077.11 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2927.65 1058.87 Q2923.32 1058.87 2920.77 1061.83 Q2918.26 1064.79 2918.26 1069.95 Q2918.26 1075.07 2920.77 1078.07 Q2923.32 1081.03 2927.65 1081.03 Q2931.98 1081.03 2934.49 1078.07 Q2937.04 1075.07 2937.04 1069.95 Q2937.04 1064.79 2934.49 1061.83 Q2931.98 1058.87 2927.65 1058.87 M2940.41 1038.73 L2940.41 1044.58 Q2937.99 1043.44 2935.51 1042.83 Q2933.06 1042.23 2930.64 1042.23 Q2924.27 1042.23 2920.9 1046.52 Q2917.56 1050.82 2917.08 1059.51 Q2918.96 1056.74 2921.79 1055.28 Q2924.62 1053.78 2928.03 1053.78 Q2935.19 1053.78 2939.33 1058.14 Q2943.5 1062.47 2943.5 1069.95 Q2943.5 1077.27 2939.17 1081.69 Q2934.84 1086.12 2927.65 1086.12 Q2919.4 1086.12 2915.04 1079.82 Q2910.68 1073.48 2910.68 1061.48 Q2910.68 1050.22 2916.03 1043.53 Q2921.38 1036.82 2930.38 1036.82 Q2932.8 1036.82 2935.25 1037.29 Q2937.74 1037.77 2940.41 1038.73 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2988.53 1035.73 Q2984.27 1043.05 2982.2 1050.22 Q2980.13 1057.38 2980.13 1064.73 Q2980.13 1072.08 2982.2 1079.31 Q2984.3 1086.5 2988.53 1093.79 L2983.44 1093.79 Q2978.67 1086.31 2976.28 1079.08 Q2973.93 1071.86 2973.93 1064.73 Q2973.93 1057.63 2976.28 1050.44 Q2978.64 1043.25 2983.44 1035.73 L2988.53 1035.73 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3000.92 1084.21 L3000.92 1078.35 Q3003.33 1079.5 3005.82 1080.1 Q3008.3 1080.71 3010.69 1080.71 Q3017.05 1080.71 3020.4 1076.44 Q3023.77 1072.15 3024.25 1063.42 Q3022.4 1066.16 3019.57 1067.63 Q3016.73 1069.09 3013.3 1069.09 Q3006.17 1069.09 3002 1064.79 Q2997.86 1060.46 2997.86 1052.98 Q2997.86 1045.66 3002.19 1041.24 Q3006.52 1036.82 3013.71 1036.82 Q3021.95 1036.82 3026.28 1043.15 Q3030.64 1049.45 3030.64 1061.48 Q3030.64 1072.72 3025.3 1079.43 Q3019.98 1086.12 3010.97 1086.12 Q3008.55 1086.12 3006.07 1085.64 Q3003.59 1085.16 3000.92 1084.21 M3013.71 1064.06 Q3018.04 1064.06 3020.55 1061.1 Q3023.1 1058.14 3023.1 1052.98 Q3023.1 1047.86 3020.55 1044.9 Q3018.04 1041.91 3013.71 1041.91 Q3009.38 1041.91 3006.84 1044.9 Q3004.32 1047.86 3004.32 1052.98 Q3004.32 1058.14 3006.84 1061.1 Q3009.38 1064.06 3013.71 1064.06 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3061.68 1059.57 Q3066.29 1060.56 3068.87 1063.68 Q3071.48 1066.8 3071.48 1071.38 Q3071.48 1078.42 3066.64 1082.27 Q3061.8 1086.12 3052.89 1086.12 Q3049.9 1086.12 3046.72 1085.51 Q3043.57 1084.94 3040.19 1083.76 L3040.19 1077.56 Q3042.87 1079.12 3046.05 1079.91 Q3049.23 1080.71 3052.7 1080.71 Q3058.75 1080.71 3061.9 1078.32 Q3065.08 1075.93 3065.08 1071.38 Q3065.08 1067.18 3062.12 1064.83 Q3059.19 1062.44 3053.94 1062.44 L3048.4 1062.44 L3048.4 1057.15 L3054.2 1057.15 Q3058.94 1057.15 3061.45 1055.28 Q3063.97 1053.37 3063.97 1049.8 Q3063.97 1046.14 3061.36 1044.2 Q3058.78 1042.23 3053.94 1042.23 Q3051.3 1042.23 3048.28 1042.8 Q3045.25 1043.37 3041.62 1044.58 L3041.62 1038.85 Q3045.28 1037.83 3048.47 1037.33 Q3051.68 1036.82 3054.52 1036.82 Q3061.84 1036.82 3066.1 1040.16 Q3070.37 1043.47 3070.37 1049.13 Q3070.37 1053.08 3068.11 1055.82 Q3065.85 1058.52 3061.68 1059.57 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3124.09 1064.28 Q3121.32 1064.28 3119.73 1066.64 Q3118.17 1068.99 3118.17 1073.2 Q3118.17 1077.33 3119.73 1079.72 Q3121.32 1082.08 3124.09 1082.08 Q3126.8 1082.08 3128.36 1079.72 Q3129.95 1077.33 3129.95 1073.2 Q3129.95 1069.03 3128.36 1066.67 Q3126.8 1064.28 3124.09 1064.28 M3124.09 1060.24 Q3129.12 1060.24 3132.08 1063.74 Q3135.04 1067.24 3135.04 1073.2 Q3135.04 1079.15 3132.05 1082.65 Q3129.09 1086.12 3124.09 1086.12 Q3119 1086.12 3116.04 1082.65 Q3113.08 1079.15 3113.08 1073.2 Q3113.08 1067.21 3116.04 1063.74 Q3119.03 1060.24 3124.09 1060.24 M3091.25 1040.86 Q3088.51 1040.86 3086.92 1043.25 Q3085.36 1045.6 3085.36 1049.74 Q3085.36 1053.94 3086.92 1056.3 Q3088.48 1058.65 3091.25 1058.65 Q3094.01 1058.65 3095.57 1056.3 Q3097.17 1053.94 3097.17 1049.74 Q3097.17 1045.63 3095.57 1043.25 Q3093.98 1040.86 3091.25 1040.86 M3119.99 1036.82 L3125.08 1036.82 L3095.35 1086.12 L3090.26 1086.12 L3119.99 1036.82 M3091.25 1036.82 Q3096.27 1036.82 3099.27 1040.32 Q3102.26 1043.79 3102.26 1049.74 Q3102.26 1055.75 3099.27 1059.22 Q3096.31 1062.69 3091.25 1062.69 Q3086.18 1062.69 3083.22 1059.22 Q3080.3 1055.72 3080.3 1049.74 Q3080.3 1043.82 3083.26 1040.32 Q3086.22 1036.82 3091.25 1036.82 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3143.86 1035.73 L3148.95 1035.73 Q3153.72 1043.25 3156.08 1050.44 Q3158.47 1057.63 3158.47 1064.73 Q3158.47 1071.86 3156.08 1079.08 Q3153.72 1086.31 3148.95 1093.79 L3143.86 1093.79 Q3148.09 1086.5 3150.16 1079.31 Q3152.26 1072.08 3152.26 1064.73 Q3152.26 1057.38 3150.16 1050.22 Q3148.09 1043.05 3143.86 1035.73 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3171.71 1077.11 L3178.42 1077.11 L3178.42 1082.59 L3173.2 1092.77 L3169.1 1092.77 L3171.71 1082.59 L3171.71 1077.11 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3226.23 1062.63 Q3221.65 1062.63 3219.01 1065.08 Q3216.4 1067.53 3216.4 1071.83 Q3216.4 1076.12 3219.01 1078.58 Q3221.65 1081.03 3226.23 1081.03 Q3230.81 1081.03 3233.46 1078.58 Q3236.1 1076.09 3236.1 1071.83 Q3236.1 1067.53 3233.46 1065.08 Q3230.85 1062.63 3226.23 1062.63 M3219.8 1059.89 Q3215.66 1058.87 3213.34 1056.04 Q3211.05 1053.21 3211.05 1049.13 Q3211.05 1043.44 3215.09 1040.13 Q3219.16 1036.82 3226.23 1036.82 Q3233.33 1036.82 3237.37 1040.13 Q3241.41 1043.44 3241.41 1049.13 Q3241.41 1053.21 3239.09 1056.04 Q3236.8 1058.87 3232.69 1059.89 Q3237.34 1060.97 3239.92 1064.12 Q3242.53 1067.28 3242.53 1071.83 Q3242.53 1078.73 3238.29 1082.43 Q3234.09 1086.12 3226.23 1086.12 Q3218.37 1086.12 3214.14 1082.43 Q3209.93 1078.73 3209.93 1071.83 Q3209.93 1067.28 3212.54 1064.12 Q3215.15 1060.97 3219.8 1059.89 M3217.45 1049.74 Q3217.45 1053.43 3219.74 1055.5 Q3222.06 1057.57 3226.23 1057.57 Q3230.37 1057.57 3232.69 1055.5 Q3235.05 1053.43 3235.05 1049.74 Q3235.05 1046.05 3232.69 1043.98 Q3230.37 1041.91 3226.23 1041.91 Q3222.06 1041.91 3219.74 1043.98 Q3217.45 1046.05 3217.45 1049.74 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3287.91 1035.73 Q3283.65 1043.05 3281.58 1050.22 Q3279.51 1057.38 3279.51 1064.73 Q3279.51 1072.08 3281.58 1079.31 Q3283.68 1086.5 3287.91 1093.79 L3282.82 1093.79 Q3278.05 1086.31 3275.66 1079.08 Q3273.3 1071.86 3273.3 1064.73 Q3273.3 1057.63 3275.66 1050.44 Q3278.02 1043.25 3282.82 1035.73 L3287.91 1035.73 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3319.58 1059.57 Q3324.2 1060.56 3326.78 1063.68 Q3329.39 1066.8 3329.39 1071.38 Q3329.39 1078.42 3324.55 1082.27 Q3319.71 1086.12 3310.8 1086.12 Q3307.81 1086.12 3304.62 1085.51 Q3301.47 1084.94 3298.1 1083.76 L3298.1 1077.56 Q3300.77 1079.12 3303.96 1079.91 Q3307.14 1080.71 3310.61 1080.71 Q3316.66 1080.71 3319.81 1078.32 Q3322.99 1075.93 3322.99 1071.38 Q3322.99 1067.18 3320.03 1064.83 Q3317.1 1062.44 3311.85 1062.44 L3306.31 1062.44 L3306.31 1057.15 L3312.1 1057.15 Q3316.85 1057.15 3319.36 1055.28 Q3321.87 1053.37 3321.87 1049.8 Q3321.87 1046.14 3319.26 1044.2 Q3316.69 1042.23 3311.85 1042.23 Q3309.21 1042.23 3306.18 1042.8 Q3303.16 1043.37 3299.53 1044.58 L3299.53 1038.85 Q3303.19 1037.83 3306.37 1037.33 Q3309.59 1036.82 3312.42 1036.82 Q3319.74 1036.82 3324.01 1040.16 Q3328.27 1043.47 3328.27 1049.13 Q3328.27 1053.08 3326.01 1055.82 Q3323.75 1058.52 3319.58 1059.57 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3382 1064.28 Q3379.23 1064.28 3377.64 1066.64 Q3376.08 1068.99 3376.08 1073.2 Q3376.08 1077.33 3377.64 1079.72 Q3379.23 1082.08 3382 1082.08 Q3384.7 1082.08 3386.26 1079.72 Q3387.86 1077.33 3387.86 1073.2 Q3387.86 1069.03 3386.26 1066.67 Q3384.7 1064.28 3382 1064.28 M3382 1060.24 Q3387.03 1060.24 3389.99 1063.74 Q3392.95 1067.24 3392.95 1073.2 Q3392.95 1079.15 3389.96 1082.65 Q3387 1086.12 3382 1086.12 Q3376.91 1086.12 3373.95 1082.65 Q3370.99 1079.15 3370.99 1073.2 Q3370.99 1067.21 3373.95 1063.74 Q3376.94 1060.24 3382 1060.24 M3349.15 1040.86 Q3346.41 1040.86 3344.82 1043.25 Q3343.26 1045.6 3343.26 1049.74 Q3343.26 1053.94 3344.82 1056.3 Q3346.38 1058.65 3349.15 1058.65 Q3351.92 1058.65 3353.48 1056.3 Q3355.07 1053.94 3355.07 1049.74 Q3355.07 1045.63 3353.48 1043.25 Q3351.89 1040.86 3349.15 1040.86 M3377.89 1036.82 L3382.99 1036.82 L3353.26 1086.12 L3348.17 1086.12 L3377.89 1036.82 M3349.15 1036.82 Q3354.18 1036.82 3357.17 1040.32 Q3360.16 1043.79 3360.16 1049.74 Q3360.16 1055.75 3357.17 1059.22 Q3354.21 1062.69 3349.15 1062.69 Q3344.09 1062.69 3341.13 1059.22 Q3338.2 1055.72 3338.2 1049.74 Q3338.2 1043.82 3341.16 1040.32 Q3344.12 1036.82 3349.15 1036.82 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3401.76 1035.73 L3406.86 1035.73 Q3411.63 1043.25 3413.99 1050.44 Q3416.37 1057.63 3416.37 1064.73 Q3416.37 1071.86 3413.99 1079.08 Q3411.63 1086.31 3406.86 1093.79 L3401.76 1093.79 Q3406 1086.5 3408.07 1079.31 Q3410.17 1072.08 3410.17 1064.73 Q3410.17 1057.38 3408.07 1050.22 Q3406 1043.05 3401.76 1035.73 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3430.12 1091.24 L3432.35 1091.24 Q3436.81 1091.24 3438.14 1089.87 Q3439.51 1088.51 3439.51 1083.95 L3439.51 1076.06 Q3439.51 1071.1 3440.95 1068.84 Q3442.38 1066.58 3445.91 1065.72 Q3442.38 1064.92 3440.95 1062.66 Q3439.51 1060.4 3439.51 1055.4 L3439.51 1047.51 Q3439.51 1042.99 3438.14 1041.62 Q3436.81 1040.22 3432.35 1040.22 L3430.12 1040.22 L3430.12 1035.67 L3432.13 1035.67 Q3440.05 1035.67 3442.7 1038.03 Q3445.37 1040.35 3445.37 1047.38 L3445.37 1055.02 Q3445.37 1059.76 3447.09 1061.61 Q3448.81 1063.42 3453.33 1063.42 L3455.3 1063.42 L3455.3 1067.98 L3453.33 1067.98 Q3448.81 1067.98 3447.09 1069.82 Q3445.37 1071.67 3445.37 1076.47 L3445.37 1084.08 Q3445.37 1091.12 3442.7 1093.47 Q3440.05 1095.83 3432.13 1095.83 L3430.12 1095.83 L3430.12 1091.24 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2870.63 1159.79 Q2868.14 1166.15 2865.79 1168.09 Q2863.43 1170.03 2859.49 1170.03 L2854.81 1170.03 L2854.81 1165.13 L2858.24 1165.13 Q2860.66 1165.13 2862 1163.99 Q2863.34 1162.84 2864.96 1158.58 L2866.01 1155.9 L2851.59 1120.83 L2857.8 1120.83 L2868.94 1148.71 L2880.08 1120.83 L2886.29 1120.83 L2870.63 1159.79 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2900.16 1110.71 L2900.16 1120.83 L2912.23 1120.83 L2912.23 1125.38 L2900.16 1125.38 L2900.16 1144.73 Q2900.16 1149.09 2901.34 1150.33 Q2902.55 1151.57 2906.21 1151.57 L2912.23 1151.57 L2912.23 1156.48 L2906.21 1156.48 Q2899.43 1156.48 2896.85 1153.96 Q2894.27 1151.41 2894.27 1144.73 L2894.27 1125.38 L2889.98 1125.38 L2889.98 1120.83 L2894.27 1120.83 L2894.27 1110.71 L2900.16 1110.71 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2940.59 1126.3 Q2939.6 1125.73 2938.42 1125.47 Q2937.27 1125.19 2935.87 1125.19 Q2930.91 1125.19 2928.24 1128.43 Q2925.59 1131.65 2925.59 1137.7 L2925.59 1156.48 L2919.71 1156.48 L2919.71 1120.83 L2925.59 1120.83 L2925.59 1126.37 Q2927.44 1123.12 2930.4 1121.56 Q2933.36 1119.97 2937.59 1119.97 Q2938.2 1119.97 2938.93 1120.06 Q2939.66 1120.13 2940.55 1120.29 L2940.59 1126.3 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M2946.12 1142.41 L2946.12 1120.83 L2951.98 1120.83 L2951.98 1142.18 Q2951.98 1147.25 2953.95 1149.79 Q2955.93 1152.31 2959.87 1152.31 Q2964.62 1152.31 2967.35 1149.28 Q2970.12 1146.26 2970.12 1141.04 L2970.12 1120.83 L2975.98 1120.83 L2975.98 1156.48 L2970.12 1156.48 L2970.12 1151 Q2967.99 1154.25 2965.16 1155.84 Q2962.36 1157.4 2958.63 1157.4 Q2952.49 1157.4 2949.31 1153.58 Q2946.12 1149.76 2946.12 1142.41 M2960.86 1119.97 L2960.86 1119.97 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3018.53 1137.19 L3018.53 1140.05 L2991.61 1140.05 Q2991.99 1146.1 2995.23 1149.28 Q2998.51 1152.43 3004.34 1152.43 Q3007.71 1152.43 3010.86 1151.61 Q3014.05 1150.78 3017.16 1149.12 L3017.16 1154.66 Q3014.01 1156 3010.7 1156.7 Q3007.39 1157.4 3003.99 1157.4 Q2995.46 1157.4 2990.46 1152.43 Q2985.5 1147.47 2985.5 1139 Q2985.5 1130.25 2990.21 1125.12 Q2994.95 1119.97 3002.97 1119.97 Q3010.16 1119.97 3014.33 1124.62 Q3018.53 1129.23 3018.53 1137.19 M3012.68 1135.47 Q3012.61 1130.66 3009.97 1127.8 Q3007.36 1124.93 3003.03 1124.93 Q2998.13 1124.93 2995.17 1127.7 Q2992.24 1130.47 2991.8 1135.5 L3012.68 1135.47 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3028.91 1126.87 L3069.71 1126.87 L3069.71 1132.22 L3028.91 1132.22 L3028.91 1126.87 M3028.91 1139.86 L3069.71 1139.86 L3069.71 1145.27 L3028.91 1145.27 L3028.91 1139.86 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip240)" d="M3098.14 1130.15 Q3093.81 1130.15 3091.26 1133.11 Q3088.75 1136.07 3088.75 1141.23 Q3088.75 1146.35 3091.26 1149.35 Q3093.81 1152.31 3098.14 1152.31 Q3102.46 1152.31 3104.98 1149.35 Q3107.53 1146.35 3107.53 1141.23 Q3107.53 1136.07 3104.98 1133.11 Q3102.46 1130.15 3098.14 1130.15 M3110.9 1110.01 L3110.9 1115.86 Q3108.48 1114.72 3106 1114.11 Q3103.55 1113.51 3101.13 1113.51 Q3094.76 1113.51 3091.39 1117.8 Q3088.05 1122.1 3087.57 1130.79 Q3089.45 1128.02 3092.28 1126.56 Q3095.11 1125.06 3098.52 1125.06 Q3105.68 1125.06 3109.82 1129.42 Q3113.99 1133.75 3113.99 1141.23 Q3113.99 1148.55 3109.66 1152.97 Q3105.33 1157.4 3098.14 1157.4 Q3089.89 1157.4 3085.53 1151.1 Q3081.17 1144.76 3081.17 1132.76 Q3081.17 1121.5 3086.52 1114.81 Q3091.87 1108.1 3100.87 1108.1 Q3103.29 1108.1 3105.74 1108.57 Q3108.23 1109.05 3110.9 1110.01 Z" fill="#ffffff" fill-rule="nonzero" fill-opacity="1"></path></svg>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-plots-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c) Randomly selected prediction sets of size <span class="math inline">\(|C|=3\)</span>.
-</figcaption>
+<figcaption class="figure-caption">(c) Randomly selected prediction sets of size <span class="math inline">\(|C|=3\)</span>.</figcaption>
 </figure>
 </div>
 </div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-plots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Conformalized predictions from an image classifier.
-</figcaption>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Conformalized predictions from an image classifier.</figcaption><p></p>
 </figure>
-</div>
 </div>
 </section>
 <section id="evaluation" class="level2">
@@ -1681,7 +1616,7 @@ Figure&nbsp;2: Conformalized predictions from an image classifier.
 <p>As for many other things, <code>ConformalPrediction.jl</code> taps into the existing functionality of <code>MLJ.jl</code> for model evaluation. In particular, we will see below how we can use the generic <code>evaluate!</code> method on our machine. To assess the correctness of our conformal predictor, we can compute the empirical coverage rate using the custom performance measure <code>emp_coverage</code>. With respect to model calibration we will look at the model’s conditional coverage. For adaptive, well-calibrated conformal models, conditional coverage is high. One general go-to measure for assessing conditional coverage is size-stratified coverage. The custom measure for this purpose is just called <code>size_stratified_coverage</code>, aliased by <code>ssc</code>.</p>
 <p>The code below implements the model evaluation using cross-validation. The Simple Inductive Classifier that we used above is not adaptive and hence the attained conditional coverage is low compared to the overall empirical coverage, which is close to <span class="math inline">\(0.95\)</span>, so in line with the desired coverage rate specified above.</p>
 <div id="553ad995" class="cell" data-execution_count="12">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a>_eval <span class="op">=</span> <span class="fu">evaluate!</span>(</span>
 <span id="cb8-2"><a href="#cb8-2"></a>    mach,</span>
@@ -1717,7 +1652,7 @@ SSC: 0.867</code></pre>
 </div>
 <p>We can attain higher adaptivity (SSC) when using adaptive prediction sets:</p>
 <div id="5136749f" class="cell" data-execution_count="14">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1"></a>conf_model <span class="op">=</span> <span class="fu">conformal_model</span>(clf; method<span class="op">=:</span>adaptive_inductive, coverage<span class="op">=</span><span class="fl">.95</span>)</span>
 <span id="cb10-2"><a href="#cb10-2"></a>mach <span class="op">=</span> <span class="fu">machine</span>(conf_model, X, y)</span>
@@ -1757,7 +1692,7 @@ SSC: 0.97</code></pre>
 </div>
 <p>We can also have a look at the resulting set size for both approaches using a custom <code>Plots.jl</code> recipe (fig-setsize). In line with the above, the spread is wider for the adaptive approach, which reflects that “the procedure is effectively distinguishing between easy and hard inputs” <span class="citation" data-cites="angelopoulos2021gentle">(<a href="#ref-angelopoulos2021gentle" role="doc-biblioref">A. N. Angelopoulos and Bates 2022</a>)</span>.</p>
 <div id="cell-fig-setsize" class="cell" data-execution_count="15">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a>plt_list <span class="op">=</span> []</span>
 <span id="cb12-2"><a href="#cb12-2"></a><span class="cf">for</span> (_mod, mach) <span class="kw">in</span> results</span>
@@ -1766,9 +1701,8 @@ SSC: 0.97</code></pre>
 <span id="cb12-5"><a href="#cb12-5"></a><span class="fu">plot</span>(plt_list<span class="op">...</span>, size<span class="op">=</span>(<span class="fl">800</span>,<span class="fl">300</span>))</span>
 <span id="cb12-6"><a href="#cb12-6"></a><span class="fu">plot</span>(plt_list<span class="op">...</span>, size<span class="op">=</span>(<span class="fl">800</span>,<span class="fl">300</span>),bg_colour<span class="op">=:</span>transparent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="fig-setsize" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored" data-execution_count="16">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-setsize-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div id="fig-setsize" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="800" height="300" viewbox="0 0 3200 1200">
 <defs>
@@ -1870,10 +1804,7 @@ SSC: 0.97</code></pre>
 <circle clip-path="url(#clip333)" style="fill:#009af9; stroke:none; fill-opacity:0" cx="2720.73" cy="1067.33" r="2"></circle>
 <circle clip-path="url(#clip333)" style="fill:#009af9; stroke:none; fill-opacity:0" cx="2975.37" cy="1080.3" r="2"></circle>
 </svg>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-setsize-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Distribution of set sizes for both approaches.
-</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;3: Distribution of set sizes for both approaches.</figcaption>
 </figure>
 </div>
 </div>
@@ -1892,7 +1823,7 @@ Figure&nbsp;3: Distribution of set sizes for both approaches.
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-angelopoulos2021gentle" class="csl-entry" role="listitem">
 Angelopoulos, Anastasios N., and Stephen Bates. 2022. <span>“A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification.”</span> <a href="https://arxiv.org/abs/2107.07511">https://arxiv.org/abs/2107.07511</a>.
 </div>
@@ -1910,7 +1841,7 @@ LeCun, Yann. 1998. <span>“The MNIST Database of Handwritten Digits.”</span> 
 <ol>
 <li id="fn1"><p>For a full tutorial on how to build an MNIST image classifier relying solely on <code>Flux.jl</code>, check out this <a href="https://fluxml.ai/Flux.jl/stable/tutorials/2021-01-26-mlp/">tutorial</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
   author = {Altmeyer, Patrick},
   title = {How to {Conformalize} a {Deep} {Image} {Classifier}},
   date = {2022-12-05},
@@ -2051,9 +1982,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -2063,17 +1995,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -2086,120 +2009,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      return note.innerHTML;
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2243,7 +2052,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2269,32 +2077,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -2372,21 +2154,21 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb13-14"><a href="#cb13-14"></a><span class="co">---</span></span>
 <span id="cb13-15"><a href="#cb13-15"></a></span>
 <span id="cb13-18"><a href="#cb13-18"></a><span class="in">```{julia}</span></span>
-<span id="cb13-19"><a href="#cb13-19"></a><span class="in">#| echo: false</span></span>
+<span id="cb13-19"><a href="#cb13-19"></a><span class="co">#| echo: false</span></span>
 <span id="cb13-20"><a href="#cb13-20"></a></span>
-<span id="cb13-21"><a href="#cb13-21"></a><span class="in">using Pkg; Pkg.activate("blog/posts/conformal-image-classifier/")</span></span>
-<span id="cb13-22"><a href="#cb13-22"></a><span class="in">using Plots</span></span>
-<span id="cb13-23"><a href="#cb13-23"></a><span class="in">using Random</span></span>
-<span id="cb13-24"><a href="#cb13-24"></a><span class="in">Random.seed!(2022)</span></span>
-<span id="cb13-25"><a href="#cb13-25"></a><span class="in">www_path = "blog/posts/conformal-image-classifier/www"</span></span>
+<span id="cb13-21"><a href="#cb13-21"></a>using Pkg; Pkg.activate(<span class="ot">"</span><span class="st">blog/posts/conformal-image-classifier/</span><span class="ot">"</span>)</span>
+<span id="cb13-22"><a href="#cb13-22"></a>using Plots</span>
+<span id="cb13-23"><a href="#cb13-23"></a>using Random</span>
+<span id="cb13-24"><a href="#cb13-24"></a>Random.seed!(<span class="dv">2022</span>)</span>
+<span id="cb13-25"><a href="#cb13-25"></a>www_path = <span class="ot">"</span><span class="st">blog/posts/conformal-image-classifier/www</span><span class="ot">"</span></span>
 <span id="cb13-26"><a href="#cb13-26"></a><span class="in">```</span></span>
 <span id="cb13-27"><a href="#cb13-27"></a></span>
-<span id="cb13-28"><a href="#cb13-28"></a>&lt;div class="intro-gif"&gt;</span>
-<span id="cb13-29"><a href="#cb13-29"></a>  &lt;figure&gt;</span>
-<span id="cb13-30"><a href="#cb13-30"></a>    &lt;img src="www/intro.gif"&gt;</span>
-<span id="cb13-31"><a href="#cb13-31"></a>    &lt;figcaption&gt;Conformalized prediction sets for a&lt;br&gt;simple Deep Image Classifier.&lt;/figcaption&gt;</span>
-<span id="cb13-32"><a href="#cb13-32"></a>  &lt;/figure&gt;</span>
-<span id="cb13-33"><a href="#cb13-33"></a>&lt;/div&gt;</span>
+<span id="cb13-28"><a href="#cb13-28"></a><span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">"intro-gif"</span><span class="kw">&gt;</span></span>
+<span id="cb13-29"><a href="#cb13-29"></a>  <span class="kw">&lt;figure&gt;</span></span>
+<span id="cb13-30"><a href="#cb13-30"></a>    <span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"www/intro.gif"</span><span class="kw">&gt;</span></span>
+<span id="cb13-31"><a href="#cb13-31"></a>    <span class="kw">&lt;figcaption&gt;</span>Conformalized prediction sets for a<span class="kw">&lt;br&gt;</span>simple Deep Image Classifier.<span class="kw">&lt;/figcaption&gt;</span></span>
+<span id="cb13-32"><a href="#cb13-32"></a>  <span class="kw">&lt;/figure&gt;</span></span>
+<span id="cb13-33"><a href="#cb13-33"></a><span class="kw">&lt;/div&gt;</span></span>
 <span id="cb13-34"><a href="#cb13-34"></a></span>
 <span id="cb13-35"><a href="#cb13-35"></a>Deep Learning is popular and --- for some tasks like image classification --- remarkably powerful. But it is also well-known that Deep Neural Networks (DNN) can be unstable <span class="co">[</span><span class="ot">@goodfellow2014explaining</span><span class="co">]</span> and poorly calibrated. Conformal Prediction can be used to mitigate these pitfalls. </span>
 <span id="cb13-36"><a href="#cb13-36"></a></span>
@@ -2399,27 +2181,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb13-43"><a href="#cb13-43"></a>The task at hand is to predict the labels of handwritten images of digits using the famous MNIST dataset <span class="co">[</span><span class="ot">@lecun1998mnist</span><span class="co">]</span>. Importing this popular machine learning dataset in Julia is made remarkably easy through <span class="in">`MLDatasets.jl`</span>:</span>
 <span id="cb13-44"><a href="#cb13-44"></a></span>
 <span id="cb13-47"><a href="#cb13-47"></a><span class="in">```{julia}</span></span>
-<span id="cb13-48"><a href="#cb13-48"></a><span class="in">using MLDatasets</span></span>
-<span id="cb13-49"><a href="#cb13-49"></a><span class="in">N = 1000</span></span>
-<span id="cb13-50"><a href="#cb13-50"></a><span class="in">Xraw, yraw = MNIST(split=:train)[:]</span></span>
-<span id="cb13-51"><a href="#cb13-51"></a><span class="in">Xraw = Xraw[:,:,1:N]</span></span>
-<span id="cb13-52"><a href="#cb13-52"></a><span class="in">yraw = yraw[1:N]</span></span>
+<span id="cb13-48"><a href="#cb13-48"></a>using MLDatasets</span>
+<span id="cb13-49"><a href="#cb13-49"></a>N = <span class="dv">1000</span></span>
+<span id="cb13-50"><a href="#cb13-50"></a>Xraw, yraw = MNIST(<span class="fu">split</span>=:train)[:]</span>
+<span id="cb13-51"><a href="#cb13-51"></a>Xraw = Xraw[:,:,<span class="dv">1</span>:N]</span>
+<span id="cb13-52"><a href="#cb13-52"></a>yraw = yraw[<span class="dv">1</span>:N]</span>
 <span id="cb13-53"><a href="#cb13-53"></a><span class="in">```</span></span>
 <span id="cb13-54"><a href="#cb13-54"></a></span>
 <span id="cb13-55"><a href="#cb13-55"></a>@fig-samples below shows a few random samples from the training data:</span>
 <span id="cb13-56"><a href="#cb13-56"></a></span>
 <span id="cb13-59"><a href="#cb13-59"></a><span class="in">```{julia}</span></span>
-<span id="cb13-60"><a href="#cb13-60"></a><span class="in">#| output: true</span></span>
-<span id="cb13-61"><a href="#cb13-61"></a><span class="in">#| label: fig-samples</span></span>
-<span id="cb13-62"><a href="#cb13-62"></a><span class="in">#| fig-cap: Random samples from the MNIST dataset.</span></span>
+<span id="cb13-60"><a href="#cb13-60"></a><span class="co">#| output: true</span></span>
+<span id="cb13-61"><a href="#cb13-61"></a><span class="co">#| label: fig-samples</span></span>
+<span id="cb13-62"><a href="#cb13-62"></a><span class="co">#| fig-cap: Random samples from the MNIST dataset.</span></span>
 <span id="cb13-63"><a href="#cb13-63"></a></span>
-<span id="cb13-64"><a href="#cb13-64"></a><span class="in">using MLJ</span></span>
-<span id="cb13-65"><a href="#cb13-65"></a><span class="in">using Images</span></span>
-<span id="cb13-66"><a href="#cb13-66"></a><span class="in">X = map(x -&gt; convert2image(MNIST, x), eachslice(Xraw, dims=3))</span></span>
-<span id="cb13-67"><a href="#cb13-67"></a><span class="in">y = coerce(yraw, Multiclass)</span></span>
+<span id="cb13-64"><a href="#cb13-64"></a>using MLJ</span>
+<span id="cb13-65"><a href="#cb13-65"></a>using Images</span>
+<span id="cb13-66"><a href="#cb13-66"></a>X = <span class="fu">map</span>(x -&gt; convert2image(MNIST, x), eachslice(Xraw, dims=<span class="dv">3</span>))</span>
+<span id="cb13-67"><a href="#cb13-67"></a><span class="ot">y </span>= coerce(yraw, Multiclass)</span>
 <span id="cb13-68"><a href="#cb13-68"></a></span>
-<span id="cb13-69"><a href="#cb13-69"></a><span class="in">n_samples = 10</span></span>
-<span id="cb13-70"><a href="#cb13-70"></a><span class="in">mosaic(rand(X, n_samples)..., ncol=n_samples)</span></span>
+<span id="cb13-69"><a href="#cb13-69"></a>n_samples = <span class="dv">10</span></span>
+<span id="cb13-70"><a href="#cb13-70"></a>mosaic(<span class="fu">rand</span>(X, n_samples)..., ncol=n_samples)</span>
 <span id="cb13-71"><a href="#cb13-71"></a><span class="in">```</span></span>
 <span id="cb13-72"><a href="#cb13-72"></a></span>
 <span id="cb13-73"><a href="#cb13-73"></a><span class="fu">## 🚧 Building the Network</span></span>
@@ -2429,13 +2211,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb13-77"><a href="#cb13-77"></a>In <span class="in">`Flux.jl`</span>, you could build an MLP for this task as follows,</span>
 <span id="cb13-78"><a href="#cb13-78"></a></span>
 <span id="cb13-81"><a href="#cb13-81"></a><span class="in">```{julia}</span></span>
-<span id="cb13-82"><a href="#cb13-82"></a><span class="in">using Flux</span></span>
+<span id="cb13-82"><a href="#cb13-82"></a>using Flux</span>
 <span id="cb13-83"><a href="#cb13-83"></a></span>
-<span id="cb13-84"><a href="#cb13-84"></a><span class="in">mlp = Chain(</span></span>
-<span id="cb13-85"><a href="#cb13-85"></a><span class="in">    Flux.flatten,</span></span>
-<span id="cb13-86"><a href="#cb13-86"></a><span class="in">    Dense(prod((28,28)), 32, relu),</span></span>
-<span id="cb13-87"><a href="#cb13-87"></a><span class="in">    Dense(32, 10)</span></span>
-<span id="cb13-88"><a href="#cb13-88"></a><span class="in">)</span></span>
+<span id="cb13-84"><a href="#cb13-84"></a>mlp = Chain(</span>
+<span id="cb13-85"><a href="#cb13-85"></a>    Flux.flatten,</span>
+<span id="cb13-86"><a href="#cb13-86"></a>    Dense(prod((<span class="dv">28</span>,<span class="dv">28</span>)), <span class="dv">32</span>, relu),</span>
+<span id="cb13-87"><a href="#cb13-87"></a>    Dense(<span class="dv">32</span>, <span class="dv">10</span>)</span>
+<span id="cb13-88"><a href="#cb13-88"></a>)</span>
 <span id="cb13-89"><a href="#cb13-89"></a><span class="in">```</span></span>
 <span id="cb13-90"><a href="#cb13-90"></a></span>
 <span id="cb13-91"><a href="#cb13-91"></a>where <span class="in">`(28,28)`</span> is just the input dimension (28x28 pixel images). Since we have ten digits, our output dimension is ten.^<span class="co">[</span><span class="ot">For a full tutorial on how to build an MNIST image classifier relying solely on `Flux.jl`, check out this [tutorial](https://fluxml.ai/Flux.jl/stable/tutorials/2021-01-26-mlp/).</span><span class="co">]</span></span>
@@ -2443,37 +2225,37 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb13-93"><a href="#cb13-93"></a>We can do the exact same thing in <span class="in">`MLJFlux.jl`</span> as follows,</span>
 <span id="cb13-94"><a href="#cb13-94"></a></span>
 <span id="cb13-97"><a href="#cb13-97"></a><span class="in">```{julia}</span></span>
-<span id="cb13-98"><a href="#cb13-98"></a><span class="in">using MLJFlux</span></span>
+<span id="cb13-98"><a href="#cb13-98"></a>using MLJFlux</span>
 <span id="cb13-99"><a href="#cb13-99"></a></span>
-<span id="cb13-100"><a href="#cb13-100"></a><span class="in">builder = MLJFlux.@builder Chain(</span></span>
-<span id="cb13-101"><a href="#cb13-101"></a><span class="in">    Flux.flatten,</span></span>
-<span id="cb13-102"><a href="#cb13-102"></a><span class="in">    Dense(prod(n_in), 32, relu),</span></span>
-<span id="cb13-103"><a href="#cb13-103"></a><span class="in">    Dense(32, n_out)</span></span>
-<span id="cb13-104"><a href="#cb13-104"></a><span class="in">)</span></span>
+<span id="cb13-100"><a href="#cb13-100"></a>builder = MLJFlux.<span class="dt">@builder</span> Chain(</span>
+<span id="cb13-101"><a href="#cb13-101"></a>    Flux.flatten,</span>
+<span id="cb13-102"><a href="#cb13-102"></a>    Dense(prod(n_in), <span class="dv">32</span>, relu),</span>
+<span id="cb13-103"><a href="#cb13-103"></a>    Dense(<span class="dv">32</span>, n_out)</span>
+<span id="cb13-104"><a href="#cb13-104"></a>)</span>
 <span id="cb13-105"><a href="#cb13-105"></a><span class="in">```</span></span>
 <span id="cb13-106"><a href="#cb13-106"></a></span>
 <span id="cb13-107"><a href="#cb13-107"></a>where here we rely on the <span class="in">`@builder`</span> macro to make the transition from <span class="in">`Flux.jl`</span> to <span class="in">`MLJ.jl`</span> as seamless as possible. Finally, <span class="in">`MLJFlux.jl`</span> already comes with a number of helper functions to define plain-vanilla networks. In this case, we will use the <span class="in">`ImageClassifier`</span> with our custom builder and cross-entropy loss:</span>
 <span id="cb13-108"><a href="#cb13-108"></a></span>
 <span id="cb13-111"><a href="#cb13-111"></a><span class="in">```{julia}</span></span>
-<span id="cb13-112"><a href="#cb13-112"></a><span class="in">ImageClassifier = @load ImageClassifier</span></span>
-<span id="cb13-113"><a href="#cb13-113"></a><span class="in">clf = ImageClassifier(</span></span>
-<span id="cb13-114"><a href="#cb13-114"></a><span class="in">    builder=builder,</span></span>
-<span id="cb13-115"><a href="#cb13-115"></a><span class="in">    epochs=10,</span></span>
-<span id="cb13-116"><a href="#cb13-116"></a><span class="in">    loss=Flux.crossentropy</span></span>
-<span id="cb13-117"><a href="#cb13-117"></a><span class="in">)</span></span>
+<span id="cb13-112"><a href="#cb13-112"></a>ImageClassifier = <span class="dt">@load</span> ImageClassifier</span>
+<span id="cb13-113"><a href="#cb13-113"></a>clf = ImageClassifier(</span>
+<span id="cb13-114"><a href="#cb13-114"></a>    builder=builder,</span>
+<span id="cb13-115"><a href="#cb13-115"></a>    epochs=<span class="dv">10</span>,</span>
+<span id="cb13-116"><a href="#cb13-116"></a>    loss=Flux.crossentropy</span>
+<span id="cb13-117"><a href="#cb13-117"></a>)</span>
 <span id="cb13-118"><a href="#cb13-118"></a><span class="in">```</span></span>
 <span id="cb13-119"><a href="#cb13-119"></a></span>
 <span id="cb13-120"><a href="#cb13-120"></a>The generated instance <span class="in">`clf`</span> is a model (in the <span class="in">`MLJ.jl`</span> sense) so from this point on we can rely on standard <span class="in">`MLJ.jl`</span> workflows. For example, we can wrap our model in data to create a machine and then evaluate it on a holdout set as follows:</span>
 <span id="cb13-121"><a href="#cb13-121"></a></span>
 <span id="cb13-124"><a href="#cb13-124"></a><span class="in">```{julia}</span></span>
-<span id="cb13-125"><a href="#cb13-125"></a><span class="in">mach = machine(clf, X, y)</span></span>
+<span id="cb13-125"><a href="#cb13-125"></a>mach = machine(clf, X, y)</span>
 <span id="cb13-126"><a href="#cb13-126"></a></span>
-<span id="cb13-127"><a href="#cb13-127"></a><span class="in">evaluate!(</span></span>
-<span id="cb13-128"><a href="#cb13-128"></a><span class="in">    mach,</span></span>
-<span id="cb13-129"><a href="#cb13-129"></a><span class="in">    resampling=Holdout(rng=123, fraction_train=0.8),</span></span>
-<span id="cb13-130"><a href="#cb13-130"></a><span class="in">    operation=predict_mode,</span></span>
-<span id="cb13-131"><a href="#cb13-131"></a><span class="in">    measure=[accuracy]</span></span>
-<span id="cb13-132"><a href="#cb13-132"></a><span class="in">)</span></span>
+<span id="cb13-127"><a href="#cb13-127"></a>evaluate!(</span>
+<span id="cb13-128"><a href="#cb13-128"></a>    mach,</span>
+<span id="cb13-129"><a href="#cb13-129"></a>    resampling=Holdout(rng=<span class="dv">123</span>, fraction_train=<span class="fl">0.8</span>),</span>
+<span id="cb13-130"><a href="#cb13-130"></a>    operation=predict_mode,</span>
+<span id="cb13-131"><a href="#cb13-131"></a>    measure=[accuracy]</span>
+<span id="cb13-132"><a href="#cb13-132"></a>)</span>
 <span id="cb13-133"><a href="#cb13-133"></a><span class="in">```</span></span>
 <span id="cb13-134"><a href="#cb13-134"></a></span>
 <span id="cb13-135"><a href="#cb13-135"></a>The accuracy of our very simple model is not amazing, but good enough for the purpose of this tutorial. For each image, our MLP returns a softmax output for each possible digit: 0,1,2,3,...,9. Since each individual softmax output is valued between zero and one, $y_k\in(0,1)$, this is commonly interpreted as a probability: $y_k \coloneqq p(y=k|X)$. Edge cases -- that is values close to either zero or one -- indicate high predictive certainty. But this is only a heuristic notion of predictive uncertainty <span class="co">[</span><span class="ot">@angelopoulos2021gentle</span><span class="co">]</span>. Next, we will turn this heuristic notion of uncertainty into a rigorous one using Conformal Prediction.</span>
@@ -2483,168 +2265,166 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb13-139"><a href="#cb13-139"></a>Since <span class="in">`clf`</span> is a model, it is also compatible with our package: <span class="in">`ConformalPrediction.jl`</span>. To conformalize our MLP, we therefore only need to call <span class="in">`conformal_model(clf)`</span>. Since the generated instance <span class="in">`conf_model`</span> is also just a model, we can still rely on standard <span class="in">`MLJ.jl`</span> workflows. Below we first wrap it in data and then fit it. Aaaand ... we're done! Let's look at the results in the next section.</span>
 <span id="cb13-140"><a href="#cb13-140"></a></span>
 <span id="cb13-143"><a href="#cb13-143"></a><span class="in">```{julia}</span></span>
-<span id="cb13-144"><a href="#cb13-144"></a><span class="in">using ConformalPrediction</span></span>
-<span id="cb13-145"><a href="#cb13-145"></a><span class="in">conf_model = conformal_model(clf; method=:simple_inductive, coverage=.95)</span></span>
-<span id="cb13-146"><a href="#cb13-146"></a><span class="in">mach = machine(conf_model, X, y)</span></span>
-<span id="cb13-147"><a href="#cb13-147"></a><span class="in">fit!(mach)</span></span>
+<span id="cb13-144"><a href="#cb13-144"></a>using ConformalPrediction</span>
+<span id="cb13-145"><a href="#cb13-145"></a>conf_model = conformal_model(clf; method=:simple_inductive, coverage=.<span class="dv">95</span>)</span>
+<span id="cb13-146"><a href="#cb13-146"></a>mach = machine(conf_model, X, y)</span>
+<span id="cb13-147"><a href="#cb13-147"></a>fit!(mach)</span>
 <span id="cb13-148"><a href="#cb13-148"></a><span class="in">```</span></span>
 <span id="cb13-149"><a href="#cb13-149"></a></span>
 <span id="cb13-150"><a href="#cb13-150"></a><span class="fu">## 📊 Results</span></span>
 <span id="cb13-151"><a href="#cb13-151"></a></span>
 <span id="cb13-154"><a href="#cb13-154"></a><span class="in">```{julia}</span></span>
-<span id="cb13-155"><a href="#cb13-155"></a><span class="in">#| echo: false</span></span>
+<span id="cb13-155"><a href="#cb13-155"></a><span class="co">#| echo: false</span></span>
 <span id="cb13-156"><a href="#cb13-156"></a></span>
-<span id="cb13-157"><a href="#cb13-157"></a><span class="in">using Plots</span></span>
-<span id="cb13-158"><a href="#cb13-158"></a><span class="in">using Plots.PlotMeasures</span></span>
-<span id="cb13-159"><a href="#cb13-159"></a><span class="in">using StatsBase: sample</span></span>
+<span id="cb13-157"><a href="#cb13-157"></a>using Plots</span>
+<span id="cb13-158"><a href="#cb13-158"></a>using Plots.PlotMeasures</span>
+<span id="cb13-159"><a href="#cb13-159"></a>using StatsBase: sample</span>
 <span id="cb13-160"><a href="#cb13-160"></a></span>
-<span id="cb13-161"><a href="#cb13-161"></a><span class="in">cw = [1, 253, 253] |&gt; (x -&gt; x./sum(x))</span></span>
-<span id="cb13-162"><a href="#cb13-162"></a><span class="in">function plot_results(mach, X, y; set_size=1, n_samples=3, c_weights=cw, c_inv=0, kwargs...)</span></span>
+<span id="cb13-161"><a href="#cb13-161"></a>cw = [<span class="dv">1</span>, <span class="dv">253</span>, <span class="dv">253</span>] |&gt; (x -&gt; x.<span class="ot">/sum</span><span class="ch">(</span><span class="ot">x</span><span class="ch">))</span></span>
+<span id="cb13-162"><a href="#cb13-162"></a><span class="ot">function plot_results</span><span class="ch">(</span><span class="ot">mach, X, y; set_size=1, n_samples=3, c_weights=cw, c_inv=0, kwargs...</span><span class="ch">)</span></span>
 <span id="cb13-163"><a href="#cb13-163"></a></span>
-<span id="cb13-164"><a href="#cb13-164"></a><span class="in">    # Choose images:</span></span>
-<span id="cb13-165"><a href="#cb13-165"></a><span class="in">    set_sizes = ConformalPrediction.set_size.(predict(mach, X))</span></span>
-<span id="cb13-166"><a href="#cb13-166"></a><span class="in">    candidates = findall(set_sizes .== set_size)</span></span>
-<span id="cb13-167"><a href="#cb13-167"></a><span class="in">    @assert length(candidates) &gt; 0 "No sets of size $set_size."</span></span>
-<span id="cb13-168"><a href="#cb13-168"></a><span class="in">    chosen = sample(candidates, n_samples, replace=false)</span></span>
+<span id="cb13-164"><a href="#cb13-164"></a><span class="co">    # Choose images:</span></span>
+<span id="cb13-165"><a href="#cb13-165"></a><span class="ot">    set_sizes = ConformalPrediction.set_size.</span><span class="ch">(</span><span class="ot">predict</span><span class="ch">(</span><span class="ot">mach, X</span><span class="ch">))</span></span>
+<span id="cb13-166"><a href="#cb13-166"></a><span class="ot">    candidates = findall</span><span class="ch">(</span><span class="ot">set_sizes .== set_size</span><span class="ch">)</span></span>
+<span id="cb13-167"><a href="#cb13-167"></a><span class="ot">    </span><span class="dt">@assert</span><span class="ot"> length</span><span class="ch">(</span><span class="ot">candidates</span><span class="ch">)</span><span class="ot"> &gt; 0 "No sets of size </span><span class="dt">$set_size</span><span class="ot">."</span></span>
+<span id="cb13-168"><a href="#cb13-168"></a><span class="ot">    chosen = sample</span><span class="ch">(</span><span class="ot">candidates, n_samples, replace=false</span><span class="ch">)</span></span>
 <span id="cb13-169"><a href="#cb13-169"></a></span>
-<span id="cb13-170"><a href="#cb13-170"></a><span class="in">    plt_lst = []</span></span>
-<span id="cb13-171"><a href="#cb13-171"></a><span class="in">    for i in chosen</span></span>
-<span id="cb13-172"><a href="#cb13-172"></a><span class="in">        ytrue = y[i]</span></span>
-<span id="cb13-173"><a href="#cb13-173"></a><span class="in">        x = X[i]</span></span>
-<span id="cb13-174"><a href="#cb13-174"></a><span class="in">        ŷ = predict(mach, x)[1]</span></span>
-<span id="cb13-175"><a href="#cb13-175"></a><span class="in">        title = join(["$(Int(key)-1) ($(Int(round(val*100)))%)" for (key, val) in ŷ.prob_given_ref], ", ")</span></span>
-<span id="cb13-176"><a href="#cb13-176"></a><span class="in">        title = "C={$title}\nytrue=$ytrue"</span></span>
-<span id="cb13-177"><a href="#cb13-177"></a><span class="in">        # Colouring:</span></span>
-<span id="cb13-178"><a href="#cb13-178"></a><span class="in">        x = abs.(c_inv .- (c_weights .* channelview(RGB.(x))))</span></span>
-<span id="cb13-179"><a href="#cb13-179"></a><span class="in">        prominent_col = median(x, dims=(2,3))</span></span>
-<span id="cb13-180"><a href="#cb13-180"></a><span class="in">        x = colorview(RGB, eachslice(x, dims=1)...)</span></span>
-<span id="cb13-181"><a href="#cb13-181"></a><span class="in">        bg_color = RGB(prominent_col...)            # most common image colour</span></span>
-<span id="cb13-182"><a href="#cb13-182"></a><span class="in">        plt = plot(x; axis=([],false), bottom_margin=10mm, bg_color=bg_color, bg_color_inside=bg_color, kwargs...)</span></span>
-<span id="cb13-183"><a href="#cb13-183"></a><span class="in">        ann_colour = RGB((1 .- prominent_col)...)   # opposite of background</span></span>
-<span id="cb13-184"><a href="#cb13-184"></a><span class="in">        annotate!(plt, (14, 31, (title, 14-set_size), ann_colour))</span></span>
-<span id="cb13-185"><a href="#cb13-185"></a><span class="in">        push!(plt_lst, plt)</span></span>
-<span id="cb13-186"><a href="#cb13-186"></a><span class="in">    end</span></span>
+<span id="cb13-170"><a href="#cb13-170"></a><span class="ot">    plt_lst = </span><span class="ch">[]</span></span>
+<span id="cb13-171"><a href="#cb13-171"></a><span class="ot">    for i in chosen</span></span>
+<span id="cb13-172"><a href="#cb13-172"></a><span class="ot">        ytrue = y</span><span class="ch">[</span><span class="bn">i</span><span class="ch">]</span></span>
+<span id="cb13-173"><a href="#cb13-173"></a><span class="ot">        x = X</span><span class="ch">[</span><span class="bn">i</span><span class="ch">]</span></span>
+<span id="cb13-174"><a href="#cb13-174"></a><span class="ot">        ŷ = predict</span><span class="ch">(</span><span class="ot">mach, x</span><span class="ch">)[</span><span class="bn">1</span><span class="ch">]</span></span>
+<span id="cb13-175"><a href="#cb13-175"></a><span class="ot">        title = join</span><span class="ch">([</span><span class="bn">"$(Int(key)-1) ($(Int(round(val*100)))%)" for (key, val) in ŷ.prob_given_ref</span><span class="ch">]</span><span class="ot">, ", "</span><span class="ch">)</span></span>
+<span id="cb13-176"><a href="#cb13-176"></a><span class="ot">        title = "C={</span><span class="dt">$title</span><span class="ot">}</span><span class="bn">\n</span><span class="ot">ytrue=</span><span class="dt">$ytrue</span><span class="ot">"</span></span>
+<span id="cb13-177"><a href="#cb13-177"></a><span class="co">        # Colouring:</span></span>
+<span id="cb13-178"><a href="#cb13-178"></a><span class="ot">        x = abs.</span><span class="ch">(</span><span class="ot">c_inv .- </span><span class="ch">(</span><span class="ot">c_weights .</span><span class="ch">*</span><span class="ot"> channelview</span><span class="ch">(</span><span class="ot">RGB.</span><span class="ch">(</span><span class="ot">x</span><span class="ch">))))</span></span>
+<span id="cb13-179"><a href="#cb13-179"></a><span class="ot">        prominent_col = median</span><span class="ch">(</span><span class="ot">x, dims=</span><span class="ch">(</span><span class="ot">2,3</span><span class="ch">))</span></span>
+<span id="cb13-180"><a href="#cb13-180"></a><span class="ot">        x = colorview</span><span class="ch">(</span><span class="ot">RGB, eachslice</span><span class="ch">(</span><span class="ot">x, dims=1</span><span class="ch">)</span><span class="ot">...</span><span class="ch">)</span></span>
+<span id="cb13-181"><a href="#cb13-181"></a><span class="ot">        bg_color = RGB</span><span class="ch">(</span><span class="ot">prominent_col...</span><span class="ch">)</span><span class="co">            # most common image colour</span></span>
+<span id="cb13-182"><a href="#cb13-182"></a><span class="ot">        plt = plot</span><span class="ch">(</span><span class="ot">x; axis=</span><span class="ch">([]</span><span class="ot">,false</span><span class="ch">)</span><span class="ot">, bottom_margin=10mm, bg_color=bg_color, bg_color_inside=bg_color, kwargs...</span><span class="ch">)</span></span>
+<span id="cb13-183"><a href="#cb13-183"></a><span class="ot">        ann_colour = RGB</span><span class="ch">((</span><span class="ot">1 .- prominent_col</span><span class="ch">)</span><span class="ot">...</span><span class="ch">)</span><span class="co">   # opposite of background</span></span>
+<span id="cb13-184"><a href="#cb13-184"></a><span class="ot">        annotate!</span><span class="ch">(</span><span class="ot">plt, </span><span class="ch">(</span><span class="ot">14, 31, </span><span class="ch">(</span><span class="ot">title, 14-set_size</span><span class="ch">)</span><span class="ot">, ann_colour</span><span class="ch">))</span></span>
+<span id="cb13-185"><a href="#cb13-185"></a><span class="ot">        push!</span><span class="ch">(</span><span class="ot">plt_lst, plt</span><span class="ch">)</span></span>
+<span id="cb13-186"><a href="#cb13-186"></a><span class="ot">    end</span></span>
 <span id="cb13-187"><a href="#cb13-187"></a></span>
-<span id="cb13-188"><a href="#cb13-188"></a><span class="in">    plot(plt_lst..., size=(n_samples*300, 300), layout=(1,n_samples))</span></span>
-<span id="cb13-189"><a href="#cb13-189"></a><span class="in">end</span></span>
-<span id="cb13-190"><a href="#cb13-190"></a><span class="in">```</span></span>
+<span id="cb13-188"><a href="#cb13-188"></a><span class="ot">    plot</span><span class="ch">(</span><span class="ot">plt_lst..., size=</span><span class="ch">(</span><span class="ot">n_samples</span><span class="ch">*</span><span class="ot">300, 300</span><span class="ch">)</span><span class="ot">, layout=</span><span class="ch">(</span><span class="ot">1,n_samples</span><span class="ch">))</span></span>
+<span id="cb13-189"><a href="#cb13-189"></a><span class="ot">end</span></span>
+<span id="cb13-190"><a href="#cb13-190"></a><span class="ot">```</span></span>
 <span id="cb13-191"><a href="#cb13-191"></a></span>
-<span id="cb13-192"><a href="#cb13-192"></a>@fig-plots below presents the results. @fig-plots-1 displays highly certain predictions, now defined in the rigorous sense of Conformal Prediction: in each case, the conformal set (just beneath the image) includes only one label. </span>
+<span id="cb13-192"><a href="#cb13-192"></a><span class="dt">@fig</span><span class="ot">-plots below presents the results. </span><span class="dt">@fig</span><span class="ot">-plots-1 displays highly certain predictions, now defined in the rigorous sense of Conformal Prediction: in each case, the conformal set </span><span class="ch">(</span><span class="ot">just beneath the image</span><span class="ch">)</span><span class="ot"> includes only one label. </span></span>
 <span id="cb13-193"><a href="#cb13-193"></a></span>
-<span id="cb13-194"><a href="#cb13-194"></a>@fig-plots-2 and @fig-plots-3 display increasingly uncertain predictions of set size two and three, respectively. They demonstrate that CP is well equipped to deal with samples characterized by high aleatoric uncertainty: digits four (4), seven (7) and nine (9) share certain similarities. So do digits five (5) and six (6) as well as three (3) and eight (8). These may be hard to distinguish from each other even after seeing many examples (and even for a human). It is therefore unsurprising to see that these digits often end up together in conformal sets. </span>
+<span id="cb13-194"><a href="#cb13-194"></a><span class="dt">@fig</span><span class="ot">-plots-2 and </span><span class="dt">@fig</span><span class="ot">-plots-3 display increasingly uncertain predictions of set size two and three, respectively. They demonstrate that CP is well equipped to deal with samples characterized by high aleatoric uncertainty: digits four </span><span class="ch">(</span><span class="ot">4</span><span class="ch">)</span><span class="ot">, seven </span><span class="ch">(</span><span class="ot">7</span><span class="ch">)</span><span class="ot"> and nine </span><span class="ch">(</span><span class="ot">9</span><span class="ch">)</span><span class="ot"> share certain similarities. So do digits five </span><span class="ch">(</span><span class="ot">5</span><span class="ch">)</span><span class="ot"> and six </span><span class="ch">(</span><span class="ot">6</span><span class="ch">)</span><span class="ot"> as well as three </span><span class="ch">(</span><span class="ot">3</span><span class="ch">)</span><span class="ot"> and eight </span><span class="ch">(</span><span class="ot">8</span><span class="ch">)</span><span class="ot">. These may be hard to distinguish from each other even after seeing many examples </span><span class="ch">(</span><span class="ot">and even for a human</span><span class="ch">)</span><span class="ot">. It is therefore unsurprising to see that these digits often end up together in conformal sets. </span></span>
 <span id="cb13-195"><a href="#cb13-195"></a></span>
 <span id="cb13-198"><a href="#cb13-198"></a><span class="in">```{julia}</span></span>
-<span id="cb13-199"><a href="#cb13-199"></a><span class="in">#| output: true</span></span>
-<span id="cb13-200"><a href="#cb13-200"></a><span class="in">#| label: fig-plots</span></span>
-<span id="cb13-201"><a href="#cb13-201"></a><span class="in">#| fig-cap: Conformalized predictions from an image classifier.</span></span>
-<span id="cb13-202"><a href="#cb13-202"></a><span class="in">#| fig-subcap:</span></span>
-<span id="cb13-203"><a href="#cb13-203"></a><span class="in">#|   - "Randomly selected prediction sets of size $|C|=1$."</span></span>
-<span id="cb13-204"><a href="#cb13-204"></a><span class="in">#|   - "Randomly selected prediction sets of size $|C|=2$."</span></span>
-<span id="cb13-205"><a href="#cb13-205"></a><span class="in">#|   - "Randomly selected prediction sets of size $|C|=3$."</span></span>
-<span id="cb13-206"><a href="#cb13-206"></a><span class="in">#| layout-nrow: 3</span></span>
-<span id="cb13-207"><a href="#cb13-207"></a><span class="in">#| echo: false</span></span>
+<span id="cb13-199"><a href="#cb13-199"></a><span class="co">#| output: true</span></span>
+<span id="cb13-200"><a href="#cb13-200"></a><span class="co">#| label: fig-plots</span></span>
+<span id="cb13-201"><a href="#cb13-201"></a><span class="co">#| fig-cap: Conformalized predictions from an image classifier.</span></span>
+<span id="cb13-202"><a href="#cb13-202"></a><span class="co">#| fig-subcap:</span></span>
+<span id="cb13-203"><a href="#cb13-203"></a><span class="co">#|   - "Randomly selected prediction sets of size $|C|=1$."</span></span>
+<span id="cb13-204"><a href="#cb13-204"></a><span class="co">#|   - "Randomly selected prediction sets of size $|C|=2$."</span></span>
+<span id="cb13-205"><a href="#cb13-205"></a><span class="co">#|   - "Randomly selected prediction sets of size $|C|=3$."</span></span>
+<span id="cb13-206"><a href="#cb13-206"></a><span class="co">#| layout-nrow: 3</span></span>
+<span id="cb13-207"><a href="#cb13-207"></a><span class="co">#| echo: false</span></span>
 <span id="cb13-208"><a href="#cb13-208"></a></span>
-<span id="cb13-209"><a href="#cb13-209"></a><span class="in">display(plot_results(mach, X, y; set_size=1))</span></span>
-<span id="cb13-210"><a href="#cb13-210"></a><span class="in">display(plot_results(mach, X, y; set_size=2))</span></span>
-<span id="cb13-211"><a href="#cb13-211"></a><span class="in">display(plot_results(mach, X, y; set_size=3))</span></span>
-<span id="cb13-212"><a href="#cb13-212"></a><span class="in">```</span></span>
+<span id="cb13-209"><a href="#cb13-209"></a><span class="ot">display</span><span class="ch">(</span><span class="ot">plot_results</span><span class="ch">(</span><span class="ot">mach, X, y; set_size=1</span><span class="ch">))</span></span>
+<span id="cb13-210"><a href="#cb13-210"></a><span class="ot">display</span><span class="ch">(</span><span class="ot">plot_results</span><span class="ch">(</span><span class="ot">mach, X, y; set_size=2</span><span class="ch">))</span></span>
+<span id="cb13-211"><a href="#cb13-211"></a><span class="ot">display</span><span class="ch">(</span><span class="ot">plot_results</span><span class="ch">(</span><span class="ot">mach, X, y; set_size=3</span><span class="ch">))</span></span>
+<span id="cb13-212"><a href="#cb13-212"></a><span class="ot">```</span></span>
 <span id="cb13-213"><a href="#cb13-213"></a></span>
 <span id="cb13-216"><a href="#cb13-216"></a><span class="in">```{julia}</span></span>
-<span id="cb13-217"><a href="#cb13-217"></a><span class="in">#| echo: false</span></span>
-<span id="cb13-218"><a href="#cb13-218"></a><span class="in">#| output: false</span></span>
+<span id="cb13-217"><a href="#cb13-217"></a><span class="co">#| echo: false</span></span>
+<span id="cb13-218"><a href="#cb13-218"></a><span class="co">#| output: false</span></span>
 <span id="cb13-219"><a href="#cb13-219"></a></span>
-<span id="cb13-220"><a href="#cb13-220"></a><span class="in">n_total = 10</span></span>
+<span id="cb13-220"><a href="#cb13-220"></a><span class="ot">n_total = 10</span></span>
 <span id="cb13-221"><a href="#cb13-221"></a></span>
-<span id="cb13-222"><a href="#cb13-222"></a><span class="in">anim = @animate for i in repeat([1,2,3],n_total)</span></span>
-<span id="cb13-223"><a href="#cb13-223"></a><span class="in">    plot_results(mach, X, y; set_size=i, n_samples=1, c_weights=rand(3), c_inv=rand([0,1],3))</span></span>
-<span id="cb13-224"><a href="#cb13-224"></a><span class="in">end</span></span>
-<span id="cb13-225"><a href="#cb13-225"></a><span class="in">gif(anim, joinpath(www_path, "intro.gif"), fps=1)</span></span>
+<span id="cb13-222"><a href="#cb13-222"></a><span class="ot">anim = </span><span class="dt">@animate</span><span class="ot"> for i in repeat</span><span class="ch">([</span><span class="bn">1,2,3</span><span class="ch">]</span><span class="ot">,n_total</span><span class="ch">)</span></span>
+<span id="cb13-223"><a href="#cb13-223"></a><span class="ot">    plot_results</span><span class="ch">(</span><span class="ot">mach, X, y; set_size=i, n_samples=1, c_weights=rand</span><span class="ch">(</span><span class="ot">3</span><span class="ch">)</span><span class="ot">, c_inv=rand</span><span class="ch">([</span><span class="bn">0,1</span><span class="ch">]</span><span class="ot">,3</span><span class="ch">))</span></span>
+<span id="cb13-224"><a href="#cb13-224"></a><span class="ot">end</span></span>
+<span id="cb13-225"><a href="#cb13-225"></a><span class="ot">gif</span><span class="ch">(</span><span class="ot">anim, joinpath</span><span class="ch">(</span><span class="ot">www_path, "intro.gif"</span><span class="ch">)</span><span class="ot">, fps=1</span><span class="ch">)</span></span>
 <span id="cb13-226"><a href="#cb13-226"></a></span>
-<span id="cb13-227"><a href="#cb13-227"></a><span class="in">anim = @animate for i in repeat([1,2,3],n_total)</span></span>
-<span id="cb13-228"><a href="#cb13-228"></a><span class="in">    plot_results(mach, X, y; set_size=i, n_samples=3, c_weights=rand(3), c_inv=rand([0,1],3))</span></span>
-<span id="cb13-229"><a href="#cb13-229"></a><span class="in">end</span></span>
-<span id="cb13-230"><a href="#cb13-230"></a><span class="in">gif(anim, joinpath(www_path, "medium.gif"), fps=1)</span></span>
-<span id="cb13-231"><a href="#cb13-231"></a><span class="in">```</span></span>
+<span id="cb13-227"><a href="#cb13-227"></a><span class="ot">anim = </span><span class="dt">@animate</span><span class="ot"> for i in repeat</span><span class="ch">([</span><span class="bn">1,2,3</span><span class="ch">]</span><span class="ot">,n_total</span><span class="ch">)</span></span>
+<span id="cb13-228"><a href="#cb13-228"></a><span class="ot">    plot_results</span><span class="ch">(</span><span class="ot">mach, X, y; set_size=i, n_samples=3, c_weights=rand</span><span class="ch">(</span><span class="ot">3</span><span class="ch">)</span><span class="ot">, c_inv=rand</span><span class="ch">([</span><span class="bn">0,1</span><span class="ch">]</span><span class="ot">,3</span><span class="ch">))</span></span>
+<span id="cb13-229"><a href="#cb13-229"></a><span class="ot">end</span></span>
+<span id="cb13-230"><a href="#cb13-230"></a><span class="ot">gif</span><span class="ch">(</span><span class="ot">anim, joinpath</span><span class="ch">(</span><span class="ot">www_path, "medium.gif"</span><span class="ch">)</span><span class="ot">, fps=1</span><span class="ch">)</span></span>
+<span id="cb13-231"><a href="#cb13-231"></a><span class="ot">```</span></span>
 <span id="cb13-232"><a href="#cb13-232"></a></span>
-<span id="cb13-233"><a href="#cb13-233"></a><span class="fu">## 🧐 Evaluation</span></span>
+<span id="cb13-233"><a href="#cb13-233"></a><span class="co">## 🧐 Evaluation</span></span>
 <span id="cb13-234"><a href="#cb13-234"></a></span>
-<span id="cb13-235"><a href="#cb13-235"></a>To evaluate the performance of conformal models, specific performance measures can be used to assess if the model is correctly specified and well-calibrated <span class="co">[</span><span class="ot">@angelopoulos2021gentle</span><span class="co">]</span>. We will look at this in some more detail in another post in the future. For now, just be aware that these measures are already available in <span class="in">`ConformalPrediction.jl`</span> and we will briefly showcase them here.</span>
+<span id="cb13-235"><a href="#cb13-235"></a><span class="ot">To evaluate the performance of conformal models, specific performance measures can be used to assess if the model is correctly specified and well-calibrated </span><span class="ch">[</span><span class="bn">@angelopoulos2021gentle</span><span class="ch">]</span><span class="ot">. We will look at this in some more detail in another post in the future. For now, just be aware that these measures are already available in `ConformalPrediction.jl` and we will briefly showcase them here.</span></span>
 <span id="cb13-236"><a href="#cb13-236"></a></span>
-<span id="cb13-237"><a href="#cb13-237"></a>As for many other things, <span class="in">`ConformalPrediction.jl`</span> taps into the existing functionality of <span class="in">`MLJ.jl`</span> for model evaluation. In particular, we will see below how we can use the generic <span class="in">`evaluate!`</span> method on our machine. To assess the correctness of our conformal predictor, we can compute the empirical coverage rate using the custom performance measure <span class="in">`emp_coverage`</span>. With respect to model calibration we will look at the model's conditional coverage. For adaptive, well-calibrated conformal models, conditional coverage is high. One general go-to measure for assessing conditional coverage is size-stratified coverage. The custom measure for this purpose is just called <span class="in">`size_stratified_coverage`</span>, aliased by <span class="in">`ssc`</span>. </span>
+<span id="cb13-237"><a href="#cb13-237"></a><span class="ot">As for many other things, `ConformalPrediction.jl` taps into the existing functionality of `MLJ.jl` for model evaluation. In particular, we will see below how we can use the generic `evaluate!` method on our machine. To assess the correctness of our conformal predictor, we can compute the empirical coverage rate using the custom performance measure `emp_coverage`. With respect to model calibration we will look at the model's conditional coverage. For adaptive, well-calibrated conformal models, conditional coverage is high. One general go-to measure for assessing conditional coverage is size-stratified coverage. The custom measure for this purpose is just called `size_stratified_coverage`, aliased by `ssc`. </span></span>
 <span id="cb13-238"><a href="#cb13-238"></a></span>
-<span id="cb13-239"><a href="#cb13-239"></a>The code below implements the model evaluation using cross-validation. The Simple Inductive Classifier that we used above is not adaptive and hence the attained conditional coverage is low compared to the overall empirical coverage, which is close to $0.95$, so in line with the desired coverage rate specified above.</span>
+<span id="cb13-239"><a href="#cb13-239"></a><span class="ot">The code below implements the model evaluation using cross-validation. The Simple Inductive Classifier that we used above is not adaptive and hence the attained conditional coverage is low compared to the overall empirical coverage, which is close to </span><span class="wa">$0</span><span class="ot">.95</span><span class="wa">$,</span><span class="ot"> so in line with the desired coverage rate specified above.</span></span>
 <span id="cb13-240"><a href="#cb13-240"></a></span>
 <span id="cb13-243"><a href="#cb13-243"></a><span class="in">```{julia}</span></span>
-<span id="cb13-244"><a href="#cb13-244"></a><span class="in">#| output: true</span></span>
+<span id="cb13-244"><a href="#cb13-244"></a><span class="co">#| output: true</span></span>
 <span id="cb13-245"><a href="#cb13-245"></a></span>
-<span id="cb13-246"><a href="#cb13-246"></a><span class="in">_eval = evaluate!(</span></span>
-<span id="cb13-247"><a href="#cb13-247"></a><span class="in">    mach,</span></span>
-<span id="cb13-248"><a href="#cb13-248"></a><span class="in">    resampling=CV(),</span></span>
-<span id="cb13-249"><a href="#cb13-249"></a><span class="in">    operation=predict,</span></span>
-<span id="cb13-250"><a href="#cb13-250"></a><span class="in">    measure=[emp_coverage, ssc]</span></span>
-<span id="cb13-251"><a href="#cb13-251"></a><span class="in">)</span></span>
-<span id="cb13-252"><a href="#cb13-252"></a><span class="in">display(_eval)</span></span>
-<span id="cb13-253"><a href="#cb13-253"></a><span class="in">println("Empirical coverage: $(round(_eval.measurement[1], digits=3))")</span></span>
-<span id="cb13-254"><a href="#cb13-254"></a><span class="in">println("SSC: $(round(_eval.measurement[2], digits=3))")</span></span>
-<span id="cb13-255"><a href="#cb13-255"></a><span class="in">```</span></span>
+<span id="cb13-246"><a href="#cb13-246"></a><span class="ot">_eval = evaluate!</span><span class="ch">(</span></span>
+<span id="cb13-247"><a href="#cb13-247"></a><span class="ot">    mach,</span></span>
+<span id="cb13-248"><a href="#cb13-248"></a><span class="ot">    resampling=CV</span><span class="ch">()</span><span class="ot">,</span></span>
+<span id="cb13-249"><a href="#cb13-249"></a><span class="ot">    operation=predict,</span></span>
+<span id="cb13-250"><a href="#cb13-250"></a><span class="ot">    measure=</span><span class="ch">[</span><span class="bn">emp_coverage, ssc</span><span class="ch">]</span></span>
+<span id="cb13-251"><a href="#cb13-251"></a><span class="ch">)</span></span>
+<span id="cb13-252"><a href="#cb13-252"></a><span class="ot">display</span><span class="ch">(</span><span class="ot">_eval</span><span class="ch">)</span></span>
+<span id="cb13-253"><a href="#cb13-253"></a><span class="ot">println</span><span class="ch">(</span><span class="ot">"Empirical coverage: </span><span class="ch">$(</span><span class="ot">round</span><span class="ch">(</span><span class="ot">_eval.measurement</span><span class="ch">[</span><span class="bn">1</span><span class="ch">]</span><span class="ot">, digits=3</span><span class="ch">))</span><span class="ot">"</span><span class="ch">)</span></span>
+<span id="cb13-254"><a href="#cb13-254"></a><span class="ot">println</span><span class="ch">(</span><span class="ot">"SSC: </span><span class="ch">$(</span><span class="ot">round</span><span class="ch">(</span><span class="ot">_eval.measurement</span><span class="ch">[</span><span class="bn">2</span><span class="ch">]</span><span class="ot">, digits=3</span><span class="ch">))</span><span class="ot">"</span><span class="ch">)</span></span>
+<span id="cb13-255"><a href="#cb13-255"></a><span class="ot">```</span></span>
 <span id="cb13-256"><a href="#cb13-256"></a></span>
 <span id="cb13-259"><a href="#cb13-259"></a><span class="in">```{julia}</span></span>
-<span id="cb13-260"><a href="#cb13-260"></a><span class="in">#| echo: false</span></span>
+<span id="cb13-260"><a href="#cb13-260"></a><span class="co">#| echo: false</span></span>
 <span id="cb13-261"><a href="#cb13-261"></a></span>
-<span id="cb13-262"><a href="#cb13-262"></a><span class="in">results = Dict{Symbol,Any}(:simple_inductive =&gt; mach) # store results</span></span>
-<span id="cb13-263"><a href="#cb13-263"></a><span class="in">```</span></span>
+<span id="cb13-262"><a href="#cb13-262"></a><span class="ot">results = Dict{Symbol,Any}</span><span class="ch">(</span><span class="ot">:simple_inductive =&gt; mach</span><span class="ch">)</span><span class="ot"> # store results</span></span>
+<span id="cb13-263"><a href="#cb13-263"></a><span class="ot">```</span></span>
 <span id="cb13-264"><a href="#cb13-264"></a></span>
-<span id="cb13-265"><a href="#cb13-265"></a>We can attain higher adaptivity (SSC) when using adaptive prediction sets:</span>
+<span id="cb13-265"><a href="#cb13-265"></a><span class="ot">We can attain higher adaptivity </span><span class="ch">(</span><span class="ot">SSC</span><span class="ch">)</span><span class="ot"> when using adaptive prediction sets:</span></span>
 <span id="cb13-266"><a href="#cb13-266"></a></span>
 <span id="cb13-269"><a href="#cb13-269"></a><span class="in">```{julia}</span></span>
-<span id="cb13-270"><a href="#cb13-270"></a><span class="in">#| output: true</span></span>
+<span id="cb13-270"><a href="#cb13-270"></a><span class="co">#| output: true</span></span>
 <span id="cb13-271"><a href="#cb13-271"></a></span>
-<span id="cb13-272"><a href="#cb13-272"></a><span class="in">conf_model = conformal_model(clf; method=:adaptive_inductive, coverage=.95)</span></span>
-<span id="cb13-273"><a href="#cb13-273"></a><span class="in">mach = machine(conf_model, X, y)</span></span>
-<span id="cb13-274"><a href="#cb13-274"></a><span class="in">fit!(mach)</span></span>
-<span id="cb13-275"><a href="#cb13-275"></a><span class="in">_eval = evaluate!(</span></span>
-<span id="cb13-276"><a href="#cb13-276"></a><span class="in">    mach,</span></span>
-<span id="cb13-277"><a href="#cb13-277"></a><span class="in">    resampling=CV(),</span></span>
-<span id="cb13-278"><a href="#cb13-278"></a><span class="in">    operation=predict,</span></span>
-<span id="cb13-279"><a href="#cb13-279"></a><span class="in">    measure=[emp_coverage, ssc]</span></span>
-<span id="cb13-280"><a href="#cb13-280"></a><span class="in">)</span></span>
-<span id="cb13-281"><a href="#cb13-281"></a><span class="in">results[:adaptive_inductive] = mach</span></span>
-<span id="cb13-282"><a href="#cb13-282"></a><span class="in">display(_eval)</span></span>
-<span id="cb13-283"><a href="#cb13-283"></a><span class="in">println("Empirical coverage: $(round(_eval.measurement[1], digits=3))")</span></span>
-<span id="cb13-284"><a href="#cb13-284"></a><span class="in">println("SSC: $(round(_eval.measurement[2], digits=3))")</span></span>
-<span id="cb13-285"><a href="#cb13-285"></a><span class="in">```</span></span>
+<span id="cb13-272"><a href="#cb13-272"></a><span class="ot">conf_model = conformal_model</span><span class="ch">(</span><span class="ot">clf; method=:adaptive_inductive, coverage=.95</span><span class="ch">)</span></span>
+<span id="cb13-273"><a href="#cb13-273"></a><span class="ot">mach = machine</span><span class="ch">(</span><span class="ot">conf_model, X, y</span><span class="ch">)</span></span>
+<span id="cb13-274"><a href="#cb13-274"></a><span class="ot">fit!</span><span class="ch">(</span><span class="ot">mach</span><span class="ch">)</span></span>
+<span id="cb13-275"><a href="#cb13-275"></a><span class="ot">_eval = evaluate!</span><span class="ch">(</span></span>
+<span id="cb13-276"><a href="#cb13-276"></a><span class="ot">    mach,</span></span>
+<span id="cb13-277"><a href="#cb13-277"></a><span class="ot">    resampling=CV</span><span class="ch">()</span><span class="ot">,</span></span>
+<span id="cb13-278"><a href="#cb13-278"></a><span class="ot">    operation=predict,</span></span>
+<span id="cb13-279"><a href="#cb13-279"></a><span class="ot">    measure=</span><span class="ch">[</span><span class="bn">emp_coverage, ssc</span><span class="ch">]</span></span>
+<span id="cb13-280"><a href="#cb13-280"></a><span class="ch">)</span></span>
+<span id="cb13-281"><a href="#cb13-281"></a><span class="ot">results</span><span class="ch">[</span><span class="bn">:adaptive_inductive</span><span class="ch">]</span><span class="ot"> = mach</span></span>
+<span id="cb13-282"><a href="#cb13-282"></a><span class="ot">display</span><span class="ch">(</span><span class="ot">_eval</span><span class="ch">)</span></span>
+<span id="cb13-283"><a href="#cb13-283"></a><span class="ot">println</span><span class="ch">(</span><span class="ot">"Empirical coverage: </span><span class="ch">$(</span><span class="ot">round</span><span class="ch">(</span><span class="ot">_eval.measurement</span><span class="ch">[</span><span class="bn">1</span><span class="ch">]</span><span class="ot">, digits=3</span><span class="ch">))</span><span class="ot">"</span><span class="ch">)</span></span>
+<span id="cb13-284"><a href="#cb13-284"></a><span class="ot">println</span><span class="ch">(</span><span class="ot">"SSC: </span><span class="ch">$(</span><span class="ot">round</span><span class="ch">(</span><span class="ot">_eval.measurement</span><span class="ch">[</span><span class="bn">2</span><span class="ch">]</span><span class="ot">, digits=3</span><span class="ch">))</span><span class="ot">"</span><span class="ch">)</span></span>
+<span id="cb13-285"><a href="#cb13-285"></a><span class="ot">```</span></span>
 <span id="cb13-286"><a href="#cb13-286"></a></span>
-<span id="cb13-287"><a href="#cb13-287"></a>We can also have a look at the resulting set size for both approaches using a custom <span class="in">`Plots.jl`</span> recipe (fig-setsize). In line with the above, the spread is wider for the adaptive approach, which reflects that "the procedure is effectively distinguishing between easy and hard inputs" <span class="co">[</span><span class="ot">@angelopoulos2021gentle</span><span class="co">]</span>.</span>
+<span id="cb13-287"><a href="#cb13-287"></a><span class="ot">We can also have a look at the resulting set size for both approaches using a custom `Plots.jl` recipe </span><span class="ch">(</span><span class="ot">fig-setsize</span><span class="ch">)</span><span class="ot">. In line with the above, the spread is wider for the adaptive approach, which reflects that "the procedure is effectively distinguishing between easy and hard inputs" </span><span class="ch">[</span><span class="bn">@angelopoulos2021gentle</span><span class="ch">]</span><span class="ot">.</span></span>
 <span id="cb13-288"><a href="#cb13-288"></a></span>
 <span id="cb13-291"><a href="#cb13-291"></a><span class="in">```{julia}</span></span>
-<span id="cb13-292"><a href="#cb13-292"></a><span class="in">#| output: true</span></span>
-<span id="cb13-293"><a href="#cb13-293"></a><span class="in">#| label: fig-setsize</span></span>
-<span id="cb13-294"><a href="#cb13-294"></a><span class="in">#| fig-cap: "Distribution of set sizes for both approaches."</span></span>
+<span id="cb13-292"><a href="#cb13-292"></a><span class="co">#| output: true</span></span>
+<span id="cb13-293"><a href="#cb13-293"></a><span class="co">#| label: fig-setsize</span></span>
+<span id="cb13-294"><a href="#cb13-294"></a><span class="co">#| fig-cap: "Distribution of set sizes for both approaches."</span></span>
 <span id="cb13-295"><a href="#cb13-295"></a></span>
-<span id="cb13-296"><a href="#cb13-296"></a><span class="in">plt_list = []</span></span>
-<span id="cb13-297"><a href="#cb13-297"></a><span class="in">for (_mod, mach) in results</span></span>
-<span id="cb13-298"><a href="#cb13-298"></a><span class="in">    push!(plt_list, bar(mach.model, mach.fitresult, X; title=String(_mod)))</span></span>
-<span id="cb13-299"><a href="#cb13-299"></a><span class="in">end</span></span>
-<span id="cb13-300"><a href="#cb13-300"></a><span class="in">plot(plt_list..., size=(800,300))</span></span>
-<span id="cb13-301"><a href="#cb13-301"></a><span class="in">plot(plt_list..., size=(800,300),bg_colour=:transparent)</span></span>
-<span id="cb13-302"><a href="#cb13-302"></a><span class="in">```</span></span>
+<span id="cb13-296"><a href="#cb13-296"></a><span class="ot">plt_list = </span><span class="ch">[]</span></span>
+<span id="cb13-297"><a href="#cb13-297"></a><span class="ot">for </span><span class="ch">(</span><span class="ot">_mod, mach</span><span class="ch">)</span><span class="ot"> in results</span></span>
+<span id="cb13-298"><a href="#cb13-298"></a><span class="ot">    push!</span><span class="ch">(</span><span class="ot">plt_list, bar</span><span class="ch">(</span><span class="ot">mach.model, mach.fitresult, X; title=String</span><span class="ch">(</span><span class="ot">_mod</span><span class="ch">)))</span></span>
+<span id="cb13-299"><a href="#cb13-299"></a><span class="ot">end</span></span>
+<span id="cb13-300"><a href="#cb13-300"></a><span class="ot">plot</span><span class="ch">(</span><span class="ot">plt_list..., size=</span><span class="ch">(</span><span class="ot">800,300</span><span class="ch">))</span></span>
+<span id="cb13-301"><a href="#cb13-301"></a><span class="ot">plot</span><span class="ch">(</span><span class="ot">plt_list..., size=</span><span class="ch">(</span><span class="ot">800,300</span><span class="ch">)</span><span class="ot">,bg_colour=:transparent</span><span class="ch">)</span></span>
+<span id="cb13-302"><a href="#cb13-302"></a><span class="ot">```</span></span>
 <span id="cb13-303"><a href="#cb13-303"></a></span>
-<span id="cb13-304"><a href="#cb13-304"></a><span class="fu">## 🔁 Recap</span></span>
+<span id="cb13-304"><a href="#cb13-304"></a><span class="co">## 🔁 Recap</span></span>
 <span id="cb13-305"><a href="#cb13-305"></a></span>
-<span id="cb13-306"><a href="#cb13-306"></a>In this short guide, we have seen how easy it is to conformalize a deep learning image classifier in Julia using <span class="in">`ConformalPrediction.jl`</span>. Almost any deep neural network trained in <span class="in">`Flux.jl`</span> is compatible with <span class="in">`MLJ.jl`</span> and can therefore be conformalized in just a few lines of code. This makes it remarkably easy to move uncertainty heuristics to rigorous predictive uncertainty estimates. We have also seen a sneak peek at the performance evaluation of conformal predictors. Stay tuned for more!</span>
+<span id="cb13-306"><a href="#cb13-306"></a><span class="ot">In this short guide, we have seen how easy it is to conformalize a deep learning image classifier in Julia using `ConformalPrediction.jl`. Almost any deep neural network trained in `Flux.jl` is compatible with `MLJ.jl` and can therefore be conformalized in just a few lines of code. This makes it remarkably easy to move uncertainty heuristics to rigorous predictive uncertainty estimates. We have also seen a sneak peek at the performance evaluation of conformal predictors. Stay tuned for more!</span></span>
 <span id="cb13-307"><a href="#cb13-307"></a></span>
-<span id="cb13-308"><a href="#cb13-308"></a><span class="fu">## 🎓 References</span></span>
+<span id="cb13-308"><a href="#cb13-308"></a><span class="co">## 🎓 References</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">
-<p>© 2023, Patrick Altmeyer</p>
-</div>   
+    <div class="nav-footer-left">© 2023, Patrick Altmeyer</div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
@@ -2675,7 +2455,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-
 
 
 

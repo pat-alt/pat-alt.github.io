@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-99.9.9">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -61,7 +61,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -103,13 +102,7 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -118,7 +111,6 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -140,7 +132,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <meta property="og:title" content="Patrick Altmeyer - Building a Conformal Chatbot in Julia">
 <meta property="og:description" content="For this year’s edition of the ING Analytics Experiment Week, we put ConformalPrediction.jl to work and built a chatbot that can be used for Conformal Intent Recognition.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/conformal-llm/www/intro.gif">
-<meta property="og:site_name" content="Patrick Altmeyer">
+<meta property="og:site-name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer - Building a Conformal Chatbot in Julia">
 <meta name="twitter:description" content="For this year’s edition of the ING Analytics Experiment Week, we put ConformalPrediction.jl to work and built a chatbot that can be used for Conformal Intent Recognition.">
 <meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/conformal-llm/www/intro.gif">
@@ -151,9 +143,9 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
@@ -168,50 +160,50 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html"> 
-<span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/publications/index.html"> 
-<span class="menu-text">Publications</span></a>
+    <a class="nav-link" href="../../../content/publications/index.html" rel="" target="">
+ <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html"> 
-<span class="menu-text">Talks</span></a>
+    <a class="nav-link" href="../../../content/talks/index.html" rel="" target="">
+ <span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html"> 
-<span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/software.html"> 
-<span class="menu-text">Software</span></a>
+    <a class="nav-link" href="../../../content/software.html" rel="" target="">
+ <span class="menu-text">Software</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/about/index.html"> 
-<span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../../content/about/index.html" rel="" target="">
+ <span class="menu-text">About</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../blog/index.xml" rel="" target=""><i class="bi bi-rss" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/pat-alt" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/paltmey" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -230,7 +222,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <li><a href="#wrapping-up" id="toc-wrapping-up" class="nav-link" data-scroll-target="#wrapping-up">🌯 Wrapping Up</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">🎓 References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -260,14 +252,14 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     <div class="quarto-title-meta-contents">
     <p class="author"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> </p>
   </div>
-  <div class="quarto-title-meta-contents">
+    <div class="quarto-title-meta-contents">
         <p class="affiliation">
             <a href="https://www.tudelft.nl/en/">
             Delft University of Technology
             </a>
           </p>
       </div>
-  </div>
+    </div>
 
 <div class="quarto-title-meta">
 
@@ -283,14 +275,12 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   </div>
   
 
-
 </header>
-
 
 <div class="intro-gif">
 <figure class="figure">
 <img src="www/intro.gif" style="width: 400px; height: 300px;" class="figure-img">
-<figcaption>
+<figcaption class="figure-caption">
 Short demo of our conformal chatbot.
 </figcaption>
 </figure>
@@ -300,7 +290,7 @@ Short demo of our conformal chatbot.
 <h2 class="anchored" data-anchor-id="huggingface-model">🤗 HuggingFace Model</h2>
 <p>The model can be loaded from HF straight into our running Julia session using the <a href="https://github.com/chengchingwen/Transformers.jl/tree/master"><code>Transformers.jl</code></a> package. Below we load the tokenizer <code>tkr</code> and the model <code>mod</code>. The tokenizer is used to convert the text into a sequence of integers, which is then fed into the model. The model outputs a hidden state, which is then fed into a classifier to get the logits for each class. Finally, the logits are then passed through a softmax function to get the corresponding predicted probabilities. Below we run a few queries through the model to see how it performs.</p>
 <div id="678fb923" class="cell" data-execution_count="3">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Load model from HF 🤗:</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>tkr <span class="op">=</span> hgf<span class="st">"mrm8488/distilroberta-finetuned-banking77:tokenizer"</span></span>
@@ -330,7 +320,7 @@ Short demo of our conformal chatbot.
 <h2 class="anchored" data-anchor-id="mlj-interface">🔁 <code>MLJ</code> Interface</h2>
 <p>Since our package is interfaced to <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/"><code>MLJ.jl</code></a>, we need to define a wrapper model that conforms to the <code>MLJ</code> interface. In order to add the model for general use, we would probably go through <a href="https://github.com/FluxML/MLJFlux.jl"><code>MLJFlux.jl</code></a>, but for this tutorial, we will make our life easy and simply overload the <code>MLJBase.fit</code> and <code>MLJBase.predict</code> methods. Since the model from HF is already pre-trained and we are not interested in further fine-tuning, we will simply return the model object in the <code>MLJBase.fit</code> method. The <code>MLJBase.predict</code> method will then take the model object and the query and return the predicted probabilities. We also need to define the <code>MLJBase.target_scitype</code> and <code>MLJBase.predict_mode</code> methods. The former tells <code>MLJ</code> what the output type of the model is, and the latter can be used to retrieve the label with the highest predicted probability.</p>
 <div id="8636c199" class="cell" data-execution_count="4">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">struct</span> IntentClassifier <span class="op">&lt;:</span><span class="dt"> MLJBase.Probabilistic</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>    tkr<span class="op">::</span><span class="dt">TextEncoders.AbstractTransformerTextEncoder</span></span>
@@ -371,7 +361,7 @@ Short demo of our conformal chatbot.
 </div>
 <p>To test that everything is working as expected, we fit the model and generated predictions for a subset of the test data:</p>
 <div id="a3fc6050" class="cell" data-execution_count="5">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a>clf <span class="op">=</span> <span class="fu">IntentClassifier</span>(tkr, mod)</span>
 <span id="cb4-2"><a href="#cb4-2"></a>top_n <span class="op">=</span> <span class="fl">10</span></span>
@@ -397,7 +387,7 @@ Short demo of our conformal chatbot.
 <li>If the conformal prediction set includes more than one label, prompt the user to either refine their input or choose one of the options included in the set.</li>
 </ol>
 <div id="d18b5d29" class="cell" data-execution_count="6">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1"></a>mach <span class="op">=</span> <span class="bu">Serialization</span>.<span class="fu">deserialize</span>(<span class="st">"blog/posts/conformal-llm/simple_inductive.jls"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2"></a></span>
@@ -442,7 +432,7 @@ Short demo of our conformal chatbot.
 </div>
 <p>Below we show the output for two example queries. The first one is very ambiguous. As expected, the size of the prediction set is therefore large.</p>
 <div id="0fd4b42b" class="cell" data-execution_count="7">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a>ambiguous_query <span class="op">=</span> <span class="st">"transfer mondey?"</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a><span class="fu">prediction_set</span>(mach, ambiguous_query)[<span class="fl">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -469,7 +459,7 @@ Short demo of our conformal chatbot.
 </div>
 <p>The more refined version of the prompt yields a smaller prediction set: less ambiguous prompts result in lower predictive uncertainty.</p>
 <div id="ab02cc12" class="cell" data-execution_count="8">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a>refined_query <span class="op">=</span> <span class="st">"I tried to transfer money to my friend, but it failed."</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="fu">prediction_set</span>(mach, refined_query)[<span class="fl">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -506,14 +496,14 @@ Short demo of our conformal chatbot.
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-casanueva2020efficient" class="csl-entry" role="listitem">
 Casanueva, Iñigo, Tadas Temčinas, Daniela Gerz, Matthew Henderson, and Ivan Vulić. 2020. <span>“Efficient <span>Intent</span> <span>Detection</span> with <span>Dual</span> <span>Sentence</span> <span>Encoders</span>.”</span> In <em>Proceedings of the 2nd <span>Workshop</span> on <span>Natural</span> <span>Language</span> <span>Processing</span> for <span>Conversational</span> <span>AI</span></em>, 38–45. Online: Association for Computational Linguistics. <a href="https://doi.org/10.18653/v1/2020.nlp4convai-1.5">https://doi.org/10.18653/v1/2020.nlp4convai-1.5</a>.
 </div>
 <div id="ref-liu2019roberta" class="csl-entry" role="listitem">
 Liu, Yinhan, Myle Ott, Naman Goyal, Jingfei Du, Mandar Joshi, Danqi Chen, Omer Levy, Mike Lewis, Luke Zettlemoyer, and Veselin Stoyanov. 2019. <span>“RoBERTa: A Robustly Optimized BERT Pretraining Approach.”</span> <a href="https://arxiv.org/abs/1907.11692">https://arxiv.org/abs/1907.11692</a>.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
   author = {Altmeyer, Patrick},
   title = {Building a {Conformal} {Chatbot} in {Julia}},
   date = {2023-07-05},
@@ -654,9 +644,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -666,17 +657,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -689,120 +671,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      return note.innerHTML;
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -846,7 +714,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -872,32 +739,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -976,51 +817,51 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb10-15"><a href="#cb10-15"></a><span class="co">---</span></span>
 <span id="cb10-16"><a href="#cb10-16"></a></span>
 <span id="cb10-19"><a href="#cb10-19"></a><span class="in">```{julia}</span></span>
-<span id="cb10-20"><a href="#cb10-20"></a><span class="in">#| echo: false</span></span>
+<span id="cb10-20"><a href="#cb10-20"></a><span class="co">#| echo: false</span></span>
 <span id="cb10-21"><a href="#cb10-21"></a></span>
-<span id="cb10-22"><a href="#cb10-22"></a><span class="in">BLOG_DIR = "blog/posts/conformal-llm"</span></span>
-<span id="cb10-23"><a href="#cb10-23"></a><span class="in">using Pkg; Pkg.activate(BLOG_DIR)</span></span>
+<span id="cb10-22"><a href="#cb10-22"></a>BLOG_DIR = <span class="ot">"</span><span class="st">blog/posts/conformal-llm</span><span class="ot">"</span></span>
+<span id="cb10-23"><a href="#cb10-23"></a>using Pkg; Pkg.activate(BLOG_DIR)</span>
 <span id="cb10-24"><a href="#cb10-24"></a></span>
-<span id="cb10-25"><a href="#cb10-25"></a><span class="in">using ConformalPrediction</span></span>
-<span id="cb10-26"><a href="#cb10-26"></a><span class="in">using CSV</span></span>
-<span id="cb10-27"><a href="#cb10-27"></a><span class="in">using DataFrames</span></span>
-<span id="cb10-28"><a href="#cb10-28"></a><span class="in">using Flux</span></span>
-<span id="cb10-29"><a href="#cb10-29"></a><span class="in">using MLJBase</span></span>
-<span id="cb10-30"><a href="#cb10-30"></a><span class="in">using Serialization</span></span>
-<span id="cb10-31"><a href="#cb10-31"></a><span class="in">using Transformers</span></span>
-<span id="cb10-32"><a href="#cb10-32"></a><span class="in">using Transformers.TextEncoders</span></span>
-<span id="cb10-33"><a href="#cb10-33"></a><span class="in">using Transformers.HuggingFace</span></span>
-<span id="cb10-34"><a href="#cb10-34"></a><span class="in">using UnicodePlots</span></span>
+<span id="cb10-25"><a href="#cb10-25"></a>using ConformalPrediction</span>
+<span id="cb10-26"><a href="#cb10-26"></a>using CSV</span>
+<span id="cb10-27"><a href="#cb10-27"></a>using DataFrames</span>
+<span id="cb10-28"><a href="#cb10-28"></a>using Flux</span>
+<span id="cb10-29"><a href="#cb10-29"></a>using MLJBase</span>
+<span id="cb10-30"><a href="#cb10-30"></a>using Serialization</span>
+<span id="cb10-31"><a href="#cb10-31"></a>using Transformers</span>
+<span id="cb10-32"><a href="#cb10-32"></a>using Transformers.TextEncoders</span>
+<span id="cb10-33"><a href="#cb10-33"></a>using Transformers.HuggingFace</span>
+<span id="cb10-34"><a href="#cb10-34"></a>using UnicodePlots</span>
 <span id="cb10-35"><a href="#cb10-35"></a><span class="in">```</span></span>
 <span id="cb10-36"><a href="#cb10-36"></a></span>
-<span id="cb10-37"><a href="#cb10-37"></a>&lt;div class="intro-gif"&gt;</span>
-<span id="cb10-38"><a href="#cb10-38"></a>  &lt;figure&gt;</span>
-<span id="cb10-39"><a href="#cb10-39"></a>    &lt;img src="www/intro.gif" style="width: 400px; height: 300px;"&gt;</span>
-<span id="cb10-40"><a href="#cb10-40"></a>    &lt;figcaption&gt;Short demo of our conformal chatbot.&lt;/figcaption&gt;</span>
-<span id="cb10-41"><a href="#cb10-41"></a>  &lt;/figure&gt;</span>
-<span id="cb10-42"><a href="#cb10-42"></a>&lt;/div&gt;</span>
+<span id="cb10-37"><a href="#cb10-37"></a><span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">"intro-gif"</span><span class="kw">&gt;</span></span>
+<span id="cb10-38"><a href="#cb10-38"></a>  <span class="kw">&lt;figure&gt;</span></span>
+<span id="cb10-39"><a href="#cb10-39"></a>    <span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"www/intro.gif"</span> <span class="er">style</span><span class="ot">=</span><span class="st">"width: 400px; height: 300px;"</span><span class="kw">&gt;</span></span>
+<span id="cb10-40"><a href="#cb10-40"></a>    <span class="kw">&lt;figcaption&gt;</span>Short demo of our conformal chatbot.<span class="kw">&lt;/figcaption&gt;</span></span>
+<span id="cb10-41"><a href="#cb10-41"></a>  <span class="kw">&lt;/figure&gt;</span></span>
+<span id="cb10-42"><a href="#cb10-42"></a><span class="kw">&lt;/div&gt;</span></span>
 <span id="cb10-43"><a href="#cb10-43"></a></span>
 <span id="cb10-44"><a href="#cb10-44"></a>Large Language Models are all the buzz right now. They are used for a variety of tasks, including text classification, question answering, and text generation. In this tutorial, we will show how to conformalize a transformer language model for text classification. We will use the <span class="co">[</span><span class="ot">Banking77</span><span class="co">](https://arxiv.org/abs/2003.04807)</span> dataset <span class="co">[</span><span class="ot">@casanueva2020efficient</span><span class="co">]</span>, which consists of 13,083 queries from 77 intents. On the model side, we will use the <span class="co">[</span><span class="ot">DistilRoBERTa</span><span class="co">](https://huggingface.co/mrm8488/distilroberta-finetuned-banking77)</span> model, which is a distilled version of <span class="co">[</span><span class="ot">RoBERTa</span><span class="co">](https://arxiv.org/abs/1907.11692)</span> <span class="co">[</span><span class="ot">@liu2019roberta</span><span class="co">]</span> finetuned on the Banking77 dataset.</span>
 <span id="cb10-45"><a href="#cb10-45"></a></span>
 <span id="cb10-48"><a href="#cb10-48"></a><span class="in">```{julia}</span></span>
-<span id="cb10-49"><a href="#cb10-49"></a><span class="in">#| echo: false</span></span>
+<span id="cb10-49"><a href="#cb10-49"></a><span class="co">#| echo: false</span></span>
 <span id="cb10-50"><a href="#cb10-50"></a></span>
-<span id="cb10-51"><a href="#cb10-51"></a><span class="in"># Get labels:</span></span>
-<span id="cb10-52"><a href="#cb10-52"></a><span class="in">df_labels = CSV.read(joinpath(BLOG_DIR,"data/labels.csv"), DataFrame, drop=[1])</span></span>
-<span id="cb10-53"><a href="#cb10-53"></a><span class="in">labels = df_labels[:,1]</span></span>
+<span id="cb10-51"><a href="#cb10-51"></a><span class="co"># Get labels:</span></span>
+<span id="cb10-52"><a href="#cb10-52"></a>df_labels = CSV.<span class="fu">read</span>(joinpath(BLOG_DIR,<span class="ot">"</span><span class="st">data/labels.csv</span><span class="ot">"</span>), DataFrame, drop=[<span class="dv">1</span>])</span>
+<span id="cb10-53"><a href="#cb10-53"></a>labels = df_labels[:,<span class="dv">1</span>]</span>
 <span id="cb10-54"><a href="#cb10-54"></a></span>
-<span id="cb10-55"><a href="#cb10-55"></a><span class="in"># Get data:</span></span>
-<span id="cb10-56"><a href="#cb10-56"></a><span class="in">df_train = CSV.read(joinpath(BLOG_DIR,"data/train.csv"), DataFrame, drop=[1])</span></span>
-<span id="cb10-57"><a href="#cb10-57"></a><span class="in">df_cal = CSV.read(joinpath(BLOG_DIR,"data/calibration.csv"), DataFrame, drop=[1])</span></span>
-<span id="cb10-58"><a href="#cb10-58"></a><span class="in">df_full_train = vcat(df_train, df_cal)</span></span>
-<span id="cb10-59"><a href="#cb10-59"></a><span class="in">train_ratio = round(nrow(df_train)/nrow(df_full_train), digits=2)</span></span>
-<span id="cb10-60"><a href="#cb10-60"></a><span class="in">df_test = CSV.read(joinpath(BLOG_DIR,"data/test.csv"), DataFrame, drop=[1])</span></span>
+<span id="cb10-55"><a href="#cb10-55"></a><span class="co"># Get data:</span></span>
+<span id="cb10-56"><a href="#cb10-56"></a>df_train = CSV.<span class="fu">read</span>(joinpath(BLOG_DIR,<span class="ot">"</span><span class="st">data/train.csv</span><span class="ot">"</span>), DataFrame, drop=[<span class="dv">1</span>])</span>
+<span id="cb10-57"><a href="#cb10-57"></a>df_cal = CSV.<span class="fu">read</span>(joinpath(BLOG_DIR,<span class="ot">"</span><span class="st">data/calibration.csv</span><span class="ot">"</span>), DataFrame, drop=[<span class="dv">1</span>])</span>
+<span id="cb10-58"><a href="#cb10-58"></a>df_full_train = vcat(df_train, df_cal)</span>
+<span id="cb10-59"><a href="#cb10-59"></a>train_ratio = round(nrow(df_train)/nrow(df_full_train), digits=<span class="dv">2</span>)</span>
+<span id="cb10-60"><a href="#cb10-60"></a>df_test = CSV.<span class="fu">read</span>(joinpath(BLOG_DIR,<span class="ot">"</span><span class="st">data/test.csv</span><span class="ot">"</span>), DataFrame, drop=[<span class="dv">1</span>])</span>
 <span id="cb10-61"><a href="#cb10-61"></a></span>
-<span id="cb10-62"><a href="#cb10-62"></a><span class="in"># Preprocess data:</span></span>
-<span id="cb10-63"><a href="#cb10-63"></a><span class="in">queries_train, y_train = collect(df_train.text), categorical(df_train.labels .+ 1)</span></span>
-<span id="cb10-64"><a href="#cb10-64"></a><span class="in">queries_cal, y_cal = collect(df_cal.text), categorical(df_cal.labels .+ 1)</span></span>
-<span id="cb10-65"><a href="#cb10-65"></a><span class="in">queries, y = collect(df_full_train.text), categorical(df_full_train.labels .+ 1)</span></span>
-<span id="cb10-66"><a href="#cb10-66"></a><span class="in">queries_test, y_test = collect(df_test.text), categorical(df_test.labels .+ 1)</span></span>
+<span id="cb10-62"><a href="#cb10-62"></a><span class="co"># Preprocess data:</span></span>
+<span id="cb10-63"><a href="#cb10-63"></a>queries_train, y_train = collect(df_train.text), categorical(df_train.labels .+ <span class="dv">1</span>)</span>
+<span id="cb10-64"><a href="#cb10-64"></a>queries_cal, y_cal = collect(df_cal.text), categorical(df_cal.labels .+ <span class="dv">1</span>)</span>
+<span id="cb10-65"><a href="#cb10-65"></a>queries, <span class="ot">y </span>= collect(df_full_train.text), categorical(df_full_train.labels .+ <span class="dv">1</span>)</span>
+<span id="cb10-66"><a href="#cb10-66"></a>queries_test, y_test = collect(df_test.text), categorical(df_test.labels .+ <span class="dv">1</span>)</span>
 <span id="cb10-67"><a href="#cb10-67"></a><span class="in">```</span></span>
 <span id="cb10-68"><a href="#cb10-68"></a></span>
 <span id="cb10-69"><a href="#cb10-69"></a><span class="fu">## 🤗 HuggingFace Model</span></span>
@@ -1028,23 +869,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb10-71"><a href="#cb10-71"></a>The model can be loaded from HF straight into our running Julia session using the <span class="co">[</span><span class="ot">`Transformers.jl`</span><span class="co">](https://github.com/chengchingwen/Transformers.jl/tree/master)</span> package. Below we load the tokenizer <span class="in">`tkr`</span> and the model <span class="in">`mod`</span>. The tokenizer is used to convert the text into a sequence of integers, which is then fed into the model. The model outputs a hidden state, which is then fed into a classifier to get the logits for each class. Finally, the logits are then passed through a softmax function to get the corresponding predicted probabilities. Below we run a few queries through the model to see how it performs.</span>
 <span id="cb10-72"><a href="#cb10-72"></a></span>
 <span id="cb10-75"><a href="#cb10-75"></a><span class="in">```{julia}</span></span>
-<span id="cb10-76"><a href="#cb10-76"></a><span class="in">#| output: true</span></span>
+<span id="cb10-76"><a href="#cb10-76"></a><span class="co">#| output: true</span></span>
 <span id="cb10-77"><a href="#cb10-77"></a></span>
-<span id="cb10-78"><a href="#cb10-78"></a><span class="in"># Load model from HF 🤗:</span></span>
-<span id="cb10-79"><a href="#cb10-79"></a><span class="in">tkr = hgf"mrm8488/distilroberta-finetuned-banking77:tokenizer"</span></span>
-<span id="cb10-80"><a href="#cb10-80"></a><span class="in">mod = hgf"mrm8488/distilroberta-finetuned-banking77:ForSequenceClassification"</span></span>
+<span id="cb10-78"><a href="#cb10-78"></a><span class="co"># Load model from HF 🤗:</span></span>
+<span id="cb10-79"><a href="#cb10-79"></a>tkr = hgf<span class="ot">"</span><span class="st">mrm8488/distilroberta-finetuned-banking77:tokenizer</span><span class="ot">"</span></span>
+<span id="cb10-80"><a href="#cb10-80"></a>mod = hgf<span class="ot">"</span><span class="st">mrm8488/distilroberta-finetuned-banking77:ForSequenceClassification</span><span class="ot">"</span></span>
 <span id="cb10-81"><a href="#cb10-81"></a></span>
-<span id="cb10-82"><a href="#cb10-82"></a><span class="in"># Test model:</span></span>
-<span id="cb10-83"><a href="#cb10-83"></a><span class="in">query = [</span></span>
-<span id="cb10-84"><a href="#cb10-84"></a><span class="in">    "What is the base of the exchange rates?",</span></span>
-<span id="cb10-85"><a href="#cb10-85"></a><span class="in">    "Why is my card not working?",</span></span>
-<span id="cb10-86"><a href="#cb10-86"></a><span class="in">    "My Apple Pay is not working, what should I do?",</span></span>
-<span id="cb10-87"><a href="#cb10-87"></a><span class="in">]</span></span>
-<span id="cb10-88"><a href="#cb10-88"></a><span class="in">a = encode(tkr, query)</span></span>
-<span id="cb10-89"><a href="#cb10-89"></a><span class="in">b = mod.model(a)</span></span>
-<span id="cb10-90"><a href="#cb10-90"></a><span class="in">c = mod.cls(b.hidden_state)</span></span>
-<span id="cb10-91"><a href="#cb10-91"></a><span class="in">d = softmax(c.logit)</span></span>
-<span id="cb10-92"><a href="#cb10-92"></a><span class="in">[labels[i] for i in Flux.onecold(d)]</span></span>
+<span id="cb10-82"><a href="#cb10-82"></a><span class="co"># Test model:</span></span>
+<span id="cb10-83"><a href="#cb10-83"></a>query = [</span>
+<span id="cb10-84"><a href="#cb10-84"></a>    <span class="ot">"</span><span class="st">What is the base of the exchange rates?</span><span class="ot">"</span>,</span>
+<span id="cb10-85"><a href="#cb10-85"></a>    <span class="ot">"</span><span class="st">Why is my card not working?</span><span class="ot">"</span>,</span>
+<span id="cb10-86"><a href="#cb10-86"></a>    <span class="ot">"</span><span class="st">My Apple Pay is not working, what should I do?</span><span class="ot">"</span>,</span>
+<span id="cb10-87"><a href="#cb10-87"></a>]</span>
+<span id="cb10-88"><a href="#cb10-88"></a>a = encode(tkr, query)</span>
+<span id="cb10-89"><a href="#cb10-89"></a>b = mod.model(a)</span>
+<span id="cb10-90"><a href="#cb10-90"></a>c = mod.cls(b.hidden_state)</span>
+<span id="cb10-91"><a href="#cb10-91"></a>d = softmax(c.logit)</span>
+<span id="cb10-92"><a href="#cb10-92"></a>[labels[i] <span class="kw">for</span> i in Flux.onecold(d)]</span>
 <span id="cb10-93"><a href="#cb10-93"></a><span class="in">```</span></span>
 <span id="cb10-94"><a href="#cb10-94"></a></span>
 <span id="cb10-95"><a href="#cb10-95"></a><span class="fu">## 🔁 `MLJ` Interface</span></span>
@@ -1052,153 +893,151 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb10-97"><a href="#cb10-97"></a>Since our package is interfaced to <span class="co">[</span><span class="ot">`MLJ.jl`</span><span class="co">](https://alan-turing-institute.github.io/MLJ.jl/dev/)</span>, we need to define a wrapper model that conforms to the <span class="in">`MLJ`</span> interface. In order to add the model for general use, we would probably go through <span class="co">[</span><span class="ot">`MLJFlux.jl`</span><span class="co">](https://github.com/FluxML/MLJFlux.jl)</span>, but for this tutorial, we will make our life easy and simply overload the <span class="in">`MLJBase.fit`</span> and <span class="in">`MLJBase.predict`</span> methods. Since the model from HF is already pre-trained and we are not interested in further fine-tuning, we will simply return the model object in the <span class="in">`MLJBase.fit`</span> method. The <span class="in">`MLJBase.predict`</span> method will then take the model object and the query and return the predicted probabilities. We also need to define the <span class="in">`MLJBase.target_scitype`</span> and <span class="in">`MLJBase.predict_mode`</span> methods. The former tells <span class="in">`MLJ`</span> what the output type of the model is, and the latter can be used to retrieve the label with the highest predicted probability.</span>
 <span id="cb10-98"><a href="#cb10-98"></a></span>
 <span id="cb10-101"><a href="#cb10-101"></a><span class="in">```{julia}</span></span>
-<span id="cb10-102"><a href="#cb10-102"></a><span class="in">struct IntentClassifier &lt;: MLJBase.Probabilistic</span></span>
-<span id="cb10-103"><a href="#cb10-103"></a><span class="in">    tkr::TextEncoders.AbstractTransformerTextEncoder</span></span>
-<span id="cb10-104"><a href="#cb10-104"></a><span class="in">    mod::HuggingFace.HGFRobertaForSequenceClassification</span></span>
-<span id="cb10-105"><a href="#cb10-105"></a><span class="in">end</span></span>
+<span id="cb10-102"><a href="#cb10-102"></a>struct IntentClassifier &lt;: MLJBase.Probabilistic</span>
+<span id="cb10-103"><a href="#cb10-103"></a>    <span class="fu">tkr::TextEncoders</span>.AbstractTransformerTextEncoder</span>
+<span id="cb10-104"><a href="#cb10-104"></a>    <span class="fu">mod::HuggingFace</span>.HGFRobertaForSequenceClassification</span>
+<span id="cb10-105"><a href="#cb10-105"></a>end</span>
 <span id="cb10-106"><a href="#cb10-106"></a></span>
-<span id="cb10-107"><a href="#cb10-107"></a><span class="in">function IntentClassifier(;</span></span>
-<span id="cb10-108"><a href="#cb10-108"></a><span class="in">    tokenizer::TextEncoders.AbstractTransformerTextEncoder, </span></span>
-<span id="cb10-109"><a href="#cb10-109"></a><span class="in">    model::HuggingFace.HGFRobertaForSequenceClassification,</span></span>
-<span id="cb10-110"><a href="#cb10-110"></a><span class="in">)</span></span>
-<span id="cb10-111"><a href="#cb10-111"></a><span class="in">    IntentClassifier(tkr, mod)</span></span>
-<span id="cb10-112"><a href="#cb10-112"></a><span class="in">end</span></span>
+<span id="cb10-107"><a href="#cb10-107"></a>function IntentClassifier(;</span>
+<span id="cb10-108"><a href="#cb10-108"></a>    <span class="fu">tokenizer::TextEncoders</span>.AbstractTransformerTextEncoder, </span>
+<span id="cb10-109"><a href="#cb10-109"></a>    <span class="fu">model::HuggingFace</span>.HGFRobertaForSequenceClassification,</span>
+<span id="cb10-110"><a href="#cb10-110"></a>)</span>
+<span id="cb10-111"><a href="#cb10-111"></a>    IntentClassifier(tkr, mod)</span>
+<span id="cb10-112"><a href="#cb10-112"></a>end</span>
 <span id="cb10-113"><a href="#cb10-113"></a></span>
-<span id="cb10-114"><a href="#cb10-114"></a><span class="in">function get_hidden_state(clf::IntentClassifier, query::Union{AbstractString, Vector{&lt;:AbstractString}})</span></span>
-<span id="cb10-115"><a href="#cb10-115"></a><span class="in">    token = encode(clf.tkr, query)</span></span>
-<span id="cb10-116"><a href="#cb10-116"></a><span class="in">    hidden_state = clf.mod.model(token).hidden_state</span></span>
-<span id="cb10-117"><a href="#cb10-117"></a><span class="in">    return hidden_state</span></span>
-<span id="cb10-118"><a href="#cb10-118"></a><span class="in">end</span></span>
+<span id="cb10-114"><a href="#cb10-114"></a>function get_hidden_state(<span class="fu">clf::IntentClassifier</span>, <span class="fu">query::Union</span>{AbstractString, Vector{&lt;:AbstractString}})</span>
+<span id="cb10-115"><a href="#cb10-115"></a>    token = encode(clf.tkr, query)</span>
+<span id="cb10-116"><a href="#cb10-116"></a>    hidden_state = clf.mod.model(token).hidden_state</span>
+<span id="cb10-117"><a href="#cb10-117"></a>    <span class="kw">return</span> hidden_state</span>
+<span id="cb10-118"><a href="#cb10-118"></a>end</span>
 <span id="cb10-119"><a href="#cb10-119"></a></span>
-<span id="cb10-120"><a href="#cb10-120"></a><span class="in"># This doesn't actually retrain the model, but it retrieves the classifier object</span></span>
-<span id="cb10-121"><a href="#cb10-121"></a><span class="in">function MLJBase.fit(clf::IntentClassifier, verbosity, X, y)</span></span>
-<span id="cb10-122"><a href="#cb10-122"></a><span class="in">    cache=nothing</span></span>
-<span id="cb10-123"><a href="#cb10-123"></a><span class="in">    report=nothing</span></span>
-<span id="cb10-124"><a href="#cb10-124"></a><span class="in">    fitresult = (clf = clf.mod.cls, labels = levels(y))</span></span>
-<span id="cb10-125"><a href="#cb10-125"></a><span class="in">    return fitresult, cache, report</span></span>
-<span id="cb10-126"><a href="#cb10-126"></a><span class="in">end</span></span>
+<span id="cb10-120"><a href="#cb10-120"></a><span class="co"># This doesn't actually retrain the model, but it retrieves the classifier object</span></span>
+<span id="cb10-121"><a href="#cb10-121"></a>function MLJBase.fit(<span class="fu">clf::IntentClassifier</span>, verbosity, X, y)</span>
+<span id="cb10-122"><a href="#cb10-122"></a>    cache=nothing</span>
+<span id="cb10-123"><a href="#cb10-123"></a>    report=nothing</span>
+<span id="cb10-124"><a href="#cb10-124"></a>    fitresult = (clf = clf.mod.cls, labels = levels(y))</span>
+<span id="cb10-125"><a href="#cb10-125"></a>    <span class="kw">return</span> fitresult, cache, report</span>
+<span id="cb10-126"><a href="#cb10-126"></a>end</span>
 <span id="cb10-127"><a href="#cb10-127"></a></span>
-<span id="cb10-128"><a href="#cb10-128"></a><span class="in">function MLJBase.predict(clf::IntentClassifier, fitresult, Xnew)</span></span>
-<span id="cb10-129"><a href="#cb10-129"></a><span class="in">    output = fitresult.clf(get_hidden_state(clf, Xnew))</span></span>
-<span id="cb10-130"><a href="#cb10-130"></a><span class="in">    p̂ = UnivariateFinite(fitresult.labels,softmax(output.logit)',pool=missing)</span></span>
-<span id="cb10-131"><a href="#cb10-131"></a><span class="in">    return p̂</span></span>
-<span id="cb10-132"><a href="#cb10-132"></a><span class="in">end</span></span>
+<span id="cb10-128"><a href="#cb10-128"></a>function MLJBase.predict(<span class="fu">clf::IntentClassifier</span>, fitresult, Xnew)</span>
+<span id="cb10-129"><a href="#cb10-129"></a>    output = fitresult.clf(get_hidden_state(clf, Xnew))</span>
+<span id="cb10-130"><a href="#cb10-130"></a>    p̂ = UnivariateFinite(fitresult.labels,softmax(output.logit)<span class="ot">'</span><span class="ss">,pool=missing)</span></span>
+<span id="cb10-131"><a href="#cb10-131"></a><span class="ss">    return p̂</span></span>
+<span id="cb10-132"><a href="#cb10-132"></a><span class="ss">end</span></span>
 <span id="cb10-133"><a href="#cb10-133"></a></span>
-<span id="cb10-134"><a href="#cb10-134"></a><span class="in">MLJBase.target_scitype(clf::IntentClassifier) = AbstractVector{&lt;:Finite}</span></span>
+<span id="cb10-134"><a href="#cb10-134"></a><span class="ss">MLJBase.target_scitype(clf::IntentClassifier) = AbstractVector{&lt;:Finite}</span></span>
 <span id="cb10-135"><a href="#cb10-135"></a></span>
-<span id="cb10-136"><a href="#cb10-136"></a><span class="in">MLJBase.predict_mode(clf::IntentClassifier, fitresult, Xnew) = mode.(MLJBase.predict(clf, fitresult, Xnew))</span></span>
-<span id="cb10-137"><a href="#cb10-137"></a><span class="in">```</span></span>
+<span id="cb10-136"><a href="#cb10-136"></a><span class="ss">MLJBase.predict_mode(clf::IntentClassifier, fitresult, Xnew) = mode.(MLJBase.predict(clf, fitresult, Xnew))</span></span>
+<span id="cb10-137"><a href="#cb10-137"></a><span class="ss">```</span></span>
 <span id="cb10-138"><a href="#cb10-138"></a></span>
-<span id="cb10-139"><a href="#cb10-139"></a>To test that everything is working as expected, we fit the model and generated predictions for a subset of the test data:</span>
+<span id="cb10-139"><a href="#cb10-139"></a><span class="ss">To test that everything is working as expected, we fit the model and generated predictions for a subset of the test data:</span></span>
 <span id="cb10-140"><a href="#cb10-140"></a></span>
 <span id="cb10-143"><a href="#cb10-143"></a><span class="in">```{julia}</span></span>
-<span id="cb10-144"><a href="#cb10-144"></a><span class="in">#| output: true</span></span>
+<span id="cb10-144"><a href="#cb10-144"></a><span class="ss">#| output: true</span></span>
 <span id="cb10-145"><a href="#cb10-145"></a></span>
-<span id="cb10-146"><a href="#cb10-146"></a><span class="in">clf = IntentClassifier(tkr, mod)</span></span>
-<span id="cb10-147"><a href="#cb10-147"></a><span class="in">top_n = 10</span></span>
-<span id="cb10-148"><a href="#cb10-148"></a><span class="in">fitresult, _, _ = MLJBase.fit(clf, 1, nothing, y_test[1:top_n])</span></span>
-<span id="cb10-149"><a href="#cb10-149"></a><span class="in">@time ŷ = MLJBase.predict(clf, fitresult, queries_test[1:top_n]);</span></span>
-<span id="cb10-150"><a href="#cb10-150"></a><span class="in">```</span></span>
+<span id="cb10-146"><a href="#cb10-146"></a><span class="ss">clf = IntentClassifier(tkr, mod)</span></span>
+<span id="cb10-147"><a href="#cb10-147"></a><span class="ss">top_n = 10</span></span>
+<span id="cb10-148"><a href="#cb10-148"></a><span class="ss">fitresult, _, _ = MLJBase.fit(clf, 1, nothing, y_test[1:top_n])</span></span>
+<span id="cb10-149"><a href="#cb10-149"></a><span class="ss">@time ŷ = MLJBase.predict(clf, fitresult, queries_test[1:top_n]);</span></span>
+<span id="cb10-150"><a href="#cb10-150"></a><span class="ss">```</span></span>
 <span id="cb10-151"><a href="#cb10-151"></a></span>
-<span id="cb10-152"><a href="#cb10-152"></a><span class="fu">## 🤖 Conformal Chatbot</span></span>
+<span id="cb10-152"><a href="#cb10-152"></a><span class="ss">## 🤖 Conformal Chatbot</span></span>
 <span id="cb10-153"><a href="#cb10-153"></a></span>
-<span id="cb10-154"><a href="#cb10-154"></a>To turn the wrapped, pre-trained model into a conformal intent classifier, we can now rely on standard API calls. We first wrap our atomic model where we also specify the desired coverage rate and method. Since even simple forward passes are computationally expensive for our (small) LLM, we rely on Simple Inductive Conformal Classification.</span>
+<span id="cb10-154"><a href="#cb10-154"></a><span class="ss">To turn the wrapped, pre-trained model into a conformal intent classifier, we can now rely on standard API calls. We first wrap our atomic model where we also specify the desired coverage rate and method. Since even simple forward passes are computationally expensive for our (small) LLM, we rely on Simple Inductive Conformal Classification.</span></span>
 <span id="cb10-155"><a href="#cb10-155"></a></span>
-<span id="cb10-156"><a href="#cb10-156"></a><span class="in">```{.julia}</span></span>
-<span id="cb10-157"><a href="#cb10-157"></a><span class="in">conf_model = conformal_model(clf; coverage=0.95, method=:simple_inductive, train_ratio=train_ratio)</span></span>
-<span id="cb10-158"><a href="#cb10-158"></a><span class="in">mach = machine(conf_model, queries, y)</span></span>
-<span id="cb10-159"><a href="#cb10-159"></a><span class="in">@time fit!(mach)</span></span>
-<span id="cb10-160"><a href="#cb10-160"></a><span class="in">Serialization.serialize("dev/artifacts/models/banking77/simple_inductive.jls", mach)</span></span>
-<span id="cb10-161"><a href="#cb10-161"></a><span class="in">```</span></span>
+<span id="cb10-156"><a href="#cb10-156"></a><span class="ss">```{.julia}</span></span>
+<span id="cb10-157"><a href="#cb10-157"></a><span class="ss">conf_model = conformal_model(clf; coverage=0.95, method=:simple_inductive, train_ratio=train_ratio)</span></span>
+<span id="cb10-158"><a href="#cb10-158"></a><span class="ss">mach = machine(conf_model, queries, y)</span></span>
+<span id="cb10-159"><a href="#cb10-159"></a><span class="ss">@time fit!(mach)</span></span>
+<span id="cb10-160"><a href="#cb10-160"></a><span class="ss">Serialization.serialize("dev/artifacts/models/banking77/simple_inductive.jls", mach)</span></span>
+<span id="cb10-161"><a href="#cb10-161"></a><span class="ss">```</span></span>
 <span id="cb10-162"><a href="#cb10-162"></a></span>
-<span id="cb10-163"><a href="#cb10-163"></a>Finally, we use our conformal LLM to build a simple yet powerful chatbot that runs directly in the Julia REPL. Without dwelling on the details too much, the <span class="in">`conformal_chatbot`</span> works as follows:</span>
+<span id="cb10-163"><a href="#cb10-163"></a><span class="ss">Finally, we use our conformal LLM to build a simple yet powerful chatbot that runs directly in the Julia REPL. Without dwelling on the details too much, the `conformal_chatbot` works as follows:</span></span>
 <span id="cb10-164"><a href="#cb10-164"></a></span>
-<span id="cb10-165"><a href="#cb10-165"></a><span class="ss">1.  </span>Prompt user to explain their intent.</span>
-<span id="cb10-166"><a href="#cb10-166"></a><span class="ss">2.  </span>Feed user input through conformal LLM and present the output to the user.</span>
-<span id="cb10-167"><a href="#cb10-167"></a><span class="ss">3.  </span>If the conformal prediction set includes more than one label, prompt the user to either refine their input or choose one of the options included in the set.</span>
+<span id="cb10-165"><a href="#cb10-165"></a><span class="ss">1.  Prompt user to explain their intent.</span></span>
+<span id="cb10-166"><a href="#cb10-166"></a><span class="ss">2.  Feed user input through conformal LLM and present the output to the user.</span></span>
+<span id="cb10-167"><a href="#cb10-167"></a><span class="ss">3.  If the conformal prediction set includes more than one label, prompt the user to either refine their input or choose one of the options included in the set.</span></span>
 <span id="cb10-168"><a href="#cb10-168"></a></span>
 <span id="cb10-171"><a href="#cb10-171"></a><span class="in">```{julia}</span></span>
-<span id="cb10-172"><a href="#cb10-172"></a><span class="in">mach = Serialization.deserialize("blog/posts/conformal-llm/simple_inductive.jls")</span></span>
+<span id="cb10-172"><a href="#cb10-172"></a><span class="ss">mach = Serialization.deserialize("blog/posts/conformal-llm/simple_inductive.jls")</span></span>
 <span id="cb10-173"><a href="#cb10-173"></a></span>
-<span id="cb10-174"><a href="#cb10-174"></a><span class="in">function prediction_set(mach, query::String)</span></span>
-<span id="cb10-175"><a href="#cb10-175"></a><span class="in">    p̂ = MLJBase.predict(mach, query)[1]</span></span>
-<span id="cb10-176"><a href="#cb10-176"></a><span class="in">    probs = pdf.(p̂, collect(1:77))</span></span>
-<span id="cb10-177"><a href="#cb10-177"></a><span class="in">    in_set = findall(probs .!= 0)</span></span>
-<span id="cb10-178"><a href="#cb10-178"></a><span class="in">    labels_in_set = labels[in_set]</span></span>
-<span id="cb10-179"><a href="#cb10-179"></a><span class="in">    probs_in_set = probs[in_set]</span></span>
-<span id="cb10-180"><a href="#cb10-180"></a><span class="in">    _order = sortperm(-probs_in_set)</span></span>
-<span id="cb10-181"><a href="#cb10-181"></a><span class="in">    plt = UnicodePlots.barplot(labels_in_set[_order], probs_in_set[_order], title="Possible Intents")</span></span>
-<span id="cb10-182"><a href="#cb10-182"></a><span class="in">    return labels_in_set, plt</span></span>
-<span id="cb10-183"><a href="#cb10-183"></a><span class="in">end</span></span>
+<span id="cb10-174"><a href="#cb10-174"></a><span class="ss">function prediction_set(mach, query::String)</span></span>
+<span id="cb10-175"><a href="#cb10-175"></a><span class="ss">    p̂ = MLJBase.predict(mach, query)[1]</span></span>
+<span id="cb10-176"><a href="#cb10-176"></a><span class="ss">    probs = pdf.(p̂, collect(1:77))</span></span>
+<span id="cb10-177"><a href="#cb10-177"></a><span class="ss">    in_set = findall(probs .!= 0)</span></span>
+<span id="cb10-178"><a href="#cb10-178"></a><span class="ss">    labels_in_set = labels[in_set]</span></span>
+<span id="cb10-179"><a href="#cb10-179"></a><span class="ss">    probs_in_set = probs[in_set]</span></span>
+<span id="cb10-180"><a href="#cb10-180"></a><span class="ss">    _order = sortperm(-probs_in_set)</span></span>
+<span id="cb10-181"><a href="#cb10-181"></a><span class="ss">    plt = UnicodePlots.barplot(labels_in_set[_order], probs_in_set[_order], title="Possible Intents")</span></span>
+<span id="cb10-182"><a href="#cb10-182"></a><span class="ss">    return labels_in_set, plt</span></span>
+<span id="cb10-183"><a href="#cb10-183"></a><span class="ss">end</span></span>
 <span id="cb10-184"><a href="#cb10-184"></a></span>
-<span id="cb10-185"><a href="#cb10-185"></a><span class="in">function conformal_chatbot()</span></span>
-<span id="cb10-186"><a href="#cb10-186"></a><span class="in">    println("👋 Hi, I'm a Julia, your conformal chatbot. I'm here to help you with your banking query. Ask me anything or type 'exit' to exit ...\n")</span></span>
-<span id="cb10-187"><a href="#cb10-187"></a><span class="in">    completed = false</span></span>
-<span id="cb10-188"><a href="#cb10-188"></a><span class="in">    queries = ""</span></span>
-<span id="cb10-189"><a href="#cb10-189"></a><span class="in">    while !completed</span></span>
-<span id="cb10-190"><a href="#cb10-190"></a><span class="in">        query = readline()</span></span>
-<span id="cb10-191"><a href="#cb10-191"></a><span class="in">        queries = queries * "," * query</span></span>
-<span id="cb10-192"><a href="#cb10-192"></a><span class="in">        labels, plt = prediction_set(mach, queries)</span></span>
-<span id="cb10-193"><a href="#cb10-193"></a><span class="in">        if length(labels) &gt; 1</span></span>
-<span id="cb10-194"><a href="#cb10-194"></a><span class="in">            println("🤔 Hmmm ... I can think of several options here. If any of these applies, simply type the corresponding number (e.g. '1' for the first option). Otherwise, can you refine your question, please?\n")</span></span>
-<span id="cb10-195"><a href="#cb10-195"></a><span class="in">            println(plt)</span></span>
-<span id="cb10-196"><a href="#cb10-196"></a><span class="in">        else</span></span>
-<span id="cb10-197"><a href="#cb10-197"></a><span class="in">            println("🥳 I think you mean $(labels[1]). Correct?")</span></span>
-<span id="cb10-198"><a href="#cb10-198"></a><span class="in">        end</span></span>
+<span id="cb10-185"><a href="#cb10-185"></a><span class="ss">function conformal_chatbot()</span></span>
+<span id="cb10-186"><a href="#cb10-186"></a><span class="ss">    println("👋 Hi, I</span><span class="ot">'</span>m a Julia, your conformal chatbot. I<span class="ot">'</span><span class="ss">m here to help you with your banking query. Ask me anything or type </span><span class="ot">'</span>exit<span class="ot">'</span><span class="ss"> to exit ...\n")</span></span>
+<span id="cb10-187"><a href="#cb10-187"></a><span class="ss">    completed = false</span></span>
+<span id="cb10-188"><a href="#cb10-188"></a><span class="ss">    queries = ""</span></span>
+<span id="cb10-189"><a href="#cb10-189"></a><span class="ss">    while !completed</span></span>
+<span id="cb10-190"><a href="#cb10-190"></a><span class="ss">        query = readline()</span></span>
+<span id="cb10-191"><a href="#cb10-191"></a><span class="ss">        queries = queries * "," * query</span></span>
+<span id="cb10-192"><a href="#cb10-192"></a><span class="ss">        labels, plt = prediction_set(mach, queries)</span></span>
+<span id="cb10-193"><a href="#cb10-193"></a><span class="ss">        if length(labels) &gt; 1</span></span>
+<span id="cb10-194"><a href="#cb10-194"></a><span class="ss">            println("🤔 Hmmm ... I can think of several options here. If any of these applies, simply type the corresponding number (e.g. </span><span class="ot">'</span><span class="dv">1</span><span class="ot">'</span><span class="ss"> for the first option). Otherwise, can you refine your question, please?\n")</span></span>
+<span id="cb10-195"><a href="#cb10-195"></a><span class="ss">            println(plt)</span></span>
+<span id="cb10-196"><a href="#cb10-196"></a><span class="ss">        else</span></span>
+<span id="cb10-197"><a href="#cb10-197"></a><span class="ss">            println("🥳 I think you mean $(labels[1]). Correct?")</span></span>
+<span id="cb10-198"><a href="#cb10-198"></a><span class="ss">        end</span></span>
 <span id="cb10-199"><a href="#cb10-199"></a></span>
-<span id="cb10-200"><a href="#cb10-200"></a><span class="in">        # Exit:</span></span>
-<span id="cb10-201"><a href="#cb10-201"></a><span class="in">        if query == "exit"</span></span>
-<span id="cb10-202"><a href="#cb10-202"></a><span class="in">            println("👋 Bye!")</span></span>
-<span id="cb10-203"><a href="#cb10-203"></a><span class="in">            break</span></span>
-<span id="cb10-204"><a href="#cb10-204"></a><span class="in">        end</span></span>
-<span id="cb10-205"><a href="#cb10-205"></a><span class="in">        if query ∈ string.(collect(1:77))</span></span>
-<span id="cb10-206"><a href="#cb10-206"></a><span class="in">            println("👍 Great! You've chosen '$(labels[parse(Int64, query)])'. I'm glad I could help you. Have a nice day!")</span></span>
-<span id="cb10-207"><a href="#cb10-207"></a><span class="in">            completed = true</span></span>
-<span id="cb10-208"><a href="#cb10-208"></a><span class="in">        end</span></span>
-<span id="cb10-209"><a href="#cb10-209"></a><span class="in">    end</span></span>
-<span id="cb10-210"><a href="#cb10-210"></a><span class="in">end</span></span>
-<span id="cb10-211"><a href="#cb10-211"></a><span class="in">```</span></span>
+<span id="cb10-200"><a href="#cb10-200"></a><span class="ss">        # Exit:</span></span>
+<span id="cb10-201"><a href="#cb10-201"></a><span class="ss">        if query == "exit"</span></span>
+<span id="cb10-202"><a href="#cb10-202"></a><span class="ss">            println("👋 Bye!")</span></span>
+<span id="cb10-203"><a href="#cb10-203"></a><span class="ss">            break</span></span>
+<span id="cb10-204"><a href="#cb10-204"></a><span class="ss">        end</span></span>
+<span id="cb10-205"><a href="#cb10-205"></a><span class="ss">        if query ∈ string.(collect(1:77))</span></span>
+<span id="cb10-206"><a href="#cb10-206"></a><span class="ss">            println("👍 Great! You</span><span class="ot">'</span>ve chosen <span class="ot">'</span><span class="ss">$(labels[parse(Int64, query)])</span><span class="ot">'</span>. I<span class="ot">'</span><span class="ss">m glad I could help you. Have a nice day!")</span></span>
+<span id="cb10-207"><a href="#cb10-207"></a><span class="ss">            completed = true</span></span>
+<span id="cb10-208"><a href="#cb10-208"></a><span class="ss">        end</span></span>
+<span id="cb10-209"><a href="#cb10-209"></a><span class="ss">    end</span></span>
+<span id="cb10-210"><a href="#cb10-210"></a><span class="ss">end</span></span>
+<span id="cb10-211"><a href="#cb10-211"></a><span class="ss">```</span></span>
 <span id="cb10-212"><a href="#cb10-212"></a></span>
-<span id="cb10-213"><a href="#cb10-213"></a>Below we show the output for two example queries. The first one is very ambiguous. As expected, the size of the prediction set is therefore large. </span>
+<span id="cb10-213"><a href="#cb10-213"></a><span class="ss">Below we show the output for two example queries. The first one is very ambiguous. As expected, the size of the prediction set is therefore large. </span></span>
 <span id="cb10-214"><a href="#cb10-214"></a></span>
 <span id="cb10-217"><a href="#cb10-217"></a><span class="in">```{julia}</span></span>
-<span id="cb10-218"><a href="#cb10-218"></a><span class="in">#| output: true</span></span>
+<span id="cb10-218"><a href="#cb10-218"></a><span class="ss">#| output: true</span></span>
 <span id="cb10-219"><a href="#cb10-219"></a></span>
-<span id="cb10-220"><a href="#cb10-220"></a><span class="in">ambiguous_query = "transfer mondey?"</span></span>
-<span id="cb10-221"><a href="#cb10-221"></a><span class="in">prediction_set(mach, ambiguous_query)[2]</span></span>
-<span id="cb10-222"><a href="#cb10-222"></a><span class="in">```</span></span>
+<span id="cb10-220"><a href="#cb10-220"></a><span class="ss">ambiguous_query = "transfer mondey?"</span></span>
+<span id="cb10-221"><a href="#cb10-221"></a><span class="ss">prediction_set(mach, ambiguous_query)[2]</span></span>
+<span id="cb10-222"><a href="#cb10-222"></a><span class="ss">```</span></span>
 <span id="cb10-223"><a href="#cb10-223"></a></span>
-<span id="cb10-224"><a href="#cb10-224"></a>The more refined version of the prompt yields a smaller prediction set: less ambiguous prompts result in lower predictive uncertainty. </span>
+<span id="cb10-224"><a href="#cb10-224"></a><span class="ss">The more refined version of the prompt yields a smaller prediction set: less ambiguous prompts result in lower predictive uncertainty. </span></span>
 <span id="cb10-225"><a href="#cb10-225"></a></span>
 <span id="cb10-228"><a href="#cb10-228"></a><span class="in">```{julia}</span></span>
-<span id="cb10-229"><a href="#cb10-229"></a><span class="in">#| output: true</span></span>
+<span id="cb10-229"><a href="#cb10-229"></a><span class="ss">#| output: true</span></span>
 <span id="cb10-230"><a href="#cb10-230"></a></span>
-<span id="cb10-231"><a href="#cb10-231"></a><span class="in">refined_query = "I tried to transfer money to my friend, but it failed."</span></span>
-<span id="cb10-232"><a href="#cb10-232"></a><span class="in">prediction_set(mach, refined_query)[2]</span></span>
-<span id="cb10-233"><a href="#cb10-233"></a><span class="in">```</span></span>
+<span id="cb10-231"><a href="#cb10-231"></a><span class="ss">refined_query = "I tried to transfer money to my friend, but it failed."</span></span>
+<span id="cb10-232"><a href="#cb10-232"></a><span class="ss">prediction_set(mach, refined_query)[2]</span></span>
+<span id="cb10-233"><a href="#cb10-233"></a><span class="ss">```</span></span>
 <span id="cb10-234"><a href="#cb10-234"></a></span>
-<span id="cb10-235"><a href="#cb10-235"></a>Below we include a short demo video that shows the REPL-based chatbot in action.</span>
+<span id="cb10-235"><a href="#cb10-235"></a><span class="ss">Below we include a short demo video that shows the REPL-based chatbot in action.</span></span>
 <span id="cb10-236"><a href="#cb10-236"></a></span>
-<span id="cb10-237"><a href="#cb10-237"></a><span class="al">![](www/demo.gif)</span></span>
+<span id="cb10-237"><a href="#cb10-237"></a><span class="ss">![](www/demo.gif)</span></span>
 <span id="cb10-238"><a href="#cb10-238"></a></span>
-<span id="cb10-239"><a href="#cb10-239"></a><span class="fu">## 🌯 Wrapping Up</span></span>
+<span id="cb10-239"><a href="#cb10-239"></a><span class="ss">## 🌯 Wrapping Up</span></span>
 <span id="cb10-240"><a href="#cb10-240"></a></span>
-<span id="cb10-241"><a href="#cb10-241"></a>This work was done in collaboration with colleagues at ING as part of the ING Analytics 2023 Experiment Week. Our team demonstrated that Conformal Prediction provides a powerful and principled alternative to top-*K* intent classification. We won the first prize by popular vote.</span>
+<span id="cb10-241"><a href="#cb10-241"></a><span class="ss">This work was done in collaboration with colleagues at ING as part of the ING Analytics 2023 Experiment Week. Our team demonstrated that Conformal Prediction provides a powerful and principled alternative to top-*K* intent classification. We won the first prize by popular vote.</span></span>
 <span id="cb10-242"><a href="#cb10-242"></a></span>
-<span id="cb10-243"><a href="#cb10-243"></a>There are a lot of things that can be improved. As far as LLMs are concerned, we have of course used a fairly small model here. In terms of Conformal Prediction, we have relied on simple inductive conformal classification. This is a good starting point, but there are more advanced methods available (and implemented in the package). Another thing we did not take into consideration here is that we have many outcome classes and may in practice be interested in achieving class-conditional coverage. Stay tuned for more!</span>
+<span id="cb10-243"><a href="#cb10-243"></a><span class="ss">There are a lot of things that can be improved. As far as LLMs are concerned, we have of course used a fairly small model here. In terms of Conformal Prediction, we have relied on simple inductive conformal classification. This is a good starting point, but there are more advanced methods available (and implemented in the package). Another thing we did not take into consideration here is that we have many outcome classes and may in practice be interested in achieving class-conditional coverage. Stay tuned for more!</span></span>
 <span id="cb10-244"><a href="#cb10-244"></a></span>
-<span id="cb10-245"><a href="#cb10-245"></a><span class="fu">## 🎓 References</span></span>
+<span id="cb10-245"><a href="#cb10-245"></a><span class="ss">## 🎓 References</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">
-<p>© 2023, Patrick Altmeyer</p>
-</div>   
+    <div class="nav-footer-left">© 2023, Patrick Altmeyer</div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
@@ -1229,7 +1068,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-
 
 
 

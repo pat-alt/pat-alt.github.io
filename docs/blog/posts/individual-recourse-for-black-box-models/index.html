@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-99.9.9">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -61,7 +61,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -103,13 +102,7 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -118,7 +111,6 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -137,39 +129,12 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Patrick Altmeyer - Individual recourse for Black Box Models">
 <meta property="og:description" content="An introduction to algorithmic recourse and an implementation of a simplified version of REVISE (Joshi et al., 2019). This post was prepared as part of my PhD application.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/individual-recourse-for-black-box-models/www/intro.gif">
-<meta property="og:site_name" content="Patrick Altmeyer">
+<meta property="og:site-name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer - Individual recourse for Black Box Models">
 <meta name="twitter:description" content="An introduction to algorithmic recourse and an implementation of a simplified version of REVISE (Joshi et al., 2019). This post was prepared as part of my PhD application.">
 <meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/individual-recourse-for-black-box-models/www/intro.gif">
@@ -180,9 +145,9 @@ window.Quarto = {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
@@ -197,50 +162,50 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html"> 
-<span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/publications/index.html"> 
-<span class="menu-text">Publications</span></a>
+    <a class="nav-link" href="../../../content/publications/index.html" rel="" target="">
+ <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html"> 
-<span class="menu-text">Talks</span></a>
+    <a class="nav-link" href="../../../content/talks/index.html" rel="" target="">
+ <span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html"> 
-<span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/software.html"> 
-<span class="menu-text">Software</span></a>
+    <a class="nav-link" href="../../../content/software.html" rel="" target="">
+ <span class="menu-text">Software</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/about/index.html"> 
-<span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../../content/about/index.html" rel="" target="">
+ <span class="menu-text">About</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../blog/index.xml" rel="" target=""><i class="bi bi-rss" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/pat-alt" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/paltmey" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -263,7 +228,7 @@ window.Quarto = {
   <li><a href="#simulated-data" id="toc-simulated-data" class="nav-link" data-scroll-target="#simulated-data">Simulated data</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -292,14 +257,14 @@ window.Quarto = {
     <div class="quarto-title-meta-contents">
     <p class="author"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> </p>
   </div>
-  <div class="quarto-title-meta-contents">
+    <div class="quarto-title-meta-contents">
         <p class="affiliation">
             <a href="https://www.tudelft.nl/en/">
             Delft University of Technology
             </a>
           </p>
       </div>
-  </div>
+    </div>
 
 <div class="quarto-title-meta">
 
@@ -315,9 +280,7 @@ window.Quarto = {
   </div>
   
 
-
 </header>
-
 
 <div class="intro-gif">
 <figure class="figure">
@@ -338,26 +301,18 @@ window.Quarto = {
 <p>For a detailed discussion of these points you may check out this <a href="paper_presentation.pdf">slide deck</a> or consult the paper directly (freely available on <a href="https://deepai.org/publication/towards-realistic-individual-recourse-and-actionable-explanations-in-black-box-decision-making-systems">DeepAI</a>). Here, we will abstract from some of these complications and instead look at an application of a slightly simplified version of <code>REVISE</code>. This should help us to first build a good intuition. Readers interested in the technicalities and code may find all of this in the annex below.</p>
 <section id="from-to" class="level2">
 <h2 class="anchored" data-anchor-id="from-to">From 🐱 to 🐶</h2>
-<p>We will explain <code>REVISE</code> through a short tale of cats and dogs. The protagonist of this tale is Kitty 🐱, a young cat that identifies as a dog. Unfortunately, Kitty is not very tall and her tail, though short for a cat, is longer than that of the average dog (<a href="#fig-density" class="quarto-xref">Figure&nbsp;1</a>).</p>
-<div id="fig-density" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="www/density.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty’s attribute values.
-</figcaption>
+<p>We will explain <code>REVISE</code> through a short tale of cats and dogs. The protagonist of this tale is Kitty 🐱, a young cat that identifies as a dog. Unfortunately, Kitty is not very tall and her tail, though short for a cat, is longer than that of the average dog (<a href="#fig-density">Figure&nbsp;1</a>).</p>
+<div id="fig-density" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="www/density.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Empirical distributions of simulated data set describing cats and dogs. Vertical stalks represent Kitty’s attribute values.</figcaption>
 </figure>
 </div>
-<p>Much to her dismay, Kitty has been recognized as a cat by a linear classifier <span class="math inline">\(g_n(X)\)</span> that we trained through stochastic gradient descent using the data on animals’ height and tail length. Once again interested readers may find technical details and code in the annex below. <a href="#fig-class" class="quarto-xref">Figure&nbsp;2</a> shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty’s location indicated by a red circle. Can we provide individual recourse to Kitty?</p>
-<div id="fig-class" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-class-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="www/class.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-class-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty’s location is indicated by a red circle.
-</figcaption>
+<p>Much to her dismay, Kitty has been recognized as a cat by a linear classifier <span class="math inline">\(g_n(X)\)</span> that we trained through stochastic gradient descent using the data on animals’ height and tail length. Once again interested readers may find technical details and code in the annex below. <a href="#fig-class">Figure&nbsp;2</a> shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty’s location indicated by a red circle. Can we provide individual recourse to Kitty?</p>
+<div id="fig-class" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="www/class.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Linear separation of cats and dogs in the 2-dimensional attribute space with the decision boundary of the fitted classifier in solid black. Kitty’s location is indicated by a red circle.</figcaption>
 </figure>
 </div>
 <p>Let’s see if and how we can apply <code>REVISE</code> to Kitty’s problem. The following summary should give you some flavour of how the algorithm works:</p>
@@ -366,16 +321,12 @@ Figure&nbsp;2: Linear separation of cats and dogs in the 2-dimensional attribute
 <li>Through gradient descent recursively revise <span class="math inline">\(\mathbf{x}_i'^{(t)}\)</span> until <span class="math inline">\(g_n(\mathbf{x}_i'^{(T)})=\)</span>🐶. At this point <span class="math inline">\(T\)</span> the descent terminates since for these revised attributes the classifier labels Kitty as a dog.</li>
 <li>Return <span class="math inline">\(\delta_i=\mathbf{x}_i'^{(T)}-\mathbf{x}_i\)</span>, that is the individual recourse for Kitty.</li>
 </ol>
-<p><a href="#fig-revise" class="quarto-xref">Figure&nbsp;3</a> illustrates what happens when this approach is applied to Kitty’s problem. The different panels show the results for different values of a regularization parameter <span class="math inline">\(\lambda\)</span> that governs the trade-off between achieving the desired label switch and keeping the distance between the original (<span class="math inline">\(\mathbf{x}_i\)</span>) and revised (<span class="math inline">\(\mathbf{x}_i'\)</span>) attributes small. In all but one case, <code>REVISE</code> converges: a decrease in tail length along with an increase in height eventually allows Kitty to cross the decision boundary. In other words, we have successfully turned Kitty into a dog - at least in the eyes of the linear classifier!</p>
+<p><a href="#fig-revise">Figure&nbsp;3</a> illustrates what happens when this approach is applied to Kitty’s problem. The different panels show the results for different values of a regularization parameter <span class="math inline">\(\lambda\)</span> that governs the trade-off between achieving the desired label switch and keeping the distance between the original (<span class="math inline">\(\mathbf{x}_i\)</span>) and revised (<span class="math inline">\(\mathbf{x}_i'\)</span>) attributes small. In all but one case, <code>REVISE</code> converges: a decrease in tail length along with an increase in height eventually allows Kitty to cross the decision boundary. In other words, we have successfully turned Kitty into a dog - at least in the eyes of the linear classifier!</p>
 <p>We also observe that as we increase <span class="math inline">\(\lambda\)</span> for a fixed learning rate, <code>REVISE</code> takes longer to converge. This should come as no surprise, since higher values of <span class="math inline">\(\lambda\)</span> lead to greater regularization with respect to the penalty we place on the distance that Kitty has to travel. When we penalize too much (<span class="math inline">\(\lambda=10\)</span>), Kitty never reaches the decision boundary, because she is reluctant to change her characteristics beyond a certain point. While not visible to the naked eye, in this particular example <span class="math inline">\(\lambda=0.001\)</span> corresponds to the best choice among the candidate values.</p>
-<div id="fig-revise" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-revise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="www/revise.gif" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-revise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: The simplified <code>REVISE</code> algorithm in action: how Kitty crosses the decision boundary by changing her attributes. Regularization with respect to the distance penalty increases from top left to bottom right.
-</figcaption>
+<div id="fig-revise" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="www/revise.gif" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;3: The simplified <code>REVISE</code> algorithm in action: how Kitty crosses the decision boundary by changing her attributes. Regularization with respect to the distance penalty increases from top left to bottom right.</figcaption>
 </figure>
 </div>
 </section>
@@ -388,7 +339,7 @@ Figure&nbsp;3: The simplified <code>REVISE</code> algorithm in action: how Kitty
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-joshi2019realistic" class="csl-entry" role="listitem">
 Joshi, Shalmali, Oluwasanmi Koyejo, Warut Vijitbenjaronk, Been Kim, and Joydeep Ghosh. 2019. <span>“Towards Realistic Individual Recourse and Actionable Explanations in Black-Box Decision Making Systems.”</span> <a href="https://arxiv.org/abs/1907.09615">https://arxiv.org/abs/1907.09615</a>.
 </div>
@@ -421,7 +372,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 \tag{1}\]</span></span></p>
 <p>The code below uses this analytical solution to perform SGD over <span class="math inline">\(T\)</span> iterations or as long as updates yield feasible parameter values. As the final vector of coefficients the function returns <span class="math inline">\(\mathbf{\bar{w}}= \frac{1}{T} \sum_{t=1}^{T} \mathbf{w}_t\)</span>. Denoting the optimal coefficient vector as <span class="math inline">\(\mathbf{w}^*\)</span>, it can be shown that under certain conditions <span class="math inline">\(\ell(\mathbf{\bar{w}})\rightarrow\ell(\mathbf{w}^*)\)</span> as <span class="math inline">\(T\rightarrow\infty\)</span>.</p>
 <div class="cell" data-layout-align="center">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#' Stochastic gradient descent</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="co">#'</span></span>
@@ -532,7 +483,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 &amp;&amp; {\mathbf{x}_i^{'}}^t&amp;\leftarrow {\mathbf{x}_i^{'}}^{t-1} + \eta \nabla_{{\mathbf{x}_i^{'}}} \left( \ell(g_n(\mathbf{x}_i^{'}),1) + \lambda d(\mathbf{x}_i^{'},\mathbf{x}_i)  \right)  \\
 \end{aligned}
 \]</span></p>
-<p>where <span class="math inline">\(\eta\)</span> is the learning rate. The descent step is almost equivalent to the one described in <span class="citation" data-cites="joshi2019realistic">Joshi et al. (<a href="#ref-joshi2019realistic" role="doc-biblioref">2019</a>)</span>, but here we greatly simplify things by optimizing directly in the attribute space instead of a latent space. The gradient of the loss function looks very similar to <a href="#eq-hinge" class="quarto-xref">Equation&nbsp;1</a>. With respect to the Euclidean distance partial derivatives are of the following form:</p>
+<p>where <span class="math inline">\(\eta\)</span> is the learning rate. The descent step is almost equivalent to the one described in <span class="citation" data-cites="joshi2019realistic">Joshi et al. (<a href="#ref-joshi2019realistic" role="doc-biblioref">2019</a>)</span>, but here we greatly simplify things by optimizing directly in the attribute space instead of a latent space. The gradient of the loss function looks very similar to <a href="#eq-hinge">Equation&nbsp;1</a>. With respect to the Euclidean distance partial derivatives are of the following form:</p>
 <p><span class="math display">\[
 \begin{aligned}
 &amp;&amp;  \frac{\partial ||\mathbf{x}_i^{'}-\mathbf{x}_i||}{\partial {x_i'}^{(d)}}  &amp;= \frac{{x_i'}^{(d)}-{x_i}^{(d)}}{||\mathbf{x}_i^{'}-\mathbf{x}_i||} \\
@@ -540,7 +491,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 \]</span></p>
 <p>The code that implements this optimization follows below.</p>
 <div class="cell" data-layout-align="center">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#' REVISE algoritm - a simplified version</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="co">#'</span></span>
@@ -624,7 +575,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 <h3 class="anchored" data-anchor-id="simulated-data">Simulated data</h3>
 <p>The synthetic data describing cats and dogs was generated as follows:</p>
 <div class="cell" data-layout-align="center">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>sim_data <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>,averages,<span class="at">noise=</span><span class="fl">0.1</span>) {</span>
 <span id="cb3-2"><a href="#cb3-2"></a>  d <span class="ot">&lt;-</span> <span class="fu">ncol</span>(averages)</span>
@@ -647,7 +598,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 </section>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2021,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2021,
   author = {Altmeyer, Patrick},
   title = {Individual Recourse for {Black} {Box} {Models}},
   date = {2021-04-27},
@@ -788,9 +739,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -800,17 +752,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -823,120 +766,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      return note.innerHTML;
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -980,7 +809,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1006,32 +834,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1107,44 +909,44 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb4-12"><a href="#cb4-12"></a><span class="co">---</span></span>
 <span id="cb4-13"><a href="#cb4-13"></a></span>
 <span id="cb4-14"><a href="#cb4-14"></a><span class="in">```{r setup, include=FALSE}</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a><span class="in">rm(list=ls())</span></span>
-<span id="cb4-16"><a href="#cb4-16"></a><span class="in">knitr::opts_chunk$set(echo = FALSE, message = FALSE, fig.align='center')</span></span>
-<span id="cb4-17"><a href="#cb4-17"></a><span class="in">library(reticulate)</span></span>
-<span id="cb4-18"><a href="#cb4-18"></a><span class="in">library(data.table)</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a><span class="in">library(ggplot2)</span></span>
-<span id="cb4-20"><a href="#cb4-20"></a><span class="in">library(emo)</span></span>
-<span id="cb4-21"><a href="#cb4-21"></a><span class="in">library(gganimate)</span></span>
-<span id="cb4-22"><a href="#cb4-22"></a><span class="in">library(ggimage)</span></span>
-<span id="cb4-23"><a href="#cb4-23"></a><span class="in">seed &lt;- 2021</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a><span class="in">theme_set(theme_minimal())</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>())</span>
+<span id="cb4-16"><a href="#cb4-16"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">FALSE</span>, <span class="at">message =</span> <span class="cn">FALSE</span>, <span class="at">fig.align=</span><span class="st">'center'</span>)</span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="fu">library</span>(emo)</span>
+<span id="cb4-21"><a href="#cb4-21"></a><span class="fu">library</span>(gganimate)</span>
+<span id="cb4-22"><a href="#cb4-22"></a><span class="fu">library</span>(ggimage)</span>
+<span id="cb4-23"><a href="#cb4-23"></a>seed <span class="ot">&lt;-</span> <span class="dv">2021</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>())</span>
 <span id="cb4-25"><a href="#cb4-25"></a><span class="in">```</span></span>
 <span id="cb4-26"><a href="#cb4-26"></a></span>
 <span id="cb4-27"><a href="#cb4-27"></a><span class="in">```{r, eval=F}</span></span>
-<span id="cb4-28"><a href="#cb4-28"></a><span class="in">cat &lt;- data.table(x=c(3,0,2,5),y=c(5,3,0,2),type="Cat",state=1:4)</span></span>
-<span id="cb4-29"><a href="#cb4-29"></a><span class="in">dog &lt;- data.table(y=c(3,0,2,5),x=c(5,3,0,2),type="Dog",state=1:4)</span></span>
-<span id="cb4-30"><a href="#cb4-30"></a><span class="in">dt_toy &lt;- rbind(cat,dog)</span></span>
-<span id="cb4-31"><a href="#cb4-31"></a><span class="in">dt_toy[,emoji:=sprintf("blog/posts/individual-recourse-for-black-box-models/www/%s.png",tolower(type))]</span></span>
-<span id="cb4-32"><a href="#cb4-32"></a><span class="in">p &lt;- ggplot(data=dt_toy, aes(x=x,y=y,image=emoji)) +</span></span>
-<span id="cb4-33"><a href="#cb4-33"></a><span class="in">  geom_image(size=0.2) +</span></span>
-<span id="cb4-34"><a href="#cb4-34"></a><span class="in">  transition_states(</span></span>
-<span id="cb4-35"><a href="#cb4-35"></a><span class="in">    state,</span></span>
-<span id="cb4-36"><a href="#cb4-36"></a><span class="in">    transition_length = 2,</span></span>
-<span id="cb4-37"><a href="#cb4-37"></a><span class="in">    state_length = 1</span></span>
-<span id="cb4-38"><a href="#cb4-38"></a><span class="in">  ) +</span></span>
-<span id="cb4-39"><a href="#cb4-39"></a><span class="in">  theme_void() +</span></span>
-<span id="cb4-40"><a href="#cb4-40"></a><span class="in">  theme(</span></span>
-<span id="cb4-41"><a href="#cb4-41"></a><span class="in">    panel.border = element_rect(colour = "black", fill=NA, size=3)</span></span>
-<span id="cb4-42"><a href="#cb4-42"></a><span class="in">  ) </span></span>
-<span id="cb4-43"><a href="#cb4-43"></a><span class="in">animate(p, width = 300, height = 300)</span></span>
-<span id="cb4-44"><a href="#cb4-44"></a><span class="in">anim_save("blog/posts/individual-recourse-for-black-box-models/www/toy.gif")</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a>cat <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">x=</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>),<span class="at">y=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">2</span>),<span class="at">type=</span><span class="st">"Cat"</span>,<span class="at">state=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span>
+<span id="cb4-29"><a href="#cb4-29"></a>dog <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">y=</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>),<span class="at">x=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">2</span>),<span class="at">type=</span><span class="st">"Dog"</span>,<span class="at">state=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span>
+<span id="cb4-30"><a href="#cb4-30"></a>dt_toy <span class="ot">&lt;-</span> <span class="fu">rbind</span>(cat,dog)</span>
+<span id="cb4-31"><a href="#cb4-31"></a>dt_toy[,emoji<span class="sc">:</span><span class="er">=</span><span class="fu">sprintf</span>(<span class="st">"blog/posts/individual-recourse-for-black-box-models/www/%s.png"</span>,<span class="fu">tolower</span>(type))]</span>
+<span id="cb4-32"><a href="#cb4-32"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>dt_toy, <span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y,<span class="at">image=</span>emoji)) <span class="sc">+</span></span>
+<span id="cb4-33"><a href="#cb4-33"></a>  <span class="fu">geom_image</span>(<span class="at">size=</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb4-34"><a href="#cb4-34"></a>  <span class="fu">transition_states</span>(</span>
+<span id="cb4-35"><a href="#cb4-35"></a>    state,</span>
+<span id="cb4-36"><a href="#cb4-36"></a>    <span class="at">transition_length =</span> <span class="dv">2</span>,</span>
+<span id="cb4-37"><a href="#cb4-37"></a>    <span class="at">state_length =</span> <span class="dv">1</span></span>
+<span id="cb4-38"><a href="#cb4-38"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-39"><a href="#cb4-39"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb4-40"><a href="#cb4-40"></a>  <span class="fu">theme</span>(</span>
+<span id="cb4-41"><a href="#cb4-41"></a>    <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">fill=</span><span class="cn">NA</span>, <span class="at">size=</span><span class="dv">3</span>)</span>
+<span id="cb4-42"><a href="#cb4-42"></a>  ) </span>
+<span id="cb4-43"><a href="#cb4-43"></a><span class="fu">animate</span>(p, <span class="at">width =</span> <span class="dv">300</span>, <span class="at">height =</span> <span class="dv">300</span>)</span>
+<span id="cb4-44"><a href="#cb4-44"></a><span class="fu">anim_save</span>(<span class="st">"blog/posts/individual-recourse-for-black-box-models/www/toy.gif"</span>)</span>
 <span id="cb4-45"><a href="#cb4-45"></a><span class="in">```</span></span>
 <span id="cb4-46"><a href="#cb4-46"></a></span>
 <span id="cb4-47"><a href="#cb4-47"></a></span>
-<span id="cb4-48"><a href="#cb4-48"></a>&lt;div class="intro-gif"&gt;</span>
-<span id="cb4-49"><a href="#cb4-49"></a>  &lt;figure&gt;</span>
-<span id="cb4-50"><a href="#cb4-50"></a>    &lt;img src="www/intro.gif"&gt;</span>
-<span id="cb4-51"><a href="#cb4-51"></a>  &lt;/figure&gt;</span>
-<span id="cb4-52"><a href="#cb4-52"></a>&lt;/div&gt;</span>
+<span id="cb4-48"><a href="#cb4-48"></a><span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">"intro-gif"</span><span class="kw">&gt;</span></span>
+<span id="cb4-49"><a href="#cb4-49"></a>  <span class="kw">&lt;figure&gt;</span></span>
+<span id="cb4-50"><a href="#cb4-50"></a>    <span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"www/intro.gif"</span><span class="kw">&gt;</span></span>
+<span id="cb4-51"><a href="#cb4-51"></a>  <span class="kw">&lt;/figure&gt;</span></span>
+<span id="cb4-52"><a href="#cb4-52"></a><span class="kw">&lt;/div&gt;</span></span>
 <span id="cb4-53"><a href="#cb4-53"></a></span>
 <span id="cb4-54"><a href="#cb4-54"></a><span class="at">&gt; "You cannot appeal to </span><span class="co">[</span><span class="ot">algorithms</span><span class="co">]</span><span class="at">. They do not listen. Nor do they bend."</span></span>
 <span id="cb4-55"><a href="#cb4-55"></a><span class="at">&gt;</span></span>
@@ -1163,22 +965,22 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb4-68"><a href="#cb4-68"></a><span class="fu">## From `r emo::ji("cat")` to `r emo::ji("dog")`</span></span>
 <span id="cb4-69"><a href="#cb4-69"></a></span>
 <span id="cb4-70"><a href="#cb4-70"></a><span class="in">```{r sim-data, echo=FALSE}</span></span>
-<span id="cb4-71"><a href="#cb4-71"></a><span class="in">sim_data &lt;- function(n=100,averages,noise=0.1) {</span></span>
-<span id="cb4-72"><a href="#cb4-72"></a><span class="in">  d &lt;- ncol(averages)</span></span>
-<span id="cb4-73"><a href="#cb4-73"></a><span class="in">  y &lt;- 2*(rbinom(n,1,0.5)-0.5) # generate binary outcome: 1=dog, -1=cat</span></span>
-<span id="cb4-74"><a href="#cb4-74"></a><span class="in">  X &lt;- as.matrix(averages[(y+1)/2+1,]) # generate attributes conditional on y</span></span>
-<span id="cb4-75"><a href="#cb4-75"></a><span class="in">  dogs &lt;- y==1</span></span>
-<span id="cb4-76"><a href="#cb4-76"></a><span class="in">  cats &lt;- y==-1</span></span>
-<span id="cb4-77"><a href="#cb4-77"></a><span class="in">  X[cats,] &lt;- X[cats,] + </span></span>
-<span id="cb4-78"><a href="#cb4-78"></a><span class="in">    matrix(rnorm(sum(cats)*d),nrow=sum(cats)) %*% diag(noise*averages[2,]) # add noise for y=1 (cats)</span></span>
-<span id="cb4-79"><a href="#cb4-79"></a><span class="in">  X[dogs,] &lt;- X[dogs,] + </span></span>
-<span id="cb4-80"><a href="#cb4-80"></a><span class="in">    matrix(rnorm(sum(dogs)*d),nrow=sum(dogs)) %*% diag(noise*averages[2,]) # add noise for y=1 (dogs)</span></span>
-<span id="cb4-81"><a href="#cb4-81"></a><span class="in">  return(list(X=X,y=y))</span></span>
-<span id="cb4-82"><a href="#cb4-82"></a><span class="in">}</span></span>
-<span id="cb4-83"><a href="#cb4-83"></a><span class="in">set.seed(seed)</span></span>
-<span id="cb4-84"><a href="#cb4-84"></a><span class="in">n &lt;- 1000</span></span>
-<span id="cb4-85"><a href="#cb4-85"></a><span class="in">averages = data.table(height=c(50,100),tail=c(50,20))</span></span>
-<span id="cb4-86"><a href="#cb4-86"></a><span class="in">invisible(list2env(sim_data(n=n,averages = averages),envir = environment()))</span></span>
+<span id="cb4-71"><a href="#cb4-71"></a>sim_data <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>,averages,<span class="at">noise=</span><span class="fl">0.1</span>) {</span>
+<span id="cb4-72"><a href="#cb4-72"></a>  d <span class="ot">&lt;-</span> <span class="fu">ncol</span>(averages)</span>
+<span id="cb4-73"><a href="#cb4-73"></a>  y <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>(<span class="fu">rbinom</span>(n,<span class="dv">1</span>,<span class="fl">0.5</span>)<span class="sc">-</span><span class="fl">0.5</span>) <span class="co"># generate binary outcome: 1=dog, -1=cat</span></span>
+<span id="cb4-74"><a href="#cb4-74"></a>  X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(averages[(y<span class="sc">+</span><span class="dv">1</span>)<span class="sc">/</span><span class="dv">2</span><span class="sc">+</span><span class="dv">1</span>,]) <span class="co"># generate attributes conditional on y</span></span>
+<span id="cb4-75"><a href="#cb4-75"></a>  dogs <span class="ot">&lt;-</span> y<span class="sc">==</span><span class="dv">1</span></span>
+<span id="cb4-76"><a href="#cb4-76"></a>  cats <span class="ot">&lt;-</span> y<span class="sc">==-</span><span class="dv">1</span></span>
+<span id="cb4-77"><a href="#cb4-77"></a>  X[cats,] <span class="ot">&lt;-</span> X[cats,] <span class="sc">+</span> </span>
+<span id="cb4-78"><a href="#cb4-78"></a>    <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="fu">sum</span>(cats)<span class="sc">*</span>d),<span class="at">nrow=</span><span class="fu">sum</span>(cats)) <span class="sc">%*%</span> <span class="fu">diag</span>(noise<span class="sc">*</span>averages[<span class="dv">2</span>,]) <span class="co"># add noise for y=1 (cats)</span></span>
+<span id="cb4-79"><a href="#cb4-79"></a>  X[dogs,] <span class="ot">&lt;-</span> X[dogs,] <span class="sc">+</span> </span>
+<span id="cb4-80"><a href="#cb4-80"></a>    <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="fu">sum</span>(dogs)<span class="sc">*</span>d),<span class="at">nrow=</span><span class="fu">sum</span>(dogs)) <span class="sc">%*%</span> <span class="fu">diag</span>(noise<span class="sc">*</span>averages[<span class="dv">2</span>,]) <span class="co"># add noise for y=1 (dogs)</span></span>
+<span id="cb4-81"><a href="#cb4-81"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">X=</span>X,<span class="at">y=</span>y))</span>
+<span id="cb4-82"><a href="#cb4-82"></a>}</span>
+<span id="cb4-83"><a href="#cb4-83"></a><span class="fu">set.seed</span>(seed)</span>
+<span id="cb4-84"><a href="#cb4-84"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb4-85"><a href="#cb4-85"></a>averages <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">height=</span><span class="fu">c</span>(<span class="dv">50</span>,<span class="dv">100</span>),<span class="at">tail=</span><span class="fu">c</span>(<span class="dv">50</span>,<span class="dv">20</span>))</span>
+<span id="cb4-86"><a href="#cb4-86"></a><span class="fu">invisible</span>(<span class="fu">list2env</span>(<span class="fu">sim_data</span>(<span class="at">n=</span>n,<span class="at">averages =</span> averages),<span class="at">envir =</span> <span class="fu">environment</span>()))</span>
 <span id="cb4-87"><a href="#cb4-87"></a><span class="in">```</span></span>
 <span id="cb4-88"><a href="#cb4-88"></a></span>
 <span id="cb4-89"><a href="#cb4-89"></a>We will explain <span class="in">`REVISE`</span> through a short tale of cats and dogs. The protagonist of this tale is Kitty <span class="in">`r emo::ji("cat")`</span>, a young cat that identifies as a dog. Unfortunately, Kitty is not very tall and her tail, though short for a cat, is longer than that of the average dog (@fig-density).</span>
@@ -1218,10 +1020,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb4-127"><a href="#cb4-127"></a>Much to her dismay, Kitty has been recognized as a cat by a linear classifier $g_n(X)$ that we trained through stochastic gradient descent using the data on animals' height and tail length. Once again interested readers may find technical details and code in the annex below. @fig-class shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty's location indicated by a red circle. Can we provide individual recourse to Kitty?</span>
 <span id="cb4-128"><a href="#cb4-128"></a></span>
 <span id="cb4-129"><a href="#cb4-129"></a><span class="in">```{r fit}</span></span>
-<span id="cb4-130"><a href="#cb4-130"></a><span class="in">source("blog/posts/individual-recourse-for-black-box-models/R/linear_classifier.R")</span></span>
-<span id="cb4-131"><a href="#cb4-131"></a><span class="in">n_iter &lt;- 1000 </span></span>
-<span id="cb4-132"><a href="#cb4-132"></a><span class="in">mod &lt;- linear_classifier(X,y,save_steps = T, n_iter = n_iter) # fit classifier</span></span>
-<span id="cb4-133"><a href="#cb4-133"></a><span class="in">y_hat &lt;- predict(mod) # predict labels</span></span>
+<span id="cb4-130"><a href="#cb4-130"></a><span class="fu">source</span>(<span class="st">"blog/posts/individual-recourse-for-black-box-models/R/linear_classifier.R"</span>)</span>
+<span id="cb4-131"><a href="#cb4-131"></a>n_iter <span class="ot">&lt;-</span> <span class="dv">1000</span> </span>
+<span id="cb4-132"><a href="#cb4-132"></a>mod <span class="ot">&lt;-</span> <span class="fu">linear_classifier</span>(X,y,<span class="at">save_steps =</span> T, <span class="at">n_iter =</span> n_iter) <span class="co"># fit classifier</span></span>
+<span id="cb4-133"><a href="#cb4-133"></a>y_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod) <span class="co"># predict labels</span></span>
 <span id="cb4-134"><a href="#cb4-134"></a><span class="in">```</span></span>
 <span id="cb4-135"><a href="#cb4-135"></a></span>
 <span id="cb4-138"><a href="#cb4-138"></a><span class="in">```{r}</span></span>
@@ -1284,20 +1086,20 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb4-199"><a href="#cb4-199"></a><span class="in">```</span></span>
 <span id="cb4-200"><a href="#cb4-200"></a></span>
 <span id="cb4-201"><a href="#cb4-201"></a><span class="in">```{r, eval=FALSE}</span></span>
-<span id="cb4-202"><a href="#cb4-202"></a><span class="in">steps[,emoji:=sprintf("blog/posts/individual-recourse-for-black-box-models/www/%s.png",tolower(y_hat))]</span></span>
-<span id="cb4-203"><a href="#cb4-203"></a><span class="in">p &lt;- p +</span></span>
-<span id="cb4-204"><a href="#cb4-204"></a><span class="in">  geom_image(data=steps,aes(x=height,y=tail,image=emoji), size=0.1) +</span></span>
-<span id="cb4-205"><a href="#cb4-205"></a><span class="in">  facet_wrap(~lambda) +</span></span>
-<span id="cb4-206"><a href="#cb4-206"></a><span class="in">  transition_states(</span></span>
-<span id="cb4-207"><a href="#cb4-207"></a><span class="in">    variable,</span></span>
-<span id="cb4-208"><a href="#cb4-208"></a><span class="in">    transition_length = 2,</span></span>
-<span id="cb4-209"><a href="#cb4-209"></a><span class="in">    state_length = 1</span></span>
-<span id="cb4-210"><a href="#cb4-210"></a><span class="in">  ) +</span></span>
-<span id="cb4-211"><a href="#cb4-211"></a><span class="in">  labs(</span></span>
-<span id="cb4-212"><a href="#cb4-212"></a><span class="in">    title="Iteration: {closest_state}"</span></span>
-<span id="cb4-213"><a href="#cb4-213"></a><span class="in">  ) </span></span>
-<span id="cb4-214"><a href="#cb4-214"></a><span class="in">animate(p, width = 600, height = 600)</span></span>
-<span id="cb4-215"><a href="#cb4-215"></a><span class="in">anim_save("blog/posts/individual-recourse-for-black-box-models/www/revise.gif")</span></span>
+<span id="cb4-202"><a href="#cb4-202"></a>steps[,emoji<span class="sc">:</span><span class="er">=</span><span class="fu">sprintf</span>(<span class="st">"blog/posts/individual-recourse-for-black-box-models/www/%s.png"</span>,<span class="fu">tolower</span>(y_hat))]</span>
+<span id="cb4-203"><a href="#cb4-203"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span></span>
+<span id="cb4-204"><a href="#cb4-204"></a>  <span class="fu">geom_image</span>(<span class="at">data=</span>steps,<span class="fu">aes</span>(<span class="at">x=</span>height,<span class="at">y=</span>tail,<span class="at">image=</span>emoji), <span class="at">size=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb4-205"><a href="#cb4-205"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>lambda) <span class="sc">+</span></span>
+<span id="cb4-206"><a href="#cb4-206"></a>  <span class="fu">transition_states</span>(</span>
+<span id="cb4-207"><a href="#cb4-207"></a>    variable,</span>
+<span id="cb4-208"><a href="#cb4-208"></a>    <span class="at">transition_length =</span> <span class="dv">2</span>,</span>
+<span id="cb4-209"><a href="#cb4-209"></a>    <span class="at">state_length =</span> <span class="dv">1</span></span>
+<span id="cb4-210"><a href="#cb4-210"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-211"><a href="#cb4-211"></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-212"><a href="#cb4-212"></a>    <span class="at">title=</span><span class="st">"Iteration: {closest_state}"</span></span>
+<span id="cb4-213"><a href="#cb4-213"></a>  ) </span>
+<span id="cb4-214"><a href="#cb4-214"></a><span class="fu">animate</span>(p, <span class="at">width =</span> <span class="dv">600</span>, <span class="at">height =</span> <span class="dv">600</span>)</span>
+<span id="cb4-215"><a href="#cb4-215"></a><span class="fu">anim_save</span>(<span class="st">"blog/posts/individual-recourse-for-black-box-models/www/revise.gif"</span>)</span>
 <span id="cb4-216"><a href="#cb4-216"></a><span class="in">```</span></span>
 <span id="cb4-217"><a href="#cb4-217"></a></span>
 <span id="cb4-218"><a href="#cb4-218"></a>Let's see if and how we can apply <span class="in">`REVISE`</span> to Kitty's problem. The following summary should give you some flavour of how the algorithm works:</span>
@@ -1313,8 +1115,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb4-228"><a href="#cb4-228"></a><span class="al">![The simplified `REVISE` algorithm in action: how Kitty crosses the decision boundary by changing her attributes. Regularization with respect to the distance penalty increases from top left to bottom right.](www/revise.gif)</span>{#fig-revise}</span>
 <span id="cb4-229"><a href="#cb4-229"></a></span>
 <span id="cb4-230"><a href="#cb4-230"></a><span class="in">```{r, eval=F}</span></span>
-<span id="cb4-231"><a href="#cb4-231"></a><span class="in">dt_dist &lt;- steps[,.(distance=unique(distance)),by=lambda]</span></span>
-<span id="cb4-232"><a href="#cb4-232"></a><span class="in">kableExtra::kable(dt_dist, col.names = c("$\\lambda$","Euclidean distance"))</span></span>
+<span id="cb4-231"><a href="#cb4-231"></a>dt_dist <span class="ot">&lt;-</span> steps[,.(<span class="at">distance=</span><span class="fu">unique</span>(distance)),by<span class="ot">=</span>lambda]</span>
+<span id="cb4-232"><a href="#cb4-232"></a>kableExtra<span class="sc">::</span><span class="fu">kable</span>(dt_dist, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">lambda$"</span>,<span class="st">"Euclidean distance"</span>))</span>
 <span id="cb4-233"><a href="#cb4-233"></a><span class="in">```</span></span>
 <span id="cb4-234"><a href="#cb4-234"></a></span>
 <span id="cb4-235"><a href="#cb4-235"></a><span class="fu">## Discussion</span></span>
@@ -1329,7 +1131,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb4-244"><a href="#cb4-244"></a></span>
 <span id="cb4-245"><a href="#cb4-245"></a><span class="fu">## References</span></span>
 <span id="cb4-246"><a href="#cb4-246"></a></span>
-<span id="cb4-247"><a href="#cb4-247"></a>&lt;div id="refs"&gt;&lt;/div&gt;</span>
+<span id="cb4-247"><a href="#cb4-247"></a><span class="kw">&lt;div</span> <span class="er">id</span><span class="ot">=</span><span class="st">"refs"</span><span class="kw">&gt;&lt;/div&gt;</span></span>
 <span id="cb4-248"><a href="#cb4-248"></a></span>
 <span id="cb4-249"><a href="#cb4-249"></a><span class="fu">## Annex </span></span>
 <span id="cb4-250"><a href="#cb4-250"></a></span>
@@ -1398,18 +1200,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb4-313"><a href="#cb4-313"></a>The synthetic data describing cats and dogs was generated as follows:</span>
 <span id="cb4-314"><a href="#cb4-314"></a></span>
 <span id="cb4-315"><a href="#cb4-315"></a><span class="in">```{r, eval=FALSE, echo=TRUE}</span></span>
-<span id="cb4-316"><a href="#cb4-316"></a><span class="in">sim_data &lt;- function(n=100,averages,noise=0.1) {</span></span>
-<span id="cb4-317"><a href="#cb4-317"></a><span class="in">  d &lt;- ncol(averages)</span></span>
-<span id="cb4-318"><a href="#cb4-318"></a><span class="in">  y &lt;- 2*(rbinom(n,1,0.5)-0.5) # generate binary outcome: 1=dog, -1=cat</span></span>
-<span id="cb4-319"><a href="#cb4-319"></a><span class="in">  X &lt;- as.matrix(averages[(y+1)/2+1,]) # generate attributes conditional on y</span></span>
-<span id="cb4-320"><a href="#cb4-320"></a><span class="in">  dogs &lt;- y==1 # boolean index for dogs</span></span>
-<span id="cb4-321"><a href="#cb4-321"></a><span class="in">  cats &lt;- y==-1 # boolean index for cats</span></span>
-<span id="cb4-322"><a href="#cb4-322"></a><span class="in">  X[cats,] &lt;- X[cats,] + </span></span>
-<span id="cb4-323"><a href="#cb4-323"></a><span class="in">    matrix(rnorm(sum(cats)*d),nrow=sum(cats)) %*% diag(noise*averages[2,]) # add noise for y=1 (cats)</span></span>
-<span id="cb4-324"><a href="#cb4-324"></a><span class="in">  X[dogs,] &lt;- X[dogs,] + </span></span>
-<span id="cb4-325"><a href="#cb4-325"></a><span class="in">    matrix(rnorm(sum(dogs)*d),nrow=sum(dogs)) %*% diag(noise*averages[2,]) # add noise for y=1 (dogs)</span></span>
-<span id="cb4-326"><a href="#cb4-326"></a><span class="in">  return(list(X=X,y=y))</span></span>
-<span id="cb4-327"><a href="#cb4-327"></a><span class="in">}</span></span>
+<span id="cb4-316"><a href="#cb4-316"></a>sim_data <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>,averages,<span class="at">noise=</span><span class="fl">0.1</span>) {</span>
+<span id="cb4-317"><a href="#cb4-317"></a>  d <span class="ot">&lt;-</span> <span class="fu">ncol</span>(averages)</span>
+<span id="cb4-318"><a href="#cb4-318"></a>  y <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>(<span class="fu">rbinom</span>(n,<span class="dv">1</span>,<span class="fl">0.5</span>)<span class="sc">-</span><span class="fl">0.5</span>) <span class="co"># generate binary outcome: 1=dog, -1=cat</span></span>
+<span id="cb4-319"><a href="#cb4-319"></a>  X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(averages[(y<span class="sc">+</span><span class="dv">1</span>)<span class="sc">/</span><span class="dv">2</span><span class="sc">+</span><span class="dv">1</span>,]) <span class="co"># generate attributes conditional on y</span></span>
+<span id="cb4-320"><a href="#cb4-320"></a>  dogs <span class="ot">&lt;-</span> y<span class="sc">==</span><span class="dv">1</span> <span class="co"># boolean index for dogs</span></span>
+<span id="cb4-321"><a href="#cb4-321"></a>  cats <span class="ot">&lt;-</span> y<span class="sc">==-</span><span class="dv">1</span> <span class="co"># boolean index for cats</span></span>
+<span id="cb4-322"><a href="#cb4-322"></a>  X[cats,] <span class="ot">&lt;-</span> X[cats,] <span class="sc">+</span> </span>
+<span id="cb4-323"><a href="#cb4-323"></a>    <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="fu">sum</span>(cats)<span class="sc">*</span>d),<span class="at">nrow=</span><span class="fu">sum</span>(cats)) <span class="sc">%*%</span> <span class="fu">diag</span>(noise<span class="sc">*</span>averages[<span class="dv">2</span>,]) <span class="co"># add noise for y=1 (cats)</span></span>
+<span id="cb4-324"><a href="#cb4-324"></a>  X[dogs,] <span class="ot">&lt;-</span> X[dogs,] <span class="sc">+</span> </span>
+<span id="cb4-325"><a href="#cb4-325"></a>    <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="fu">sum</span>(dogs)<span class="sc">*</span>d),<span class="at">nrow=</span><span class="fu">sum</span>(dogs)) <span class="sc">%*%</span> <span class="fu">diag</span>(noise<span class="sc">*</span>averages[<span class="dv">2</span>,]) <span class="co"># add noise for y=1 (dogs)</span></span>
+<span id="cb4-326"><a href="#cb4-326"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">X=</span>X,<span class="at">y=</span>y))</span>
+<span id="cb4-327"><a href="#cb4-327"></a>}</span>
 <span id="cb4-328"><a href="#cb4-328"></a><span class="in">```</span></span>
 <span id="cb4-329"><a href="#cb4-329"></a></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1417,12 +1219,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">
-<p>© 2023, Patrick Altmeyer</p>
-</div>   
+    <div class="nav-footer-left">© 2023, Patrick Altmeyer</div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
@@ -1453,7 +1253,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-
 
 
 
