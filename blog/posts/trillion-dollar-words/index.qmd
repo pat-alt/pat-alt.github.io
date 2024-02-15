@@ -1,0 +1,140 @@
+---
+title: TrillionDollarWords.jl
+subtitle: The Trillion Dollar Words dataset and model in Julia
+date: '2024-02-14'
+categories:
+  - llm
+  - mechanistic interpretability
+  - finance
+  - Julia
+description: >-
+  A short post introducing a small new Julia package that facilitates working with the Trillion Dollar Words dataset and model published in a recent ACL 2023 [paper](https://arxiv.org/abs/2305.07972).
+image: intro.jpeg
+draft: false
+code-fold: show
+---  
+
+```{julia}
+#| echo: false
+
+include("$(pwd())/blog/posts/trillion-dollar-words/src/setup.jl")
+```
+
+<div class="intro-gif">
+  <figure>
+    <img src="intro.jpeg">
+    <figcaption>Photo by <a href="https://unsplash.com/@neonbrand?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Kenny Eliason</a> on <a href="https://unsplash.com/photos/1-us-dollar-banknote-8fDhgAN5zG0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a></figcaption>
+  </figure>
+</div> 
+
+
+In a recent [post](../spurious-sparks/index.qmd), I questioned the idea that finding patterns in latent embeddings of models is indicative of AGI or even surprising. One of the models we investigate in our related [paper](https://arxiv.org/abs/2402.03962) [@altmeyer2024position] is the *FOMC-RoBERTa* model trained on the Trillion Dollar Words dataset, both of which were published by @shah2023trillion in a recent ACL 2023 paper: [Trillion Dollar Words: A New Financial Dataset, Task & Market Analysis](https://arxiv.org/abs/2305.07972) [@shah2023trillion]. To run our experiments and facilitate working with the data and model in Julia, I have developed a small package: [TrillionDollarWords.jl](https://github.com/pat-alt/TrillionDollarWords.jl). This short post introduces the package and its basic functionality.
+
+## TrillionDollarWords.jl
+
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://pat-alt.github.io/TrillionDollarWords.jl/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://pat-alt.github.io/TrillionDollarWords.jl/dev/)
+[![Build Status](https://github.com/pat-alt/TrillionDollarWords.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/pat-alt/TrillionDollarWords.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Coverage](https://codecov.io/gh/pat-alt/TrillionDollarWords.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/pat-alt/TrillionDollarWords.jl)
+[![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
+
+[TrillionDollarWords.jl](https://github.com/pat-alt/TrillionDollarWords.jl) is a light-weight package that provides Julia useres easy access to the Trillion Dollar Words dataset and model [@shah2023trillion].
+
+::: {.callout-note}
+
+## Disclaimer  
+
+Please note that I am not the author of the Trillion Dollar Words paper nor am I affiliated with the authors. The package was developed as a by-product of our research and is not officially endorsed by the authors of the paper. 
+
+:::
+
+The package is currently pending registration on Julia's general registry. In the meantime, you can install the development version from GitHub:
+
+``` julia
+using Pkg
+Pkg.add(url="https://github.com/pat-alt/TrillionDollarWords.jl")
+```
+
+### Basic Functionality
+
+The package provides the following functionality:
+
+- Load pre-processed data.
+- Load the model proposed in the paper. 
+- Basic model inference: compute forward passes and layer-wise activations.
+- Download pre-computed activations for probing the model.
+
+The latter two are particularly useful for downstream tasks related to [mechanistic interpretability](https://en.wikipedia.org/wiki/Large_language_model#Interpretation). In times of increasing scrutiny of AI models, it is important to understand how they work and what they have learned. Mechanistic interpretability is a promising approach to this end, as it aims to understand the model's internal representations and how they relate to the task at hand. As we make abundantly clear in our own [paper](https://arxiv.org/abs/2402.03962) [@altmeyer2024position], interpretability is not a silver bullet, but merely a step towards understanding, monitoring and improving AI models.
+
+### Loading the Data
+
+The Trillion Dollar Words dataset is a collection of preprocessed sentences around 40,000 time-stamped sentences from meeting minutes, press conferences and speeches by members of the Federal Open Market Committee (FOMC) [@shah2023trillion]. The total sample period spans from January, 1996, to October, 2022. In order to train various rule-based models and large language models (LLM) to classify sentences as either ‘hawkish’, ‘dovish’ or ‘neutral’, they have manually annotated a subset of around 2,500 sentences. The best-performing model, a large BERT model with around 355 million parameters, was open-sourced on [HuggingFace](https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves). The authors also link the sentences to market data, which makes it possible to study the relationship between language and financial markets. While the authors of the paper did publish their data, much of it is unfortunately scattered across CSV and Excel files stored in a public GitHub [repo](https://github.com/gtfintechlab/fomc-hawkish-dovish). I have collected and merged that data, yielding a combined dataset with indexed sentences and additional metadata that may be useful for downstream tasks.
+
+The entire dataset of all available sentences used in the paper can be loaded as follows:
+
+```{julia}
+#| output: true
+
+using TrillionDollarWords
+load_all_sentences() |> show
+```
+
+The combined dataset is also available as a `DataFrame` and can be loaded as follows:
+
+```{julia}
+#| output: true
+
+load_all_data() |> show
+```
+
+Additional functionality for data loading is available (see [docs](https://www.paltmeyer.com/TrillionDollarWords.jl/dev/)).
+
+### Loading the Model
+
+The model can be loaded with or without the classifier head (below without the head). Under the hood, this function uses [Transformers.jl](https://github.com/chengchingwen/Transformers.jl) to retrieve the model from [HuggingFace](https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves). Any keyword arguments accepted by `Transformers.HuggingFace.HGFConfig` can also be passed. For example, to load the model without the classifier head and enable access to layer-wise activations, the following command can be used:
+
+```{julia}
+#| output: true
+
+load_model(; load_head=false, output_hidden_states=true) |> show
+```
+
+### Basic Model Inference
+
+Using the model and data, layer-wise activations can be computed as below (here for the first 5 sentences). When called on a `DataFrame`, the `layerwise_activations` returns a data frame that links activations to sentence identifiers. This makes it possible to relate activations to market data by using the `sentence_id` key. Alternatively, `layerwise_activations` also accepts a vector of sentences.
+
+```{julia}
+#| output: true
+
+df = load_all_sentences()
+mod = load_model(; load_head=false, output_hidden_states=true)
+n = 5
+queries = df[1:n, :]
+layerwise_activations(mod, queries) |> show
+```
+
+### Probe Findings
+
+For our own [research](https://arxiv.org/abs/2402.03962) [@altmeyer2024position], we have been interested in probing the model. This involves using linear models to estimate the relationship between layer-wise transformer embeddings and some outcome variable of interest [@alain2018understanding]. To do this, we first had to run a single forward pass for each sentence through the RoBERTa model and store the layerwise emeddings. As we have seen above, the package ships with functionality for doing just that, but to save others valuable GPU hours we have archived activations of the hidden state on the first entity token for each layer as [artifacts](https://github.com/pat-alt/TrillionDollarWords.jl/releases/tag/activations_2024-01-17). To download the last-layer activations in an interactive Julia session, for example, users can proceed as follows:
+
+``` julia
+using LazyArtifacts
+
+julia> artifact"activations_layer_24"
+```
+
+We have found that despite the small sample size, the *FOMC-RoBERTa* model appears to have distilled useful representations for downstream tasks that it was not explicitly trained for. @fig-rmse-pca-128 below shows the average out-of-sample root mean squared error for predicting various market indicators from layer activations. Consistent with findings in related work [@alain2018understanding], we find that performance typically improves for layers closer to the final output layer of the transformer model. The measured performance is at least on par with baseline autoregressive models. For more information on this, see also my other recent [post](../spurious-sparks/index.qmd).
+
+![Out-of-sample root mean squared error (RMSE) for the linear probe plotted against *FOMC-RoBERTa*'s $n$-th layer for different indicators. The values correspond to averages computed across cross-validation folds, where we have used an expanding window approach to split the time series.](https://raw.githubusercontent.com/pat-alt/TrillionDollarWords.jl/11-activations-for-cls-head/dev/juliacon/rmse_pca_128.png){#fig-rmse-pca-128}
+
+## Intended Purpose and Goals
+
+I hope that this small package may be useful to members of the Julia community who are interested in the interplay between Economics, Finance and Artificial Intelligence. It should serve as a good starting point for the following ideas:
+
+- Fine-tune additional models on the classification task or other tasks of interest.
+- Further model probing, e.g. using other market indicators not discussed in the original paper.
+- Improve and extend the label annotations. 
+
+Any contributions are very much welcome.
+
+## References
