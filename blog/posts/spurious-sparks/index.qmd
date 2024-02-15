@@ -347,7 +347,7 @@ Instead of computing a measure based on predicted labels, we can use linear prob
 
 @fig-fomc shows the out-of-sample root mean squared error (RMSE) for the linear probe, plotted against *FOMC-RoBERTa*'s $n$-th layer. The values correspond to averages across cross-validation folds where I have used an expanding window scheme. Consistent with related work [@alain2018understanding,@gurnee2023language], we can observe that model performance tends to be higher for layers near the end of the transformer model. Curiously, for yields at longer maturities, we see that performance eventually deteriorates for the very final layers. This is not the case for the training data, so I would attribute this to overfitting. A detailed discussion of all our results including a benchmark of these probes against baseline autoregressive models can be found in the paper.
 
-![Out-of-sample root mean squared error (RMSE) for the linear probe plotted against*FOMC-RoBERTa*'s $n$-th layer for different indicators. The values correspond to averages computed across cross-validation folds, where we have used an expanding window approach to split the time series.](results/figures/rmse_pca_128.png){#fig-fomc}
+![Out-of-sample root mean squared error (RMSE) for the linear probe plotted against *FOMC-RoBERTa*'s $n$-th layer for different indicators. The values correspond to averages computed across cross-validation folds, where we have used an expanding window approach to split the time series.](results/figures/rmse_pca_128.png){#fig-fomc}
 
 #### Stochastic Parrots After All?
 
