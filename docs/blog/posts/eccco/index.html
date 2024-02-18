@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -61,6 +61,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -102,7 +103,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -111,6 +118,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -132,7 +140,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <meta property="og:title" content="Patrick Altmeyer - ECCCos from the Black Box">
 <meta property="og:description" content="ECCCo is a new way to generate faithful model explanations through counterfactuals that are as plausible as the underlying model permits. Companion post to our AAAI 2024 paper.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/eccco/www/density_model.png">
-<meta property="og:site-name" content="Patrick Altmeyer">
+<meta property="og:site_name" content="Patrick Altmeyer">
 <meta property="og:image:height" content="1499">
 <meta property="og:image:width" content="1499">
 <meta name="twitter:title" content="Patrick Altmeyer - ECCCos from the Black Box">
@@ -147,9 +155,9 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
@@ -164,50 +172,50 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/publications/index.html" rel="" target="">
- <span class="menu-text">Publications</span></a>
+    <a class="nav-link" href="../../../content/publications/index.html"> 
+<span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html" rel="" target="">
- <span class="menu-text">Talks</span></a>
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/software.html" rel="" target="">
- <span class="menu-text">Software</span></a>
+    <a class="nav-link" href="../../../content/software.html"> 
+<span class="menu-text">Software</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/about/index.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../../content/about/index.html"> 
+<span class="menu-text">About</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../blog/index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/pat-alt" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/paltmey" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -232,7 +240,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <li><a href="#software" id="toc-software" class="nav-link" data-scroll-target="#software">Software</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
@@ -262,14 +270,14 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     <div class="quarto-title-meta-contents">
     <p class="author"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> </p>
   </div>
-    <div class="quarto-title-meta-contents">
+  <div class="quarto-title-meta-contents">
         <p class="affiliation">
             <a href="https://www.tudelft.nl/en/">
             Delft University of Technology
             </a>
           </p>
       </div>
-    </div>
+  </div>
 
 <div class="quarto-title-meta">
 
@@ -285,7 +293,9 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   </div>
   
 
+
 </header>
+
 
 <p>Counterfactual explanations offer an intuitive and straightforward way to explain opaque machine learning (ML) models. They work under the premise of perturbing inputs to achieve a desired change in the predicted output. There are typically many ways to achieve this, in other words, many different counterfactuals may yield the same desired outcome. A key challenge for researchers has therefore been to, firstly, define certain desirable characteristics of counterfactual explanations and, secondly, come up with efficient ways to achieve them.</p>
 <p>One of the most important and studied characteristics of counterfactual explanations is ‘plausibility’: explanations should look realistic to humans. Plausibility is positively associated with actionability, robustness <span class="citation" data-cites="artelt2021evaluating">(<a href="#ref-artelt2021evaluating" role="doc-biblioref">Artelt et al. 2021</a>)</span> and causal validity <span class="citation" data-cites="mahajan2019preserving">(<a href="#ref-mahajan2019preserving" role="doc-biblioref">Mahajan, Tan, and Sharma 2020</a>)</span>. To achieve plausibility, many existing approaches rely on surrogate models. This is straightforward but it also convolutes things further: it essentially reallocates the task of learning plausible explanations for the data from the model itself to the surrogate.</p>
@@ -323,15 +333,19 @@ Intermezzo: Why Bother?
 <p>In summary, I think that—like it or not—we do need to bother.</p>
 </div>
 </div>
-<p>The second major debate is about what constitutes a good explanation, because, crucially, explanations are not unique: was your headache cured by the aspirin you took before going to sleep or sleep itself? Or a combination of both? This multiplicity of explanations arises almost naturally in the context of counterfactual explanations. Unless the combination of input features for which the model predicts the target class or value is unique, there is always more than one possible explanation. As an illustrative example, consider the counterfactuals presented in <a href="#fig-cf-example">Figure&nbsp;1</a>. All of these are valid explanations for turning a ‘nine’ into ‘seven’ according to the underlying classifier (a simple multi-layer perceptron). They are all valid in the sense the model predicts the target label with high probability in each case. The troubling part is that even though all of the generated counterfactuals provide valid explanations for why the model predicts ‘seven’ instead of ‘nine’, they all look very different.</p>
-<div id="fig-cf-example" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="www/mnist_motivation.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using <em>Wachter</em> <span class="citation" data-cites="wachter2017counterfactual">(<a href="#ref-wachter2017counterfactual" role="doc-biblioref">Wachter, Mittelstadt, and Russell 2017</a>)</span>, <em>Schut</em> <span class="citation" data-cites="schut2021generating">(<a href="#ref-schut2021generating" role="doc-biblioref">Schut et al. 2021</a>)</span> and <em>REVISE</em> <span class="citation" data-cites="joshi2019realistic">(<a href="#ref-joshi2019realistic" role="doc-biblioref">Joshi et al. 2019</a>)</span>.</figcaption>
+<p>The second major debate is about what constitutes a good explanation, because, crucially, explanations are not unique: was your headache cured by the aspirin you took before going to sleep or sleep itself? Or a combination of both? This multiplicity of explanations arises almost naturally in the context of counterfactual explanations. Unless the combination of input features for which the model predicts the target class or value is unique, there is always more than one possible explanation. As an illustrative example, consider the counterfactuals presented in <a href="#fig-cf-example" class="quarto-xref">Figure&nbsp;1</a>. All of these are valid explanations for turning a ‘nine’ into ‘seven’ according to the underlying classifier (a simple multi-layer perceptron). They are all valid in the sense the model predicts the target label with high probability in each case. The troubling part is that even though all of the generated counterfactuals provide valid explanations for why the model predicts ‘seven’ instead of ‘nine’, they all look very different.</p>
+<div id="fig-cf-example" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cf-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="www/mnist_motivation.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cf-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using <em>Wachter</em> <span class="citation" data-cites="wachter2017counterfactual">(<a href="#ref-wachter2017counterfactual" role="doc-biblioref">Wachter, Mittelstadt, and Russell 2017</a>)</span>, <em>Schut</em> <span class="citation" data-cites="schut2021generating">(<a href="#ref-schut2021generating" role="doc-biblioref">Schut et al. 2021</a>)</span> and <em>REVISE</em> <span class="citation" data-cites="joshi2019realistic">(<a href="#ref-joshi2019realistic" role="doc-biblioref">Joshi et al. 2019</a>)</span>.
+</figcaption>
 </figure>
 </div>
 <p>So, which explanations do we trust most? Which one would you choose to present to an audience to explain how the classifier decides which digit to predict? Arguably, the counterfactual on the far right looks most like a ‘seven’, so I am willing to bet that most people would simply choose that one. It is valid after all and it looks plausible, while the other two counterfactuals might just lead to awkward questions from more interrogative audience members. In any case, I mentioned earlier that more plausible explanations tend to also be more actionable and robust, so this seems fair game. The counterfactual produced by <em>REVISE</em> <span class="citation" data-cites="joshi2019realistic">(<a href="#ref-joshi2019realistic" role="doc-biblioref">Joshi et al. 2019</a>)</span> is the poison we will pick—dump the rest and move on. Plausibility is all we need!<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<p>I am exaggerating but I do think that as a community of researchers studying counterfactual explanations, we have become so absorbed by the pursuit of a few desiderata that we have forgotten that ultimately we are in the business of explaining models. Our primary mandate is to design tools that help us understand why models predict certain outcomes. How useful is a plausible, actionable, sparse, causally valid explanation in gaining that understanding, if there exist a whole bunch of other valid explanations that do not meet these desiderata? Have we significantly improved our understanding of the underlying classifier in <a href="#fig-cf-example">Figure&nbsp;1</a> and therefore established a higher degree of trust in the model, simply because we have found a plausible counterfactual?</p>
+<p>I am exaggerating but I do think that as a community of researchers studying counterfactual explanations, we have become so absorbed by the pursuit of a few desiderata that we have forgotten that ultimately we are in the business of explaining models. Our primary mandate is to design tools that help us understand why models predict certain outcomes. How useful is a plausible, actionable, sparse, causally valid explanation in gaining that understanding, if there exist a whole bunch of other valid explanations that do not meet these desiderata? Have we significantly improved our understanding of the underlying classifier in <a href="#fig-cf-example" class="quarto-xref">Figure&nbsp;1</a> and therefore established a higher degree of trust in the model, simply because we have found a plausible counterfactual?</p>
 <p>In my mind, we most certainly have not. I would argue that the existence of a valid and plausible explanation merely serves to reassure us that the model is not entirely ignorant about meaningful representations in the data. But as long as entirely implausible counterfactuals are also valid according to the model, selectively relying only on the subset of plausible counterfactuals may lead to a wrong sense of trust in untrustworthy models. That is why in our paper we argue that explanations should be faithful first, and plausible second.</p>
 </section>
 <section id="faithful-first-plausible-second" class="level2 page-columns page-full">
@@ -341,68 +355,88 @@ Intermezzo: Why Bother?
 <h3 class="anchored" data-anchor-id="faithful-counterfactuals">Faithful Counterfactuals</h3>
 <p>When inquiring about what is “consistent with what the model has learned about the data”, we are essentially asking about the model’s posterior conditional distribution of the input data given the target output. It turns out that we can approximate that distribution using ideas relevant to energy-based modelling. In particular, we can use something called Stochastic Gradient Langevin Dynamics (SGLD) to sample from the model’s posterior conditional distribution <span class="citation" data-cites="welling2011bayesian">(<a href="#ref-welling2011bayesian" role="doc-biblioref">Welling and Teh 2011</a>)</span>.</p>
 <p>Without going into too much detail here, the idea is to use the model’s energy function to guide the sampling process. The energy function is a scalar function that assigns a value to each possible configuration of the input data. The lower the energy, the higher the likelihood corresponding to the configuration. This is a powerful tool: <span class="citation" data-cites="grathwohl2020your">Grathwohl et al. (<a href="#ref-grathwohl2020your" role="doc-biblioref">2020</a>)</span>, for example, use SGLD in this fashion to train hybrid models—joint-energy models (JEM)—that are trained to both classify and generate data.</p>
-<p><a href="#fig-faithful">Figure&nbsp;2</a> illustrates this concept. It shows samples (yellow stars) drawn from the posterior of a simple JEM trained on linearly separable data. The contour shows the kernel density estimate (KDE) for the learned conditional distribution. Although it seems that the posterior is too sharp in this case, the learned conditional distribution is overall consistent with the data (at least the mode is).</p>
+<p><a href="#fig-faithful" class="quarto-xref">Figure&nbsp;2</a> illustrates this concept. It shows samples (yellow stars) drawn from the posterior of a simple JEM trained on linearly separable data. The contour shows the kernel density estimate (KDE) for the learned conditional distribution. Although it seems that the posterior is too sharp in this case, the learned conditional distribution is overall consistent with the data (at least the mode is).</p>
 
 <div class="no-row-height column-margin column-container"><div class="">
-<div id="fig-faithful" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="www/density_model.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: Kernel Density Estimate (KDE) for the learned conditional distribution. Yellow stars indicate samples generated through Stochastic Gradient Langevin Dynamics for a joint energy model (JEM).</figcaption>
+<div id="fig-faithful" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-faithful-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="www/density_model.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-faithful-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Kernel Density Estimate (KDE) for the learned conditional distribution. Yellow stars indicate samples generated through Stochastic Gradient Langevin Dynamics for a joint energy model (JEM).
+</figcaption>
 </figure>
 </div>
-</div></div><p>Also shown in <a href="#fig-faithful">Figure&nbsp;2</a> is a single counterfactual path from the orange to the blue class. I have relied on the baseline approach proposed in <span class="citation" data-cites="wachter2017counterfactual">Wachter, Mittelstadt, and Russell (<a href="#ref-wachter2017counterfactual" role="doc-biblioref">2017</a>)</span> here using only a small penalty for the distance between the counterfactual and the original input. A truly faithful counterfactual, as we define it in our paper, would be one that we could expect to sample from the learned conditional distribution (with high probability)<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. Based on this notion, we would not characterize the counterfactual in <a href="#fig-faithful">Figure&nbsp;2</a> as faithful, but it also is not too far off.</p>
+</div></div><p>Also shown in <a href="#fig-faithful" class="quarto-xref">Figure&nbsp;2</a> is a single counterfactual path from the orange to the blue class. I have relied on the baseline approach proposed in <span class="citation" data-cites="wachter2017counterfactual">Wachter, Mittelstadt, and Russell (<a href="#ref-wachter2017counterfactual" role="doc-biblioref">2017</a>)</span> here using only a small penalty for the distance between the counterfactual and the original input. A truly faithful counterfactual, as we define it in our paper, would be one that we could expect to sample from the learned conditional distribution (with high probability)<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. Based on this notion, we would not characterize the counterfactual in <a href="#fig-faithful" class="quarto-xref">Figure&nbsp;2</a> as faithful, but it also is not too far off.</p>
 <p>It is easy to see how other desiderata may conflict with faithfulness. If I had penalized the distance between the counterfactual and the original input more, for example, then the counterfactual would have been less costly but also less faithful. This is the sort of trade-off between different desiderata that we always need to navigate carefully in the context of counterfactual explanations. As we will see next, the same also applies to plausibility but in a different way.</p>
 </section>
 <section id="plausible-counterfactuals" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="plausible-counterfactuals">Plausible Counterfactuals</h3>
-<p>If you have followed the discussion so far, then you have already understood the trickiest concept in our paper. Plausibility can be defined much like we have done for faithfulness, but it is a bit more straightforward. In our paper, we broadly define plausible counterfactals as those that are indistinguishable from the observed data in the target domain. We already touched on this above when discussing the counterfactual images in <a href="#fig-cf-example">Figure&nbsp;1</a>.</p>
+<p>If you have followed the discussion so far, then you have already understood the trickiest concept in our paper. Plausibility can be defined much like we have done for faithfulness, but it is a bit more straightforward. In our paper, we broadly define plausible counterfactals as those that are indistinguishable from the observed data in the target domain. We already touched on this above when discussing the counterfactual images in <a href="#fig-cf-example" class="quarto-xref">Figure&nbsp;1</a>.</p>
 
 <div class="no-row-height column-margin column-container"><div class="">
-<div id="fig-plausible" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="www/density_true.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: KDE for the conditional distribution based on observed data. Counterfactual path as in <a href="#fig-faithful">Figure&nbsp;2</a>.</figcaption>
+<div id="fig-plausible" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-plausible-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="www/density_true.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-plausible-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: KDE for the conditional distribution based on observed data. Counterfactual path as in <a href="#fig-faithful" class="quarto-xref">Figure&nbsp;2</a>.
+</figcaption>
 </figure>
 </div>
-</div></div><p><a href="#fig-plausible">Figure&nbsp;3</a> illustrates the same concept for the same JEM as in <a href="#fig-faithful">Figure&nbsp;2</a>. The KDE in <a href="#fig-plausible">Figure&nbsp;3</a> shows the conditional distribution based on the observed data. The counterfactual path is the same as in <a href="#fig-faithful">Figure&nbsp;2</a>. The counterfactual is plausible in this case since it is not easily distinguishable from the observed data in the target domain.</p>
-<p>Looking at both <a href="#fig-faithful">Figure&nbsp;2</a> and <a href="#fig-plausible">Figure&nbsp;3</a>, it becomes evident why the interplay between faithfulness and plausibility need not necessary be a trade-off. In this case, the counterfactual is neither terribly unfaithful nor implausible. This is because the learned conditional distribution is broadly consistent with the observed distribution of the data.</p>
+</div></div><p><a href="#fig-plausible" class="quarto-xref">Figure&nbsp;3</a> illustrates the same concept for the same JEM as in <a href="#fig-faithful" class="quarto-xref">Figure&nbsp;2</a>. The KDE in <a href="#fig-plausible" class="quarto-xref">Figure&nbsp;3</a> shows the conditional distribution based on the observed data. The counterfactual path is the same as in <a href="#fig-faithful" class="quarto-xref">Figure&nbsp;2</a>. The counterfactual is plausible in this case since it is not easily distinguishable from the observed data in the target domain.</p>
+<p>Looking at both <a href="#fig-faithful" class="quarto-xref">Figure&nbsp;2</a> and <a href="#fig-plausible" class="quarto-xref">Figure&nbsp;3</a>, it becomes evident why the interplay between faithfulness and plausibility need not necessary be a trade-off. In this case, the counterfactual is neither terribly unfaithful nor implausible. This is because the learned conditional distribution is broadly consistent with the observed distribution of the data.</p>
 </section>
 </section>
 <section id="our-approach-eccco" class="level2">
 <h2 class="anchored" data-anchor-id="our-approach-eccco">Our approach: <em>ECCCo</em></h2>
 <p>Now that we have covered the two major concepts in our paper, we can move on to our proposed approach for generating faithful counterfactuals: <em>ECCCo</em>. As the title of the paper suggests, <em>ECCCo</em> is an acronym for <em>E</em>nergy-<em>C</em>onstrained <em>C</em>onformal <em>Co</em>unterfactuals. We leverage ideas from energy-based modelling and conformal prediction, in particular from <span class="citation" data-cites="grathwohl2020your">Grathwohl et al. (<a href="#ref-grathwohl2020your" role="doc-biblioref">2020</a>)</span> and <span class="citation" data-cites="stutz2022learning">Stutz et al. (<a href="#ref-stutz2022learning" role="doc-biblioref">2022</a>)</span>, respectively. Our proposed counterfactual generation process involves little to no overhead and is broadly applicable to any model that can be trained using stochastic gradient descent. Technical details can be found in the paper. For now, let us focus on the high-level idea.</p>
-<p><a href="#fig-poc">Figure&nbsp;4</a> compares the counterfactual path generated by <em>Wachter</em> <span class="citation" data-cites="wachter2017counterfactual">(<a href="#ref-wachter2017counterfactual" role="doc-biblioref">Wachter, Mittelstadt, and Russell 2017</a>)</span> to those generated by <em>ECCCo</em>, where we use ablation to remove the energy constraint—<em>ECCCo (no EBM)</em>—and the conformal prediction component—<em>ECCCo (no CP)</em>. In this case, the counterfactual generated by <em>Wachter</em> is neither faithful nor plausible. It does, however, minimize the distance between the counterfactual and the original input.</p>
+<p><a href="#fig-poc" class="quarto-xref">Figure&nbsp;4</a> compares the counterfactual path generated by <em>Wachter</em> <span class="citation" data-cites="wachter2017counterfactual">(<a href="#ref-wachter2017counterfactual" role="doc-biblioref">Wachter, Mittelstadt, and Russell 2017</a>)</span> to those generated by <em>ECCCo</em>, where we use ablation to remove the energy constraint—<em>ECCCo (no EBM)</em>—and the conformal prediction component—<em>ECCCo (no CP)</em>. In this case, the counterfactual generated by <em>Wachter</em> is neither faithful nor plausible. It does, however, minimize the distance between the counterfactual and the original input.</p>
 <p>The counterfactual generated by <em>ECCCo (no EBM)</em> is deeper inside the blue class and has avoided points near the decision boundary on its path to its final destination. This is because <em>ECCCo (no EBM)</em> involves a penalty term for predictive uncertainty, which is high near the decision boundary. Intuitively, we would expect that avoiding regions of high predictive uncertainty in our counterfactual search should help with plausibility <span class="citation" data-cites="schut2021generating">(<a href="#ref-schut2021generating" role="doc-biblioref">Schut et al. 2021</a>)</span>. In this particular case, the final counterfactual is neither more faithful nor more plausible than the one generated by <em>Wachter</em>, but in our experiments we have generally found that penalizing predictive uncertainty alone can help to generate more faithful and plausible counterfactuals.</p>
-<p>The counterfactual generated by <em>ECCCo (no CP)</em> is more faithful than the one generated by <em>Wachter</em> and <em>ECCCo (no EBM)</em>. This is because the energy constraint induces counterfactuals that are more consistent with the learned conditional distribution (as in <a href="#fig-faithful">Figure&nbsp;2</a>). Since the model has learned something meaningful about the data, the counterfactual is also more plausible than the one generated by <em>Wachter</em> and <em>ECCCo (no EBM)</em> in this case.</p>
+<p>The counterfactual generated by <em>ECCCo (no CP)</em> is more faithful than the one generated by <em>Wachter</em> and <em>ECCCo (no EBM)</em>. This is because the energy constraint induces counterfactuals that are more consistent with the learned conditional distribution (as in <a href="#fig-faithful" class="quarto-xref">Figure&nbsp;2</a>). Since the model has learned something meaningful about the data, the counterfactual is also more plausible than the one generated by <em>Wachter</em> and <em>ECCCo (no EBM)</em> in this case.</p>
 <p>The counterfactual path generated by <em>ECCCo</em> combines benefits from both the energy constraint and the conformal prediction component. It avoids regions of high predictive uncertainty and ends up at a point that is consistent with the learned conditional distribution.</p>
-<div id="fig-poc" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="www/poc_gradient_fields.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;4: Gradient fields and counterfactual paths for different generators.</figcaption>
+<div id="fig-poc" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-poc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="www/poc_gradient_fields.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-poc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Gradient fields and counterfactual paths for different generators.
+</figcaption>
 </figure>
 </div>
 </section>
 <section id="results" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
 <p>In the paper, we present results from extensive empirical studies involving eight datasets from different domains and a variety of models. We compare <em>ECCCo</em> to state-of-the-art counterfactual generators and show that it consistently outperforms these in terms of faithfulness and often achieves the highest degrees of plausibility. Here we will highlight some visual results from the MNIST dataset.</p>
-<p><a href="#fig-mnist-benchmark">Figure&nbsp;5</a> shows counterfactuals generated using different counterfactual generators on the MNIST dataset. In this example, the goal is to generate a counterfactual in class ‘five’ for the factual ‘three’. The <em>ECCCo+</em> generator is a variant of <em>ECCCo</em> that performs gradient search in the space spanned by the first few principal components. This reduces computational costs and often helps with plausibility, sometimes at a small cost of faithfulness. The counterfactuals generated by <em>ECCCo</em> and <em>ECCCo+</em> are visibly more plausible than those generated by the other generators. In the paper, we quantify this using custom metrics for plausibility and faithfulness that we propose.</p>
-<div id="fig-mnist-benchmark" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="www/mnist_benchmark.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;5: Results for different generators (from 3 to 5).</figcaption>
+<p><a href="#fig-mnist-benchmark" class="quarto-xref">Figure&nbsp;5</a> shows counterfactuals generated using different counterfactual generators on the MNIST dataset. In this example, the goal is to generate a counterfactual in class ‘five’ for the factual ‘three’. The <em>ECCCo+</em> generator is a variant of <em>ECCCo</em> that performs gradient search in the space spanned by the first few principal components. This reduces computational costs and often helps with plausibility, sometimes at a small cost of faithfulness. The counterfactuals generated by <em>ECCCo</em> and <em>ECCCo+</em> are visibly more plausible than those generated by the other generators. In the paper, we quantify this using custom metrics for plausibility and faithfulness that we propose.</p>
+<div id="fig-mnist-benchmark" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mnist-benchmark-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="www/mnist_benchmark.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mnist-benchmark-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Results for different generators (from 3 to 5).
+</figcaption>
 </figure>
 </div>
-<p>We also find that the counterfactuals generated by <em>ECCCo</em> are more faithful in this case. The underlying model is a LeNet-5 convolutional neural network <span class="citation" data-cites="lecun1998gradient">(<a href="#ref-lecun1998gradient" role="doc-biblioref">LeCun et al. 1998</a>)</span>. Even today, convolutional neural networks are still among the most popular neural network architectures for image classification. Contrary to the simple multi-layer perceptron (MLP) used in <a href="#fig-cf-example">Figure&nbsp;1</a>, the LeNet-5 model is a bit more complex and it is not surprising that it has distilled more meaningful representations in the data.</p>
-<p>More generally, we find that <em>ECCCo</em> is particularly effective at producing plausible counterfactuals for models that we would expect to have learned more meaningful representations of the data. This is consistent with our claim that <em>ECCCo</em> generates faithful counterfactuals. <a href="#fig-mnist-benchmark">Figure&nbsp;5</a> shows the results for applying <em>ECCCo</em> to the same factual ‘nine’ as in <a href="#fig-cf-example">Figure&nbsp;1</a> for different models from left to right and top to bottom: (a) an MLP, (b) a deep ensemble of MLPs, (c) a JEM, and, (d) a deep ensemble of JEMs. The plausibility of the generated counterfactual gradually improves from left to right and top to bottom as we get more rigorous about model complexity and training: deep ensembling can help to capture predictive uncertainty and joint-energy modelling is explicitly concerned with learning meaningful representations in the data.</p>
+<p>We also find that the counterfactuals generated by <em>ECCCo</em> are more faithful in this case. The underlying model is a LeNet-5 convolutional neural network <span class="citation" data-cites="lecun1998gradient">(<a href="#ref-lecun1998gradient" role="doc-biblioref">LeCun et al. 1998</a>)</span>. Even today, convolutional neural networks are still among the most popular neural network architectures for image classification. Contrary to the simple multi-layer perceptron (MLP) used in <a href="#fig-cf-example" class="quarto-xref">Figure&nbsp;1</a>, the LeNet-5 model is a bit more complex and it is not surprising that it has distilled more meaningful representations in the data.</p>
+<p>More generally, we find that <em>ECCCo</em> is particularly effective at producing plausible counterfactuals for models that we would expect to have learned more meaningful representations of the data. This is consistent with our claim that <em>ECCCo</em> generates faithful counterfactuals. <a href="#fig-mnist-benchmark" class="quarto-xref">Figure&nbsp;5</a> shows the results for applying <em>ECCCo</em> to the same factual ‘nine’ as in <a href="#fig-cf-example" class="quarto-xref">Figure&nbsp;1</a> for different models from left to right and top to bottom: (a) an MLP, (b) a deep ensemble of MLPs, (c) a JEM, and, (d) a deep ensemble of JEMs. The plausibility of the generated counterfactual gradually improves from left to right and top to bottom as we get more rigorous about model complexity and training: deep ensembling can help to capture predictive uncertainty and joint-energy modelling is explicitly concerned with learning meaningful representations in the data.</p>
 
 <div class="no-row-height column-margin column-container"><div class="">
-<div id="fig-mnist-eccco" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="www/mnist_eccco.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;6: Turning a 9 into a 7. <em>ECCCo</em> applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).</figcaption>
+<div id="fig-mnist-eccco" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mnist-eccco-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="www/mnist_eccco.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mnist-eccco-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Turning a 9 into a 7. <em>ECCCo</em> applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).
+</figcaption>
 </figure>
 </div>
-</div></div><p>We would argue that in general, this is a desirable property of a counterfactual explainer, because it helps to distinguish trustworthy from unreliable models. The generated counterfactual for the MLP in (a) in <a href="#fig-mnist-eccco">Figure&nbsp;6</a> is grainy and altogether not very plausible. But this is precisely because the MLP is not very trustworthy: it is sensitive to input perturbations that are not meaningful. We think that explanations should reflect these kinds of shortcomings of models instead of hiding them.</p>
+</div></div><p>We would argue that in general, this is a desirable property of a counterfactual explainer, because it helps to distinguish trustworthy from unreliable models. The generated counterfactual for the MLP in (a) in <a href="#fig-mnist-eccco" class="quarto-xref">Figure&nbsp;6</a> is grainy and altogether not very plausible. But this is precisely because the MLP is not very trustworthy: it is sensitive to input perturbations that are not meaningful. We think that explanations should reflect these kinds of shortcomings of models instead of hiding them.</p>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
@@ -427,7 +461,7 @@ Intermezzo: Why Bother?
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-alufaisan2021does" class="csl-entry" role="listitem">
 Alufaisan, Yasmeen, Laura R Marusich, Jonathan Z Bakdash, Yan Zhou, and Murat Kantarcioglu. 2021. <span>“Does Explainable Artificial Intelligence Improve Human Decision-Making?”</span> In <em>Proceedings of the AAAI Conference on Artificial Intelligence</em>, 35:6618–26. 8.
 </div>
@@ -486,7 +520,7 @@ Welling, Max, and Yee W Teh. 2011. <span>“Bayesian Learning via Stochastic Gra
 <li id="fn2"><p>Considering how much I have cited <span class="citation" data-cites="joshi2019realistic">Joshi et al. (<a href="#ref-joshi2019realistic" role="doc-biblioref">2019</a>)</span> in the past, I think it should go without saying that I very much like this paper, despite taking a critical stance on it here.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>I have had an interesting chat with <a href="https://profiles.cardiff.ac.uk/staff/potykan">Nico Potyka</a> and <a href="https://fraleo.github.io/">Francesco Leofante</a>, recently, where they rightly pointed out that this definition of faithfulness needs to be refined. In particular, one might wonder what constitutes a ‘high probability’ in this context. I think this is a very valid point and I am looking forward to discussing this further with them.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2024,
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2024,
   author = {Altmeyer, Patrick},
   title = {ECCCos from the {Black} {Box}},
   date = {2024-02-08},
@@ -627,10 +661,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -640,8 +673,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -654,6 +696,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -697,6 +858,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -722,6 +884,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -921,10 +1109,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">© 2023, Patrick Altmeyer</div>   
+    <div class="nav-footer-left">
+<p>© 2023, Patrick Altmeyer</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
@@ -955,6 +1145,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 

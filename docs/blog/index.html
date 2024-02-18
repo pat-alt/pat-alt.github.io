@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -48,7 +48,13 @@ ul.task-list li input[type="checkbox"] {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -57,6 +63,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -104,22 +111,47 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="../styles.css">
-<link rel="alternate" type="application/rss+xml" title="Patrick Altmeyer" href="index.xml"><meta property="og:title" content="Patrick Altmeyer - Posts">
-<meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/trillion-dollar-words/intro.jpeg">
-<meta property="og:site-name" content="Patrick Altmeyer">
+<link rel="alternate" type="application/rss+xml" title="Patrick Altmeyer" href="index.xml" data-external="1"><meta property="og:title" content="Patrick Altmeyer - Posts">
+<meta property="og:site_name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer - Posts">
-<meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/trillion-dollar-words/intro.jpeg">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../www/icon.png" alt="" class="navbar-logo">
     </a>
@@ -134,50 +166,50 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../content/publications/index.html" rel="" target="">
- <span class="menu-text">Publications</span></a>
+    <a class="nav-link" href="../content/publications/index.html"> 
+<span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../content/talks/index.html" rel="" target="">
- <span class="menu-text">Talks</span></a>
+    <a class="nav-link" href="../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../blog/index.html" rel="" target="" aria-current="page">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link active" href="../blog/index.html" aria-current="page"> 
+<span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../content/software.html" rel="" target="">
- <span class="menu-text">Software</span></a>
+    <a class="nav-link" href="../content/software.html"> 
+<span class="menu-text">Software</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../content/about/index.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../content/about/index.html"> 
+<span class="menu-text">About</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="../blog/index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../blog/index.xml"> <i class="bi bi-rss" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/pat-alt" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/paltmey" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -206,7 +238,9 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   </div>
   
 
+
 </header>
+
 
 
 
@@ -214,27 +248,27 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-left" data-index="0" data-categories="llm,mechanistic interpretability,finance,Julia" data-listing-date-sort="1707865200000" data-listing-file-modified-sort="1708007813138" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6">
+<div class="quarto-post image-left" data-index="0" data-categories="llm,mechanistic interpretability,finance,Julia" data-listing-date-sort="1708210800000" data-listing-file-modified-sort="1708260175190" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1021">
 <div class="thumbnail">
-<p><a href="../blog/posts/trillion-dollar-words/index.html"> <img src="../blog/posts/trillion-dollar-words/intro.jpeg" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/trillion-dollar-words/index.html" class="no-external"></a></p><a href="../blog/posts/trillion-dollar-words/index.html" class="no-external">
+<p><img src="../blog/posts/trillion-dollar-words/intro.jpeg" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/trillion-dollar-words/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/trillion-dollar-words/index.html">
 <h3 class="no-anchor listing-title">
-TrillionDollarWords.jl
+<a href="../blog/posts/trillion-dollar-words/index.html" class="no-external">TrillionDollarWords.jl</a>
 </h3>
 <div class="listing-subtitle">
-The Trillion Dollar Words dataset and model in Julia
+<a href="../blog/posts/trillion-dollar-words/index.html" class="no-external">The Trillion Dollar Words dataset and model in Julia</a>
 </div>
 <div class="listing-description">
-<p>A short post introducing a small new Julia package that facilitates working with the Trillion Dollar Words dataset and model published in a recent ACL 2023 <span>paper</span>.</p>
+<a href="../blog/posts/trillion-dollar-words/index.html" class="no-external">A short post introducing a small new Julia package that facilitates working with the Trillion Dollar Words dataset and model published in a recent ACL 2023 <span>paper</span>.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/trillion-dollar-words/index.html">
+<a href="../blog/posts/trillion-dollar-words/index.html" class="no-external">
 <div class="listing-date">
-Feb 14, 2024
+Feb 18, 2024
 </div>
 <div class="listing-author">
 Patrick Altmeyer
@@ -243,30 +277,30 @@ Patrick Altmeyer
 6 min
 </div>
 <div class="metadata-value listing-file-modified">
-2/15/24, 3:36:53 PM
+2/18/24, 1:42:55 PM
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="1" data-categories="counterfactuals,explainable AI,algorithmic recourse,Julia" data-listing-date-sort="1707346800000" data-listing-file-modified-sort="1708070523691" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17">
+<div class="quarto-post image-left" data-index="1" data-categories="counterfactuals,explainable AI,algorithmic recourse,Julia" data-listing-date-sort="1707346800000" data-listing-file-modified-sort="1708259747328" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3224">
 <div class="thumbnail">
-<p><a href="../blog/posts/eccco/index.html"> <img src="../blog/posts/eccco/www/density_model.png" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/eccco/index.html" class="no-external"></a></p><a href="../blog/posts/eccco/index.html" class="no-external">
+<p><img src="../blog/posts/eccco/www/density_model.png" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/eccco/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/eccco/index.html">
 <h3 class="no-anchor listing-title">
-ECCCos from the Black Box
+<a href="../blog/posts/eccco/index.html" class="no-external">ECCCos from the Black Box</a>
 </h3>
 <div class="listing-subtitle">
-Faithful Model Explanations through Energy-Constrained Conformal Counterfactuals
+<a href="../blog/posts/eccco/index.html" class="no-external">Faithful Model Explanations through Energy-Constrained Conformal Counterfactuals</a>
 </div>
 <div class="listing-description">
-<p><em>ECCCo</em> is a new way to generate faithful model explanations through counterfactuals that are as plausible as the underlying model permits. Companion post to our AAAI 2024 paper.</p>
+<a href="../blog/posts/eccco/index.html" class="no-external"><em>ECCCo</em> is a new way to generate faithful model explanations through counterfactuals that are as plausible as the underlying model permits. Companion post to our AAAI 2024 paper.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/eccco/index.html">
+<a href="../blog/posts/eccco/index.html" class="no-external">
 <div class="listing-date">
 Feb 8, 2024
 </div>
@@ -277,30 +311,30 @@ Patrick Altmeyer
 17 min
 </div>
 <div class="metadata-value listing-file-modified">
-2/16/24, 9:02:03 AM
+2/18/24, 1:35:47 PM
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="2" data-categories="spurious sparks,artificial general intelligence,anthropomorphism,large language models" data-listing-date-sort="1707260400000" data-listing-file-modified-sort="1708007813137" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="30">
+<div class="quarto-post image-left" data-index="2" data-categories="spurious sparks,artificial general intelligence,anthropomorphism,large language models" data-listing-date-sort="1707260400000" data-listing-file-modified-sort="1708259747329" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="30" data-listing-word-count-sort="5958">
 <div class="thumbnail">
-<p><a href="../blog/posts/spurious-sparks/index.html"> <img src="../blog/posts/spurious-sparks/results/figures/intro.jpeg" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/spurious-sparks/index.html" class="no-external"></a></p><a href="../blog/posts/spurious-sparks/index.html" class="no-external">
+<p><img src="../blog/posts/spurious-sparks/results/figures/intro.jpeg" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/spurious-sparks/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/spurious-sparks/index.html">
 <h3 class="no-anchor listing-title">
-Spurious Sparks of AGI
+<a href="../blog/posts/spurious-sparks/index.html" class="no-external">Spurious Sparks of AGI</a>
 </h3>
 <div class="listing-subtitle">
-On the Unsurprising Finding of Patterns in Latent Spaces
+<a href="../blog/posts/spurious-sparks/index.html" class="no-external">On the Unsurprising Finding of Patterns in Latent Spaces</a>
 </div>
 <div class="listing-description">
-<p>This post questions the idea that finding patterns in latent embeddings of models is indicative of AGI or even surprising. I illustrate this using examples from Economics, a discipline that does not typically anthropomorphize the models it produces.</p>
+<a href="../blog/posts/spurious-sparks/index.html" class="no-external">This post questions the idea that finding patterns in latent embeddings of models is indicative of AGI or even surprising. I illustrate this using examples from Economics, a discipline that does not typically anthropomorphize the models it produces.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/spurious-sparks/index.html">
+<a href="../blog/posts/spurious-sparks/index.html" class="no-external">
 <div class="listing-date">
 Feb 7, 2024
 </div>
@@ -311,30 +345,30 @@ Patrick Altmeyer, Patrick Altmeyer
 30 min
 </div>
 <div class="metadata-value listing-file-modified">
-2/15/24, 3:36:53 PM
+2/18/24, 1:35:47 PM
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="3" data-categories="scientific publishing,Quarto,Julia" data-listing-date-sort="1700866800000" data-listing-file-modified-sort="1701000010611" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12">
+<div class="quarto-post image-left" data-index="3" data-categories="scientific publishing,Quarto,Julia" data-listing-date-sort="1700866800000" data-listing-file-modified-sort="1701000010611" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2328">
 <div class="thumbnail">
-<p><a href="../blog/posts/quarto-juliacon-proceedings/index.html"> <img src="../blog/posts/quarto-juliacon-proceedings/www/intro.jpeg" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/quarto-juliacon-proceedings/index.html" class="no-external"></a></p><a href="../blog/posts/quarto-juliacon-proceedings/index.html" class="no-external">
+<p><img src="../blog/posts/quarto-juliacon-proceedings/www/intro.jpeg" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/quarto-juliacon-proceedings/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/quarto-juliacon-proceedings/index.html">
 <h3 class="no-anchor listing-title">
-Stuck in the Past
+<a href="../blog/posts/quarto-juliacon-proceedings/index.html" class="no-external">Stuck in the Past</a>
 </h3>
 <div class="listing-subtitle">
-Why we should treat research like software and how Quarto can help
+<a href="../blog/posts/quarto-juliacon-proceedings/index.html" class="no-external">Why we should treat research like software and how Quarto can help</a>
 </div>
 <div class="listing-description">
-<p>An opinionated post on outdated publication and peer review practices, as well as modern solutions. It introduces a Quarto extension for JuliaCon Proceedings that I have been working on.</p>
+<a href="../blog/posts/quarto-juliacon-proceedings/index.html" class="no-external">An opinionated post on outdated publication and peer review practices, as well as modern solutions. It introduces a Quarto extension for JuliaCon Proceedings that I have been working on.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/quarto-juliacon-proceedings/index.html">
+<a href="../blog/posts/quarto-juliacon-proceedings/index.html" class="no-external">
 <div class="listing-date">
 Nov 25, 2023
 </div>
@@ -350,25 +384,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="4" data-categories="conformal prediction,transformers,llm,Julia" data-listing-date-sort="1688508000000" data-listing-file-modified-sort="1696671763822" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7">
+<div class="quarto-post image-left" data-index="4" data-categories="conformal prediction,transformers,llm,Julia" data-listing-date-sort="1688508000000" data-listing-file-modified-sort="1696671763822" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1347">
 <div class="thumbnail">
-<p><a href="../blog/posts/conformal-llm/index.html"> <img src="../blog/posts/conformal-llm/www/intro.gif" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/conformal-llm/index.html" class="no-external"></a></p><a href="../blog/posts/conformal-llm/index.html" class="no-external">
+<p><img src="../blog/posts/conformal-llm/www/intro.gif" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/conformal-llm/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/conformal-llm/index.html">
 <h3 class="no-anchor listing-title">
-Building a Conformal Chatbot in Julia
+<a href="../blog/posts/conformal-llm/index.html" class="no-external">Building a Conformal Chatbot in Julia</a>
 </h3>
 <div class="listing-subtitle">
-HuggingFace, Transformers, and Conformal Prediction - Part 1
+<a href="../blog/posts/conformal-llm/index.html" class="no-external">HuggingFace, Transformers, and Conformal Prediction - Part 1</a>
 </div>
 <div class="listing-description">
-<p>For this year’s edition of the ING Analytics Experiment Week, we put <code>ConformalPrediction.jl</code> to work and built a chatbot that can be used for Conformal Intent Recognition.</p>
+<a href="../blog/posts/conformal-llm/index.html" class="no-external">For this year’s edition of the ING Analytics Experiment Week, we put <code>ConformalPrediction.jl</code> to work and built a chatbot that can be used for Conformal Intent Recognition.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/conformal-llm/index.html">
+<a href="../blog/posts/conformal-llm/index.html" class="no-external">
 <div class="listing-date">
 Jul 5, 2023
 </div>
@@ -384,25 +418,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="5" data-categories="bayesian deep learning,laplace approximation,guest post,Julia" data-listing-date-sort="1688421600000" data-listing-file-modified-sort="1701000080286" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11">
+<div class="quarto-post image-left" data-index="5" data-categories="bayesian deep learning,laplace approximation,guest post,Julia" data-listing-date-sort="1688421600000" data-listing-file-modified-sort="1701000080286" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2170">
 <div class="thumbnail">
-<p><a href="../blog/posts/guest-students-laplace/index.html"> <img src="../blog/posts/guest-students-laplace/www/intro.png" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/guest-students-laplace/index.html" class="no-external"></a></p><a href="../blog/posts/guest-students-laplace/index.html" class="no-external">
+<p><img src="../blog/posts/guest-students-laplace/www/intro.png" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/guest-students-laplace/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/guest-students-laplace/index.html">
 <h3 class="no-anchor listing-title">
-Paving the Way Towards Low-Overhead Uncertainty Calibration
+<a href="../blog/posts/guest-students-laplace/index.html" class="no-external">Paving the Way Towards Low-Overhead Uncertainty Calibration</a>
 </h3>
 <div class="listing-subtitle">
-An Accessible Intro to Laplace Approximations in Julia for Bayesian Deep Learning
+<a href="../blog/posts/guest-students-laplace/index.html" class="no-external">An Accessible Intro to Laplace Approximations in Julia for Bayesian Deep Learning</a>
 </div>
 <div class="listing-description">
-<p>A guest blog post by a team of students from TU Delft, who have contributed multiple improvements to LaplaceRedux.jl.</p>
+<a href="../blog/posts/guest-students-laplace/index.html" class="no-external">A guest blog post by a team of students from TU Delft, who have contributed multiple improvements to LaplaceRedux.jl.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/guest-students-laplace/index.html">
+<a href="../blog/posts/guest-students-laplace/index.html" class="no-external">
 <div class="listing-date">
 Jul 4, 2023
 </div>
@@ -418,25 +452,25 @@ Patrick Altmeyer, Severin Bratus, Mark Ardman, Adelina Cazacu, Andrei Ionescu, I
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="6" data-categories="metaprogramming,macros,Julia" data-listing-date-sort="1678662000000" data-listing-file-modified-sort="1704293849463" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14">
+<div class="quarto-post image-left" data-index="6" data-categories="metaprogramming,macros,Julia" data-listing-date-sort="1678662000000" data-listing-file-modified-sort="1704293849463" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2685">
 <div class="thumbnail">
-<p><a href="../blog/posts/meta-programming/index.html"> <img src="../blog/posts/meta-programming/www/intro.png" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/meta-programming/index.html" class="no-external"></a></p><a href="../blog/posts/meta-programming/index.html" class="no-external">
+<p><img src="../blog/posts/meta-programming/www/intro.png" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/meta-programming/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/meta-programming/index.html">
 <h3 class="no-anchor listing-title">
-A Leap of Faith into Julia’s Metaverse
+<a href="../blog/posts/meta-programming/index.html" class="no-external">A Leap of Faith into Julia’s Metaverse</a>
 </h3>
 <div class="listing-subtitle">
-Getting started with metaprogramming in Julia
+<a href="../blog/posts/meta-programming/index.html" class="no-external">Getting started with metaprogramming in Julia</a>
 </div>
 <div class="listing-description">
-<p>In this slightly different post, I talk about my first experience with metaprogramming in Julia.</p>
+<a href="../blog/posts/meta-programming/index.html" class="no-external">In this slightly different post, I talk about my first experience with metaprogramming in Julia.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/meta-programming/index.html">
+<a href="../blog/posts/meta-programming/index.html" class="no-external">
 <div class="listing-date">
 Mar 13, 2023
 </div>
@@ -452,25 +486,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="7" data-categories="Quarto,reproducibility,open-source" data-listing-date-sort="1673823600000" data-listing-file-modified-sort="1696671763933" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
+<div class="quarto-post image-left" data-index="7" data-categories="Quarto,reproducibility,open-source" data-listing-date-sort="1673823600000" data-listing-file-modified-sort="1696671763933" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="933">
 <div class="thumbnail">
-<p><a href="../blog/posts/quarto-extensions/index.html"> <img src="../blog/posts/quarto-extensions/www/intro.gif" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/quarto-extensions/index.html" class="no-external"></a></p><a href="../blog/posts/quarto-extensions/index.html" class="no-external">
+<p><img src="../blog/posts/quarto-extensions/www/intro.gif" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/quarto-extensions/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/quarto-extensions/index.html">
 <h3 class="no-anchor listing-title">
-Quarto on Steroids: Advanced Customization through Quarto Extensions
+<a href="../blog/posts/quarto-extensions/index.html" class="no-external">Quarto on Steroids: Advanced Customization through Quarto Extensions</a>
 </h3>
 <div class="listing-subtitle">
-Using and Contributing Quarto Extensions for Custom Formats.
+<a href="../blog/posts/quarto-extensions/index.html" class="no-external">Using and Contributing Quarto Extensions for Custom Formats.</a>
 </div>
 <div class="listing-description">
-<p>A short introduction to using, building and contributing Quarto Extensions.</p>
+<a href="../blog/posts/quarto-extensions/index.html" class="no-external">A short introduction to using, building and contributing Quarto Extensions.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/quarto-extensions/index.html">
+<a href="../blog/posts/quarto-extensions/index.html" class="no-external">
 <div class="listing-date">
 Jan 16, 2023
 </div>
@@ -486,25 +520,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="8" data-categories="probabilistic programming,uncertainty,conformal prediction,regression,Julia" data-listing-date-sort="1670799600000" data-listing-file-modified-sort="1696671763842" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11">
+<div class="quarto-post image-left" data-index="8" data-categories="probabilistic programming,uncertainty,conformal prediction,regression,Julia" data-listing-date-sort="1670799600000" data-listing-file-modified-sort="1696671763842" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2181">
 <div class="thumbnail">
-<p><a href="../blog/posts/conformal-regression/index.html"> <img src="../blog/posts/conformal-regression/www/intro.gif" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/conformal-regression/index.html" class="no-external"></a></p><a href="../blog/posts/conformal-regression/index.html" class="no-external">
+<p><img src="../blog/posts/conformal-regression/www/intro.gif" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/conformal-regression/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/conformal-regression/index.html">
 <h3 class="no-anchor listing-title">
-Prediction Intervals for any Regression Model
+<a href="../blog/posts/conformal-regression/index.html" class="no-external">Prediction Intervals for any Regression Model</a>
 </h3>
 <div class="listing-subtitle">
-Conformal Prediction in Julia — Part 3
+<a href="../blog/posts/conformal-regression/index.html" class="no-external">Conformal Prediction in Julia — Part 3</a>
 </div>
 <div class="listing-description">
-<p>This third post introduces conformal regression by going through a standard machine learning workflow using <span><code>MLJ.jl</code></span> and <span><code>ConformalPrediction.jl</code></span>.</p>
+<a href="../blog/posts/conformal-regression/index.html" class="no-external">This third post introduces conformal regression by going through a standard machine learning workflow using <span><code>MLJ.jl</code></span> and <span><code>ConformalPrediction.jl</code></span>.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/conformal-regression/index.html">
+<a href="../blog/posts/conformal-regression/index.html" class="no-external">
 <div class="listing-date">
 Dec 12, 2022
 </div>
@@ -520,25 +554,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="9" data-categories="conformal prediction,uncertainty,Julia" data-listing-date-sort="1670194800000" data-listing-file-modified-sort="1696671763816" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9">
+<div class="quarto-post image-left" data-index="9" data-categories="conformal prediction,uncertainty,Julia" data-listing-date-sort="1670194800000" data-listing-file-modified-sort="1696671763816" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1692">
 <div class="thumbnail">
-<p><a href="../blog/posts/conformal-image-classifier/index.html"> <img src="../blog/posts/conformal-image-classifier/www/intro.gif" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/conformal-image-classifier/index.html" class="no-external"></a></p><a href="../blog/posts/conformal-image-classifier/index.html" class="no-external">
+<p><img src="../blog/posts/conformal-image-classifier/www/intro.gif" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/conformal-image-classifier/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/conformal-image-classifier/index.html">
 <h3 class="no-anchor listing-title">
-How to Conformalize a Deep Image Classifier
+<a href="../blog/posts/conformal-image-classifier/index.html" class="no-external">How to Conformalize a Deep Image Classifier</a>
 </h3>
 <div class="listing-subtitle">
-Conformal Prediction in Julia — Part 2
+<a href="../blog/posts/conformal-image-classifier/index.html" class="no-external">Conformal Prediction in Julia — Part 2</a>
 </div>
 <div class="listing-description">
-<p>A guide demonstrating how to use <span><code>ConformalPrediction.jl</code></span> to conformalize a deep image classifier in a few lines of code.</p>
+<a href="../blog/posts/conformal-image-classifier/index.html" class="no-external">A guide demonstrating how to use <span><code>ConformalPrediction.jl</code></span> to conformalize a deep image classifier in a few lines of code.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/conformal-image-classifier/index.html">
+<a href="../blog/posts/conformal-image-classifier/index.html" class="no-external">
 <div class="listing-date">
 Dec 5, 2022
 </div>
@@ -554,25 +588,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="10" data-categories="Quarto,Julia,open-source,reproducibility" data-listing-date-sort="1668985200000" data-listing-file-modified-sort="1696671763939" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8">
+<div class="quarto-post image-left" data-index="10" data-categories="Quarto,Julia,open-source,reproducibility" data-listing-date-sort="1668985200000" data-listing-file-modified-sort="1696671763939" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1406">
 <div class="thumbnail">
-<p><a href="../blog/posts/tips-and-tricks-for-using-quarto-with-julia/index.html"> <img src="../www/images/julia_quarto.gif" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/tips-and-tricks-for-using-quarto-with-julia/index.html" class="no-external"></a></p><a href="../blog/posts/tips-and-tricks-for-using-quarto-with-julia/index.html" class="no-external">
+<p><img src="../www/images/julia_quarto.gif" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/tips-and-tricks-for-using-quarto-with-julia/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/tips-and-tricks-for-using-quarto-with-julia/index.html">
 <h3 class="no-anchor listing-title">
-A year of using Quarto with Julia
+<a href="../blog/posts/tips-and-tricks-for-using-quarto-with-julia/index.html" class="no-external">A year of using Quarto with Julia</a>
 </h3>
 <div class="listing-subtitle">
-Tips and tricks for Julia practitioners
+<a href="../blog/posts/tips-and-tricks-for-using-quarto-with-julia/index.html" class="no-external">Tips and tricks for Julia practitioners</a>
 </div>
 <div class="listing-description">
-<p>A short companion post to my presentation on using Quarto with Julia at the 2nd JuliaLang Eindhoven meetup in November, 2022.</p>
+<a href="../blog/posts/tips-and-tricks-for-using-quarto-with-julia/index.html" class="no-external">A short companion post to my presentation on using Quarto with Julia at the 2nd JuliaLang Eindhoven meetup in November, 2022. </a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/tips-and-tricks-for-using-quarto-with-julia/index.html">
+<a href="../blog/posts/tips-and-tricks-for-using-quarto-with-julia/index.html" class="no-external">
 <div class="listing-date">
 Nov 21, 2022
 </div>
@@ -588,25 +622,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="11" data-categories="conformal prediction,uncertainty,Julia" data-listing-date-sort="1666648800000" data-listing-file-modified-sort="1696671763837" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15">
+<div class="quarto-post image-left" data-index="11" data-categories="conformal prediction,uncertainty,Julia" data-listing-date-sort="1666648800000" data-listing-file-modified-sort="1696671763837" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2921">
 <div class="thumbnail">
-<p><a href="../blog/posts/conformal-prediction/index.html"> <img src="../blog/posts/conformal-prediction/www/intro.gif" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/conformal-prediction/index.html" class="no-external"></a></p><a href="../blog/posts/conformal-prediction/index.html" class="no-external">
+<p><img src="../blog/posts/conformal-prediction/www/intro.gif" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/conformal-prediction/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/conformal-prediction/index.html">
 <h3 class="no-anchor listing-title">
-Conformal Prediction in Julia 🟣🔴🟢
+<a href="../blog/posts/conformal-prediction/index.html" class="no-external">Conformal Prediction in Julia 🟣🔴🟢</a>
 </h3>
 <div class="listing-subtitle">
-Conformal Prediction in Julia — Part 1
+<a href="../blog/posts/conformal-prediction/index.html" class="no-external">Conformal Prediction in Julia — Part 1</a>
 </div>
 <div class="listing-description">
-<p>A (very) gentle introduction to Conformal Prediction in Julia using my new package <span><code>ConformalPrediction.jl</code></span>.</p>
+<a href="../blog/posts/conformal-prediction/index.html" class="no-external">A (very) gentle introduction to Conformal Prediction in Julia using my new package <span><code>ConformalPrediction.jl</code></span>.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/conformal-prediction/index.html">
+<a href="../blog/posts/conformal-prediction/index.html" class="no-external">
 <div class="listing-date">
 Oct 25, 2022
 </div>
@@ -622,25 +656,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="12" data-categories="counterfactuals,explainable AI,Julia" data-listing-date-sort="1650405600000" data-listing-file-modified-sort="1696671763734" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12">
+<div class="quarto-post image-left" data-index="12" data-categories="counterfactuals,explainable AI,Julia" data-listing-date-sort="1650405600000" data-listing-file-modified-sort="1696671763734" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2221">
 <div class="thumbnail">
-<p><a href="../blog/posts/a-new-tool-for-explainable-ai/index.html"> <img src="../blog/posts/a-new-tool-for-explainable-ai/www/intro.gif" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/a-new-tool-for-explainable-ai/index.html" class="no-external"></a></p><a href="../blog/posts/a-new-tool-for-explainable-ai/index.html" class="no-external">
+<p><img src="../blog/posts/a-new-tool-for-explainable-ai/www/intro.gif" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/a-new-tool-for-explainable-ai/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/a-new-tool-for-explainable-ai/index.html">
 <h3 class="no-anchor listing-title">
-A new tool for explainable AI
+<a href="../blog/posts/a-new-tool-for-explainable-ai/index.html" class="no-external">A new tool for explainable AI</a>
 </h3>
 <div class="listing-subtitle">
-Counterfactual Explanations in Julia — Part I
+<a href="../blog/posts/a-new-tool-for-explainable-ai/index.html" class="no-external">Counterfactual Explanations in Julia — Part I</a>
 </div>
 <div class="listing-description">
-<p>This post introduces a new Julia package for generating counterfactual explanations. The package can be used to explain machine learning algorithms developed and trained in Julia as well as other popular programming languages like Python and R.</p>
+<a href="../blog/posts/a-new-tool-for-explainable-ai/index.html" class="no-external">This post introduces a new Julia package for generating counterfactual explanations. The package can be used to explain machine learning algorithms developed and trained in Julia as well as other popular programming languages like Python and R. </a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/a-new-tool-for-explainable-ai/index.html">
+<a href="../blog/posts/a-new-tool-for-explainable-ai/index.html" class="no-external">
 <div class="listing-date">
 Apr 20, 2022
 </div>
@@ -656,25 +690,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="13" data-categories="scientific publishing,Quarto,Julia" data-listing-date-sort="1649282400000" data-listing-file-modified-sort="1696671763921" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16">
+<div class="quarto-post image-left" data-index="13" data-categories="scientific publishing,Quarto,Julia" data-listing-date-sort="1649282400000" data-listing-file-modified-sort="1696671763921" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3088">
 <div class="thumbnail">
-<p><a href="../blog/posts/julia-and-quarto-a-match-made-in-heaven/index.html"> <img src="../blog/posts/julia-and-quarto-a-match-made-in-heaven/www/intro.gif" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/julia-and-quarto-a-match-made-in-heaven/index.html" class="no-external"></a></p><a href="../blog/posts/julia-and-quarto-a-match-made-in-heaven/index.html" class="no-external">
+<p><img src="../blog/posts/julia-and-quarto-a-match-made-in-heaven/www/intro.gif" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/julia-and-quarto-a-match-made-in-heaven/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/julia-and-quarto-a-match-made-in-heaven/index.html">
 <h3 class="no-anchor listing-title">
-Julia and Quarto: a match made in heaven? 🌤
+<a href="../blog/posts/julia-and-quarto-a-match-made-in-heaven/index.html" class="no-external">Julia and Quarto: a match made in heaven? 🌤</a>
 </h3>
 <div class="listing-subtitle">
-A new way to publish science
+<a href="../blog/posts/julia-and-quarto-a-match-made-in-heaven/index.html" class="no-external">A new way to publish science</a>
 </div>
 <div class="listing-description">
-<p>An opinionated, practical review celebrating the open-source community. I discuss why Quarto is nothing short of revolutionary and how I’ve been using it with Julia.</p>
+<a href="../blog/posts/julia-and-quarto-a-match-made-in-heaven/index.html" class="no-external">An opinionated, practical review celebrating the open-source community. I discuss why Quarto is nothing short of revolutionary and how I’ve been using it with Julia.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/julia-and-quarto-a-match-made-in-heaven/index.html">
+<a href="../blog/posts/julia-and-quarto-a-match-made-in-heaven/index.html" class="no-external">
 <div class="listing-date">
 Apr 7, 2022
 </div>
@@ -690,25 +724,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="14" data-categories="bayes,deep learning,Julia" data-listing-date-sort="1645138800000" data-listing-file-modified-sort="1696671763860" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12">
+<div class="quarto-post image-left" data-index="14" data-categories="bayes,deep learning,Julia" data-listing-date-sort="1645138800000" data-listing-file-modified-sort="1696671763860" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2249">
 <div class="thumbnail">
-<p><a href="../blog/posts/effortsless-bayesian-dl/index.html"> <img src="../blog/posts/effortsless-bayesian-dl/www/intro.gif" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/effortsless-bayesian-dl/index.html" class="no-external"></a></p><a href="../blog/posts/effortsless-bayesian-dl/index.html" class="no-external">
+<p><img src="../blog/posts/effortsless-bayesian-dl/www/intro.gif" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/effortsless-bayesian-dl/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/effortsless-bayesian-dl/index.html">
 <h3 class="no-anchor listing-title">
-Go deep, but also … go Bayesian!
+<a href="../blog/posts/effortsless-bayesian-dl/index.html" class="no-external">Go deep, but also … go Bayesian!</a>
 </h3>
 <div class="listing-subtitle">
-Effortless Bayesian Deep Learning in Julia — Part I
+<a href="../blog/posts/effortsless-bayesian-dl/index.html" class="no-external">Effortless Bayesian Deep Learning in Julia — Part I</a>
 </div>
 <div class="listing-description">
-<p>An introduction to effortless Bayesian deep learning through Laplace approximation coded from scratch in Julia.</p>
+<a href="../blog/posts/effortsless-bayesian-dl/index.html" class="no-external">An introduction to effortless Bayesian deep learning through Laplace approximation coded from scratch in Julia.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/effortsless-bayesian-dl/index.html">
+<a href="../blog/posts/effortsless-bayesian-dl/index.html" class="no-external">
 <div class="listing-date">
 Feb 18, 2022
 </div>
@@ -724,25 +758,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="15" data-categories="bayes,logistic regression,Julia" data-listing-date-sort="1636930800000" data-listing-file-modified-sort="1696671763736" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14">
+<div class="quarto-post image-left" data-index="15" data-categories="bayes,logistic regression,Julia" data-listing-date-sort="1636930800000" data-listing-file-modified-sort="1696671763736" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2689">
 <div class="thumbnail">
-<p><a href="../blog/posts/bayesian-logit/index.html"> <img src="../blog/posts/bayesian-logit/www/intro.gif" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/bayesian-logit/index.html" class="no-external"></a></p><a href="../blog/posts/bayesian-logit/index.html" class="no-external">
+<p><img src="../blog/posts/bayesian-logit/www/intro.gif" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/bayesian-logit/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/bayesian-logit/index.html">
 <h3 class="no-anchor listing-title">
-Bayesian Logistic Regression
+<a href="../blog/posts/bayesian-logit/index.html" class="no-external">Bayesian Logistic Regression</a>
 </h3>
 <div class="listing-subtitle">
-From scratch in Julia Language
+<a href="../blog/posts/bayesian-logit/index.html" class="no-external">From scratch in Julia Language</a>
 </div>
 <div class="listing-description">
-<p>An introduction to Bayesian Logistic Regression from the bottom up with examples in Julia language.</p>
+<a href="../blog/posts/bayesian-logit/index.html" class="no-external">An introduction to Bayesian Logistic Regression from the bottom up with examples in Julia language.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/bayesian-logit/index.html">
+<a href="../blog/posts/bayesian-logit/index.html" class="no-external">
 <div class="listing-date">
 Nov 15, 2021
 </div>
@@ -758,25 +792,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="16" data-categories="counterfactuals,algorithmic recourse,deep learning" data-listing-date-sort="1619474400000" data-listing-file-modified-sort="1696671763907" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11">
+<div class="quarto-post image-left" data-index="16" data-categories="counterfactuals,algorithmic recourse,deep learning" data-listing-date-sort="1619474400000" data-listing-file-modified-sort="1696671763907" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2175">
 <div class="thumbnail">
-<p><a href="../blog/posts/individual-recourse-for-black-box-models/index.html"> <img src="../blog/posts/individual-recourse-for-black-box-models/www/intro.gif" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/individual-recourse-for-black-box-models/index.html" class="no-external"></a></p><a href="../blog/posts/individual-recourse-for-black-box-models/index.html" class="no-external">
+<p><img src="../blog/posts/individual-recourse-for-black-box-models/www/intro.gif" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/individual-recourse-for-black-box-models/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/individual-recourse-for-black-box-models/index.html">
 <h3 class="no-anchor listing-title">
-Individual recourse for Black Box Models
+<a href="../blog/posts/individual-recourse-for-black-box-models/index.html" class="no-external">Individual recourse for Black Box Models</a>
 </h3>
 <div class="listing-subtitle">
-Explained through a tale of 🐱’s and 🐶’s
+<a href="../blog/posts/individual-recourse-for-black-box-models/index.html" class="no-external">Explained through a tale of 🐱’s and 🐶’s</a>
 </div>
 <div class="listing-description">
-<p>An introduction to algorithmic recourse and an implementation of a simplified version of REVISE (Joshi et al., 2019). This post was prepared as part of my PhD application.</p>
+<a href="../blog/posts/individual-recourse-for-black-box-models/index.html" class="no-external">An introduction to algorithmic recourse and an implementation of a simplified version of REVISE (Joshi et al., 2019). This post was prepared as part of my PhD application.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/individual-recourse-for-black-box-models/index.html">
+<a href="../blog/posts/individual-recourse-for-black-box-models/index.html" class="no-external">
 <div class="listing-date">
 Apr 27, 2021
 </div>
@@ -792,25 +826,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="17" data-categories="deep learning,explainable AI,bayes" data-listing-date-sort="1612652400000" data-listing-file-modified-sort="1696671763735" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11">
+<div class="quarto-post image-left" data-index="17" data-categories="deep learning,explainable AI,bayes" data-listing-date-sort="1612652400000" data-listing-file-modified-sort="1696671763735" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2185">
 <div class="thumbnail">
-<p><a href="../blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks/index.html"> <img src="../blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks/www/intro.jpeg" class="thumbnail-image"> </a></p>
+<p><a href="../blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks/index.html" class="no-external"></a></p><a href="../blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks/index.html" class="no-external">
+<p><img src="../blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks/www/intro.jpeg" class="thumbnail-image"></p>
+</a><p><a href="../blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks/index.html">
 <h3 class="no-anchor listing-title">
-A peek inside the ‘Black Box’ - interpreting neural networks
+<a href="../blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks/index.html" class="no-external">A peek inside the ‘Black Box’ - interpreting neural networks</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="../blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks/index.html" class="no-external"></a>
 </div>
 <div class="listing-description">
-<p>Research on explainable AI has recently gained considerable momentum. In this post I explore a Bayesian approach to ex-post explainability of Deep Neural Networks.a</p>
+<a href="../blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks/index.html" class="no-external">Research on explainable AI has recently gained considerable momentum. In this post I explore a Bayesian approach to ex-post explainability of Deep Neural Networks.a</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks/index.html">
+<a href="../blog/posts/a-peek-inside-the-black-box-interpreting-neural-networks/index.html" class="no-external">
 <div class="listing-date">
 Feb 7, 2021
 </div>
@@ -826,25 +860,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="18" data-categories="blogdown,rmarkdown,C++" data-listing-date-sort="1612220400000" data-listing-file-modified-sort="1696671763907" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6">
+<div class="quarto-post image-left" data-index="18" data-categories="blogdown,rmarkdown,C++" data-listing-date-sort="1612220400000" data-listing-file-modified-sort="1696671763907" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1019">
 <div class="thumbnail">
-<p><a href="../blog/posts/how-i-m-building-this-website-in-r/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="../blog/posts/how-i-m-building-this-website-in-r/index.html" class="no-external"></a></p><a href="../blog/posts/how-i-m-building-this-website-in-r/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="../blog/posts/how-i-m-building-this-website-in-r/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/how-i-m-building-this-website-in-r/index.html">
 <h3 class="no-anchor listing-title">
-How I’m building this website in R
+<a href="../blog/posts/how-i-m-building-this-website-in-r/index.html" class="no-external">How I’m building this website in R</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="../blog/posts/how-i-m-building-this-website-in-r/index.html" class="no-external"></a>
 </div>
 <div class="listing-description">
-<p>A small post on how I (used to!) build this website using <code>blogdown</code>.</p>
+<a href="../blog/posts/how-i-m-building-this-website-in-r/index.html" class="no-external">A small post on how I (used to!) build this website using <code>blogdown</code>.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/how-i-m-building-this-website-in-r/index.html">
+<a href="../blog/posts/how-i-m-building-this-website-in-r/index.html" class="no-external">
 <div class="listing-date">
 Feb 2, 2021
 </div>
@@ -860,25 +894,25 @@ Patrick Altmeyer
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="19" data-listing-date-sort="1612134000000" data-listing-file-modified-sort="1696671763940" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-left" data-index="19" data-listing-date-sort="1612134000000" data-listing-file-modified-sort="1696671763940" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="163">
 <div class="thumbnail">
-<p><a href="../blog/posts/welcome/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="../blog/posts/welcome/index.html" class="no-external"></a></p><a href="../blog/posts/welcome/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="../blog/posts/welcome/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="../blog/posts/welcome/index.html">
 <h3 class="no-anchor listing-title">
-Welcome
+<a href="../blog/posts/welcome/index.html" class="no-external">Welcome</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="../blog/posts/welcome/index.html" class="no-external"></a>
 </div>
 <div class="listing-description">
-<p>The obligatory welcome post and a shout-out to Yihui Xie and the folks behind quarto.</p>
+<a href="../blog/posts/welcome/index.html" class="no-external">The obligatory welcome post and a shout-out to Yihui Xie and the folks behind quarto.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="../blog/posts/welcome/index.html">
+<a href="../blog/posts/welcome/index.html" class="no-external">
 <div class="listing-date">
 Feb 1, 2021
 </div>
@@ -978,10 +1012,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -991,8 +1024,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1005,6 +1047,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1048,6 +1209,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1073,6 +1235,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1135,10 +1323,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">© 2023, Patrick Altmeyer</div>   
+    <div class="nav-footer-left">
+<p>© 2023, Patrick Altmeyer</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></div>
+    <div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
@@ -1169,6 +1359,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 

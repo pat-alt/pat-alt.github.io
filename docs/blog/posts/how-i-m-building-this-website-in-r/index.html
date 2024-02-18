@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -83,7 +83,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -92,6 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -110,11 +117,38 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Patrick Altmeyer - How I’m building this website in R">
 <meta property="og:description" content="A small post on how I (used to!) build this website using blogdown.">
-<meta property="og:site-name" content="Patrick Altmeyer">
+<meta property="og:site_name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer - How I’m building this website in R">
 <meta name="twitter:description" content="A small post on how I (used to!) build this website using blogdown.">
 <meta name="twitter:card" content="summary">
@@ -124,9 +158,9 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
@@ -141,50 +175,50 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/publications/index.html" rel="" target="">
- <span class="menu-text">Publications</span></a>
+    <a class="nav-link" href="../../../content/publications/index.html"> 
+<span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html" rel="" target="">
- <span class="menu-text">Talks</span></a>
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/software.html" rel="" target="">
- <span class="menu-text">Software</span></a>
+    <a class="nav-link" href="../../../content/software.html"> 
+<span class="menu-text">Software</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/about/index.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../../content/about/index.html"> 
+<span class="menu-text">About</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../blog/index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/pat-alt" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/paltmey" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -204,7 +238,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <li><a href="#embedding-existing-work" id="toc-embedding-existing-work" class="nav-link" data-scroll-target="#embedding-existing-work">Embedding existing work</a></li>
   <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">Resources</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -232,14 +266,14 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     <div class="quarto-title-meta-contents">
     <p class="author"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> </p>
   </div>
-    <div class="quarto-title-meta-contents">
+  <div class="quarto-title-meta-contents">
         <p class="affiliation">
             <a href="https://www.tudelft.nl/en/">
             Delft University of Technology
             </a>
           </p>
       </div>
-    </div>
+  </div>
 
 <div class="quarto-title-meta">
 
@@ -255,7 +289,9 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   </div>
   
 
+
 </header>
+
 
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -308,7 +344,7 @@ patalt.github.io/
 <h2 class="anchored" data-anchor-id="why-all-the-trouble">Why all the trouble?</h2>
 <p>There are certainly easier ways to build a website. But if like me you do pretty much all your work in R Markdown and want to share some of it, then you will love <code>blogdown</code>. The beauty of it is that once the basic infrastructure is set up, adding content is as simple as running the following wrapper function</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>blogdown<span class="sc">::</span><span class="fu">new_post</span>(<span class="st">"Your new post"</span>, <span class="at">ext =</span> <span class="st">".Rmd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -325,7 +361,7 @@ patalt.github.io/
 <p>As you can probably tell from the code chunks above this post was created just in the way I described. So I thought I might as well go ahead with a simple coding example to add some flavour. Suppose you have built some function that you think is worth sharing with the world or simply learned something new and interesting. As a case in point, I recently had a look at the <code>Rcpp</code> package and wrote a small program in C++ to be used in R. Since R Markdown supports <code>Rcpp</code> code chunks (along with Python, bash, SQL, …) it is straight-forward to show-case that code on this website.</p>
 <p>The program can be used to simulate data from a categorical distribution. This distribution describes the possible results of a random variable that can take on one of <span class="math inline">\(K\)</span> possible categories with different probabilities. In base R we could use <code>rmultinom(n=1000,1,p=c(0.5,0.1,0.4))</code> to simulate draws from one such distribution with three different categories. Alternatively, we could write the program in C++ as follows:</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource cpp number-lines code-with-copy"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="kw">using</span> <span class="kw">namespace</span> Rcpp<span class="op">;</span></span>
@@ -362,7 +398,7 @@ patalt.github.io/
 </div>
 <p>In terms of performance it turns out that the simple C++ program actually does somewhat better than the base R alternative:</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">library</span>(microbenchmark)</span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="fu">library</span>(ggplot2)</span>
@@ -389,7 +425,7 @@ patalt.github.io/
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2021,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2021,
   author = {Altmeyer, Patrick},
   title = {How {I’m} Building This Website in {R}},
   date = {2021-02-02},
@@ -530,10 +566,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -543,8 +578,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -557,6 +601,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -600,6 +763,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -625,6 +789,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -748,7 +938,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-60"><a href="#cb6-60"></a>There are certainly easier ways to build a website. But if like me you do pretty much all your work in R Markdown and want to share some of it, then you will love <span class="in">`blogdown`</span>. The beauty of it is that once the basic infrastructure is set up, adding content is as simple as running the following wrapper function</span>
 <span id="cb6-61"><a href="#cb6-61"></a></span>
 <span id="cb6-62"><a href="#cb6-62"></a><span class="in">```{r, eval=FALSE}</span></span>
-<span id="cb6-63"><a href="#cb6-63"></a>blogdown<span class="sc">::</span><span class="fu">new_post</span>(<span class="st">"Your new post"</span>, <span class="at">ext =</span> <span class="st">".Rmd"</span>)</span>
+<span id="cb6-63"><a href="#cb6-63"></a><span class="in">blogdown::new_post("Your new post", ext = ".Rmd")</span></span>
 <span id="cb6-64"><a href="#cb6-64"></a><span class="in">```</span></span>
 <span id="cb6-65"><a href="#cb6-65"></a></span>
 <span id="cb6-66"><a href="#cb6-66"></a>where the first argument is just the title of your post and the <span class="in">`ext`</span> argument can be used to specify that you want to create an R Markdown document that can include code chucks. The wrapper function will automatically set up a directory for your post under <span class="in">`/post/`</span>. R Studio will redirect you to the relevant <span class="in">`.Rmd`</span> file that you can then fill with content. By default that folder will look roughly like this:</span>
@@ -768,51 +958,51 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-80"><a href="#cb6-80"></a>The program can be used to simulate data from a categorical distribution. This distribution describes the possible results of a random variable that can take on one of $K$ possible categories with different probabilities. In base R we could use <span class="in">`rmultinom(n=1000,1,p=c(0.5,0.1,0.4))`</span> to simulate draws from one such distribution with three different categories. Alternatively, we could write the program in C++ as follows:</span>
 <span id="cb6-81"><a href="#cb6-81"></a></span>
 <span id="cb6-84"><a href="#cb6-84"></a><span class="in">```{Rcpp}</span></span>
-<span id="cb6-85"><a href="#cb6-85"></a><span class="co">#include &lt;Rcpp.h&gt;</span></span>
-<span id="cb6-86"><a href="#cb6-86"></a>using namespace Rcpp;</span>
+<span id="cb6-85"><a href="#cb6-85"></a><span class="in">#include &lt;Rcpp.h&gt;</span></span>
+<span id="cb6-86"><a href="#cb6-86"></a><span class="in">using namespace Rcpp;</span></span>
 <span id="cb6-87"><a href="#cb6-87"></a></span>
-<span id="cb6-88"><a href="#cb6-88"></a><span class="sc">/</span><span class="er">/</span> [[Rcpp<span class="sc">::</span>export]]</span>
-<span id="cb6-89"><a href="#cb6-89"></a>NumericMatrix <span class="fu">simCategorical</span>(int n, NumericVector p) {</span>
-<span id="cb6-90"><a href="#cb6-90"></a>  int k <span class="ot">=</span> <span class="fu">p.size</span>();</span>
-<span id="cb6-91"><a href="#cb6-91"></a>  NumericMatrix <span class="fu">mat</span>(k, n);</span>
-<span id="cb6-92"><a href="#cb6-92"></a>  <span class="sc">/</span><span class="er">/</span> Normalise prob <span class="cf">if</span> necessary<span class="sc">:</span></span>
-<span id="cb6-93"><a href="#cb6-93"></a>  <span class="cf">if</span> (<span class="fu">sum</span>(p)<span class="sc">!=</span><span class="dv">1</span>) {</span>
-<span id="cb6-94"><a href="#cb6-94"></a>    p <span class="ot">=</span> p<span class="sc">/</span><span class="fu">sum</span>(p);</span>
-<span id="cb6-95"><a href="#cb6-95"></a>  }</span>
-<span id="cb6-96"><a href="#cb6-96"></a>  NumericVector emp_cdf <span class="ot">=</span> <span class="fu">cumsum</span>(p);</span>
-<span id="cb6-97"><a href="#cb6-97"></a>  NumericVector u <span class="ot">=</span> Rcpp<span class="sc">::</span><span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb6-98"><a href="#cb6-98"></a>  <span class="sc">/</span><span class="er">/</span> Matrix <span class="cf">for</span> <span class="dv">1</span><span class="sc">-</span>hot<span class="sc">-</span>encoding<span class="sc">:</span></span>
-<span id="cb6-99"><a href="#cb6-99"></a>  <span class="cf">for</span> (int <span class="at">j =</span> <span class="dv">0</span>; j <span class="sc">&lt;</span> n; j<span class="sc">++</span>) {</span>
-<span id="cb6-100"><a href="#cb6-100"></a>    <span class="sc">/</span><span class="er">/</span> Perform binary search<span class="sc">:</span></span>
-<span id="cb6-101"><a href="#cb6-101"></a>    int l <span class="ot">=</span> <span class="dv">0</span>;</span>
-<span id="cb6-102"><a href="#cb6-102"></a>    int r <span class="ot">=</span> k;</span>
-<span id="cb6-103"><a href="#cb6-103"></a>    double target <span class="ot">=</span> u[j];</span>
-<span id="cb6-104"><a href="#cb6-104"></a>    <span class="cf">while</span> (l <span class="sc">&lt;</span> r) {</span>
-<span id="cb6-105"><a href="#cb6-105"></a>      int m <span class="ot">=</span> <span class="fu">floor</span>((l<span class="sc">+</span>r)<span class="sc">/</span><span class="dv">2</span>);</span>
-<span id="cb6-106"><a href="#cb6-106"></a>      <span class="cf">if</span> (emp_cdf[m] <span class="sc">&gt;</span> target) {</span>
-<span id="cb6-107"><a href="#cb6-107"></a>        r <span class="ot">=</span> m;</span>
-<span id="cb6-108"><a href="#cb6-108"></a>      } <span class="cf">else</span> {</span>
-<span id="cb6-109"><a href="#cb6-109"></a>        l <span class="ot">=</span> m<span class="sc">+</span><span class="dv">1</span>;</span>
-<span id="cb6-110"><a href="#cb6-110"></a>      }</span>
-<span id="cb6-111"><a href="#cb6-111"></a>    }</span>
-<span id="cb6-112"><a href="#cb6-112"></a>    <span class="fu">mat</span>(r,j) <span class="ot">=</span> <span class="dv">1</span>;</span>
-<span id="cb6-113"><a href="#cb6-113"></a>  }</span>
-<span id="cb6-114"><a href="#cb6-114"></a>  return mat;</span>
-<span id="cb6-115"><a href="#cb6-115"></a>}</span>
+<span id="cb6-88"><a href="#cb6-88"></a><span class="in">// [[Rcpp::export]]</span></span>
+<span id="cb6-89"><a href="#cb6-89"></a><span class="in">NumericMatrix simCategorical(int n, NumericVector p) {</span></span>
+<span id="cb6-90"><a href="#cb6-90"></a><span class="in">  int k = p.size();</span></span>
+<span id="cb6-91"><a href="#cb6-91"></a><span class="in">  NumericMatrix mat(k, n);</span></span>
+<span id="cb6-92"><a href="#cb6-92"></a><span class="in">  // Normalise prob if necessary:</span></span>
+<span id="cb6-93"><a href="#cb6-93"></a><span class="in">  if (sum(p)!=1) {</span></span>
+<span id="cb6-94"><a href="#cb6-94"></a><span class="in">    p = p/sum(p);</span></span>
+<span id="cb6-95"><a href="#cb6-95"></a><span class="in">  }</span></span>
+<span id="cb6-96"><a href="#cb6-96"></a><span class="in">  NumericVector emp_cdf = cumsum(p);</span></span>
+<span id="cb6-97"><a href="#cb6-97"></a><span class="in">  NumericVector u = Rcpp::runif(n, 0, 1);</span></span>
+<span id="cb6-98"><a href="#cb6-98"></a><span class="in">  // Matrix for 1-hot-encoding:</span></span>
+<span id="cb6-99"><a href="#cb6-99"></a><span class="in">  for (int j = 0; j &lt; n; j++) {</span></span>
+<span id="cb6-100"><a href="#cb6-100"></a><span class="in">    // Perform binary search:</span></span>
+<span id="cb6-101"><a href="#cb6-101"></a><span class="in">    int l = 0;</span></span>
+<span id="cb6-102"><a href="#cb6-102"></a><span class="in">    int r = k;</span></span>
+<span id="cb6-103"><a href="#cb6-103"></a><span class="in">    double target = u[j];</span></span>
+<span id="cb6-104"><a href="#cb6-104"></a><span class="in">    while (l &lt; r) {</span></span>
+<span id="cb6-105"><a href="#cb6-105"></a><span class="in">      int m = floor((l+r)/2);</span></span>
+<span id="cb6-106"><a href="#cb6-106"></a><span class="in">      if (emp_cdf[m] &gt; target) {</span></span>
+<span id="cb6-107"><a href="#cb6-107"></a><span class="in">        r = m;</span></span>
+<span id="cb6-108"><a href="#cb6-108"></a><span class="in">      } else {</span></span>
+<span id="cb6-109"><a href="#cb6-109"></a><span class="in">        l = m+1;</span></span>
+<span id="cb6-110"><a href="#cb6-110"></a><span class="in">      }</span></span>
+<span id="cb6-111"><a href="#cb6-111"></a><span class="in">    }</span></span>
+<span id="cb6-112"><a href="#cb6-112"></a><span class="in">    mat(r,j) = 1;</span></span>
+<span id="cb6-113"><a href="#cb6-113"></a><span class="in">  }</span></span>
+<span id="cb6-114"><a href="#cb6-114"></a><span class="in">  return mat;</span></span>
+<span id="cb6-115"><a href="#cb6-115"></a><span class="in">}</span></span>
 <span id="cb6-116"><a href="#cb6-116"></a><span class="in">```</span></span>
 <span id="cb6-117"><a href="#cb6-117"></a></span>
 <span id="cb6-118"><a href="#cb6-118"></a>In terms of performance it turns out that the simple C++ program actually does somewhat better than the base R alternative:</span>
 <span id="cb6-119"><a href="#cb6-119"></a></span>
 <span id="cb6-120"><a href="#cb6-120"></a><span class="in">```{r, message=F, warning=F}</span></span>
-<span id="cb6-121"><a href="#cb6-121"></a><span class="fu">library</span>(microbenchmark)</span>
-<span id="cb6-122"><a href="#cb6-122"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb6-123"><a href="#cb6-123"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb6-124"><a href="#cb6-124"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.1</span>,<span class="fl">0.4</span>)</span>
-<span id="cb6-125"><a href="#cb6-125"></a>mb <span class="ot">&lt;-</span> <span class="fu">microbenchmark</span>(</span>
-<span id="cb6-126"><a href="#cb6-126"></a>    <span class="st">"rmultinom"</span> <span class="ot">=</span> {<span class="fu">rmultinom</span>(n, <span class="dv">1</span>, p)},</span>
-<span id="cb6-127"><a href="#cb6-127"></a>    <span class="st">"Rcpp"</span> <span class="ot">=</span> {<span class="fu">simCategorical</span>(n, p)}</span>
-<span id="cb6-128"><a href="#cb6-128"></a>)</span>
-<span id="cb6-129"><a href="#cb6-129"></a><span class="fu">autoplot</span>(mb)</span>
+<span id="cb6-121"><a href="#cb6-121"></a><span class="in">library(microbenchmark)</span></span>
+<span id="cb6-122"><a href="#cb6-122"></a><span class="in">library(ggplot2)</span></span>
+<span id="cb6-123"><a href="#cb6-123"></a><span class="in">n &lt;- 1000</span></span>
+<span id="cb6-124"><a href="#cb6-124"></a><span class="in">p &lt;- c(0.5,0.1,0.4)</span></span>
+<span id="cb6-125"><a href="#cb6-125"></a><span class="in">mb &lt;- microbenchmark(</span></span>
+<span id="cb6-126"><a href="#cb6-126"></a><span class="in">    "rmultinom" = {rmultinom(n, 1, p)},</span></span>
+<span id="cb6-127"><a href="#cb6-127"></a><span class="in">    "Rcpp" = {simCategorical(n, p)}</span></span>
+<span id="cb6-128"><a href="#cb6-128"></a><span class="in">)</span></span>
+<span id="cb6-129"><a href="#cb6-129"></a><span class="in">autoplot(mb)</span></span>
 <span id="cb6-130"><a href="#cb6-130"></a><span class="in">```</span></span>
 <span id="cb6-131"><a href="#cb6-131"></a></span>
 <span id="cb6-132"><a href="#cb6-132"></a><span class="fu">## Embedding existing work</span></span>
@@ -827,10 +1017,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">© 2023, Patrick Altmeyer</div>   
+    <div class="nav-footer-left">
+<p>© 2023, Patrick Altmeyer</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
@@ -861,6 +1053,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 

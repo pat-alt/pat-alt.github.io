@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -61,6 +61,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -102,7 +103,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -111,6 +118,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -129,12 +137,39 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Patrick Altmeyer - A new tool for explainable AI">
 <meta property="og:description" content="This post introduces a new Julia package for generating counterfactual explanations. The package can be used to explain machine learning algorithms developed and trained in Julia as well as other popular programming languages like Python and R.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/a-new-tool-for-explainable-ai/www/intro.gif">
-<meta property="og:site-name" content="Patrick Altmeyer">
+<meta property="og:site_name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer - A new tool for explainable AI">
 <meta name="twitter:description" content="This post introduces a new Julia package for generating counterfactual explanations. The package can be used to explain machine learning algorithms developed and trained in Julia as well as other popular programming languages like Python and R.">
 <meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/a-new-tool-for-explainable-ai/www/intro.gif">
@@ -145,9 +180,9 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
@@ -162,50 +197,50 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/publications/index.html" rel="" target="">
- <span class="menu-text">Publications</span></a>
+    <a class="nav-link" href="../../../content/publications/index.html"> 
+<span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html" rel="" target="">
- <span class="menu-text">Talks</span></a>
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/software.html" rel="" target="">
- <span class="menu-text">Software</span></a>
+    <a class="nav-link" href="../../../content/software.html"> 
+<span class="menu-text">Software</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/about/index.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../../content/about/index.html"> 
+<span class="menu-text">About</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../blog/index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/pat-alt" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/paltmey" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -231,7 +266,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <li><a href="#we-need-you" id="toc-we-need-you" class="nav-link" data-scroll-target="#we-need-you">We need you! 🫵</a></li>
   <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Further reading 📚</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -260,14 +295,14 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     <div class="quarto-title-meta-contents">
     <p class="author"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> </p>
   </div>
-    <div class="quarto-title-meta-contents">
+  <div class="quarto-title-meta-contents">
         <p class="affiliation">
             <a href="https://www.tudelft.nl/en/">
             Delft University of Technology
             </a>
           </p>
       </div>
-    </div>
+  </div>
 
 <div class="quarto-title-meta">
 
@@ -283,12 +318,14 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   </div>
   
 
+
 </header>
+
 
 <div class="intro-gif">
 <figure class="figure">
 <img src="www/intro.gif" class="figure-img">
-<figcaption class="figure-caption">
+<figcaption>
 Turning a 9 (nine) into a 4 (four).
 </figcaption>
 </figure>
@@ -312,7 +349,7 @@ Turning a 9 (nine) into a 4 (four).
 <h3 class="anchored" data-anchor-id="black-box-models">Black-box models</h3>
 <p>The code below loads relevant packages along with the MNIST data and pre-trained models.</p>
 <div class="cell" data-execution_count="2">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Load package, models and data:</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">using</span> <span class="bu">CounterfactualExplanations</span>, <span class="bu">Flux</span></span>
@@ -330,7 +367,7 @@ Turning a 9 (nine) into a 4 (four).
 </ol>
 <p>The following code implements these two steps first for the MLP and then for the deep ensemble.</p>
 <div class="cell" data-execution_count="3">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">using</span> <span class="bu">CounterfactualExplanations.Models</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> <span class="bu">CounterfactualExplanations.Models</span>: logits, probs</span>
@@ -364,7 +401,7 @@ Turning a 9 (nine) into a 4 (four).
 <p>The greedy generator is designed to be used with models that incorporate uncertainty in their predictions such as the deep ensemble introduced above. It works for probabilistic (Bayesian) models, because they only produce high-confidence predictions in regions of the feature domain that are populated by training samples. As long as the model is expressive enough and well-specified, counterfactuals in these regions will always be realistic and unambiguous since by construction they should look very similar to training samples. Other popular approaches to counterfactual explanations like REVISE <span class="citation" data-cites="joshi2019realistic">(<a href="#ref-joshi2019realistic" role="doc-biblioref">Joshi et al. 2019</a>)</span> and CLUE <span class="citation" data-cites="antoran2020getting">(<a href="#ref-antoran2020getting" role="doc-biblioref">Antorán et al. 2020</a>)</span> also play with this simple idea.</p>
 <p>The following code instantiates the two generators for the problem at hand.</p>
 <div class="cell" data-execution_count="4">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a>generic <span class="op">=</span> <span class="fu">GenericGenerator</span>(;loss<span class="op">=:</span>logitcrossentropy)</span>
 <span id="cb3-2"><a href="#cb3-2"></a>greedy <span class="op">=</span> <span class="fu">GreedyGenerator</span>(;loss<span class="op">=:</span>logitcrossentropy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -377,12 +414,16 @@ Turning a 9 (nine) into a 4 (four).
 <div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">generate_counterfactual</span>(x, target, counterfactual_data, M, generic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>will generate the results, in this case using the generic generator (<code>generic</code>) for the MLP (<code>M</code>). Since we have specified two different black-box models and two different counterfactual generators, we have four combinations of a model and a generator in total. For each of these combinations I have used the <code>generate_counterfactual</code> function to produce the results in <a href="#fig-mnist-9to4">Figure&nbsp;1</a>.</p>
+<p>will generate the results, in this case using the generic generator (<code>generic</code>) for the MLP (<code>M</code>). Since we have specified two different black-box models and two different counterfactual generators, we have four combinations of a model and a generator in total. For each of these combinations I have used the <code>generate_counterfactual</code> function to produce the results in <a href="#fig-mnist-9to4" class="quarto-xref">Figure&nbsp;1</a>.</p>
 <p>In every case the desired label switch is in fact achieved, but arguably from a human perspective only the counterfactuals for the deep ensemble look like a four. The generic generator produces mild perturbations in regions that seem irrelevant from a human perspective, but nonetheless yields a counterfactual that can pass as a four. The greedy approach clearly targets pixels at the top of the handwritten nine and yields the best result overall. For the non-Bayesian MLP, both the generic and the greedy approach generate counterfactuals that look much like adversarial examples: they perturb pixels in seemingly random regions on the image.</p>
-<div id="fig-mnist-9to4" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="www/mnist_9_to_4.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Counterfactual explanations for MNIST: turning a nine (9) into a four (4).</figcaption>
+<div id="fig-mnist-9to4" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mnist-9to4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="www/mnist_9_to_4.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mnist-9to4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Counterfactual explanations for MNIST: turning a nine (9) into a four (4).
+</figcaption>
 </figure>
 </div>
 </section>
@@ -394,7 +435,7 @@ Turning a 9 (nine) into a 4 (four).
 <h3 class="anchored" data-anchor-id="explaining-a-torch-model">Explaining a <code>torch</code> model</h3>
 <p>We will consider a simple MLP trained for a binary classification task. As before we first need to adapt this custom model for use with our package. The code below the two necessary steps - sub-typing and method extension. Logits are returned by the <code>torch</code> model and copied from the R environment into the Julia scope. Probabilities are then computed inside the Julia scope by passing the logits through the sigmoid function.</p>
 <div class="cell" data-execution_count="12">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">using</span> <span class="bu">Flux</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="im">using</span> <span class="bu">CounterfactualExplanations</span>, <span class="bu">CounterfactualExplanations.Models</span></span>
@@ -418,7 +459,7 @@ Turning a 9 (nine) into a 4 (four).
 <span id="cb5-20"><a href="#cb5-20"></a>M <span class="op">=</span> <span class="fu">TorchNetwork</span>(R<span class="st">"model"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Compared to models trained in Julia, we need to do a little more work at this point. Since our counterfactual generators need gradient access, we essentially need to allow our package to communicate with the R <code>torch</code> library. While this may sound daunting, it turns out to be quite manageable: all we have to do is respecify the function that computes the gradient with respect to the counterfactual loss function so that it can deal with the <code>TorchNetwork</code> type we defined above. That is all the adjustment needed to use <code>CounterfactualExplanations.jl</code> for our custom R model. <a href="#fig-torch">Figure&nbsp;2</a> shows a counterfactual path for a randomly chosen sample with respect to the MLP trained in R.</p>
+<p>Compared to models trained in Julia, we need to do a little more work at this point. Since our counterfactual generators need gradient access, we essentially need to allow our package to communicate with the R <code>torch</code> library. While this may sound daunting, it turns out to be quite manageable: all we have to do is respecify the function that computes the gradient with respect to the counterfactual loss function so that it can deal with the <code>TorchNetwork</code> type we defined above. That is all the adjustment needed to use <code>CounterfactualExplanations.jl</code> for our custom R model. <a href="#fig-torch" class="quarto-xref">Figure&nbsp;2</a> shows a counterfactual path for a randomly chosen sample with respect to the MLP trained in R.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -433,7 +474,7 @@ Experimental functionality
 </div>
 </div>
 <div class="cell" data-execution_count="13">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> <span class="bu">CounterfactualExplanations.Generators</span>: ∂ℓ</span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
@@ -458,10 +499,14 @@ Experimental functionality
 <span id="cb6-21"><a href="#cb6-21"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="fig-torch" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="www/interop_r.gif" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: Counterfactual path using the generic counterfactual generator for a model trained in R.</figcaption>
+<div id="fig-torch" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-torch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="www/interop_r.gif" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-torch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Counterfactual path using the generic counterfactual generator for a model trained in R.
+</figcaption>
 </figure>
 </div>
 <!-- kicker -->
@@ -495,7 +540,7 @@ Experimental functionality
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-antoran2020getting" class="csl-entry" role="listitem">
 Antorán, Javier, Umang Bhatt, Tameem Adel, Adrian Weller, and José Miguel Hernández-Lobato. 2020. <span>“Getting a Clue: <span>A</span> Method for Explaining Uncertainty Estimates.”</span> <a href="https://arxiv.org/abs/2006.06848">https://arxiv.org/abs/2006.06848</a>.
 </div>
@@ -527,7 +572,7 @@ Wachter, Sandra, Brent Mittelstadt, and Chris Russell. 2017. <span>“Counterfac
 <li id="fn2"><p>For more information on Bayesian deep learning see my previous post: [<a href="https://towardsdatascience.com/go-deep-but-also-go-bayesian-ab25efa6f7b">TDS</a>], [<a href="https://www.paltmeyer.com/blog/posts/effortsless-bayesian-dl/">blog</a>].<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>The corresponding example involving <code>PyTorch</code> is analogous and therefore not included here. You may find it <a href="https://www.paltmeyer.com/CounterfactualExplanations.jl/dev/tutorials/interop/">here</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
   author = {Altmeyer, Patrick},
   title = {A New Tool for Explainable {AI}},
   date = {2022-04-20},
@@ -668,10 +713,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -681,8 +725,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -695,6 +748,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -738,6 +910,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -763,6 +936,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -842,16 +1041,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-16"><a href="#cb7-16"></a><span class="co">---</span></span>
 <span id="cb7-17"><a href="#cb7-17"></a></span>
 <span id="cb7-20"><a href="#cb7-20"></a><span class="in">```{julia}</span></span>
-<span id="cb7-21"><a href="#cb7-21"></a><span class="co">#| echo: false</span></span>
-<span id="cb7-22"><a href="#cb7-22"></a>www_path = <span class="ot">"</span><span class="st">posts/a-new-tool-for-explainable-ai/www</span><span class="ot">"</span></span>
+<span id="cb7-21"><a href="#cb7-21"></a><span class="in">#| echo: false</span></span>
+<span id="cb7-22"><a href="#cb7-22"></a><span class="in">www_path = "posts/a-new-tool-for-explainable-ai/www"</span></span>
 <span id="cb7-23"><a href="#cb7-23"></a><span class="in">```</span></span>
 <span id="cb7-24"><a href="#cb7-24"></a></span>
-<span id="cb7-25"><a href="#cb7-25"></a><span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">"intro-gif"</span><span class="kw">&gt;</span></span>
-<span id="cb7-26"><a href="#cb7-26"></a>  <span class="kw">&lt;figure&gt;</span></span>
-<span id="cb7-27"><a href="#cb7-27"></a>    <span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"www/intro.gif"</span><span class="kw">&gt;</span></span>
-<span id="cb7-28"><a href="#cb7-28"></a>    <span class="kw">&lt;figcaption&gt;</span>Turning a 9 (nine) into a 4 (four).<span class="kw">&lt;/figcaption&gt;</span></span>
-<span id="cb7-29"><a href="#cb7-29"></a>  <span class="kw">&lt;/figure&gt;</span></span>
-<span id="cb7-30"><a href="#cb7-30"></a><span class="kw">&lt;/div&gt;</span></span>
+<span id="cb7-25"><a href="#cb7-25"></a>&lt;div class="intro-gif"&gt;</span>
+<span id="cb7-26"><a href="#cb7-26"></a>  &lt;figure&gt;</span>
+<span id="cb7-27"><a href="#cb7-27"></a>    &lt;img src="www/intro.gif"&gt;</span>
+<span id="cb7-28"><a href="#cb7-28"></a>    &lt;figcaption&gt;Turning a 9 (nine) into a 4 (four).&lt;/figcaption&gt;</span>
+<span id="cb7-29"><a href="#cb7-29"></a>  &lt;/figure&gt;</span>
+<span id="cb7-30"><a href="#cb7-30"></a>&lt;/div&gt;</span>
 <span id="cb7-31"><a href="#cb7-31"></a></span>
 <span id="cb7-32"><a href="#cb7-32"></a><span class="co">&lt;!-- Intro --&gt;</span></span>
 <span id="cb7-33"><a href="#cb7-33"></a></span>
@@ -882,13 +1081,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-58"><a href="#cb7-58"></a>The code below loads relevant packages along with the MNIST data and pre-trained models. </span>
 <span id="cb7-59"><a href="#cb7-59"></a></span>
 <span id="cb7-62"><a href="#cb7-62"></a><span class="in">```{julia}</span></span>
-<span id="cb7-63"><a href="#cb7-63"></a><span class="co"># Load package, models and data:</span></span>
-<span id="cb7-64"><a href="#cb7-64"></a>using CounterfactualExplanations, Flux</span>
-<span id="cb7-65"><a href="#cb7-65"></a>using CounterfactualExplanations.Data: mnist_data, mnist_model, mnist_ensemble</span>
-<span id="cb7-66"><a href="#cb7-66"></a>data, X, ys = mnist_data()</span>
-<span id="cb7-67"><a href="#cb7-67"></a>model = mnist_model()</span>
-<span id="cb7-68"><a href="#cb7-68"></a>ensemble = mnist_ensemble()</span>
-<span id="cb7-69"><a href="#cb7-69"></a>counterfactual_data = CounterfactualData(X,ys;domain=(<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb7-63"><a href="#cb7-63"></a><span class="in"># Load package, models and data:</span></span>
+<span id="cb7-64"><a href="#cb7-64"></a><span class="in">using CounterfactualExplanations, Flux</span></span>
+<span id="cb7-65"><a href="#cb7-65"></a><span class="in">using CounterfactualExplanations.Data: mnist_data, mnist_model, mnist_ensemble</span></span>
+<span id="cb7-66"><a href="#cb7-66"></a><span class="in">data, X, ys = mnist_data()</span></span>
+<span id="cb7-67"><a href="#cb7-67"></a><span class="in">model = mnist_model()</span></span>
+<span id="cb7-68"><a href="#cb7-68"></a><span class="in">ensemble = mnist_ensemble()</span></span>
+<span id="cb7-69"><a href="#cb7-69"></a><span class="in">counterfactual_data = CounterfactualData(X,ys;domain=(0,1))</span></span>
 <span id="cb7-70"><a href="#cb7-70"></a><span class="in">```</span></span>
 <span id="cb7-71"><a href="#cb7-71"></a></span>
 <span id="cb7-72"><a href="#cb7-72"></a>While the package can currently handle a few simple classification models natively, it is designed to be easily extensible through users and contributors. Extending the package to deal with custom models typically involves only two simple steps:</span>
@@ -899,29 +1098,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-77"><a href="#cb7-77"></a>The following code implements these two steps first for the MLP and then for the deep ensemble.</span>
 <span id="cb7-78"><a href="#cb7-78"></a></span>
 <span id="cb7-81"><a href="#cb7-81"></a><span class="in">```{julia}</span></span>
-<span id="cb7-82"><a href="#cb7-82"></a>using CounterfactualExplanations.Models</span>
-<span id="cb7-83"><a href="#cb7-83"></a><span class="fu">import</span> CounterfactualExplanations.Models: logits, probs</span>
-<span id="cb7-84"><a href="#cb7-84"></a><span class="co"># MLP:</span></span>
-<span id="cb7-85"><a href="#cb7-85"></a><span class="co"># Step 1)</span></span>
-<span id="cb7-86"><a href="#cb7-86"></a>struct NeuralNetwork &lt;: Models.AbstractFittedModel</span>
-<span id="cb7-87"><a href="#cb7-87"></a>    <span class="fu">model::Any</span></span>
-<span id="cb7-88"><a href="#cb7-88"></a>end</span>
-<span id="cb7-89"><a href="#cb7-89"></a><span class="co"># Step 2)</span></span>
-<span id="cb7-90"><a href="#cb7-90"></a>logits(<span class="fu">M::NeuralNetwork</span>, <span class="fu">X::AbstractArray</span>) = M.model(X)</span>
-<span id="cb7-91"><a href="#cb7-91"></a>probs(<span class="fu">M::NeuralNetwork</span>, <span class="fu">X::AbstractArray</span>)= softmax(logits(M, X))</span>
-<span id="cb7-92"><a href="#cb7-92"></a>M = NeuralNetwork(model)</span>
+<span id="cb7-82"><a href="#cb7-82"></a><span class="in">using CounterfactualExplanations.Models</span></span>
+<span id="cb7-83"><a href="#cb7-83"></a><span class="in">import CounterfactualExplanations.Models: logits, probs</span></span>
+<span id="cb7-84"><a href="#cb7-84"></a><span class="in"># MLP:</span></span>
+<span id="cb7-85"><a href="#cb7-85"></a><span class="in"># Step 1)</span></span>
+<span id="cb7-86"><a href="#cb7-86"></a><span class="in">struct NeuralNetwork &lt;: Models.AbstractFittedModel</span></span>
+<span id="cb7-87"><a href="#cb7-87"></a><span class="in">    model::Any</span></span>
+<span id="cb7-88"><a href="#cb7-88"></a><span class="in">end</span></span>
+<span id="cb7-89"><a href="#cb7-89"></a><span class="in"># Step 2)</span></span>
+<span id="cb7-90"><a href="#cb7-90"></a><span class="in">logits(M::NeuralNetwork, X::AbstractArray) = M.model(X)</span></span>
+<span id="cb7-91"><a href="#cb7-91"></a><span class="in">probs(M::NeuralNetwork, X::AbstractArray)= softmax(logits(M, X))</span></span>
+<span id="cb7-92"><a href="#cb7-92"></a><span class="in">M = NeuralNetwork(model)</span></span>
 <span id="cb7-93"><a href="#cb7-93"></a></span>
-<span id="cb7-94"><a href="#cb7-94"></a><span class="co"># Deep ensemble:</span></span>
-<span id="cb7-95"><a href="#cb7-95"></a>using Flux: stack</span>
-<span id="cb7-96"><a href="#cb7-96"></a><span class="co"># Step 1)</span></span>
-<span id="cb7-97"><a href="#cb7-97"></a>struct FittedEnsemble &lt;: Models.AbstractFittedModel</span>
-<span id="cb7-98"><a href="#cb7-98"></a>    <span class="fu">ensemble::AbstractArray</span></span>
-<span id="cb7-99"><a href="#cb7-99"></a>end</span>
-<span id="cb7-100"><a href="#cb7-100"></a><span class="co"># Step 2)</span></span>
-<span id="cb7-101"><a href="#cb7-101"></a>using Statistics</span>
-<span id="cb7-102"><a href="#cb7-102"></a>logits(<span class="fu">M::FittedEnsemble</span>, <span class="fu">X::AbstractArray</span>) = mean(stack([<span class="ot">m(X)</span> <span class="kw">for</span> m in M.ensemble],<span class="dv">3</span>),dims=<span class="dv">3</span>)</span>
-<span id="cb7-103"><a href="#cb7-103"></a>probs(<span class="fu">M::FittedEnsemble</span>, <span class="fu">X::AbstractArray</span>) = mean(stack([softmax(<span class="ot">m(X)</span>) <span class="kw">for</span> m in M.ensemble],<span class="dv">3</span>),dims=<span class="dv">3</span>)</span>
-<span id="cb7-104"><a href="#cb7-104"></a>M_ensemble = FittedEnsemble(ensemble)</span>
+<span id="cb7-94"><a href="#cb7-94"></a><span class="in"># Deep ensemble:</span></span>
+<span id="cb7-95"><a href="#cb7-95"></a><span class="in">using Flux: stack</span></span>
+<span id="cb7-96"><a href="#cb7-96"></a><span class="in"># Step 1)</span></span>
+<span id="cb7-97"><a href="#cb7-97"></a><span class="in">struct FittedEnsemble &lt;: Models.AbstractFittedModel</span></span>
+<span id="cb7-98"><a href="#cb7-98"></a><span class="in">    ensemble::AbstractArray</span></span>
+<span id="cb7-99"><a href="#cb7-99"></a><span class="in">end</span></span>
+<span id="cb7-100"><a href="#cb7-100"></a><span class="in"># Step 2)</span></span>
+<span id="cb7-101"><a href="#cb7-101"></a><span class="in">using Statistics</span></span>
+<span id="cb7-102"><a href="#cb7-102"></a><span class="in">logits(M::FittedEnsemble, X::AbstractArray) = mean(stack([m(X) for m in M.ensemble],3),dims=3)</span></span>
+<span id="cb7-103"><a href="#cb7-103"></a><span class="in">probs(M::FittedEnsemble, X::AbstractArray) = mean(stack([softmax(m(X)) for m in M.ensemble],3),dims=3)</span></span>
+<span id="cb7-104"><a href="#cb7-104"></a><span class="in">M_ensemble = FittedEnsemble(ensemble)</span></span>
 <span id="cb7-105"><a href="#cb7-105"></a><span class="in">```</span></span>
 <span id="cb7-106"><a href="#cb7-106"></a></span>
 <span id="cb7-107"><a href="#cb7-107"></a><span class="fu">### Counterfactual generators</span></span>
@@ -933,27 +1132,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-113"><a href="#cb7-113"></a>The following code instantiates the two generators for the problem at hand. </span>
 <span id="cb7-114"><a href="#cb7-114"></a></span>
 <span id="cb7-117"><a href="#cb7-117"></a><span class="in">```{julia}</span></span>
-<span id="cb7-118"><a href="#cb7-118"></a>generic = GenericGenerator(;loss=:logitcrossentropy)</span>
-<span id="cb7-119"><a href="#cb7-119"></a>greedy = GreedyGenerator(;loss=:logitcrossentropy)</span>
+<span id="cb7-118"><a href="#cb7-118"></a><span class="in">generic = GenericGenerator(;loss=:logitcrossentropy)</span></span>
+<span id="cb7-119"><a href="#cb7-119"></a><span class="in">greedy = GreedyGenerator(;loss=:logitcrossentropy)</span></span>
 <span id="cb7-120"><a href="#cb7-120"></a><span class="in">```</span></span>
 <span id="cb7-121"><a href="#cb7-121"></a></span>
 <span id="cb7-122"><a href="#cb7-122"></a><span class="fu">### Explanations</span></span>
 <span id="cb7-123"><a href="#cb7-123"></a></span>
 <span id="cb7-126"><a href="#cb7-126"></a><span class="in">```{julia}</span></span>
-<span id="cb7-127"><a href="#cb7-127"></a><span class="co">#| echo: false</span></span>
-<span id="cb7-128"><a href="#cb7-128"></a><span class="co"># Randomly selected factual:</span></span>
-<span id="cb7-129"><a href="#cb7-129"></a>using Random</span>
-<span id="cb7-130"><a href="#cb7-130"></a>Random.seed!(<span class="dv">1234</span>)</span>
-<span id="cb7-131"><a href="#cb7-131"></a>x = Flux.unsqueeze(select_factual(counterfactual_data, <span class="fu">rand</span>(<span class="dv">1</span>:size(X)[<span class="dv">2</span>])),<span class="dv">2</span>)</span>
-<span id="cb7-132"><a href="#cb7-132"></a>target = <span class="dv">5</span></span>
-<span id="cb7-133"><a href="#cb7-133"></a>γ = <span class="fl">0.80</span></span>
+<span id="cb7-127"><a href="#cb7-127"></a><span class="in">#| echo: false</span></span>
+<span id="cb7-128"><a href="#cb7-128"></a><span class="in"># Randomly selected factual:</span></span>
+<span id="cb7-129"><a href="#cb7-129"></a><span class="in">using Random</span></span>
+<span id="cb7-130"><a href="#cb7-130"></a><span class="in">Random.seed!(1234)</span></span>
+<span id="cb7-131"><a href="#cb7-131"></a><span class="in">x = Flux.unsqueeze(select_factual(counterfactual_data, rand(1:size(X)[2])),2)</span></span>
+<span id="cb7-132"><a href="#cb7-132"></a><span class="in">target = 5</span></span>
+<span id="cb7-133"><a href="#cb7-133"></a><span class="in">γ = 0.80</span></span>
 <span id="cb7-134"><a href="#cb7-134"></a><span class="in">```</span></span>
 <span id="cb7-135"><a href="#cb7-135"></a></span>
 <span id="cb7-136"><a href="#cb7-136"></a>Once the model and counterfactual generator are specified, running counterfactual search is very easy using the package. For a given factual (<span class="in">`x`</span>), target class (<span class="in">`target`</span>) and data set (<span class="in">`counterfactual_data`</span>), simply running </span>
 <span id="cb7-137"><a href="#cb7-137"></a></span>
 <span id="cb7-140"><a href="#cb7-140"></a><span class="in">```{julia}</span></span>
-<span id="cb7-141"><a href="#cb7-141"></a><span class="co">#| code-fold: false</span></span>
-<span id="cb7-142"><a href="#cb7-142"></a>generate_counterfactual(x, target, counterfactual_data, M, generic)</span>
+<span id="cb7-141"><a href="#cb7-141"></a><span class="in">#| code-fold: false</span></span>
+<span id="cb7-142"><a href="#cb7-142"></a><span class="in">generate_counterfactual(x, target, counterfactual_data, M, generic)</span></span>
 <span id="cb7-143"><a href="#cb7-143"></a><span class="in">```</span> </span>
 <span id="cb7-144"><a href="#cb7-144"></a></span>
 <span id="cb7-145"><a href="#cb7-145"></a>will generate the results, in this case using the generic generator (<span class="in">`generic`</span>) for the MLP (<span class="in">`M`</span>). Since we have specified two different black-box models and two different counterfactual generators, we have four combinations of a model and a generator in total. For each of these combinations I have used the <span class="in">`generate_counterfactual`</span> function to produce the results in @fig-mnist-9to4. </span>
@@ -961,80 +1160,80 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-147"><a href="#cb7-147"></a>In every case the desired label switch is in fact achieved, but arguably from a human perspective only the counterfactuals for the deep ensemble look like a four. The generic generator produces mild perturbations in regions that seem irrelevant from a human perspective, but nonetheless yields a counterfactual that can pass as a four. The greedy approach clearly targets pixels at the top of the handwritten nine and yields the best result overall. For the non-Bayesian MLP, both the generic and the greedy approach generate counterfactuals that look much like adversarial examples: they perturb pixels in seemingly random regions on the image.</span>
 <span id="cb7-148"><a href="#cb7-148"></a></span>
 <span id="cb7-151"><a href="#cb7-151"></a><span class="in">```{julia}</span></span>
-<span id="cb7-152"><a href="#cb7-152"></a><span class="co">#| echo: false</span></span>
-<span id="cb7-153"><a href="#cb7-153"></a>generators = Dict(</span>
-<span id="cb7-154"><a href="#cb7-154"></a>    <span class="ot">"</span><span class="st">Wachter</span><span class="ot">"</span> =&gt; generic,</span>
-<span id="cb7-155"><a href="#cb7-155"></a>    <span class="ot">"</span><span class="st">Greedy</span><span class="ot">"</span> =&gt; greedy</span>
-<span id="cb7-156"><a href="#cb7-156"></a>)</span>
-<span id="cb7-157"><a href="#cb7-157"></a>models = Dict(<span class="ot">"</span><span class="st">MLP</span><span class="ot">"</span> =&gt; M, <span class="ot">"</span><span class="st">Ensemble</span><span class="ot">"</span> =&gt; M_ensemble)</span>
+<span id="cb7-152"><a href="#cb7-152"></a><span class="in">#| echo: false</span></span>
+<span id="cb7-153"><a href="#cb7-153"></a><span class="in">generators = Dict(</span></span>
+<span id="cb7-154"><a href="#cb7-154"></a><span class="in">    "Wachter" =&gt; generic,</span></span>
+<span id="cb7-155"><a href="#cb7-155"></a><span class="in">    "Greedy" =&gt; greedy</span></span>
+<span id="cb7-156"><a href="#cb7-156"></a><span class="in">)</span></span>
+<span id="cb7-157"><a href="#cb7-157"></a><span class="in">models = Dict("MLP" =&gt; M, "Ensemble" =&gt; M_ensemble)</span></span>
 <span id="cb7-158"><a href="#cb7-158"></a></span>
-<span id="cb7-159"><a href="#cb7-159"></a><span class="co"># Plotting utilities:</span></span>
-<span id="cb7-160"><a href="#cb7-160"></a>using Images</span>
-<span id="cb7-161"><a href="#cb7-161"></a>using MLDatasets.MNIST: convert2image</span>
+<span id="cb7-159"><a href="#cb7-159"></a><span class="in"># Plotting utilities:</span></span>
+<span id="cb7-160"><a href="#cb7-160"></a><span class="in">using Images</span></span>
+<span id="cb7-161"><a href="#cb7-161"></a><span class="in">using MLDatasets.MNIST: convert2image</span></span>
 <span id="cb7-162"><a href="#cb7-162"></a></span>
-<span id="cb7-163"><a href="#cb7-163"></a>input_dim = size(X)[<span class="dv">1</span>]</span>
+<span id="cb7-163"><a href="#cb7-163"></a><span class="in">input_dim = size(X)[1]</span></span>
 <span id="cb7-164"><a href="#cb7-164"></a></span>
-<span id="cb7-165"><a href="#cb7-165"></a>using Flux: onecold</span>
+<span id="cb7-165"><a href="#cb7-165"></a><span class="in">using Flux: onecold</span></span>
 <span id="cb7-166"><a href="#cb7-166"></a></span>
-<span id="cb7-167"><a href="#cb7-167"></a><span class="co"># Specific image:</span></span>
-<span id="cb7-168"><a href="#cb7-168"></a>function from_digit_to_digit(<span class="fu">from::AbstractArray</span>, <span class="fu">to::Number</span>, generator, model; γ=γ, x=X, y=ys, seed=<span class="dv">1234</span>, T=<span class="dv">1000</span>)</span>
-<span id="cb7-169"><a href="#cb7-169"></a>    </span>
-<span id="cb7-170"><a href="#cb7-170"></a>    x = from</span>
-<span id="cb7-171"><a href="#cb7-171"></a>    target = to + <span class="dv">1</span></span>
-<span id="cb7-172"><a href="#cb7-172"></a>    counterfactuals = Dict()</span>
+<span id="cb7-167"><a href="#cb7-167"></a><span class="in"># Specific image:</span></span>
+<span id="cb7-168"><a href="#cb7-168"></a><span class="in">function from_digit_to_digit(from::AbstractArray, to::Number, generator, model; γ=γ, x=X, y=ys, seed=1234, T=1000)</span></span>
+<span id="cb7-169"><a href="#cb7-169"></a><span class="in">    </span></span>
+<span id="cb7-170"><a href="#cb7-170"></a><span class="in">    x = from</span></span>
+<span id="cb7-171"><a href="#cb7-171"></a><span class="in">    target = to + 1</span></span>
+<span id="cb7-172"><a href="#cb7-172"></a><span class="in">    counterfactuals = Dict()</span></span>
 <span id="cb7-173"><a href="#cb7-173"></a></span>
-<span id="cb7-174"><a href="#cb7-174"></a>    <span class="kw">for</span> (k_gen,v_gen) ∈ generators</span>
-<span id="cb7-175"><a href="#cb7-175"></a>        <span class="kw">for</span> (k_mod,v_mod) ∈ models </span>
-<span id="cb7-176"><a href="#cb7-176"></a>            k = k_mod <span class="ot">*</span> <span class="ot">"</span><span class="st"> - </span><span class="ot">"</span> <span class="ot">*</span> k_gen</span>
-<span id="cb7-177"><a href="#cb7-177"></a>            counterfactuals[k] = generate_counterfactual(x, target, counterfactual_data, v_mod, v_gen; T=T, γ=γ)</span>
-<span id="cb7-178"><a href="#cb7-178"></a>        end</span>
-<span id="cb7-179"><a href="#cb7-179"></a>    end</span>
+<span id="cb7-174"><a href="#cb7-174"></a><span class="in">    for (k_gen,v_gen) ∈ generators</span></span>
+<span id="cb7-175"><a href="#cb7-175"></a><span class="in">        for (k_mod,v_mod) ∈ models </span></span>
+<span id="cb7-176"><a href="#cb7-176"></a><span class="in">            k = k_mod * " - " * k_gen</span></span>
+<span id="cb7-177"><a href="#cb7-177"></a><span class="in">            counterfactuals[k] = generate_counterfactual(x, target, counterfactual_data, v_mod, v_gen; T=T, γ=γ)</span></span>
+<span id="cb7-178"><a href="#cb7-178"></a><span class="in">        end</span></span>
+<span id="cb7-179"><a href="#cb7-179"></a><span class="in">    end</span></span>
 <span id="cb7-180"><a href="#cb7-180"></a></span>
-<span id="cb7-181"><a href="#cb7-181"></a>    <span class="kw">return</span> counterfactuals</span>
+<span id="cb7-181"><a href="#cb7-181"></a><span class="in">    return counterfactuals</span></span>
 <span id="cb7-182"><a href="#cb7-182"></a></span>
-<span id="cb7-183"><a href="#cb7-183"></a>end</span>
+<span id="cb7-183"><a href="#cb7-183"></a><span class="in">end</span></span>
 <span id="cb7-184"><a href="#cb7-184"></a></span>
-<span id="cb7-185"><a href="#cb7-185"></a><span class="co"># Specific digit:</span></span>
-<span id="cb7-186"><a href="#cb7-186"></a>function from_digit_to_digit(<span class="fu">from::Number</span>, <span class="fu">to::Number</span>, <span class="fu">generator::Dict</span>, <span class="fu">model::Dict</span>; γ=γ, x=X, y=ys, seed=<span class="dv">1234</span>, T=<span class="dv">1000</span>)</span>
+<span id="cb7-185"><a href="#cb7-185"></a><span class="in"># Specific digit:</span></span>
+<span id="cb7-186"><a href="#cb7-186"></a><span class="in">function from_digit_to_digit(from::Number, to::Number, generator::Dict, model::Dict; γ=γ, x=X, y=ys, seed=1234, T=1000)</span></span>
 <span id="cb7-187"><a href="#cb7-187"></a></span>
-<span id="cb7-188"><a href="#cb7-188"></a>    Random.seed!(seed)</span>
+<span id="cb7-188"><a href="#cb7-188"></a><span class="in">    Random.seed!(seed)</span></span>
 <span id="cb7-189"><a href="#cb7-189"></a></span>
-<span id="cb7-190"><a href="#cb7-190"></a>    candidates = findall(onecold(<span class="ot">y</span>,<span class="dv">0</span>:<span class="dv">9</span>).==from)</span>
-<span id="cb7-191"><a href="#cb7-191"></a>    x = Flux.unsqueeze(x[:,<span class="fu">rand</span>(candidates)],<span class="dv">2</span>)</span>
-<span id="cb7-192"><a href="#cb7-192"></a>    target = to + <span class="dv">1</span></span>
-<span id="cb7-193"><a href="#cb7-193"></a>    counterfactuals = Dict()</span>
+<span id="cb7-190"><a href="#cb7-190"></a><span class="in">    candidates = findall(onecold(y,0:9).==from)</span></span>
+<span id="cb7-191"><a href="#cb7-191"></a><span class="in">    x = Flux.unsqueeze(x[:,rand(candidates)],2)</span></span>
+<span id="cb7-192"><a href="#cb7-192"></a><span class="in">    target = to + 1</span></span>
+<span id="cb7-193"><a href="#cb7-193"></a><span class="in">    counterfactuals = Dict()</span></span>
 <span id="cb7-194"><a href="#cb7-194"></a></span>
-<span id="cb7-195"><a href="#cb7-195"></a>    <span class="kw">for</span> (k_gen,v_gen) ∈ generators</span>
-<span id="cb7-196"><a href="#cb7-196"></a>        <span class="kw">for</span> (k_mod,v_mod) ∈ models </span>
-<span id="cb7-197"><a href="#cb7-197"></a>            k = k_mod <span class="ot">*</span> <span class="ot">"</span><span class="st"> - </span><span class="ot">"</span> <span class="ot">*</span> k_gen</span>
-<span id="cb7-198"><a href="#cb7-198"></a>            counterfactuals[k] = generate_counterfactual(x, target, counterfactual_data, v_mod, v_gen; T=T, γ=γ)</span>
-<span id="cb7-199"><a href="#cb7-199"></a>        end</span>
-<span id="cb7-200"><a href="#cb7-200"></a>    end</span>
+<span id="cb7-195"><a href="#cb7-195"></a><span class="in">    for (k_gen,v_gen) ∈ generators</span></span>
+<span id="cb7-196"><a href="#cb7-196"></a><span class="in">        for (k_mod,v_mod) ∈ models </span></span>
+<span id="cb7-197"><a href="#cb7-197"></a><span class="in">            k = k_mod * " - " * k_gen</span></span>
+<span id="cb7-198"><a href="#cb7-198"></a><span class="in">            counterfactuals[k] = generate_counterfactual(x, target, counterfactual_data, v_mod, v_gen; T=T, γ=γ)</span></span>
+<span id="cb7-199"><a href="#cb7-199"></a><span class="in">        end</span></span>
+<span id="cb7-200"><a href="#cb7-200"></a><span class="in">    end</span></span>
 <span id="cb7-201"><a href="#cb7-201"></a></span>
-<span id="cb7-202"><a href="#cb7-202"></a>    <span class="kw">return</span> counterfactuals</span>
-<span id="cb7-203"><a href="#cb7-203"></a>end</span>
+<span id="cb7-202"><a href="#cb7-202"></a><span class="in">    return counterfactuals</span></span>
+<span id="cb7-203"><a href="#cb7-203"></a><span class="in">end</span></span>
 <span id="cb7-204"><a href="#cb7-204"></a><span class="in">```</span></span>
 <span id="cb7-205"><a href="#cb7-205"></a></span>
 <span id="cb7-208"><a href="#cb7-208"></a><span class="in">```{julia}</span></span>
-<span id="cb7-209"><a href="#cb7-209"></a><span class="co">#| echo: false</span></span>
-<span id="cb7-210"><a href="#cb7-210"></a>using Plots</span>
-<span id="cb7-211"><a href="#cb7-211"></a>to = <span class="dv">4</span></span>
-<span id="cb7-212"><a href="#cb7-212"></a>counterfactuals = from_digit_to_digit(x,to,generators,models)</span>
-<span id="cb7-213"><a href="#cb7-213"></a>plts =  first(<span class="fu">values</span>(counterfactuals)).x |&gt; x -&gt; plot(convert2image(reshape(x,Int(√(input_dim)),Int(√(input_dim)))),title=<span class="ot">"</span><span class="st">Original</span><span class="ot">"</span>)</span>
-<span id="cb7-214"><a href="#cb7-214"></a>plts = vcat(plts, [plot(convert2image(reshape(v.x′,Int(√(input_dim)),Int(√(input_dim)))),title=k) <span class="kw">for</span> (k,v) in counterfactuals])</span>
-<span id="cb7-215"><a href="#cb7-215"></a>plt = plot(plts...,layout=(<span class="dv">1</span>,<span class="fu">length</span>(plts)),axis=nothing, size=(<span class="dv">1200</span>,<span class="dv">300</span>))</span>
-<span id="cb7-216"><a href="#cb7-216"></a>savefig(plt, joinpath(www_path, <span class="ot">"</span><span class="st">mnist_9_to_4.png</span><span class="ot">"</span>))</span>
+<span id="cb7-209"><a href="#cb7-209"></a><span class="in">#| echo: false</span></span>
+<span id="cb7-210"><a href="#cb7-210"></a><span class="in">using Plots</span></span>
+<span id="cb7-211"><a href="#cb7-211"></a><span class="in">to = 4</span></span>
+<span id="cb7-212"><a href="#cb7-212"></a><span class="in">counterfactuals = from_digit_to_digit(x,to,generators,models)</span></span>
+<span id="cb7-213"><a href="#cb7-213"></a><span class="in">plts =  first(values(counterfactuals)).x |&gt; x -&gt; plot(convert2image(reshape(x,Int(√(input_dim)),Int(√(input_dim)))),title="Original")</span></span>
+<span id="cb7-214"><a href="#cb7-214"></a><span class="in">plts = vcat(plts, [plot(convert2image(reshape(v.x′,Int(√(input_dim)),Int(√(input_dim)))),title=k) for (k,v) in counterfactuals])</span></span>
+<span id="cb7-215"><a href="#cb7-215"></a><span class="in">plt = plot(plts...,layout=(1,length(plts)),axis=nothing, size=(1200,300))</span></span>
+<span id="cb7-216"><a href="#cb7-216"></a><span class="in">savefig(plt, joinpath(www_path, "mnist_9_to_4.png"))</span></span>
 <span id="cb7-217"><a href="#cb7-217"></a><span class="in">```</span></span>
 <span id="cb7-218"><a href="#cb7-218"></a></span>
 <span id="cb7-219"><a href="#cb7-219"></a><span class="al">![Counterfactual explanations for MNIST: turning a nine (9) into a four (4).](www/mnist_9_to_4.png)</span>{#fig-mnist-9to4}</span>
 <span id="cb7-220"><a href="#cb7-220"></a></span>
 <span id="cb7-223"><a href="#cb7-223"></a><span class="in">```{julia}</span></span>
-<span id="cb7-224"><a href="#cb7-224"></a><span class="co">#| echo: false</span></span>
-<span id="cb7-225"><a href="#cb7-225"></a>X = counterfactuals[<span class="ot">"</span><span class="st">Ensemble - Greedy</span><span class="ot">"</span>].search[:path]</span>
-<span id="cb7-226"><a href="#cb7-226"></a>anim = <span class="dt">@animate</span> <span class="kw">for</span> t in <span class="dv">1</span>:<span class="fu">length</span>(X)</span>
-<span id="cb7-227"><a href="#cb7-227"></a>    plot(convert2image(reshape(X[t],Int(√(input_dim)),Int(√(input_dim)))),axis=nothing,size=(<span class="dv">300</span>,<span class="dv">300</span>))</span>
-<span id="cb7-228"><a href="#cb7-228"></a>end every <span class="dv">10</span></span>
-<span id="cb7-229"><a href="#cb7-229"></a>gif(anim, joinpath(www_path, <span class="ot">"</span><span class="st">intro.gif</span><span class="ot">"</span>))</span>
+<span id="cb7-224"><a href="#cb7-224"></a><span class="in">#| echo: false</span></span>
+<span id="cb7-225"><a href="#cb7-225"></a><span class="in">X = counterfactuals["Ensemble - Greedy"].search[:path]</span></span>
+<span id="cb7-226"><a href="#cb7-226"></a><span class="in">anim = @animate for t in 1:length(X)</span></span>
+<span id="cb7-227"><a href="#cb7-227"></a><span class="in">    plot(convert2image(reshape(X[t],Int(√(input_dim)),Int(√(input_dim)))),axis=nothing,size=(300,300))</span></span>
+<span id="cb7-228"><a href="#cb7-228"></a><span class="in">end every 10</span></span>
+<span id="cb7-229"><a href="#cb7-229"></a><span class="in">gif(anim, joinpath(www_path, "intro.gif"))</span></span>
 <span id="cb7-230"><a href="#cb7-230"></a><span class="in">```</span></span>
 <span id="cb7-231"><a href="#cb7-231"></a></span>
 <span id="cb7-232"><a href="#cb7-232"></a><span class="fu">## Language interoperability 👥</span></span>
@@ -1044,84 +1243,84 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-236"><a href="#cb7-236"></a><span class="fu">### Explaining a `torch` model </span></span>
 <span id="cb7-237"><a href="#cb7-237"></a></span>
 <span id="cb7-240"><a href="#cb7-240"></a><span class="in">```{julia}</span></span>
-<span id="cb7-241"><a href="#cb7-241"></a><span class="co">#| echo: false</span></span>
-<span id="cb7-242"><a href="#cb7-242"></a>using Random</span>
-<span id="cb7-243"><a href="#cb7-243"></a><span class="co"># Some random data:</span></span>
-<span id="cb7-244"><a href="#cb7-244"></a>Random.seed!(<span class="dv">1234</span>)</span>
-<span id="cb7-245"><a href="#cb7-245"></a>N = <span class="dv">100</span></span>
-<span id="cb7-246"><a href="#cb7-246"></a>using CounterfactualExplanations</span>
-<span id="cb7-247"><a href="#cb7-247"></a>using CounterfactualExplanations.Data</span>
-<span id="cb7-248"><a href="#cb7-248"></a>xs, ys = Data.toy_data_non_linear(N)</span>
-<span id="cb7-249"><a href="#cb7-249"></a>X = hcat(xs...)</span>
-<span id="cb7-250"><a href="#cb7-250"></a>counterfactual_data = CounterfactualData(X,ys<span class="ot">'</span><span class="ss">)</span></span>
-<span id="cb7-251"><a href="#cb7-251"></a><span class="ss">```</span></span>
+<span id="cb7-241"><a href="#cb7-241"></a><span class="in">#| echo: false</span></span>
+<span id="cb7-242"><a href="#cb7-242"></a><span class="in">using Random</span></span>
+<span id="cb7-243"><a href="#cb7-243"></a><span class="in"># Some random data:</span></span>
+<span id="cb7-244"><a href="#cb7-244"></a><span class="in">Random.seed!(1234)</span></span>
+<span id="cb7-245"><a href="#cb7-245"></a><span class="in">N = 100</span></span>
+<span id="cb7-246"><a href="#cb7-246"></a><span class="in">using CounterfactualExplanations</span></span>
+<span id="cb7-247"><a href="#cb7-247"></a><span class="in">using CounterfactualExplanations.Data</span></span>
+<span id="cb7-248"><a href="#cb7-248"></a><span class="in">xs, ys = Data.toy_data_non_linear(N)</span></span>
+<span id="cb7-249"><a href="#cb7-249"></a><span class="in">X = hcat(xs...)</span></span>
+<span id="cb7-250"><a href="#cb7-250"></a><span class="in">counterfactual_data = CounterfactualData(X,ys')</span></span>
+<span id="cb7-251"><a href="#cb7-251"></a><span class="in">```</span></span>
 <span id="cb7-252"><a href="#cb7-252"></a></span>
 <span id="cb7-255"><a href="#cb7-255"></a><span class="in">```{julia}</span></span>
-<span id="cb7-256"><a href="#cb7-256"></a><span class="ss">#| echo: false</span></span>
-<span id="cb7-257"><a href="#cb7-257"></a><span class="ss">using RCall</span></span>
-<span id="cb7-258"><a href="#cb7-258"></a><span class="ss">R"""</span></span>
-<span id="cb7-259"><a href="#cb7-259"></a><span class="ss"># Data</span></span>
-<span id="cb7-260"><a href="#cb7-260"></a><span class="ss">library(torch)</span></span>
-<span id="cb7-261"><a href="#cb7-261"></a><span class="ss">X &lt;- torch_tensor(t($X))</span></span>
-<span id="cb7-262"><a href="#cb7-262"></a><span class="ss">ys &lt;- torch_tensor($ys)</span></span>
+<span id="cb7-256"><a href="#cb7-256"></a><span class="in">#| echo: false</span></span>
+<span id="cb7-257"><a href="#cb7-257"></a><span class="in">using RCall</span></span>
+<span id="cb7-258"><a href="#cb7-258"></a><span class="in">R"""</span></span>
+<span id="cb7-259"><a href="#cb7-259"></a><span class="in"># Data</span></span>
+<span id="cb7-260"><a href="#cb7-260"></a><span class="in">library(torch)</span></span>
+<span id="cb7-261"><a href="#cb7-261"></a><span class="in">X &lt;- torch_tensor(t($X))</span></span>
+<span id="cb7-262"><a href="#cb7-262"></a><span class="in">ys &lt;- torch_tensor($ys)</span></span>
 <span id="cb7-263"><a href="#cb7-263"></a></span>
-<span id="cb7-264"><a href="#cb7-264"></a><span class="ss"># Model:</span></span>
-<span id="cb7-265"><a href="#cb7-265"></a><span class="ss">mlp &lt;- nn_module(</span></span>
-<span id="cb7-266"><a href="#cb7-266"></a><span class="ss">  initialize = function() {</span></span>
-<span id="cb7-267"><a href="#cb7-267"></a><span class="ss">    self$layer1 &lt;- nn_linear(2, 32)</span></span>
-<span id="cb7-268"><a href="#cb7-268"></a><span class="ss">    self$layer2 &lt;- nn_linear(32, 1)</span></span>
-<span id="cb7-269"><a href="#cb7-269"></a><span class="ss">  },</span></span>
-<span id="cb7-270"><a href="#cb7-270"></a><span class="ss">  forward = function(input) {</span></span>
-<span id="cb7-271"><a href="#cb7-271"></a><span class="ss">    input &lt;- self$layer1(input)</span></span>
-<span id="cb7-272"><a href="#cb7-272"></a><span class="ss">    input &lt;- nnf_sigmoid(input)</span></span>
-<span id="cb7-273"><a href="#cb7-273"></a><span class="ss">    input &lt;- self$layer2(input)</span></span>
-<span id="cb7-274"><a href="#cb7-274"></a><span class="ss">    input</span></span>
-<span id="cb7-275"><a href="#cb7-275"></a><span class="ss">  }</span></span>
-<span id="cb7-276"><a href="#cb7-276"></a><span class="ss">)</span></span>
-<span id="cb7-277"><a href="#cb7-277"></a><span class="ss">model &lt;- mlp()</span></span>
-<span id="cb7-278"><a href="#cb7-278"></a><span class="ss">optimizer &lt;- optim_adam(model$parameters, lr = 0.1)</span></span>
-<span id="cb7-279"><a href="#cb7-279"></a><span class="ss">loss_fun &lt;- nnf_binary_cross_entropy_with_logits</span></span>
+<span id="cb7-264"><a href="#cb7-264"></a><span class="in"># Model:</span></span>
+<span id="cb7-265"><a href="#cb7-265"></a><span class="in">mlp &lt;- nn_module(</span></span>
+<span id="cb7-266"><a href="#cb7-266"></a><span class="in">  initialize = function() {</span></span>
+<span id="cb7-267"><a href="#cb7-267"></a><span class="in">    self$layer1 &lt;- nn_linear(2, 32)</span></span>
+<span id="cb7-268"><a href="#cb7-268"></a><span class="in">    self$layer2 &lt;- nn_linear(32, 1)</span></span>
+<span id="cb7-269"><a href="#cb7-269"></a><span class="in">  },</span></span>
+<span id="cb7-270"><a href="#cb7-270"></a><span class="in">  forward = function(input) {</span></span>
+<span id="cb7-271"><a href="#cb7-271"></a><span class="in">    input &lt;- self$layer1(input)</span></span>
+<span id="cb7-272"><a href="#cb7-272"></a><span class="in">    input &lt;- nnf_sigmoid(input)</span></span>
+<span id="cb7-273"><a href="#cb7-273"></a><span class="in">    input &lt;- self$layer2(input)</span></span>
+<span id="cb7-274"><a href="#cb7-274"></a><span class="in">    input</span></span>
+<span id="cb7-275"><a href="#cb7-275"></a><span class="in">  }</span></span>
+<span id="cb7-276"><a href="#cb7-276"></a><span class="in">)</span></span>
+<span id="cb7-277"><a href="#cb7-277"></a><span class="in">model &lt;- mlp()</span></span>
+<span id="cb7-278"><a href="#cb7-278"></a><span class="in">optimizer &lt;- optim_adam(model$parameters, lr = 0.1)</span></span>
+<span id="cb7-279"><a href="#cb7-279"></a><span class="in">loss_fun &lt;- nnf_binary_cross_entropy_with_logits</span></span>
 <span id="cb7-280"><a href="#cb7-280"></a></span>
-<span id="cb7-281"><a href="#cb7-281"></a><span class="ss">for (epoch in 1:100) {</span></span>
+<span id="cb7-281"><a href="#cb7-281"></a><span class="in">for (epoch in 1:100) {</span></span>
 <span id="cb7-282"><a href="#cb7-282"></a></span>
-<span id="cb7-283"><a href="#cb7-283"></a><span class="ss">  model$train()</span></span>
-<span id="cb7-284"><a href="#cb7-284"></a><span class="ss">  train_losses &lt;- c()  </span></span>
+<span id="cb7-283"><a href="#cb7-283"></a><span class="in">  model$train()</span></span>
+<span id="cb7-284"><a href="#cb7-284"></a><span class="in">  train_losses &lt;- c()  </span></span>
 <span id="cb7-285"><a href="#cb7-285"></a></span>
-<span id="cb7-286"><a href="#cb7-286"></a><span class="ss">  optimizer$zero_grad()</span></span>
-<span id="cb7-287"><a href="#cb7-287"></a><span class="ss">  output &lt;- model(X)</span></span>
-<span id="cb7-288"><a href="#cb7-288"></a><span class="ss">  loss &lt;- loss_fun(output[,1], ys)</span></span>
-<span id="cb7-289"><a href="#cb7-289"></a><span class="ss">  loss$backward()</span></span>
-<span id="cb7-290"><a href="#cb7-290"></a><span class="ss">  optimizer$step()</span></span>
-<span id="cb7-291"><a href="#cb7-291"></a><span class="ss">  train_losses &lt;- c(train_losses, loss$item())</span></span>
-<span id="cb7-292"><a href="#cb7-292"></a><span class="ss">  </span></span>
-<span id="cb7-293"><a href="#cb7-293"></a><span class="ss">  cat(sprintf("Loss at epoch %d: %3f\n", epoch, mean(train_losses)))</span></span>
-<span id="cb7-294"><a href="#cb7-294"></a><span class="ss">}</span></span>
-<span id="cb7-295"><a href="#cb7-295"></a><span class="ss">"""</span></span>
-<span id="cb7-296"><a href="#cb7-296"></a><span class="ss">```</span></span>
+<span id="cb7-286"><a href="#cb7-286"></a><span class="in">  optimizer$zero_grad()</span></span>
+<span id="cb7-287"><a href="#cb7-287"></a><span class="in">  output &lt;- model(X)</span></span>
+<span id="cb7-288"><a href="#cb7-288"></a><span class="in">  loss &lt;- loss_fun(output[,1], ys)</span></span>
+<span id="cb7-289"><a href="#cb7-289"></a><span class="in">  loss$backward()</span></span>
+<span id="cb7-290"><a href="#cb7-290"></a><span class="in">  optimizer$step()</span></span>
+<span id="cb7-291"><a href="#cb7-291"></a><span class="in">  train_losses &lt;- c(train_losses, loss$item())</span></span>
+<span id="cb7-292"><a href="#cb7-292"></a><span class="in">  </span></span>
+<span id="cb7-293"><a href="#cb7-293"></a><span class="in">  cat(sprintf("Loss at epoch %d: %3f\n", epoch, mean(train_losses)))</span></span>
+<span id="cb7-294"><a href="#cb7-294"></a><span class="in">}</span></span>
+<span id="cb7-295"><a href="#cb7-295"></a><span class="in">"""</span></span>
+<span id="cb7-296"><a href="#cb7-296"></a><span class="in">```</span></span>
 <span id="cb7-297"><a href="#cb7-297"></a></span>
-<span id="cb7-298"><a href="#cb7-298"></a><span class="ss">We will consider a simple MLP trained for a binary classification task. As before we first need to adapt this custom model for use with our package. The code below the two necessary steps - sub-typing and method extension. Logits are returned by the `torch` model and copied from the R environment into the Julia scope. Probabilities are then computed inside the Julia scope by passing the logits through the sigmoid function.</span></span>
+<span id="cb7-298"><a href="#cb7-298"></a>We will consider a simple MLP trained for a binary classification task. As before we first need to adapt this custom model for use with our package. The code below the two necessary steps - sub-typing and method extension. Logits are returned by the <span class="in">`torch`</span> model and copied from the R environment into the Julia scope. Probabilities are then computed inside the Julia scope by passing the logits through the sigmoid function.</span>
 <span id="cb7-299"><a href="#cb7-299"></a></span>
 <span id="cb7-302"><a href="#cb7-302"></a><span class="in">```{julia}</span></span>
-<span id="cb7-303"><a href="#cb7-303"></a><span class="ss">using Flux</span></span>
-<span id="cb7-304"><a href="#cb7-304"></a><span class="ss">using CounterfactualExplanations, CounterfactualExplanations.Models</span></span>
-<span id="cb7-305"><a href="#cb7-305"></a><span class="ss">import CounterfactualExplanations.Models: logits, probs # import functions in order to extend</span></span>
+<span id="cb7-303"><a href="#cb7-303"></a><span class="in">using Flux</span></span>
+<span id="cb7-304"><a href="#cb7-304"></a><span class="in">using CounterfactualExplanations, CounterfactualExplanations.Models</span></span>
+<span id="cb7-305"><a href="#cb7-305"></a><span class="in">import CounterfactualExplanations.Models: logits, probs # import functions in order to extend</span></span>
 <span id="cb7-306"><a href="#cb7-306"></a></span>
-<span id="cb7-307"><a href="#cb7-307"></a><span class="ss"># Step 1)</span></span>
-<span id="cb7-308"><a href="#cb7-308"></a><span class="ss">struct TorchNetwork &lt;: Models.AbstractFittedModel</span></span>
-<span id="cb7-309"><a href="#cb7-309"></a><span class="ss">    nn::Any</span></span>
-<span id="cb7-310"><a href="#cb7-310"></a><span class="ss">end</span></span>
+<span id="cb7-307"><a href="#cb7-307"></a><span class="in"># Step 1)</span></span>
+<span id="cb7-308"><a href="#cb7-308"></a><span class="in">struct TorchNetwork &lt;: Models.AbstractFittedModel</span></span>
+<span id="cb7-309"><a href="#cb7-309"></a><span class="in">    nn::Any</span></span>
+<span id="cb7-310"><a href="#cb7-310"></a><span class="in">end</span></span>
 <span id="cb7-311"><a href="#cb7-311"></a></span>
-<span id="cb7-312"><a href="#cb7-312"></a><span class="ss"># Step 2)</span></span>
-<span id="cb7-313"><a href="#cb7-313"></a><span class="ss">function logits(M::TorchNetwork, X::AbstractArray)</span></span>
-<span id="cb7-314"><a href="#cb7-314"></a><span class="ss">  nn = M.nn</span></span>
-<span id="cb7-315"><a href="#cb7-315"></a><span class="ss">  y = rcopy(R"as_array($nn(torch_tensor(t($X))))")</span></span>
-<span id="cb7-316"><a href="#cb7-316"></a><span class="ss">  y = isa(y, AbstractArray) ? y : [y]</span></span>
-<span id="cb7-317"><a href="#cb7-317"></a><span class="ss">  return y</span><span class="ot">'</span></span>
-<span id="cb7-318"><a href="#cb7-318"></a>end</span>
-<span id="cb7-319"><a href="#cb7-319"></a>function probs(<span class="fu">M::TorchNetwork</span>, <span class="fu">X::AbstractArray</span>)</span>
-<span id="cb7-320"><a href="#cb7-320"></a>  <span class="kw">return</span> σ.(logits(M, X))</span>
-<span id="cb7-321"><a href="#cb7-321"></a>end</span>
-<span id="cb7-322"><a href="#cb7-322"></a>M = TorchNetwork(R<span class="ot">"</span><span class="st">model</span><span class="ot">"</span>)</span>
+<span id="cb7-312"><a href="#cb7-312"></a><span class="in"># Step 2)</span></span>
+<span id="cb7-313"><a href="#cb7-313"></a><span class="in">function logits(M::TorchNetwork, X::AbstractArray)</span></span>
+<span id="cb7-314"><a href="#cb7-314"></a><span class="in">  nn = M.nn</span></span>
+<span id="cb7-315"><a href="#cb7-315"></a><span class="in">  y = rcopy(R"as_array($nn(torch_tensor(t($X))))")</span></span>
+<span id="cb7-316"><a href="#cb7-316"></a><span class="in">  y = isa(y, AbstractArray) ? y : [y]</span></span>
+<span id="cb7-317"><a href="#cb7-317"></a><span class="in">  return y'</span></span>
+<span id="cb7-318"><a href="#cb7-318"></a><span class="in">end</span></span>
+<span id="cb7-319"><a href="#cb7-319"></a><span class="in">function probs(M::TorchNetwork, X::AbstractArray)</span></span>
+<span id="cb7-320"><a href="#cb7-320"></a><span class="in">  return σ.(logits(M, X))</span></span>
+<span id="cb7-321"><a href="#cb7-321"></a><span class="in">end</span></span>
+<span id="cb7-322"><a href="#cb7-322"></a><span class="in">M = TorchNetwork(R"model")</span></span>
 <span id="cb7-323"><a href="#cb7-323"></a><span class="in">```</span></span>
 <span id="cb7-324"><a href="#cb7-324"></a></span>
 <span id="cb7-325"><a href="#cb7-325"></a>Compared to models trained in Julia, we need to do a little more work at this point. Since our counterfactual generators need gradient access, we essentially need to allow our package to communicate with the R <span class="in">`torch`</span> library. While this may sound daunting, it turns out to be quite manageable: all we have to do is respecify the function that computes the gradient with respect to the counterfactual loss function so that it can deal with the <span class="in">`TorchNetwork`</span> type we defined above. That is all the adjustment needed to use <span class="in">`CounterfactualExplanations.jl`</span> for our custom R model. @fig-torch shows a counterfactual path for a randomly chosen sample with respect to the MLP trained in R.</span>
@@ -1133,76 +1332,76 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-331"><a href="#cb7-331"></a>:::</span>
 <span id="cb7-332"><a href="#cb7-332"></a></span>
 <span id="cb7-335"><a href="#cb7-335"></a><span class="in">```{julia}</span></span>
-<span id="cb7-336"><a href="#cb7-336"></a><span class="fu">import</span> CounterfactualExplanations.Generators: ∂ℓ</span>
-<span id="cb7-337"><a href="#cb7-337"></a>using LinearAlgebra</span>
+<span id="cb7-336"><a href="#cb7-336"></a><span class="in">import CounterfactualExplanations.Generators: ∂ℓ</span></span>
+<span id="cb7-337"><a href="#cb7-337"></a><span class="in">using LinearAlgebra</span></span>
 <span id="cb7-338"><a href="#cb7-338"></a></span>
-<span id="cb7-339"><a href="#cb7-339"></a><span class="co"># Countefactual loss:</span></span>
-<span id="cb7-340"><a href="#cb7-340"></a>function ∂ℓ(</span>
-<span id="cb7-341"><a href="#cb7-341"></a>    <span class="fu">generator::AbstractGradientBasedGenerator</span>, </span>
-<span id="cb7-342"><a href="#cb7-342"></a>    <span class="fu">counterfactual_state::CounterfactualState</span>) </span>
-<span id="cb7-343"><a href="#cb7-343"></a>  M = counterfactual_state.M</span>
-<span id="cb7-344"><a href="#cb7-344"></a>  nn = M.nn</span>
-<span id="cb7-345"><a href="#cb7-345"></a>  x′ = counterfactual_state.x′</span>
-<span id="cb7-346"><a href="#cb7-346"></a>  t = counterfactual_state.target_encoded</span>
-<span id="cb7-347"><a href="#cb7-347"></a>  R<span class="ot">"""</span></span>
-<span id="cb7-348"><a href="#cb7-348"></a><span class="st">  x &lt;- torch_tensor(</span><span class="dt">$x</span><span class="st">′, requires_grad=TRUE)</span></span>
-<span id="cb7-349"><a href="#cb7-349"></a><span class="st">  output &lt;- </span><span class="dt">$nn</span><span class="st">(x)</span></span>
-<span id="cb7-350"><a href="#cb7-350"></a><span class="st">  loss_fun &lt;- nnf_binary_cross_entropy_with_logits</span></span>
-<span id="cb7-351"><a href="#cb7-351"></a><span class="st">  obj_loss &lt;- loss_fun(output,</span><span class="dt">$t</span><span class="st">)</span></span>
-<span id="cb7-352"><a href="#cb7-352"></a><span class="st">  obj_loss</span><span class="dt">$backward</span><span class="st">()</span></span>
-<span id="cb7-353"><a href="#cb7-353"></a><span class="st">  </span><span class="ot">"""</span></span>
-<span id="cb7-354"><a href="#cb7-354"></a>  grad = rcopy(R<span class="ot">"</span><span class="st">as_array(x</span><span class="dt">$grad</span><span class="st">)</span><span class="ot">"</span>)</span>
-<span id="cb7-355"><a href="#cb7-355"></a>  <span class="kw">return</span> grad</span>
-<span id="cb7-356"><a href="#cb7-356"></a>end</span>
+<span id="cb7-339"><a href="#cb7-339"></a><span class="in"># Countefactual loss:</span></span>
+<span id="cb7-340"><a href="#cb7-340"></a><span class="in">function ∂ℓ(</span></span>
+<span id="cb7-341"><a href="#cb7-341"></a><span class="in">    generator::AbstractGradientBasedGenerator, </span></span>
+<span id="cb7-342"><a href="#cb7-342"></a><span class="in">    counterfactual_state::CounterfactualState) </span></span>
+<span id="cb7-343"><a href="#cb7-343"></a><span class="in">  M = counterfactual_state.M</span></span>
+<span id="cb7-344"><a href="#cb7-344"></a><span class="in">  nn = M.nn</span></span>
+<span id="cb7-345"><a href="#cb7-345"></a><span class="in">  x′ = counterfactual_state.x′</span></span>
+<span id="cb7-346"><a href="#cb7-346"></a><span class="in">  t = counterfactual_state.target_encoded</span></span>
+<span id="cb7-347"><a href="#cb7-347"></a><span class="in">  R"""</span></span>
+<span id="cb7-348"><a href="#cb7-348"></a><span class="in">  x &lt;- torch_tensor($x′, requires_grad=TRUE)</span></span>
+<span id="cb7-349"><a href="#cb7-349"></a><span class="in">  output &lt;- $nn(x)</span></span>
+<span id="cb7-350"><a href="#cb7-350"></a><span class="in">  loss_fun &lt;- nnf_binary_cross_entropy_with_logits</span></span>
+<span id="cb7-351"><a href="#cb7-351"></a><span class="in">  obj_loss &lt;- loss_fun(output,$t)</span></span>
+<span id="cb7-352"><a href="#cb7-352"></a><span class="in">  obj_loss$backward()</span></span>
+<span id="cb7-353"><a href="#cb7-353"></a><span class="in">  """</span></span>
+<span id="cb7-354"><a href="#cb7-354"></a><span class="in">  grad = rcopy(R"as_array(x$grad)")</span></span>
+<span id="cb7-355"><a href="#cb7-355"></a><span class="in">  return grad</span></span>
+<span id="cb7-356"><a href="#cb7-356"></a><span class="in">end</span></span>
 <span id="cb7-357"><a href="#cb7-357"></a><span class="in">```</span></span>
 <span id="cb7-358"><a href="#cb7-358"></a></span>
 <span id="cb7-361"><a href="#cb7-361"></a><span class="in">```{julia}</span></span>
-<span id="cb7-362"><a href="#cb7-362"></a><span class="co">#| echo: false</span></span>
-<span id="cb7-363"><a href="#cb7-363"></a><span class="co"># Randomly selected factual:</span></span>
-<span id="cb7-364"><a href="#cb7-364"></a>Random.seed!(<span class="dv">123</span>)</span>
-<span id="cb7-365"><a href="#cb7-365"></a>x = select_factual(counterfactual_data, <span class="fu">rand</span>(<span class="dv">1</span>:<span class="fu">length</span>(xs))) </span>
-<span id="cb7-366"><a href="#cb7-366"></a><span class="ot">y </span>= round(probs(M, x)[<span class="dv">1</span>])</span>
-<span id="cb7-367"><a href="#cb7-367"></a>target = ifelse(y==<span class="fl">1.0</span>,<span class="fl">0.0</span>,<span class="fl">1.0</span>) <span class="co"># opposite label as target</span></span>
-<span id="cb7-368"><a href="#cb7-368"></a><span class="co"># Define generator:</span></span>
-<span id="cb7-369"><a href="#cb7-369"></a>generator = GenericGenerator()</span>
-<span id="cb7-370"><a href="#cb7-370"></a><span class="co"># Generate recourse:</span></span>
-<span id="cb7-371"><a href="#cb7-371"></a>counterfactual = generate_counterfactual(x, target, counterfactual_data, M, generator)</span>
+<span id="cb7-362"><a href="#cb7-362"></a><span class="in">#| echo: false</span></span>
+<span id="cb7-363"><a href="#cb7-363"></a><span class="in"># Randomly selected factual:</span></span>
+<span id="cb7-364"><a href="#cb7-364"></a><span class="in">Random.seed!(123)</span></span>
+<span id="cb7-365"><a href="#cb7-365"></a><span class="in">x = select_factual(counterfactual_data, rand(1:length(xs))) </span></span>
+<span id="cb7-366"><a href="#cb7-366"></a><span class="in">y = round(probs(M, x)[1])</span></span>
+<span id="cb7-367"><a href="#cb7-367"></a><span class="in">target = ifelse(y==1.0,0.0,1.0) # opposite label as target</span></span>
+<span id="cb7-368"><a href="#cb7-368"></a><span class="in"># Define generator:</span></span>
+<span id="cb7-369"><a href="#cb7-369"></a><span class="in">generator = GenericGenerator()</span></span>
+<span id="cb7-370"><a href="#cb7-370"></a><span class="in"># Generate recourse:</span></span>
+<span id="cb7-371"><a href="#cb7-371"></a><span class="in">counterfactual = generate_counterfactual(x, target, counterfactual_data, M, generator)</span></span>
 <span id="cb7-372"><a href="#cb7-372"></a><span class="in">```</span></span>
 <span id="cb7-373"><a href="#cb7-373"></a></span>
 <span id="cb7-376"><a href="#cb7-376"></a><span class="in">```{julia}</span></span>
-<span id="cb7-377"><a href="#cb7-377"></a><span class="co">#| echo: false</span></span>
-<span id="cb7-378"><a href="#cb7-378"></a>using Plots</span>
-<span id="cb7-379"><a href="#cb7-379"></a>T = size(path(counterfactual))[<span class="dv">1</span>]</span>
-<span id="cb7-380"><a href="#cb7-380"></a>X_path = reduce(hcat,path(counterfactual))</span>
-<span id="cb7-381"><a href="#cb7-381"></a>plt = plot_contour(X<span class="ot">'</span><span class="ss">,ys,M)</span></span>
-<span id="cb7-382"><a href="#cb7-382"></a><span class="ss">[scatter!(plt, [path(counterfactual)[t][1]], [path(counterfactual)[t][2]], ms=7.5, color=Int(y), label="") for t in 1:T]</span></span>
-<span id="cb7-383"><a href="#cb7-383"></a><span class="ss">savefig(plt, joinpath(www_path,"interop_r.png"))</span></span>
-<span id="cb7-384"><a href="#cb7-384"></a><span class="ss">```</span></span>
+<span id="cb7-377"><a href="#cb7-377"></a><span class="in">#| echo: false</span></span>
+<span id="cb7-378"><a href="#cb7-378"></a><span class="in">using Plots</span></span>
+<span id="cb7-379"><a href="#cb7-379"></a><span class="in">T = size(path(counterfactual))[1]</span></span>
+<span id="cb7-380"><a href="#cb7-380"></a><span class="in">X_path = reduce(hcat,path(counterfactual))</span></span>
+<span id="cb7-381"><a href="#cb7-381"></a><span class="in">plt = plot_contour(X',ys,M)</span></span>
+<span id="cb7-382"><a href="#cb7-382"></a><span class="in">[scatter!(plt, [path(counterfactual)[t][1]], [path(counterfactual)[t][2]], ms=7.5, color=Int(y), label="") for t in 1:T]</span></span>
+<span id="cb7-383"><a href="#cb7-383"></a><span class="in">savefig(plt, joinpath(www_path,"interop_r.png"))</span></span>
+<span id="cb7-384"><a href="#cb7-384"></a><span class="in">```</span></span>
 <span id="cb7-385"><a href="#cb7-385"></a></span>
-<span id="cb7-386"><a href="#cb7-386"></a><span class="ss">![Counterfactual path using the generic counterfactual generator for a model trained in R.](www/interop_r.gif){#fig-torch}</span></span>
+<span id="cb7-386"><a href="#cb7-386"></a><span class="al">![Counterfactual path using the generic counterfactual generator for a model trained in R.](www/interop_r.gif)</span>{#fig-torch}</span>
 <span id="cb7-387"><a href="#cb7-387"></a></span>
-<span id="cb7-388"><a href="#cb7-388"></a><span class="ss">&lt;!-- kicker --&gt;</span></span>
+<span id="cb7-388"><a href="#cb7-388"></a><span class="co">&lt;!-- kicker --&gt;</span></span>
 <span id="cb7-389"><a href="#cb7-389"></a></span>
-<span id="cb7-390"><a href="#cb7-390"></a><span class="ss">## We need you! 🫵</span></span>
+<span id="cb7-390"><a href="#cb7-390"></a><span class="fu">## We need you! 🫵</span></span>
 <span id="cb7-391"><a href="#cb7-391"></a></span>
-<span id="cb7-392"><a href="#cb7-392"></a><span class="ss">The ambition for `CounterfactualExplanations.jl` is to provide a go-to place for counterfactual explanations to the Julia community and beyond. This is a grand ambition, especially for a package that has so far been built by a single developer who has little prior experience with Julia. We would therefore very much like to invite community contributions. If you have an interest in trustworthy AI, the open-source community and Julia, please do get involved! This package is still in its early stages of development, so any kind of contribution is welcome: advice on the core package architecture, pull requests, issues, discussions and even just comments below would be much appreciated. </span></span>
+<span id="cb7-392"><a href="#cb7-392"></a>The ambition for <span class="in">`CounterfactualExplanations.jl`</span> is to provide a go-to place for counterfactual explanations to the Julia community and beyond. This is a grand ambition, especially for a package that has so far been built by a single developer who has little prior experience with Julia. We would therefore very much like to invite community contributions. If you have an interest in trustworthy AI, the open-source community and Julia, please do get involved! This package is still in its early stages of development, so any kind of contribution is welcome: advice on the core package architecture, pull requests, issues, discussions and even just comments below would be much appreciated. </span>
 <span id="cb7-393"><a href="#cb7-393"></a></span>
-<span id="cb7-394"><a href="#cb7-394"></a><span class="ss">To give you a flavor of what type of future developments we envision, here is a non-exhaustive list:</span></span>
+<span id="cb7-394"><a href="#cb7-394"></a>To give you a flavor of what type of future developments we envision, here is a non-exhaustive list:</span>
 <span id="cb7-395"><a href="#cb7-395"></a></span>
-<span id="cb7-396"><a href="#cb7-396"></a><span class="ss">1. Native support for additional counterfactual generators and predictive models including those built and trained in Python or R.</span></span>
-<span id="cb7-397"><a href="#cb7-397"></a><span class="ss">2. Additional datasets for testing, evaluation and benchmarking.</span></span>
-<span id="cb7-398"><a href="#cb7-398"></a><span class="ss">3. Improved preprocessing including native support for categorical features.</span></span>
-<span id="cb7-399"><a href="#cb7-399"></a><span class="ss">4. Support for regression models.</span></span>
+<span id="cb7-396"><a href="#cb7-396"></a><span class="ss">1. </span>Native support for additional counterfactual generators and predictive models including those built and trained in Python or R.</span>
+<span id="cb7-397"><a href="#cb7-397"></a><span class="ss">2. </span>Additional datasets for testing, evaluation and benchmarking.</span>
+<span id="cb7-398"><a href="#cb7-398"></a><span class="ss">3. </span>Improved preprocessing including native support for categorical features.</span>
+<span id="cb7-399"><a href="#cb7-399"></a><span class="ss">4. </span>Support for regression models.</span>
 <span id="cb7-400"><a href="#cb7-400"></a></span>
-<span id="cb7-401"><a href="#cb7-401"></a><span class="ss">Finally, if you like this project but don</span><span class="ot">'</span>t have much <span class="fu">time</span>, then simply sharing this article <span class="ot">or</span> starring the [repo](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl) on GitHub would also go a long way.</span>
+<span id="cb7-401"><a href="#cb7-401"></a>Finally, if you like this project but don't have much time, then simply sharing this article or starring the <span class="co">[</span><span class="ot">repo</span><span class="co">](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl)</span> on GitHub would also go a long way.</span>
 <span id="cb7-402"><a href="#cb7-402"></a></span>
-<span id="cb7-403"><a href="#cb7-403"></a><span class="co">## Further reading 📚</span></span>
+<span id="cb7-403"><a href="#cb7-403"></a><span class="fu">## Further reading 📚</span></span>
 <span id="cb7-404"><a href="#cb7-404"></a></span>
-<span id="cb7-405"><a href="#cb7-405"></a>If you<span class="ot">'</span><span class="ss">re interested in learning more about this development, feel free to check out the following resources:</span></span>
+<span id="cb7-405"><a href="#cb7-405"></a>If you're interested in learning more about this development, feel free to check out the following resources:</span>
 <span id="cb7-406"><a href="#cb7-406"></a></span>
-<span id="cb7-407"><a href="#cb7-407"></a><span class="ss">- Package docs: [[stable]](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/stable), [[dev]](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/dev).</span></span>
-<span id="cb7-408"><a href="#cb7-408"></a><span class="ss">- [Contributor</span><span class="ot">'</span>s guide](https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/contributing/).</span>
-<span id="cb7-409"><a href="#cb7-409"></a>- [GitHub repo](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl).</span>
+<span id="cb7-407"><a href="#cb7-407"></a><span class="ss">- </span>Package docs: [<span class="co">[</span><span class="ot">stable</span><span class="co">]</span>](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/stable), [<span class="co">[</span><span class="ot">dev</span><span class="co">]</span>](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/dev).</span>
+<span id="cb7-408"><a href="#cb7-408"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Contributor's guide</span><span class="co">](https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/contributing/)</span>.</span>
+<span id="cb7-409"><a href="#cb7-409"></a><span class="ss">- </span><span class="co">[</span><span class="ot">GitHub repo</span><span class="co">](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl)</span>.</span>
 <span id="cb7-410"><a href="#cb7-410"></a></span>
 <span id="cb7-411"><a href="#cb7-411"></a></span>
 <span id="cb7-412"><a href="#cb7-412"></a></span>
@@ -1211,10 +1410,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">© 2023, Patrick Altmeyer</div>   
+    <div class="nav-footer-left">
+<p>© 2023, Patrick Altmeyer</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
@@ -1245,6 +1446,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 

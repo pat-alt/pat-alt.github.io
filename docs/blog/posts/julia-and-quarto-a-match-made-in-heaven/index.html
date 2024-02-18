@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -83,7 +83,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -92,6 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -113,7 +120,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <meta property="og:title" content="Patrick Altmeyer - Julia and Quarto: a match made in heaven? 🌤">
 <meta property="og:description" content="An opinionated, practical review celebrating the open-source community. I discuss why Quarto is nothing short of revolutionary and how I’ve been using it with Julia.">
 <meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/julia-and-quarto-a-match-made-in-heaven/www/intro.gif">
-<meta property="og:site-name" content="Patrick Altmeyer">
+<meta property="og:site_name" content="Patrick Altmeyer">
 <meta name="twitter:title" content="Patrick Altmeyer - Julia and Quarto: a match made in heaven? 🌤">
 <meta name="twitter:description" content="An opinionated, practical review celebrating the open-source community. I discuss why Quarto is nothing short of revolutionary and how I’ve been using it with Julia.">
 <meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/julia-and-quarto-a-match-made-in-heaven/www/intro.gif">
@@ -124,9 +131,9 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
@@ -141,50 +148,50 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/publications/index.html" rel="" target="">
- <span class="menu-text">Publications</span></a>
+    <a class="nav-link" href="../../../content/publications/index.html"> 
+<span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/talks/index.html" rel="" target="">
- <span class="menu-text">Talks</span></a>
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/software.html" rel="" target="">
- <span class="menu-text">Software</span></a>
+    <a class="nav-link" href="../../../content/software.html"> 
+<span class="menu-text">Software</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../content/about/index.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../../content/about/index.html"> 
+<span class="menu-text">About</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../blog/index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/pat-alt" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/paltmey" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -201,7 +208,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   <li><a href="#sec-match" id="toc-sec-match" class="nav-link" data-scroll-target="#sec-match">Quarto and Julia: a perfect match 💙💜💚</a></li>
   <li><a href="#wrapping-up" id="toc-wrapping-up" class="nav-link" data-scroll-target="#wrapping-up">Wrapping up 🎗</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -230,14 +237,14 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     <div class="quarto-title-meta-contents">
     <p class="author"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> </p>
   </div>
-    <div class="quarto-title-meta-contents">
+  <div class="quarto-title-meta-contents">
         <p class="affiliation">
             <a href="https://www.tudelft.nl/en/">
             Delft University of Technology
             </a>
           </p>
       </div>
-    </div>
+  </div>
 
 <div class="quarto-title-meta">
 
@@ -253,12 +260,14 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   </div>
   
 
+
 </header>
+
 
 <div class="intro-gif">
 <figure class="figure">
 <img src="www/intro.gif" class="figure-img">
-<figcaption class="figure-caption">
+<figcaption>
 Julia and Quarto: a perfect match.
 </figcaption>
 </figure>
@@ -270,7 +279,7 @@ Julia and Quarto: a perfect match.
 <blockquote class="blockquote">
 <p>Hold up?! Wasn’t this supposed to be about Julia and Quarto?</p>
 </blockquote>
-<p>Yes! But it’s worth noting that a lot of the benefits that Quarto brings have been available to R users for many years, thanks to the amazing work of many great open-source contributors like <a href="https://twitter.com/xieyihui">@xieyihui</a>. Julia was the main reason for me to branch out of this comfortable R bubble as I describe below. That said, if you are a Julia user who really couldn’t care less about my previous experiences with R Markdown, this is a good time to skip straight ahead to <a href="#sec-match">Section&nbsp;2</a>. By the way, if you haven’t clicked on that link, here’s a small showcase demonstrating how it was generated. It shows easy it is to have everything well organised and connected with Quarto.</p>
+<p>Yes! But it’s worth noting that a lot of the benefits that Quarto brings have been available to R users for many years, thanks to the amazing work of many great open-source contributors like <a href="https://twitter.com/xieyihui">@xieyihui</a>. Julia was the main reason for me to branch out of this comfortable R bubble as I describe below. That said, if you are a Julia user who really couldn’t care less about my previous experiences with R Markdown, this is a good time to skip straight ahead to <a href="#sec-match" class="quarto-xref">Section&nbsp;2</a>. By the way, if you haven’t clicked on that link, here’s a small showcase demonstrating how it was generated. It shows easy it is to have everything well organised and connected with Quarto.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -288,7 +297,7 @@ Cross-referencing
 <p>There is actually a comprehensive 8-step guide explaining how to achieve something similar in MS Word, but personally I wouldn’t go there. Anyway, take your pick:</p>
 <ol type="a">
 <li>🔴 <a href="https://support.microsoft.com/en-us/office/create-a-cross-reference-300b208c-e45a-487a-880b-a02767d9774b">Go there</a>.</li>
-<li>🟢 Move on to <a href="#sec-bubble">Section&nbsp;1</a> #safespace.</li>
+<li>🟢 Move on to <a href="#sec-bubble" class="quarto-xref">Section&nbsp;1</a> #safespace.</li>
 </ol>
 </div>
 </div>
@@ -346,8 +355,8 @@ Just had my first go <a href="https://twitter.com/hashtag/quarto?src=hash&amp;re
 </ol>
 <p>Julia code cells can be added anywhere along with your plain text Markdown. They look like this:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1"></a><span class="in">```{julia}</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>using Pkg</span>
-<span id="cb2-3"><a href="#cb2-3"></a>Pkg.add(<span class="ot">"</span><span class="st">CounterfactualExplanations</span><span class="ot">"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="in">using Pkg</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="in">Pkg.add("CounterfactualExplanations")</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Contrary to Jupyter notebooks, executing this code cells will start a Julia REPL in VSCode. I find this very helpful, because it lets me fiddle with anything I have created inside the Quarto notebook without having to click into cells all the time. Quarto comes with great support for specifying <a href="https://quarto.org/docs/computations/julia.html">code executing options</a>. For example, for the code below I have specified <code>#| echo: true</code> in order for the code to be rendered. The code itself is the code I actually used to build the animation above (heavily borrowed from this <code>Javis.jl</code> <a href="https://juliaanimators.github.io/Javis.jl/stable/tutorials/tutorial_7/">tutorial</a>).</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#| echo: true</span></span>
@@ -478,7 +487,7 @@ Just had my first go <a href="https://twitter.com/hashtag/quarto?src=hash&amp;re
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
   author = {Altmeyer, Patrick},
   title = {Julia and {Quarto:} A Match Made in Heaven? 🌤},
   date = {2022-04-07},
@@ -619,10 +628,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -632,8 +640,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -646,6 +663,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -689,6 +825,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -714,6 +851,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -796,15 +959,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-19"><a href="#cb5-19"></a><span class="co">---</span></span>
 <span id="cb5-20"><a href="#cb5-20"></a></span>
 <span id="cb5-23"><a href="#cb5-23"></a><span class="in">```{julia}</span></span>
-<span id="cb5-24"><a href="#cb5-24"></a>www_path = <span class="ot">"</span><span class="st">blog/posts/julia-and-quarto-a-match-made-in-heaven/www</span><span class="ot">"</span></span>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="in">www_path = "blog/posts/julia-and-quarto-a-match-made-in-heaven/www"</span></span>
 <span id="cb5-25"><a href="#cb5-25"></a><span class="in">```</span></span>
 <span id="cb5-26"><a href="#cb5-26"></a></span>
-<span id="cb5-27"><a href="#cb5-27"></a><span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">"intro-gif"</span><span class="kw">&gt;</span></span>
-<span id="cb5-28"><a href="#cb5-28"></a>  <span class="kw">&lt;figure&gt;</span></span>
-<span id="cb5-29"><a href="#cb5-29"></a>    <span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"www/intro.gif"</span><span class="kw">&gt;</span></span>
-<span id="cb5-30"><a href="#cb5-30"></a>    <span class="kw">&lt;figcaption&gt;</span>Julia and Quarto: a perfect match.<span class="kw">&lt;/figcaption&gt;</span></span>
-<span id="cb5-31"><a href="#cb5-31"></a>  <span class="kw">&lt;/figure&gt;</span></span>
-<span id="cb5-32"><a href="#cb5-32"></a><span class="kw">&lt;/div&gt;</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a>&lt;div class="intro-gif"&gt;</span>
+<span id="cb5-28"><a href="#cb5-28"></a>  &lt;figure&gt;</span>
+<span id="cb5-29"><a href="#cb5-29"></a>    &lt;img src="www/intro.gif"&gt;</span>
+<span id="cb5-30"><a href="#cb5-30"></a>    &lt;figcaption&gt;Julia and Quarto: a perfect match.&lt;/figcaption&gt;</span>
+<span id="cb5-31"><a href="#cb5-31"></a>  &lt;/figure&gt;</span>
+<span id="cb5-32"><a href="#cb5-32"></a>&lt;/div&gt;</span>
 <span id="cb5-33"><a href="#cb5-33"></a></span>
 <span id="cb5-34"><a href="#cb5-34"></a>Does your work involve research, coding, writing and publishing? If so, then chances are that you often find yourself bouncing back and forth between different open-source text editors, IDEs, programming languages and platforms depending on your current needs. Using a diverse set of tools is reasonable, because there typically is no single perfect approach that solves all our problems. For example, interactive notebooks like Jupyter are useful for working with code and communicating it to others, but they are probably not anyone's first choice for producing a scientific article. Similarly, Beamer presentations can be useful for presenting science in a standardized fashion, but they are the very opposite of interactive and look incredibly boring. </span>
 <span id="cb5-35"><a href="#cb5-35"></a></span>
@@ -855,7 +1018,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-80"><a href="#cb5-80"></a></span>
 <span id="cb5-81"><a href="#cb5-81"></a>Around the same time that I started using Julia, I read about Quarto for the first time. It looked ... great! Like a timely little miracle really! But also ... unfinished? Definitely experimental at the time. I loved the idea though and in a footnote somewhere on their website it said that the project was supported by R Studio which I took as a very good sign. So I decided to at least give it a quick try and built a small (tiny) <span class="co">[</span><span class="ot">website</span><span class="co">](https://www.paltmeyer.com/tai/)</span> summarising some of the literature I had read for my PhD:</span>
 <span id="cb5-82"><a href="#cb5-82"></a></span>
-<span id="cb5-83"><a href="#cb5-83"></a><span class="kw">&lt;blockquote</span> <span class="er">class</span><span class="ot">=</span><span class="st">"twitter-tweet"</span><span class="kw">&gt;&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">"en"</span> <span class="er">dir</span><span class="ot">=</span><span class="st">"ltr"</span><span class="kw">&gt;</span>Just had my first go <span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://twitter.com/hashtag/quarto?src=hash</span><span class="dv">&amp;amp;</span><span class="st">ref_src=twsrc%5Etfw"</span><span class="kw">&gt;</span>#quarto<span class="kw">&lt;/a&gt;</span> and I absolutely love the concept! Open-source and language agnostic - truly amazing work from <span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://twitter.com/rstudio?ref_src=twsrc%5Etfw"</span><span class="kw">&gt;</span>&amp;#64rstudio<span class="kw">&lt;/a&gt;</span> <span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://t.co/veCg7ywQ8v"</span><span class="kw">&gt;</span>https://t.co/veCg7ywQ8v<span class="kw">&lt;/a&gt;&lt;/p&gt;</span><span class="dv">&amp;mdash;</span> Patrick Altmeyer (&amp;#64paltmey) <span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://twitter.com/paltmey/status/1454042807019180035?ref_src=twsrc%5Etfw"</span><span class="kw">&gt;</span>October 29, 2021<span class="kw">&lt;/a&gt;&lt;/blockquote&gt;</span> <span class="kw">&lt;script</span> <span class="er">async</span> <span class="er">src</span><span class="ot">=</span><span class="st">"https://platform.twitter.com/widgets.js"</span> <span class="er">charset</span><span class="ot">=</span><span class="st">"utf-8"</span><span class="kw">&gt;&lt;/script&gt;</span></span>
+<span id="cb5-83"><a href="#cb5-83"></a>&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Just had my first go &lt;a href="https://twitter.com/hashtag/quarto?src=hash<span class="dv">&amp;amp;</span>ref_src=twsrc%5Etfw"&gt;#quarto&lt;/a&gt; and I absolutely love the concept! Open-source and language agnostic - truly amazing work from &lt;a href="https://twitter.com/rstudio?ref_src=twsrc%5Etfw"&gt;&amp;#64rstudio&lt;/a&gt; &lt;a href="https://t.co/veCg7ywQ8v"&gt;https://t.co/veCg7ywQ8v&lt;/a&gt;&lt;/p&gt;<span class="dv">&amp;mdash;</span> Patrick Altmeyer (&amp;#64paltmey) &lt;a href="https://twitter.com/paltmey/status/1454042807019180035?ref_src=twsrc%5Etfw"&gt;October 29, 2021&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;</span>
 <span id="cb5-84"><a href="#cb5-84"></a></span>
 <span id="cb5-85"><a href="#cb5-85"></a>This was a first very pleasant encounter with Quarto, arguable even smoother than building websites in <span class="in">`blogdown`</span>. As for working with Julia though, I had made up my mind that VSCode was the way to go and at the time there was no Quarto extension (there is <span class="co">[</span><span class="ot">now</span><span class="co">](https://marketplace.visualstudio.com/items?itemName=quarto.quarto)</span>). There was also little in terms of communication about the project by R Studio, probably because things were really still in the early development stages. I was hopeful that eventually Quarto would enable me to emulate the R Studio experience in VS Code, but for now things were not quite there yet. </span>
 <span id="cb5-86"><a href="#cb5-86"></a></span>
@@ -863,7 +1026,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-88"><a href="#cb5-88"></a></span>
 <span id="cb5-89"><a href="#cb5-89"></a>Since I was now working with VSCode + Jupyter and since Quarto supports Jupyter as well as all of my old R Markdown work, my next little Quarto project involved turning my old <span class="in">`blogdown`</span>-powered blog into a Quarto-powered <span class="co">[</span><span class="ot">blog</span><span class="co">](https://www.paltmeyer.com/blog/)</span>. This was not strictly necessary, as I could always export my new Jupyter notebooks to HTML and let <span class="in">`blogdown`</span> do the rest. But it did streamline things a little bit and the default Quarto blog theme - you are staring at it - is actually 🔥. I also did not have to feel guilty towards <span class="co">[</span><span class="ot">\@xieyihui</span><span class="co">](https://twitter.com/xieyihui)</span> about leaving <span class="in">`blogdown`</span>, because unsurprisingly he is on the Quarto team. As I was working on this little project I started noticing that the Quarto website was updated regularly and responses to issues I opened like this <span class="co">[</span><span class="ot">one</span><span class="co">](https://github.com/quarto-dev/quarto-cli/issues/293)</span> were answered very swiftly. Clearly, things were moving and they were moving fast. More recently, the news about Quarto has been spreading and it's left some folks as confused and amazed as I was, when I first heard about it:</span>
 <span id="cb5-90"><a href="#cb5-90"></a></span>
-<span id="cb5-91"><a href="#cb5-91"></a><span class="kw">&lt;blockquote</span> <span class="er">class</span><span class="ot">=</span><span class="st">"twitter-tweet"</span><span class="kw">&gt;&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">"en"</span> <span class="er">dir</span><span class="ot">=</span><span class="st">"ltr"</span><span class="kw">&gt;&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://twitter.com/hashtag/RStats?src=hash</span><span class="dv">&amp;amp;</span><span class="st">ref_src=twsrc%5Etfw"</span><span class="kw">&gt;</span>#RStats<span class="kw">&lt;/a&gt;</span> can someone explain to me what<span class="dv">&amp;#39;</span>s the difference between {Quarto} and {RMarkdown}? I saw a tweet about Quarto and now I<span class="dv">&amp;#39;</span>m all confused ... What gap is it supposed to fill?<span class="kw">&lt;/p&gt;</span><span class="dv">&amp;mdash;</span> Erwin Lares (&amp;#64lasrubieras) <span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://twitter.com/lasrubieras/status/1509014670262390784?ref_src=twsrc%5Etfw"</span><span class="kw">&gt;</span>March 30, 2022<span class="kw">&lt;/a&gt;&lt;/blockquote&gt;</span> <span class="kw">&lt;script</span> <span class="er">async</span> <span class="er">src</span><span class="ot">=</span><span class="st">"https://platform.twitter.com/widgets.js"</span> <span class="er">charset</span><span class="ot">=</span><span class="st">"utf-8"</span><span class="kw">&gt;&lt;/script&gt;</span></span>
+<span id="cb5-91"><a href="#cb5-91"></a>&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;&lt;a href="https://twitter.com/hashtag/RStats?src=hash<span class="dv">&amp;amp;</span>ref_src=twsrc%5Etfw"&gt;#RStats&lt;/a&gt; can someone explain to me what<span class="dv">&amp;#39;</span>s the difference between {Quarto} and {RMarkdown}? I saw a tweet about Quarto and now I<span class="dv">&amp;#39;</span>m all confused ... What gap is it supposed to fill?&lt;/p&gt;<span class="dv">&amp;mdash;</span> Erwin Lares (&amp;#64lasrubieras) &lt;a href="https://twitter.com/lasrubieras/status/1509014670262390784?ref_src=twsrc%5Etfw"&gt;March 30, 2022&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;</span>
 <span id="cb5-92"><a href="#cb5-92"></a></span>
 <span id="cb5-93"><a href="#cb5-93"></a>This is why finally I've decided I should write a brief post about how and why I use Quarto. Since I have been working mostly with Julia for the past couple of months, I've chosen to focus on the interaction between Quarto and Julia. Coincidentally, yesterday was also the first time I saw a <span class="co">[</span><span class="ot">guide</span><span class="co">](https://quarto.org/docs/computations/julia.html)</span> dedicated to Julia on the Quarto website, so evidently I am not the only one interested in that marriage. This also means that there really is not too much left for me to talk about now, since Quarto's documentation is state-of-the-art. But a few bits and pieces I mention below might hopefully still be useful or at least some food for thought.</span>
 <span id="cb5-94"><a href="#cb5-94"></a></span>
@@ -885,107 +1048,107 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-110"><a href="#cb5-110"></a></span>
 <span id="cb5-111"><a href="#cb5-111"></a><span class="in">```` markdown</span></span>
 <span id="cb5-112"><a href="#cb5-112"></a><span class="in">```{julia}</span></span>
-<span id="cb5-113"><a href="#cb5-113"></a>using Pkg</span>
-<span id="cb5-114"><a href="#cb5-114"></a>Pkg.add(<span class="ot">"</span><span class="st">CounterfactualExplanations</span><span class="ot">"</span>)</span>
+<span id="cb5-113"><a href="#cb5-113"></a><span class="in">using Pkg</span></span>
+<span id="cb5-114"><a href="#cb5-114"></a><span class="in">Pkg.add("CounterfactualExplanations")</span></span>
 <span id="cb5-115"><a href="#cb5-115"></a><span class="in">```</span></span>
 <span id="cb5-116"><a href="#cb5-116"></a><span class="in">````</span></span>
 <span id="cb5-117"><a href="#cb5-117"></a></span>
 <span id="cb5-118"><a href="#cb5-118"></a>Contrary to Jupyter notebooks, executing this code cells will start a Julia REPL in VSCode. I find this very helpful, because it lets me fiddle with anything I have created inside the Quarto notebook without having to click into cells all the time. Quarto comes with great support for specifying <span class="co">[</span><span class="ot">code executing options</span><span class="co">](https://quarto.org/docs/computations/julia.html)</span>. For example, for the code below I have specified <span class="in">`#| echo: true`</span> in order for the code to be rendered. The code itself is the code I actually used to build the animation above (heavily borrowed from this <span class="in">`Javis.jl`</span> <span class="co">[</span><span class="ot">tutorial</span><span class="co">](https://juliaanimators.github.io/Javis.jl/stable/tutorials/tutorial_7/)</span>).</span>
 <span id="cb5-119"><a href="#cb5-119"></a></span>
 <span id="cb5-120"><a href="#cb5-120"></a><span class="in">```{.julia}</span></span>
-<span id="cb5-121"><a href="#cb5-121"></a><span class="co">#| echo: true</span></span>
-<span id="cb5-122"><a href="#cb5-122"></a>using Javis, Animations, Colors</span>
+<span id="cb5-121"><a href="#cb5-121"></a><span class="in">#| echo: true</span></span>
+<span id="cb5-122"><a href="#cb5-122"></a><span class="in">using Javis, Animations, Colors</span></span>
 <span id="cb5-123"><a href="#cb5-123"></a></span>
-<span id="cb5-124"><a href="#cb5-124"></a>size = <span class="dv">600</span></span>
-<span id="cb5-125"><a href="#cb5-125"></a>radius_factor = <span class="fl">0.33</span></span>
+<span id="cb5-124"><a href="#cb5-124"></a><span class="in">size = 600</span></span>
+<span id="cb5-125"><a href="#cb5-125"></a><span class="in">radius_factor = 0.33</span></span>
 <span id="cb5-126"><a href="#cb5-126"></a></span>
-<span id="cb5-127"><a href="#cb5-127"></a>function ground(args...)</span>
-<span id="cb5-128"><a href="#cb5-128"></a>    background(<span class="ot">"</span><span class="st">transparent</span><span class="ot">"</span>)</span>
-<span id="cb5-129"><a href="#cb5-129"></a>    sethue(<span class="ot">"</span><span class="st">white</span><span class="ot">"</span>)</span>
-<span id="cb5-130"><a href="#cb5-130"></a>end</span>
+<span id="cb5-127"><a href="#cb5-127"></a><span class="in">function ground(args...)</span></span>
+<span id="cb5-128"><a href="#cb5-128"></a><span class="in">    background("transparent")</span></span>
+<span id="cb5-129"><a href="#cb5-129"></a><span class="in">    sethue("white")</span></span>
+<span id="cb5-130"><a href="#cb5-130"></a><span class="in">end</span></span>
 <span id="cb5-131"><a href="#cb5-131"></a></span>
-<span id="cb5-132"><a href="#cb5-132"></a>function rotate_anim(<span class="fu">idx::Number</span>, <span class="fu">total::Number</span>) </span>
-<span id="cb5-133"><a href="#cb5-133"></a>    distance_circle = <span class="fl">0.875</span></span>
-<span id="cb5-134"><a href="#cb5-134"></a>    steps = collect(range(distance_circle,<span class="dv">1</span><span class="ot">-d</span>istance_circle,<span class="fu">length</span>=total))</span>
-<span id="cb5-135"><a href="#cb5-135"></a>    Animation(</span>
-<span id="cb5-136"><a href="#cb5-136"></a>        [<span class="dv">0</span>, <span class="dv">1</span>], <span class="co"># must go from 0 to 1</span></span>
-<span id="cb5-137"><a href="#cb5-137"></a>        [<span class="dv">0</span>, steps[idx]*<span class="dv">2</span>π],</span>
-<span id="cb5-138"><a href="#cb5-138"></a>        [sineio()],</span>
-<span id="cb5-139"><a href="#cb5-139"></a>    )</span>
-<span id="cb5-140"><a href="#cb5-140"></a>end</span>
+<span id="cb5-132"><a href="#cb5-132"></a><span class="in">function rotate_anim(idx::Number, total::Number) </span></span>
+<span id="cb5-133"><a href="#cb5-133"></a><span class="in">    distance_circle = 0.875</span></span>
+<span id="cb5-134"><a href="#cb5-134"></a><span class="in">    steps = collect(range(distance_circle,1-distance_circle,length=total))</span></span>
+<span id="cb5-135"><a href="#cb5-135"></a><span class="in">    Animation(</span></span>
+<span id="cb5-136"><a href="#cb5-136"></a><span class="in">        [0, 1], # must go from 0 to 1</span></span>
+<span id="cb5-137"><a href="#cb5-137"></a><span class="in">        [0, steps[idx]*2π],</span></span>
+<span id="cb5-138"><a href="#cb5-138"></a><span class="in">        [sineio()],</span></span>
+<span id="cb5-139"><a href="#cb5-139"></a><span class="in">    )</span></span>
+<span id="cb5-140"><a href="#cb5-140"></a><span class="in">end</span></span>
 <span id="cb5-141"><a href="#cb5-141"></a></span>
-<span id="cb5-142"><a href="#cb5-142"></a>translate_anim = Animation(</span>
-<span id="cb5-143"><a href="#cb5-143"></a>    [<span class="dv">0</span>, <span class="dv">1</span>], <span class="co"># must go from 0 to 1</span></span>
-<span id="cb5-144"><a href="#cb5-144"></a>    [O, Point(size<span class="dt">*radius_factor</span>, <span class="dv">0</span>)],</span>
-<span id="cb5-145"><a href="#cb5-145"></a>    [sineio()],</span>
-<span id="cb5-146"><a href="#cb5-146"></a>)</span>
+<span id="cb5-142"><a href="#cb5-142"></a><span class="in">translate_anim = Animation(</span></span>
+<span id="cb5-143"><a href="#cb5-143"></a><span class="in">    [0, 1], # must go from 0 to 1</span></span>
+<span id="cb5-144"><a href="#cb5-144"></a><span class="in">    [O, Point(size*radius_factor, 0)],</span></span>
+<span id="cb5-145"><a href="#cb5-145"></a><span class="in">    [sineio()],</span></span>
+<span id="cb5-146"><a href="#cb5-146"></a><span class="in">)</span></span>
 <span id="cb5-147"><a href="#cb5-147"></a></span>
-<span id="cb5-148"><a href="#cb5-148"></a>translate_back_anim = Animation(</span>
-<span id="cb5-149"><a href="#cb5-149"></a>    [<span class="dv">0</span>, <span class="dv">1</span>], <span class="co"># must go from 0 to 1</span></span>
-<span id="cb5-150"><a href="#cb5-150"></a>    [O, Point(-(size<span class="dt">*radius_factor</span>), <span class="dv">0</span>)],</span>
-<span id="cb5-151"><a href="#cb5-151"></a>    [sineio()],</span>
-<span id="cb5-152"><a href="#cb5-152"></a>)</span>
+<span id="cb5-148"><a href="#cb5-148"></a><span class="in">translate_back_anim = Animation(</span></span>
+<span id="cb5-149"><a href="#cb5-149"></a><span class="in">    [0, 1], # must go from 0 to 1</span></span>
+<span id="cb5-150"><a href="#cb5-150"></a><span class="in">    [O, Point(-(size*radius_factor), 0)],</span></span>
+<span id="cb5-151"><a href="#cb5-151"></a><span class="in">    [sineio()],</span></span>
+<span id="cb5-152"><a href="#cb5-152"></a><span class="in">)</span></span>
 <span id="cb5-153"><a href="#cb5-153"></a></span>
-<span id="cb5-154"><a href="#cb5-154"></a>julia_colours = Dict(</span>
-<span id="cb5-155"><a href="#cb5-155"></a>    :blue =&gt; <span class="ot">"</span><span class="st">#4063D8</span><span class="ot">"</span>,</span>
-<span id="cb5-156"><a href="#cb5-156"></a>    :green =&gt; <span class="ot">"</span><span class="st">#389826</span><span class="ot">"</span>,</span>
-<span id="cb5-157"><a href="#cb5-157"></a>    :purple =&gt; <span class="ot">"</span><span class="st">#9558b2</span><span class="ot">"</span>,</span>
-<span id="cb5-158"><a href="#cb5-158"></a>    :red =&gt; <span class="ot">"</span><span class="st">#CB3C33</span><span class="ot">"</span></span>
-<span id="cb5-159"><a href="#cb5-159"></a>)</span>
-<span id="cb5-160"><a href="#cb5-160"></a>colour_order = [:red, :purple, :green, :blue]</span>
-<span id="cb5-161"><a href="#cb5-161"></a>n_colours = <span class="fu">length</span>(julia_colours)</span>
-<span id="cb5-162"><a href="#cb5-162"></a>function color_anim(<span class="fu">start_colour::String</span>, <span class="fu">quarto_col::String</span>=<span class="ot">"</span><span class="st">#4b95d0</span><span class="ot">"</span>)</span>
-<span id="cb5-163"><a href="#cb5-163"></a>    Animation(</span>
-<span id="cb5-164"><a href="#cb5-164"></a>        [<span class="dv">0</span>, <span class="dv">1</span>], <span class="co"># must go from 0 to 1</span></span>
-<span id="cb5-165"><a href="#cb5-165"></a>        [Lab(color(start_colour)), Lab(color(quarto_col))],</span>
-<span id="cb5-166"><a href="#cb5-166"></a>        [sineio()],</span>
-<span id="cb5-167"><a href="#cb5-167"></a>    )</span>
-<span id="cb5-168"><a href="#cb5-168"></a>end</span>
+<span id="cb5-154"><a href="#cb5-154"></a><span class="in">julia_colours = Dict(</span></span>
+<span id="cb5-155"><a href="#cb5-155"></a><span class="in">    :blue =&gt; "#4063D8",</span></span>
+<span id="cb5-156"><a href="#cb5-156"></a><span class="in">    :green =&gt; "#389826",</span></span>
+<span id="cb5-157"><a href="#cb5-157"></a><span class="in">    :purple =&gt; "#9558b2",</span></span>
+<span id="cb5-158"><a href="#cb5-158"></a><span class="in">    :red =&gt; "#CB3C33"</span></span>
+<span id="cb5-159"><a href="#cb5-159"></a><span class="in">)</span></span>
+<span id="cb5-160"><a href="#cb5-160"></a><span class="in">colour_order = [:red, :purple, :green, :blue]</span></span>
+<span id="cb5-161"><a href="#cb5-161"></a><span class="in">n_colours = length(julia_colours)</span></span>
+<span id="cb5-162"><a href="#cb5-162"></a><span class="in">function color_anim(start_colour::String, quarto_col::String="#4b95d0")</span></span>
+<span id="cb5-163"><a href="#cb5-163"></a><span class="in">    Animation(</span></span>
+<span id="cb5-164"><a href="#cb5-164"></a><span class="in">        [0, 1], # must go from 0 to 1</span></span>
+<span id="cb5-165"><a href="#cb5-165"></a><span class="in">        [Lab(color(start_colour)), Lab(color(quarto_col))],</span></span>
+<span id="cb5-166"><a href="#cb5-166"></a><span class="in">        [sineio()],</span></span>
+<span id="cb5-167"><a href="#cb5-167"></a><span class="in">    )</span></span>
+<span id="cb5-168"><a href="#cb5-168"></a><span class="in">end</span></span>
 <span id="cb5-169"><a href="#cb5-169"></a></span>
-<span id="cb5-170"><a href="#cb5-170"></a>video = Video(size, size)</span>
+<span id="cb5-170"><a href="#cb5-170"></a><span class="in">video = Video(size, size)</span></span>
 <span id="cb5-171"><a href="#cb5-171"></a></span>
-<span id="cb5-172"><a href="#cb5-172"></a>frame_starts = <span class="dv">1</span>:<span class="dv">10</span>:<span class="dv">40</span></span>
-<span id="cb5-173"><a href="#cb5-173"></a>n_total = <span class="dv">250</span></span>
-<span id="cb5-174"><a href="#cb5-174"></a>n_frames = <span class="dv">150</span></span>
-<span id="cb5-175"><a href="#cb5-175"></a>Background(<span class="dv">1</span>:n_total, ground)</span>
+<span id="cb5-172"><a href="#cb5-172"></a><span class="in">frame_starts = 1:10:40</span></span>
+<span id="cb5-173"><a href="#cb5-173"></a><span class="in">n_total = 250</span></span>
+<span id="cb5-174"><a href="#cb5-174"></a><span class="in">n_frames = 150</span></span>
+<span id="cb5-175"><a href="#cb5-175"></a><span class="in">Background(1:n_total, ground)</span></span>
 <span id="cb5-176"><a href="#cb5-176"></a></span>
-<span id="cb5-177"><a href="#cb5-177"></a><span class="co"># Blob:</span></span>
-<span id="cb5-178"><a href="#cb5-178"></a>function element(; radius = <span class="dv">1</span>)</span>
-<span id="cb5-179"><a href="#cb5-179"></a>    circle(O, radius, :fill) <span class="co"># The 4 is to make the circle not so small</span></span>
-<span id="cb5-180"><a href="#cb5-180"></a>end</span>
+<span id="cb5-177"><a href="#cb5-177"></a><span class="in"># Blob:</span></span>
+<span id="cb5-178"><a href="#cb5-178"></a><span class="in">function element(; radius = 1)</span></span>
+<span id="cb5-179"><a href="#cb5-179"></a><span class="in">    circle(O, radius, :fill) # The 4 is to make the circle not so small</span></span>
+<span id="cb5-180"><a href="#cb5-180"></a><span class="in">end</span></span>
 <span id="cb5-181"><a href="#cb5-181"></a></span>
-<span id="cb5-182"><a href="#cb5-182"></a><span class="co"># Cross:</span></span>
-<span id="cb5-183"><a href="#cb5-183"></a>function cross(color=<span class="ot">"</span><span class="st">black</span><span class="ot">"</span>;orientation=:horizontal)</span>
-<span id="cb5-184"><a href="#cb5-184"></a>    sethue(color)</span>
-<span id="cb5-185"><a href="#cb5-185"></a>    setline(<span class="dv">10</span>)</span>
-<span id="cb5-186"><a href="#cb5-186"></a>    <span class="kw">if</span> orientation==:horizontal</span>
-<span id="cb5-187"><a href="#cb5-187"></a>        out = line(Point(<span class="ot">-s</span>ize,<span class="dv">0</span>),Point(size,<span class="dv">0</span>), :stroke)</span>
-<span id="cb5-188"><a href="#cb5-188"></a>    <span class="kw">else</span></span>
-<span id="cb5-189"><a href="#cb5-189"></a>        out = line(Point(<span class="dv">0</span>,<span class="ot">-s</span>ize),Point(<span class="dv">0</span>,size), :stroke)</span>
-<span id="cb5-190"><a href="#cb5-190"></a>    end</span>
-<span id="cb5-191"><a href="#cb5-191"></a>    <span class="kw">return</span> out</span>
-<span id="cb5-192"><a href="#cb5-192"></a>end</span>
+<span id="cb5-182"><a href="#cb5-182"></a><span class="in"># Cross:</span></span>
+<span id="cb5-183"><a href="#cb5-183"></a><span class="in">function cross(color="black";orientation=:horizontal)</span></span>
+<span id="cb5-184"><a href="#cb5-184"></a><span class="in">    sethue(color)</span></span>
+<span id="cb5-185"><a href="#cb5-185"></a><span class="in">    setline(10)</span></span>
+<span id="cb5-186"><a href="#cb5-186"></a><span class="in">    if orientation==:horizontal</span></span>
+<span id="cb5-187"><a href="#cb5-187"></a><span class="in">        out = line(Point(-size,0),Point(size,0), :stroke)</span></span>
+<span id="cb5-188"><a href="#cb5-188"></a><span class="in">    else</span></span>
+<span id="cb5-189"><a href="#cb5-189"></a><span class="in">        out = line(Point(0,-size),Point(0,size), :stroke)</span></span>
+<span id="cb5-190"><a href="#cb5-190"></a><span class="in">    end</span></span>
+<span id="cb5-191"><a href="#cb5-191"></a><span class="in">    return out</span></span>
+<span id="cb5-192"><a href="#cb5-192"></a><span class="in">end</span></span>
 <span id="cb5-193"><a href="#cb5-193"></a></span>
-<span id="cb5-194"><a href="#cb5-194"></a><span class="kw">for</span> (i, frame_start) in enumerate(<span class="dv">1</span>:<span class="dv">10</span>:<span class="dv">40</span>)</span>
+<span id="cb5-194"><a href="#cb5-194"></a><span class="in">for (i, frame_start) in enumerate(1:10:40)</span></span>
 <span id="cb5-195"><a href="#cb5-195"></a></span>
-<span id="cb5-196"><a href="#cb5-196"></a>    <span class="co"># Julia circles:</span></span>
-<span id="cb5-197"><a href="#cb5-197"></a>    blob = Object(frame_start:n_total, (args...;radius=<span class="dv">1</span>) -&gt; element(;radius=radius))</span>
-<span id="cb5-198"><a href="#cb5-198"></a>    act!(blob, Action(<span class="dv">1</span>:Int(round(n_frames*<span class="fl">0.25</span>)), change(:radius, <span class="dv">1</span> =&gt; <span class="dv">75</span>))) <span class="co"># scale up</span></span>
-<span id="cb5-199"><a href="#cb5-199"></a>    act!(blob, Action(n_frames:(n_frames+<span class="dv">50</span>), change(:radius, <span class="dv">75</span> =&gt; <span class="dv">250</span>))) <span class="co"># scale up further</span></span>
-<span id="cb5-200"><a href="#cb5-200"></a>    act!(blob, Action(<span class="dv">1</span>:<span class="dv">30</span>, translate_anim, translate()))</span>
-<span id="cb5-201"><a href="#cb5-201"></a>    act!(blob, Action(<span class="dv">31</span>:<span class="dv">120</span>, rotate_anim(i, n_colours), rotate_around(Point(-(size<span class="dt">*radius_factor</span>), <span class="dv">0</span>))))</span>
-<span id="cb5-202"><a href="#cb5-202"></a>    act!(blob, Action(<span class="dv">121</span>:<span class="dv">150</span>, translate_back_anim, translate()))</span>
-<span id="cb5-203"><a href="#cb5-203"></a>    act!(blob, Action(<span class="dv">1</span>:<span class="dv">150</span>, color_anim(julia_colours[colour_order[i]]), sethue()))</span>
+<span id="cb5-196"><a href="#cb5-196"></a><span class="in">    # Julia circles:</span></span>
+<span id="cb5-197"><a href="#cb5-197"></a><span class="in">    blob = Object(frame_start:n_total, (args...;radius=1) -&gt; element(;radius=radius))</span></span>
+<span id="cb5-198"><a href="#cb5-198"></a><span class="in">    act!(blob, Action(1:Int(round(n_frames*0.25)), change(:radius, 1 =&gt; 75))) # scale up</span></span>
+<span id="cb5-199"><a href="#cb5-199"></a><span class="in">    act!(blob, Action(n_frames:(n_frames+50), change(:radius, 75 =&gt; 250))) # scale up further</span></span>
+<span id="cb5-200"><a href="#cb5-200"></a><span class="in">    act!(blob, Action(1:30, translate_anim, translate()))</span></span>
+<span id="cb5-201"><a href="#cb5-201"></a><span class="in">    act!(blob, Action(31:120, rotate_anim(i, n_colours), rotate_around(Point(-(size*radius_factor), 0))))</span></span>
+<span id="cb5-202"><a href="#cb5-202"></a><span class="in">    act!(blob, Action(121:150, translate_back_anim, translate()))</span></span>
+<span id="cb5-203"><a href="#cb5-203"></a><span class="in">    act!(blob, Action(1:150, color_anim(julia_colours[colour_order[i]]), sethue()))</span></span>
 <span id="cb5-204"><a href="#cb5-204"></a></span>
-<span id="cb5-205"><a href="#cb5-205"></a>    <span class="co"># Quarto cross:</span></span>
-<span id="cb5-206"><a href="#cb5-206"></a>    cross_h = Object((n_frames+<span class="dv">50</span>):n_total, (args...) -&gt; cross(;orientation=:horizontal))</span>
-<span id="cb5-207"><a href="#cb5-207"></a>    cross_v = Object((n_frames+<span class="dv">50</span>):n_total, (args...) -&gt; cross(;orientation=:vertical))</span>
-<span id="cb5-208"><a href="#cb5-208"></a>end</span>
+<span id="cb5-205"><a href="#cb5-205"></a><span class="in">    # Quarto cross:</span></span>
+<span id="cb5-206"><a href="#cb5-206"></a><span class="in">    cross_h = Object((n_frames+50):n_total, (args...) -&gt; cross(;orientation=:horizontal))</span></span>
+<span id="cb5-207"><a href="#cb5-207"></a><span class="in">    cross_v = Object((n_frames+50):n_total, (args...) -&gt; cross(;orientation=:vertical))</span></span>
+<span id="cb5-208"><a href="#cb5-208"></a><span class="in">end</span></span>
 <span id="cb5-209"><a href="#cb5-209"></a></span>
-<span id="cb5-210"><a href="#cb5-210"></a>render(</span>
-<span id="cb5-211"><a href="#cb5-211"></a>    video;</span>
-<span id="cb5-212"><a href="#cb5-212"></a>    pathname = joinpath(www_path, <span class="ot">"</span><span class="st">intro.gif</span><span class="ot">"</span>),</span>
-<span id="cb5-213"><a href="#cb5-213"></a>)</span>
+<span id="cb5-210"><a href="#cb5-210"></a><span class="in">render(</span></span>
+<span id="cb5-211"><a href="#cb5-211"></a><span class="in">    video;</span></span>
+<span id="cb5-212"><a href="#cb5-212"></a><span class="in">    pathname = joinpath(www_path, "intro.gif"),</span></span>
+<span id="cb5-213"><a href="#cb5-213"></a><span class="in">)</span></span>
 <span id="cb5-214"><a href="#cb5-214"></a><span class="in">```</span></span>
 <span id="cb5-215"><a href="#cb5-215"></a></span>
 <span id="cb5-216"><a href="#cb5-216"></a><span class="fu">#### Working with `Documenter.jl` and Quarto</span></span>
@@ -1025,10 +1188,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">© 2023, Patrick Altmeyer</div>   
+    <div class="nav-footer-left">
+<p>© 2023, Patrick Altmeyer</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
@@ -1059,6 +1224,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 
