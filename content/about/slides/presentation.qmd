@@ -1,0 +1,149 @@
+---
+title: Trustworthy Artificial Intelligence
+author: 
+  - name: "**Patrick Altmeyer**"
+    url: https://www.paltmeyer.com/
+  - name: Arie van Deursen
+  - name: Cynthia C. S. Liem
+institute: Delft University of Technology
+date: today
+format: 
+  tudelft-revealjs:
+    theme: custom.scss
+    self-contained: true
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    fig-align: center
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+classoption: "notheorems"
+---
+
+## Overview {.smaller}
+
+::::{.columns}::::
+:::{.column width='65%'}
+
+- **Question**: How can we faithfully explain predictions of opaque machine learning models?
+- **Methods**: Counterfactual Explanations, Algorithmic Recourse, Probabilistic Machine Learning, Energy-Based Models, Conformal Prediction, ...
+- **Applications**: Mostly finance and economics but also images and natural language.
+- **Tools**: I am a Julia developer and the founder of [Taija](https://github.com/JuliaTrustworthyAI), an organization for trustworthy AI in Julia.
+<!-- - **Papers**: @altmeyer2023endogenous, @altmeyer2023explaining, @altmeyer2023faithful, @hengst2024conformal, @altmeyer2024position -->
+
+:::
+:::{.column width='35%'}
+![](/www/images/qr.png){width="100%" fig-align="center"}
+:::
+::::
+
+## Counterfactual Explanations
+
+$$
+\begin{aligned}
+\min_{\mathbf{Z}^\prime \in \mathcal{Z}^L} \{  {\text{yloss}(M_{\theta}(f(\mathbf{Z}^\prime)),\mathbf{y}^+)} + \lambda {\text{cost}(f(\mathbf{Z}^\prime)) }  \} 
+\end{aligned} 
+$$ 
+
+::::{.columns}::::
+:::{.column width='50%'}
+**Counterfactual Explanations** (CE) explain how inputs into a model need to change for it to produce different outputs.
+:::
+:::{.column width='50%'}
+![Gradient-based counterfactual search.](www/simple_ce.png){#fig-ce-intro width="60%"}
+:::
+::::
+
+@altmeyer2023explaining
+
+## Pick your Poison
+
+@altmeyer2023faithful
+
+All of these counterfactuals are valid explanations for the model's prediction. 
+
+> Which one would you pick?
+
+![Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](www/mnist_motivation.png){#fig-cf-example width="80%"}
+
+## ECCCos from the Black-Box {.nostretch .smaller} 
+
+::::{.columns}::::
+:::{.column width='30%'}
+::: {.callout-tip appearance="minimal"}
+
+## Key Idea
+
+Use the hybrid objective of joint energy models (JEM) and a model-agnostic penalty for predictive uncertainty: Energy-Constrained ($\mathcal{E}_{\theta}$) Conformal ($\Omega$) Counterfactuals (*ECCCo*). 
+
+:::
+:::
+:::{.column width='70%'}
+
+*ECCCo* objective^[We leverage ideas from @grathwohl2020your and @stutz2022learning. See the paper and appendix for a derivation of the objective from first principles.]:
+
+$$
+\begin{aligned}
+& \min_{\mathbf{Z}^\prime \in \mathcal{Z}^L} \{  {L_{\text{clf}}(f(\mathbf{Z}^\prime);M_{\theta},\mathbf{y}^+)}+ \lambda_1 {\text{cost}(f(\mathbf{Z}^\prime)) } \\
+&+ \lambda_2 \mathcal{E}_{\theta}(f(\mathbf{Z}^\prime)|\mathbf{y}^+) + \lambda_3 \Omega(C_{\theta}(f(\mathbf{Z}^\prime);\alpha)) \} 
+\end{aligned} 
+$$
+
+![Gradient fields and counterfactual paths for different generators.](www/poc_gradient_fields.png){#fig-poc-gradient-fields width="75%" fig-align="center"}
+
+:::
+::::
+
+## Faithul Counterfactuals
+
+::::{.columns}::::
+:::{.column width='30%'}
+![Turning a 9 into a 7. *ECCCo* applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).](www/mnist_eccco.png){#fig-mnist-eccco width="75%"}
+:::
+:::{.column width='70%'}
+*ECCCo* generates counterfactuals that
+
+- faithfully represent model quality (@fig-mnist-eccco).
+- achieve state-of-the-art plausibility (@fig-mnist-benchmark).
+
+![Results for different generators (from 3 to 5).](www/mnist_benchmark.png){#fig-mnist-benchmark width="100%"}
+:::
+::::
+
+## Dynamics of Counterfactuals
+
+## Spurious Sparks
+
+## Taija
+
+## Code
+
+The [code](https://github.com/pat-alt/ECCCo.jl) used to run the analysis for this work is built on top of [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl).
+
+There is also a corresponding paper, [*Explaining Black-Box Models through Counterfactuals*](https://proceedings.juliacon.org/papers/10.21105/jcon.00130), which has been published in JuliaCon Proceedings. 
+
+[![Trustworthy AI in Julia: github.com/JuliaTrustworthyAI](www/logo.png){width="50%" fig-align="center"}](https://github.com/JuliaTrustworthyAI)
+
+## References {.scrollable .smaller}
+
+
