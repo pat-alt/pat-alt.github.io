@@ -1,0 +1,179 @@
+---
+title: Against Spurious Sparks − Dovelating Inflated AI Claims 🕊️
+subtitle: "ECONDAT Conference 2024^[Upcoming position paper at ICML 2024.]"
+author: 
+  - name: Patrick Altmeyer
+    url: https://www.paltmeyer.com/
+  - name: Andrew M. Demetriou
+  - name: Antony Bartlett
+  - name: Cynthia C. S. Liem
+institute: Delft University of Technology
+date: 2024-05-07
+format: 
+  tudelft-revealjs:
+    theme: custom.scss
+    width: 1244.45
+    self-contained: true
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    fig-align: center
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
+  beamer: 
+    aspectratio: 169
+    slide-level: 2
+    theme: Berlin
+    fontsize: 10pt
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+bibliography: biblio.bib
+classoption: "notheorems"
+---
+
+## Motivation {.smaller}
+
+::::{.columns}::::
+:::{.column width='50%'}
+- $A_1$: „It is essential to bring inflation back to target to avoid drifting into deflation territory.“
+- $A_2$: „It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“
+
+> "They're exactly the same."
+> 
+> --- Linear probe $\widehat{cpi}=f(A)$
+:::
+:::{.column width='50%'}
+![](www/spider.jpeg)
+:::
+::::
+
+## Position
+
+> Current LLMs embed knowledge. They don‘t „understand“ anything. They are useful tools, but tools nonetheless.
+
+:::{.incremental}
+
+- Meaningful patterns in embeddings are like doves in the sky.
+- Humans are prone to seek patterns and anthropomorphize. 
+- Observed ‘sparks’ of Artificial General Intelligence are spurious.
+- The academic community should exercise extra caution.
+- Publishing incentives need to be adjusted.
+
+:::
+
+## Outline
+
+:::{.incremental}
+
+- **Experiments**: We probe models of varying complexity including random projections, matrix decompositions, deep autoencoders and transformers.
+  - All of them successfully distill knowledge and yet none of them develop true understanding.
+- **Social sciences review**: Humans are prone to seek patterns and anthropomorphize.
+- **Conclusion and outlook**: More caution at the individual level, and different incentives at the institutional level.
+
+:::
+
+# There! It's sentient! {.nostretch} 
+
+![](www/leo.png){fig-align="center"}
+
+## The Holy Grail {.smaller}
+
+Achievement of Artificial General Intelligence (AGI) has become a grand challenge, and in some cases, an explicit business goal.
+
+::::{.columns}::::
+:::{.column width='50%'}
+### Definition
+
+The definition of AGI itself is not as clear-cut or consistent:
+
+- (loosely) a phenomenon contrasting with ‘narrow AI’ systems, that were trained for specific tasks [@goertzel2014artificial].
+:::
+:::{.column width='50%'}
+### Practice
+
+Researchers have sought to show that AI models generalize to different (and possibly unseen) tasks or show performance
+considered ‘surprising’ to humans.
+
+- For example, Google DeepMind claimed their AlphaGeometry model [@trinh2024geometry] reached a ‘milestone’ towards AGI.
+:::
+::::
+
+## A Perfect Storm
+
+Recent developments in the field have created a ‘perfect storm’ for inflated claims:
+
+:::{.incremental}
+
+-  Early sharing of preprints and code.
+-  Volume of publishable work has exploded.
+-  Social media influencers start playing a role in article discovery and citeability [@weissburg2024tweets].
+-  Complexity is increasing because it is incentivized [@values_in_ML].
+
+:::
+
+## "Not Mere Stochastic Parrots"
+
+- We consider a recently viral work [@gurnee2023languagev1], in which claims about the learning of world models by LLMs were made.
+  - Linear probes (ridge regression) were successfully used to predict geographical locations from LLM embeddings.
+- Claims on [X](https://twitter.com/tegmark/status/1709572469978231063) that this indicates that LLMs are not mere ‘stochastic parrots’ [@bender2021dangers].
+- Reactions on X seemed to largely exhibit excitement and surprise at the authors’ findings.
+
+# On the unsurprising nature of latent embeddings
+
+## Are Neural Networks Born with World Models? {.smaller}
+
+::::{.columns}::::
+:::{.column width='60%'}
+- Llama-2 model tested in @gurnee2023languagev2 has ingested huge amounts of publicly available data [@touvron2023llama].
+  - Geographical locations are literally in the training data: e.g. Wikipedia [article](https://en.wikipedia.org/wiki/London) for "London". 
+  - Where would this information be encoded if not in the embedding space $\mathcal{A}$? Is it surprising that $A_{\text{LDN}}=enc(\text{"London"}) \not\!\perp\!\!\!\perp (\text{lat}_{\text{LDN}},\text{long}_{\text{LDN}})$?
+- @fig-map shows the predicted coordinates of a linear probe on the final-layer activations of an untrained neural network.
+:::
+:::{.column width='40%'}
+![Predicted coordinate values (out-of-sample) from a linear probe on final-layer activations of an untrained
+neural network.](www/map.png){#fig-map}
+
+- Model has seen noisy coordinates plus $d$ random features.
+- Single hidden layer with $h < d$ hidden units.
+:::
+::::
+
+## PCA as a Yield Curve Interpreter {.smaller}
+
+## LLMs for Economic Sentiment Prediction {.smaller}
+
+# Human Proneness to Over-Interpretation
+
+## Spurious Relationships
+
+## Antropomorphism
+
+## Confirmation Bias
+
+# Questions? {.nostretch} 
+
+With thanks to my co-authors Andrew M. Demetriou, Antony Bartlett, and Cynthia C. S. Liem and to the audience for their attention.
+
+![](/www/images/qr.png){width="25%" fig-align="center"}
+
+## References {.scrollable .smaller}
+
+
