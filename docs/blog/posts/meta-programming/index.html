@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Patrick Altmeyer">
+<meta name="dcterms.date" content="2023-03-13">
+<meta name="description" content="In this slightly different post, I talk about my first experience with metaprogramming in Julia.">
+
+<title>Patrick Altmeyer - A Leap of Faith into Julia’s Metaverse</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../..//www/favicon.ico" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-BEEZ30787D"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
+</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../../styles.css">
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="Patrick Altmeyer - A Leap of Faith into Julia’s Metaverse">
+<meta property="og:description" content="In this slightly different post, I talk about my first experience with metaprogramming in Julia.">
+<meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/meta-programming/www/intro.png">
+<meta property="og:site_name" content="Patrick Altmeyer">
+<meta property="og:image:height" content="765">
+<meta property="og:image:width" content="782">
+<meta name="twitter:title" content="Patrick Altmeyer - A Leap of Faith into Julia’s Metaverse">
+<meta name="twitter:description" content="In this slightly different post, I talk about my first experience with metaprogramming in Julia.">
+<meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/meta-programming/www/intro.png">
+<meta name="twitter:image-height" content="765">
+<meta name="twitter:image-width" content="782">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Patrick Altmeyer</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/publications/index.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/software.html"> 
+<span class="menu-text">Software</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/about/index.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#all-right-where-to-start" id="toc-all-right-where-to-start" class="nav-link active" data-scroll-target="#all-right-where-to-start">🤔 All right, where to start?</a></li>
+  <li><a href="#julia-docs" id="toc-julia-docs" class="nav-link" data-scroll-target="#julia-docs">📖 Julia docs</a>
+  <ul class="collapse">
+  <li><a href="#code-as-data-structures" id="toc-code-as-data-structures" class="nav-link" data-scroll-target="#code-as-data-structures">Code as Data Structures</a></li>
+  <li><a href="#interpolation" id="toc-interpolation" class="nav-link" data-scroll-target="#interpolation">Interpolation</a></li>
+  <li><a href="#macros" id="toc-macros" class="nav-link" data-scroll-target="#macros">Macros</a></li>
+  </ul></li>
+  <li><a href="#build-an-advanced-macro" id="toc-build-an-advanced-macro" class="nav-link" data-scroll-target="#build-an-advanced-macro">🔥 BUILD AN ADVANCED MACRO</a>
+  <ul class="collapse">
+  <li><a href="#from-off-the-shelf-counterfactual-generators" id="toc-from-off-the-shelf-counterfactual-generators" class="nav-link" data-scroll-target="#from-off-the-shelf-counterfactual-generators">From Off-the-Shelf Counterfactual Generators …</a></li>
+  <li><a href="#to-composable-generators" id="toc-to-composable-generators" class="nav-link" data-scroll-target="#to-composable-generators">… To Composable Generators</a></li>
+  <li><a href="#define-your-objective" id="toc-define-your-objective" class="nav-link" data-scroll-target="#define-your-objective">Define your <code>@objective</code></a></li>
+  </ul></li>
+  <li><a href="#hygiene" id="toc-hygiene" class="nav-link" data-scroll-target="#hygiene">🧼 Hygiene</a></li>
+  <li><a href="#wrapping-up" id="toc-wrapping-up" class="nav-link" data-scroll-target="#wrapping-up">🌯 Wrapping Up</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">🎓 References</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">A Leap of Faith into Julia’s Metaverse</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<p class="subtitle lead">Getting started with metaprogramming in Julia</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">metaprogramming</div>
+    <div class="quarto-category">macros</div>
+    <div class="quarto-category">Julia</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    In this slightly different post, I talk about my first experience with metaprogramming in Julia.
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://www.tudelft.nl/en/">
+            Delft University of Technology
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 13, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="intro-gif">
+<figure class="figure">
+<img src="www/intro.png" class="figure-img">
+<figcaption>
+A leap of faith into Julia’s metaverse.
+</figcaption>
+</figure>
+</div>
+<p>On this blog, I typically talk about things that I have <em>some</em> understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly <em>clueless</em> about. There’s an interesting aspect about Julia, which I know embarrassingly little about at this point: <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/">Metaprogramming</a>.</p>
+<p>Having worked with Julia for about 1.5 years now, I have so far employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it never existed. Meanwhile, <a href="https://twitter.com/kdpsinghlab">Karandeep Singh</a> has stepped on the Julia scence around 5 minutes ago and already developed a package that literally oozes macro: <a href="https://github.com/TidierOrg/Tidier.jl">Tidier.jl</a>. The package API is such a joy to work with that I have felt inspired to finally take a serious look at what metaprogramming is all about.</p>
+<p>My goal for this post is to get to the point where I can confidently write my first macro for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> - more on this below! If you are as clueless and curious about the topic as I am, then follow along on a journey into the metaverse. Buckle in though, it’s going to be a bumpy ride! You have been warned.</p>
+<section id="all-right-where-to-start" class="level2">
+<h2 class="anchored" data-anchor-id="all-right-where-to-start">🤔 All right, where to start?</h2>
+<p>You guessed it, we’ll start with the official Julia <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/">documentation</a> on the topic:</p>
+<blockquote class="blockquote">
+<p>Like Lisp, Julia represents its own code as a data structure of the language itself.</p>
+</blockquote>
+<p>Hmmm … I know nothing about Lisp and this is already beyond me. Code as a data structure?</p>
+<p>Let’s first try to understand what exactly metaprogramming is, outside of Julia and Lisp. We’ll take a quick detour before we’re back. <a href="https://en.wikipedia.org/wiki/Metaprogramming#:~:text=Metaprogramming%20is%20a%20programming%20technique,even%20modify%20itself%20while%20running.">Wikipedia</a> has the following to say on the topic:</p>
+<blockquote class="blockquote">
+<p>Metaprogramming is a programming technique in which computer programs have the ability to treat other programs as their data.</p>
+</blockquote>
+<p>Right … What about ChatGPT? I wanted to try out <a href="https://github.com/ThatcherC/ReplGPT.jl">ReplGPT</a> anyway so here goes<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource julia-repl number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>julia&gt; using ReplGPT</span>
+<span id="cb1-2"><a href="#cb1-2"></a>ChatGPT&gt; Hey hey, can you please explain metaprogramming to me (I have no computer science background, but am experienced with programming and data science)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>  Metaprogramming is a programming technique where a program is capable of creating or manipulating code at</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  runtime. It involves writing computer programs that create, modify, or analyze other computer programs or data</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  about those programs.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So, in layman’s terms, metaprogramming involves code that generates code - I guess we really have entered the metaverse!</p>
+</section>
+<section id="julia-docs" class="level2">
+<h2 class="anchored" data-anchor-id="julia-docs">📖 Julia docs</h2>
+<p>Let’s head back to the Julia <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/">documentation (v1.8)</a> and look at the first couple of examples.</p>
+<section id="code-as-data-structures" class="level3">
+<h3 class="anchored" data-anchor-id="code-as-data-structures">Code as Data Structures</h3>
+<p>Skipping the details here, it turns out that when I write <code>1 + 1</code> in the REPL, Julia first parses this program as a string <code>"1 + 1</code> into an expression <code>ex=:(1 + 1)::Expr</code>, which is then evaluated <code>eval(ex)</code> (<a href="#fig-code" class="quarto-xref">Figure&nbsp;1</a>). I’ve used a <code>quote</code> here to generate the expression because I’ve used <strong>quoting</strong> before for use with <code>Documenter.jl</code>.</p>
+<div id="fig-code" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-code-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="www/code-as-data.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-code-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Key concept: code as a data structure.
+</figcaption>
+</figure>
+</div>
+<p>And if I understand this correctly, the expression <code>ex::Expr</code> is literally <strong>code as a data structure</strong>:</p>
+<div id="4e84364e" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a>ex <span class="op">=</span> <span class="op">:</span>(<span class="fu">sum</span>([<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]))</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">dump</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Expr
+  head: Symbol call
+  args: Array{Any}((2,))
+    1: Symbol sum
+    2: Expr
+      head: Symbol vect
+      args: Array{Any}((3,))
+        1: Int64 1
+        2: Int64 2
+        3: Int64 3</code></pre>
+</div>
+</div>
+<p>That data structure can be “manipulated from within the language”.</p>
+<p>Let’s try that! Currently, evaluating this expression yields the <code>sum</code> of the <code>Array</code>:</p>
+<div id="ce19556a" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>6</code></pre>
+</div>
+</div>
+<p>Upon manipulation (that sounds weird!), we have:</p>
+<div id="1df5a83b" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a>ex.args[<span class="fl">1</span>] <span class="op">=</span> <span class="op">:</span>maximum</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>3</code></pre>
+</div>
+</div>
+<p>Ok ok, things are starting to make sense now!</p>
+</section>
+<section id="interpolation" class="level3">
+<h3 class="anchored" data-anchor-id="interpolation">Interpolation</h3>
+<p>Back to the Julia documentation and next on the agenda we have <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-expression-interpolation">Interpolation</a>. Skipping the details again, it seems like I can interpolate an expression much like strings. Using interpolation I can recreate the expression from above as follows:</p>
+<div id="fa275c21" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a>fun <span class="op">=</span> maximum</span>
+<span id="cb8-2"><a href="#cb8-2"></a>x <span class="op">=</span> [<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]</span>
+<span id="cb8-3"><a href="#cb8-3"></a>ex_from_ex_interpoliation <span class="op">=</span> <span class="op">:</span>(<span class="op">$</span><span class="fu">fun</span>(<span class="op">$</span>x))</span>
+<span id="cb8-4"><a href="#cb8-4"></a>a <span class="op">=</span> <span class="fu">eval</span>(ex_from_ex_interpoliation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Using string interpolation is quite similar:</p>
+<div id="eec9bb60" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a>fun <span class="op">=</span> maximum</span>
+<span id="cb9-2"><a href="#cb9-2"></a>x <span class="op">=</span> [<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]</span>
+<span id="cb9-3"><a href="#cb9-3"></a>ex_from_string_interpolation <span class="op">=</span> <span class="bu">Meta</span>.<span class="fu">parse</span>(<span class="st">"</span><span class="sc">$</span>fun<span class="st">(</span><span class="sc">$</span>x<span class="st">)"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="fu">eval</span>(ex_from_string_interpolation) <span class="op">==</span> a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>true</code></pre>
+</div>
+</div>
+<p>And much like with function arguments, we can also use splatting:</p>
+<div id="8fb9f3eb" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">eval</span>(<span class="op">:</span>(<span class="fu">zeros</span>(<span class="op">$</span>x<span class="op">...</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>1×2×3 Array{Float64, 3}:
+[:, :, 1] =
+ 0.0  0.0
+
+[:, :, 2] =
+ 0.0  0.0
+
+[:, :, 3] =
+ 0.0  0.0</code></pre>
+</div>
+</div>
+<p>Next off, we have <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Nested-quote"><strong>nested quotes</strong></a>. I can’t see myself using these anytime soon but anyway it seems that for each <code>$</code> sign that we prepend to <code>x</code>, an evaluation is trigged:</p>
+<div id="084c541f" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">eval</span>(<span class="kw">quote</span> <span class="kw">quote</span> <span class="op">$$:</span>(x) <span class="kw">end</span> <span class="kw">end</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="ansi-escaped-output">
+<pre>quote
+    <span class="ansi-bright-black-fg">#= In[9]:2 =#</span>
+    [1, 2, 3]
+end</pre>
+</div>
+</div>
+</div>
+<p>Moving on, we have <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-quote-node"><code>QuoteNodes</code></a>, which I will steer clear of because I probably won’t be doing any super advanced metaprogramming anytime soon. The next two sections on <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Evaluating-expressions">evaluating expressions</a> and <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions">functions on <code>Expr</code>essions</a> also look somewhat more involved than what I need right now, but I expect I’ll find myself back here when I write that first macro for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>.</p>
+</section>
+<section id="macros" class="level3">
+<h3 class="anchored" data-anchor-id="macros">Macros</h3>
+<p>Ahhh, I see we’ve finally arrived in <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-macros">Macroland</a>!</p>
+<blockquote class="blockquote">
+<p>A macro maps a tuple of arguments to a returned expression, and the resulting expression is compiled directly rather than requiring a runtime eval call.</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-right">
+<figure class="figure">
+<p><img src="www/macroland.png" class="img-fluid quarto-figure quarto-figure-right figure-img"></p>
+<figcaption>Arrived in Macroland.</figcaption>
+</figure>
+</div>
+<p>Let’s see if we can make sense of this as we move on. The <code>Hello, world!</code> example makes the concept quite clear:</p>
+<div id="2fe0093a" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">macro</span> <span class="fu">sayhello</span>(name)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>    <span class="cf">return</span> <span class="op">:</span>( <span class="fu">println</span>(<span class="st">"Hello, "</span>, <span class="op">$</span>name) )   <span class="co"># return the expression ...</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="kw">end</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="pp">@sayhello</span> <span class="st">"reader"</span>                          <span class="co"># ... to be immediately compiled.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello, reader</code></pre>
+</div>
+</div>
+<p>It seems that a macro is a way to build and return expressions inside a block (a bit like a function) but on call that expression is immediately evaluated. In other words, we can use macros to write code that generates code that is then evaluated.</p>
+<p>To fully grasp the next <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hold-up:-why-macros?">part</a>, I should have not skipped the part on <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions">functions on <code>Expr</code>essions</a>. We’ll leave that little nugget for Future Me. That same guy will also have to suffer the consequences of Present Me merely skimming the details in the next <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Macro-invocation">section</a> on macro invocation. Present Me is impatient and overly confident in the level of knowledge that we have just acquired about metaprogramming.</p>
+<p>Let’s get ahead of ourselves and meet the final boss of the metaverse: an Advanced Macro.</p>
+</section>
+</section>
+<section id="build-an-advanced-macro" class="level2">
+<h2 class="anchored" data-anchor-id="build-an-advanced-macro">🔥 BUILD AN ADVANCED MACRO</h2>
+<p>I’ll leave it to you to thoroughly read that section in the Julia <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Building-an-advanced-macro">docs</a>. Here, we’ll jump straight into building the macro I want to have for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>. I now think it’ll be less involved than I thought — optimism in the face of uncertainty!</p>
+<div class="quarto-figure quarto-figure-right">
+<figure class="figure">
+<p><img src="www/final-boss.png" class="img-fluid quarto-figure quarto-figure-right figure-img"></p>
+<figcaption>Advanced Macro: the final boss.</figcaption>
+</figure>
+</div>
+<section id="from-off-the-shelf-counterfactual-generators" class="level3">
+<h3 class="anchored" data-anchor-id="from-off-the-shelf-counterfactual-generators">From Off-the-Shelf Counterfactual Generators …</h3>
+<p><a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> is a package for generating Counterfactual Explanations for predictive models <span class="math inline">\(f: \mathcal{X} \mapsto \mathcal{Y}\)</span>. This is a relatively recent approach to Explainable AI that I am (probably a little too) excited about and won’t dwell on here. For what follows, it suffices to say that generating Counterfactual Explanations can be seen as a generative modelling task because it involves generating samples in the input space: <span class="math inline">\(x \sim \mathcal{X}\)</span>. To this end, the package has previously shipped with a number of <code>Generators</code>: composite types that contain information about how counterfactuals ought to be generated.</p>
+<p>This has allowed users to specify the type of generator they want to use by instantiating it. For example, the DiCE generator by <span class="citation" data-cites="mothilal2020explaining">Mothilal, Sharma, and Tan (<a href="#ref-mothilal2020explaining" role="doc-biblioref">2020</a>)</span> could (and still can) be instantiated as follows:</p>
+<div id="a8a7c466" class="cell" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1"></a>generator <span class="op">=</span> <span class="fu">DiCEGenerator</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>This has been a straightforward way for users to use off-the-shelf counterfactual generators. But relying on separate composite types for this task may have been an overkill. In fact, all this time there was some untapped potential here, as we will see next.</p>
+</section>
+<section id="to-composable-generators" class="level3">
+<h3 class="anchored" data-anchor-id="to-composable-generators">… To Composable Generators</h3>
+<p>One of my key objectives for the package has always been composability. It turns out that many of the various counterfactual generators that have been proposed in the literature, essentially do the same thing: they optimize an objective function. In <span class="citation" data-cites="altmeyer2023endogenous">Altmeyer et al. (<a href="#ref-altmeyer2023endogenous" role="doc-biblioref">2023</a>)</span>, we denote that objective formally as follows,</p>
+<p><span id="eq-general"><span class="math display">\[
+\begin{aligned}
+\mathbf{s}^\prime &amp;= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\}
+\end{aligned}
+\tag{1}\]</span></span></p>
+<p>where <span class="math inline">\(\text{yloss}\)</span> denotes the main loss function and <span class="math inline">\(\text{cost}\)</span> is a penalty term. I won’t cover this in any more detail here, but you can read about it in the package <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators">docs</a>. The important thing is that <a href="#eq-general" class="quarto-xref">Equation&nbsp;1</a> very closely describes how counterfactual search is actually implemented in the package.</p>
+<p>In other words, all generators currently implemented share a common starting point. They largely just vary in the exact way the objective function is specified. This gives rise to an interesting idea:</p>
+<blockquote class="blockquote">
+<p>Why not compose generators that combine ideas from different off-the-shelf generators?</p>
+</blockquote>
+<p>I want to give users an easy way to do that, without having to build custom <code>Generator</code> types from scratch. This (I think) is a good use case for metaprogramming.</p>
+<p>Let’s try and see if we can make that work. We’ll simply extend <code>CounterfactualExplanations</code> right here in this repo hosting the blog (easily done in Julia) and provided everything works out well create a pull request. I already have a GitHub <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/118">issue</a> for this with a linked branch, so that’s the one I’ll use in my environment:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a>(metaprogramming) pkg<span class="op">&gt;</span> add https<span class="op">://</span>github.com<span class="op">/</span>JuliaTrustworthyAI<span class="op">/</span>CounterfactualExplanations.jl<span class="co">#118-add-losses-and-penalties-modules-or-group-under-objectives-module</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>julia<span class="op">&gt;</span> <span class="im">using</span> <span class="bu">CounterfactualExplanations</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>By the time you’re reading this, all changes to that branch will have hopefully already been committed and merged.</p>
+<p>Let’s start by instantiating a generic generator:</p>
+<div id="4cf7a11d" class="cell" data-execution_count="11">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1"></a>generator <span class="op">=</span> <span class="fu">GenericGenerator</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Our goal is to create macros that build expressions that, when evaluated, mutate the <code>generator</code> instance.</p>
+</section>
+<section id="define-your-objective" class="level3">
+<h3 class="anchored" data-anchor-id="define-your-objective">Define your <code>@objective</code></h3>
+<p>Our first and most important macro shall define the counterfactual search objective. In particular, the <code>@objective</code> macro should accept an expression that looks much like the right-hand-side of <a href="#eq-general" class="quarto-xref">Equation&nbsp;1</a>, which is essentially just a weighted sum.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="www/objective.png" class="img-fluid figure-img"></p>
+<figcaption>Sketch of the envisioned <code>@objective</code> macro.</figcaption>
+</figure>
+</div>
+<p>Let’s start with that part. Naively, we could begin by writing it out very literally:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a>ex <span class="op">=</span> <span class="op">:</span>(yloss <span class="op">+</span> λ<span class="op">*</span>cost)</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Of course, evaluating this expression throws an error because none of the variables are actually defined. Let’s work on that …</p>
+<p>For the loss and penalty functions, we will use methods available from the <code>CounterfactualExplanations.Objectives</code> module, while for <span class="math inline">\(\lambda\)</span> we will use a literal:</p>
+<div id="4da47d40" class="cell" data-execution_count="12">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1"></a>ex <span class="op">=</span> <span class="op">:</span>(logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span> <span class="op">*</span> distance_l2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Let’s try to make sense of the data structure we have created:</p>
+<div id="2c4dd2cb" class="cell" data-execution_count="13">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1"></a>ex.args</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>3-element Vector{Any}:
+ :+
+ :logitbinarycrossentropy
+ :(0.1distance_l2)</code></pre>
+</div>
+</div>
+<p>My first naive approach is shown below. It errors because I forgot to interpolate the variables inside the <code>quote</code>.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<span id="cb23-2"><a href="#cb23-2"></a>    loss <span class="op">=</span> ex.args[<span class="fl">2</span>]</span>
+<span id="cb23-3"><a href="#cb23-3"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
+<span id="cb23-4"><a href="#cb23-4"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
+<span id="cb23-5"><a href="#cb23-5"></a>    cost <span class="op">=</span> ex_penalty.args[<span class="fl">3</span>]</span>
+<span id="cb23-6"><a href="#cb23-6"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
+<span id="cb23-7"><a href="#cb23-7"></a>        generator.loss <span class="op">=</span> loss</span>
+<span id="cb23-8"><a href="#cb23-8"></a>        generator.cost <span class="op">=</span> cost</span>
+<span id="cb23-9"><a href="#cb23-9"></a>        generator.λ <span class="op">=</span> λ</span>
+<span id="cb23-10"><a href="#cb23-10"></a>    <span class="kw">end</span></span>
+<span id="cb23-11"><a href="#cb23-11"></a>    <span class="cf">return</span> ex_generator</span>
+<span id="cb23-12"><a href="#cb23-12"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Having fixed that below, I still get an error because <code>loss</code> and <code>cost</code> functions are not part of the global scope. I am pretty sure that this error would have occurred anyway and has nothing to do with the fact that I’m writing a macro.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<span id="cb24-2"><a href="#cb24-2"></a>    loss <span class="op">=</span> ex.args[<span class="fl">2</span>]</span>
+<span id="cb24-3"><a href="#cb24-3"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
+<span id="cb24-4"><a href="#cb24-4"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
+<span id="cb24-5"><a href="#cb24-5"></a>    cost <span class="op">=</span> ex_penalty.args[<span class="fl">3</span>]</span>
+<span id="cb24-6"><a href="#cb24-6"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
+<span id="cb24-7"><a href="#cb24-7"></a>        <span class="op">$</span>generator.loss <span class="op">=</span> <span class="op">$</span>loss</span>
+<span id="cb24-8"><a href="#cb24-8"></a>        <span class="op">$</span>generator.cost <span class="op">=</span> <span class="op">$</span>cost</span>
+<span id="cb24-9"><a href="#cb24-9"></a>        <span class="op">$</span>generator.λ <span class="op">=</span> <span class="op">$</span>λ</span>
+<span id="cb24-10"><a href="#cb24-10"></a>    <span class="kw">end</span></span>
+<span id="cb24-11"><a href="#cb24-11"></a>    <span class="cf">return</span> ex_generator</span>
+<span id="cb24-12"><a href="#cb24-12"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Instead of importing the functions, I just get them explicitly from the <code>Objectives</code> module,</p>
+<div id="f180449c" class="cell" data-execution_count="14">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<span id="cb25-2"><a href="#cb25-2"></a>    loss <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex.args[<span class="fl">2</span>])</span>
+<span id="cb25-3"><a href="#cb25-3"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
+<span id="cb25-4"><a href="#cb25-4"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
+<span id="cb25-5"><a href="#cb25-5"></a>    cost <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex_penalty.args[<span class="fl">3</span>])</span>
+<span id="cb25-6"><a href="#cb25-6"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
+<span id="cb25-7"><a href="#cb25-7"></a>        <span class="op">$</span>generator.loss <span class="op">=</span> <span class="op">$</span>loss</span>
+<span id="cb25-8"><a href="#cb25-8"></a>        <span class="op">$</span>generator.penalty <span class="op">=</span> <span class="op">$</span>cost</span>
+<span id="cb25-9"><a href="#cb25-9"></a>        <span class="op">$</span>generator.λ <span class="op">=</span> <span class="op">$</span>λ</span>
+<span id="cb25-10"><a href="#cb25-10"></a>        generator</span>
+<span id="cb25-11"><a href="#cb25-11"></a>    <span class="kw">end</span></span>
+<span id="cb25-12"><a href="#cb25-12"></a>    <span class="cf">return</span> ex_generator</span>
+<span id="cb25-13"><a href="#cb25-13"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>and, finally, this works:</p>
+<div id="f1b64467" class="cell" data-execution_count="15">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1"></a><span class="pp">@objective</span>(generator, logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span>distance_l2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>CounterfactualExplanations.Generators.GradientBasedGenerator(Flux.Losses.logitbinarycrossentropy, CounterfactualExplanations.Objectives.distance_l2, 0.1, false, false, Flux.Optimise.Descent(0.1))</code></pre>
+</div>
+</div>
+<p>But what about adding multiple penalties? The DiCE generator, for example, also takes into account how diverse the counterfactual explanations are <span class="citation" data-cites="mothilal2020explaining">(<a href="#ref-mothilal2020explaining" role="doc-biblioref">Mothilal, Sharma, and Tan 2020</a>)</span>. The corresponding penalty is called <code>ddp_diversity</code>. Let’s start with the expression again:</p>
+<div id="44373b5a" class="cell" data-execution_count="16">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1"></a>ex <span class="op">=</span> <span class="op">:</span>(logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span>distance_l2 <span class="op">+</span> <span class="fl">1.0</span>ddp_diversity)</span>
+<span id="cb28-2"><a href="#cb28-2"></a>ex.args</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>4-element Vector{Any}:
+ :+
+ :logitbinarycrossentropy
+ :(0.1distance_l2)
+ :(1.0ddp_diversity)</code></pre>
+</div>
+</div>
+<div id="3878a24d" class="cell" data-execution_count="17">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="18">
+<p>This time there’s a second nested <code>Expr</code>ession among the arguments: <code>:(1.0ddp_diversity)</code>.</p>
+</div>
+</div>
+<div id="87d69468" class="cell" data-execution_count="18">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<span id="cb30-2"><a href="#cb30-2"></a>    loss <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex.args[<span class="fl">2</span>])</span>
+<span id="cb30-3"><a href="#cb30-3"></a>    Λ <span class="op">=</span> <span class="fu">Vector</span><span class="dt">{AbstractFloat}</span>()</span>
+<span id="cb30-4"><a href="#cb30-4"></a>    costs <span class="op">=</span> <span class="fu">Vector</span><span class="dt">{Function}</span>()</span>
+<span id="cb30-5"><a href="#cb30-5"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">3</span><span class="op">:</span><span class="fu">length</span>(ex.args)</span>
+<span id="cb30-6"><a href="#cb30-6"></a>        ex_penalty <span class="op">=</span> ex.args[i]</span>
+<span id="cb30-7"><a href="#cb30-7"></a>        λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
+<span id="cb30-8"><a href="#cb30-8"></a>        <span class="fu">push!</span>(Λ, λ)</span>
+<span id="cb30-9"><a href="#cb30-9"></a>        cost <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex_penalty.args[<span class="fl">3</span>])</span>
+<span id="cb30-10"><a href="#cb30-10"></a>        <span class="fu">push!</span>(costs, cost)</span>
+<span id="cb30-11"><a href="#cb30-11"></a>    <span class="cf">end</span></span>
+<span id="cb30-12"><a href="#cb30-12"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
+<span id="cb30-13"><a href="#cb30-13"></a>        <span class="op">$</span>generator.loss <span class="op">=</span> <span class="op">$</span>loss</span>
+<span id="cb30-14"><a href="#cb30-14"></a>        <span class="op">$</span>generator.penalty <span class="op">=</span> <span class="op">$</span>costs</span>
+<span id="cb30-15"><a href="#cb30-15"></a>        <span class="op">$</span>generator.λ <span class="op">=</span> <span class="op">$</span>Λ</span>
+<span id="cb30-16"><a href="#cb30-16"></a>        generator</span>
+<span id="cb30-17"><a href="#cb30-17"></a>    <span class="kw">end</span></span>
+<span id="cb30-18"><a href="#cb30-18"></a>    <span class="cf">return</span> ex_generator</span>
+<span id="cb30-19"><a href="#cb30-19"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>That works well,</p>
+<div id="9323f3d9" class="cell" data-execution_count="19">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1"></a><span class="pp">@objective</span>(generator, logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.05</span>distance_l2 <span class="op">+</span> <span class="fl">1.0</span>ddp_diversity)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>CounterfactualExplanations.Generators.GradientBasedGenerator(Flux.Losses.logitbinarycrossentropy, Function[CounterfactualExplanations.Objectives.distance_l2, CounterfactualExplanations.Objectives.ddp_diversity], AbstractFloat[0.05, 1.0], false, false, Flux.Optimise.Descent(0.1))</code></pre>
+</div>
+</div>
+<p>but we should still make sure that this <code>generator</code> is also compatible with our package. Below we go through some of the typical workflows associated with Counterfactual Explanations. Firstly, we load some synthetic data and fit a black-box model to it.</p>
+<div id="7a06c4c8" class="cell" data-execution_count="20">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb33-1"><a href="#cb33-1"></a>n_dim <span class="op">=</span> <span class="fl">2</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a>n_classes <span class="op">=</span> <span class="fl">4</span></span>
+<span id="cb33-3"><a href="#cb33-3"></a>n_samples <span class="op">=</span> <span class="fl">400</span></span>
+<span id="cb33-4"><a href="#cb33-4"></a>model_name <span class="op">=</span> <span class="op">:</span>MLP</span>
+<span id="cb33-5"><a href="#cb33-5"></a>counterfactual_data <span class="op">=</span> CounterfactualExplanations.<span class="fu">load_blobs</span>(n_samples; k<span class="op">=</span>n_dim, centers<span class="op">=</span>n_classes)</span>
+<span id="cb33-6"><a href="#cb33-6"></a>M <span class="op">=</span> <span class="fu">fit_model</span>(counterfactual_data, model_name)</span>
+<span id="cb33-7"><a href="#cb33-7"></a><span class="fu">plot</span>(M, counterfactual_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Next, we begin by specifying our target and factual label. We then draw a random sample from the non-target (factual) class.</p>
+<div id="4812eaf7" class="cell" data-execution_count="21">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1"></a><span class="co"># Factual and target:</span></span>
+<span id="cb34-2"><a href="#cb34-2"></a>target <span class="op">=</span> <span class="fl">2</span></span>
+<span id="cb34-3"><a href="#cb34-3"></a>factual <span class="op">=</span> <span class="fl">4</span></span>
+<span id="cb34-4"><a href="#cb34-4"></a>chosen <span class="op">=</span> <span class="fu">rand</span>(<span class="fu">findall</span>(<span class="fu">predict_label</span>(M, counterfactual_data) <span class="op">.==</span> factual))</span>
+<span id="cb34-5"><a href="#cb34-5"></a>x <span class="op">=</span> <span class="fu">select_factual</span>(counterfactual_data,chosen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Finally, we use our <code>generator</code> to generate counterfactuals:</p>
+<div id="6514cb4b" class="cell" data-execution_count="22">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1"></a>ce <span class="op">=</span> <span class="fu">generate_counterfactual</span>(</span>
+<span id="cb35-2"><a href="#cb35-2"></a>    x, target, counterfactual_data, M, generator;</span>
+<span id="cb35-3"><a href="#cb35-3"></a>    num_counterfactuals <span class="op">=</span> <span class="fl">5</span>,</span>
+<span id="cb35-4"><a href="#cb35-4"></a>    converge_when <span class="op">=</span> <span class="op">:</span>generator_conditions</span>
+<span id="cb35-5"><a href="#cb35-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>It worked! 🎉 The resulting counterfactual search is illustrated in <a href="#fig-search" class="quarto-xref">Figure&nbsp;2</a>. I may have overspecified the size of the <code>ddp_diversity</code> penalty a little bit here, but it sure makes for a cool chart!</p>
+<div id="cell-fig-search" class="cell" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="24">
+<div id="fig-search" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-search-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-search-output-1.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-search-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Counterfactual search using our composed generator.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Time for me to add this all to <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> … ⏳</p>
+</section>
+</section>
+<section id="hygiene" class="level2">
+<h2 class="anchored" data-anchor-id="hygiene">🧼 Hygiene</h2>
+<p>… aaand I’m back. There was one thing I had ignored that ended up causing a minor complication: macro <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hygiene">hygiene</a>.</p>
+<p>Again, I’ll leave it to you to read up on the details, but the bottom line is that when writing macros, we need to keep variable scopes in mind. <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> is composed of various (sub)modules, and when I initially added the macro to the <code>CounterfactualExplanations.Generators</code> module, it errored.</p>
+<p>The problem was (I believe) that the <code>generator</code> variable existed in the global scope (<code>Main</code>) but it was not accessible for the <code>@objective</code> macro that at runtime lives in <code>Main.Generators</code>. Fortunately, it is easy to make the variable accessible by wrapping it inside an <code>esc()</code> call:</p>
+<blockquote class="blockquote">
+<p>This escaping mechanism can be used to “violate” hygiene when necessary, in order to introduce or manipulate user variables.</p>
+</blockquote>
+<p>This may not be the ideal way to do this, and as always, if you have any suggestions I’d be happy to hear about them.</p>
+<p>If you want to find out more about how macros can now be used to easily compose counterfactual generators, check out the new section in the package <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/tutorials/generators/">documentation</a>.</p>
+</section>
+<section id="wrapping-up" class="level2">
+<h2 class="anchored" data-anchor-id="wrapping-up">🌯 Wrapping Up</h2>
+<p>In this blog post, I’ve done something I usually try to avoid: talk about things I don’t know. Metaprogramming is an exciting topic and if you’re still here, you just got to experience it through the lens of an absolute novice. During our leap of faith into Julia’s metaverse we’ve learned the following things:</p>
+<ol type="1">
+<li>Code in Julia is internally represented as a mutable data structure.</li>
+<li>Macros are a way to take such data structures and transform them before they get evaluated at runtime.</li>
+<li>An important thing to keep in mind when writing macros is variable scopes.</li>
+</ol>
+<p>Throughout this post, I have skipped various important details that (I think) were not immediately relevant to the goal I had in mind: adding my first macro to <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>. In the future, I may write about this topic again and cover some of these missing details (hopefully with a bit more insight at that point!).</p>
+</section>
+<section id="references" class="level2">
+
+
+
+<!-- -->
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">🎓 References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-altmeyer2023endogenous" class="csl-entry" role="listitem">
+Altmeyer, Patrick, Giovan Angela, Aleksander Buszydlik, Karol Dobiczek, Arie van Deursen, and Cynthia CS Liem. 2023. <span>“Endogenous Macrodynamics in Algorithmic Recourse.”</span> In <em>2023 IEEE Conference on Secure and Trustworthy Machine Learning (SaTML)</em>, 418–31. IEEE.
+</div>
+<div id="ref-mothilal2020explaining" class="csl-entry" role="listitem">
+Mothilal, Ramaravind K, Amit Sharma, and Chenhao Tan. 2020. <span>“Explaining Machine Learning Classifiers Through Diverse Counterfactual Explanations.”</span> In <em>Proceedings of the 2020 <span>Conference</span> on <span>Fairness</span>, <span>Accountability</span>, and <span>Transparency</span></em>, 607–17. <a href="https://doi.org/10.1145/3351095.3372850">https://doi.org/10.1145/3351095.3372850</a>.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>A very cool package! Funny story, though, I somehow managed to commit my OpenAI API key to GitHub on the first go (<a href="https://github.com/ThatcherC/ReplGPT.jl/issues/8">developing</a>)<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2023,
+  author = {Altmeyer, Patrick},
+  title = {A {Leap} of {Faith} into {Julia’s} {Metaverse}},
+  date = {2023-03-13},
+  url = {https://www.paltmeyer.com/blog//blog/posts/meta-programming},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2023" class="csl-entry quarto-appendix-citeas" role="listitem">
+Altmeyer, Patrick. 2023. <span>“A Leap of Faith into Julia’s
+Metaverse.”</span> March 13, 2023. <a href="https://www.paltmeyer.com/blog//blog/posts/meta-programming">https://www.paltmeyer.com/blog//blog/posts/meta-programming</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb36" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb36-1"><a href="#cb36-1"></a><span class="co">---</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a><span class="an">title:</span><span class="co"> A Leap of Faith into Julia's Metaverse</span></span>
+<span id="cb36-3"><a href="#cb36-3"></a><span class="an">subtitle:</span><span class="co"> Getting started with metaprogramming in Julia</span></span>
+<span id="cb36-4"><a href="#cb36-4"></a><span class="an">date:</span><span class="co"> '2023-03-13'</span></span>
+<span id="cb36-5"><a href="#cb36-5"></a><span class="an">categories:</span></span>
+<span id="cb36-6"><a href="#cb36-6"></a><span class="co">  - metaprogramming</span></span>
+<span id="cb36-7"><a href="#cb36-7"></a><span class="co">  - macros</span></span>
+<span id="cb36-8"><a href="#cb36-8"></a><span class="co">  - Julia</span></span>
+<span id="cb36-9"><a href="#cb36-9"></a><span class="an">description:</span><span class="co"> &gt;-</span></span>
+<span id="cb36-10"><a href="#cb36-10"></a><span class="co">  In this slightly different post, I talk about my first experience with metaprogramming in Julia.</span></span>
+<span id="cb36-11"><a href="#cb36-11"></a><span class="an">image:</span><span class="co"> www/intro.png</span></span>
+<span id="cb36-12"><a href="#cb36-12"></a><span class="an">jupyter:</span><span class="co"> julia-1.8</span></span>
+<span id="cb36-13"><a href="#cb36-13"></a><span class="an">draft:</span><span class="co"> false</span></span>
+<span id="cb36-14"><a href="#cb36-14"></a><span class="co">---</span></span>
+<span id="cb36-15"><a href="#cb36-15"></a></span>
+<span id="cb36-18"><a href="#cb36-18"></a><span class="in">```{julia}</span></span>
+<span id="cb36-19"><a href="#cb36-19"></a><span class="in">#| echo: false</span></span>
+<span id="cb36-20"><a href="#cb36-20"></a></span>
+<span id="cb36-21"><a href="#cb36-21"></a><span class="in">using Pkg; Pkg.activate("blog/posts/meta-programming")</span></span>
+<span id="cb36-22"><a href="#cb36-22"></a><span class="in">using CounterfactualExplanations</span></span>
+<span id="cb36-23"><a href="#cb36-23"></a><span class="in">using Markdown</span></span>
+<span id="cb36-24"><a href="#cb36-24"></a><span class="in">using Plots</span></span>
+<span id="cb36-25"><a href="#cb36-25"></a><span class="in">using TaijaPlotting</span></span>
+<span id="cb36-26"><a href="#cb36-26"></a><span class="in">```</span></span>
+<span id="cb36-27"><a href="#cb36-27"></a></span>
+<span id="cb36-28"><a href="#cb36-28"></a>&lt;div class="intro-gif"&gt;</span>
+<span id="cb36-29"><a href="#cb36-29"></a>  &lt;figure&gt;</span>
+<span id="cb36-30"><a href="#cb36-30"></a>    &lt;img src="www/intro.png"&gt;</span>
+<span id="cb36-31"><a href="#cb36-31"></a>    &lt;figcaption&gt;A leap of faith into Julia's metaverse.&lt;/figcaption&gt;</span>
+<span id="cb36-32"><a href="#cb36-32"></a>  &lt;/figure&gt;</span>
+<span id="cb36-33"><a href="#cb36-33"></a>&lt;/div&gt;</span>
+<span id="cb36-34"><a href="#cb36-34"></a></span>
+<span id="cb36-35"><a href="#cb36-35"></a>On this blog, I typically talk about things that I have *some* understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly *clueless* about. There's an interesting aspect about Julia, which I know embarrassingly little about at this point: <span class="co">[</span><span class="ot">Metaprogramming</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/)</span>. </span>
+<span id="cb36-36"><a href="#cb36-36"></a></span>
+<span id="cb36-37"><a href="#cb36-37"></a>Having worked with Julia for about 1.5 years now, I have so far employed a successful strategy of occasionally taking a glimpse at that part of the Julia documentation and then deciding to go back to pretending it never existed. Meanwhile, <span class="co">[</span><span class="ot">Karandeep Singh</span><span class="co">](https://twitter.com/kdpsinghlab)</span> has stepped on the Julia scence around 5 minutes ago and already developed a package that literally oozes macro: <span class="co">[</span><span class="ot">Tidier.jl</span><span class="co">](https://github.com/TidierOrg/Tidier.jl)</span>. The package API is such a joy to work with that I have felt inspired to finally take a serious look at what metaprogramming is all about. </span>
+<span id="cb36-38"><a href="#cb36-38"></a></span>
+<span id="cb36-39"><a href="#cb36-39"></a>My goal for this post is to get to the point where I can confidently write my first macro for <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)</span> - more on this below! If you are as clueless and curious about the topic as I am, then follow along on a journey into the metaverse. Buckle in though, it's going to be a bumpy ride! You have been warned. </span>
+<span id="cb36-40"><a href="#cb36-40"></a></span>
+<span id="cb36-41"><a href="#cb36-41"></a><span class="fu">## 🤔 All right, where to start?</span></span>
+<span id="cb36-42"><a href="#cb36-42"></a></span>
+<span id="cb36-43"><a href="#cb36-43"></a>You guessed it, we'll start with the official Julia <span class="co">[</span><span class="ot">documentation</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/)</span> on the topic:</span>
+<span id="cb36-44"><a href="#cb36-44"></a></span>
+<span id="cb36-45"><a href="#cb36-45"></a><span class="at">&gt; Like Lisp, Julia represents its own code as a data structure of the language itself.</span></span>
+<span id="cb36-46"><a href="#cb36-46"></a></span>
+<span id="cb36-47"><a href="#cb36-47"></a>Hmmm ... I know nothing about Lisp and this is already beyond me. Code as a data structure?</span>
+<span id="cb36-48"><a href="#cb36-48"></a></span>
+<span id="cb36-49"><a href="#cb36-49"></a>Let's first try to understand what exactly metaprogramming is, outside of Julia and Lisp. We'll take a quick detour before we're back. <span class="co">[</span><span class="ot">Wikipedia</span><span class="co">](https://en.wikipedia.org/wiki/Metaprogramming#:~:text=Metaprogramming%20is%20a%20programming%20technique,even%20modify%20itself%20while%20running.)</span> has the following to say on the topic:</span>
+<span id="cb36-50"><a href="#cb36-50"></a></span>
+<span id="cb36-51"><a href="#cb36-51"></a><span class="at">&gt; Metaprogramming is a programming technique in which computer programs have the ability to treat other programs as their data.</span></span>
+<span id="cb36-52"><a href="#cb36-52"></a></span>
+<span id="cb36-53"><a href="#cb36-53"></a>Right ... What about ChatGPT? I wanted to try out <span class="co">[</span><span class="ot">ReplGPT</span><span class="co">](https://github.com/ThatcherC/ReplGPT.jl)</span> anyway so here goes^<span class="co">[</span><span class="ot">A very cool package! Funny story, though, I somehow managed to commit my OpenAI API key to GitHub on the first go ([developing](https://github.com/ThatcherC/ReplGPT.jl/issues/8))</span><span class="co">]</span>:</span>
+<span id="cb36-54"><a href="#cb36-54"></a></span>
+<span id="cb36-55"><a href="#cb36-55"></a><span class="in">```{.julia-repl}</span></span>
+<span id="cb36-56"><a href="#cb36-56"></a><span class="in">julia&gt; using ReplGPT</span></span>
+<span id="cb36-57"><a href="#cb36-57"></a><span class="in">ChatGPT&gt; Hey hey, can you please explain metaprogramming to me (I have no computer science background, but am experienced with programming and data science)</span></span>
+<span id="cb36-58"><a href="#cb36-58"></a><span class="in">  Metaprogramming is a programming technique where a program is capable of creating or manipulating code at</span></span>
+<span id="cb36-59"><a href="#cb36-59"></a><span class="in">  runtime. It involves writing computer programs that create, modify, or analyze other computer programs or data</span></span>
+<span id="cb36-60"><a href="#cb36-60"></a><span class="in">  about those programs.</span></span>
+<span id="cb36-61"><a href="#cb36-61"></a><span class="in">```</span></span>
+<span id="cb36-62"><a href="#cb36-62"></a></span>
+<span id="cb36-63"><a href="#cb36-63"></a>So, in layman's terms, metaprogramming involves code that generates code - I guess we really have entered the metaverse!</span>
+<span id="cb36-64"><a href="#cb36-64"></a></span>
+<span id="cb36-65"><a href="#cb36-65"></a><span class="fu">## 📖 Julia docs </span></span>
+<span id="cb36-66"><a href="#cb36-66"></a></span>
+<span id="cb36-67"><a href="#cb36-67"></a>Let's head back to the Julia <span class="co">[</span><span class="ot">documentation (v1.8)</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/)</span> and look at the first couple of examples.</span>
+<span id="cb36-68"><a href="#cb36-68"></a></span>
+<span id="cb36-69"><a href="#cb36-69"></a><span class="fu">### Code as Data Structures</span></span>
+<span id="cb36-70"><a href="#cb36-70"></a></span>
+<span id="cb36-71"><a href="#cb36-71"></a>Skipping the details here, it turns out that when I write <span class="in">`1 + 1`</span> in the REPL, Julia first parses this program as a string <span class="in">`"1 + 1`</span> into an expression <span class="in">`ex=:(1 + 1)::Expr`</span>, which is then evaluated <span class="in">`eval(ex)`</span> (@fig-code). I've used a <span class="in">`quote`</span> here to generate the expression because I've used **quoting** before for use with <span class="in">`Documenter.jl`</span>. </span>
+<span id="cb36-72"><a href="#cb36-72"></a></span>
+<span id="cb36-73"><a href="#cb36-73"></a><span class="al">![Key concept: code as a data structure.](www/code-as-data.png)</span>{#fig-code}</span>
+<span id="cb36-74"><a href="#cb36-74"></a></span>
+<span id="cb36-75"><a href="#cb36-75"></a>And if I understand this correctly, the expression <span class="in">`ex::Expr`</span> is literally **code as a data structure**:</span>
+<span id="cb36-76"><a href="#cb36-76"></a></span>
+<span id="cb36-79"><a href="#cb36-79"></a><span class="in">```{julia}</span></span>
+<span id="cb36-80"><a href="#cb36-80"></a><span class="in">#| output: true</span></span>
+<span id="cb36-81"><a href="#cb36-81"></a><span class="in">ex = :(sum([1,2,3]))</span></span>
+<span id="cb36-82"><a href="#cb36-82"></a><span class="in">dump(ex)</span></span>
+<span id="cb36-83"><a href="#cb36-83"></a><span class="in">```</span></span>
+<span id="cb36-84"><a href="#cb36-84"></a></span>
+<span id="cb36-85"><a href="#cb36-85"></a>That data structure can be "manipulated from within the language". </span>
+<span id="cb36-86"><a href="#cb36-86"></a></span>
+<span id="cb36-87"><a href="#cb36-87"></a>Let's try that! Currently, evaluating this expression yields the <span class="in">`sum`</span> of the <span class="in">`Array`</span>:</span>
+<span id="cb36-88"><a href="#cb36-88"></a></span>
+<span id="cb36-91"><a href="#cb36-91"></a><span class="in">```{julia}</span></span>
+<span id="cb36-92"><a href="#cb36-92"></a><span class="in">#| output: true</span></span>
+<span id="cb36-93"><a href="#cb36-93"></a><span class="in">eval(ex)</span></span>
+<span id="cb36-94"><a href="#cb36-94"></a><span class="in">```</span></span>
+<span id="cb36-95"><a href="#cb36-95"></a></span>
+<span id="cb36-96"><a href="#cb36-96"></a>Upon manipulation (that sounds weird!), we have:</span>
+<span id="cb36-97"><a href="#cb36-97"></a></span>
+<span id="cb36-100"><a href="#cb36-100"></a><span class="in">```{julia}</span></span>
+<span id="cb36-101"><a href="#cb36-101"></a><span class="in">#| output: true</span></span>
+<span id="cb36-102"><a href="#cb36-102"></a><span class="in">ex.args[1] = :maximum</span></span>
+<span id="cb36-103"><a href="#cb36-103"></a><span class="in">eval(ex)</span></span>
+<span id="cb36-104"><a href="#cb36-104"></a><span class="in">```</span></span>
+<span id="cb36-105"><a href="#cb36-105"></a></span>
+<span id="cb36-106"><a href="#cb36-106"></a>Ok ok, things are starting to make sense now! </span>
+<span id="cb36-107"><a href="#cb36-107"></a></span>
+<span id="cb36-108"><a href="#cb36-108"></a><span class="fu">### Interpolation</span></span>
+<span id="cb36-109"><a href="#cb36-109"></a></span>
+<span id="cb36-110"><a href="#cb36-110"></a>Back to the Julia documentation and next on the agenda we have <span class="co">[</span><span class="ot">Interpolation</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-expression-interpolation)</span>. Skipping the details again, it seems like I can interpolate an expression much like strings. Using interpolation I can recreate the expression from above as follows:</span>
+<span id="cb36-111"><a href="#cb36-111"></a></span>
+<span id="cb36-114"><a href="#cb36-114"></a><span class="in">```{julia}</span></span>
+<span id="cb36-115"><a href="#cb36-115"></a><span class="in">fun = maximum</span></span>
+<span id="cb36-116"><a href="#cb36-116"></a><span class="in">x = [1,2,3]</span></span>
+<span id="cb36-117"><a href="#cb36-117"></a><span class="in">ex_from_ex_interpoliation = :($fun($x))</span></span>
+<span id="cb36-118"><a href="#cb36-118"></a><span class="in">a = eval(ex_from_ex_interpoliation)</span></span>
+<span id="cb36-119"><a href="#cb36-119"></a><span class="in">```</span></span>
+<span id="cb36-120"><a href="#cb36-120"></a></span>
+<span id="cb36-121"><a href="#cb36-121"></a>Using string interpolation is quite similar:</span>
+<span id="cb36-122"><a href="#cb36-122"></a></span>
+<span id="cb36-125"><a href="#cb36-125"></a><span class="in">```{julia}</span></span>
+<span id="cb36-126"><a href="#cb36-126"></a><span class="in">#| output: true</span></span>
+<span id="cb36-127"><a href="#cb36-127"></a></span>
+<span id="cb36-128"><a href="#cb36-128"></a><span class="in">fun = maximum</span></span>
+<span id="cb36-129"><a href="#cb36-129"></a><span class="in">x = [1,2,3]</span></span>
+<span id="cb36-130"><a href="#cb36-130"></a><span class="in">ex_from_string_interpolation = Meta.parse("$fun($x)")</span></span>
+<span id="cb36-131"><a href="#cb36-131"></a><span class="in">eval(ex_from_string_interpolation) == a</span></span>
+<span id="cb36-132"><a href="#cb36-132"></a><span class="in">```</span></span>
+<span id="cb36-133"><a href="#cb36-133"></a></span>
+<span id="cb36-134"><a href="#cb36-134"></a>And much like with function arguments, we can also use splatting:</span>
+<span id="cb36-135"><a href="#cb36-135"></a></span>
+<span id="cb36-138"><a href="#cb36-138"></a><span class="in">```{julia}</span></span>
+<span id="cb36-139"><a href="#cb36-139"></a><span class="in">#| output: true</span></span>
+<span id="cb36-140"><a href="#cb36-140"></a></span>
+<span id="cb36-141"><a href="#cb36-141"></a><span class="in">eval(:(zeros($x...)))</span></span>
+<span id="cb36-142"><a href="#cb36-142"></a><span class="in">```</span></span>
+<span id="cb36-143"><a href="#cb36-143"></a></span>
+<span id="cb36-144"><a href="#cb36-144"></a>Next off, we have <span class="co">[</span><span class="ot">**nested quotes**</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Nested-quote)</span>. I can't see myself using these anytime soon but anyway it seems that for each <span class="in">`$`</span> sign that we prepend to <span class="in">`x`</span>, an evaluation is trigged: </span>
+<span id="cb36-145"><a href="#cb36-145"></a></span>
+<span id="cb36-148"><a href="#cb36-148"></a><span class="in">```{julia}</span></span>
+<span id="cb36-149"><a href="#cb36-149"></a><span class="in">#| output: true</span></span>
+<span id="cb36-150"><a href="#cb36-150"></a></span>
+<span id="cb36-151"><a href="#cb36-151"></a><span class="in">eval(quote quote $$:(x) end end)</span></span>
+<span id="cb36-152"><a href="#cb36-152"></a><span class="in">```</span></span>
+<span id="cb36-153"><a href="#cb36-153"></a></span>
+<span id="cb36-154"><a href="#cb36-154"></a>Moving on, we have <span class="co">[</span><span class="ot">`QuoteNodes`</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-quote-node)</span>, which I will steer clear of because I probably won't be doing any super advanced metaprogramming anytime soon. The next two sections on <span class="co">[</span><span class="ot">evaluating expressions</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Evaluating-expressions)</span> and <span class="co">[</span><span class="ot">functions on `Expr`essions</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions)</span> also look somewhat more involved than what I need right now, but I expect I'll find myself back here when I write that first macro for <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)</span>.</span>
+<span id="cb36-155"><a href="#cb36-155"></a></span>
+<span id="cb36-156"><a href="#cb36-156"></a><span class="fu">### Macros </span></span>
+<span id="cb36-157"><a href="#cb36-157"></a></span>
+<span id="cb36-158"><a href="#cb36-158"></a>Ahhh, I see we've finally arrived in <span class="co">[</span><span class="ot">Macroland</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-macros)</span>! </span>
+<span id="cb36-159"><a href="#cb36-159"></a></span>
+<span id="cb36-160"><a href="#cb36-160"></a><span class="at">&gt; A macro maps a tuple of arguments to a returned expression, and the resulting expression is compiled directly rather than requiring a runtime eval call.</span></span>
+<span id="cb36-161"><a href="#cb36-161"></a></span>
+<span id="cb36-162"><a href="#cb36-162"></a><span class="al">![Arrived in Macroland.](www/macroland.png)</span>{fig-align="right"}</span>
+<span id="cb36-163"><a href="#cb36-163"></a></span>
+<span id="cb36-164"><a href="#cb36-164"></a>Let's see if we can make sense of this as we move on. The <span class="in">`Hello, world!`</span> example makes the concept quite clear:</span>
+<span id="cb36-165"><a href="#cb36-165"></a></span>
+<span id="cb36-168"><a href="#cb36-168"></a><span class="in">```{julia}</span></span>
+<span id="cb36-169"><a href="#cb36-169"></a><span class="in">#| output: true</span></span>
+<span id="cb36-170"><a href="#cb36-170"></a></span>
+<span id="cb36-171"><a href="#cb36-171"></a><span class="in">macro sayhello(name)</span></span>
+<span id="cb36-172"><a href="#cb36-172"></a><span class="in">    return :( println("Hello, ", $name) )   # return the expression ...</span></span>
+<span id="cb36-173"><a href="#cb36-173"></a><span class="in">end</span></span>
+<span id="cb36-174"><a href="#cb36-174"></a><span class="in">@sayhello "reader"                          # ... to be immediately compiled.</span></span>
+<span id="cb36-175"><a href="#cb36-175"></a><span class="in">```</span></span>
+<span id="cb36-176"><a href="#cb36-176"></a></span>
+<span id="cb36-177"><a href="#cb36-177"></a>It seems that a macro is a way to build and return expressions inside a block (a bit like a function) but on call that expression is immediately evaluated. In other words, we can use macros to write code that generates code that is then evaluated. </span>
+<span id="cb36-178"><a href="#cb36-178"></a></span>
+<span id="cb36-179"><a href="#cb36-179"></a>To fully grasp the next <span class="co">[</span><span class="ot">part</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hold-up:-why-macros?)</span>, I should have not skipped the part on <span class="co">[</span><span class="ot">functions on `Expr`essions</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions)</span>. We'll leave that little nugget for Future Me. That same guy will also have to suffer the consequences of Present Me merely skimming the details in the next <span class="co">[</span><span class="ot">section</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Macro-invocation)</span> on macro invocation. Present Me is impatient and overly confident in the level of knowledge that we have just acquired about metaprogramming. </span>
+<span id="cb36-180"><a href="#cb36-180"></a></span>
+<span id="cb36-181"><a href="#cb36-181"></a>Let's get ahead of ourselves and meet the final boss of the metaverse: an Advanced Macro.</span>
+<span id="cb36-182"><a href="#cb36-182"></a></span>
+<span id="cb36-183"><a href="#cb36-183"></a><span class="fu">## 🔥 BUILD AN ADVANCED MACRO</span></span>
+<span id="cb36-184"><a href="#cb36-184"></a></span>
+<span id="cb36-185"><a href="#cb36-185"></a>I'll leave it to you to thoroughly read that section in the Julia <span class="co">[</span><span class="ot">docs</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Building-an-advanced-macro)</span>. Here, we'll jump straight into building the macro I want to have for <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)</span>. I now think it'll be less involved than I thought --- optimism in the face of uncertainty!</span>
+<span id="cb36-186"><a href="#cb36-186"></a></span>
+<span id="cb36-187"><a href="#cb36-187"></a><span class="al">![Advanced Macro: the final boss.](www/final-boss.png)</span>{fig-align="right"}</span>
+<span id="cb36-188"><a href="#cb36-188"></a></span>
+<span id="cb36-189"><a href="#cb36-189"></a><span class="fu">### From Off-the-Shelf Counterfactual Generators ...</span></span>
+<span id="cb36-190"><a href="#cb36-190"></a></span>
+<span id="cb36-191"><a href="#cb36-191"></a><span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)</span> is a package for generating Counterfactual Explanations for predictive models $f: \mathcal{X} \mapsto \mathcal{Y}$. This is a relatively recent approach to Explainable AI that I am (probably a little too) excited about and won't dwell on here. For what follows, it suffices to say that generating Counterfactual Explanations can be seen as a generative modelling task because it involves generating samples in the input space: $x \sim \mathcal{X}$. To this end, the package has previously shipped with a number of <span class="in">`Generators`</span>: composite types that contain information about how counterfactuals ought to be generated. </span>
+<span id="cb36-192"><a href="#cb36-192"></a></span>
+<span id="cb36-193"><a href="#cb36-193"></a>This has allowed users to specify the type of generator they want to use by instantiating it. For example, the DiCE generator by @mothilal2020explaining could (and still can) be instantiated as follows:</span>
+<span id="cb36-194"><a href="#cb36-194"></a></span>
+<span id="cb36-197"><a href="#cb36-197"></a><span class="in">```{julia}</span></span>
+<span id="cb36-198"><a href="#cb36-198"></a><span class="in">generator = DiCEGenerator()</span></span>
+<span id="cb36-199"><a href="#cb36-199"></a><span class="in">```</span></span>
+<span id="cb36-200"><a href="#cb36-200"></a></span>
+<span id="cb36-201"><a href="#cb36-201"></a>This has been a straightforward way for users to use off-the-shelf counterfactual generators. But relying on separate composite types for this task may have been an overkill. In fact, all this time there was some untapped potential here, as we will see next.</span>
+<span id="cb36-202"><a href="#cb36-202"></a></span>
+<span id="cb36-203"><a href="#cb36-203"></a><span class="fu">### ... To Composable Generators</span></span>
+<span id="cb36-204"><a href="#cb36-204"></a></span>
+<span id="cb36-205"><a href="#cb36-205"></a>One of my key objectives for the package has always been composability. It turns out that many of the various counterfactual generators that have been proposed in the literature, essentially do the same thing: they optimize an objective function. In @altmeyer2023endogenous, we denote that objective formally as follows,</span>
+<span id="cb36-206"><a href="#cb36-206"></a></span>
+<span id="cb36-207"><a href="#cb36-207"></a>$$</span>
+<span id="cb36-208"><a href="#cb36-208"></a>\begin{aligned}</span>
+<span id="cb36-209"><a href="#cb36-209"></a>\mathbf{s}^\prime &amp;= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left<span class="sc">\{</span>  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right<span class="sc">\}</span> </span>
+<span id="cb36-210"><a href="#cb36-210"></a>\end{aligned} </span>
+<span id="cb36-211"><a href="#cb36-211"></a>$$ {#eq-general}</span>
+<span id="cb36-212"><a href="#cb36-212"></a></span>
+<span id="cb36-213"><a href="#cb36-213"></a>where $\text{yloss}$ denotes the main loss function and $\text{cost}$ is a penalty term. I won't cover this in any more detail here, but you can read about it in the package <span class="co">[</span><span class="ot">docs</span><span class="co">](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators)</span>. The important thing is that @eq-general very closely describes how counterfactual search is actually implemented in the package. </span>
+<span id="cb36-214"><a href="#cb36-214"></a></span>
+<span id="cb36-215"><a href="#cb36-215"></a>In other words, all generators currently implemented share a common starting point. They largely just vary in the exact way the objective function is specified. This gives rise to an interesting idea: </span>
+<span id="cb36-216"><a href="#cb36-216"></a></span>
+<span id="cb36-217"><a href="#cb36-217"></a><span class="at">&gt; Why not compose generators that combine ideas from different off-the-shelf generators?</span></span>
+<span id="cb36-218"><a href="#cb36-218"></a></span>
+<span id="cb36-219"><a href="#cb36-219"></a>I want to give users an easy way to do that, without having to build custom <span class="in">`Generator`</span> types from scratch. This (I think) is a good use case for metaprogramming.</span>
+<span id="cb36-220"><a href="#cb36-220"></a></span>
+<span id="cb36-221"><a href="#cb36-221"></a>Let's try and see if we can make that work. We'll simply extend <span class="in">`CounterfactualExplanations`</span> right here in this repo hosting the blog (easily done in Julia) and provided everything works out well create a pull request. I already have a GitHub <span class="co">[</span><span class="ot">issue</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/118)</span> for this with a linked branch, so that's the one I'll use in my environment:</span>
+<span id="cb36-222"><a href="#cb36-222"></a></span>
+<span id="cb36-223"><a href="#cb36-223"></a><span class="in">```{.julia}</span></span>
+<span id="cb36-224"><a href="#cb36-224"></a><span class="in">(metaprogramming) pkg&gt; add https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl#118-add-losses-and-penalties-modules-or-group-under-objectives-module</span></span>
+<span id="cb36-225"><a href="#cb36-225"></a><span class="in">julia&gt; using CounterfactualExplanations</span></span>
+<span id="cb36-226"><a href="#cb36-226"></a><span class="in">```</span></span>
+<span id="cb36-227"><a href="#cb36-227"></a></span>
+<span id="cb36-228"><a href="#cb36-228"></a>By the time you're reading this, all changes to that branch will have hopefully already been committed and merged.</span>
+<span id="cb36-229"><a href="#cb36-229"></a></span>
+<span id="cb36-230"><a href="#cb36-230"></a>Let's start by instantiating a generic generator:</span>
+<span id="cb36-231"><a href="#cb36-231"></a></span>
+<span id="cb36-234"><a href="#cb36-234"></a><span class="in">```{julia}</span></span>
+<span id="cb36-235"><a href="#cb36-235"></a><span class="in">generator = GenericGenerator()</span></span>
+<span id="cb36-236"><a href="#cb36-236"></a><span class="in">```</span></span>
+<span id="cb36-237"><a href="#cb36-237"></a></span>
+<span id="cb36-238"><a href="#cb36-238"></a>Our goal is to create macros that build expressions that, when evaluated, mutate the <span class="in">`generator`</span> instance. </span>
+<span id="cb36-239"><a href="#cb36-239"></a></span>
+<span id="cb36-240"><a href="#cb36-240"></a><span class="fu">### Define your `@objective`</span></span>
+<span id="cb36-241"><a href="#cb36-241"></a></span>
+<span id="cb36-242"><a href="#cb36-242"></a>Our first and most important macro shall define the counterfactual search objective. In particular, the <span class="in">`@objective`</span> macro should accept an expression that looks much like the right-hand-side of @eq-general, which is essentially just a weighted sum. </span>
+<span id="cb36-243"><a href="#cb36-243"></a></span>
+<span id="cb36-244"><a href="#cb36-244"></a><span class="al">![Sketch of the envisioned `@objective` macro.](www/objective.png)</span></span>
+<span id="cb36-245"><a href="#cb36-245"></a></span>
+<span id="cb36-246"><a href="#cb36-246"></a>Let's start with that part. Naively, we could begin by writing it out very literally:</span>
+<span id="cb36-247"><a href="#cb36-247"></a></span>
+<span id="cb36-248"><a href="#cb36-248"></a><span class="in">```{.julia}</span></span>
+<span id="cb36-249"><a href="#cb36-249"></a><span class="in">ex = :(yloss + λ*cost)</span></span>
+<span id="cb36-250"><a href="#cb36-250"></a><span class="in">eval(ex)</span></span>
+<span id="cb36-251"><a href="#cb36-251"></a><span class="in">```</span></span>
+<span id="cb36-252"><a href="#cb36-252"></a></span>
+<span id="cb36-253"><a href="#cb36-253"></a>Of course, evaluating this expression throws an error because none of the variables are actually defined. Let's work on that ...</span>
+<span id="cb36-254"><a href="#cb36-254"></a></span>
+<span id="cb36-255"><a href="#cb36-255"></a>For the loss and penalty functions, we will use methods available from the <span class="in">`CounterfactualExplanations.Objectives`</span> module, while for $\lambda$ we will use a literal:</span>
+<span id="cb36-256"><a href="#cb36-256"></a></span>
+<span id="cb36-259"><a href="#cb36-259"></a><span class="in">```{julia}</span></span>
+<span id="cb36-260"><a href="#cb36-260"></a><span class="in">ex = :(logitbinarycrossentropy + 0.1 * distance_l2)</span></span>
+<span id="cb36-261"><a href="#cb36-261"></a><span class="in">```</span></span>
+<span id="cb36-262"><a href="#cb36-262"></a></span>
+<span id="cb36-263"><a href="#cb36-263"></a>Let's try to make sense of the data structure we have created:</span>
+<span id="cb36-264"><a href="#cb36-264"></a></span>
+<span id="cb36-267"><a href="#cb36-267"></a><span class="in">```{julia}</span></span>
+<span id="cb36-268"><a href="#cb36-268"></a><span class="in">#| output: true</span></span>
+<span id="cb36-269"><a href="#cb36-269"></a></span>
+<span id="cb36-270"><a href="#cb36-270"></a><span class="in">ex.args</span></span>
+<span id="cb36-271"><a href="#cb36-271"></a><span class="in">```</span></span>
+<span id="cb36-272"><a href="#cb36-272"></a></span>
+<span id="cb36-273"><a href="#cb36-273"></a>My first naive approach is shown below. It errors because I forgot to interpolate the variables inside the <span class="in">`quote`</span>.</span>
+<span id="cb36-274"><a href="#cb36-274"></a></span>
+<span id="cb36-275"><a href="#cb36-275"></a><span class="in">```{.julia}</span></span>
+<span id="cb36-276"><a href="#cb36-276"></a><span class="in">macro objective(generator, ex)</span></span>
+<span id="cb36-277"><a href="#cb36-277"></a><span class="in">    loss = ex.args[2]</span></span>
+<span id="cb36-278"><a href="#cb36-278"></a><span class="in">    ex_penalty = ex.args[3]</span></span>
+<span id="cb36-279"><a href="#cb36-279"></a><span class="in">    λ = ex_penalty.args[2]</span></span>
+<span id="cb36-280"><a href="#cb36-280"></a><span class="in">    cost = ex_penalty.args[3]</span></span>
+<span id="cb36-281"><a href="#cb36-281"></a><span class="in">    ex_generator = quote </span></span>
+<span id="cb36-282"><a href="#cb36-282"></a><span class="in">        generator.loss = loss</span></span>
+<span id="cb36-283"><a href="#cb36-283"></a><span class="in">        generator.cost = cost</span></span>
+<span id="cb36-284"><a href="#cb36-284"></a><span class="in">        generator.λ = λ</span></span>
+<span id="cb36-285"><a href="#cb36-285"></a><span class="in">    end</span></span>
+<span id="cb36-286"><a href="#cb36-286"></a><span class="in">    return ex_generator</span></span>
+<span id="cb36-287"><a href="#cb36-287"></a><span class="in">end</span></span>
+<span id="cb36-288"><a href="#cb36-288"></a><span class="in">```</span></span>
+<span id="cb36-289"><a href="#cb36-289"></a></span>
+<span id="cb36-290"><a href="#cb36-290"></a>Having fixed that below, I still get an error because <span class="in">`loss`</span> and <span class="in">`cost`</span> functions are not part of the global scope. I am pretty sure that this error would have occurred anyway and has nothing to do with the fact that I'm writing a macro. </span>
+<span id="cb36-291"><a href="#cb36-291"></a></span>
+<span id="cb36-292"><a href="#cb36-292"></a><span class="in">```{.julia}</span></span>
+<span id="cb36-293"><a href="#cb36-293"></a><span class="in">macro objective(generator, ex)</span></span>
+<span id="cb36-294"><a href="#cb36-294"></a><span class="in">    loss = ex.args[2]</span></span>
+<span id="cb36-295"><a href="#cb36-295"></a><span class="in">    ex_penalty = ex.args[3]</span></span>
+<span id="cb36-296"><a href="#cb36-296"></a><span class="in">    λ = ex_penalty.args[2]</span></span>
+<span id="cb36-297"><a href="#cb36-297"></a><span class="in">    cost = ex_penalty.args[3]</span></span>
+<span id="cb36-298"><a href="#cb36-298"></a><span class="in">    ex_generator = quote </span></span>
+<span id="cb36-299"><a href="#cb36-299"></a><span class="in">        $generator.loss = $loss</span></span>
+<span id="cb36-300"><a href="#cb36-300"></a><span class="in">        $generator.cost = $cost</span></span>
+<span id="cb36-301"><a href="#cb36-301"></a><span class="in">        $generator.λ = $λ</span></span>
+<span id="cb36-302"><a href="#cb36-302"></a><span class="in">    end</span></span>
+<span id="cb36-303"><a href="#cb36-303"></a><span class="in">    return ex_generator</span></span>
+<span id="cb36-304"><a href="#cb36-304"></a><span class="in">end</span></span>
+<span id="cb36-305"><a href="#cb36-305"></a><span class="in">```</span></span>
+<span id="cb36-306"><a href="#cb36-306"></a></span>
+<span id="cb36-307"><a href="#cb36-307"></a>Instead of importing the functions, I just get them explicitly from the <span class="in">`Objectives`</span> module, </span>
+<span id="cb36-308"><a href="#cb36-308"></a></span>
+<span id="cb36-311"><a href="#cb36-311"></a><span class="in">```{julia}</span></span>
+<span id="cb36-312"><a href="#cb36-312"></a><span class="in">macro objective(generator, ex)</span></span>
+<span id="cb36-313"><a href="#cb36-313"></a><span class="in">    loss = getfield(CounterfactualExplanations.Objectives, ex.args[2])</span></span>
+<span id="cb36-314"><a href="#cb36-314"></a><span class="in">    ex_penalty = ex.args[3]</span></span>
+<span id="cb36-315"><a href="#cb36-315"></a><span class="in">    λ = ex_penalty.args[2]</span></span>
+<span id="cb36-316"><a href="#cb36-316"></a><span class="in">    cost = getfield(CounterfactualExplanations.Objectives, ex_penalty.args[3])</span></span>
+<span id="cb36-317"><a href="#cb36-317"></a><span class="in">    ex_generator = quote </span></span>
+<span id="cb36-318"><a href="#cb36-318"></a><span class="in">        $generator.loss = $loss</span></span>
+<span id="cb36-319"><a href="#cb36-319"></a><span class="in">        $generator.penalty = $cost</span></span>
+<span id="cb36-320"><a href="#cb36-320"></a><span class="in">        $generator.λ = $λ</span></span>
+<span id="cb36-321"><a href="#cb36-321"></a><span class="in">        generator</span></span>
+<span id="cb36-322"><a href="#cb36-322"></a><span class="in">    end</span></span>
+<span id="cb36-323"><a href="#cb36-323"></a><span class="in">    return ex_generator</span></span>
+<span id="cb36-324"><a href="#cb36-324"></a><span class="in">end</span></span>
+<span id="cb36-325"><a href="#cb36-325"></a><span class="in">```</span></span>
+<span id="cb36-326"><a href="#cb36-326"></a></span>
+<span id="cb36-327"><a href="#cb36-327"></a>and, finally, this works:</span>
+<span id="cb36-328"><a href="#cb36-328"></a></span>
+<span id="cb36-331"><a href="#cb36-331"></a><span class="in">```{julia}</span></span>
+<span id="cb36-332"><a href="#cb36-332"></a><span class="in">#| output: ture</span></span>
+<span id="cb36-333"><a href="#cb36-333"></a></span>
+<span id="cb36-334"><a href="#cb36-334"></a><span class="in">@objective(generator, logitbinarycrossentropy + 0.1distance_l2)</span></span>
+<span id="cb36-335"><a href="#cb36-335"></a><span class="in">```</span></span>
+<span id="cb36-336"><a href="#cb36-336"></a></span>
+<span id="cb36-337"><a href="#cb36-337"></a>But what about adding multiple penalties? The DiCE generator, for example, also takes into account how diverse the counterfactual explanations are <span class="co">[</span><span class="ot">@mothilal2020explaining</span><span class="co">]</span>. The corresponding penalty is called <span class="in">`ddp_diversity`</span>. Let's start with the expression again:</span>
+<span id="cb36-338"><a href="#cb36-338"></a></span>
+<span id="cb36-341"><a href="#cb36-341"></a><span class="in">```{julia}</span></span>
+<span id="cb36-342"><a href="#cb36-342"></a><span class="in">#| output: true</span></span>
+<span id="cb36-343"><a href="#cb36-343"></a></span>
+<span id="cb36-344"><a href="#cb36-344"></a><span class="in">ex = :(logitbinarycrossentropy + 0.1distance_l2 + 1.0ddp_diversity)</span></span>
+<span id="cb36-345"><a href="#cb36-345"></a><span class="in">ex.args</span></span>
+<span id="cb36-346"><a href="#cb36-346"></a><span class="in">```</span></span>
+<span id="cb36-347"><a href="#cb36-347"></a></span>
+<span id="cb36-350"><a href="#cb36-350"></a><span class="in">```{julia}</span></span>
+<span id="cb36-351"><a href="#cb36-351"></a><span class="in">#| output: true</span></span>
+<span id="cb36-352"><a href="#cb36-352"></a><span class="in">#| echo: false</span></span>
+<span id="cb36-353"><a href="#cb36-353"></a></span>
+<span id="cb36-354"><a href="#cb36-354"></a><span class="in">Markdown.parse(</span></span>
+<span id="cb36-355"><a href="#cb36-355"></a><span class="in">    """</span></span>
+<span id="cb36-356"><a href="#cb36-356"></a><span class="in">    This time there's a second nested `Expr`ession among the arguments: `:($(ex.args[end]))`.</span></span>
+<span id="cb36-357"><a href="#cb36-357"></a><span class="in">    """</span></span>
+<span id="cb36-358"><a href="#cb36-358"></a><span class="in">)</span></span>
+<span id="cb36-359"><a href="#cb36-359"></a><span class="in">```</span></span>
+<span id="cb36-360"><a href="#cb36-360"></a></span>
+<span id="cb36-363"><a href="#cb36-363"></a><span class="in">```{julia}</span></span>
+<span id="cb36-364"><a href="#cb36-364"></a><span class="in">macro objective(generator, ex)</span></span>
+<span id="cb36-365"><a href="#cb36-365"></a><span class="in">    loss = getfield(CounterfactualExplanations.Objectives, ex.args[2])</span></span>
+<span id="cb36-366"><a href="#cb36-366"></a><span class="in">    Λ = Vector{AbstractFloat}()</span></span>
+<span id="cb36-367"><a href="#cb36-367"></a><span class="in">    costs = Vector{Function}()</span></span>
+<span id="cb36-368"><a href="#cb36-368"></a><span class="in">    for i in 3:length(ex.args)</span></span>
+<span id="cb36-369"><a href="#cb36-369"></a><span class="in">        ex_penalty = ex.args[i]</span></span>
+<span id="cb36-370"><a href="#cb36-370"></a><span class="in">        λ = ex_penalty.args[2]</span></span>
+<span id="cb36-371"><a href="#cb36-371"></a><span class="in">        push!(Λ, λ)</span></span>
+<span id="cb36-372"><a href="#cb36-372"></a><span class="in">        cost = getfield(CounterfactualExplanations.Objectives, ex_penalty.args[3])</span></span>
+<span id="cb36-373"><a href="#cb36-373"></a><span class="in">        push!(costs, cost)</span></span>
+<span id="cb36-374"><a href="#cb36-374"></a><span class="in">    end</span></span>
+<span id="cb36-375"><a href="#cb36-375"></a><span class="in">    ex_generator = quote </span></span>
+<span id="cb36-376"><a href="#cb36-376"></a><span class="in">        $generator.loss = $loss</span></span>
+<span id="cb36-377"><a href="#cb36-377"></a><span class="in">        $generator.penalty = $costs</span></span>
+<span id="cb36-378"><a href="#cb36-378"></a><span class="in">        $generator.λ = $Λ</span></span>
+<span id="cb36-379"><a href="#cb36-379"></a><span class="in">        generator</span></span>
+<span id="cb36-380"><a href="#cb36-380"></a><span class="in">    end</span></span>
+<span id="cb36-381"><a href="#cb36-381"></a><span class="in">    return ex_generator</span></span>
+<span id="cb36-382"><a href="#cb36-382"></a><span class="in">end</span></span>
+<span id="cb36-383"><a href="#cb36-383"></a><span class="in">```</span></span>
+<span id="cb36-384"><a href="#cb36-384"></a></span>
+<span id="cb36-385"><a href="#cb36-385"></a>That works well,</span>
+<span id="cb36-386"><a href="#cb36-386"></a></span>
+<span id="cb36-389"><a href="#cb36-389"></a><span class="in">```{julia}</span></span>
+<span id="cb36-390"><a href="#cb36-390"></a><span class="in">#| output: true</span></span>
+<span id="cb36-391"><a href="#cb36-391"></a></span>
+<span id="cb36-392"><a href="#cb36-392"></a><span class="in">@objective(generator, logitbinarycrossentropy + 0.05distance_l2 + 1.0ddp_diversity)</span></span>
+<span id="cb36-393"><a href="#cb36-393"></a><span class="in">```</span></span>
+<span id="cb36-394"><a href="#cb36-394"></a></span>
+<span id="cb36-395"><a href="#cb36-395"></a>but we should still make sure that this <span class="in">`generator`</span> is also compatible with our package. Below we go through some of the typical workflows associated with Counterfactual Explanations. Firstly, we load some synthetic data and fit a black-box model to it.</span>
+<span id="cb36-396"><a href="#cb36-396"></a></span>
+<span id="cb36-399"><a href="#cb36-399"></a><span class="in">```{julia}</span></span>
+<span id="cb36-400"><a href="#cb36-400"></a><span class="in">n_dim = 2</span></span>
+<span id="cb36-401"><a href="#cb36-401"></a><span class="in">n_classes = 4</span></span>
+<span id="cb36-402"><a href="#cb36-402"></a><span class="in">n_samples = 400</span></span>
+<span id="cb36-403"><a href="#cb36-403"></a><span class="in">model_name = :MLP</span></span>
+<span id="cb36-404"><a href="#cb36-404"></a><span class="in">counterfactual_data = CounterfactualExplanations.load_blobs(n_samples; k=n_dim, centers=n_classes)</span></span>
+<span id="cb36-405"><a href="#cb36-405"></a><span class="in">M = fit_model(counterfactual_data, model_name)</span></span>
+<span id="cb36-406"><a href="#cb36-406"></a><span class="in">plot(M, counterfactual_data)</span></span>
+<span id="cb36-407"><a href="#cb36-407"></a><span class="in">```</span></span>
+<span id="cb36-408"><a href="#cb36-408"></a></span>
+<span id="cb36-409"><a href="#cb36-409"></a>Next, we begin by specifying our target and factual label. We then draw a random sample from the non-target (factual) class.</span>
+<span id="cb36-410"><a href="#cb36-410"></a></span>
+<span id="cb36-413"><a href="#cb36-413"></a><span class="in">```{julia}</span></span>
+<span id="cb36-414"><a href="#cb36-414"></a><span class="in"># Factual and target:</span></span>
+<span id="cb36-415"><a href="#cb36-415"></a><span class="in">target = 2</span></span>
+<span id="cb36-416"><a href="#cb36-416"></a><span class="in">factual = 4</span></span>
+<span id="cb36-417"><a href="#cb36-417"></a><span class="in">chosen = rand(findall(predict_label(M, counterfactual_data) .== factual))</span></span>
+<span id="cb36-418"><a href="#cb36-418"></a><span class="in">x = select_factual(counterfactual_data,chosen)</span></span>
+<span id="cb36-419"><a href="#cb36-419"></a><span class="in">```</span></span>
+<span id="cb36-420"><a href="#cb36-420"></a></span>
+<span id="cb36-421"><a href="#cb36-421"></a>Finally, we use our <span class="in">`generator`</span> to generate counterfactuals:</span>
+<span id="cb36-422"><a href="#cb36-422"></a></span>
+<span id="cb36-425"><a href="#cb36-425"></a><span class="in">```{julia}</span></span>
+<span id="cb36-426"><a href="#cb36-426"></a><span class="in">ce = generate_counterfactual(</span></span>
+<span id="cb36-427"><a href="#cb36-427"></a><span class="in">    x, target, counterfactual_data, M, generator;</span></span>
+<span id="cb36-428"><a href="#cb36-428"></a><span class="in">    num_counterfactuals = 5,</span></span>
+<span id="cb36-429"><a href="#cb36-429"></a><span class="in">    converge_when = :generator_conditions</span></span>
+<span id="cb36-430"><a href="#cb36-430"></a><span class="in">)</span></span>
+<span id="cb36-431"><a href="#cb36-431"></a><span class="in">```</span></span>
+<span id="cb36-432"><a href="#cb36-432"></a></span>
+<span id="cb36-433"><a href="#cb36-433"></a>It worked! 🎉 The resulting counterfactual search is illustrated in @fig-search. I may have overspecified the size of the <span class="in">`ddp_diversity`</span> penalty a little bit here, but it sure makes for a cool chart!</span>
+<span id="cb36-434"><a href="#cb36-434"></a></span>
+<span id="cb36-437"><a href="#cb36-437"></a><span class="in">```{julia}</span></span>
+<span id="cb36-438"><a href="#cb36-438"></a><span class="in">#| fig-cap: "Counterfactual search using our composed generator."</span></span>
+<span id="cb36-439"><a href="#cb36-439"></a><span class="in">#| label: fig-search</span></span>
+<span id="cb36-440"><a href="#cb36-440"></a><span class="in">#| output: true</span></span>
+<span id="cb36-441"><a href="#cb36-441"></a><span class="in">#| echo: false</span></span>
+<span id="cb36-442"><a href="#cb36-442"></a></span>
+<span id="cb36-443"><a href="#cb36-443"></a><span class="in">plot(ce)</span></span>
+<span id="cb36-444"><a href="#cb36-444"></a><span class="in">```</span></span>
+<span id="cb36-445"><a href="#cb36-445"></a></span>
+<span id="cb36-446"><a href="#cb36-446"></a>Time for me to add this all to <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)</span> ... ⏳</span>
+<span id="cb36-447"><a href="#cb36-447"></a></span>
+<span id="cb36-448"><a href="#cb36-448"></a><span class="fu">## 🧼 Hygiene</span></span>
+<span id="cb36-449"><a href="#cb36-449"></a></span>
+<span id="cb36-450"><a href="#cb36-450"></a>... aaand I'm back. There was one thing I had ignored that ended up causing a minor complication: macro <span class="co">[</span><span class="ot">hygiene</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Hygiene)</span>.  </span>
+<span id="cb36-451"><a href="#cb36-451"></a></span>
+<span id="cb36-452"><a href="#cb36-452"></a>Again, I'll leave it to you to read up on the details, but the bottom line is that when writing macros, we need to keep variable scopes in mind. <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)</span> is composed of various (sub)modules, and when I initially added the macro to the <span class="in">`CounterfactualExplanations.Generators`</span> module, it errored. </span>
+<span id="cb36-453"><a href="#cb36-453"></a></span>
+<span id="cb36-454"><a href="#cb36-454"></a>The problem was (I believe) that the <span class="in">`generator`</span> variable existed in the global scope (<span class="in">`Main`</span>) but it was not accessible for the <span class="in">`@objective`</span> macro that at runtime lives in <span class="in">`Main.Generators`</span>. Fortunately, it is easy to make the variable accessible by wrapping it inside an <span class="in">`esc()`</span> call:</span>
+<span id="cb36-455"><a href="#cb36-455"></a></span>
+<span id="cb36-456"><a href="#cb36-456"></a><span class="at">&gt; This escaping mechanism can be used to "violate" hygiene when necessary, in order to introduce or manipulate user variables. </span></span>
+<span id="cb36-457"><a href="#cb36-457"></a></span>
+<span id="cb36-458"><a href="#cb36-458"></a>This may not be the ideal way to do this, and as always, if you have any suggestions I'd be happy to hear about them. </span>
+<span id="cb36-459"><a href="#cb36-459"></a></span>
+<span id="cb36-460"><a href="#cb36-460"></a>If you want to find out more about how macros can now be used to easily compose counterfactual generators, check out the new section in the package <span class="co">[</span><span class="ot">documentation</span><span class="co">](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/tutorials/generators/)</span>.</span>
+<span id="cb36-461"><a href="#cb36-461"></a></span>
+<span id="cb36-462"><a href="#cb36-462"></a><span class="fu">## 🌯 Wrapping Up</span></span>
+<span id="cb36-463"><a href="#cb36-463"></a></span>
+<span id="cb36-464"><a href="#cb36-464"></a>In this blog post, I've done something I usually try to avoid: talk about things I don't know. Metaprogramming is an exciting topic and if you're still here, you just got to experience it through the lens of an absolute novice. During our leap of faith into Julia's metaverse we've learned the following things:</span>
+<span id="cb36-465"><a href="#cb36-465"></a></span>
+<span id="cb36-466"><a href="#cb36-466"></a><span class="ss">1. </span>Code in Julia is internally represented as a mutable data structure.</span>
+<span id="cb36-467"><a href="#cb36-467"></a><span class="ss">2. </span>Macros are a way to take such data structures and transform them before they get evaluated at runtime. </span>
+<span id="cb36-468"><a href="#cb36-468"></a><span class="ss">3. </span>An important thing to keep in mind when writing macros is variable scopes. </span>
+<span id="cb36-469"><a href="#cb36-469"></a></span>
+<span id="cb36-470"><a href="#cb36-470"></a>Throughout this post, I have skipped various important details that (I think) were not immediately relevant to the goal I had in mind: adding my first macro to  <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)</span>. In the future, I may write about this topic again and cover some of these missing details (hopefully with a bit more insight at that point!).</span>
+<span id="cb36-471"><a href="#cb36-471"></a></span>
+<span id="cb36-472"><a href="#cb36-472"></a><span class="fu">## 🎓 References</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2023, Patrick Altmeyer</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.paltmeyer.com/">
+      <i class="bi bi-house" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/pat-alt">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/paltmey">
+      <i class="bi bi-twitter" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://medium.com/\@patrick.altmeyer">
+      <i class="bi bi-medium" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

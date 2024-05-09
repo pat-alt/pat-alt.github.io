@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Patrick Altmeyer">
+
+<title>Patrick Altmeyer</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../..//www/favicon.ico" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-BEEZ30787D"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
+</script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="Patrick Altmeyer">
+<meta property="og:site_name" content="Patrick Altmeyer">
+<meta name="twitter:title" content="Patrick Altmeyer">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Patrick Altmeyer</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/publications/index.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/software.html"> 
+<span class="menu-text">Software</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/about/index.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#train-model" id="toc-train-model" class="nav-link active" data-scroll-target="#train-model">Train model</a></li>
+  <li><a href="#chart" id="toc-chart" class="nav-link" data-scroll-target="#chart">Chart</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><div class="quarto-title-block"><div class="quarto-title-tools-only"><h1></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://www.tudelft.nl/en/">
+            Delft University of Technology
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="train-model" class="level3">
+<h3 class="anchored" data-anchor-id="train-model">Train model</h3>
+<div class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Import libraries.</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">using</span> <span class="bu">Flux</span>, <span class="bu">Plots</span>, <span class="bu">Random</span>, <span class="bu">Statistics</span>, <span class="bu">LaplaceRedux</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">theme</span>(<span class="op">:</span>wong)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># Number of points to generate.</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>xs, y <span class="op">=</span> <span class="fu">toy_data_non_linear</span>(<span class="fl">200</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>X <span class="op">=</span> <span class="fu">hcat</span>(xs<span class="op">...</span>); <span class="co"># bring into tabular format</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>data <span class="op">=</span> <span class="fu">zip</span>(xs,y);</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># Neural network:</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>n_hidden <span class="op">=</span> <span class="fl">32</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>D <span class="op">=</span> <span class="fu">size</span>(X)[<span class="fl">1</span>]</span>
+<span id="cb1-12"><a href="#cb1-12"></a>nn <span class="op">=</span> <span class="fu">Chain</span>(</span>
+<span id="cb1-13"><a href="#cb1-13"></a>    <span class="fu">Dense</span>(D, n_hidden, σ),</span>
+<span id="cb1-14"><a href="#cb1-14"></a>    <span class="fu">Dense</span>(n_hidden, <span class="fl">1</span>)</span>
+<span id="cb1-15"><a href="#cb1-15"></a>)  </span>
+<span id="cb1-16"><a href="#cb1-16"></a>λ <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="fu">sqnorm</span>(x) <span class="op">=</span> <span class="fu">sum</span>(abs2, x)</span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="fu">weight_regularization</span>(λ<span class="op">=</span>λ) <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span> <span class="op">*</span> λ<span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="fu">sum</span>(sqnorm, Flux.<span class="fu">params</span>(nn))</span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="fu">loss</span>(x, y) <span class="op">=</span> Flux.Losses.<span class="fu">logitbinarycrossentropy</span>(<span class="fu">nn</span>(x), y) <span class="op">+</span> <span class="fu">weight_regularization</span>()</span>
+<span id="cb1-20"><a href="#cb1-20"></a></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="co"># Training:</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="im">using</span> <span class="bu">Flux.Optimise</span>: update!, ADAM</span>
+<span id="cb1-23"><a href="#cb1-23"></a>opt <span class="op">=</span> <span class="fu">ADAM</span>()</span>
+<span id="cb1-24"><a href="#cb1-24"></a>epochs <span class="op">=</span> <span class="fl">200</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="cf">for</span> epoch <span class="op">=</span> <span class="fl">1</span><span class="op">:</span>epochs</span>
+<span id="cb1-26"><a href="#cb1-26"></a>  <span class="cf">for</span> d <span class="kw">in</span> data</span>
+<span id="cb1-27"><a href="#cb1-27"></a>    gs <span class="op">=</span> <span class="fu">gradient</span>(<span class="fu">params</span>(nn)) <span class="cf">do</span></span>
+<span id="cb1-28"><a href="#cb1-28"></a>      l <span class="op">=</span> <span class="fu">loss</span>(d<span class="op">...</span>)</span>
+<span id="cb1-29"><a href="#cb1-29"></a>    <span class="cf">end</span></span>
+<span id="cb1-30"><a href="#cb1-30"></a>    <span class="fu">update!</span>(opt, <span class="fu">params</span>(nn), gs)</span>
+<span id="cb1-31"><a href="#cb1-31"></a>  <span class="cf">end</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="chart" class="level3">
+<h3 class="anchored" data-anchor-id="chart">Chart</h3>
+<div class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">123</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>shuffled_indices <span class="op">=</span> <span class="fu">randperm</span>(<span class="fl">200</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>data <span class="op">=</span> <span class="fu">zip</span>(xs[shuffled_indices], y[shuffled_indices]);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a>xlim <span class="op">=</span> (<span class="fu">minimum</span>(X[<span class="fl">1</span>,<span class="op">:</span>]),<span class="fu">maximum</span>(X[<span class="fl">1</span>,<span class="op">:</span>]))</span>
+<span id="cb3-2"><a href="#cb3-2"></a>ylim <span class="op">=</span> (<span class="fu">minimum</span>(X[<span class="fl">2</span>,<span class="op">:</span>]),<span class="fu">maximum</span>(X[<span class="fl">2</span>,<span class="op">:</span>]))</span>
+<span id="cb3-3"><a href="#cb3-3"></a>anim <span class="op">=</span> <span class="fu">Animation</span>()</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="cf">for</span> N <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(data)</span>
+<span id="cb3-5"><a href="#cb3-5"></a>    la <span class="op">=</span> <span class="fu">laplace</span>(nn, λ<span class="op">=</span>λ, subset_of_weights<span class="op">=:</span>last_layer)</span>
+<span id="cb3-6"><a href="#cb3-6"></a>    <span class="fu">fit!</span>(la, <span class="bu">Iterators</span>.<span class="fu">take</span>(data,N))</span>
+<span id="cb3-7"><a href="#cb3-7"></a>    Xᵢ <span class="op">=</span> <span class="fu">reduce</span>(vcat,<span class="fu">map</span>(d <span class="op">-&gt;</span> <span class="fu">reshape</span>(d[<span class="fl">1</span>],<span class="fl">1</span>,<span class="fu">length</span>(d[<span class="fl">1</span>])),<span class="bu">Iterators</span>.<span class="fu">take</span>(data, N)))</span>
+<span id="cb3-8"><a href="#cb3-8"></a>    yᵢ <span class="op">=</span> <span class="fu">map</span>(d <span class="op">-&gt;</span> d[<span class="fl">2</span>],<span class="bu">Iterators</span>.<span class="fu">take</span>(data, N))</span>
+<span id="cb3-9"><a href="#cb3-9"></a>    plt <span class="op">=</span> <span class="fu">plot_contour</span>(Xᵢ,yᵢ,la;xlim<span class="op">=</span>xlim,ylim<span class="op">=</span>ylim,zoom<span class="op">=-</span><span class="fl">2</span>,clegend<span class="op">=</span><span class="cn">false</span>)</span>
+<span id="cb3-10"><a href="#cb3-10"></a>    plt <span class="op">=</span> <span class="fu">plot</span>(plt, axis<span class="op">=</span><span class="cn">nothing</span>,background_color<span class="op">=:</span>transparent, size<span class="op">=</span>(<span class="fl">500</span>,<span class="fl">500</span>))</span>
+<span id="cb3-11"><a href="#cb3-11"></a>    <span class="fu">frame</span>(anim, plt)</span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">gif</span>(anim, <span class="st">"www/intro.gif"</span>, fps<span class="op">=</span><span class="fl">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a>xlim <span class="op">=</span> (<span class="fu">minimum</span>(X[<span class="fl">1</span>,<span class="op">:</span>]),<span class="fu">maximum</span>(X[<span class="fl">1</span>,<span class="op">:</span>]))</span>
+<span id="cb5-2"><a href="#cb5-2"></a>ylim <span class="op">=</span> (<span class="fu">minimum</span>(X[<span class="fl">2</span>,<span class="op">:</span>]),<span class="fu">maximum</span>(X[<span class="fl">2</span>,<span class="op">:</span>]))</span>
+<span id="cb5-3"><a href="#cb5-3"></a>anim <span class="op">=</span> <span class="fu">Animation</span>()</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="cf">for</span> N <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(data)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>    la <span class="op">=</span> <span class="fu">laplace</span>(nn, λ<span class="op">=</span>λ, subset_of_weights<span class="op">=:</span>last_layer)</span>
+<span id="cb5-6"><a href="#cb5-6"></a>    <span class="fu">fit!</span>(la, <span class="bu">Iterators</span>.<span class="fu">take</span>(data,N))</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    Xᵢ <span class="op">=</span> <span class="fu">reduce</span>(vcat,<span class="fu">map</span>(d <span class="op">-&gt;</span> <span class="fu">reshape</span>(d[<span class="fl">1</span>],<span class="fl">1</span>,<span class="fu">length</span>(d[<span class="fl">1</span>])),<span class="bu">Iterators</span>.<span class="fu">take</span>(data, N)))</span>
+<span id="cb5-8"><a href="#cb5-8"></a>    yᵢ <span class="op">=</span> <span class="fu">map</span>(d <span class="op">-&gt;</span> d[<span class="fl">2</span>],<span class="bu">Iterators</span>.<span class="fu">take</span>(data, N))</span>
+<span id="cb5-9"><a href="#cb5-9"></a>    plt <span class="op">=</span> <span class="fu">plot_contour</span>(Xᵢ,yᵢ,la;xlim<span class="op">=</span>xlim,ylim<span class="op">=</span>ylim,zoom<span class="op">=-</span><span class="fl">2</span>,clegend<span class="op">=</span><span class="cn">false</span>)</span>
+<span id="cb5-10"><a href="#cb5-10"></a>    plt <span class="op">=</span> <span class="fu">plot</span>(plt, axis<span class="op">=</span><span class="cn">nothing</span>,background_color<span class="op">=:</span>transparent, size<span class="op">=</span>(<span class="fl">1200</span>,<span class="fl">400</span>))</span>
+<span id="cb5-11"><a href="#cb5-11"></a>    <span class="fu">frame</span>(anim, plt)</span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="cf">end</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="fu">gif</span>(anim, <span class="st">"www/medium.gif"</span>, fps<span class="op">=</span><span class="fl">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+
+
+<!-- -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer,
+  author = {Altmeyer, Patrick},
+  url = {https://www.paltmeyer.com/blog//blog/posts/effortsless-bayesian-dl/intro_gif.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer" class="csl-entry quarto-appendix-citeas" role="listitem">
+Altmeyer, Patrick. n.d. <a href="https://www.paltmeyer.com/blog//blog/posts/effortsless-bayesian-dl/intro_gif.html">https://www.paltmeyer.com/blog//blog/posts/effortsless-bayesian-dl/intro_gif.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">---</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="an">draft:</span><span class="co"> true</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="an">jupyter:</span><span class="co"> julia-1.8</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="an">execute:</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">  eval: false</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">---</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="fu">### Train model</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="in">```{julia}</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="in"># Import libraries.</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="in">using Flux, Plots, Random, Statistics, LaplaceRedux</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="in">theme(:wong)</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="in"># Number of points to generate.</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="in">xs, y = toy_data_non_linear(200)</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="in">X = hcat(xs...); # bring into tabular format</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="in">data = zip(xs,y);</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="in"># Neural network:</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="in">n_hidden = 32</span></span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="in">D = size(X)[1]</span></span>
+<span id="cb6-24"><a href="#cb6-24"></a><span class="in">nn = Chain(</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="in">    Dense(D, n_hidden, σ),</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="in">    Dense(n_hidden, 1)</span></span>
+<span id="cb6-27"><a href="#cb6-27"></a><span class="in">)  </span></span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="in">λ = 0.01</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a><span class="in">sqnorm(x) = sum(abs2, x)</span></span>
+<span id="cb6-30"><a href="#cb6-30"></a><span class="in">weight_regularization(λ=λ) = 1/2 * λ^2 * sum(sqnorm, Flux.params(nn))</span></span>
+<span id="cb6-31"><a href="#cb6-31"></a><span class="in">loss(x, y) = Flux.Losses.logitbinarycrossentropy(nn(x), y) + weight_regularization()</span></span>
+<span id="cb6-32"><a href="#cb6-32"></a></span>
+<span id="cb6-33"><a href="#cb6-33"></a><span class="in"># Training:</span></span>
+<span id="cb6-34"><a href="#cb6-34"></a><span class="in">using Flux.Optimise: update!, ADAM</span></span>
+<span id="cb6-35"><a href="#cb6-35"></a><span class="in">opt = ADAM()</span></span>
+<span id="cb6-36"><a href="#cb6-36"></a><span class="in">epochs = 200</span></span>
+<span id="cb6-37"><a href="#cb6-37"></a><span class="in">for epoch = 1:epochs</span></span>
+<span id="cb6-38"><a href="#cb6-38"></a><span class="in">  for d in data</span></span>
+<span id="cb6-39"><a href="#cb6-39"></a><span class="in">    gs = gradient(params(nn)) do</span></span>
+<span id="cb6-40"><a href="#cb6-40"></a><span class="in">      l = loss(d...)</span></span>
+<span id="cb6-41"><a href="#cb6-41"></a><span class="in">    end</span></span>
+<span id="cb6-42"><a href="#cb6-42"></a><span class="in">    update!(opt, params(nn), gs)</span></span>
+<span id="cb6-43"><a href="#cb6-43"></a><span class="in">  end</span></span>
+<span id="cb6-44"><a href="#cb6-44"></a><span class="in">end</span></span>
+<span id="cb6-45"><a href="#cb6-45"></a><span class="in">```</span></span>
+<span id="cb6-46"><a href="#cb6-46"></a></span>
+<span id="cb6-47"><a href="#cb6-47"></a><span class="fu">### Chart</span></span>
+<span id="cb6-48"><a href="#cb6-48"></a></span>
+<span id="cb6-51"><a href="#cb6-51"></a><span class="in">```{julia}</span></span>
+<span id="cb6-52"><a href="#cb6-52"></a><span class="in">Random.seed!(123)</span></span>
+<span id="cb6-53"><a href="#cb6-53"></a><span class="in">shuffled_indices = randperm(200)</span></span>
+<span id="cb6-54"><a href="#cb6-54"></a><span class="in">data = zip(xs[shuffled_indices], y[shuffled_indices]);</span></span>
+<span id="cb6-55"><a href="#cb6-55"></a><span class="in">```</span></span>
+<span id="cb6-56"><a href="#cb6-56"></a></span>
+<span id="cb6-59"><a href="#cb6-59"></a><span class="in">```{julia}</span></span>
+<span id="cb6-60"><a href="#cb6-60"></a><span class="in">xlim = (minimum(X[1,:]),maximum(X[1,:]))</span></span>
+<span id="cb6-61"><a href="#cb6-61"></a><span class="in">ylim = (minimum(X[2,:]),maximum(X[2,:]))</span></span>
+<span id="cb6-62"><a href="#cb6-62"></a><span class="in">anim = Animation()</span></span>
+<span id="cb6-63"><a href="#cb6-63"></a><span class="in">for N in 1:1:length(data)</span></span>
+<span id="cb6-64"><a href="#cb6-64"></a><span class="in">    la = laplace(nn, λ=λ, subset_of_weights=:last_layer)</span></span>
+<span id="cb6-65"><a href="#cb6-65"></a><span class="in">    fit!(la, Iterators.take(data,N))</span></span>
+<span id="cb6-66"><a href="#cb6-66"></a><span class="in">    Xᵢ = reduce(vcat,map(d -&gt; reshape(d[1],1,length(d[1])),Iterators.take(data, N)))</span></span>
+<span id="cb6-67"><a href="#cb6-67"></a><span class="in">    yᵢ = map(d -&gt; d[2],Iterators.take(data, N))</span></span>
+<span id="cb6-68"><a href="#cb6-68"></a><span class="in">    plt = plot_contour(Xᵢ,yᵢ,la;xlim=xlim,ylim=ylim,zoom=-2,clegend=false)</span></span>
+<span id="cb6-69"><a href="#cb6-69"></a><span class="in">    plt = plot(plt, axis=nothing,background_color=:transparent, size=(500,500))</span></span>
+<span id="cb6-70"><a href="#cb6-70"></a><span class="in">    frame(anim, plt)</span></span>
+<span id="cb6-71"><a href="#cb6-71"></a><span class="in">end</span></span>
+<span id="cb6-72"><a href="#cb6-72"></a><span class="in">```</span></span>
+<span id="cb6-73"><a href="#cb6-73"></a></span>
+<span id="cb6-76"><a href="#cb6-76"></a><span class="in">```{julia}</span></span>
+<span id="cb6-77"><a href="#cb6-77"></a><span class="in">gif(anim, "www/intro.gif", fps=50)</span></span>
+<span id="cb6-78"><a href="#cb6-78"></a><span class="in">```</span></span>
+<span id="cb6-79"><a href="#cb6-79"></a></span>
+<span id="cb6-82"><a href="#cb6-82"></a><span class="in">```{julia}</span></span>
+<span id="cb6-83"><a href="#cb6-83"></a><span class="in">xlim = (minimum(X[1,:]),maximum(X[1,:]))</span></span>
+<span id="cb6-84"><a href="#cb6-84"></a><span class="in">ylim = (minimum(X[2,:]),maximum(X[2,:]))</span></span>
+<span id="cb6-85"><a href="#cb6-85"></a><span class="in">anim = Animation()</span></span>
+<span id="cb6-86"><a href="#cb6-86"></a><span class="in">for N in 1:1:length(data)</span></span>
+<span id="cb6-87"><a href="#cb6-87"></a><span class="in">    la = laplace(nn, λ=λ, subset_of_weights=:last_layer)</span></span>
+<span id="cb6-88"><a href="#cb6-88"></a><span class="in">    fit!(la, Iterators.take(data,N))</span></span>
+<span id="cb6-89"><a href="#cb6-89"></a><span class="in">    Xᵢ = reduce(vcat,map(d -&gt; reshape(d[1],1,length(d[1])),Iterators.take(data, N)))</span></span>
+<span id="cb6-90"><a href="#cb6-90"></a><span class="in">    yᵢ = map(d -&gt; d[2],Iterators.take(data, N))</span></span>
+<span id="cb6-91"><a href="#cb6-91"></a><span class="in">    plt = plot_contour(Xᵢ,yᵢ,la;xlim=xlim,ylim=ylim,zoom=-2,clegend=false)</span></span>
+<span id="cb6-92"><a href="#cb6-92"></a><span class="in">    plt = plot(plt, axis=nothing,background_color=:transparent, size=(1200,400))</span></span>
+<span id="cb6-93"><a href="#cb6-93"></a><span class="in">    frame(anim, plt)</span></span>
+<span id="cb6-94"><a href="#cb6-94"></a><span class="in">end</span></span>
+<span id="cb6-95"><a href="#cb6-95"></a><span class="in">gif(anim, "www/medium.gif", fps=50)</span></span>
+<span id="cb6-96"><a href="#cb6-96"></a><span class="in">```</span></span>
+<span id="cb6-97"><a href="#cb6-97"></a></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2023, Patrick Altmeyer</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.paltmeyer.com/">
+      <i class="bi bi-house" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/pat-alt">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/paltmey">
+      <i class="bi bi-twitter" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://medium.com/\@patrick.altmeyer">
+      <i class="bi bi-medium" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

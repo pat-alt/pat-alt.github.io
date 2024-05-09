@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Patrick Altmeyer">
+<meta name="dcterms.date" content="2022-04-07">
+<meta name="description" content="An opinionated, practical review celebrating the open-source community. I discuss why Quarto is nothing short of revolutionary and how I’ve been using it with Julia.">
+
+<title>Patrick Altmeyer - Julia and Quarto: a match made in heaven? 🌤</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../..//www/favicon.ico" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-BEEZ30787D"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
+</script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="Patrick Altmeyer - Julia and Quarto: a match made in heaven? 🌤">
+<meta property="og:description" content="An opinionated, practical review celebrating the open-source community. I discuss why Quarto is nothing short of revolutionary and how I’ve been using it with Julia.">
+<meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/julia-and-quarto-a-match-made-in-heaven/www/intro.gif">
+<meta property="og:site_name" content="Patrick Altmeyer">
+<meta name="twitter:title" content="Patrick Altmeyer - Julia and Quarto: a match made in heaven? 🌤">
+<meta name="twitter:description" content="An opinionated, practical review celebrating the open-source community. I discuss why Quarto is nothing short of revolutionary and how I’ve been using it with Julia.">
+<meta name="twitter:image" content="https://www.paltmeyer.com/blog/blog/posts/julia-and-quarto-a-match-made-in-heaven/www/intro.gif">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Patrick Altmeyer</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/publications/index.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/talks/index.html"> 
+<span class="menu-text">Talks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/software.html"> 
+<span class="menu-text">Software</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../content/about/index.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../../blog/index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/pat-alt"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/paltmey"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#sec-bubble" id="toc-sec-bubble" class="nav-link active" data-scroll-target="#sec-bubble">A comfortable bubble 🎈</a></li>
+  <li><a href="#sec-match" id="toc-sec-match" class="nav-link" data-scroll-target="#sec-match">Quarto and Julia: a perfect match 💙💜💚</a></li>
+  <li><a href="#wrapping-up" id="toc-wrapping-up" class="nav-link" data-scroll-target="#wrapping-up">Wrapping up 🎗</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Julia and Quarto: a match made in heaven? 🌤</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">A new way to publish science</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">scientific publishing</div>
+    <div class="quarto-category">Quarto</div>
+    <div class="quarto-category">Julia</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    An opinionated, practical review celebrating the open-source community. I discuss why Quarto is nothing short of revolutionary and how I’ve been using it with Julia.
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://www.paltmeyer.com/">Patrick Altmeyer</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://www.tudelft.nl/en/">
+            Delft University of Technology
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 7, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="intro-gif">
+<figure class="figure">
+<img src="www/intro.gif" class="figure-img">
+<figcaption>
+Julia and Quarto: a perfect match.
+</figcaption>
+</figure>
+</div>
+<p>Does your work involve research, coding, writing and publishing? If so, then chances are that you often find yourself bouncing back and forth between different open-source text editors, IDEs, programming languages and platforms depending on your current needs. Using a diverse set of tools is reasonable, because there typically is no single perfect approach that solves all our problems. For example, interactive notebooks like Jupyter are useful for working with code and communicating it to others, but they are probably not anyone’s first choice for producing a scientific article. Similarly, Beamer presentations can be useful for presenting science in a standardized fashion, but they are the very opposite of interactive and look incredibly boring.</p>
+<p>As much as the great variety of free tools deserves being celebrated, all this bouncing back and forth can be really tiring. What if there was a single tool, an engine that can turn your work into all kinds of different outputs? I mean literally any output you can think of: Markdown, HTML, PDF, LateX, ePub, entire websites, presentations (yes, also Beamer if you have to), MS Word, OpenOffice, … the list goes on. All of that starting from the same place: a plain Markdown document blended with essentially any programming language of your choice and a YAML header defining your output. This tool now exists and it goes by the name <a href="https://quarto.org/">Quarto</a>.</p>
+<p>In this short blog post I hope to convince you that Quarto is the only publishing engine you will ever need. What I am definitely not going to tell you is which IDE, text editor or programming language you should be using to actually produce your work. Quarto does not care about that. Quarto is here to make your life a bit easier (and by ‘a bit’ I mean a whole lot). Quarto is nothing less but a revolution for scientific publishing.</p>
+<p>To put this all in some context (well, my context), I will now tell you a bit about what has led me to making such bold claims about yet another open-source tool.</p>
+<blockquote class="blockquote">
+<p>Hold up?! Wasn’t this supposed to be about Julia and Quarto?</p>
+</blockquote>
+<p>Yes! But it’s worth noting that a lot of the benefits that Quarto brings have been available to R users for many years, thanks to the amazing work of many great open-source contributors like <a href="https://twitter.com/xieyihui">@xieyihui</a>. Julia was the main reason for me to branch out of this comfortable R bubble as I describe below. That said, if you are a Julia user who really couldn’t care less about my previous experiences with R Markdown, this is a good time to skip straight ahead to <a href="#sec-match" class="quarto-xref">Section&nbsp;2</a>. By the way, if you haven’t clicked on that link, here’s a small showcase demonstrating how it was generated. It shows easy it is to have everything well organised and connected with Quarto.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Cross-referencing
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There is a standard recipe for generating cross-references in Quarto. The example below involves a section cross-reference.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a>If you are a Julia user that really couldn't care less about my previous experiences with R Markdown, this is a good time to skip straight ahead to @sec-match.</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">## Quarto and Julia - a perfect match {#sec-match}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>There is actually a comprehensive 8-step guide explaining how to achieve something similar in MS Word, but personally I wouldn’t go there. Anyway, take your pick:</p>
+<ol type="a">
+<li>🔴 <a href="https://support.microsoft.com/en-us/office/create-a-cross-reference-300b208c-e45a-487a-880b-a02767d9774b">Go there</a>.</li>
+<li>🟢 Move on to <a href="#sec-bubble" class="quarto-xref">Section&nbsp;1</a> #safespace.</li>
+</ol>
+</div>
+</div>
+<section id="sec-bubble" class="level2">
+<h2 class="anchored" data-anchor-id="sec-bubble">A comfortable bubble 🎈</h2>
+<p>For many years I have used R Markdown for essentially anything work-related. As an undergraduate economics student facing the unfortunate reality that people still teach Stata, I was drawn to R. This was partially because R has a great open-source community and also partially because Stata. Once I realised that I would be able to use R Markdown to write up all of my future homework assignments and even my thesis, I never looked back. MS Word was now officially dead to me. Overleaf was nothing more than a last resort if everyone else in my team insisted on using it for a group project. Being able to write my undergraduate dissertation in R Markdown was a first truly triumphant moment. Soon after that I would also try myself at Shiny, produce outputs in HTML and build entire websites through <code>blogdown</code>. And all of that from within R Studio involving R and Markdown and really not much else. During my first professional job at the Bank of England I was reluctant to use anything other than R Markdown to produce all of my output. Luckily for me, the Bank was very much heading in that same direction at the time and my reluctance was not perceived as stubbornness, but actually welcome (at least I hoped so).</p>
+<section id="cracks-in-the-bubble" class="level4">
+<h4 class="anchored" data-anchor-id="cracks-in-the-bubble">Cracks in the bubble 🧨</h4>
+<p>Soon though, part of me felt a little boxed in. For any work that required me to look outside of the R bubble, I knew I might also have to give up a very, very comfortable work environment and my productivity would surely take a hit. During my master’s in Data Science, for example, the mantra was very much “Python + Jupyter or die”. Through <a href="https://rstudio.github.io/reticulate/"><code>reticulate</code></a> and R Studio’s growing support for Python I managed to get by without having to leave my bubble too often. But <code>reticulate</code> always felt a little clunky (sorry!) and some professors were reluctant to accept anything other than Jupyter notebooks. Even if others had not perceived it that way in the past, I certainly started to feel that I might just be a little too attached the beautiful bubble that R Studio had created around me.</p>
+</section>
+<section id="enter-julia" class="level4">
+<h4 class="anchored" data-anchor-id="enter-julia">Enter: Julia 💣</h4>
+<p>Then there was Julia: elegant, fast, pure, scientific and - oh my REPL! - those beautiful colors and unicode symbols. The stuff of dreams, really! Geeky dreams, but dreams nonetheless. I had once before given Julia a shot when working with high-frequency trade data for a course in market microstructure. This was the first time R really revealed its limitations to me and my bubble nearly burst, but thanks to <code>data.table</code> and <code>Rcpp</code> I managed to escape with only minor bruises. Still, Julia kept popping up, teasing me whenever I would work on some Frakenstein-style C++ code snippets that would hopefully resolve my R bottlenecks. I actually enjoyed mixing <strong>some</strong> C++ into my R code like I did <a href="https://github.com/pat-alt/reinforcement_learning">here</a>, but the process was just a little painful and slow. But wouldn’t learning <strong>all of</strong> Julia take even more time and patience? And what about my dependence on R Markdown?</p>
+</section>
+<section id="julia-bursts-my-bubble" class="level4">
+<h4 class="anchored" data-anchor-id="julia-bursts-my-bubble">Julia bursts my bubble 💥</h4>
+<p>As I started my PhD in September 2021, I eventually gave in. New beginnings - time to suck it up! If it meant that I’d have to use Jupyter notebooks with Julia, so be it! And so I was off to a somewhat bumpy start that would have me bouncing back and forth between trying to make Julia work in R Studio (meh), setting up Jupyter Lab (meeeh), just using the Julia REPL because “the REPL is all you need” (nope) and even struggling with Vim and Emacs. Then there was also <code>Pluto.jl</code>, of course, which admittedly looks amazing! But it also looks very much tailored to Julia and (I believe) the number of different output formats you can produce is still very limited. Eventually, I settled for VSCode in combination with Jupyter notebooks. As much as I dreaded the latter, Jupyter is popular, arguably versatile and supports both R and Julia. This setup worked well enough for me, but it still definitely fell short of the breeze that R Studio had always provided. One thing that really bugged me, for example, was the fact that the IJulia kernel was not accessible from the Julia REPL. Each notebook would have its own environment, which could only be accessed through the notebook. In R Studio the interaction between R Markdown and the console is seamless, as both have access to the same environment variables.</p>
+</section>
+<section id="enter-quarto" class="level4">
+<h4 class="anchored" data-anchor-id="enter-quarto">Enter: Quarto ❤️‍🩹</h4>
+<p>Around the same time that I started using Julia, I read about Quarto for the first time. It looked … great! Like a timely little miracle really! But also … unfinished? Definitely experimental at the time. I loved the idea though and in a footnote somewhere on their website it said that the project was supported by R Studio which I took as a very good sign. So I decided to at least give it a quick try and built a small (tiny) <a href="https://www.paltmeyer.com/tai/">website</a> summarising some of the literature I had read for my PhD:</p>
+<blockquote class="twitter-tweet blockquote">
+<p lang="en" dir="ltr">
+Just had my first go <a href="https://twitter.com/hashtag/quarto?src=hash&amp;ref_src=twsrc%5Etfw">#quarto</a> and I absolutely love the concept! Open-source and language agnostic - truly amazing work from <a href="https://twitter.com/rstudio?ref_src=twsrc%5Etfw">&amp;#64rstudio</a> <a href="https://t.co/veCg7ywQ8v">https://t.co/veCg7ywQ8v</a>
+</p>
+— Patrick Altmeyer (&amp;#64paltmey) <a href="https://twitter.com/paltmey/status/1454042807019180035?ref_src=twsrc%5Etfw">October 29, 2021</a>
+</blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>This was a first very pleasant encounter with Quarto, arguable even smoother than building websites in <code>blogdown</code>. As for working with Julia though, I had made up my mind that VSCode was the way to go and at the time there was no Quarto extension (there is <a href="https://marketplace.visualstudio.com/items?itemName=quarto.quarto">now</a>). There was also little in terms of communication about the project by R Studio, probably because things were really still in the early development stages. I was hopeful that eventually Quarto would enable me to emulate the R Studio experience in VS Code, but for now things were not quite there yet.</p>
+</section>
+<section id="quarto-keeps-growing" class="level4">
+<h4 class="anchored" data-anchor-id="quarto-keeps-growing">Quarto keeps growing 🤞</h4>
+<p>Since I was now working with VSCode + Jupyter and since Quarto supports Jupyter as well as all of my old R Markdown work, my next little Quarto project involved turning my old <code>blogdown</code>-powered blog into a Quarto-powered <a href="https://www.paltmeyer.com/blog/">blog</a>. This was not strictly necessary, as I could always export my new Jupyter notebooks to HTML and let <code>blogdown</code> do the rest. But it did streamline things a little bit and the default Quarto blog theme - you are staring at it - is actually 🔥. I also did not have to feel guilty towards <a href="https://twitter.com/xieyihui">@xieyihui</a> about leaving <code>blogdown</code>, because unsurprisingly he is on the Quarto team. As I was working on this little project I started noticing that the Quarto website was updated regularly and responses to issues I opened like this <a href="https://github.com/quarto-dev/quarto-cli/issues/293">one</a> were answered very swiftly. Clearly, things were moving and they were moving fast. More recently, the news about Quarto has been spreading and it’s left some folks as confused and amazed as I was, when I first heard about it:</p>
+<blockquote class="twitter-tweet blockquote">
+<p lang="en" dir="ltr">
+<a href="https://twitter.com/hashtag/RStats?src=hash&amp;ref_src=twsrc%5Etfw">#RStats</a> can someone explain to me what's the difference between {Quarto} and {RMarkdown}? I saw a tweet about Quarto and now I'm all confused … What gap is it supposed to fill?
+</p>
+— Erwin Lares (&amp;#64lasrubieras) <a href="https://twitter.com/lasrubieras/status/1509014670262390784?ref_src=twsrc%5Etfw">March 30, 2022</a>
+</blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>This is why finally I’ve decided I should write a brief post about how and why I use Quarto. Since I have been working mostly with Julia for the past couple of months, I’ve chosen to focus on the interaction between Quarto and Julia. Coincidentally, yesterday was also the first time I saw a <a href="https://quarto.org/docs/computations/julia.html">guide</a> dedicated to Julia on the Quarto website, so evidently I am not the only one interested in that marriage. This also means that there really is not too much left for me to talk about now, since Quarto’s documentation is state-of-the-art. But a few bits and pieces I mention below might hopefully still be useful or at least some food for thought.</p>
+</section>
+</section>
+<section id="sec-match" class="level2">
+<h2 class="anchored" data-anchor-id="sec-match">Quarto and Julia: a perfect match 💙💜💚</h2>
+<p>While what follows may be relevant to other programming languages, my main goal for this last section is to flag Quarto to the Julia community. In any case, #rstats folks have been using R and Python in R Markdown documents for a while now and won’t need much of an introduction to Quarto. As for Python aficionados, I can only recommend to give Quarto a shot (you will still be able to use Jupyter notebooks).</p>
+<section id="working-with-vscode-quarto-and-julia" class="level4">
+<h4 class="anchored" data-anchor-id="working-with-vscode-quarto-and-julia">Working with VSCode, Quarto and Julia</h4>
+<p>The very article you are reading right now was composed in a Quarto document. These documents feel and look very much like standard Julia Markdown documents, but you can do a lot more with them. You can find the source code for this and other documents presented in this blog <a href="https://github.com/pat-alt/blog">here</a>.</p>
+<p>To get you started, here is my current setup combining VSCode, Quarto and Julia:</p>
+<ol type="1">
+<li>VSCode extensions: in addition to the <a href="https://marketplace.visualstudio.com/items?itemName=julialang.language-julia">Julia extension</a> you will need the <a href="https://marketplace.visualstudio.com/items?itemName=quarto.quarto">Quarto extension</a>. In addition, the <a href="https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml">YAML extension</a> and some extension to preview Markdown docs would be helpful. I am not sure if <a href="https://marketplace.visualstudio.com/items?itemName=colinfang.markdown-julia">Markdown Julia</a> and <a href="https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter">Jupyter</a> are strictly necessary, but it won’t hurt.</li>
+<li>I do most of my work in Quarto documents <code>.qmd</code>.</li>
+<li>If you choose to also do that, make sure that the <code>.qmd</code> document has access to a <code>Pkg.jl</code> environment that has <code>IJulia</code> added.</li>
+</ol>
+<p>Julia code cells can be added anywhere along with your plain text Markdown. They look like this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1"></a><span class="in">```{julia}</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="in">using Pkg</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="in">Pkg.add("CounterfactualExplanations")</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Contrary to Jupyter notebooks, executing this code cells will start a Julia REPL in VSCode. I find this very helpful, because it lets me fiddle with anything I have created inside the Quarto notebook without having to click into cells all the time. Quarto comes with great support for specifying <a href="https://quarto.org/docs/computations/julia.html">code executing options</a>. For example, for the code below I have specified <code>#| echo: true</code> in order for the code to be rendered. The code itself is the code I actually used to build the animation above (heavily borrowed from this <code>Javis.jl</code> <a href="https://juliaanimators.github.io/Javis.jl/stable/tutorials/tutorial_7/">tutorial</a>).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="im">using</span> <span class="bu">Javis</span>, <span class="bu">Animations</span>, <span class="bu">Colors</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a>size <span class="op">=</span> <span class="fl">600</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>radius_factor <span class="op">=</span> <span class="fl">0.33</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="kw">function</span> <span class="fu">ground</span>(args<span class="op">...</span>)</span>
+<span id="cb3-8"><a href="#cb3-8"></a>    <span class="fu">background</span>(<span class="st">"transparent"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9"></a>    <span class="fu">sethue</span>(<span class="st">"white"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="kw">end</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="kw">function</span> <span class="fu">rotate_anim</span>(idx<span class="op">::</span><span class="dt">Number</span>, total<span class="op">::</span><span class="dt">Number</span>) </span>
+<span id="cb3-13"><a href="#cb3-13"></a>    distance_circle <span class="op">=</span> <span class="fl">0.875</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a>    steps <span class="op">=</span> <span class="fu">collect</span>(<span class="fu">range</span>(distance_circle,<span class="fl">1</span><span class="op">-</span>distance_circle,length<span class="op">=</span>total))</span>
+<span id="cb3-15"><a href="#cb3-15"></a>    <span class="fu">Animation</span>(</span>
+<span id="cb3-16"><a href="#cb3-16"></a>        [<span class="fl">0</span>, <span class="fl">1</span>], <span class="co"># must go from 0 to 1</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a>        [<span class="fl">0</span>, steps[idx]<span class="op">*</span><span class="fl">2</span>π],</span>
+<span id="cb3-18"><a href="#cb3-18"></a>        [<span class="fu">sineio</span>()],</span>
+<span id="cb3-19"><a href="#cb3-19"></a>    )</span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="kw">end</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a></span>
+<span id="cb3-22"><a href="#cb3-22"></a>translate_anim <span class="op">=</span> <span class="fu">Animation</span>(</span>
+<span id="cb3-23"><a href="#cb3-23"></a>    [<span class="fl">0</span>, <span class="fl">1</span>], <span class="co"># must go from 0 to 1</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a>    [O, <span class="fu">Point</span>(size<span class="op">*</span>radius_factor, <span class="fl">0</span>)],</span>
+<span id="cb3-25"><a href="#cb3-25"></a>    [<span class="fu">sineio</span>()],</span>
+<span id="cb3-26"><a href="#cb3-26"></a>)</span>
+<span id="cb3-27"><a href="#cb3-27"></a></span>
+<span id="cb3-28"><a href="#cb3-28"></a>translate_back_anim <span class="op">=</span> <span class="fu">Animation</span>(</span>
+<span id="cb3-29"><a href="#cb3-29"></a>    [<span class="fl">0</span>, <span class="fl">1</span>], <span class="co"># must go from 0 to 1</span></span>
+<span id="cb3-30"><a href="#cb3-30"></a>    [O, <span class="fu">Point</span>(<span class="fu">-</span>(size<span class="op">*</span>radius_factor), <span class="fl">0</span>)],</span>
+<span id="cb3-31"><a href="#cb3-31"></a>    [<span class="fu">sineio</span>()],</span>
+<span id="cb3-32"><a href="#cb3-32"></a>)</span>
+<span id="cb3-33"><a href="#cb3-33"></a></span>
+<span id="cb3-34"><a href="#cb3-34"></a>julia_colours <span class="op">=</span> <span class="fu">Dict</span>(</span>
+<span id="cb3-35"><a href="#cb3-35"></a>    <span class="op">:</span>blue <span class="op">=&gt;</span> <span class="st">"#4063D8"</span>,</span>
+<span id="cb3-36"><a href="#cb3-36"></a>    <span class="op">:</span>green <span class="op">=&gt;</span> <span class="st">"#389826"</span>,</span>
+<span id="cb3-37"><a href="#cb3-37"></a>    <span class="op">:</span>purple <span class="op">=&gt;</span> <span class="st">"#9558b2"</span>,</span>
+<span id="cb3-38"><a href="#cb3-38"></a>    <span class="op">:</span>red <span class="op">=&gt;</span> <span class="st">"#CB3C33"</span></span>
+<span id="cb3-39"><a href="#cb3-39"></a>)</span>
+<span id="cb3-40"><a href="#cb3-40"></a>colour_order <span class="op">=</span> [<span class="op">:</span>red, <span class="op">:</span>purple, <span class="op">:</span>green, <span class="op">:</span>blue]</span>
+<span id="cb3-41"><a href="#cb3-41"></a>n_colours <span class="op">=</span> <span class="fu">length</span>(julia_colours)</span>
+<span id="cb3-42"><a href="#cb3-42"></a><span class="kw">function</span> <span class="fu">color_anim</span>(start_colour<span class="op">::</span><span class="dt">String</span>, quarto_col<span class="op">::</span><span class="dt">String</span>=<span class="st">"#4b95d0"</span>)</span>
+<span id="cb3-43"><a href="#cb3-43"></a>    <span class="fu">Animation</span>(</span>
+<span id="cb3-44"><a href="#cb3-44"></a>        [<span class="fl">0</span>, <span class="fl">1</span>], <span class="co"># must go from 0 to 1</span></span>
+<span id="cb3-45"><a href="#cb3-45"></a>        [<span class="fu">Lab</span>(<span class="fu">color</span>(start_colour)), <span class="fu">Lab</span>(<span class="fu">color</span>(quarto_col))],</span>
+<span id="cb3-46"><a href="#cb3-46"></a>        [<span class="fu">sineio</span>()],</span>
+<span id="cb3-47"><a href="#cb3-47"></a>    )</span>
+<span id="cb3-48"><a href="#cb3-48"></a><span class="kw">end</span></span>
+<span id="cb3-49"><a href="#cb3-49"></a></span>
+<span id="cb3-50"><a href="#cb3-50"></a>video <span class="op">=</span> <span class="fu">Video</span>(size, size)</span>
+<span id="cb3-51"><a href="#cb3-51"></a></span>
+<span id="cb3-52"><a href="#cb3-52"></a>frame_starts <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">:</span><span class="fl">40</span></span>
+<span id="cb3-53"><a href="#cb3-53"></a>n_total <span class="op">=</span> <span class="fl">250</span></span>
+<span id="cb3-54"><a href="#cb3-54"></a>n_frames <span class="op">=</span> <span class="fl">150</span></span>
+<span id="cb3-55"><a href="#cb3-55"></a><span class="fu">Background</span>(<span class="fl">1</span><span class="op">:</span>n_total, ground)</span>
+<span id="cb3-56"><a href="#cb3-56"></a></span>
+<span id="cb3-57"><a href="#cb3-57"></a><span class="co"># Blob:</span></span>
+<span id="cb3-58"><a href="#cb3-58"></a><span class="kw">function</span> <span class="fu">element</span>(; radius <span class="op">=</span> <span class="fl">1</span>)</span>
+<span id="cb3-59"><a href="#cb3-59"></a>    <span class="fu">circle</span>(O, radius, <span class="op">:</span>fill) <span class="co"># The 4 is to make the circle not so small</span></span>
+<span id="cb3-60"><a href="#cb3-60"></a><span class="kw">end</span></span>
+<span id="cb3-61"><a href="#cb3-61"></a></span>
+<span id="cb3-62"><a href="#cb3-62"></a><span class="co"># Cross:</span></span>
+<span id="cb3-63"><a href="#cb3-63"></a><span class="kw">function</span> <span class="fu">cross</span>(color<span class="op">=</span><span class="st">"black"</span>;orientation<span class="op">=:</span>horizontal)</span>
+<span id="cb3-64"><a href="#cb3-64"></a>    <span class="fu">sethue</span>(color)</span>
+<span id="cb3-65"><a href="#cb3-65"></a>    <span class="fu">setline</span>(<span class="fl">10</span>)</span>
+<span id="cb3-66"><a href="#cb3-66"></a>    <span class="cf">if</span> orientation<span class="op">==:</span>horizontal</span>
+<span id="cb3-67"><a href="#cb3-67"></a>        out <span class="op">=</span> <span class="fu">line</span>(<span class="fu">Point</span>(<span class="op">-</span>size,<span class="fl">0</span>),<span class="fu">Point</span>(size,<span class="fl">0</span>), <span class="op">:</span>stroke)</span>
+<span id="cb3-68"><a href="#cb3-68"></a>    <span class="cf">else</span></span>
+<span id="cb3-69"><a href="#cb3-69"></a>        out <span class="op">=</span> <span class="fu">line</span>(<span class="fu">Point</span>(<span class="fl">0</span>,<span class="op">-</span>size),<span class="fu">Point</span>(<span class="fl">0</span>,size), <span class="op">:</span>stroke)</span>
+<span id="cb3-70"><a href="#cb3-70"></a>    <span class="cf">end</span></span>
+<span id="cb3-71"><a href="#cb3-71"></a>    <span class="cf">return</span> out</span>
+<span id="cb3-72"><a href="#cb3-72"></a><span class="kw">end</span></span>
+<span id="cb3-73"><a href="#cb3-73"></a></span>
+<span id="cb3-74"><a href="#cb3-74"></a><span class="cf">for</span> (i, frame_start) <span class="kw">in</span> <span class="fu">enumerate</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">:</span><span class="fl">40</span>)</span>
+<span id="cb3-75"><a href="#cb3-75"></a></span>
+<span id="cb3-76"><a href="#cb3-76"></a>    <span class="co"># Julia circles:</span></span>
+<span id="cb3-77"><a href="#cb3-77"></a>    blob <span class="op">=</span> <span class="fu">Object</span>(frame_start<span class="op">:</span>n_total, (args<span class="op">...</span>;radius<span class="op">=</span><span class="fl">1</span>) <span class="op">-&gt;</span> <span class="fu">element</span>(;radius<span class="op">=</span>radius))</span>
+<span id="cb3-78"><a href="#cb3-78"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">1</span><span class="op">:</span><span class="fu">Int</span>(<span class="fu">round</span>(n_frames<span class="op">*</span><span class="fl">0.25</span>)), <span class="fu">change</span>(<span class="op">:</span>radius, <span class="fl">1</span> <span class="op">=&gt;</span> <span class="fl">75</span>))) <span class="co"># scale up</span></span>
+<span id="cb3-79"><a href="#cb3-79"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(n_frames<span class="op">:</span>(n_frames<span class="op">+</span><span class="fl">50</span>), <span class="fu">change</span>(<span class="op">:</span>radius, <span class="fl">75</span> <span class="op">=&gt;</span> <span class="fl">250</span>))) <span class="co"># scale up further</span></span>
+<span id="cb3-80"><a href="#cb3-80"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, translate_anim, <span class="fu">translate</span>()))</span>
+<span id="cb3-81"><a href="#cb3-81"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">31</span><span class="op">:</span><span class="fl">120</span>, <span class="fu">rotate_anim</span>(i, n_colours), <span class="fu">rotate_around</span>(<span class="fu">Point</span>(<span class="fu">-</span>(size<span class="op">*</span>radius_factor), <span class="fl">0</span>))))</span>
+<span id="cb3-82"><a href="#cb3-82"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">121</span><span class="op">:</span><span class="fl">150</span>, translate_back_anim, <span class="fu">translate</span>()))</span>
+<span id="cb3-83"><a href="#cb3-83"></a>    <span class="fu">act!</span>(blob, <span class="fu">Action</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">150</span>, <span class="fu">color_anim</span>(julia_colours[colour_order[i]]), <span class="fu">sethue</span>()))</span>
+<span id="cb3-84"><a href="#cb3-84"></a></span>
+<span id="cb3-85"><a href="#cb3-85"></a>    <span class="co"># Quarto cross:</span></span>
+<span id="cb3-86"><a href="#cb3-86"></a>    cross_h <span class="op">=</span> <span class="fu">Object</span>((n_frames<span class="op">+</span><span class="fl">50</span>)<span class="op">:</span>n_total, (args<span class="op">...</span>) <span class="op">-&gt;</span> <span class="fu">cross</span>(;orientation<span class="op">=:</span>horizontal))</span>
+<span id="cb3-87"><a href="#cb3-87"></a>    cross_v <span class="op">=</span> <span class="fu">Object</span>((n_frames<span class="op">+</span><span class="fl">50</span>)<span class="op">:</span>n_total, (args<span class="op">...</span>) <span class="op">-&gt;</span> <span class="fu">cross</span>(;orientation<span class="op">=:</span>vertical))</span>
+<span id="cb3-88"><a href="#cb3-88"></a><span class="cf">end</span></span>
+<span id="cb3-89"><a href="#cb3-89"></a></span>
+<span id="cb3-90"><a href="#cb3-90"></a><span class="fu">render</span>(</span>
+<span id="cb3-91"><a href="#cb3-91"></a>    video;</span>
+<span id="cb3-92"><a href="#cb3-92"></a>    pathname <span class="op">=</span> <span class="fu">joinpath</span>(www_path, <span class="st">"intro.gif"</span>),</span>
+<span id="cb3-93"><a href="#cb3-93"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="working-with-documenter.jl-and-quarto" class="level4">
+<h4 class="anchored" data-anchor-id="working-with-documenter.jl-and-quarto">Working with <code>Documenter.jl</code> and Quarto</h4>
+<p>An interesting application of Quarto in the Julia ecosystem is package documentation. This is of course best done using <code>Documenter.jl</code> and fortunately the two play nicely with each other, since both share a common ground (Markdown). Their interaction is perhaps best demonstrated through this Julia library I recently developed: <a href="https://github.com/juliatrustworthyai/CounterfactualExplanations.jl"><code>CounterfactualExplanatinos.jl</code></a>. On there you will find lot of Julia scripts <code>*.jl</code> under <code>src/</code> and <code>test/</code>, as well as many Markdown <code>.md</code> and Quarto documents <code>.qmd</code> under <code>docs</code>. I <em>wrote</em> the package documentation in the Quarto documents, <em>rendered</em> documents individually through <code>quarto render [doc].qmd</code> and then fed the resulting Markdown documents to <code>Documenter.jl</code> as always.</p>
+<p>Below is my standard YAML header for those Quarto documents:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="at">  </span><span class="fu">commonmark</span><span class="kw">:</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="at">    </span><span class="fu">variant</span><span class="kw">:</span><span class="at"> -raw_html</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="at">    </span><span class="fu">wrap</span><span class="kw">:</span><span class="at"> none</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="at">    </span><span class="fu">self-contained</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="fu">crossref</span><span class="kw">:</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="at">  </span><span class="fu">fig-prefix</span><span class="kw">:</span><span class="at"> Figure</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="at">  </span><span class="fu">tbl-prefix</span><span class="kw">:</span><span class="at"> Table</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="fu">bibliography</span><span class="kw">:</span><span class="at"> https://raw.githubusercontent.com/pat-alt/bib/main/bib.bib</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="fu">output</span><span class="kw">:</span><span class="at"> asis</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="fu">execute</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="at">  </span><span class="fu">echo</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="at">  </span><span class="fu">eval</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="fu">jupyter</span><span class="kw">:</span><span class="at"> julia-1.7</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can see that it points to Bibtex file I host on another Github repository. This makes it very easy to generate citations and references for the rendered Markdown documents, that also show up in the docs (e.g.&nbsp;<a href="https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/cats_dogs/">here</a>). Unfortunately, cross-referencing only partially works, because it relies on auto-generated HTML and <code>Documenter.jl</code> expects this to be passed in blocks. Choosing <code>variant: -raw_html</code> is only a workaround as I have discussed <a href="https://github.com/JuliaDocs/Documenter.jl/issues/1778">here</a>. Ideally, <code>Documenter.jl</code> would just accept HTML documents rendered from Quarto, but currently only Markdown documents are accepted by <code>make_docs</code>. Still, if anything this workaround is a nice gimmick that extends the default <code>Documenter.jl</code> functionality, without any hassle involved. Hopefully, this can be improved in the future.</p>
+</section>
+<section id="using-quarto-for-juliacon-proceedings" class="level4">
+<h4 class="anchored" data-anchor-id="using-quarto-for-juliacon-proceedings">Using Quarto for JuliaCon Proceedings</h4>
+<p>Another very good use-case for Quarto involves actual scientific publications in journals such as JuliaCon Proceedings. The existing submission process is tailored towards reproducibility and actually involves reviews directly on GitHub, which is fantastic. But currently only submissions in TeX format are accepted, which is not so great. Using Quarto would not only streamline this process further, but also open the JuliaCon Proceedings Journal up to publishing content in different output formats. Quarto docs could be used to still render the traditional PDF. But those same documents could also be used to create interactive versions in HTML. Arguably, the entire journal could probably be built through Quarto.</p>
+</section>
+</section>
+<section id="wrapping-up" class="level2">
+<h2 class="anchored" data-anchor-id="wrapping-up">Wrapping up 🎗</h2>
+<p>In this post I wanted to demonstrate that Quarto might just be the next revolution in scientific publishing. In particular, I hope I have managed to demonstrate its appeal to the Julia community, which I am proud to be part of now that I have managed to branch out of my old R bubble. Please let me hear your thoughts and comments below!</p>
+
+
+<!-- -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
+  author = {Altmeyer, Patrick},
+  title = {Julia and {Quarto:} A Match Made in Heaven? 🌤},
+  date = {2022-04-07},
+  url = {https://www.paltmeyer.com/blog//blog/posts/julia-and-quarto-a-match-made-in-heaven},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas" role="listitem">
+Altmeyer, Patrick. 2022. <span>“Julia and Quarto: A Match Made in
+Heaven? 🌤.”</span> April 7, 2022. <a href="https://www.paltmeyer.com/blog//blog/posts/julia-and-quarto-a-match-made-in-heaven">https://www.paltmeyer.com/blog//blog/posts/julia-and-quarto-a-match-made-in-heaven</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">---</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="an">title:</span><span class="co"> 'Julia and Quarto: a match made in heaven? 🌤'</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="an">subtitle:</span><span class="co"> A new way to publish science</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="an">date:</span><span class="co"> '2022-04-07'</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="an">categories:</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">  - scientific publishing</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">  - Quarto</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">  - Julia</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="an">description:</span><span class="co"> &gt;-</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">  An opinionated, practical review celebrating the open-source community. I discuss why Quarto is nothing short of revolutionary and how I've been using it with Julia. </span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="an">bibliography:</span><span class="co"> https://raw.githubusercontent.com/pat-alt/bib/main/bib.bib</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="an">image:</span><span class="co"> www/intro.gif</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="an">comments:</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="co">  utterances:</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="co">    repo: pat-alt/pat-alt.github.io</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="an">execute:</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="co">    echo: false</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="co">    eval: false</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="co">---</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a></span>
+<span id="cb5-23"><a href="#cb5-23"></a><span class="in">```{julia}</span></span>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="in">www_path = "blog/posts/julia-and-quarto-a-match-made-in-heaven/www"</span></span>
+<span id="cb5-25"><a href="#cb5-25"></a><span class="in">```</span></span>
+<span id="cb5-26"><a href="#cb5-26"></a></span>
+<span id="cb5-27"><a href="#cb5-27"></a>&lt;div class="intro-gif"&gt;</span>
+<span id="cb5-28"><a href="#cb5-28"></a>  &lt;figure&gt;</span>
+<span id="cb5-29"><a href="#cb5-29"></a>    &lt;img src="www/intro.gif"&gt;</span>
+<span id="cb5-30"><a href="#cb5-30"></a>    &lt;figcaption&gt;Julia and Quarto: a perfect match.&lt;/figcaption&gt;</span>
+<span id="cb5-31"><a href="#cb5-31"></a>  &lt;/figure&gt;</span>
+<span id="cb5-32"><a href="#cb5-32"></a>&lt;/div&gt;</span>
+<span id="cb5-33"><a href="#cb5-33"></a></span>
+<span id="cb5-34"><a href="#cb5-34"></a>Does your work involve research, coding, writing and publishing? If so, then chances are that you often find yourself bouncing back and forth between different open-source text editors, IDEs, programming languages and platforms depending on your current needs. Using a diverse set of tools is reasonable, because there typically is no single perfect approach that solves all our problems. For example, interactive notebooks like Jupyter are useful for working with code and communicating it to others, but they are probably not anyone's first choice for producing a scientific article. Similarly, Beamer presentations can be useful for presenting science in a standardized fashion, but they are the very opposite of interactive and look incredibly boring. </span>
+<span id="cb5-35"><a href="#cb5-35"></a></span>
+<span id="cb5-36"><a href="#cb5-36"></a>As much as the great variety of free tools deserves being celebrated, all this bouncing back and forth can be really tiring. What if there was a single tool, an engine that can turn your work into all kinds of different outputs? I mean literally any output you can think of: Markdown, HTML, PDF, LateX, ePub, entire websites, presentations (yes, also Beamer if you have to), MS Word, OpenOffice, ... the list goes on. All of that starting from the same place: a plain Markdown document blended with essentially any programming language of your choice and a YAML header defining your output. This tool now exists and it goes by the name <span class="co">[</span><span class="ot">Quarto</span><span class="co">](https://quarto.org/)</span>.</span>
+<span id="cb5-37"><a href="#cb5-37"></a></span>
+<span id="cb5-38"><a href="#cb5-38"></a>In this short blog post I hope to convince you that Quarto is the only publishing engine you will ever need. What I am definitely not going to tell you is which IDE, text editor or programming language you should be using to actually produce your work. Quarto does not care about that. Quarto is here to make your life a bit easier (and by 'a bit' I mean a whole lot). Quarto is nothing less but a revolution for scientific publishing. </span>
+<span id="cb5-39"><a href="#cb5-39"></a></span>
+<span id="cb5-40"><a href="#cb5-40"></a>To put this all in some context (well, my context), I will now tell you a bit about what has led me to making such bold claims about yet another open-source tool. </span>
+<span id="cb5-41"><a href="#cb5-41"></a></span>
+<span id="cb5-42"><a href="#cb5-42"></a><span class="at">&gt; Hold up?! Wasn't this supposed to be about Julia and Quarto?</span></span>
+<span id="cb5-43"><a href="#cb5-43"></a></span>
+<span id="cb5-44"><a href="#cb5-44"></a>Yes! But it's worth noting that a lot of the benefits that Quarto brings have been available to R users for many years, thanks to the amazing work of many great open-source contributors like <span class="co">[</span><span class="ot">\@xieyihui</span><span class="co">](https://twitter.com/xieyihui)</span>. Julia was the main reason for me to branch out of this comfortable R bubble as I describe below. That said, if you are a Julia user who really couldn't care less about my previous experiences with R Markdown, this is a good time to skip straight ahead to @sec-match. By the way, if you haven't clicked on that link, here's a small showcase demonstrating how it was generated. It shows easy it is to have everything well organised and connected with Quarto.</span>
+<span id="cb5-45"><a href="#cb5-45"></a></span>
+<span id="cb5-46"><a href="#cb5-46"></a>:::{.callout-tip}</span>
+<span id="cb5-47"><a href="#cb5-47"></a><span class="fu">## Cross-referencing</span></span>
+<span id="cb5-48"><a href="#cb5-48"></a></span>
+<span id="cb5-49"><a href="#cb5-49"></a>There is a standard recipe for generating cross-references in Quarto. The example below involves a section cross-reference.</span>
+<span id="cb5-50"><a href="#cb5-50"></a></span>
+<span id="cb5-51"><a href="#cb5-51"></a><span class="in">```` markdown</span></span>
+<span id="cb5-52"><a href="#cb5-52"></a>If you are a Julia user that really couldn't care less about my previous experiences with R Markdown, this is a good time to skip straight ahead to @sec-match.</span>
+<span id="cb5-53"><a href="#cb5-53"></a></span>
+<span id="cb5-54"><a href="#cb5-54"></a><span class="fu">## Quarto and Julia - a perfect match {#sec-match}</span></span>
+<span id="cb5-55"><a href="#cb5-55"></a><span class="in">````</span></span>
+<span id="cb5-56"><a href="#cb5-56"></a></span>
+<span id="cb5-57"><a href="#cb5-57"></a>There is actually a comprehensive 8-step guide explaining how to achieve something similar in MS Word, but personally I wouldn't go there. Anyway, take your pick: </span>
+<span id="cb5-58"><a href="#cb5-58"></a></span>
+<span id="cb5-59"><a href="#cb5-59"></a>a. 🔴 <span class="co">[</span><span class="ot">Go there</span><span class="co">](https://support.microsoft.com/en-us/office/create-a-cross-reference-300b208c-e45a-487a-880b-a02767d9774b)</span>.</span>
+<span id="cb5-60"><a href="#cb5-60"></a>b. 🟢 Move on to  @sec-bubble #safespace. </span>
+<span id="cb5-61"><a href="#cb5-61"></a>:::</span>
+<span id="cb5-62"><a href="#cb5-62"></a></span>
+<span id="cb5-63"><a href="#cb5-63"></a><span class="fu">## A comfortable bubble 🎈 {#sec-bubble}</span></span>
+<span id="cb5-64"><a href="#cb5-64"></a></span>
+<span id="cb5-65"><a href="#cb5-65"></a>For many years I have used R Markdown for essentially anything work-related. As an undergraduate economics student facing the unfortunate reality that people still teach Stata, I was drawn to R. This was partially because R has a great open-source community and also partially because Stata. Once I realised that I would be able to use R Markdown to write up all of my future homework assignments and even my thesis, I never looked back. MS Word was now officially dead to me. Overleaf was nothing more than a last resort if everyone else in my team insisted on using it for a group project. Being able to write my undergraduate dissertation in R Markdown was a first truly triumphant moment. Soon after that I would also try myself at Shiny, produce outputs in HTML and build entire websites through <span class="in">`blogdown`</span>. And all of that from within R Studio involving R and Markdown and really not much else. During my first professional job at the Bank of England I was reluctant to use anything other than R Markdown to produce all of my output. Luckily for me, the Bank was very much heading in that same direction at the time and my reluctance was not perceived as stubbornness, but actually welcome (at least I hoped so). </span>
+<span id="cb5-66"><a href="#cb5-66"></a></span>
+<span id="cb5-67"><a href="#cb5-67"></a><span class="fu">#### Cracks in the bubble 🧨</span></span>
+<span id="cb5-68"><a href="#cb5-68"></a></span>
+<span id="cb5-69"><a href="#cb5-69"></a>Soon though, part of me felt a little boxed in. For any work that required me to look outside of the R bubble, I knew I might also have to give up a very, very comfortable work environment and my productivity would surely take a hit. During my master's in Data Science, for example, the mantra was very much "Python + Jupyter or die". Through <span class="co">[</span><span class="ot">`reticulate`</span><span class="co">](https://rstudio.github.io/reticulate/)</span> and R Studio's growing support for Python I managed to get by without having to leave my bubble too often. But <span class="in">`reticulate`</span> always felt a little clunky (sorry!) and some professors were reluctant to accept anything other than Jupyter notebooks. Even if others had not perceived it that way in the past, I certainly started to feel that I might just be a little too attached the beautiful bubble that R Studio had created around me. </span>
+<span id="cb5-70"><a href="#cb5-70"></a></span>
+<span id="cb5-71"><a href="#cb5-71"></a><span class="fu">#### Enter: Julia 💣</span></span>
+<span id="cb5-72"><a href="#cb5-72"></a></span>
+<span id="cb5-73"><a href="#cb5-73"></a>Then there was Julia: elegant, fast, pure, scientific and - oh my REPL! - those beautiful colors and unicode symbols. The stuff of dreams, really! Geeky dreams, but dreams nonetheless. I had once before given Julia a shot when working with high-frequency trade data for a course in market microstructure. This was the first time R really revealed its limitations to me and my bubble nearly burst, but thanks to <span class="in">`data.table`</span> and <span class="in">`Rcpp`</span> I managed to escape with only minor bruises. Still, Julia kept popping up, teasing me whenever I would work on some Frakenstein-style C++ code snippets that would hopefully resolve my R bottlenecks. I actually enjoyed mixing **some** C++ into my R code like I did [here](https://github.com/pat-alt/reinforcement_learning), but the process was just a little painful and slow. But wouldn't learning **all of** Julia take even more time and patience? And what about my dependence on R Markdown?</span>
+<span id="cb5-74"><a href="#cb5-74"></a></span>
+<span id="cb5-75"><a href="#cb5-75"></a><span class="fu">#### Julia bursts my bubble 💥</span></span>
+<span id="cb5-76"><a href="#cb5-76"></a></span>
+<span id="cb5-77"><a href="#cb5-77"></a>As I started my PhD in September 2021, I eventually gave in. New beginnings - time to suck it up! If it meant that I'd have to use Jupyter notebooks with Julia, so be it! And so I was off to a somewhat bumpy start that would have me bouncing back and forth between trying to make Julia work in R Studio (meh), setting up Jupyter Lab (meeeh), just using the Julia REPL because "the REPL is all you need" (nope) and even struggling with Vim and Emacs. Then there was also <span class="in">`Pluto.jl`</span>, of course, which admittedly looks amazing! But it also looks very much tailored to Julia and (I believe) the number of different output formats you can produce is still very limited. Eventually, I settled for VSCode in combination with Jupyter notebooks. As much as I dreaded the latter, Jupyter is popular, arguably versatile and supports both R and Julia. This setup worked well enough for me, but it still definitely fell short of the breeze that R Studio had always provided. One thing that really bugged me, for example, was the fact that the IJulia kernel was not accessible from the Julia REPL. Each notebook would have its own environment, which could only be accessed through the notebook. In R Studio the interaction between R Markdown and the console is seamless, as both have access to the same environment variables. </span>
+<span id="cb5-78"><a href="#cb5-78"></a></span>
+<span id="cb5-79"><a href="#cb5-79"></a><span class="fu">#### Enter: Quarto ❤️‍🩹</span></span>
+<span id="cb5-80"><a href="#cb5-80"></a></span>
+<span id="cb5-81"><a href="#cb5-81"></a>Around the same time that I started using Julia, I read about Quarto for the first time. It looked ... great! Like a timely little miracle really! But also ... unfinished? Definitely experimental at the time. I loved the idea though and in a footnote somewhere on their website it said that the project was supported by R Studio which I took as a very good sign. So I decided to at least give it a quick try and built a small (tiny) <span class="co">[</span><span class="ot">website</span><span class="co">](https://www.paltmeyer.com/tai/)</span> summarising some of the literature I had read for my PhD:</span>
+<span id="cb5-82"><a href="#cb5-82"></a></span>
+<span id="cb5-83"><a href="#cb5-83"></a>&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Just had my first go &lt;a href="https://twitter.com/hashtag/quarto?src=hash<span class="dv">&amp;amp;</span>ref_src=twsrc%5Etfw"&gt;#quarto&lt;/a&gt; and I absolutely love the concept! Open-source and language agnostic - truly amazing work from &lt;a href="https://twitter.com/rstudio?ref_src=twsrc%5Etfw"&gt;&amp;#64rstudio&lt;/a&gt; &lt;a href="https://t.co/veCg7ywQ8v"&gt;https://t.co/veCg7ywQ8v&lt;/a&gt;&lt;/p&gt;<span class="dv">&amp;mdash;</span> Patrick Altmeyer (&amp;#64paltmey) &lt;a href="https://twitter.com/paltmey/status/1454042807019180035?ref_src=twsrc%5Etfw"&gt;October 29, 2021&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;</span>
+<span id="cb5-84"><a href="#cb5-84"></a></span>
+<span id="cb5-85"><a href="#cb5-85"></a>This was a first very pleasant encounter with Quarto, arguable even smoother than building websites in <span class="in">`blogdown`</span>. As for working with Julia though, I had made up my mind that VSCode was the way to go and at the time there was no Quarto extension (there is <span class="co">[</span><span class="ot">now</span><span class="co">](https://marketplace.visualstudio.com/items?itemName=quarto.quarto)</span>). There was also little in terms of communication about the project by R Studio, probably because things were really still in the early development stages. I was hopeful that eventually Quarto would enable me to emulate the R Studio experience in VS Code, but for now things were not quite there yet. </span>
+<span id="cb5-86"><a href="#cb5-86"></a></span>
+<span id="cb5-87"><a href="#cb5-87"></a><span class="fu">#### Quarto keeps growing 🤞</span></span>
+<span id="cb5-88"><a href="#cb5-88"></a></span>
+<span id="cb5-89"><a href="#cb5-89"></a>Since I was now working with VSCode + Jupyter and since Quarto supports Jupyter as well as all of my old R Markdown work, my next little Quarto project involved turning my old <span class="in">`blogdown`</span>-powered blog into a Quarto-powered <span class="co">[</span><span class="ot">blog</span><span class="co">](https://www.paltmeyer.com/blog/)</span>. This was not strictly necessary, as I could always export my new Jupyter notebooks to HTML and let <span class="in">`blogdown`</span> do the rest. But it did streamline things a little bit and the default Quarto blog theme - you are staring at it - is actually 🔥. I also did not have to feel guilty towards <span class="co">[</span><span class="ot">\@xieyihui</span><span class="co">](https://twitter.com/xieyihui)</span> about leaving <span class="in">`blogdown`</span>, because unsurprisingly he is on the Quarto team. As I was working on this little project I started noticing that the Quarto website was updated regularly and responses to issues I opened like this <span class="co">[</span><span class="ot">one</span><span class="co">](https://github.com/quarto-dev/quarto-cli/issues/293)</span> were answered very swiftly. Clearly, things were moving and they were moving fast. More recently, the news about Quarto has been spreading and it's left some folks as confused and amazed as I was, when I first heard about it:</span>
+<span id="cb5-90"><a href="#cb5-90"></a></span>
+<span id="cb5-91"><a href="#cb5-91"></a>&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;&lt;a href="https://twitter.com/hashtag/RStats?src=hash<span class="dv">&amp;amp;</span>ref_src=twsrc%5Etfw"&gt;#RStats&lt;/a&gt; can someone explain to me what<span class="dv">&amp;#39;</span>s the difference between {Quarto} and {RMarkdown}? I saw a tweet about Quarto and now I<span class="dv">&amp;#39;</span>m all confused ... What gap is it supposed to fill?&lt;/p&gt;<span class="dv">&amp;mdash;</span> Erwin Lares (&amp;#64lasrubieras) &lt;a href="https://twitter.com/lasrubieras/status/1509014670262390784?ref_src=twsrc%5Etfw"&gt;March 30, 2022&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;</span>
+<span id="cb5-92"><a href="#cb5-92"></a></span>
+<span id="cb5-93"><a href="#cb5-93"></a>This is why finally I've decided I should write a brief post about how and why I use Quarto. Since I have been working mostly with Julia for the past couple of months, I've chosen to focus on the interaction between Quarto and Julia. Coincidentally, yesterday was also the first time I saw a <span class="co">[</span><span class="ot">guide</span><span class="co">](https://quarto.org/docs/computations/julia.html)</span> dedicated to Julia on the Quarto website, so evidently I am not the only one interested in that marriage. This also means that there really is not too much left for me to talk about now, since Quarto's documentation is state-of-the-art. But a few bits and pieces I mention below might hopefully still be useful or at least some food for thought.</span>
+<span id="cb5-94"><a href="#cb5-94"></a></span>
+<span id="cb5-95"><a href="#cb5-95"></a><span class="fu">## Quarto and Julia: a perfect match 💙💜💚  {#sec-match}</span></span>
+<span id="cb5-96"><a href="#cb5-96"></a></span>
+<span id="cb5-97"><a href="#cb5-97"></a>While what follows may be relevant to other programming languages, my main goal for this last section is to flag Quarto to the Julia community. In any case, #rstats folks have been using R and Python in R Markdown documents for a while now and won't need much of an introduction to Quarto. As for Python aficionados, I can only recommend to give Quarto a shot (you will still be able to use Jupyter notebooks). </span>
+<span id="cb5-98"><a href="#cb5-98"></a></span>
+<span id="cb5-99"><a href="#cb5-99"></a><span class="fu">#### Working with VSCode, Quarto and Julia</span></span>
+<span id="cb5-100"><a href="#cb5-100"></a></span>
+<span id="cb5-101"><a href="#cb5-101"></a>The very article you are reading right now was composed in a Quarto document. These documents feel and look very much like standard Julia Markdown documents, but you can do a lot more with them. You can find the source code for this and other documents presented in this blog <span class="co">[</span><span class="ot">here</span><span class="co">](https://github.com/pat-alt/blog)</span>. </span>
+<span id="cb5-102"><a href="#cb5-102"></a></span>
+<span id="cb5-103"><a href="#cb5-103"></a>To get you started, here is my current setup combining VSCode, Quarto and Julia:</span>
+<span id="cb5-104"><a href="#cb5-104"></a></span>
+<span id="cb5-105"><a href="#cb5-105"></a><span class="ss">1. </span>VSCode extensions: in addition to the <span class="co">[</span><span class="ot">Julia extension</span><span class="co">](https://marketplace.visualstudio.com/items?itemName=julialang.language-julia)</span> you will need the <span class="co">[</span><span class="ot">Quarto extension</span><span class="co">](https://marketplace.visualstudio.com/items?itemName=quarto.quarto)</span>. In addition, the <span class="co">[</span><span class="ot">YAML extension</span><span class="co">](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml)</span> and some extension to preview Markdown docs would be helpful. I am not sure if <span class="co">[</span><span class="ot">Markdown Julia</span><span class="co">](https://marketplace.visualstudio.com/items?itemName=colinfang.markdown-julia)</span> and <span class="co">[</span><span class="ot">Jupyter</span><span class="co">](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter)</span> are strictly necessary, but it won't hurt.</span>
+<span id="cb5-106"><a href="#cb5-106"></a><span class="ss">2. </span>I do most of my work in Quarto documents <span class="in">`.qmd`</span>. </span>
+<span id="cb5-107"><a href="#cb5-107"></a><span class="ss">3. </span>If you choose to also do that, make sure that the <span class="in">`.qmd`</span> document has access to a <span class="in">`Pkg.jl`</span> environment that has <span class="in">`IJulia`</span> added. </span>
+<span id="cb5-108"><a href="#cb5-108"></a></span>
+<span id="cb5-109"><a href="#cb5-109"></a>Julia code cells can be added anywhere along with your plain text Markdown. They look like this:</span>
+<span id="cb5-110"><a href="#cb5-110"></a></span>
+<span id="cb5-111"><a href="#cb5-111"></a><span class="in">```` markdown</span></span>
+<span id="cb5-112"><a href="#cb5-112"></a><span class="in">```{julia}</span></span>
+<span id="cb5-113"><a href="#cb5-113"></a><span class="in">using Pkg</span></span>
+<span id="cb5-114"><a href="#cb5-114"></a><span class="in">Pkg.add("CounterfactualExplanations")</span></span>
+<span id="cb5-115"><a href="#cb5-115"></a><span class="in">```</span></span>
+<span id="cb5-116"><a href="#cb5-116"></a><span class="in">````</span></span>
+<span id="cb5-117"><a href="#cb5-117"></a></span>
+<span id="cb5-118"><a href="#cb5-118"></a>Contrary to Jupyter notebooks, executing this code cells will start a Julia REPL in VSCode. I find this very helpful, because it lets me fiddle with anything I have created inside the Quarto notebook without having to click into cells all the time. Quarto comes with great support for specifying <span class="co">[</span><span class="ot">code executing options</span><span class="co">](https://quarto.org/docs/computations/julia.html)</span>. For example, for the code below I have specified <span class="in">`#| echo: true`</span> in order for the code to be rendered. The code itself is the code I actually used to build the animation above (heavily borrowed from this <span class="in">`Javis.jl`</span> <span class="co">[</span><span class="ot">tutorial</span><span class="co">](https://juliaanimators.github.io/Javis.jl/stable/tutorials/tutorial_7/)</span>).</span>
+<span id="cb5-119"><a href="#cb5-119"></a></span>
+<span id="cb5-120"><a href="#cb5-120"></a><span class="in">```{.julia}</span></span>
+<span id="cb5-121"><a href="#cb5-121"></a><span class="in">#| echo: true</span></span>
+<span id="cb5-122"><a href="#cb5-122"></a><span class="in">using Javis, Animations, Colors</span></span>
+<span id="cb5-123"><a href="#cb5-123"></a></span>
+<span id="cb5-124"><a href="#cb5-124"></a><span class="in">size = 600</span></span>
+<span id="cb5-125"><a href="#cb5-125"></a><span class="in">radius_factor = 0.33</span></span>
+<span id="cb5-126"><a href="#cb5-126"></a></span>
+<span id="cb5-127"><a href="#cb5-127"></a><span class="in">function ground(args...)</span></span>
+<span id="cb5-128"><a href="#cb5-128"></a><span class="in">    background("transparent")</span></span>
+<span id="cb5-129"><a href="#cb5-129"></a><span class="in">    sethue("white")</span></span>
+<span id="cb5-130"><a href="#cb5-130"></a><span class="in">end</span></span>
+<span id="cb5-131"><a href="#cb5-131"></a></span>
+<span id="cb5-132"><a href="#cb5-132"></a><span class="in">function rotate_anim(idx::Number, total::Number) </span></span>
+<span id="cb5-133"><a href="#cb5-133"></a><span class="in">    distance_circle = 0.875</span></span>
+<span id="cb5-134"><a href="#cb5-134"></a><span class="in">    steps = collect(range(distance_circle,1-distance_circle,length=total))</span></span>
+<span id="cb5-135"><a href="#cb5-135"></a><span class="in">    Animation(</span></span>
+<span id="cb5-136"><a href="#cb5-136"></a><span class="in">        [0, 1], # must go from 0 to 1</span></span>
+<span id="cb5-137"><a href="#cb5-137"></a><span class="in">        [0, steps[idx]*2π],</span></span>
+<span id="cb5-138"><a href="#cb5-138"></a><span class="in">        [sineio()],</span></span>
+<span id="cb5-139"><a href="#cb5-139"></a><span class="in">    )</span></span>
+<span id="cb5-140"><a href="#cb5-140"></a><span class="in">end</span></span>
+<span id="cb5-141"><a href="#cb5-141"></a></span>
+<span id="cb5-142"><a href="#cb5-142"></a><span class="in">translate_anim = Animation(</span></span>
+<span id="cb5-143"><a href="#cb5-143"></a><span class="in">    [0, 1], # must go from 0 to 1</span></span>
+<span id="cb5-144"><a href="#cb5-144"></a><span class="in">    [O, Point(size*radius_factor, 0)],</span></span>
+<span id="cb5-145"><a href="#cb5-145"></a><span class="in">    [sineio()],</span></span>
+<span id="cb5-146"><a href="#cb5-146"></a><span class="in">)</span></span>
+<span id="cb5-147"><a href="#cb5-147"></a></span>
+<span id="cb5-148"><a href="#cb5-148"></a><span class="in">translate_back_anim = Animation(</span></span>
+<span id="cb5-149"><a href="#cb5-149"></a><span class="in">    [0, 1], # must go from 0 to 1</span></span>
+<span id="cb5-150"><a href="#cb5-150"></a><span class="in">    [O, Point(-(size*radius_factor), 0)],</span></span>
+<span id="cb5-151"><a href="#cb5-151"></a><span class="in">    [sineio()],</span></span>
+<span id="cb5-152"><a href="#cb5-152"></a><span class="in">)</span></span>
+<span id="cb5-153"><a href="#cb5-153"></a></span>
+<span id="cb5-154"><a href="#cb5-154"></a><span class="in">julia_colours = Dict(</span></span>
+<span id="cb5-155"><a href="#cb5-155"></a><span class="in">    :blue =&gt; "#4063D8",</span></span>
+<span id="cb5-156"><a href="#cb5-156"></a><span class="in">    :green =&gt; "#389826",</span></span>
+<span id="cb5-157"><a href="#cb5-157"></a><span class="in">    :purple =&gt; "#9558b2",</span></span>
+<span id="cb5-158"><a href="#cb5-158"></a><span class="in">    :red =&gt; "#CB3C33"</span></span>
+<span id="cb5-159"><a href="#cb5-159"></a><span class="in">)</span></span>
+<span id="cb5-160"><a href="#cb5-160"></a><span class="in">colour_order = [:red, :purple, :green, :blue]</span></span>
+<span id="cb5-161"><a href="#cb5-161"></a><span class="in">n_colours = length(julia_colours)</span></span>
+<span id="cb5-162"><a href="#cb5-162"></a><span class="in">function color_anim(start_colour::String, quarto_col::String="#4b95d0")</span></span>
+<span id="cb5-163"><a href="#cb5-163"></a><span class="in">    Animation(</span></span>
+<span id="cb5-164"><a href="#cb5-164"></a><span class="in">        [0, 1], # must go from 0 to 1</span></span>
+<span id="cb5-165"><a href="#cb5-165"></a><span class="in">        [Lab(color(start_colour)), Lab(color(quarto_col))],</span></span>
+<span id="cb5-166"><a href="#cb5-166"></a><span class="in">        [sineio()],</span></span>
+<span id="cb5-167"><a href="#cb5-167"></a><span class="in">    )</span></span>
+<span id="cb5-168"><a href="#cb5-168"></a><span class="in">end</span></span>
+<span id="cb5-169"><a href="#cb5-169"></a></span>
+<span id="cb5-170"><a href="#cb5-170"></a><span class="in">video = Video(size, size)</span></span>
+<span id="cb5-171"><a href="#cb5-171"></a></span>
+<span id="cb5-172"><a href="#cb5-172"></a><span class="in">frame_starts = 1:10:40</span></span>
+<span id="cb5-173"><a href="#cb5-173"></a><span class="in">n_total = 250</span></span>
+<span id="cb5-174"><a href="#cb5-174"></a><span class="in">n_frames = 150</span></span>
+<span id="cb5-175"><a href="#cb5-175"></a><span class="in">Background(1:n_total, ground)</span></span>
+<span id="cb5-176"><a href="#cb5-176"></a></span>
+<span id="cb5-177"><a href="#cb5-177"></a><span class="in"># Blob:</span></span>
+<span id="cb5-178"><a href="#cb5-178"></a><span class="in">function element(; radius = 1)</span></span>
+<span id="cb5-179"><a href="#cb5-179"></a><span class="in">    circle(O, radius, :fill) # The 4 is to make the circle not so small</span></span>
+<span id="cb5-180"><a href="#cb5-180"></a><span class="in">end</span></span>
+<span id="cb5-181"><a href="#cb5-181"></a></span>
+<span id="cb5-182"><a href="#cb5-182"></a><span class="in"># Cross:</span></span>
+<span id="cb5-183"><a href="#cb5-183"></a><span class="in">function cross(color="black";orientation=:horizontal)</span></span>
+<span id="cb5-184"><a href="#cb5-184"></a><span class="in">    sethue(color)</span></span>
+<span id="cb5-185"><a href="#cb5-185"></a><span class="in">    setline(10)</span></span>
+<span id="cb5-186"><a href="#cb5-186"></a><span class="in">    if orientation==:horizontal</span></span>
+<span id="cb5-187"><a href="#cb5-187"></a><span class="in">        out = line(Point(-size,0),Point(size,0), :stroke)</span></span>
+<span id="cb5-188"><a href="#cb5-188"></a><span class="in">    else</span></span>
+<span id="cb5-189"><a href="#cb5-189"></a><span class="in">        out = line(Point(0,-size),Point(0,size), :stroke)</span></span>
+<span id="cb5-190"><a href="#cb5-190"></a><span class="in">    end</span></span>
+<span id="cb5-191"><a href="#cb5-191"></a><span class="in">    return out</span></span>
+<span id="cb5-192"><a href="#cb5-192"></a><span class="in">end</span></span>
+<span id="cb5-193"><a href="#cb5-193"></a></span>
+<span id="cb5-194"><a href="#cb5-194"></a><span class="in">for (i, frame_start) in enumerate(1:10:40)</span></span>
+<span id="cb5-195"><a href="#cb5-195"></a></span>
+<span id="cb5-196"><a href="#cb5-196"></a><span class="in">    # Julia circles:</span></span>
+<span id="cb5-197"><a href="#cb5-197"></a><span class="in">    blob = Object(frame_start:n_total, (args...;radius=1) -&gt; element(;radius=radius))</span></span>
+<span id="cb5-198"><a href="#cb5-198"></a><span class="in">    act!(blob, Action(1:Int(round(n_frames*0.25)), change(:radius, 1 =&gt; 75))) # scale up</span></span>
+<span id="cb5-199"><a href="#cb5-199"></a><span class="in">    act!(blob, Action(n_frames:(n_frames+50), change(:radius, 75 =&gt; 250))) # scale up further</span></span>
+<span id="cb5-200"><a href="#cb5-200"></a><span class="in">    act!(blob, Action(1:30, translate_anim, translate()))</span></span>
+<span id="cb5-201"><a href="#cb5-201"></a><span class="in">    act!(blob, Action(31:120, rotate_anim(i, n_colours), rotate_around(Point(-(size*radius_factor), 0))))</span></span>
+<span id="cb5-202"><a href="#cb5-202"></a><span class="in">    act!(blob, Action(121:150, translate_back_anim, translate()))</span></span>
+<span id="cb5-203"><a href="#cb5-203"></a><span class="in">    act!(blob, Action(1:150, color_anim(julia_colours[colour_order[i]]), sethue()))</span></span>
+<span id="cb5-204"><a href="#cb5-204"></a></span>
+<span id="cb5-205"><a href="#cb5-205"></a><span class="in">    # Quarto cross:</span></span>
+<span id="cb5-206"><a href="#cb5-206"></a><span class="in">    cross_h = Object((n_frames+50):n_total, (args...) -&gt; cross(;orientation=:horizontal))</span></span>
+<span id="cb5-207"><a href="#cb5-207"></a><span class="in">    cross_v = Object((n_frames+50):n_total, (args...) -&gt; cross(;orientation=:vertical))</span></span>
+<span id="cb5-208"><a href="#cb5-208"></a><span class="in">end</span></span>
+<span id="cb5-209"><a href="#cb5-209"></a></span>
+<span id="cb5-210"><a href="#cb5-210"></a><span class="in">render(</span></span>
+<span id="cb5-211"><a href="#cb5-211"></a><span class="in">    video;</span></span>
+<span id="cb5-212"><a href="#cb5-212"></a><span class="in">    pathname = joinpath(www_path, "intro.gif"),</span></span>
+<span id="cb5-213"><a href="#cb5-213"></a><span class="in">)</span></span>
+<span id="cb5-214"><a href="#cb5-214"></a><span class="in">```</span></span>
+<span id="cb5-215"><a href="#cb5-215"></a></span>
+<span id="cb5-216"><a href="#cb5-216"></a><span class="fu">#### Working with `Documenter.jl` and Quarto</span></span>
+<span id="cb5-217"><a href="#cb5-217"></a></span>
+<span id="cb5-218"><a href="#cb5-218"></a>An interesting application of Quarto in the Julia ecosystem is package documentation. This is of course best done using <span class="in">`Documenter.jl`</span> and fortunately the two play nicely with each other, since both share a common ground (Markdown). Their interaction is perhaps best demonstrated through this Julia library I recently developed: <span class="co">[</span><span class="ot">`CounterfactualExplanatinos.jl`</span><span class="co">](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl)</span>. On there you will find lot of Julia scripts <span class="in">`*.jl`</span> under <span class="in">`src/`</span> and <span class="in">`test/`</span>, as well as many Markdown <span class="in">`.md`</span> and Quarto documents <span class="in">`.qmd`</span> under <span class="in">`docs`</span>. I *wrote* the package documentation in the Quarto documents, *rendered* documents individually through <span class="in">`quarto render [doc].qmd`</span> and then fed the resulting Markdown documents to <span class="in">`Documenter.jl`</span> as always. </span>
+<span id="cb5-219"><a href="#cb5-219"></a></span>
+<span id="cb5-220"><a href="#cb5-220"></a>Below is my standard YAML header for those Quarto documents:</span>
+<span id="cb5-221"><a href="#cb5-221"></a></span>
+<span id="cb5-222"><a href="#cb5-222"></a><span class="in">```YAML</span></span>
+<span id="cb5-223"><a href="#cb5-223"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb5-224"><a href="#cb5-224"></a><span class="at">  </span><span class="fu">commonmark</span><span class="kw">:</span></span>
+<span id="cb5-225"><a href="#cb5-225"></a><span class="at">    </span><span class="fu">variant</span><span class="kw">:</span><span class="at"> -raw_html</span></span>
+<span id="cb5-226"><a href="#cb5-226"></a><span class="at">    </span><span class="fu">wrap</span><span class="kw">:</span><span class="at"> none</span></span>
+<span id="cb5-227"><a href="#cb5-227"></a><span class="at">    </span><span class="fu">self-contained</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb5-228"><a href="#cb5-228"></a><span class="fu">crossref</span><span class="kw">:</span></span>
+<span id="cb5-229"><a href="#cb5-229"></a><span class="at">  </span><span class="fu">fig-prefix</span><span class="kw">:</span><span class="at"> Figure</span></span>
+<span id="cb5-230"><a href="#cb5-230"></a><span class="at">  </span><span class="fu">tbl-prefix</span><span class="kw">:</span><span class="at"> Table</span></span>
+<span id="cb5-231"><a href="#cb5-231"></a><span class="fu">bibliography</span><span class="kw">:</span><span class="at"> https://raw.githubusercontent.com/pat-alt/bib/main/bib.bib</span></span>
+<span id="cb5-232"><a href="#cb5-232"></a><span class="fu">output</span><span class="kw">:</span><span class="at"> asis</span></span>
+<span id="cb5-233"><a href="#cb5-233"></a><span class="fu">execute</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb5-234"><a href="#cb5-234"></a><span class="at">  </span><span class="fu">echo</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb5-235"><a href="#cb5-235"></a><span class="at">  </span><span class="fu">eval</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb5-236"><a href="#cb5-236"></a><span class="fu">jupyter</span><span class="kw">:</span><span class="at"> julia-1.7</span></span>
+<span id="cb5-237"><a href="#cb5-237"></a><span class="in">```</span></span>
+<span id="cb5-238"><a href="#cb5-238"></a></span>
+<span id="cb5-239"><a href="#cb5-239"></a>You can see that it points to Bibtex file I host on another Github repository. This makes it very easy to generate citations and references for the rendered Markdown documents, that also show up in the docs (e.g. <span class="co">[</span><span class="ot">here</span><span class="co">](https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/cats_dogs/)</span>). Unfortunately, cross-referencing only partially works, because it relies on auto-generated HTML and <span class="in">`Documenter.jl`</span> expects this to be passed in blocks. Choosing <span class="in">`variant: -raw_html`</span> is only a workaround as I have discussed <span class="co">[</span><span class="ot">here</span><span class="co">](https://github.com/JuliaDocs/Documenter.jl/issues/1778)</span>. Ideally, <span class="in">`Documenter.jl`</span> would just accept HTML documents rendered from Quarto, but currently only Markdown documents are accepted by <span class="in">`make_docs`</span>. Still, if anything this workaround is a nice gimmick that extends the default <span class="in">`Documenter.jl`</span> functionality, without any hassle involved. Hopefully, this can be improved in the future.</span>
+<span id="cb5-240"><a href="#cb5-240"></a></span>
+<span id="cb5-241"><a href="#cb5-241"></a><span class="fu">#### Using Quarto for JuliaCon Proceedings</span></span>
+<span id="cb5-242"><a href="#cb5-242"></a></span>
+<span id="cb5-243"><a href="#cb5-243"></a>Another very good use-case for Quarto involves actual scientific publications in journals such as JuliaCon Proceedings. The existing submission process is tailored towards reproducibility and actually involves reviews directly on GitHub, which is fantastic. But currently only submissions in TeX format are accepted, which is not so great. Using Quarto would not only streamline this process further, but also open the JuliaCon Proceedings Journal up to publishing content in different output formats. Quarto docs could be used to still render the traditional PDF. But those same documents could also be used to create interactive versions in HTML. Arguably, the entire journal could probably be built through Quarto.</span>
+<span id="cb5-244"><a href="#cb5-244"></a></span>
+<span id="cb5-245"><a href="#cb5-245"></a><span class="fu">## Wrapping up 🎗</span></span>
+<span id="cb5-246"><a href="#cb5-246"></a></span>
+<span id="cb5-247"><a href="#cb5-247"></a>In this post I wanted to demonstrate that Quarto might just be the next revolution in scientific publishing. In particular, I hope I have managed to demonstrate its appeal to the Julia community, which I am proud to be part of now that I have managed to branch out of my old R bubble. Please let me hear your thoughts and comments below! </span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2023, Patrick Altmeyer</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/pat-alt/pat-alt.github.io/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.paltmeyer.com/">
+      <i class="bi bi-house" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/pat-alt">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/paltmey">
+      <i class="bi bi-twitter" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://medium.com/\@patrick.altmeyer">
+      <i class="bi bi-medium" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
