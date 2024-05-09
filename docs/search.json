@@ -2044,18 +2044,32 @@
     "text": "PCA as a Yield Curve Interpreter\nWhat are principal components if not model embeddings?\n\n\n\n\n\n\nFigure 2: Top chart: The first two principal components of US Treasury yields over time at daily frequency. Bottom chart: Observed average level and 10yr-3mo spread of the yield curve. Vertical stalks roughly indicate the onset (|GFC) and the beginning of the aftermath (GFC|) of the Global Financial Crisis."
   },
   {
+    "objectID": "content/talks/posts/2024-econdat/presentation.html#autoencoders-as-economic-growth-predictors",
+    "href": "content/talks/posts/2024-econdat/presentation.html#autoencoders-as-economic-growth-predictors",
+    "title": "Against Spurious Sparks − Dovelating Inflated AI Claims 🕊️",
+    "section": "Autoencoders as Economic Growth Predictors",
+    "text": "Autoencoders as Economic Growth Predictors\n\n\n\nWe train a neural network with a bottleneck layer to predict GDP growth from the yield curve Figure 3.\n\nInput: UST yields at different maturities.\nHidden layer, bottleneck layer, hidden layer.\nOutput: GDP growth.\n\nCan we use this for more than just forecasting?\n\n\n\n\n\n\n\n\nFigure 3: Simple autoencoder architecture."
+  },
+  {
+    "objectID": "content/talks/posts/2024-econdat/presentation.html#autoencoders-as-economic-growth-predictors-1",
+    "href": "content/talks/posts/2024-econdat/presentation.html#autoencoders-as-economic-growth-predictors-1",
+    "title": "Against Spurious Sparks − Dovelating Inflated AI Claims 🕊️",
+    "section": "Autoencoders as Economic Growth Predictors",
+    "text": "Autoencoders as Economic Growth Predictors\n\nYes, this can be used for feature extraction and forecasting:\n\nBottle-neck layer embeddings predict spread and level of the yield curve.\n\n\n\n\n\n\n\n\nFigure 4: The left chart shows the actual GDP growth and fitted values from the autoencoder model. The right chart shows the observed average level and spread of the yield curve (solid) along with the predicted values (in-sample) from the linear probe based on the latent embeddings (dashed)"
+  },
+  {
     "objectID": "content/talks/posts/2024-econdat/presentation.html#embedding-fomc-comms",
     "href": "content/talks/posts/2024-econdat/presentation.html#embedding-fomc-comms",
     "title": "Against Spurious Sparks − Dovelating Inflated AI Claims 🕊️",
     "section": "Embedding FOMC comms",
-    "text": "Embedding FOMC comms\n\nBERT-based model trained on FOMC minutes, speeches and press conferences to classify statements as hawkish or dovish (or neutral) (Shah, Paturi, and Chava 2023).\nWe linearly probe all layers to predict unseen economic indicators (CPI, PPI, UST yields).\nPredictive power increases with layer depth and probes outperform simple AR(\\(p\\)) models.\n\n\n\n\n\n\n\nFigure 3: Out-of-sample root mean squared error (RMSE) for the linear probe plotted against FOMC-RoBERTa’s n-th layer for different indicators."
+    "text": "Embedding FOMC comms\n\nBERT-based model trained on FOMC minutes, speeches and press conferences to classify statements as hawkish or dovish (or neutral) (Shah, Paturi, and Chava 2023).\nWe linearly probe all layers to predict unseen economic indicators (CPI, PPI, UST yields).\nPredictive power increases with layer depth and probes outperform simple AR(\\(p\\)) models.\n\n\n\n\n\n\n\nFigure 5: Out-of-sample root mean squared error (RMSE) for the linear probe plotted against FOMC-RoBERTa’s n-th layer for different indicators."
   },
   {
     "objectID": "content/talks/posts/2024-econdat/presentation.html#sparks-of-economic-understanding",
     "href": "content/talks/posts/2024-econdat/presentation.html#sparks-of-economic-understanding",
     "title": "Against Spurious Sparks − Dovelating Inflated AI Claims 🕊️",
     "section": "Sparks of Economic Understanding?",
-    "text": "Sparks of Economic Understanding?\nPremise: If probe results were indicative of some intrinsic ‘understanding’ of the economy, then the probe should not be sensitive to random sentences unrelated to economics.\nParrot Test\n\nSelect the best-performing probe for each economic indicator.\nPredict inflation levels for real (related) and perturbed (unrelated) sentences.\n\n\n\n\n\n\n\nFigure 4: Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB) and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted value of the probe for random noise.\n\n\n\nAs evidenced by Figure 4, the probe is easily fooled."
+    "text": "Sparks of Economic Understanding?\nPremise: If probe results were indicative of some intrinsic ‘understanding’ of the economy, then the probe should not be sensitive to random sentences unrelated to economics.\nParrot Test\n\nSelect the best-performing probe for each economic indicator.\nPredict inflation levels for real (related) and perturbed (unrelated) sentences.\n\n\n\n\n\n\n\nFigure 6: Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB) and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted value of the probe for random noise.\n\n\n\nAs evidenced by Figure 6, the probe is easily fooled."
   },
   {
     "objectID": "content/talks/posts/2024-econdat/presentation.html#spurious-relationships",
@@ -2105,13 +2119,6 @@
     "title": "Against Spurious Sparks − Dovelating Inflated AI Claims 🕊️",
     "section": "Quote sources",
     "text": "Quote sources\n\n“There! It’s sentient”—that engineer at Google (probably!)\n“The human mind is a pattern-seeking device”—Daniel Kahneman\n“We’re fascinated with robots because they are reflections of ourselves.”—Ken Goldberg"
-  },
-  {
-    "objectID": "content/talks/posts/2024-econdat/presentation.html#autoencoders-as-economic-growth-predictors",
-    "href": "content/talks/posts/2024-econdat/presentation.html#autoencoders-as-economic-growth-predictors",
-    "title": "Against Spurious Sparks − Dovelating Inflated AI Claims 🕊️",
-    "section": "Autoencoders as Economic Growth Predictors",
-    "text": "Autoencoders as Economic Growth Predictors\n\nWe train a neural network with a bottleneck layer to predict GDP growth from the yield curve.\nThis can be used for feature extraction and forecasting.\n\nBottle-neck layer embeddings predict spread and level of the yield curve.\n\n\n\n\n\n\n\n\nFigure 5: The left chart shows the actual GDP growth and fitted values from the autoencoder model. The right chart shows the observed average level and spread of the yield curve (solid) along with the predicted values (in-sample) from the linear probe based on the latent embeddings (dashed)"
   },
   {
     "objectID": "content/talks/posts/2022-boe/presentation.html#blurb",

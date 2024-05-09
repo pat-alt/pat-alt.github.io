@@ -170,6 +170,28 @@ What are principal components if not model embeddings?
 
 ![Top chart: The first two principal components of US Treasury yields over time at daily frequency. Bottom chart: Observed average level and 10yr-3mo spread of the yield curve. Vertical stalks roughly indicate the onset (|GFC) and the beginning of the aftermath (GFC|) of the Global Financial Crisis.](www/pca_yield.png){#fig-pca width="80%"}
 
+## Autoencoders as Economic Growth Predictors {.smaller .nostretch auto-animate=true}
+
+::::{.columns}::::
+:::{.column width='50%'}
+- We train a neural network with a bottleneck layer to predict GDP growth from the yield curve [@fig-autoenc].
+  - **Input**: UST yields at different maturities. 
+  - Hidden layer, bottleneck layer, hidden layer. 
+  - **Output**: GDP growth.
+- Can we use this for more than just forecasting?
+:::
+:::{.column width='50%'}
+![Simple autoencoder architecture.](www/autoenc.png){#fig-autoenc}
+:::
+::::
+
+## Autoencoders as Economic Growth Predictors {.smaller .nostretch auto-animate=true}
+
+- Yes, this can be used for feature extraction and forecasting:
+  - Bottle-neck layer embeddings predict spread and level of the yield curve.
+
+![The left chart shows the actual GDP growth and fitted values from the autoencoder model. The right chart shows the observed average level and spread of the yield curve (solid) along with the predicted values (in-sample) from the linear probe based on the latent embeddings (dashed)](www/dl.png){#fig-dl width="80%"}
+
 ## Embedding FOMC comms {.smaller .nostretch}
 
 - BERT-based model trained on FOMC minutes, speeches and press conferences to classify statements as hawkish or dovish (or neutral) [@shah2023trillion].
@@ -252,15 +274,4 @@ With thanks to my co-authors Andrew M. Demetriou, Antony Bartlett, and Cynthia C
 - "There! It's sentient"---that engineer at Google (probably!)
 - "The human mind is a pattern-seeking device"---Daniel Kahneman
 - "We're fascinated with robots because they are reflections of ourselves."---Ken Goldberg
-
-
-# Hiddens
-
-## Autoencoders as Economic Growth Predictors {.smaller .nostretch}
-
-- We train a neural network with a bottleneck layer to predict GDP growth from the yield curve.
-- This can be used for feature extraction and forecasting.
-  - Bottle-neck layer embeddings predict spread and level of the yield curve.
-
-![The left chart shows the actual GDP growth and fitted values from the autoencoder model. The right chart shows the observed average level and spread of the yield curve (solid) along with the predicted values (in-sample) from the linear probe based on the latent embeddings (dashed)](www/dl.png){#fig-dl width="80%"}
 
