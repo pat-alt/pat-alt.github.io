@@ -1,0 +1,102 @@
+---
+title: Trustworthy AI in Julia
+subtitle: The Alan Turing Institute
+author: 
+  - name: Patrick Altmeyer
+    url: https://www.paltmeyer.com/
+institute: Delft University of Technology
+date: 2024-05-08
+format: 
+  julia-revealjs:
+    theme: custom.scss
+    self-contained: true
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    fig-align: center
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+---
+
+# Introduction {.nostretch} 
+
+Economist by training, previously Bank of England, currently 3rd year PhD in Trustworthy AI \@ TU Delft.
+
+![](/www/images/qr.png){width="25%" fig-align="center"}
+
+## Motivation {.smaller}
+
+Why Trustworthy AI and why in Julia?
+
+::: {.incremental}
+
+- Opaque AI technologies have entered the public domain with far-reaching stakes.
+- These technologies are here to stay, so at best, we can make them more trustworthy. 
+- Julia has an edge:
+  - **Transparency**: most packages are written in pure Julia.
+  - **Intuitiveness**: great Lisp-like support for symbolic computing.
+  - **Community**: welcoming, supportive and diverse (sort of!). 
+  - **Autodiff**: [top-notch support](https://discourse.julialang.org/t/automatic-differentiation-julia-implementation-advantages/24975), which helps with common XAI approaches.
+
+:::
+
+## Outline
+
+:::{.incremental}
+
+- **Taija**: A brief overview of the [Taija]() ecosystem.
+- **Deep Dive**: A closer look at some of our core packages.
+- **The Journey**: "I'll try out Julia for this PhD"---3 years later. 
+
+:::
+
+# Taija
+
+![](www/logo.png){.absolute bottom=-300 right=50}
+
+# "Algorithms do not listen, nor do they bend"
+
+![](www/logo.png){.absolute bottom=-300 right=50}
+
+# "We're fascinated with robots because they are reflections of ourselves."
+
+![](www/logo.png){.absolute bottom=-300 right=50}
+
+# Questions? {.nostretch} 
+
+With thanks to my co-authors Andrew M. Demetriou, Antony Bartlett, and Cynthia C. S. Liem and to the audience for their attention.
+
+![](/www/images/qr.png){width="25%" fig-align="center"}
+
+## References {.scrollable .smaller}
+
+::: {#refs}
+:::
+
+## Quote sources
+
+- "There! It's sentient"---that engineer at Google (probably!)
+- "Algorithms don't listen, nor do they bend"---Cathy O'Neil
+- "We're fascinated with robots because they are reflections of ourselves."---Ken Goldberg
+
+# Hiddens
