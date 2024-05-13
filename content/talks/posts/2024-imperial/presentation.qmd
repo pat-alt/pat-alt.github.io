@@ -1,0 +1,211 @@
+---
+title: ECCCos from the Black Box
+subtitle: Faithful Model Explanations through Energy-Constrained Conformal Counterfactuals
+author: 
+  - name: "**Patrick Altmeyer**"
+    url: https://www.paltmeyer.com/
+  - name: Mojtaba Farmanbar
+  - name: Arie van Deursen
+  - name: Cynthia C. S. Liem
+institute: Delft University of Technology
+date: today
+format: 
+  tudelft-revealjs:
+    theme: custom.scss
+    self-contained: true
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    fig-align: center
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+bibliography: ../../../../bib.bib
+classoption: "notheorems"
+---
+
+## Pick your Poison
+
+All of these counterfactuals are valid explanations for the model's prediction. 
+
+> Which one would you pick?
+
+![Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](www/mnist_motivation.png){#fig-cf-example width="80%"}
+
+# Faithfulness first, plausibility second.
+
+We propose *ECCCo*: a new way to generate faithful model explanations that are as plausible as the underlying model permits.
+
+## Summary
+
+:::{.incremental}
+
+- **Idea**: generate counterfactuals that are consistent with what the model has learned about the data.
+- **Method**: constrain the model's energy and predictive uncertainty for the counterfactual.
+- **Result**: faithful counterfactuals that are as plausible as the model permits.
+- **Benefits**: enable us to distinguish trustworthy from unreliable models. 
+
+:::
+
+## Counterfactual Explanations
+
+$$
+\begin{aligned}
+\min_{\mathbf{Z}^\prime \in \mathcal{Z}^L} \{  {\text{yloss}(M_{\theta}(f(\mathbf{Z}^\prime)),\mathbf{y}^+)} + \lambda {\text{cost}(f(\mathbf{Z}^\prime)) }  \} 
+\end{aligned} 
+$$ 
+
+::::{.columns}::::
+:::{.column width='50%'}
+**Counterfactual Explanations** (CE) explain how inputs into a model need to change for it to produce different outputs.
+:::
+:::{.column width='50%'}
+![Gradient-based counterfactual search.](www/simple_ce.png){#fig-ce-intro width="60%"}
+:::
+::::
+
+# Reconciling Faithfulness and Plausibility
+
+## Plausibility {.smaller}
+
+::::{.columns}::::
+:::{.column width='50%'}
+::: {#def-plausible}
+
+## Plausible Counterfactuals
+
+Let $\mathcal{X}|\mathbf{y}^+= p(\mathbf{x}|\mathbf{y}^+)$ denote the true conditional distribution of samples in the target class $\mathbf{y}^+$. Then for $\mathbf{x}^{\prime}$ to be considered a plausible counterfactual, we need: $\mathbf{x}^{\prime} \sim \mathcal{X}|\mathbf{y}^+$.
+
+:::
+
+::: {.callout-note appearance="minimal"}
+
+## Why Plausibility?
+
+Plausibility is positively associated with actionability, robustness [@artelt2021evaluating] and causal validity [@mahajan2019preserving].
+
+:::
+:::
+:::{.column width='50%'}
+![Kernel density estimate (KDE) for the conditional distribution, $p(\mathbf{x}|\mathbf{y}^+)$, based on observed data. Counterfactual path as in @fig-ce-intro.](www/density_true.png){#fig-density-true width="75%"}
+:::
+::::
+
+## Faithfulness {.smaller}
+
+::::{.columns}::::
+:::{.column width='50%'}
+::: {#def-faithful}
+
+## Faithful Counterfactuals
+
+Let $\mathcal{X}_{\theta}|\mathbf{y}^+ = p_{\theta}(\mathbf{x}|\mathbf{y}^+)$ denote the conditional distribution of $\mathbf{x}$ in the target class $\mathbf{y}^+$, where $\theta$ denotes the parameters of model $M_{\theta}$. Then for $\mathbf{x}^{\prime}$ to be considered a faithful counterfactual, we need: $\mathbf{x}^{\prime} \sim \mathcal{X}_{\theta}|\mathbf{y}^+$.
+
+:::
+
+::: {.callout-note appearance="minimal"}
+
+## Trustworthy Models
+
+If the model posterior approximates the true posterior ($p_{\theta}(\mathbf{x}|\mathbf{y}^+) \rightarrow p(\mathbf{x}|\mathbf{y}^+)$), faithful counterfactuals are also plausible.
+:::
+:::
+:::{.column width='50%'}
+![KDE for learned conditional distribution, $p_{\theta}(\mathbf{x}|\mathbf{y}^+)$. Yellow stars indicate conditional samples generated through SGLD for a joint energy model (JEM).](www/density_model.png){#fig-density-true width="75%"}
+:::
+::::
+
+
+
+## ECCCo {.nostretch .smaller} 
+
+::::{.columns}::::
+:::{.column width='30%'}
+::: {.callout-tip appearance="minimal"}
+
+## Key Idea
+
+Use the hybrid objective of joint energy models (JEM) and a model-agnostic penalty for predictive uncertainty: Energy-Constrained ($\mathcal{E}_{\theta}$) Conformal ($\Omega$) Counterfactuals (*ECCCo*). 
+
+:::
+:::
+:::{.column width='70%'}
+
+*ECCCo* objective^[We leverage ideas from @grathwohl2020your and @stutz2022learning. See the paper and appendix for a derivation of the objective from first principles.]:
+
+$$
+\begin{aligned}
+& \min_{\mathbf{Z}^\prime \in \mathcal{Z}^L} \{  {L_{\text{clf}}(f(\mathbf{Z}^\prime);M_{\theta},\mathbf{y}^+)}+ \lambda_1 {\text{cost}(f(\mathbf{Z}^\prime)) } \\
+&+ \lambda_2 \mathcal{E}_{\theta}(f(\mathbf{Z}^\prime)|\mathbf{y}^+) + \lambda_3 \Omega(C_{\theta}(f(\mathbf{Z}^\prime);\alpha)) \} 
+\end{aligned} 
+$$
+
+![Gradient fields and counterfactual paths for different generators.](www/poc_gradient_fields.png){#fig-poc-gradient-fields width="75%" fig-align="center"}
+
+:::
+::::
+
+
+
+
+# Results
+
+## Visual Evidence 
+
+::::{.columns}::::
+:::{.column width='30%'}
+![Turning a 9 into a 7. *ECCCo* applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).](www/mnist_eccco.png){#fig-mnist-eccco width="75%"}
+:::
+:::{.column width='70%'}
+*ECCCo* generates counterfactuals that
+
+- faithfully represent model quality (@fig-mnist-eccco).
+- achieve state-of-the-art plausibility (@fig-mnist-benchmark).
+
+![Results for different generators (from 3 to 5).](www/mnist_benchmark.png){#fig-mnist-benchmark width="100%"}
+:::
+::::
+
+## The Numbers {.smaller}
+
+- Large benchmarks on a variety of models and datasets from various domains.
+- *ECCCo* achieves state-of-the-art faithfulness across models and datasets and approaches state-of-the-art plausibility for more trustworthy models. 
+
+![](www/numbers.png){width="100%" fig-align="center"}
+
+## Code
+
+The [code](https://github.com/pat-alt/ECCCo.jl) used to run the analysis for this work is built on top of [`CounterfactualExplanations.jl`](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl).
+
+There is also a corresponding paper, [*Explaining Black-Box Models through Counterfactuals*](https://proceedings.juliacon.org/papers/10.21105/jcon.00130), which has been published in JuliaCon Proceedings. 
+
+[![Trustworthy AI in Julia: github.com/JuliaTrustworthyAI](www/logo.png){width="50%" fig-align="center"}](https://github.com/JuliaTrustworthyAI)
+
+# Questions? {.nostretch} 
+
+With thanks to my co-authors Mojtaba Farmanbar, Arie van Deursen and Cynthia C. S. Liem.
+
+![](/www/images/qr.png){width="25%" fig-align="center"}
+
+## References {.scrollable .smaller}
+
+
