@@ -1491,6 +1491,13 @@
     "text": "References\n\n\n\n\nA year of using Quarto with Julia — Patrick Altmeyer — CC BY-NC\n\n\n\n\nBlaom, Anthony D., Franz Kiraly, Thibaut Lienart, Yiannis Simillides, Diego Arenas, and Sebastian J. Vollmer. 2020. “MLJ: A Julia Package for Composable Machine Learning.” Journal of Open Source Software 5 (55): 2704. https://doi.org/10.21105/joss.02704."
   },
   {
+    "objectID": "content/talks/posts/2024-imperial/presentation.html#counterfactual-explanations",
+    "href": "content/talks/posts/2024-imperial/presentation.html#counterfactual-explanations",
+    "title": "ECCCos from the Black Box",
+    "section": "Counterfactual Explanations",
+    "text": "Counterfactual Explanations\n\\[\n\\begin{aligned}\n\\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {\\text{yloss}(M_{\\theta}(f(\\mathbf{Z}^\\prime)),\\mathbf{y}^+)} + \\lambda {\\text{cost}(f(\\mathbf{Z}^\\prime)) }  \\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations (CE) explain how inputs into a model need to change for it to produce different outputs.\n\n\n\n\n\n\n\nFigure 1: Gradient-based counterfactual search."
+  },
+  {
     "objectID": "content/talks/posts/2024-imperial/presentation.html#pick-your-poison",
     "href": "content/talks/posts/2024-imperial/presentation.html#pick-your-poison",
     "title": "ECCCos from the Black Box",
@@ -1503,13 +1510,6 @@
     "title": "ECCCos from the Black Box",
     "section": "Summary",
     "text": "Summary\n\n\nIdea: generate counterfactuals that are consistent with what the model has learned about the data.\nMethod: constrain the model’s energy and predictive uncertainty for the counterfactual.\nResult: faithful counterfactuals that are as plausible as the model permits.\nBenefits: enable us to distinguish trustworthy from unreliable models."
-  },
-  {
-    "objectID": "content/talks/posts/2024-imperial/presentation.html#counterfactual-explanations",
-    "href": "content/talks/posts/2024-imperial/presentation.html#counterfactual-explanations",
-    "title": "ECCCos from the Black Box",
-    "section": "Counterfactual Explanations",
-    "text": "Counterfactual Explanations\n\\[\n\\begin{aligned}\n\\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {\\text{yloss}(M_{\\theta}(f(\\mathbf{Z}^\\prime)),\\mathbf{y}^+)} + \\lambda {\\text{cost}(f(\\mathbf{Z}^\\prime)) }  \\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations (CE) explain how inputs into a model need to change for it to produce different outputs.\n\n\n\n\n\n\n\nFigure 1: Gradient-based counterfactual search."
   },
   {
     "objectID": "content/talks/posts/2024-imperial/presentation.html#plausibility",
@@ -1552,6 +1552,13 @@
     "title": "ECCCos from the Black Box",
     "section": "Code",
     "text": "Code\nThe code used to run the analysis for this work is built on top of CounterfactualExplanations.jl, part of Taija.\nHighlights\n\nEasily combine different research ideas through composable counterfactual generators.\nBenefit from Julia’s speed and native, intuitive support for parallelization.\nExtensions for Laplace Redux and differentiable tree-based models.\n\n📜 Explaining Black-Box Models through Counterfactuals in JuliaCon Proceedings."
+  },
+  {
+    "objectID": "content/talks/posts/2024-imperial/presentation.html#shamelessly-plugging",
+    "href": "content/talks/posts/2024-imperial/presentation.html#shamelessly-plugging",
+    "title": "ECCCos from the Black Box",
+    "section": "Shamelessly plugging …",
+    "text": "Shamelessly plugging …\n… more research\n\nPosition: Against Spurious Sparks - Dovelating Inflated AI Claims 🕊️ (Altmeyer et al. 2024) to be published at ICML 2024. [preprint], [blog post]\nEndogenous Macrodynamics in Algorithmic Recourse (Altmeyer et al. 2023) published in Proceedings of the 2023 IEEE Conference on Secure and Trustworthy Machine Learning (SaTML)."
   },
   {
     "objectID": "content/talks/posts/2024-imperial/presentation.html#references",
@@ -3589,12 +3596,5 @@
     "title": "Spurious Sparks of AGI",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nI would be very surprised—concerned even—if our search for patterns in latent spaces of capable LLMs revealed nothing at all.↩︎\nThe data is taken from the US Department of the Treasury.↩︎"
-  },
-  {
-    "objectID": "content/talks/posts/2024-imperial/presentation.html#shamelessly-plugging",
-    "href": "content/talks/posts/2024-imperial/presentation.html#shamelessly-plugging",
-    "title": "ECCCos from the Black Box",
-    "section": "Shamelessly plugging …",
-    "text": "Shamelessly plugging …\n… more research\n\nPosition: Against Spurious Sparks - Dovelating Inflated AI Claims 🕊️ (Altmeyer et al. 2024) to be published at ICML 2024. [preprint], [blog post]\nEndogenous Macrodynamics in Algorithmic Recourse (Altmeyer et al. 2023) published in Proceedings of the 2023 IEEE Conference on Secure and Trustworthy Machine Learning (SaTML)."
   }
 ]
