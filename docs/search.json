@@ -2121,6 +2121,13 @@
     "text": "Faithful Counterfactuals\n\n\n\n\n\n\n\n\nFigure 4: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\nECCCo generates counterfactuals that\n\nfaithfully represent model quality (Figure 4).\nachieve state-of-the-art plausibility (Figure 5).\n\n\n\n\n\n\n\nFigure 5: Results for different generators (from 3 to 5)."
   },
   {
+    "objectID": "content/talks/posts/2024-turing/presentation.html#ongoing-work",
+    "href": "content/talks/posts/2024-turing/presentation.html#ongoing-work",
+    "title": "Trustworthy AI in Julia",
+    "section": "Ongoing Work",
+    "text": "Ongoing Work\n\nJSoC 2024: From Counterfactuals to Interventions - Recourse through Minimal Causal Interventions with Jorge Luiz Franco and co-mentor Moritz Schauer (CausalInference.jl)\n\nWe typically make the implicit causal assumption that all features are independent.\nIf we have (imperfect) causal knowledge, we can use it to guide the search for counterfactuals.\n\nWhat Makes Models Explainable?: using ECCCo to benchmark models.\nFour master’s theses all using CounterfactualExplanations.jl (LLM explainability, imbalanced data, recourse in practice and counterfactuals for model testing)."
+  },
+  {
     "objectID": "content/talks/posts/2024-turing/presentation.html#background-1",
     "href": "content/talks/posts/2024-turing/presentation.html#background-1",
     "title": "Trustworthy AI in Julia",
@@ -2135,11 +2142,46 @@
     "text": "Examples\n\nA simple usage example.\nConformalizing an image classifier here.\nHow to build a conformal chatbot here.\n\n\nConformalPrediction.jl meets SymbolicRegression.jl."
   },
   {
+    "objectID": "content/talks/posts/2024-turing/presentation.html#ongoing-work-1",
+    "href": "content/talks/posts/2024-turing/presentation.html#ongoing-work-1",
+    "title": "Trustworthy AI in Julia",
+    "section": "Ongoing Work",
+    "text": "Ongoing Work\n\nGSoC 2024: Add the support to Conformal Bayes to Taija with Pasquale Caterino and co-mentor Mojtaba Farmanbar\nSupport for conformal training (Stutz et al. 2022).\nCode refactoring to allow adding support for parallelization using TaijaParallel.jl.\nJuliaCon Proceedings paper (in planning)."
+  },
+  {
+    "objectID": "content/talks/posts/2024-turing/presentation.html#interactive-tour",
+    "href": "content/talks/posts/2024-turing/presentation.html#interactive-tour",
+    "title": "Trustworthy AI in Julia",
+    "section": "Interactive Tour",
+    "text": "Interactive Tour\n… if time permits at the end.\n\nFirst time here? Take a quick interactive tour to see what this package can do right on JuliaHub (To run the notebook, hit login and then edit).\n\nThis Pluto.jl 🎈 notebook won the 2nd Price in the JuliaCon 2023 Notebook Competition."
+  },
+  {
     "objectID": "content/talks/posts/2024-turing/presentation.html#background-2",
     "href": "content/talks/posts/2024-turing/presentation.html#background-2",
     "title": "Trustworthy AI in Julia",
     "section": "Background",
-    "text": "Background\nWe want BMA for neural networks,\n\\[\np(y|x,\\mathcal{D}) = \\int p(y|x,\\theta)p(\\theta|\\mathcal{D})d\\theta\n\\tag{1}\\]\nwhere \\(p(y|x,\\theta)\\) is the likelihood, \\(p(\\theta|\\mathcal{D})\\) is the posterior and \\(\\mathcal{D}\\) is the training data.\n\n\n\nProblem 😢: Intractable posterior \\(p(\\theta|\\mathcal{D})\\).\nIdea 💡: Taylor approximation at the mode.\n\n\n\n\n\nUnnormalized log-posterior and corresponding Laplace Approximation. Source: Murphy (2022)."
+    "text": "Background\nWe want BMA for neural networks underspecified by the data (Wilson 2020),\n\\[\np(y|x,\\mathcal{D}) = \\int p(y|x,\\theta)p(\\theta|\\mathcal{D})d\\theta\n\\qquad(1)\\]\nwhere \\(p(y|x,\\theta)\\) is the likelihood, \\(p(\\theta|\\mathcal{D})\\) is the posterior and \\(\\mathcal{D}\\) is the training data.\n\n\n\nProblem 😢: Intractable posterior \\(p(\\theta|\\mathcal{D})\\).\nConvention 🤔: Use MAP estimate \\(p(y|x,\\mathcal{D}) \\approx p(y|x,\\hat\\theta)\\) with \\(\\hat\\theta=\\arg\\max_{\\theta}p(\\theta|\\mathcal{D})\\).\nIdea 💡: Taylor approximation at the mode amounts to multivariate Gaussian centered around MAP.\n\n\n\n\n\nUnnormalized log-posterior and corresponding Laplace Approximation. Source: Murphy (2022)."
+  },
+  {
+    "objectID": "content/talks/posts/2024-turing/presentation.html#model-assumptions",
+    "href": "content/talks/posts/2024-turing/presentation.html#model-assumptions",
+    "title": "Trustworthy AI in Julia",
+    "section": "Model Assumptions",
+    "text": "Model Assumptions\nExample (binary classification): We assume Bernoulli likelihood and a Gaussian prior for our weights …\n\\[\np(y_n|\\mathbf{x}_n;\\mathbf{w})\\sim\\text{Ber}(y_n|\\sigma(\\mathbf{w}^T\\mathbf{x}_n))\n\\qquad(2)\\]\n\\[\np(\\theta) \\sim \\mathcal{N} \\left( \\theta | \\mathbf{0}, \\lambda^{-1} \\mathbf{I} \\right)=\\mathcal{N} \\left( \\theta | \\mathbf{0}, \\mathbf{H}_0^{-1} \\right)\n\\qquad(3)\\]\n\n… which yields the following negative log-likelihood (or energy) function (Murphy 2022):\n\\[\n\\psi(\\theta)= - \\sum_{n}^N [y_n \\log \\mu_n + (1-y_n)\\log (1-\\mu_n)] + \\\\ \\frac{1}{2} (\\theta-\\theta_0)^T\\mathbf{H}_0(\\theta-\\theta_0)\n\\qquad(4)\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2024-turing/presentation.html#taylor-expansion",
+    "href": "content/talks/posts/2024-turing/presentation.html#taylor-expansion",
+    "title": "Trustworthy AI in Julia",
+    "section": "Taylor Expansion",
+    "text": "Taylor Expansion\nWe have the following normalized posterior:\n\\[\np(\\theta|\\mathcal{D}) = Z^{-1} p(\\mathcal{D}|\\theta)p(\\theta) = Z^{-1} \\exp(-\\psi(\\theta))\n\\qquad(5)\\]\nwith \\(Z = \\int p(\\mathcal{D}|\\theta) p(\\theta)\\).\n\nThen, second-order Taylor expansion of the energy function around the mode \\(\\theta_0\\) gives us the Laplace approximation (Murphy 2022):\n\\[\n\\psi(\\theta) \\approxeq \\psi(\\hat\\theta) + \\frac{1}{2} (\\theta-\\hat\\theta)^T \\mathbf{H}(\\theta-\\hat\\theta)\n\\qquad(6)\\]\n\n\nThus, we have\n\\[\np(\\theta|\\mathcal{D}) \\approxeq \\mathcal{N}(\\theta;\\hat\\theta,-\\mathbf{H}^{-1})\n\\qquad(7)\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2024-turing/presentation.html#hessian-approximation",
+    "href": "content/talks/posts/2024-turing/presentation.html#hessian-approximation",
+    "title": "Trustworthy AI in Julia",
+    "section": "Hessian Approximation",
+    "text": "Hessian Approximation\n\nChallenge lies in computing the Hessian \\(\\mathbf{H}\\).\nWe can use the Empirical Fisher or Generalized Gauss-Newton approximation (Murphy 2022).\n\nStill quadratic in the number of parameters.\n\nFor scalable solutions, we can use the diagonal approximation or the K-FAC approximation or work with a subnetwork."
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#examples-2",
@@ -2149,11 +2191,25 @@
     "text": "Examples\n\nA basic usage example.\nA binary classification example with prior tuning through empirical Bayes.\nCounterfactual explanations with Laplace Redux here."
   },
   {
-    "objectID": "content/talks/posts/2024-turing/presentation.html#background-and-examples",
-    "href": "content/talks/posts/2024-turing/presentation.html#background-and-examples",
+    "objectID": "content/talks/posts/2024-turing/presentation.html#background-3",
+    "href": "content/talks/posts/2024-turing/presentation.html#background-3",
     "title": "Trustworthy AI in Julia",
-    "section": "Background and Examples",
-    "text": "Background and Examples\n\nJoint Energy Models (JEM) are a class of energy-based models that learn a joint distribution over inputs and outputs (Grathwohl et al. 2020).\nPackage used in Altmeyer et al. (2024), but less mature than the other packages.\nSimple usage example can be found here.\n\n\nContributions welcome!"
+    "section": "Background",
+    "text": "Background\nJoint Energy Models (JEM) are a class of energy-based models that learn a joint distribution over inputs and outputs (Grathwohl et al. 2020).\n\nTraining JEMs."
+  },
+  {
+    "objectID": "content/talks/posts/2024-turing/presentation.html#package",
+    "href": "content/talks/posts/2024-turing/presentation.html#package",
+    "title": "Trustworthy AI in Julia",
+    "section": "Package",
+    "text": "Package\n\n\n\nPackage used in Altmeyer et al. (2024), but less mature than the other packages.\nSimple usage example can be found here.\n\n\nContributions welcome!\n\n\n\n\n\nSamples generated through SGLD for JEM ensemble."
+  },
+  {
+    "objectID": "content/talks/posts/2024-turing/presentation.html#timeline",
+    "href": "content/talks/posts/2024-turing/presentation.html#timeline",
+    "title": "Trustworthy AI in Julia",
+    "section": "Timeline",
+    "text": "Timeline\n\nBackground in R and Python (mostly R), a little bit of MATLAB during my master’s\nFirst looked at Julia (v0.6) in 2017 during my master’s but quickly abandoned it.\nDuring my master’s in Data Science (2021) I started to get frustrated with the speed of R and Python.\n\nDid some work in C++ and Rcpp, but it was too cumbersome.\n\nStarted my PhD in Trustworthy AI in September 2021 and decided to give Julia another go.\nHaven’t looked back since!"
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#the-good",
@@ -2174,7 +2230,7 @@
     "href": "content/talks/posts/2024-turing/presentation.html#references",
     "title": "Trustworthy AI in Julia",
     "section": "References",
-    "text": "References\n\n\nAltmeyer, Patrick, Giovan Angela, Aleksander Buszydlik, Karol Dobiczek, Arie van Deursen, and Cynthia CS Liem. 2023. “Endogenous Macrodynamics in Algorithmic Recourse.” In 2023 IEEE Conference on Secure and Trustworthy Machine Learning (SaTML), 418–31. IEEE.\n\n\nAltmeyer, Patrick, Arie van Deursen, et al. 2023. “Explaining Black-Box Models Through Counterfactuals.” In Proceedings of the JuliaCon Conferences, 1:130. 1.\n\n\nAltmeyer, Patrick, Mojtaba Farmanbar, Arie van Deursen, and Cynthia C. S. Liem. 2023. “Faithful Model Explanations Through Energy-Constrained Conformal Counterfactuals.” https://arxiv.org/abs/2312.10648.\n\n\nAltmeyer, Patrick, Mojtaba Farmanbar, Arie van Deursen, and Cynthia CS Liem. 2024. “Faithful Model Explanations Through Energy-Constrained Conformal Counterfactuals.” In Proceedings of the AAAI Conference on Artificial Intelligence, 38:10829–37. 10.\n\n\nGrathwohl, Will, Kuan-Chieh Wang, Joern-Henrik Jacobsen, David Duvenaud, Mohammad Norouzi, and Kevin Swersky. 2020. “Your Classifier Is Secretly an Energy Based Model and You Should Treat It Like One.” In International Conference on Learning Representations.\n\n\nHengst, Floris den, Ralf Wolter, Patrick Altmeyer, and Arda Kaygan. 2024. “Conformal Intent Classification and Clarification for Fast and Accurate Intent Recognition.” https://arxiv.org/abs/2403.18973.\n\n\nJoshi, Shalmali, Oluwasanmi Koyejo, Warut Vijitbenjaronk, Been Kim, and Joydeep Ghosh. 2019. “Towards Realistic Individual Recourse and Actionable Explanations in Black-Box Decision Making Systems.” https://arxiv.org/abs/1907.09615.\n\n\nMurphy, Kevin P. 2022. Probabilistic Machine Learning: An Introduction. MIT Press.\n\n\nSchut, Lisa, Oscar Key, Rory Mc Grath, Luca Costabello, Bogdan Sacaleanu, Yarin Gal, et al. 2021. “Generating Interpretable Counterfactual Explanations By Implicit Minimisation of Epistemic and Aleatoric Uncertainties.” In International Conference on Artificial Intelligence and Statistics, 1756–64. PMLR.\n\n\nStutz, David, Krishnamurthy, Dvijotham, Ali Taylan Cemgil, and Arnaud Doucet. 2022. “Learning Optimal Conformal Classifiers.” https://arxiv.org/abs/2110.09192.\n\n\nWachter, Sandra, Brent Mittelstadt, and Chris Russell. 2017. “Counterfactual Explanations Without Opening the Black Box: Automated Decisions and the GDPR.” Harv. JL & Tech. 31: 841. https://doi.org/10.2139/ssrn.3063289."
+    "text": "References\n\n\nAltmeyer, Patrick, Giovan Angela, Aleksander Buszydlik, Karol Dobiczek, Arie van Deursen, and Cynthia CS Liem. 2023. “Endogenous Macrodynamics in Algorithmic Recourse.” In 2023 IEEE Conference on Secure and Trustworthy Machine Learning (SaTML), 418–31. IEEE.\n\n\nAltmeyer, Patrick, Arie van Deursen, et al. 2023. “Explaining Black-Box Models Through Counterfactuals.” In Proceedings of the JuliaCon Conferences, 1:130. 1.\n\n\nAltmeyer, Patrick, Mojtaba Farmanbar, Arie van Deursen, and Cynthia C. S. Liem. 2023. “Faithful Model Explanations Through Energy-Constrained Conformal Counterfactuals.” https://arxiv.org/abs/2312.10648.\n\n\nAltmeyer, Patrick, Mojtaba Farmanbar, Arie van Deursen, and Cynthia CS Liem. 2024. “Faithful Model Explanations Through Energy-Constrained Conformal Counterfactuals.” In Proceedings of the AAAI Conference on Artificial Intelligence, 38:10829–37. 10.\n\n\nGrathwohl, Will, Kuan-Chieh Wang, Joern-Henrik Jacobsen, David Duvenaud, Mohammad Norouzi, and Kevin Swersky. 2020. “Your Classifier Is Secretly an Energy Based Model and You Should Treat It Like One.” In International Conference on Learning Representations.\n\n\nHengst, Floris den, Ralf Wolter, Patrick Altmeyer, and Arda Kaygan. 2024. “Conformal Intent Classification and Clarification for Fast and Accurate Intent Recognition.” https://arxiv.org/abs/2403.18973.\n\n\nJoshi, Shalmali, Oluwasanmi Koyejo, Warut Vijitbenjaronk, Been Kim, and Joydeep Ghosh. 2019. “Towards Realistic Individual Recourse and Actionable Explanations in Black-Box Decision Making Systems.” https://arxiv.org/abs/1907.09615.\n\n\nMurphy, Kevin P. 2022. Probabilistic Machine Learning: An Introduction. MIT Press.\n\n\nSchut, Lisa, Oscar Key, Rory Mc Grath, Luca Costabello, Bogdan Sacaleanu, Yarin Gal, et al. 2021. “Generating Interpretable Counterfactual Explanations By Implicit Minimisation of Epistemic and Aleatoric Uncertainties.” In International Conference on Artificial Intelligence and Statistics, 1756–64. PMLR.\n\n\nStutz, David, Krishnamurthy, Dvijotham, Ali Taylan Cemgil, and Arnaud Doucet. 2022. “Learning Optimal Conformal Classifiers.” https://arxiv.org/abs/2110.09192.\n\n\nWachter, Sandra, Brent Mittelstadt, and Chris Russell. 2017. “Counterfactual Explanations Without Opening the Black Box: Automated Decisions and the GDPR.” Harv. JL & Tech. 31: 841. https://doi.org/10.2139/ssrn.3063289.\n\n\nWilson, Andrew Gordon. 2020. “The Case for Bayesian Deep Learning.” https://arxiv.org/abs/2001.10995."
   },
   {
     "objectID": "content/talks/posts/2024-econdat/presentation.html#motivation",

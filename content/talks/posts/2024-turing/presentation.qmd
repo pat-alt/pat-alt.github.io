@@ -17,20 +17,6 @@ format:
     transition: slide
     background-transition: fade
     fig-align: center
-    html-math-method: mathjax
-    include-in-header:
-      - text: |
-          <script>
-          MathJax = {
-            options: {
-              menuOptions: {
-                settings: {
-                  assistiveMml: false
-                }
-              }
-            }
-          };
-          </script>
 revealjs-plugins:
   - pointer
 crossref: 
@@ -64,7 +50,7 @@ Why Trustworthy AI and why in Julia?
 
 :::{.incremental}
 
-- **Taija**: A brief overview of the [Taija]() ecosystem.
+- **Taija**: A brief overview of the [Taija](https://github.com/JuliaTrustworthyAI) ecosystem.
   - Overview, Projects, Research. 
 - **Deep Dive**: A closer look at some of our core packages.
   - Counterfactual Explanations, Conformal Prediction, Laplace Redux, Joint Energy Models. 
@@ -248,6 +234,14 @@ $$
 :::
 ::::
 
+## Ongoing Work {.smaller}
+
+- JSoC 2024: *From Counterfactuals to Interventions - Recourse through Minimal Causal Interventions* with Jorge Luiz Franco and co-mentor [Moritz Schauer](https://github.com/mschauer) ([CausalInference.jl](https://github.com/mschauer/CausalInference.jl))
+  - We typically make the implicit causal assumption that all features are independent.
+  - If we have (imperfect) causal knowledge, we can use it to guide the search for counterfactuals.
+- *What Makes Models Explainable?*: using *ECCCo* to benchmark models.
+- Four master's theses all using `CounterfactualExplanations.jl` (LLM explainability, imbalanced data, recourse in practice and counterfactuals for model testing).
+
 # Conformal Prediction
 
 `ConformalPrediction.jl`: A [package](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) for Predictive Uncertainty Quantification through Conformal Prediction for Machine Learning models trained in MLJ.
@@ -268,6 +262,21 @@ Intuitively, CP works under the premise of turning heuristic notions of uncertai
 
 ![`ConformalPrediction.jl` meets `SymbolicRegression.jl`.](www/cp.gif)
 
+## Ongoing Work
+
+- GSoC 2024: *Add the support to Conformal Bayes to Taija* with Pasquale Caterino and co-mentor Mojtaba Farmanbar
+- Support for conformal training [@stutz2022learning].
+- Code refactoring to allow adding support for parallelization using `TaijaParallel.jl`.
+- JuliaCon Proceedings paper (in planning).
+
+## Interactive Tour
+
+... if time permits at the end.
+
+> First time here? Take a quick interactive [tour](https://juliahub.com/ui/Notebooks/juliahub/Tutorials/ConformalPrediction.jl) to see what this package can do right on [JuliaHub](https://juliahub.com/ui/Notebooks/juliahub/Tutorials/ConformalPrediction.jl){target="_blank"} (To run the notebook, hit login and then edit). 
+
+This [`Pluto.jl`](https://github.com/fonsp/Pluto.jl){target="_blank"} 🎈 notebook won the 2nd Price in the [JuliaCon 2023 Notebook Competition](https://info.juliahub.com/pluto-notebook-winner-23).
+
 # Laplace Redux
 
 `LaplaceRedux.jl`: A [package](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl) for Effortless Bayesian Deep Learning through Laplace Approximation for Flux.jl neural networks.
@@ -276,7 +285,7 @@ Intuitively, CP works under the premise of turning heuristic notions of uncertai
 
 ## Background {.smaller}
 
-We want BMA for neural networks, 
+We want BMA for neural networks underspecified by the data [@wilson2020case], 
 
 $$
 p(y|x,\mathcal{D}) = \int p(y|x,\theta)p(\theta|\mathcal{D})d\theta
@@ -285,14 +294,68 @@ $$ {#eq-bma}
 where $p(y|x,\theta)$ is the likelihood, $p(\theta|\mathcal{D})$ is the posterior and $\mathcal{D}$ is the training data.
 
 ::::{.columns}::::
-:::{.column width='50%'}
+:::{.column width='60%'}
 - **Problem** 😢: Intractable posterior $p(\theta|\mathcal{D})$.
-- **Idea** 💡: Taylor approximation at the mode.
+- **Convention** 🤔: Use MAP estimate $p(y|x,\mathcal{D}) \approx p(y|x,\hat\theta)$ with $\hat\theta=\arg\max_{\theta}p(\theta|\mathcal{D})$. 
+- **Idea** 💡: Taylor approximation at the mode amounts to multivariate Gaussian centered around MAP.
 :::
-:::{.column width='50%'}
+:::{.column width='40%'}
 ![Unnormalized log-posterior and corresponding Laplace Approximation. Source: @murphy2022probabilistic.](/www/images/laplace_posterior.png)
 :::
 ::::
+
+## Model Assumptions {.smaller}
+
+**Example (binary classification)**: We assume Bernoulli likelihood and a Gaussian prior for our weights ...
+
+$$
+p(y_n|\mathbf{x}_n;\mathbf{w})\sim\text{Ber}(y_n|\sigma(\mathbf{w}^T\mathbf{x}_n))
+$$ {#eq-prior}
+
+$$
+p(\theta) \sim \mathcal{N} \left( \theta | \mathbf{0}, \lambda^{-1} \mathbf{I} \right)=\mathcal{N} \left( \theta | \mathbf{0}, \mathbf{H}_0^{-1} \right)
+$$ {#eq-prior}
+
+. . .
+
+... which yields the following negative log-likelihood (or energy) function [@murphy2022probabilistic]:
+
+$$
+\psi(\theta)= - \sum_{n}^N [y_n \log \mu_n + (1-y_n)\log (1-\mu_n)] + \\ \frac{1}{2} (\theta-\theta_0)^T\mathbf{H}_0(\theta-\theta_0)
+$$ {#eq-loss}
+
+## Taylor Expansion {.smaller}
+
+We have the following normalized posterior: 
+
+$$
+p(\theta|\mathcal{D}) = Z^{-1} p(\mathcal{D}|\theta)p(\theta) = Z^{-1} \exp(-\psi(\theta)) 
+$$ {#eq-normalized}
+
+with $Z = \int p(\mathcal{D}|\theta) p(\theta)$.
+
+. . .
+
+Then, second-order Taylor expansion of the energy function around the mode $\theta_0$ gives us the Laplace approximation [@murphy2022probabilistic]:
+
+$$
+\psi(\theta) \approxeq \psi(\hat\theta) + \frac{1}{2} (\theta-\hat\theta)^T \mathbf{H}(\theta-\hat\theta)
+$$ {#eq-taylor}
+
+. . .
+
+Thus, we have
+
+$$
+p(\theta|\mathcal{D}) \approxeq \mathcal{N}(\theta;\hat\theta,-\mathbf{H}^{-1})
+$$ {#eq-posterior}
+
+## Hessian Approximation
+
+- Challenge lies in computing the Hessian $\mathbf{H}$.
+- We can use the Empirical Fisher or Generalized Gauss-Newton approximation [@murphy2022probabilistic].
+  - Still quadratic in the number of parameters.
+- For scalable solutions, we can use the diagonal approximation or the K-FAC approximation or work with a subnetwork.
 
 ## Examples
 
@@ -308,15 +371,36 @@ where $p(y|x,\theta)$ is the likelihood, $p(\theta|\mathcal{D})$ is the posterio
 
 ![](www/jem.svg){.absolute bottom=-400 right=50 width="50%"}
 
-## Background and Examples
+## Background 
 
-- **Joint Energy Models** (JEM) are a class of energy-based models that learn a joint distribution over inputs and outputs [@grathwohl2020your].
+**Joint Energy Models** (JEM) are a class of energy-based models that learn a joint distribution over inputs and outputs [@grathwohl2020your].
+
+![Training JEMs.](www/jem.png)
+
+## Package
+
+::::{.columns}::::
+:::{.column width='50%'}
 - Package used in @altmeyer2024faithful, but less mature than the other packages.
 - Simple usage example can be found [here](https://juliatrustworthyai.github.io/JointEnergyModels.jl/stable/).
 
 > Contributions welcome!
+:::
+:::{.column width='50%'}
+![Samples generated through SGLD for JEM ensemble.](www/mnist_generated_jem.png)
+:::
+::::
 
 # The Journey
+
+## Timeline
+
+- Background in R and Python (mostly R), a little bit of MATLAB during my master's
+- First looked at Julia (`v0.6`) in 2017 during my master's but quickly abandoned it.
+- During my master's in Data Science (2021) I started to get frustrated with the speed of R and Python.
+  - Did some work in C++ and Rcpp, but it was too cumbersome.
+- Started my PhD in Trustworthy AI in September 2021 and decided to give Julia another go.
+- Haven't looked back since!
 
 ## The Good
 
