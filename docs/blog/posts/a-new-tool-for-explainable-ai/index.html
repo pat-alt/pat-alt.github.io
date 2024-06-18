@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2022-04-20">
 <meta name="description" content="This post introduces a new Julia package for generating counterfactual explanations. The package can be used to explain machine learning algorithms developed and trained in Julia as well as other popular programming languages like Python and R.">
 
-<title>Patrick Altmeyer - A new tool for explainable AI</title>
+<title>patalt - A new tool for explainable AI</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -166,10 +166,10 @@ window.Quarto = {
 
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Patrick Altmeyer - A new tool for explainable AI">
+<meta property="og:title" content="patalt - A new tool for explainable AI">
 <meta property="og:description" content="This post introduces a new Julia package for generating counterfactual explanations. The package can be used to explain machine learning algorithms developed and trained in Julia as well as other popular programming languages like Python and R.">
-<meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/a-new-tool-for-explainable-ai/www/intro.gif">
-<meta property="og:site_name" content="Patrick Altmeyer">
+<meta property="og:image" content="https://www.patalt.org/blog/posts/a-new-tool-for-explainable-ai/www/intro.gif">
+<meta property="og:site_name" content="patalt">
 </head>
 
 <body class="nav-fixed">
@@ -183,7 +183,7 @@ window.Quarto = {
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
     <a class="navbar-brand" href="../../../index.html">
-    <span class="navbar-title">Patrick Altmeyer</span>
+    <span class="navbar-title">patalt</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -328,7 +328,7 @@ Turning a 9 (nine) into a 4 (four).
 </div>
 <!-- Intro -->
 <p>Counterfactual explanations, which I introduced in one of my previous posts<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, offer a simple and intuitive way to explain black-box models without opening them. Still, as of today there exists only one open-source library that provides a unifying approach to generate and benchmark counterfactual explanations for models built and trained in Python <span class="citation" data-cites="pawelczyk2021carla">(<a href="#ref-pawelczyk2021carla" role="doc-biblioref">Pawelczyk et al. 2021</a>)</span>. This is great, but of limited use to users of other programming languages 🥲.</p>
-<p>Enter <a href="https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/"><code>CounterfactualExplanations.jl</code></a>: a Julia package that can be used to explain machine learning algorithms developed and trained in Julia, Python and R. Counterfactual explanations fall into the broader category of explainable artificial intelligence (XAI).</p>
+<p>Enter <a href="https://www.patalt.org/CounterfactualExplanations.jl/stable/"><code>CounterfactualExplanations.jl</code></a>: a Julia package that can be used to explain machine learning algorithms developed and trained in Julia, Python and R. Counterfactual explanations fall into the broader category of explainable artificial intelligence (XAI).</p>
 <p>Explainable AI typically involves models that are not inherently interpretable but require additional tools to be explainable to humans. Examples of the latter include ensembles, support vector machines and deep neural networks. This is not to be confused with interpretable AI, which involves models that are inherently interpretable and transparent such as general additive models (GAM), decision trees and rule-based models.</p>
 <p>Some would argue that we best avoid explaining black-box models altogether <span class="citation" data-cites="rudin2019stop">(<a href="#ref-rudin2019stop" role="doc-biblioref">Rudin 2019</a>)</span> and instead focus solely on interpretable AI. While I agree that initial efforts should always be geared towards interpretable models, stopping there would entail missed opportunities and anyway is probably not very realistic in times of <a href="https://openai.com/blog/dall-e/">DALL<span class="math inline">\(\cdot\)</span>E</a> and Co.</p>
 <blockquote class="blockquote">
@@ -340,11 +340,11 @@ Turning a 9 (nine) into a 4 (four).
 <section id="counterfactuals-for-image-data" class="level2">
 <h2 class="anchored" data-anchor-id="counterfactuals-for-image-data">Counterfactuals for image data 🖼</h2>
 <p>To introduce counterfactual explanations I used a simple binary classification problem in my previous <a href="https://towardsdatascience.com/individual-recourse-for-black-box-models-5e9ed1e4b4cc">post</a>. It involved a linear classifier and a linearly separable, synthetic data set with just two features. This time we are going to step it up a notch: we will generate counterfactual explanations MNIST data. The MNIST dataset contains 60,000 training samples of handwritten digits in the form of 28x28 pixel grey-scale images <span class="citation" data-cites="lecun1998mnist">(<a href="#ref-lecun1998mnist" role="doc-biblioref">LeCun 1998</a>)</span>. Each image is associated with a label indicating the digit (0-9) that the image represents.</p>
-<p>The <a href="https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/"><code>CounterfactualExplanations.jl</code></a> package ships with two black-box models that were trained to predict labels for this data: firstly, a simple multi-layer perceptron (MLP) and, secondly, a corresponding deep ensemble. Originally proposed by <span class="citation" data-cites="lakshminarayanan2016simple">Lakshminarayanan, Pritzel, and Blundell (<a href="#ref-lakshminarayanan2016simple" role="doc-biblioref">2017</a>)</span>, deep ensembles are really just ensembles of deep neural networks. They are still among the most popular approaches to Bayesian deep learning.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>The <a href="https://www.patalt.org/CounterfactualExplanations.jl/stable/"><code>CounterfactualExplanations.jl</code></a> package ships with two black-box models that were trained to predict labels for this data: firstly, a simple multi-layer perceptron (MLP) and, secondly, a corresponding deep ensemble. Originally proposed by <span class="citation" data-cites="lakshminarayanan2016simple">Lakshminarayanan, Pritzel, and Blundell (<a href="#ref-lakshminarayanan2016simple" role="doc-biblioref">2017</a>)</span>, deep ensembles are really just ensembles of deep neural networks. They are still among the most popular approaches to Bayesian deep learning.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <section id="black-box-models" class="level3">
 <h3 class="anchored" data-anchor-id="black-box-models">Black-box models</h3>
 <p>The code below loads relevant packages along with the MNIST data and pre-trained models.</p>
-<div class="cell" data-execution_count="2">
+<div id="54d7db74" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Load package, models and data:</span></span>
@@ -362,7 +362,7 @@ Turning a 9 (nine) into a 4 (four).
 <li><strong>Multiple dispatch</strong>: the package-internal functions <code>logits</code> and <code>probs</code> need to be extended through custom methods for the new model type.</li>
 </ol>
 <p>The following code implements these two steps first for the MLP and then for the deep ensemble.</p>
-<div class="cell" data-execution_count="3">
+<div id="33917159" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">using</span> <span class="bu">CounterfactualExplanations.Models</span></span>
@@ -396,7 +396,7 @@ Turning a 9 (nine) into a 4 (four).
 <p>Next, we need to specify the counterfactual generators we want to use. The package currently ships with two default generators that both need gradient access: firstly, the generic generator introduced by <span class="citation" data-cites="wachter2017counterfactual">Wachter, Mittelstadt, and Russell (<a href="#ref-wachter2017counterfactual" role="doc-biblioref">2017</a>)</span> and, secondly, a greedy generator introduced by <span class="citation" data-cites="schut2021generating">Schut et al. (<a href="#ref-schut2021generating" role="doc-biblioref">2021</a>)</span>.</p>
 <p>The greedy generator is designed to be used with models that incorporate uncertainty in their predictions such as the deep ensemble introduced above. It works for probabilistic (Bayesian) models, because they only produce high-confidence predictions in regions of the feature domain that are populated by training samples. As long as the model is expressive enough and well-specified, counterfactuals in these regions will always be realistic and unambiguous since by construction they should look very similar to training samples. Other popular approaches to counterfactual explanations like REVISE <span class="citation" data-cites="joshi2019realistic">(<a href="#ref-joshi2019realistic" role="doc-biblioref">Joshi et al. 2019</a>)</span> and CLUE <span class="citation" data-cites="antoran2020getting">(<a href="#ref-antoran2020getting" role="doc-biblioref">Antorán et al. 2020</a>)</span> also play with this simple idea.</p>
 <p>The following code instantiates the two generators for the problem at hand.</p>
-<div class="cell" data-execution_count="4">
+<div id="321ebc82" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a>generic <span class="op">=</span> <span class="fu">GenericGenerator</span>(;loss<span class="op">=:</span>logitcrossentropy)</span>
@@ -407,7 +407,7 @@ Turning a 9 (nine) into a 4 (four).
 <section id="explanations" class="level3">
 <h3 class="anchored" data-anchor-id="explanations">Explanations</h3>
 <p>Once the model and counterfactual generator are specified, running counterfactual search is very easy using the package. For a given factual (<code>x</code>), target class (<code>target</code>) and data set (<code>counterfactual_data</code>), simply running</p>
-<div class="cell" data-execution_count="6">
+<div id="0eece317" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">generate_counterfactual</span>(x, target, counterfactual_data, M, generic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>will generate the results, in this case using the generic generator (<code>generic</code>) for the MLP (<code>M</code>). Since we have specified two different black-box models and two different counterfactual generators, we have four combinations of a model and a generator in total. For each of these combinations I have used the <code>generate_counterfactual</code> function to produce the results in <a href="#fig-mnist-9to4" class="quarto-xref">Figure&nbsp;1</a>.</p>
@@ -430,7 +430,7 @@ Figure&nbsp;1: Counterfactual explanations for MNIST: turning a nine (9) into a 
 <section id="explaining-a-torch-model" class="level3">
 <h3 class="anchored" data-anchor-id="explaining-a-torch-model">Explaining a <code>torch</code> model</h3>
 <p>We will consider a simple MLP trained for a binary classification task. As before we first need to adapt this custom model for use with our package. The code below the two necessary steps - sub-typing and method extension. Logits are returned by the <code>torch</code> model and copied from the R environment into the Julia scope. Probabilities are then computed inside the Julia scope by passing the logits through the sigmoid function.</p>
-<div class="cell" data-execution_count="12">
+<div id="63ca46af" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">using</span> <span class="bu">Flux</span></span>
@@ -469,7 +469,7 @@ Experimental functionality
 <p>You may have stumbled across the term <em>respecify</em> above: does it really seem like a good idea to just replace an existing function from our package? Surely not! There are certainly better ways to go about this, which we will consider when adding native support for Python and R models in future package releases. Which brings us to our final section …</p>
 </div>
 </div>
-<div class="cell" data-execution_count="13">
+<div id="06af8432" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> <span class="bu">CounterfactualExplanations.Generators</span>: ∂ℓ</span>
@@ -525,7 +525,7 @@ Figure&nbsp;2: Counterfactual path using the generic counterfactual generator fo
 <p>If you’re interested in learning more about this development, feel free to check out the following resources:</p>
 <ul>
 <li>Package docs: <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/stable">[stable]</a>, <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/dev">[dev]</a>.</li>
-<li><a href="https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/contributing/">Contributor’s guide</a>.</li>
+<li><a href="https://www.patalt.org/CounterfactualExplanations.jl/stable/contributing/">Contributor’s guide</a>.</li>
 <li><a href="https://github.com/juliatrustworthyai/CounterfactualExplanations.jl">GitHub repo</a>.</li>
 </ul>
 
@@ -564,20 +564,20 @@ Wachter, Sandra, Brent Mittelstadt, and Chris Russell. 2017. <span>“Counterfac
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>See: [<a href="https://towardsdatascience.com/individual-recourse-for-black-box-models-5e9ed1e4b4cc">TDS</a>], [<a href="https://www.paltmeyer.com/blog/posts/individual-recourse-for-black-box-models/">blog</a>]<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>For more information on Bayesian deep learning see my previous post: [<a href="https://towardsdatascience.com/go-deep-but-also-go-bayesian-ab25efa6f7b">TDS</a>], [<a href="https://www.paltmeyer.com/blog/posts/effortsless-bayesian-dl/">blog</a>].<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>The corresponding example involving <code>PyTorch</code> is analogous and therefore not included here. You may find it <a href="https://www.paltmeyer.com/CounterfactualExplanations.jl/dev/tutorials/interop/">here</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>See: [<a href="https://towardsdatascience.com/individual-recourse-for-black-box-models-5e9ed1e4b4cc">TDS</a>], [<a href="https://www.patalt.org/blog/posts/individual-recourse-for-black-box-models/">blog</a>]<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>For more information on Bayesian deep learning see my previous post: [<a href="https://towardsdatascience.com/go-deep-but-also-go-bayesian-ab25efa6f7b">TDS</a>], [<a href="https://www.patalt.org/blog/posts/effortsless-bayesian-dl/">blog</a>].<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The corresponding example involving <code>PyTorch</code> is analogous and therefore not included here. You may find it <a href="https://www.patalt.org/CounterfactualExplanations.jl/dev/tutorials/interop/">here</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2022,
   author = {Altmeyer, Patrick},
   title = {A New Tool for Explainable {AI}},
   date = {2022-04-20},
-  url = {https://www.paltmeyer.com/blog//blog/posts/a-new-tool-for-explainable-ai},
+  url = {https://www.patalt.org//blog/posts/a-new-tool-for-explainable-ai},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas" role="listitem">
 Altmeyer, Patrick. 2022. <span>“A New Tool for Explainable AI.”</span>
-April 20, 2022. <a href="https://www.paltmeyer.com/blog//blog/posts/a-new-tool-for-explainable-ai">https://www.paltmeyer.com/blog//blog/posts/a-new-tool-for-explainable-ai</a>.
+April 20, 2022. <a href="https://www.patalt.org//blog/posts/a-new-tool-for-explainable-ai">https://www.patalt.org//blog/posts/a-new-tool-for-explainable-ai</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -1050,9 +1050,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-31"><a href="#cb7-31"></a></span>
 <span id="cb7-32"><a href="#cb7-32"></a><span class="co">&lt;!-- Intro --&gt;</span></span>
 <span id="cb7-33"><a href="#cb7-33"></a></span>
-<span id="cb7-34"><a href="#cb7-34"></a>Counterfactual explanations, which I introduced in one of my previous posts^<span class="co">[</span><span class="ot">See: [[TDS](https://towardsdatascience.com/individual-recourse-for-black-box-models-5e9ed1e4b4cc)</span><span class="co">]</span>, [<span class="co">[</span><span class="ot">blog</span><span class="co">](https://www.paltmeyer.com/blog/posts/individual-recourse-for-black-box-models/)</span>]], offer a simple and intuitive way to explain black-box models without opening them. Still, as of today there exists only one open-source library that provides a unifying approach to generate and benchmark counterfactual explanations for models built and trained in Python <span class="co">[</span><span class="ot">@pawelczyk2021carla</span><span class="co">]</span>. This is great, but of limited use to users of other programming languages 🥲. </span>
+<span id="cb7-34"><a href="#cb7-34"></a>Counterfactual explanations, which I introduced in one of my previous posts^<span class="co">[</span><span class="ot">See: [[TDS](https://towardsdatascience.com/individual-recourse-for-black-box-models-5e9ed1e4b4cc)</span><span class="co">]</span>, [<span class="co">[</span><span class="ot">blog</span><span class="co">](https://www.patalt.org/blog/posts/individual-recourse-for-black-box-models/)</span>]], offer a simple and intuitive way to explain black-box models without opening them. Still, as of today there exists only one open-source library that provides a unifying approach to generate and benchmark counterfactual explanations for models built and trained in Python <span class="co">[</span><span class="ot">@pawelczyk2021carla</span><span class="co">]</span>. This is great, but of limited use to users of other programming languages 🥲. </span>
 <span id="cb7-35"><a href="#cb7-35"></a></span>
-<span id="cb7-36"><a href="#cb7-36"></a>Enter <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/)</span>: a Julia package that can be used to explain machine learning algorithms developed and trained in Julia, Python and R. Counterfactual explanations fall into the broader category of explainable artificial intelligence (XAI). </span>
+<span id="cb7-36"><a href="#cb7-36"></a>Enter <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://www.patalt.org/CounterfactualExplanations.jl/stable/)</span>: a Julia package that can be used to explain machine learning algorithms developed and trained in Julia, Python and R. Counterfactual explanations fall into the broader category of explainable artificial intelligence (XAI). </span>
 <span id="cb7-37"><a href="#cb7-37"></a></span>
 <span id="cb7-38"><a href="#cb7-38"></a>Explainable AI typically involves models that are not inherently interpretable but require additional tools to be explainable to humans. Examples of the latter include ensembles, support vector machines and deep neural networks. This is not to be confused with interpretable AI, which involves models that are inherently interpretable and transparent such as general additive models (GAM), decision trees and rule-based models. </span>
 <span id="cb7-39"><a href="#cb7-39"></a></span>
@@ -1070,7 +1070,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-51"><a href="#cb7-51"></a></span>
 <span id="cb7-52"><a href="#cb7-52"></a>To introduce counterfactual explanations I used a simple binary classification problem in my previous <span class="co">[</span><span class="ot">post</span><span class="co">](https://towardsdatascience.com/individual-recourse-for-black-box-models-5e9ed1e4b4cc)</span>. It involved a linear classifier and a linearly separable, synthetic data set with just two features. This time we are going to step it up a notch: we will generate counterfactual explanations MNIST data. The MNIST dataset contains 60,000 training samples of handwritten digits in the form of 28x28 pixel grey-scale images <span class="co">[</span><span class="ot">@lecun1998mnist</span><span class="co">]</span>. Each image is associated with a label indicating the digit (0-9) that the image represents. </span>
 <span id="cb7-53"><a href="#cb7-53"></a></span>
-<span id="cb7-54"><a href="#cb7-54"></a>The <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/)</span> package ships with two black-box models that were trained to predict labels for this data: firstly, a simple multi-layer perceptron (MLP) and, secondly, a corresponding deep ensemble. Originally proposed by @lakshminarayanan2016simple, deep ensembles are really just ensembles of deep neural networks. They are still among the most popular approaches to Bayesian deep learning.^<span class="co">[</span><span class="ot">For more information on Bayesian deep learning see my previous post: [[TDS](https://towardsdatascience.com/go-deep-but-also-go-bayesian-ab25efa6f7b)</span><span class="co">]</span>, [<span class="co">[</span><span class="ot">blog</span><span class="co">](https://www.paltmeyer.com/blog/posts/effortsless-bayesian-dl/)</span>].] </span>
+<span id="cb7-54"><a href="#cb7-54"></a>The <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://www.patalt.org/CounterfactualExplanations.jl/stable/)</span> package ships with two black-box models that were trained to predict labels for this data: firstly, a simple multi-layer perceptron (MLP) and, secondly, a corresponding deep ensemble. Originally proposed by @lakshminarayanan2016simple, deep ensembles are really just ensembles of deep neural networks. They are still among the most popular approaches to Bayesian deep learning.^<span class="co">[</span><span class="ot">For more information on Bayesian deep learning see my previous post: [[TDS](https://towardsdatascience.com/go-deep-but-also-go-bayesian-ab25efa6f7b)</span><span class="co">]</span>, [<span class="co">[</span><span class="ot">blog</span><span class="co">](https://www.patalt.org/blog/posts/effortsless-bayesian-dl/)</span>].] </span>
 <span id="cb7-55"><a href="#cb7-55"></a></span>
 <span id="cb7-56"><a href="#cb7-56"></a><span class="fu">### Black-box models</span></span>
 <span id="cb7-57"><a href="#cb7-57"></a></span>
@@ -1234,7 +1234,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-231"><a href="#cb7-231"></a></span>
 <span id="cb7-232"><a href="#cb7-232"></a><span class="fu">## Language interoperability 👥</span></span>
 <span id="cb7-233"><a href="#cb7-233"></a></span>
-<span id="cb7-234"><a href="#cb7-234"></a>The Julia language offers unique support for programming language interoperability. For example, calling R or Python is made remarkably easy through <span class="in">`RCall.jl`</span> and <span class="in">`PyCall.jl`</span>, respectively. This functionality can be leveraged to use <span class="in">`CounterfactualExplanations.jl`</span> to generate explanations for models that were developed in other programming languages. At this time there is no native support for foreign programming languages, but the following example involving a <span class="in">`torch`</span> neural network trained in <span class="in">`R`</span> demonstrates how versatile the package is.^<span class="co">[</span><span class="ot">The corresponding example involving `PyTorch` is analogous and therefore not included here. You may find it [here](https://www.paltmeyer.com/CounterfactualExplanations.jl/dev/tutorials/interop/).</span><span class="co">]</span></span>
+<span id="cb7-234"><a href="#cb7-234"></a>The Julia language offers unique support for programming language interoperability. For example, calling R or Python is made remarkably easy through <span class="in">`RCall.jl`</span> and <span class="in">`PyCall.jl`</span>, respectively. This functionality can be leveraged to use <span class="in">`CounterfactualExplanations.jl`</span> to generate explanations for models that were developed in other programming languages. At this time there is no native support for foreign programming languages, but the following example involving a <span class="in">`torch`</span> neural network trained in <span class="in">`R`</span> demonstrates how versatile the package is.^<span class="co">[</span><span class="ot">The corresponding example involving `PyTorch` is analogous and therefore not included here. You may find it [here](https://www.patalt.org/CounterfactualExplanations.jl/dev/tutorials/interop/).</span><span class="co">]</span></span>
 <span id="cb7-235"><a href="#cb7-235"></a></span>
 <span id="cb7-236"><a href="#cb7-236"></a><span class="fu">### Explaining a `torch` model </span></span>
 <span id="cb7-237"><a href="#cb7-237"></a></span>
@@ -1396,7 +1396,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-405"><a href="#cb7-405"></a>If you're interested in learning more about this development, feel free to check out the following resources:</span>
 <span id="cb7-406"><a href="#cb7-406"></a></span>
 <span id="cb7-407"><a href="#cb7-407"></a><span class="ss">- </span>Package docs: [<span class="co">[</span><span class="ot">stable</span><span class="co">]</span>](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/stable), [<span class="co">[</span><span class="ot">dev</span><span class="co">]</span>](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/dev).</span>
-<span id="cb7-408"><a href="#cb7-408"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Contributor's guide</span><span class="co">](https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/contributing/)</span>.</span>
+<span id="cb7-408"><a href="#cb7-408"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Contributor's guide</span><span class="co">](https://www.patalt.org/CounterfactualExplanations.jl/stable/contributing/)</span>.</span>
 <span id="cb7-409"><a href="#cb7-409"></a><span class="ss">- </span><span class="co">[</span><span class="ot">GitHub repo</span><span class="co">](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl)</span>.</span>
 <span id="cb7-410"><a href="#cb7-410"></a></span>
 <span id="cb7-411"><a href="#cb7-411"></a></span>
@@ -1415,7 +1415,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
-    <a class="nav-link" href="https://www.paltmeyer.com/">
+    <a class="nav-link" href="https://www.patalt.org/">
       <i class="bi bi-house" role="img">
 </i> 
     </a>

@@ -11,7 +11,7 @@ categories:
 description: >-
   This third post introduces conformal regression by going through a standard machine learning workflow using [`MLJ.jl`](https://alan-turing-institute.github.io/MLJ.jl/dev/) and [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl).
 image: www/intro.gif
-jupyter: julia-1.9
+jupyter: julia-1.10
 draft: false
 ---
 
@@ -27,6 +27,7 @@ using MLJModels
 using NearestNeighborModels: KNNRegressor
 using Plots
 using Random
+using TaijaPlotting
 Random.seed!(2022)
 theme(:wong)
 www_path = "blog/posts/conformal-regression/www"
@@ -342,7 +343,7 @@ By expanding the domain of out inputs, we have violated the exchangeability assu
 
 ## 📚 Read on
 
-If you are curious to find out more, be sure to read on in the [docs](https://www.paltmeyer.com/ConformalPrediction.jl/stable/). There are also a number of useful resources to learn more about Conformal Prediction, a few of which I have listed below:
+If you are curious to find out more, be sure to read on in the [docs](https://www.patalt.org/ConformalPrediction.jl/stable/). There are also a number of useful resources to learn more about Conformal Prediction, a few of which I have listed below:
 
 - *A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification* by Angelopoulos and Bates ([2022](https://arxiv.org/pdf/2107.07511.pdf)).
 - *Awesome Conformal Prediction* repository by Manokhin ([2022](https://github.com/valeman/awesome-conformal-prediction))

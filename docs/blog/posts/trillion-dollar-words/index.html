@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2024-02-18">
 <meta name="description" content="A short post introducing a small new Julia package that facilitates working with the Trillion Dollar Words dataset and model published in a recent ACL 2023 paper.">
 
-<title>Patrick Altmeyer - TrillionDollarWords.jl</title>
+<title>patalt - TrillionDollarWords.jl</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -166,10 +166,10 @@ window.Quarto = {
 
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Patrick Altmeyer - TrillionDollarWords.jl">
+<meta property="og:title" content="patalt - TrillionDollarWords.jl">
 <meta property="og:description" content="A short post introducing a small new Julia package that facilitates working with the Trillion Dollar Words dataset and model published in a recent ACL 2023 paper.">
-<meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/trillion-dollar-words/intro.jpeg">
-<meta property="og:site_name" content="Patrick Altmeyer">
+<meta property="og:image" content="https://www.patalt.org/blog/posts/trillion-dollar-words/intro.jpeg">
+<meta property="og:site_name" content="patalt">
 </head>
 
 <body class="nav-fixed">
@@ -183,7 +183,7 @@ window.Quarto = {
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
     <a class="navbar-brand" href="../../../index.html">
-    <span class="navbar-title">Patrick Altmeyer</span>
+    <span class="navbar-title">patalt</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -364,7 +364,7 @@ Disclaimer
 <h3 class="anchored" data-anchor-id="loading-the-data">Loading the Data</h3>
 <p>The Trillion Dollar Words dataset is a collection of preprocessed sentences around 40,000 time-stamped sentences from meeting minutes, press conferences and speeches by members of the Federal Open Market Committee (FOMC) <span class="citation" data-cites="shah2023trillion">(<a href="#ref-shah2023trillion" role="doc-biblioref">Shah, Paturi, and Chava 2023</a>)</span>. The total sample period spans from January, 1996, to October, 2022. In order to train various rule-based models and large language models (LLM) to classify sentences as either ‘hawkish’, ‘dovish’ or ‘neutral’, they have manually annotated a subset of around 2,500 sentences. The best-performing model, a large BERT model with around 355 million parameters, was open-sourced on <a href="https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves">HuggingFace</a>. The authors also link the sentences to market data, which makes it possible to study the relationship between language and financial markets. While the authors of the paper did publish their data, much of it is unfortunately scattered across CSV and Excel files stored in a public GitHub <a href="https://github.com/gtfintechlab/fomc-hawkish-dovish">repo</a>. I have collected and merged that data, yielding a combined dataset with indexed sentences and additional metadata that may be useful for downstream tasks.</p>
 <p>The entire dataset of all available sentences used in the paper can be loaded as follows:</p>
-<div id="7ce0b5af" class="cell" data-execution_count="2">
+<div id="c3a49107" class="cell" data-execution_count="2">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">using</span> <span class="bu">TrillionDollarWords</span></span>
@@ -401,7 +401,7 @@ Disclaimer
 </div>
 </div>
 <p>The combined dataset is also available as a <code>DataFrame</code> and can be loaded as follows:</p>
-<div id="2392f6c4" class="cell" data-execution_count="3">
+<div id="5d34ae52" class="cell" data-execution_count="3">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">load_all_data</span>() <span class="op">|&gt;</span> show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -436,12 +436,12 @@ Disclaimer
                                                6 columns and 524374 rows omitted</code></pre>
 </div>
 </div>
-<p>Additional functionality for data loading is available (see <a href="https://www.paltmeyer.com/TrillionDollarWords.jl/dev/">docs</a>).</p>
+<p>Additional functionality for data loading is available (see <a href="https://www.patalt.org/TrillionDollarWords.jl/dev/">docs</a>).</p>
 </section>
 <section id="loading-the-model" class="level3">
 <h3 class="anchored" data-anchor-id="loading-the-model">Loading the Model</h3>
 <p>The model can be loaded with or without the classifier head (below without the head). Under the hood, this function uses <a href="https://github.com/chengchingwen/Transformers.jl">Transformers.jl</a> to retrieve the model from <a href="https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves">HuggingFace</a>. Any keyword arguments accepted by <code>Transformers.HuggingFace.HGFConfig</code> can also be passed. For example, to load the model without the classifier head and enable access to layer-wise activations, the following command can be used:</p>
-<div id="9e7d7954" class="cell" data-execution_count="4">
+<div id="8375363f" class="cell" data-execution_count="4">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">load_model</span>(; load_head<span class="op">=</span><span class="cn">false</span>, output_hidden_states<span class="op">=</span><span class="cn">true</span>) <span class="op">|&gt;</span> show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -470,7 +470,7 @@ Disclaimer
 <section id="basic-model-inference" class="level3">
 <h3 class="anchored" data-anchor-id="basic-model-inference">Basic Model Inference</h3>
 <p>Using the model and data, layer-wise activations can be computed as below (here for the first 5 sentences). When called on a <code>DataFrame</code>, the <code>layerwise_activations</code> returns a data frame that links activations to sentence identifiers. This makes it possible to relate activations to market data by using the <code>sentence_id</code> key. Alternatively, <code>layerwise_activations</code> also accepts a vector of sentences.</p>
-<div id="51ba0a6e" class="cell" data-execution_count="5">
+<div id="99d7242a" class="cell" data-execution_count="5">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a>df <span class="op">=</span> <span class="fu">load_all_sentences</span>()</span>
@@ -562,12 +562,12 @@ Shah, Agam, Suvan Paturi, and Sudheer Chava. 2023. <span>“Trillion Dollar Word
   author = {Altmeyer, Patrick},
   title = {TrillionDollarWords.jl},
   date = {2024-02-18},
-  url = {https://www.paltmeyer.com/blog//blog/posts/trillion-dollar-words},
+  url = {https://www.patalt.org//blog/posts/trillion-dollar-words},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2024" class="csl-entry quarto-appendix-citeas" role="listitem">
 Altmeyer, Patrick. 2024. <span>“TrillionDollarWords.jl.”</span> February
-18, 2024. <a href="https://www.paltmeyer.com/blog//blog/posts/trillion-dollar-words">https://www.paltmeyer.com/blog//blog/posts/trillion-dollar-words</a>.
+18, 2024. <a href="https://www.patalt.org//blog/posts/trillion-dollar-words">https://www.patalt.org//blog/posts/trillion-dollar-words</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -1105,7 +1105,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb12-100"><a href="#cb12-100"></a><span class="in">load_all_data() |&gt; show</span></span>
 <span id="cb12-101"><a href="#cb12-101"></a><span class="in">```</span></span>
 <span id="cb12-102"><a href="#cb12-102"></a></span>
-<span id="cb12-103"><a href="#cb12-103"></a>Additional functionality for data loading is available (see <span class="co">[</span><span class="ot">docs</span><span class="co">](https://www.paltmeyer.com/TrillionDollarWords.jl/dev/)</span>).</span>
+<span id="cb12-103"><a href="#cb12-103"></a>Additional functionality for data loading is available (see <span class="co">[</span><span class="ot">docs</span><span class="co">](https://www.patalt.org/TrillionDollarWords.jl/dev/)</span>).</span>
 <span id="cb12-104"><a href="#cb12-104"></a></span>
 <span id="cb12-105"><a href="#cb12-105"></a><span class="fu">### Loading the Model</span></span>
 <span id="cb12-106"><a href="#cb12-106"></a></span>
@@ -1170,7 +1170,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
-    <a class="nav-link" href="https://www.paltmeyer.com/">
+    <a class="nav-link" href="https://www.patalt.org/">
       <i class="bi bi-house" role="img">
 </i> 
     </a>

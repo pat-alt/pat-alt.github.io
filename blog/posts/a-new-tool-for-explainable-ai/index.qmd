@@ -29,9 +29,9 @@ www_path = "posts/a-new-tool-for-explainable-ai/www"
 
 <!-- Intro -->
 
-Counterfactual explanations, which I introduced in one of my previous posts^[See: [[TDS](https://towardsdatascience.com/individual-recourse-for-black-box-models-5e9ed1e4b4cc)], [[blog](https://www.paltmeyer.com/blog/posts/individual-recourse-for-black-box-models/)]], offer a simple and intuitive way to explain black-box models without opening them. Still, as of today there exists only one open-source library that provides a unifying approach to generate and benchmark counterfactual explanations for models built and trained in Python [@pawelczyk2021carla]. This is great, but of limited use to users of other programming languages 🥲. 
+Counterfactual explanations, which I introduced in one of my previous posts^[See: [[TDS](https://towardsdatascience.com/individual-recourse-for-black-box-models-5e9ed1e4b4cc)], [[blog](https://www.patalt.org/blog/posts/individual-recourse-for-black-box-models/)]], offer a simple and intuitive way to explain black-box models without opening them. Still, as of today there exists only one open-source library that provides a unifying approach to generate and benchmark counterfactual explanations for models built and trained in Python [@pawelczyk2021carla]. This is great, but of limited use to users of other programming languages 🥲. 
 
-Enter [`CounterfactualExplanations.jl`](https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/): a Julia package that can be used to explain machine learning algorithms developed and trained in Julia, Python and R. Counterfactual explanations fall into the broader category of explainable artificial intelligence (XAI). 
+Enter [`CounterfactualExplanations.jl`](https://www.patalt.org/CounterfactualExplanations.jl/stable/): a Julia package that can be used to explain machine learning algorithms developed and trained in Julia, Python and R. Counterfactual explanations fall into the broader category of explainable artificial intelligence (XAI). 
 
 Explainable AI typically involves models that are not inherently interpretable but require additional tools to be explainable to humans. Examples of the latter include ensembles, support vector machines and deep neural networks. This is not to be confused with interpretable AI, which involves models that are inherently interpretable and transparent such as general additive models (GAM), decision trees and rule-based models. 
 
@@ -49,7 +49,7 @@ This post introduces the main functionality of the new Julia package. Following 
 
 To introduce counterfactual explanations I used a simple binary classification problem in my previous [post](https://towardsdatascience.com/individual-recourse-for-black-box-models-5e9ed1e4b4cc). It involved a linear classifier and a linearly separable, synthetic data set with just two features. This time we are going to step it up a notch: we will generate counterfactual explanations MNIST data. The MNIST dataset contains 60,000 training samples of handwritten digits in the form of 28x28 pixel grey-scale images [@lecun1998mnist]. Each image is associated with a label indicating the digit (0-9) that the image represents. 
 
-The [`CounterfactualExplanations.jl`](https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/) package ships with two black-box models that were trained to predict labels for this data: firstly, a simple multi-layer perceptron (MLP) and, secondly, a corresponding deep ensemble. Originally proposed by @lakshminarayanan2016simple, deep ensembles are really just ensembles of deep neural networks. They are still among the most popular approaches to Bayesian deep learning.^[For more information on Bayesian deep learning see my previous post: [[TDS](https://towardsdatascience.com/go-deep-but-also-go-bayesian-ab25efa6f7b)], [[blog](https://www.paltmeyer.com/blog/posts/effortsless-bayesian-dl/)].] 
+The [`CounterfactualExplanations.jl`](https://www.patalt.org/CounterfactualExplanations.jl/stable/) package ships with two black-box models that were trained to predict labels for this data: firstly, a simple multi-layer perceptron (MLP) and, secondly, a corresponding deep ensemble. Originally proposed by @lakshminarayanan2016simple, deep ensembles are really just ensembles of deep neural networks. They are still among the most popular approaches to Bayesian deep learning.^[For more information on Bayesian deep learning see my previous post: [[TDS](https://towardsdatascience.com/go-deep-but-also-go-bayesian-ab25efa6f7b)], [[blog](https://www.patalt.org/blog/posts/effortsless-bayesian-dl/)].] 
 
 ### Black-box models
 
@@ -213,7 +213,7 @@ gif(anim, joinpath(www_path, "intro.gif"))
 
 ## Language interoperability 👥
 
-The Julia language offers unique support for programming language interoperability. For example, calling R or Python is made remarkably easy through `RCall.jl` and `PyCall.jl`, respectively. This functionality can be leveraged to use `CounterfactualExplanations.jl` to generate explanations for models that were developed in other programming languages. At this time there is no native support for foreign programming languages, but the following example involving a `torch` neural network trained in `R` demonstrates how versatile the package is.^[The corresponding example involving `PyTorch` is analogous and therefore not included here. You may find it [here](https://www.paltmeyer.com/CounterfactualExplanations.jl/dev/tutorials/interop/).]
+The Julia language offers unique support for programming language interoperability. For example, calling R or Python is made remarkably easy through `RCall.jl` and `PyCall.jl`, respectively. This functionality can be leveraged to use `CounterfactualExplanations.jl` to generate explanations for models that were developed in other programming languages. At this time there is no native support for foreign programming languages, but the following example involving a `torch` neural network trained in `R` demonstrates how versatile the package is.^[The corresponding example involving `PyTorch` is analogous and therefore not included here. You may find it [here](https://www.patalt.org/CounterfactualExplanations.jl/dev/tutorials/interop/).]
 
 ### Explaining a `torch` model 
 
@@ -375,7 +375,7 @@ Finally, if you like this project but don't have much time, then simply sharing 
 If you're interested in learning more about this development, feel free to check out the following resources:
 
 - Package docs: [[stable]](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/stable), [[dev]](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/dev).
-- [Contributor's guide](https://www.paltmeyer.com/CounterfactualExplanations.jl/stable/contributing/).
+- [Contributor's guide](https://www.patalt.org/CounterfactualExplanations.jl/stable/contributing/).
 - [GitHub repo](https://github.com/juliatrustworthyai/CounterfactualExplanations.jl).
 
 

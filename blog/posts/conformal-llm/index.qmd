@@ -10,7 +10,7 @@ categories:
 description: >-
   For this year's edition of the ING Analytics Experiment Week, we put `ConformalPrediction.jl` to work and built a chatbot that can be used for Conformal Intent Recognition.
 image: www/intro.gif
-jupyter: julia-1.9
+jupyter: julia-1.10
 draft: false
 ---
 
@@ -144,10 +144,10 @@ fitresult, _, _ = MLJBase.fit(clf, 1, nothing, y_test[1:top_n])
 To turn the wrapped, pre-trained model into a conformal intent classifier, we can now rely on standard API calls. We first wrap our atomic model where we also specify the desired coverage rate and method. Since even simple forward passes are computationally expensive for our (small) LLM, we rely on Simple Inductive Conformal Classification.
 
 ```{.julia}
-conf_model = conformal_model(clf; coverage=0.95, method=:simple_inductive, train_ratio=train_ratio)
+conf_model = conformal_model(clf; coverage=0.99, method=:simple_inductive, train_ratio=train_ratio)
 mach = machine(conf_model, queries, y)
 @time fit!(mach)
-Serialization.serialize("dev/artifacts/models/banking77/simple_inductive.jls", mach)
+Serialization.serialize("dev/private/simple_inductive.jls", mach)
 ```
 
 Finally, we use our conformal LLM to build a simple yet powerful chatbot that runs directly in the Julia REPL. Without dwelling on the details too much, the `conformal_chatbot` works as follows:
@@ -157,7 +157,7 @@ Finally, we use our conformal LLM to build a simple yet powerful chatbot that ru
 3.  If the conformal prediction set includes more than one label, prompt the user to either refine their input or choose one of the options included in the set.
 
 ```{julia}
-mach = Serialization.deserialize("blog/posts/conformal-llm/simple_inductive.jls")
+mach = Serialization.deserialize("dev/private/simple_inductive.jls")
 
 function prediction_set(mach, query::String)
     p̂ = MLJBase.predict(mach, query)[1]

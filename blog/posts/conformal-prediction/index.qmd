@@ -9,7 +9,7 @@ categories:
 description: >-
   A (very) gentle introduction to Conformal Prediction in Julia using my new package [`ConformalPrediction.jl`](https://github.com/juliatrustworthyai/ConformalPrediction.jl).
 image: www/intro.gif
-jupyter: julia-1.8
+jupyter: julia-1.10
 draft: false
 ---
 
@@ -30,7 +30,7 @@ A first crucial step towards building trustworthy AI systems is to be transparen
 
 Beyond that obvious concern, it turns out that quantifying model uncertainty actually opens up a myriad of possibilities to improve up- and down-stream modeling tasks like active learning and robustness. In Bayesian Active Learning, for example, uncertainty estimates are used to guide the search for new input samples, which can make ground-truthing tasks more efficient [@houlsby2011bayesian]. With respect to model performance in downstream tasks, uncertainty quantification can be used to improve model calibration and robustness [@lakshminarayanan2016simple]. 
 
-In previous posts we have looked at how uncertainty can be quantified in the Bayesian context (see [here](https://www.paltmeyer.com/blog/posts/bayesian-logit/) and [here](https://www.paltmeyer.com/blog/posts/effortsless-bayesian-dl/)). Since in Bayesian modeling we are generally concerned with estimating posterior distributions, we get uncertainty estimates almost as a byproduct. This is great for all intends and purposes, but it hinges on assumptions about prior distributions. Personally, I have no quarrel with the idea of making prior distributional assumptions. On the contrary, I think the Bayesian framework formalizes the idea of integrating prior information in models and therefore provides a powerful toolkit for conducting science. Still, in some cases this requirement may be seen as too restrictive or we may simply lack prior information. 
+In previous posts we have looked at how uncertainty can be quantified in the Bayesian context (see [here](https://www.patalt.org/blog/posts/bayesian-logit/) and [here](https://www.patalt.org/blog/posts/effortsless-bayesian-dl/)). Since in Bayesian modeling we are generally concerned with estimating posterior distributions, we get uncertainty estimates almost as a byproduct. This is great for all intends and purposes, but it hinges on assumptions about prior distributions. Personally, I have no quarrel with the idea of making prior distributional assumptions. On the contrary, I think the Bayesian framework formalizes the idea of integrating prior information in models and therefore provides a powerful toolkit for conducting science. Still, in some cases this requirement may be seen as too restrictive or we may simply lack prior information. 
 
 Enter: Conformal Prediction (CP) --- a scalable frequentist approach to uncertainty quantification and coverage control. In this post we will go through the basic concepts underlying CP. A number of hands-on usage examples in Julia should hopefully help to convey some intuition and ideally attract people interested in contributing to a new and exciting open-source development. 
 
@@ -64,8 +64,8 @@ In this section of this first short post on CP we will look at how conformal pre
 
 `ConformalPrediction.jl` is a package for uncertainty quantification through conformal prediction for machine learning models trained in [MLJ](https://alan-turing-institute.github.io/MLJ.jl/dev/). At the time of writing it is still in its early stages of development, but already implements a range of different approaches to CP. Contributions are very much welcome:
 
-- [Documentation](https://www.paltmeyer.com/ConformalPrediction.jl/stable/)
-- [Contributor's Guide](https://www.paltmeyer.com/ConformalPrediction.jl/stable/#Contribute)
+- [Documentation](https://www.patalt.org/ConformalPrediction.jl/stable/)
+- [Contributor's Guide](https://www.patalt.org/ConformalPrediction.jl/stable/#Contribute)
 :::
 
 ### Split Conformal Classification {#sec-scp}

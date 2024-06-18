@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2022-02-18">
 <meta name="description" content="An introduction to effortless Bayesian deep learning through Laplace approximation coded from scratch in Julia.">
 
-<title>Patrick Altmeyer - Go deep, but also … go Bayesian!</title>
+<title>patalt - Go deep, but also … go Bayesian!</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -166,10 +166,10 @@ window.Quarto = {
 
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Patrick Altmeyer - Go deep, but also … go Bayesian!">
+<meta property="og:title" content="patalt - Go deep, but also … go Bayesian!">
 <meta property="og:description" content="An introduction to effortless Bayesian deep learning through Laplace approximation coded from scratch in Julia.">
-<meta property="og:image" content="https://www.paltmeyer.com/blog/blog/posts/effortsless-bayesian-dl/www/intro.gif">
-<meta property="og:site_name" content="Patrick Altmeyer">
+<meta property="og:image" content="https://www.patalt.org/blog/posts/effortsless-bayesian-dl/www/intro.gif">
+<meta property="og:site_name" content="patalt">
 </head>
 
 <body class="nav-fixed">
@@ -183,7 +183,7 @@ window.Quarto = {
     <img src="../../../www/icon.png" alt="" class="navbar-logo">
     </a>
     <a class="navbar-brand" href="../../../index.html">
-    <span class="navbar-title">Patrick Altmeyer</span>
+    <span class="navbar-title">patalt</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -345,7 +345,7 @@ p(y|x,\mathcal{D}) = \int p(y|x,\theta)p(\theta|\mathcal{D})d\theta
 </section>
 <section id="laplace-approximation" class="level2">
 <h2 class="anchored" data-anchor-id="laplace-approximation">Laplace Approximation</h2>
-<p>While LA was first proposed in the 18th century, it has so far not attracted serious attention from the deep learning community largely because it involves a possibly large Hessian computation. <span class="citation" data-cites="daxberger2021laplace">Daxberger et al. (<a href="#ref-daxberger2021laplace" role="doc-biblioref">2021</a>)</span> are on a mission to change the perception that LA has no use in DL: in their <a href="https://arxiv.org/pdf/2106.14806.pdf">NeurIPS 2021 paper</a> they demonstrate empirically that LA can be used to produce Bayesian model averages that are at least at par with existing approaches in terms of uncertainty quantification and out-of-distribution detection and significantly cheaper to compute. They show that recent advancements in autodifferentation can be leveraged to produce fast and accurate approximations of the Hessian and even provide a fully-fledged <a href="https://aleximmer.github.io/Laplace/">Python library</a> that can be used with any pretrained Torch model. For this post, I have built a much less comprehensive, pure-play equivalent of their package in Julia - <a href="https://www.paltmeyer.com/LaplaceRedux.jl/dev/">LaplaceRedux.jl</a> can be used with deep learning models built in <a href="https://fluxml.ai/">Flux.jl</a>, which is Julia’s main DL library. As in the previous post on Bayesian logistic regression I will rely on Julia code snippits instead of equations to convey the underlying maths. If you’re curious about the maths, the <a href="https://arxiv.org/pdf/2106.14806.pdf">NeurIPS 2021 paper</a> provides all the detail you need.</p>
+<p>While LA was first proposed in the 18th century, it has so far not attracted serious attention from the deep learning community largely because it involves a possibly large Hessian computation. <span class="citation" data-cites="daxberger2021laplace">Daxberger et al. (<a href="#ref-daxberger2021laplace" role="doc-biblioref">2021</a>)</span> are on a mission to change the perception that LA has no use in DL: in their <a href="https://arxiv.org/pdf/2106.14806.pdf">NeurIPS 2021 paper</a> they demonstrate empirically that LA can be used to produce Bayesian model averages that are at least at par with existing approaches in terms of uncertainty quantification and out-of-distribution detection and significantly cheaper to compute. They show that recent advancements in autodifferentation can be leveraged to produce fast and accurate approximations of the Hessian and even provide a fully-fledged <a href="https://aleximmer.github.io/Laplace/">Python library</a> that can be used with any pretrained Torch model. For this post, I have built a much less comprehensive, pure-play equivalent of their package in Julia - <a href="https://www.patalt.org/LaplaceRedux.jl/dev/">LaplaceRedux.jl</a> can be used with deep learning models built in <a href="https://fluxml.ai/">Flux.jl</a>, which is Julia’s main DL library. As in the previous post on Bayesian logistic regression I will rely on Julia code snippits instead of equations to convey the underlying maths. If you’re curious about the maths, the <a href="https://arxiv.org/pdf/2106.14806.pdf">NeurIPS 2021 paper</a> provides all the detail you need.</p>
 <section id="from-bayesian-logistic-regression" class="level3">
 <h3 class="anchored" data-anchor-id="from-bayesian-logistic-regression">From Bayesian Logistic Regression …</h3>
 <p>Let’s recap: in the case of logistic regression we had a assumed a zero-mean Gaussian prior <span class="math inline">\(p(\mathbf{w}) \sim \mathcal{N} \left( \mathbf{w} | \mathbf{0}, \sigma_0^2 \mathbf{I} \right)=\mathcal{N} \left( \mathbf{w} | \mathbf{0}, \mathbf{H}_0^{-1} \right)\)</span> for the weights that are used to compute logits <span class="math inline">\(\mu_n=\mathbf{w}^T\mathbf{x}_n\)</span>, which in turn are fed to a sigmoid function to produce probabilities <span class="math inline">\(p(y_n=1)=\sigma(\mu_n)\)</span>. We saw that under this assumption solving the logistic regression problem corresponds to minimizing the following differentiable loss function:</p>
@@ -354,8 +354,8 @@ p(y|x,\mathcal{D}) = \int p(y|x,\theta)p(\theta|\mathcal{D})d\theta
 \]</span></p>
 <p>As our first step towards Bayesian deep learning, we observe the following: the loss function above corresponds to the objective faced by a single-layer artificial neural network with sigmoid activation and weight decay<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. In other words, regularized logistic regression is equivalent to a very simple neural network architecture and hence it is not surprising that underlying concepts can in theory be applied in much the same way.</p>
 <p>So let’s quickly recap the next core concept: LA relies on the fact that the second-order Taylor expansion of our loss function <span class="math inline">\(\ell\)</span> evaluated at the <strong>maximum a posteriori</strong> (MAP) estimate <span class="math inline">\(\mathbf{\hat{w}}=\arg\max_{\mathbf{w}} p(\mathbf{w}|\mathcal{D})\)</span> amounts to a multi-variate Gaussian distribution. In particular, that Gaussian is centered around the MAP estimate with covariance equal to the inverse Hessian evaluated at the mode <span class="math inline">\(\hat{\Sigma}=(\mathbf{H}(\mathbf{\hat{w}}))^{-1}\)</span> <span class="citation" data-cites="murphy2022probabilistic">(<a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy 2022</a>)</span>.</p>
-<p>That is basically all there is to the story: if we have a good estimate of <span class="math inline">\(\mathbf{H}(\mathbf{\hat{w}})\)</span> we have an analytical expression for an (approximate) posterior over parameters. So let’s go ahead and start by run Bayesian Logistic regression using <a href="https://fluxml.ai/">Flux.jl</a>. We begin by loading some required packages including <a href="https://www.paltmeyer.com/LaplaceRedux.jl/dev/">LaplaceRedux.jl</a>. It ships with a helper function <code>toy_data_linear</code> that creates a toy data set composed of linearly separable samples evenly balanced across the two classes.</p>
-<div class="cell" data-execution_count="1">
+<p>That is basically all there is to the story: if we have a good estimate of <span class="math inline">\(\mathbf{H}(\mathbf{\hat{w}})\)</span> we have an analytical expression for an (approximate) posterior over parameters. So let’s go ahead and start by run Bayesian Logistic regression using <a href="https://fluxml.ai/">Flux.jl</a>. We begin by loading some required packages including <a href="https://www.patalt.org/LaplaceRedux.jl/dev/">LaplaceRedux.jl</a>. It ships with a helper function <code>toy_data_linear</code> that creates a toy data set composed of linearly separable samples evenly balanced across the two classes.</p>
+<div id="909ba713" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Import libraries.</span></span>
@@ -368,7 +368,7 @@ p(y|x,\mathcal{D}) = \int p(y|x,\theta)p(\theta|\mathcal{D})d\theta
 </details>
 </div>
 <p>Then we proceed to prepare the single-layer neural network with weight decay. The term <span class="math inline">\(\lambda\)</span> determines the strength of the <span class="math inline">\(\ell2\)</span> penalty: we regularize parameters <span class="math inline">\(\theta\)</span> more heavily for higher values. Equivalently, we can say that from the Bayesian perspective it governs the strength of the prior <span class="math inline">\(p(\theta) \sim \mathcal{N} \left( \theta | \mathbf{0}, \sigma_0^2 \mathbf{I} \right)= \mathcal{N} \left( \mathbf{w} | \mathbf{0}, \lambda_0^{-2} \mathbf{I} \right)\)</span>: a higher value of <span class="math inline">\(\lambda\)</span> indicates a higher conviction about our prior belief that <span class="math inline">\(\theta=\mathbf{0}\)</span>, which is of course equivalent to regularizing more heavily. The exact choice of <span class="math inline">\(\lambda=0.5\)</span> for this toy example is somewhat arbitrary (it made for good visualizations below). Note that I have used <span class="math inline">\(\theta\)</span> to denote our neural parameters to distinguish the case from Bayesian logistic regression, but we are in fact still solving the same problem.</p>
-<div class="cell" data-execution_count="2">
+<div id="404415aa" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a>nn <span class="op">=</span> <span class="fu">Chain</span>(<span class="fu">Dense</span>(<span class="fl">2</span>,<span class="fl">1</span>))</span>
@@ -379,7 +379,7 @@ p(y|x,\mathcal{D}) = \int p(y|x,\theta)p(\theta|\mathcal{D})d\theta
 </details>
 </div>
 <p>Before we apply Laplace approximation we train our model:</p>
-<div class="cell" data-execution_count="3">
+<div id="308d874f" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">using</span> <span class="bu">Flux.Optimise</span>: update!, ADAM</span>
@@ -396,16 +396,16 @@ p(y|x,\mathcal{D}) = \int p(y|x,\theta)p(\theta|\mathcal{D})d\theta
 <span id="cb3-12"><a href="#cb3-12"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Up until this point we have just followed the standard recipe for training a regularized artificial neural network in <a href="https://fluxml.ai/">Flux.jl</a> for a simple binary classification task. To compute the Laplace approximation using <a href="https://www.paltmeyer.com/LaplaceRedux.jl/dev/">LaplaceRedux.jl</a> we need just two more lines of code:</p>
-<div class="cell" data-execution_count="4">
+<p>Up until this point we have just followed the standard recipe for training a regularized artificial neural network in <a href="https://fluxml.ai/">Flux.jl</a> for a simple binary classification task. To compute the Laplace approximation using <a href="https://www.patalt.org/LaplaceRedux.jl/dev/">LaplaceRedux.jl</a> we need just two more lines of code:</p>
+<div id="a0603622" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a>la <span class="op">=</span> <span class="fu">laplace</span>(nn, λ<span class="op">=</span>λ)</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="fu">fit!</span>(la, data);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Under the hood the Hessian is approximated through the <strong>empirical Fisher</strong>, which can be computed using only the gradients of our loss function <span class="math inline">\(\nabla_{\theta}\ell(f(\mathbf{x}_n;\theta,y_n))\)</span> where <span class="math inline">\(\{\mathbf{x}_n,y_n\}\)</span> are training data (see <a href="https://arxiv.org/pdf/2106.14806.pdf">NeurIPS 2021 paper</a> for details). Finally, <a href="https://www.paltmeyer.com/LaplaceRedux.jl/dev/">LaplaceRedux.jl</a> ships with a function <code>predict(𝑳::LaplaceRedux, X::AbstractArray; link_approx=:probit)</code> that computes the posterior predictive using a probit approximation, much like we saw in the previous post. That function is used under the hood of the <code>plot_contour</code> function below to create the right panel of <a href="#fig-logit" class="quarto-xref">Figure&nbsp;1</a>. It visualizes the posterior predictive distribution in the 2D feature space. For comparison I have added the corresponding plugin estimate as well. Note how for the Laplace approximation the predicted probabilities fan out indicating that confidence decreases in regions scarce of data.</p>
-<div class="cell" data-execution_count="5">
+<p>Under the hood the Hessian is approximated through the <strong>empirical Fisher</strong>, which can be computed using only the gradients of our loss function <span class="math inline">\(\nabla_{\theta}\ell(f(\mathbf{x}_n;\theta,y_n))\)</span> where <span class="math inline">\(\{\mathbf{x}_n,y_n\}\)</span> are training data (see <a href="https://arxiv.org/pdf/2106.14806.pdf">NeurIPS 2021 paper</a> for details). Finally, <a href="https://www.patalt.org/LaplaceRedux.jl/dev/">LaplaceRedux.jl</a> ships with a function <code>predict(𝑳::LaplaceRedux, X::AbstractArray; link_approx=:probit)</code> that computes the posterior predictive using a probit approximation, much like we saw in the previous post. That function is used under the hood of the <code>plot_contour</code> function below to create the right panel of <a href="#fig-logit" class="quarto-xref">Figure&nbsp;1</a>. It visualizes the posterior predictive distribution in the 2D feature space. For comparison I have added the corresponding plugin estimate as well. Note how for the Laplace approximation the predicted probabilities fan out indicating that confidence decreases in regions scarce of data.</p>
+<div id="578aa6f2" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a>p_plugin <span class="op">=</span> <span class="fu">plot_contour</span>(X<span class="op">'</span>,y,la;title<span class="op">=</span><span class="st">"Plugin"</span>,<span class="kw">type</span><span class="op">=:</span>plugin);</span>
@@ -429,7 +429,7 @@ Figure&nbsp;1: Posterior predictive distribution of Logistic regression in the 2
 <section id="to-bayesian-neural-networks" class="level3">
 <h3 class="anchored" data-anchor-id="to-bayesian-neural-networks">… to Bayesian Neural Networks</h3>
 <p>Now let’s step it up a notch: we will repeat the exercise from above, but this time for data that is not linearly separable using a simple MLP instead of the single-layer neural network we used above. The code below is almost the same as above, so I will not go through the various steps again.</p>
-<div class="cell" data-execution_count="6">
+<div id="b15ea660" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Number of points to generate:</span></span>
@@ -462,7 +462,7 @@ Figure&nbsp;1: Posterior predictive distribution of Logistic regression in the 2
 </details>
 </div>
 <p>Fitting the Laplace approximation is also analogous, but note that this we have added an argument: <code>subset_of_weights=:last_layer</code>. This specifies that we only want to use the parameters of the last layer of our MLP. While we could have used all of them (<code>subset_of_weights=:all</code>), <span class="citation" data-cites="daxberger2021laplace">Daxberger et al. (<a href="#ref-daxberger2021laplace" role="doc-biblioref">2021</a>)</span> find that the last-layer Laplace approximation produces satisfying results, while be computationally cheaper. <a href="#fig-mlp" class="quarto-xref">Figure&nbsp;2</a> demonstrates that once again the Laplace approximation yields a posterior predictive distribution that is more conservative than the over-confident plugin estimate.</p>
-<div class="cell" data-execution_count="7">
+<div id="3f10459a" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1"></a>la <span class="op">=</span> <span class="fu">laplace</span>(nn, λ<span class="op">=</span>λ, subset_of_weights<span class="op">=:</span>last_layer)</span>
@@ -485,7 +485,7 @@ Figure&nbsp;2: Posterior predictive distribution of MLP in the 2D feature space 
 </figure>
 </div>
 <p>To see why this is a desirable outcome consider the zoomed out version of <a href="#fig-mlp" class="quarto-xref">Figure&nbsp;2</a> below: the plugin estimator classifies with full confidence in regions completely scarce of any data. Arguably Laplace approximation produces a much more reasonable picture, even though it too could likely be improved by fine-tuning our choice of <span class="math inline">\(\lambda\)</span> and the neural network architecture.</p>
-<div class="cell" data-execution_count="8">
+<div id="004860e6" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a>zoom<span class="op">=-</span><span class="fl">50</span></span>
@@ -572,12 +572,12 @@ Wilson, Andrew Gordon. 2020. <span>“The Case for Bayesian Deep Learning.”</s
   author = {Altmeyer, Patrick},
   title = {Go Deep, but Also ... Go {Bayesian!}},
   date = {2022-02-18},
-  url = {https://www.paltmeyer.com/blog//blog/posts/effortsless-bayesian-dl},
+  url = {https://www.patalt.org//blog/posts/effortsless-bayesian-dl},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2022" class="csl-entry quarto-appendix-citeas" role="listitem">
 Altmeyer, Patrick. 2022. <span>“Go Deep, but Also ... Go
-Bayesian!”</span> February 18, 2022. <a href="https://www.paltmeyer.com/blog//blog/posts/effortsless-bayesian-dl">https://www.paltmeyer.com/blog//blog/posts/effortsless-bayesian-dl</a>.
+Bayesian!”</span> February 18, 2022. <a href="https://www.patalt.org//blog/posts/effortsless-bayesian-dl">https://www.patalt.org//blog/posts/effortsless-bayesian-dl</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -1031,7 +1031,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb9-10"><a href="#cb9-10"></a><span class="co">  An introduction to effortless Bayesian deep learning through Laplace</span></span>
 <span id="cb9-11"><a href="#cb9-11"></a><span class="co">  approximation coded from scratch in Julia. </span></span>
 <span id="cb9-12"><a href="#cb9-12"></a><span class="an">image:</span><span class="co"> www/intro.gif</span></span>
-<span id="cb9-13"><a href="#cb9-13"></a><span class="an">jupyter:</span><span class="co"> julia-1.7</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="an">jupyter:</span><span class="co"> julia-1.10</span></span>
 <span id="cb9-14"><a href="#cb9-14"></a><span class="an">execute:</span><span class="co"> </span></span>
 <span id="cb9-15"><a href="#cb9-15"></a><span class="co">  eval: false</span></span>
 <span id="cb9-16"><a href="#cb9-16"></a><span class="co">---</span></span>
@@ -1076,7 +1076,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb9-55"><a href="#cb9-55"></a></span>
 <span id="cb9-56"><a href="#cb9-56"></a><span class="fu">## Laplace Approximation</span></span>
 <span id="cb9-57"><a href="#cb9-57"></a></span>
-<span id="cb9-58"><a href="#cb9-58"></a>While LA was first proposed in the 18th century, it has so far not attracted serious attention from the deep learning community largely because it involves a possibly large Hessian computation. @daxberger2021laplace are on a mission to change the perception that LA has no use in DL: in their <span class="co">[</span><span class="ot">NeurIPS 2021 paper</span><span class="co">](https://arxiv.org/pdf/2106.14806.pdf)</span> they demonstrate empirically that LA can be used to produce Bayesian model averages that are at least at par with existing approaches in terms of uncertainty quantification and out-of-distribution detection and significantly cheaper to compute. They show that recent advancements in autodifferentation can be leveraged to produce fast and accurate approximations of the Hessian and even provide a fully-fledged <span class="co">[</span><span class="ot">Python library</span><span class="co">](https://aleximmer.github.io/Laplace/)</span> that can be used with any pretrained Torch model. For this post, I have built a much less comprehensive, pure-play equivalent of their package in Julia - <span class="co">[</span><span class="ot">LaplaceRedux.jl</span><span class="co">](https://www.paltmeyer.com/LaplaceRedux.jl/dev/)</span> can be used with deep learning models built in <span class="co">[</span><span class="ot">Flux.jl</span><span class="co">](https://fluxml.ai/)</span>, which is Julia's main DL library. As in the previous post on Bayesian logistic regression I will rely on Julia code snippits instead of equations to convey the underlying maths. If you're curious about the maths, the <span class="co">[</span><span class="ot">NeurIPS 2021 paper</span><span class="co">](https://arxiv.org/pdf/2106.14806.pdf)</span> provides all the detail you need.</span>
+<span id="cb9-58"><a href="#cb9-58"></a>While LA was first proposed in the 18th century, it has so far not attracted serious attention from the deep learning community largely because it involves a possibly large Hessian computation. @daxberger2021laplace are on a mission to change the perception that LA has no use in DL: in their <span class="co">[</span><span class="ot">NeurIPS 2021 paper</span><span class="co">](https://arxiv.org/pdf/2106.14806.pdf)</span> they demonstrate empirically that LA can be used to produce Bayesian model averages that are at least at par with existing approaches in terms of uncertainty quantification and out-of-distribution detection and significantly cheaper to compute. They show that recent advancements in autodifferentation can be leveraged to produce fast and accurate approximations of the Hessian and even provide a fully-fledged <span class="co">[</span><span class="ot">Python library</span><span class="co">](https://aleximmer.github.io/Laplace/)</span> that can be used with any pretrained Torch model. For this post, I have built a much less comprehensive, pure-play equivalent of their package in Julia - <span class="co">[</span><span class="ot">LaplaceRedux.jl</span><span class="co">](https://www.patalt.org/LaplaceRedux.jl/dev/)</span> can be used with deep learning models built in <span class="co">[</span><span class="ot">Flux.jl</span><span class="co">](https://fluxml.ai/)</span>, which is Julia's main DL library. As in the previous post on Bayesian logistic regression I will rely on Julia code snippits instead of equations to convey the underlying maths. If you're curious about the maths, the <span class="co">[</span><span class="ot">NeurIPS 2021 paper</span><span class="co">](https://arxiv.org/pdf/2106.14806.pdf)</span> provides all the detail you need.</span>
 <span id="cb9-59"><a href="#cb9-59"></a></span>
 <span id="cb9-60"><a href="#cb9-60"></a><span class="fu">### From Bayesian Logistic Regression ...</span></span>
 <span id="cb9-61"><a href="#cb9-61"></a></span>
@@ -1090,7 +1090,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb9-69"><a href="#cb9-69"></a></span>
 <span id="cb9-70"><a href="#cb9-70"></a>So let's quickly recap the next core concept: LA relies on the fact that the second-order Taylor expansion of our loss function $\ell$ evaluated at the **maximum a posteriori** (MAP) estimate $\mathbf{\hat{w}}=\arg\max_{\mathbf{w}} p(\mathbf{w}|\mathcal{D})$ amounts to a multi-variate Gaussian distribution. In particular, that Gaussian is centered around the MAP estimate with covariance equal to the inverse Hessian evaluated at the mode $\hat{\Sigma}=(\mathbf{H}(\mathbf{\hat{w}}))^{-1}$ <span class="co">[</span><span class="ot">@murphy2022probabilistic</span><span class="co">]</span>. </span>
 <span id="cb9-71"><a href="#cb9-71"></a></span>
-<span id="cb9-72"><a href="#cb9-72"></a>That is basically all there is to the story: if we have a good estimate of $\mathbf{H}(\mathbf{\hat{w}})$ we have an analytical expression for an (approximate) posterior over parameters. So let's go ahead and start by run Bayesian Logistic regression using <span class="co">[</span><span class="ot">Flux.jl</span><span class="co">](https://fluxml.ai/)</span>. We begin by loading some required packages including <span class="co">[</span><span class="ot">LaplaceRedux.jl</span><span class="co">](https://www.paltmeyer.com/LaplaceRedux.jl/dev/)</span>. It ships with a helper function <span class="in">`toy_data_linear`</span> that creates a toy data set composed of linearly separable samples evenly balanced across the two classes.</span>
+<span id="cb9-72"><a href="#cb9-72"></a>That is basically all there is to the story: if we have a good estimate of $\mathbf{H}(\mathbf{\hat{w}})$ we have an analytical expression for an (approximate) posterior over parameters. So let's go ahead and start by run Bayesian Logistic regression using <span class="co">[</span><span class="ot">Flux.jl</span><span class="co">](https://fluxml.ai/)</span>. We begin by loading some required packages including <span class="co">[</span><span class="ot">LaplaceRedux.jl</span><span class="co">](https://www.patalt.org/LaplaceRedux.jl/dev/)</span>. It ships with a helper function <span class="in">`toy_data_linear`</span> that creates a toy data set composed of linearly separable samples evenly balanced across the two classes.</span>
 <span id="cb9-73"><a href="#cb9-73"></a></span>
 <span id="cb9-76"><a href="#cb9-76"></a><span class="in">```{julia}</span></span>
 <span id="cb9-77"><a href="#cb9-77"></a><span class="in"># Import libraries.</span></span>
@@ -1129,14 +1129,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb9-114"><a href="#cb9-114"></a><span class="in">end</span></span>
 <span id="cb9-115"><a href="#cb9-115"></a><span class="in">```</span></span>
 <span id="cb9-116"><a href="#cb9-116"></a></span>
-<span id="cb9-117"><a href="#cb9-117"></a>Up until this point we have just followed the standard recipe for training a regularized artificial neural network in <span class="co">[</span><span class="ot">Flux.jl</span><span class="co">](https://fluxml.ai/)</span> for a simple binary classification task. To compute the Laplace approximation using <span class="co">[</span><span class="ot">LaplaceRedux.jl</span><span class="co">](https://www.paltmeyer.com/LaplaceRedux.jl/dev/)</span> we need just two more lines of code:</span>
+<span id="cb9-117"><a href="#cb9-117"></a>Up until this point we have just followed the standard recipe for training a regularized artificial neural network in <span class="co">[</span><span class="ot">Flux.jl</span><span class="co">](https://fluxml.ai/)</span> for a simple binary classification task. To compute the Laplace approximation using <span class="co">[</span><span class="ot">LaplaceRedux.jl</span><span class="co">](https://www.patalt.org/LaplaceRedux.jl/dev/)</span> we need just two more lines of code:</span>
 <span id="cb9-118"><a href="#cb9-118"></a></span>
 <span id="cb9-121"><a href="#cb9-121"></a><span class="in">```{julia}</span></span>
 <span id="cb9-122"><a href="#cb9-122"></a><span class="in">la = laplace(nn, λ=λ)</span></span>
 <span id="cb9-123"><a href="#cb9-123"></a><span class="in">fit!(la, data);</span></span>
 <span id="cb9-124"><a href="#cb9-124"></a><span class="in">```</span></span>
 <span id="cb9-125"><a href="#cb9-125"></a></span>
-<span id="cb9-126"><a href="#cb9-126"></a>Under the hood the Hessian is approximated through the **empirical Fisher**, which can be computed using only the gradients of our loss function $\nabla_{\theta}\ell(f(\mathbf{x}_n;\theta,y_n))$ where $<span class="sc">\{</span>\mathbf{x}_n,y_n<span class="sc">\}</span>$ are training data (see <span class="co">[</span><span class="ot">NeurIPS 2021 paper</span><span class="co">](https://arxiv.org/pdf/2106.14806.pdf)</span> for details). Finally, <span class="co">[</span><span class="ot">LaplaceRedux.jl</span><span class="co">](https://www.paltmeyer.com/LaplaceRedux.jl/dev/)</span> ships with a function <span class="in">`predict(𝑳::LaplaceRedux, X::AbstractArray; link_approx=:probit)`</span> that computes the posterior predictive using a probit approximation, much like we saw in the previous post. That function is used under the hood of the <span class="in">`plot_contour`</span> function below to create the right panel of @fig-logit. It visualizes the posterior predictive distribution in the 2D feature space. For comparison I have added the corresponding plugin estimate as well. Note how for the Laplace approximation the predicted probabilities fan out indicating that confidence decreases in regions scarce of data.</span>
+<span id="cb9-126"><a href="#cb9-126"></a>Under the hood the Hessian is approximated through the **empirical Fisher**, which can be computed using only the gradients of our loss function $\nabla_{\theta}\ell(f(\mathbf{x}_n;\theta,y_n))$ where $<span class="sc">\{</span>\mathbf{x}_n,y_n<span class="sc">\}</span>$ are training data (see <span class="co">[</span><span class="ot">NeurIPS 2021 paper</span><span class="co">](https://arxiv.org/pdf/2106.14806.pdf)</span> for details). Finally, <span class="co">[</span><span class="ot">LaplaceRedux.jl</span><span class="co">](https://www.patalt.org/LaplaceRedux.jl/dev/)</span> ships with a function <span class="in">`predict(𝑳::LaplaceRedux, X::AbstractArray; link_approx=:probit)`</span> that computes the posterior predictive using a probit approximation, much like we saw in the previous post. That function is used under the hood of the <span class="in">`plot_contour`</span> function below to create the right panel of @fig-logit. It visualizes the posterior predictive distribution in the 2D feature space. For comparison I have added the corresponding plugin estimate as well. Note how for the Laplace approximation the predicted probabilities fan out indicating that confidence decreases in regions scarce of data.</span>
 <span id="cb9-127"><a href="#cb9-127"></a></span>
 <span id="cb9-130"><a href="#cb9-130"></a><span class="in">```{julia}</span></span>
 <span id="cb9-131"><a href="#cb9-131"></a><span class="in">p_plugin = plot_contour(X',y,la;title="Plugin",type=:plugin);</span></span>
@@ -1238,7 +1238,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
-    <a class="nav-link" href="https://www.paltmeyer.com/">
+    <a class="nav-link" href="https://www.patalt.org/">
       <i class="bi bi-house" role="img">
 </i> 
     </a>

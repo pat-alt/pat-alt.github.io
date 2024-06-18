@@ -9,7 +9,7 @@ categories:
 description: >-
   In this slightly different post, I talk about my first experience with metaprogramming in Julia.
 image: www/intro.png
-jupyter: julia-1.8
+jupyter: julia-1.10
 draft: false
 ---
 
@@ -20,6 +20,7 @@ using Pkg; Pkg.activate("blog/posts/meta-programming")
 using CounterfactualExplanations
 using Markdown
 using Plots
+using TaijaData
 using TaijaPlotting
 ```
 
@@ -357,11 +358,13 @@ That works well,
 but we should still make sure that this `generator` is also compatible with our package. Below we go through some of the typical workflows associated with Counterfactual Explanations. Firstly, we load some synthetic data and fit a black-box model to it.
 
 ```{julia}
+using CounterfactualExplanations.Models: fit_model
 n_dim = 2
 n_classes = 4
 n_samples = 400
 model_name = :MLP
-counterfactual_data = CounterfactualExplanations.load_blobs(n_samples; k=n_dim, centers=n_classes)
+counterfactual_data = TaijaData.load_blobs(n_samples; k=n_dim, centers=n_classes) |>
+    data -> CounterfactualData(data...)
 M = fit_model(counterfactual_data, model_name)
 plot(M, counterfactual_data)
 ```
@@ -379,10 +382,11 @@ x = select_factual(counterfactual_data,chosen)
 Finally, we use our `generator` to generate counterfactuals:
 
 ```{julia}
+using CounterfactualExplanations.Convergence
 ce = generate_counterfactual(
     x, target, counterfactual_data, M, generator;
     num_counterfactuals = 5,
-    converge_when = :generator_conditions
+    convergence = GeneratorConditionsConvergence()
 )
 ```
 
