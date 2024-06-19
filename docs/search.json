@@ -3442,5 +3442,208 @@
     "title": "Spurious Sparks of AGI",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nI would be very surprised—concerned even—if our search for patterns in latent spaces of capable LLMs revealed nothing at all.↩︎\nThe data is taken from the US Department of the Treasury.↩︎"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#motivation",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#motivation",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Motivation",
+    "text": "Motivation\n\n\\(A_1\\): \\(enc(\\)„It is essential to bring inflation back to target to avoid drifting into deflation territory.“\\()\\)\n\\(A_2\\): \\(enc(\\)„It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“\\()\\)"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#motivation-1",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#motivation-1",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Motivation",
+    "text": "Motivation\n\n\n\n\\(A_1\\): \\(enc(\\)„It is essential to bring inflation back to target to avoid drifting into deflation territory.“\\()\\)\n\\(A_2\\): \\(enc(\\)„It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“\\()\\)\n\n\n“They’re exactly the same.”\n— Linear probe \\(\\widehat{cpi}=f(A)\\)"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#position",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#position",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Position",
+    "text": "Position\n\nCurrent LLMs embed knowledge. They don‘t „understand“ anything. They are useful tools, but tools nonetheless.\n\n\n\nMeaningful patterns in embeddings are like doves in the sky.\nHumans are prone to seek patterns and anthropomorphize.\nObserved ‘sparks’ of Artificial General Intelligence are spurious.\nThe academic community should exercise extra caution.\nPublishing incentives need to be adjusted."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#outline",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#outline",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Outline",
+    "text": "Outline\n\n\nExperiments: We probe models of varying complexity including random projections, matrix decompositions, deep autoencoders and transformers.\n\nAll of them successfully distill knowledge and yet none of them develop true understanding.\n\nSocial sciences review: Humans are prone to seek patterns and anthropomorphize.\nConclusion and outlook: More caution at the individual level, and different incentives at the institutional level."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#the-holy-grail",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#the-holy-grail",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "The Holy Grail",
+    "text": "The Holy Grail\nAchievement of Artificial General Intelligence (AGI) has become a grand challenge, and in some cases, an explicit business goal.\n\n\nDefinition\nThe definition of AGI itself is not as clear-cut or consistent:\n\n(loosely) a phenomenon contrasting with ‘narrow AI’ systems, that were trained for specific tasks (Goertzel 2014).\n\n\nPractice\nResearchers have sought to show that AI models generalize to different (and possibly unseen) tasks or show performance considered ‘surprising’ to humans.\n\nFor example, Google DeepMind claimed their AlphaGeometry model (Trinh et al. 2024) reached a ‘milestone’ towards AGI."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#a-perfect-storm",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#a-perfect-storm",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "A Perfect Storm",
+    "text": "A Perfect Storm\nRecent developments in the field have created a ‘perfect storm’ for inflated claims:\n\n\nEarly sharing of preprints and code.\nVolume of publishable work has exploded.\nSocial media influencers start playing a role in article discovery and citeability (Weissburg et al. 2024).\nComplexity is increasing because it is incentivized (Birhane et al. 2022)."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#not-mere-stochastic-parrots",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#not-mere-stochastic-parrots",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "“Not Mere Stochastic Parrots”",
+    "text": "“Not Mere Stochastic Parrots”\n\nWe consider a recently viral work (Gurnee and Tegmark 2023a), in which claims about the learning of world models by LLMs were made.\n\nLinear probes (ridge regression) were successfully used to predict geographical locations from LLM embeddings.\n\nClaims on X that this indicates that LLMs are not mere ‘stochastic parrots’ (Bender et al. 2021).\nReactions on X seemed to largely exhibit excitement and surprise at the authors’ findings."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#are-neural-networks-born-with-world-models",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#are-neural-networks-born-with-world-models",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Are Neural Networks Born with World Models?",
+    "text": "Are Neural Networks Born with World Models?\n\n\n\nLlama-2 model tested in Gurnee and Tegmark (2023b) has ingested huge amounts of publicly available data (Touvron et al. 2023).\n\nGeographical locations are literally in the training data: e.g. Wikipedia article for “London”.\nWhere would this information be encoded if not in the embedding space \\(\\mathcal{A}\\)? Is it surprising that \\(A_{\\text{LDN}}=enc(\\text{\"London\"}) \\not\\!\\perp\\!\\!\\!\\perp (\\text{lat}_{\\text{LDN}},\\text{long}_{\\text{LDN}})\\)?\n\nFigure 1 shows the predicted coordinates of a linear probe on the final-layer activations of an untrained neural network.\n\n\n\n\n\n\n\n\nFigure 1: Predicted coordinate values (out-of-sample) from a linear probe on final-layer activations of an untrained neural network.\n\n\n\n\nModel has seen noisy coordinates plus \\(d\\) random features.\nSingle hidden layer with \\(h &lt; d\\) hidden units."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#pca-as-a-yield-curve-interpreter",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#pca-as-a-yield-curve-interpreter",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "PCA as a Yield Curve Interpreter",
+    "text": "PCA as a Yield Curve Interpreter\nWhat are principal components if not model embeddings?\n\n\n\n\n\n\nFigure 2: Top chart: The first two principal components of US Treasury yields over time at daily frequency. Bottom chart: Observed average level and 10yr-3mo spread of the yield curve. Vertical stalks roughly indicate the onset (|GFC) and the beginning of the aftermath (GFC|) of the Global Financial Crisis."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#autoencoders-as-economic-growth-predictors",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#autoencoders-as-economic-growth-predictors",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Autoencoders as Economic Growth Predictors",
+    "text": "Autoencoders as Economic Growth Predictors\n\n\n\nWe train a neural network with a bottleneck layer to predict GDP growth from the yield curve Figure 3.\n\nInput: UST yields at different maturities.\nHidden layer, bottleneck layer, hidden layer.\nOutput: GDP growth.\n\nCan we use this for more than just forecasting?\n\n\n\n\n\n\n\n\nFigure 3: Simple autoencoder architecture."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#autoencoders-as-economic-growth-predictors-1",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#autoencoders-as-economic-growth-predictors-1",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Autoencoders as Economic Growth Predictors",
+    "text": "Autoencoders as Economic Growth Predictors\n\nYes, this can be used for feature extraction and forecasting:\n\nBottle-neck layer embeddings predict spread and level of the yield curve.\n\n\n\n\n\n\n\n\nFigure 4: The left chart shows the actual GDP growth and fitted values from the autoencoder model. The right chart shows the observed average level and spread of the yield curve (solid) along with the predicted values (in-sample) from the linear probe based on the latent embeddings (dashed)"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#embedding-fomc-comms",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#embedding-fomc-comms",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Embedding FOMC comms",
+    "text": "Embedding FOMC comms\n\nWe linearly probe all layers to predict unseen economic indicators (CPI, PPI, UST yields).\nPredictive power increases with layer depth and probes outperform simple AR(\\(p\\)) models.\n\n\n\n\n\n\n\nFigure 1: Out-of-sample root mean squared error (RMSE) for the linear probe plotted against FOMC-RoBERTa’s n-th layer for different indicators."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#sparks-of-economic-understanding",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#sparks-of-economic-understanding",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Sparks of Economic Understanding?",
+    "text": "Sparks of Economic Understanding?\nIf probe results were indicative of some intrinsic ‘understanding’ of the economy, then the probe should not be sensitive to random sentences unrelated to economics.\n\n\n\n\n\n\nFigure 2: Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB) and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted value of the probe for random noise."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#spurious-relationships",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#spurious-relationships",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Spurious Relationships",
+    "text": "Spurious Relationships\nDefiniton: Varies somewhat (Haig 2003) but distinctly implies that the observation of correlations does not imply causation.\n\nHumans struggle to tell the difference between random and non-random sequences (Falk and Konold 1997).\nLack of expectation that randomness that hints towards a causal relationship will still appear at random.\nEven experts perceive correlations of inflated magnitude (Nickerson 1998) and causal relationships where none exist (Zgraggen et al. 2018)."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#antropomorphism",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#antropomorphism",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Antropomorphism",
+    "text": "Antropomorphism\nDefinition: Human tendency to attribute human-like characteristics to non-human agents and/or objects.\n\nExperience as humans is an always-readily-available template to interpret the world (Epley, Waytz, and Cacioppo 2007).\nMotivation to avoid loneliness may lead us to anthropomorphize inanimate objects Waytz, Epley, and Cacioppo (2010).\nMotivation to be competent may lead us anthropomorphize opaque technologies like LLMs Waytz, Epley, and Cacioppo (2010)"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#confirmation-bias",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#confirmation-bias",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Confirmation Bias",
+    "text": "Confirmation Bias\nDefinition: Favoring interpretations of evidence that support existing beliefs or hypotheses (Nickerson 1998).\n\nHypotheses in present-day AI research are often implicit, often framed simply as a system being more accurate or efficient, compared to other systems.\n\nFailing to articulate a sufficiently strong null hypothesis leading to a ‘weak’ experiment (Claesen et al. 2022).\n\nIndividuals may place greater emphasis on evidence in support of their hypothesis, and lesser emphasis on evidence that opposes it (Nickerson 1998)."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#conclusion-and-outlook",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#conclusion-and-outlook",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Conclusion and Outlook",
+    "text": "Conclusion and Outlook\n\nWe call for the community to create explicit room for organized skepticism\n\nWelcome negative results\nEncouraging replication studies.\nMove from authorship to contribution-based credit (see e.g. Liem and Demetriou, 2023 and Smith, 1997).\n\nReturn to the Mertonian norms (communism, universalism, disinterestedness, organized skepticism) (Merton et al. 1942)."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#references",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#references",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "References",
+    "text": "References\n\n\nAltmeyer, Patrick, Andrew M. Demetriou, Antony Bartlett, and Cynthia C. S. Liem. 2024. “Position: Stop Making Unscientific AGI Performance Claims.” https://arxiv.org/abs/2402.03962.\n\n\nShah, Agam, Suvan Paturi, and Sudheer Chava. 2023. “Trillion Dollar Words: A New Financial Dataset, Task & Market Analysis.” arXiv Preprint arXiv:2310.02207v1. https://arxiv.org/abs/2305.07972."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#image-sources",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#image-sources",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Image sources",
+    "text": "Image sources\n\nLeonardo DiCaprio: Meme template by user on Reddit"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#quote-sources",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#quote-sources",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Quote sources",
+    "text": "Quote sources\n\n“There! It’s sentient”—that engineer at Google (probably!)"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#background",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#background",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Background",
+    "text": "Background\nDeveloped in the context of our position paper on LLM interpretability presented at ECONDAT 2024 and ICML 2024 (preprint, blog post, code):\n\nStop Making Unscientific AGI Performance Claims (Altmeyer et al. 2024)\n\n\n\nExperiments: We probe models of varying complexity including random projections, matrix decompositions, deep autoencoders and transformers.\n\nAll of them successfully distill knowledge and yet none of them develop true understanding.\n\nSocial sciences review: Humans are prone to seek patterns and anthropomorphize.\nConclusion and outlook: More caution at the individual level, and different incentives at the institutional level."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#background-1",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#background-1",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Background",
+    "text": "Background\n\n\n\n\\(A_1\\): \\(enc(\\)„It is essential to bring inflation back to target to avoid drifting into deflation territory.“\\()\\)\n\\(A_2\\): \\(enc(\\)„It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“\\()\\)\n\n\n“They’re exactly the same.”\n— Linear probe \\(\\widehat{cpi}=f(A)\\)"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#trilliondollarwords.jl",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#trilliondollarwords.jl",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "TrillionDollarWords.jl",
+    "text": "TrillionDollarWords.jl\n    \nA light-weight package providing Julia users easy access to the Trillion Dollar Words dataset and model (Shah, Paturi, and Chava 2023).\n\n\n\n\n\n\nDisclaimer\n\n\nPlease note that I am not the author of the Trillion Dollar Words paper nor am I affiliated with the authors. The package was developed as a by-product of our research and is not officially endorsed by the authors of the paper."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#context",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#context",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Context",
+    "text": "Context\nDeveloped in the context of our position paper on LLM interpretability presented at ECONDAT 2024 and ICML 2024 (preprint, blog post, code):\n\nStop Making Unscientific AGI Performance Claims (Altmeyer et al. 2024)\n\n\n\nExperiments: We probe models of varying complexity including random projections, matrix decompositions, deep autoencoders and transformers.\n\nAll of them successfully distill knowledge and yet none of them develop true understanding.\n\nSocial sciences review: Humans are prone to seek patterns and anthropomorphize.\nConclusion and outlook: More caution at the individual level, and different incentives at the institutional level."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#basic-functionality",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#basic-functionality",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Basic Functionality",
+    "text": "Basic Functionality\nThe package provides the following functionality:\n\nLoad pre-processed data.\nLoad the model proposed in the paper.\nBasic model inference: compute forward passes and layer-wise activations.\nDownload pre-computed activations for probing the model."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#loading-the-data",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#loading-the-data",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Loading the Data",
+    "text": "Loading the Data\n\n\nSentences\n40,000 time-stamped sentences from\n\nmeeting minutes\npress conferences\nspeeches\n\nby members of the Federal Open Market Committee (FOMC):\n\nusing TrillionDollarWords\nload_all_sentences() |&gt;\n  x -&gt; names(x)\n\n8-element Vector{String}:\n \"sentence_id\"\n \"doc_id\"\n \"date\"\n \"event_type\"\n \"label\"\n \"sentence\"\n \"score\"\n \"speaker\"\n\n\n\nAll Data\nMerged data includes economic indicators\n\nConsumer Price Index (CPI)\nProducer Price Index (PPI)\nUS Treasury (UST) yields\n\n\nload_all_data() |&gt;\n  x -&gt; names(x)\n\n11-element Vector{String}:\n \"sentence_id\"\n \"doc_id\"\n \"date\"\n \"event_type\"\n \"label\"\n \"sentence\"\n \"score\"\n \"speaker\"\n \"value\"\n \"indicator\"\n \"maturity\""
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#loading-the-model",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#loading-the-model",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Loading the Model",
+    "text": "Loading the Model\n\nCan be loaded with or without the classifier head.\nUses Transformers.jl to retrieve the model from HuggingFace.\nAny keyword arguments accepted by Transformers.HuggingFace.HGFConfig can also be passed.\n\n\nload_model(; load_head=false, output_hidden_states=true)"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#basic-model-inference",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#basic-model-inference",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Basic Model Inference",
+    "text": "Basic Model Inference\n\n\nFrom Scratch\nLayer-wise activations can be computed as follows:\n\ndf = load_all_sentences()\nmod = load_model(\n  load_head=false, \n  output_hidden_states=true\n)\nn = 5\nqueries = df[1:n, :]\nlayerwise_activations(\n  mod, queries\n) \n\n\nFrom Artifacts\nWe have archived activations for each layer and sentence as artifacts:\nusing LazyArtifacts\n\nartifact\"activations_layer_24\"\n\nOK, but why would I need all this? 🤔"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#intended-purpose-and-goals",
+    "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#intended-purpose-and-goals",
+    "title": "💰 Trillion Dollar Words in Julia",
+    "section": "Intended Purpose and Goals",
+    "text": "Intended Purpose and Goals\nGood starting point for the following ideas:\n\nFine-tune additional models on the classification task or other tasks of interest.\nFurther model probing, e.g. using other market indicators not discussed in the original paper.\nImprove and extend the label annotations.\n\nAny contributions are very much welcome."
   }
 ]
