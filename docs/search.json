@@ -3645,5 +3645,12 @@
     "title": "💰 Trillion Dollar Words in Julia",
     "section": "Intended Purpose and Goals",
     "text": "Intended Purpose and Goals\nGood starting point for the following ideas:\n\nFine-tune additional models on the classification task or other tasks of interest.\nFurther model probing, e.g. using other market indicators not discussed in the original paper.\nImprove and extend the label annotations.\n\nAny contributions are very much welcome."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#whats-taija",
+    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#whats-taija",
+    "title": "Trustworthy AI in Julia meets Supercomputing",
+    "section": "What’s Taija?",
+    "text": "What’s Taija?\nGrowing ecosystem of packages geared towards Trustworthy Artificial Intelligence in Julia—Taija.\n\n\n\n\n\n\n%%{\n  init: {\n    'theme': 'base',\n    'themeVariables': {\n      'primaryColor': '#BB2528',\n      'primaryTextColor': '#fff',\n      'primaryBorderColor': '#7C0000',\n      'lineColor': '#F8B229',\n      'secondaryColor': '#006100',\n      'tertiaryColor': '#e9edfb',\n      'fontFamily': \"avenir\"\n    }\n  }\n}%%\n\nflowchart TB\n\n    classDef taija fill:#389836,stroke:#333,color:#fff;\n    classDef core fill:#CB3C33,stroke:#333,color:#fff;\n    classDef base fill:#9558B2,stroke:#333,color:#fff;\n\n    %% Base\n    base[\"TaijaBase.jl\"]\n\n    %% Meta\n    interop[\"TaijaInteroperability.jl\"]\n    data[\"TaijaData.jl\"]\n    parallel[\"TaijaParallel.jl\"]\n    plotting[\"TaijaPlotting.jl\"]\n\n    %% Core\n    ce[\"CounterfactualExplanations.jl\"]\n    ar[\"AlgorithmiRecourseDynamics.jl\"]\n    cp[\"ConformalPrediction.jl\"]\n    lr[\"LaplaceRedux.jl\"]\n    jem[\"JointEnergyModels.jl\"]\n\n    class base base;\n    class interop,data,parallel,plotting taija;\n    class ce,cp,lr,jem,ar core;\n\n    %% Graph\n    subgraph \"Meta Packages\"\n        data & plotting & parallel & interop\n    end\n\n    subgraph \"Core Packages\"\n        ce & cp & lr & jem & ar\n    end\n\n\n\n\nFigure 1: An overview of the Taija ecosystem."
   }
 ]

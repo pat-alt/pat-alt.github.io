@@ -1,0 +1,92 @@
+---
+title: Trustworthy AI in Julia meets Supercomputing
+subtitle: JuliaCon 2024
+author: Patrick Altmeyer
+format:
+  julia-revealjs: 
+    scrollable: true
+date: last-modified
+bibliography: biblio.bib
+execute:
+  freeze: auto
+  eval: true
+  echo: true
+  output: false
+---
+
+```{julia}
+#| echo: false
+
+include("$(pwd())/content/talks/posts/2024-juliacon/taija-supercomp/setup.jl")
+```
+
+# [TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl)
+
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaTrustworthyAI.github.io/TaijaParallel.jl/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaTrustworthyAI.github.io/TaijaParallel.jl/dev/)
+[![Build Status](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Coverage](https://codecov.io/gh/JuliaTrustworthyAI/TaijaParallel.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaTrustworthyAI/TaijaParallel.jl)
+[![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
+[![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
+
+This package adds custom support for parallelization for certain [Taija](https://github.com/JuliaTrustworthyAI) packages.
+
+## What's Taija?
+
+Growing ecosystem of packages geared towards *T*rustworthy *A*rtificial *I*ntelligence in *J*uli*a*---[Taija](https://github.com/JuliaTrustworthyAI).  
+
+```{mermaid}
+%%| echo: false
+%%| label: fig-overview
+%%| fig-cap: "An overview of the Taija ecosystem."
+
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'primaryColor': '#BB2528',
+      'primaryTextColor': '#fff',
+      'primaryBorderColor': '#7C0000',
+      'lineColor': '#F8B229',
+      'secondaryColor': '#006100',
+      'tertiaryColor': '#e9edfb',
+      'fontFamily': "avenir"
+    }
+  }
+}%%
+
+flowchart TB
+
+    classDef taija fill:#389836,stroke:#333,color:#fff;
+    classDef core fill:#CB3C33,stroke:#333,color:#fff;
+    classDef base fill:#9558B2,stroke:#333,color:#fff;
+
+    %% Base
+    base["TaijaBase.jl"]
+
+    %% Meta
+    interop["TaijaInteroperability.jl"]
+    data["TaijaData.jl"]
+    parallel["TaijaParallel.jl"]
+    plotting["TaijaPlotting.jl"]
+
+    %% Core
+    ce["CounterfactualExplanations.jl"]
+    ar["AlgorithmiRecourseDynamics.jl"]
+    cp["ConformalPrediction.jl"]
+    lr["LaplaceRedux.jl"]
+    jem["JointEnergyModels.jl"]
+
+    class base base;
+    class interop,data,parallel,plotting taija;
+    class ce,cp,lr,jem,ar core;
+
+    %% Graph
+    subgraph "Meta Packages"
+        data & plotting & parallel & interop
+    end
+
+    subgraph "Core Packages"
+        ce & cp & lr & jem & ar
+    end
+```
