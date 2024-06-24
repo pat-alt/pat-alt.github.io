@@ -36,8 +36,8 @@ $toc-inactive-border: lighten($toc-active-border, 15%) !default;
 // Callouts:
 $callout-color-note: $julia-blue !default;
 $callout-color-tip: $julia-green !default;
-$callout-color-warning: $julia-purple !default;
-$callout-color-caution: lighten($callout-color-warning, 30%) !default;
+$callout-color-caution: $julia-purple !default;
+$callout-color-warning: lighten($callout-color-caution, 30%) !default;
 $callout-color-important: $julia-red !default;
 
 /*-- scss:rules --*/
@@ -47,4 +47,25 @@ h1, h2, h3, h4, h5, h6 {
 
 hr {
     color: $julia-blue;
+}
+
+blockquote {
+    color: lighten($julia-blue, 15%);
+    border-left: .25rem solid $julia-blue;
+    background-color: lighten($julia-blue, 40%);
+    font-family: "Barlow";
+}
+
+// Classes for Julia colors:
+.julia-purple {
+    color: $julia-purple;
+}
+.julia-blue {
+    color: $julia-blue;
+}
+.julia-green {
+    color: $julia-green;
+}
+.julia-red {
+    color: $julia-red;
 }
