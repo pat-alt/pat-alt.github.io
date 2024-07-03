@@ -72,14 +72,13 @@ flowchart TB
 
     %% Core
     ce["CounterfactualExplanations.jl"]
-    ar["AlgorithmiRecourseDynamics.jl"]
     cp["ConformalPrediction.jl"]
     lr["LaplaceRedux.jl"]
     jem["JointEnergyModels.jl"]
 
     class base base;
     class interop,data,parallel,plotting taija;
-    class ce,cp,lr,jem,ar core;
+    class ce,cp,lr,jem core;
 
     %% Graph
     subgraph "Meta Packages"
@@ -87,6 +86,26 @@ flowchart TB
     end
 
     subgraph "Core Packages"
-        ce & cp & lr & jem & ar
+        ce & cp & lr & jem 
     end
 ```
+
+## Why Supercomputing?
+
+> Efforts towards trustworthy AI tend to increase the computational burden involved in training or inference.
+
+. . .
+
+- Explainable AI: we are often required to generate many explanations for many individuals.
+- Conformal Prediction: many techniques involve cross-validation or bootstrapping.
+- (Quasi) Bayesian DL: even simple approaches like deep ensembles require training multiple models.
+
+. . .
+
+Good news: all of these tasks can be parallelized!
+
+<!-- A firm that is using a machine learning model to screen out job applicants, for example, might be required to explain to each unsuccessful applicant why they were not admitted to the interview stage. In a different context, researchers may need to generate many explanations for evaluation and benchmarking purposes. -->
+
+# Case Study: Counterfactual Explanations
+
+The package was developed to power [research](https://arxiv.org/abs/2312.10648) presented at AAAI 2024. The project involved large benchmarks of counterfactual explanations that had to be run on a supercomputer. 

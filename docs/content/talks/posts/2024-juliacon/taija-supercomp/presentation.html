@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.4.550">
 
   <meta name="author" content="Patrick Altmeyer">
-  <meta name="dcterms.date" content="2024-06-24">
+  <meta name="dcterms.date" content="2024-07-03">
   <title>patalt - Trustworthy AI in Julia meets Supercomputing</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -404,7 +404,7 @@ Patrick Altmeyer
 </div>
 </div>
 
-  <p class="date">2024-06-24</p>
+  <p class="date">2024-07-03</p>
 </section>
 <section>
 <section id="taijaparallel.jl" class="title-slide slide level1 center">
@@ -453,14 +453,13 @@ flowchart TB
 
     %% Core
     ce["CounterfactualExplanations.jl"]
-    ar["AlgorithmiRecourseDynamics.jl"]
     cp["ConformalPrediction.jl"]
     lr["LaplaceRedux.jl"]
     jem["JointEnergyModels.jl"]
 
     class base base;
     class interop,data,parallel,plotting taija;
-    class ce,cp,lr,jem,ar core;
+    class ce,cp,lr,jem core;
 
     %% Graph
     subgraph "Meta Packages"
@@ -468,7 +467,7 @@ flowchart TB
     end
 
     subgraph "Core Packages"
-        ce &amp; cp &amp; lr &amp; jem &amp; ar
+        ce &amp; cp &amp; lr &amp; jem 
     end
 </pre>
 </div>
@@ -480,13 +479,34 @@ Figure&nbsp;1: An overview of the Taija ecosystem.
 </div>
 </div>
 </div>
+</section>
+<section id="why-supercomputing" class="slide level2">
+<h2>Why Supercomputing?</h2>
+<blockquote>
+<p>Efforts towards trustworthy AI tend to increase the computational burden involved in training or inference.</p>
+</blockquote>
+<div class="fragment">
+<ul>
+<li>Explainable AI: we are often required to generate many explanations for many individuals.</li>
+<li>Conformal Prediction: many techniques involve cross-validation or bootstrapping.</li>
+<li>(Quasi) Bayesian DL: even simple approaches like deep ensembles require training multiple models.</li>
+</ul>
+</div>
+<div class="fragment">
+<p>Good news: all of these tasks can be parallelized!</p>
+<!-- A firm that is using a machine learning model to screen out job applicants, for example, might be required to explain to each unsuccessful applicant why they were not admitted to the interview stage. In a different context, researchers may need to generate many explanations for evaluation and benchmarking purposes. -->
+</div>
+</section></section>
+<section id="case-study-counterfactual-explanations" class="title-slide slide level1 center">
+<h1>Case Study: Counterfactual Explanations</h1>
+<p>The package was developed to power <a href="https://arxiv.org/abs/2312.10648">research</a> presented at AAAI 2024. The project involved large benchmarks of counterfactual explanations that had to be run on a supercomputer.</p>
 
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
 </div>
-</section></section>
+</section>
     </div>
   </div>
 
