@@ -31,7 +31,27 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-  </style>
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
   <link rel="stylesheet" href="../../../../../site_libs/revealjs/dist/theme/quarto.css">
   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-BEEZ30787D"></script>
 
@@ -482,31 +502,110 @@ Figure&nbsp;1: An overview of the Taija ecosystem.
 </section>
 <section id="why-supercomputing" class="slide level2">
 <h2>Why Supercomputing?</h2>
-<blockquote>
-<p>Efforts towards trustworthy AI tend to increase the computational burden involved in training or inference.</p>
-</blockquote>
+<p>Efforts towards trustworthy AI tend to increase the computational burden involved in training or inference:</p>
 <div class="fragment">
 <ul>
 <li>Explainable AI: we are often required to generate many explanations for many individuals.</li>
 <li>Conformal Prediction: many techniques involve cross-validation or bootstrapping.</li>
-<li>(Quasi) Bayesian DL: even simple approaches like deep ensembles require training multiple models.</li>
+<li>(Quasi) Bayesian DL like deep ensembles.</li>
 </ul>
 </div>
 <div class="fragment">
+<blockquote>
 <p>Good news: all of these tasks can be parallelized!</p>
+</blockquote>
 <!-- A firm that is using a machine learning model to screen out job applicants, for example, might be required to explain to each unsuccessful applicant why they were not admitted to the interview stage. In a different context, researchers may need to generate many explanations for evaluation and benchmarking purposes. -->
 </div>
 </section></section>
-<section id="case-study-counterfactual-explanations" class="title-slide slide level1 center">
-<h1>Case Study: Counterfactual Explanations</h1>
-<p>The package was developed to power <a href="https://arxiv.org/abs/2312.10648">research</a> presented at AAAI 2024. The project involved large benchmarks of counterfactual explanations that had to be run on a supercomputer.</p>
+<section>
+<section id="motivating-example-counterfactual-explanations" class="title-slide slide level1 center">
+<h1>Motivating Example: Counterfactual Explanations</h1>
+<p>The package was developed to power <a href="https://arxiv.org/abs/2312.10648">research</a> presented at AAAI 2024 <span class="citation" data-cites="altmeyer2024faithful">(<a href="#/references" role="doc-biblioref" onclick="">Altmeyer et al. 2024</a>)</span>. The project involved large benchmarks of counterfactual explanations that had to be run on a supercomputer.</p>
+</section>
+<section id="benchmarking-explanations" class="slide level2 nostretch">
+<h2>Benchmarking Explanations</h2>
+<ul>
+<li>Final benchmark: total of <strong>~10 million</strong> counterfactuals across 8 datasets and different DL models.</li>
+<li>Parallelized across <strong>50 to 300 CPUs</strong> on <a href="https://www.tudelft.nl/dhpc/system">DelftBlue</a> using combination of multi-threading and -processing.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="www/poc_gradient_fields.png" style="width:75.0%"></p>
+<figcaption>Gradients and counterfactuals for different generators. Source: <span class="citation" data-cites="altmeyer2024faithful">Altmeyer et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span></figcaption>
+</figure>
+</div>
+</section>
+<section id="source-code" class="slide level2">
+<h2>Source Code</h2>
+<ul>
+<li><a href="https://github.com/pat-alt/ECCCo.jl/tree/main">ECCCo.jl</a> is a small package build for <span class="citation" data-cites="altmeyer2024faithful">Altmeyer et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span> that leverages and extends <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl">CounterfactualExplanations.jl</a>, <a href="https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl">ConformalPrediction.jl</a>, and <a href="https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl">JointEnergyModels.jl</a>.</li>
+<li>Parallelization is achieved through <a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/tree/main">TaijaParallel.jl</a>.</li>
+<li>Functionality now being absorbed by CounterfactualExplanations.jl.</li>
+</ul>
+<div class="fragment">
+<blockquote>
+<p>Code is open-sourced and available on <a href="https://github.com/pat-alt/ECCCo.jl/tree/main">GitHub</a>.</p>
+</blockquote>
+</div>
+</section></section>
+<section>
+<section id="the-package" class="title-slide slide level1 center">
+<h1>The Package</h1>
+
+</section>
+<section id="user-interface" class="slide level2">
+<h2>User Interface</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<blockquote>
+<p>We aim to minimize the burden on users.</p>
+</blockquote>
+<ul>
+<li>Users will mostly interact with custom macro <code>@with_parallelizer</code>.</li>
+<li>In <a href="#/user-interface" class="quarto-xref">Figure&nbsp;2</a>, <code>mpi</code> is an instance of type <code>MPIParallelizer</code>.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div id="fig-usage" class="quarto-figure quarto-figure-center quarto-float">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-usage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="www/usage.png">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-usage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Generating counterfactuals in parallel using MPI. See <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/stable/tutorials/parallelization/">docs</a> for details.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="backend" class="slide level2">
+<h2>Backend</h2>
+</section>
+<section id="architecture" class="slide level2">
+<h2>Architecture</h2>
+<ul>
+<li><a href="https://github.com/JuliaTrustworthyAI/TaijaBase.jl">TaijaBase.jl</a> ships basic parallelization <a href="https://github.com/JuliaTrustworthyAI/TaijaBase.jl/blob/main/src/parallelization/base.jl">functions and symbols</a> to make them available to all Taija packages.
+<ul>
+<li><code>CounterfactualExplanations.benchmark</code>, for example, accepts a <code>parallelizer</code> argument of type <code>Union{Nothing,AbstractParallelizer}</code>.</li>
+</ul></li>
+<li><a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl">TaijaParallel.jl</a> adds out-of-the-box support for parallelization through multi-threading.</li>
+<li>Multi-processing through <a href="https://github.com/JuliaParallel/MPI.jl">MPI.jl</a> handled through an extension.</li>
+</ul>
+</section>
+<section id="references" class="slide level2 smaller scrollable">
+<h2>References</h2>
 
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
 </div>
-</section>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-altmeyer2024faithful" class="csl-entry" role="listitem">
+Altmeyer, Patrick, Mojtaba Farmanbar, Arie van Deursen, and Cynthia CS Liem. 2024. <span>“Faithful Model Explanations Through Energy-Constrained Conformal Counterfactuals.”</span> In <em>Proceedings of the AAAI Conference on Artificial Intelligence</em>, 38:10829–37. 10.
+</div>
+</div>
+</section></section>
     </div>
   </div>
 

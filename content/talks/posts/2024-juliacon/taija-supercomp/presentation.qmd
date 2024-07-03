@@ -92,20 +92,68 @@ flowchart TB
 
 ## Why Supercomputing?
 
-> Efforts towards trustworthy AI tend to increase the computational burden involved in training or inference.
+Efforts towards trustworthy AI tend to increase the computational burden involved in training or inference:
 
 . . .
 
 - Explainable AI: we are often required to generate many explanations for many individuals.
 - Conformal Prediction: many techniques involve cross-validation or bootstrapping.
-- (Quasi) Bayesian DL: even simple approaches like deep ensembles require training multiple models.
+- (Quasi) Bayesian DL like deep ensembles.
 
 . . .
 
-Good news: all of these tasks can be parallelized!
+> Good news: all of these tasks can be parallelized!
 
 <!-- A firm that is using a machine learning model to screen out job applicants, for example, might be required to explain to each unsuccessful applicant why they were not admitted to the interview stage. In a different context, researchers may need to generate many explanations for evaluation and benchmarking purposes. -->
 
-# Case Study: Counterfactual Explanations
+# Motivating Example: Counterfactual Explanations
 
-The package was developed to power [research](https://arxiv.org/abs/2312.10648) presented at AAAI 2024. The project involved large benchmarks of counterfactual explanations that had to be run on a supercomputer. 
+The package was developed to power [research](https://arxiv.org/abs/2312.10648) presented at AAAI 2024 [@altmeyer2024faithful]. The project involved large benchmarks of counterfactual explanations that had to be run on a supercomputer. 
+
+## Benchmarking Explanations {.nostretch}
+
+- Final benchmark: total of **~10 million** counterfactuals across 8 datasets and different DL models.
+- Parallelized across **50 to 300 CPUs** on [DelftBlue](https://www.tudelft.nl/dhpc/system) using combination of multi-threading and -processing.
+
+![Gradients and counterfactuals for different generators. Source: @altmeyer2024faithful](www/poc_gradient_fields.png){width=75%}
+
+## Source Code
+
+- [ECCCo.jl](https://github.com/pat-alt/ECCCo.jl/tree/main) is a small package build for @altmeyer2024faithful that leverages and extends [CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl), [ConformalPrediction.jl](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl), and [JointEnergyModels.jl](https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl).
+- Parallelization is achieved through [TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/tree/main). 
+- Functionality now being absorbed by CounterfactualExplanations.jl.
+
+. . .
+
+> Code is open-sourced and available on [GitHub](https://github.com/pat-alt/ECCCo.jl/tree/main).
+
+# The Package
+
+
+
+## User Interface
+
+::::{.columns}::::
+:::{.column width='50%'}
+
+> We aim to minimize the burden on users.
+
+- Users will mostly interact with custom macro `@with_parallelizer`. 
+- In @fig-usage, `mpi` is an instance of type `MPIParallelizer`. 
+
+:::
+:::{.column width='50%'}
+![Generating counterfactuals in parallel using MPI. See [docs](https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/stable/tutorials/parallelization/) for details.](www/usage.png){#fig-usage}
+:::
+::::
+
+## Backend
+
+## Architecture
+
+- [TaijaBase.jl](https://github.com/JuliaTrustworthyAI/TaijaBase.jl) ships basic parallelization [functions and symbols](https://github.com/JuliaTrustworthyAI/TaijaBase.jl/blob/main/src/parallelization/base.jl) to make them available to all Taija packages.
+  - `CounterfactualExplanations.benchmark`, for example, accepts a `parallelizer` argument of type `Union{Nothing,AbstractParallelizer}`.
+- [TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl) adds out-of-the-box support for parallelization through multi-threading.
+- Multi-processing through [MPI.jl](https://github.com/JuliaParallel/MPI.jl) handled through an extension. 
+
+## References

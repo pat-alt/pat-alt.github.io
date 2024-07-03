@@ -3658,6 +3658,62 @@
     "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#why-supercomputing",
     "title": "Trustworthy AI in Julia meets Supercomputing",
     "section": "Why Supercomputing?",
-    "text": "Why Supercomputing?\n\nEfforts towards trustworthy AI tend to increase the computational burden involved in training or inference.\n\n\n\nExplainable AI: we are often required to generate many explanations for many individuals.\nConformal Prediction: many techniques involve cross-validation or bootstrapping.\n(Quasi) Bayesian DL: even simple approaches like deep ensembles require training multiple models.\n\n\n\nGood news: all of these tasks can be parallelized!"
+    "text": "Why Supercomputing?\nEfforts towards trustworthy AI tend to increase the computational burden involved in training or inference:\n\n\nExplainable AI: we are often required to generate many explanations for many individuals.\nConformal Prediction: many techniques involve cross-validation or bootstrapping.\n(Quasi) Bayesian DL like deep ensembles.\n\n\n\n\nGood news: all of these tasks can be parallelized!"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#benchmarking-explanations",
+    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#benchmarking-explanations",
+    "title": "Trustworthy AI in Julia meets Supercomputing",
+    "section": "Benchmarking Explanations",
+    "text": "Benchmarking Explanations\n\nFinal benchmark: total of ~10 million counterfactuals across 8 datasets and different DL models.\nParallelized across 50 to 300 CPUs on DelftBlue using combination of multi-threading and -processing.\n\n\n\n\nGradients and counterfactuals for different generators. Source: Altmeyer et al. (2024)"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#references",
+    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#references",
+    "title": "Trustworthy AI in Julia meets Supercomputing",
+    "section": "References",
+    "text": "References\n\n\n\n\n\n\n\n\nAltmeyer, Patrick, Mojtaba Farmanbar, Arie van Deursen, and Cynthia CS Liem. 2024. “Faithful Model Explanations Through Energy-Constrained Conformal Counterfactuals.” In Proceedings of the AAAI Conference on Artificial Intelligence, 38:10829–37. 10."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#implementation",
+    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#implementation",
+    "title": "Trustworthy AI in Julia meets Supercomputing",
+    "section": "Implementation",
+    "text": "Implementation\n\nECCCo.jl is a small package build for Altmeyer et al. (2024) that leverages and extends CounterfactualExplanations.jl, ConformalPrediction.jl, and JointEnergyModels.jl.\nParallelization is achieved through TaijaParallel.jl.\nFunctionality now being absorbed by CounterfactualExplanations.jl.\n\n\n\nCode is open-sourced and available on GitHub."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#source-code",
+    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#source-code",
+    "title": "Trustworthy AI in Julia meets Supercomputing",
+    "section": "Source Code",
+    "text": "Source Code\n\nECCCo.jl is a small package build for Altmeyer et al. (2024) that leverages and extends CounterfactualExplanations.jl, ConformalPrediction.jl, and JointEnergyModels.jl.\nParallelization is achieved through TaijaParallel.jl.\nFunctionality now being absorbed by CounterfactualExplanations.jl.\n\n\n\nCode is open-sourced and available on GitHub."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#implementation-2",
+    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#implementation-2",
+    "title": "Trustworthy AI in Julia meets Supercomputing",
+    "section": "Implementation (2)",
+    "text": "Implementation (2)"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#user-interface",
+    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#user-interface",
+    "title": "Trustworthy AI in Julia meets Supercomputing",
+    "section": "User Interface",
+    "text": "User Interface\n\n\n\nWe aim to minimize the burden on users.\n\n\nUsers will mostly interact with custom macro @with_parallelizer.\nIn Figure 2, mpi is an instance of type MPIParallelizer.\n\n\n\n\n\n\n\n\nFigure 2: Generating counterfactuals in parallel using MPI. See docs for details."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#architecture",
+    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#architecture",
+    "title": "Trustworthy AI in Julia meets Supercomputing",
+    "section": "Architecture",
+    "text": "Architecture\n\nTaijaBase.jl ships basic parallelization functions and symbols to make them available to all Taija packages.\n\nCounterfactualExplanations.benchmark, for example, accepts a parallelizer argument of type Union{Nothing,AbstractParallelizer}.\n\nTaijaParallel.jl adds out-of-the-box support for parallelization through multi-threading.\nMulti-processing through MPI.jl handled through an extension."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#backend",
+    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#backend",
+    "title": "Trustworthy AI in Julia meets Supercomputing",
+    "section": "Backend",
+    "text": "Backend"
   }
 ]
