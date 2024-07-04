@@ -3742,7 +3742,7 @@
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#ecosystem-overview",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Ecosystem Overview",
-    "text": "Ecosystem Overview\n\n\n\n\n\n\n%%{\n  init: {\n    'theme': 'base',\n    'themeVariables': {\n      'primaryColor': '#BB2528',\n      'primaryTextColor': '#fff',\n      'primaryBorderColor': '#7C0000',\n      'lineColor': '#F8B229',\n      'secondaryColor': '#006100',\n      'tertiaryColor': '#e9edfb',\n      'fontFamily': \"avenir\"\n    }\n  }\n}%%\n\nflowchart TB\n\n    classDef taija fill:#389836,stroke:#333,color:#fff;\n    classDef core fill:#CB3C33,stroke:#333,color:#fff;\n    classDef base fill:#9558B2,stroke:#333,color:#fff;\n\n    %% Base\n    base[\"TaijaBase.jl\"]\n\n    %% Meta\n    interop[\"TaijaInteroperability.jl\"]\n    data[\"TaijaData.jl\"]\n    parallel[\"TaijaParallel.jl\"]\n    plotting[\"TaijaPlotting.jl\"]\n\n    %% Core\n    ce[\"CounterfactualExplanations.jl\"]\n    cp[\"ConformalPrediction.jl\"]\n    lr[\"LaplaceRedux.jl\"]\n    jem[\"JointEnergyModels.jl\"]\n\n    class base base;\n    class interop,data,parallel,plotting taija;\n    class ce,cp,lr,jem core;\n\n    %% Graph\n    base --&gt; ce & cp & lr & jem\n\n    subgraph \"Core Packages\"\n        ce & cp & lr & jem \n    end\n\n    subgraph \"Meta Packages\"\n        data & plotting & parallel & interop\n    end \n\n\n\n\nFigure 1: Overview of the Taija ecosystem. Packages in early development not shown."
+    "text": "Ecosystem Overview\n\n\n\n\n\n\n%%{\n  init: {\n    'theme': 'base',\n    'themeVariables': {\n      'primaryColor': '#BB2528',\n      'primaryTextColor': '#fff',\n      'primaryBorderColor': '#7C0000',\n      'lineColor': '#F8B229',\n      'secondaryColor': '#006100',\n      'tertiaryColor': '#e9edfb',\n      'fontFamily': \"avenir\"\n    }\n  }\n}%%\n\nflowchart TB\n\n    classDef taija fill:#389836,stroke:#333,color:#fff;\n    classDef core fill:#CB3C33,stroke:#333,color:#fff;\n    classDef base fill:#9558B2,stroke:#333,color:#fff;\n\n    %% Base\n    base[\"TaijaBase.jl\"]\n\n    %% Meta\n    interop[\"TaijaInteroperability.jl\"]\n    data[\"TaijaData.jl\"]\n    parallel[\"TaijaParallel.jl\"]\n    plotting[\"TaijaPlotting.jl\"]\n\n    %% Core\n    ce[\"CounterfactualExplanations.jl\"]\n    cp[\"ConformalPrediction.jl\"]\n    lr[\"LaplaceRedux.jl\"]\n    jem[\"JointEnergyModels.jl\"]\n\n    %% External\n    mlj[\"MLJ.jl\"]\n    flux[\"Flux.jl\"]\n\n    class base base;\n    class interop,data,parallel,plotting taija;\n    class ce,cp,lr,jem core;\n\n    %% Graph\n    base --&gt; ce & cp & lr & jem\n\n    subgraph \"Core Packages\"\n        ce & cp & lr & jem \n    end\n\n    subgraph \"Meta Packages\"\n        data & plotting & parallel & interop\n    end \n\n    subgraph \"External Packages\"\n        mlj & flux\n    end\n\n\n\n\nFigure 1: Overview of the Taija ecosystem. Packages in early development not shown."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#whos-behind-taija",
@@ -3763,27 +3763,132 @@
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#references",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "References",
-    "text": "References\n\n\n\n\n\n\n\n\nAltmeyer, Patrick, Arie van Deursen, et al. 2023. “Explaining Black-Box Models Through Counterfactuals.” In Proceedings of the JuliaCon Conferences, 1:130. 1.\n\n\nGrathwohl, Will, Kuan-Chieh Wang, Joern-Henrik Jacobsen, David Duvenaud, Mohammad Norouzi, and Kevin Swersky. 2020. “Your Classifier Is Secretly an Energy Based Model and You Should Treat It Like One.” In International Conference on Learning Representations."
+    "text": "References\n\n\n\n\n\n\n\n\nAltmeyer, Patrick, Giovan Angela, Aleksander Buszydlik, Karol Dobiczek, Arie van Deursen, and Cynthia CS Liem. 2023. “Endogenous Macrodynamics in Algorithmic Recourse.” In 2023 IEEE Conference on Secure and Trustworthy Machine Learning (SaTML), 418–31. IEEE.\n\n\nAltmeyer, Patrick, Arie van Deursen, et al. 2023. “Explaining Black-Box Models Through Counterfactuals.” In Proceedings of the JuliaCon Conferences, 1:130. 1.\n\n\nGrathwohl, Will, Kuan-Chieh Wang, Joern-Henrik Jacobsen, David Duvenaud, Mohammad Norouzi, and Kevin Swersky. 2020. “Your Classifier Is Secretly an Energy Based Model and You Should Treat It Like One.” In International Conference on Learning Representations.\n\n\nJoshi, Shalmali, Oluwasanmi Koyejo, Warut Vijitbenjaronk, Been Kim, and Joydeep Ghosh. 2019. “Towards Realistic Individual Recourse and Actionable Explanations in Black-Box Decision Making Systems.” https://arxiv.org/abs/1907.09615.\n\n\nSchut, Lisa, Oscar Key, Rory Mc Grath, Luca Costabello, Bogdan Sacaleanu, Yarin Gal, et al. 2021. “Generating Interpretable Counterfactual Explanations By Implicit Minimisation of Epistemic and Aleatoric Uncertainties.” In International Conference on Artificial Intelligence and Statistics, 1756–64. PMLR.\n\n\nWachter, Sandra, Brent Mittelstadt, and Chris Russell. 2017. “Counterfactual Explanations Without Opening the Black Box: Automated Decisions and the GDPR.” Harv. JL & Tech. 31: 841. https://doi.org/10.2139/ssrn.3063289.\n\n\nZagorac, Ivor. 2024. “A Study on Counterfactual Explanations: Investigating the Impact of Inter-Class Distance and Data Imbalance.”"
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-research",
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-research",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "New Research",
-    "text": "New Research\nTaija has been used in several research projects (some of which are still ongoing):"
+    "text": "New Research\n\nConformal Intent Classification and Clarification for Fast and Accurate Intent Recognition (Hengst et al. 2024) upcoming in ACL’s NAACL Findings 20241.\nFaithful Model Explanations through Energy-Constrained Conformal Counterfactuals (Altmeyer et al. 2024) published in Proceedings of the AAAI Conference on Artificial Intelligence 2024.\nExplaining Black-Box Models through Counterfactuals (Altmeyer, Deursen, et al. 2023) published in JuliaCon Proceedings.\nEndogenous Macrodynamics in Algorithmic Recourse (Altmeyer et al. 2023) published in Proceedings of the 2023 IEEE Conference on Secure and Trustworthy Machine Learning (SaTML).\n\nExperiments were run in parallel using Python’s MAPIE and ConformalPrediction.jl, in order to cross-check results. Reported results were produced using MAPIE."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-developments",
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-developments",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "New Developments",
-    "text": "New Developments\nTaija has undergone significant development:\n\nCounterfactualExplanations.jl: refactoring, performance improvements, new features, JCon Proceedings (Altmeyer, Deursen, et al. 2023).\nLaplaceRedux.jl: new features, interface to MLJ, JCon Proceedings (under review).\nConformalPrediction.jl: new features.\nJointEnergyModels.jl: new package for Joint Energy-Based Models (Grathwohl et al. 2020).\nMeta packages: TaijaData.jl, TaijaPlotting.jl, TaijaParallel.jl, and TaijaInteroperability.jl."
+    "text": "New Developments\n\nCounterfactualExplanations.jl: refactoring, performance improvements, new features, JCon Proceedings (Altmeyer, Deursen, et al. 2023).\nLaplaceRedux.jl: new features, interface to MLJ, JCon Proceedings (under review).\nConformalPrediction.jl: new features.\nJointEnergyModels.jl: new package for Joint Energy-Based Models (Grathwohl et al. 2020).\nMeta packages: TaijaData.jl, TaijaParallel.jl, …"
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#whats-new",
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#whats-new",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "What’s New?",
-    "text": "What’s New?\nDevelopments\n\nCounterfactualExplanations.jl: refactoring, performance improvements, new features, JCon Proceedings (Altmeyer, Deursen, et al. 2023).\nLaplaceRedux.jl: new features, interface to MLJ, JCon Proceedings (under review).\nConformalPrediction.jl: new features.\nJointEnergyModels.jl: new package for Joint Energy-Based Models (Grathwohl et al. 2020).\nMeta packages: TaijaData.jl, TaijaPlotting.jl, TaijaParallel.jl, and TaijaInteroperability.jl.\n\nResearch"
+    "text": "What’s New?\nDevelopments\n\nCounterfactualExplanations.jl: refactoring, performance improvements, new features, JCon Proceedings (Altmeyer, Deursen, et al. 2023).\nLaplaceRedux.jl: new features, interface to MLJ, JCon Proceedings (under review).\nConformalPrediction.jl: new features.\nJointEnergyModels.jl: new package for Joint Energy-Based Models (Grathwohl et al. 2020).\nMeta packages: TaijaData.jl, TaijaPlotting.jl, TaijaParallel.jl, and TaijaInteroperability.jl.\n\nResearch\n\nConformal Intent Classification and Clarification for Fast and Accurate Intent Recognition (Hengst et al. 2024) upcoming in ACL’s NAACL Findings 20241.\nFaithful Model Explanations through Energy-Constrained Conformal Counterfactuals (Altmeyer et al. 2024) published in Proceedings of the AAAI Conference on Artificial Intelligence 2024.\nExplaining Black-Box Models through Counterfactuals (Altmeyer, Deursen, et al. 2023) published in JuliaCon Proceedings.\nEndogenous Macrodynamics in Algorithmic Recourse (Altmeyer et al. 2023) published in Proceedings of the 2023 IEEE Conference on Secure and Trustworthy Machine Learning (SaTML).\n\nExperiments were run in parallel using Python’s MAPIE and ConformalPrediction.jl, in order to cross-check results. Reported results were produced using MAPIE."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#faithful-counterfactuals",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#faithful-counterfactuals",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Faithful Counterfactuals",
+    "text": "Faithful Counterfactuals\n\n\n\n\n\n\n\n\nFigure 3: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\nECCCo1 generates counterfactuals that\n\nfaithfully represent model quality (Figure 3).\nachieve state-of-the-art plausibility (Figure 4).\n\n\n\n\n\n\n\nFigure 4: Results for different generators (from 3 to 5).\n\n\n\n\n\nSource code ECCCo.jl extends CE.jl, CP.jl and JEM.jl."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#conformal-intent-classification",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#conformal-intent-classification",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Conformal Intent Classification",
+    "text": "Conformal Intent Classification"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#more-research",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#more-research",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "More Research",
+    "text": "More Research\n\nEndogenous Macrodynamics in Algorithmic Recourse (Altmeyer et al. 2023) published at IEEE SaTML 2023.\n\nStudents\n\nBachelor’s thesis on What Makes Models Explainable? Evidence from Counterfactuals (work in progress).\n\nRelated development: AdversarialRobustness.jl.\n\nVarious Master’s theses on CE for imbalanced data (Zagorac 2024), CE as a tool for testing, operationalizing algorithmic recourse, explainability of LLMs (see draft PR)."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#overview",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#overview",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Overview",
+    "text": "Overview\n\nCounterfactualExplanations.jl: refactoring, performance improvements, new features, JCon Proceedings (Altmeyer, Deursen, et al. 2023).\nLaplaceRedux.jl: new features, interface to MLJ, JCon Proceedings (under review).\nConformalPrediction.jl: new features.\nJointEnergyModels.jl: new package for Joint Energy-Based Models (Grathwohl et al. 2020).\nMeta packages: TaijaData.jl, TaijaParallel.jl, …"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#composable-counterfactual-generators",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#composable-counterfactual-generators",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Composable Counterfactual Generators",
+    "text": "Composable Counterfactual Generators"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#explaining-different-models",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#explaining-different-models",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Explaining Different Models",
+    "text": "Explaining Different Models\nNeuroTrees.jl\nTalk"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#benchmarking-counterfactuals",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#benchmarking-counterfactuals",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Benchmarking Counterfactuals",
+    "text": "Benchmarking Counterfactuals"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#scaling-things-up",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#scaling-things-up",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Scaling Things Up",
+    "text": "Scaling Things Up"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-features-in-laplaceredux.jl",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-features-in-laplaceredux.jl",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "New Features in LaplaceRedux.jl",
+    "text": "New Features in LaplaceRedux.jl"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-features-in-conformalprediction.jl",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-features-in-conformalprediction.jl",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "New Features in ConformalPrediction.jl",
+    "text": "New Features in ConformalPrediction.jl"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#joint-energy-based-models",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#joint-energy-based-models",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Joint Energy-Based Models",
+    "text": "Joint Energy-Based Models"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#ongoing-work",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#ongoing-work",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Ongoing Work",
+    "text": "Ongoing Work"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-in-laplaceredux.jl",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-in-laplaceredux.jl",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "New in LaplaceRedux.jl",
+    "text": "New in LaplaceRedux.jl"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-in-conformalprediction.jl",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-in-conformalprediction.jl",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "New in ConformalPrediction.jl",
+    "text": "New in ConformalPrediction.jl"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#pick-your-poison",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#pick-your-poison",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Pick your Poison",
+    "text": "Pick your Poison\nAll of these counterfactuals are valid explanations for the model’s prediction.\n\nWhich one would you pick?\n\n\n\nFigure 2: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using Wachter (Wachter, Mittelstadt, and Russell 2017), Schut (Schut et al. 2021) and REVISE (Joshi et al. 2019)."
   }
 ]

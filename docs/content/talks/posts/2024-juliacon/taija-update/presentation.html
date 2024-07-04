@@ -481,6 +481,10 @@ flowchart TB
     lr["LaplaceRedux.jl"]
     jem["JointEnergyModels.jl"]
 
+    %% External
+    mlj["MLJ.jl"]
+    flux["Flux.jl"]
+
     class base base;
     class interop,data,parallel,plotting taija;
     class ce,cp,lr,jem core;
@@ -495,6 +499,10 @@ flowchart TB
     subgraph "Meta Packages"
         data &amp; plotting &amp; parallel &amp; interop
     end 
+
+    subgraph "External Packages"
+        mlj &amp; flux
+    end
 </pre>
 </div>
 </div>
@@ -528,18 +536,112 @@ Figure&nbsp;1: Overview of the Taija ecosystem. Packages in early development no
 <li class="fragment">Julia developers who want to contribute to the ecosystem (any level of expertise is welcome!).</li>
 </ul>
 </div>
+</section></section>
+<section>
+<section id="research" class="title-slide slide level1 center">
+<h1>Research</h1>
+
 </section>
-<section id="whats-new" class="slide level2 smaller">
-<h2>What’s New?</h2>
-<h3 id="developments">Developments</h3>
+<section id="pick-your-poison" class="slide level2">
+<h2>Pick your Poison</h2>
+<p>All of these counterfactuals are valid explanations for the model’s prediction.</p>
+<blockquote>
+<p>Which one would you pick?</p>
+</blockquote>
+
+<img data-src="www/mnist_motivation.png" style="width:80.0%" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;2: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using <em>Wachter</em> <span class="citation" data-cites="wachter2017counterfactual">(<a href="#/references" role="doc-biblioref" onclick="">Wachter, Mittelstadt, and Russell 2017</a>)</span>, <em>Schut</em> <span class="citation" data-cites="schut2021generating">(<a href="#/references" role="doc-biblioref" onclick="">Schut et al. 2021</a>)</span> and <em>REVISE</em> <span class="citation" data-cites="joshi2019realistic">(<a href="#/references" role="doc-biblioref" onclick="">Joshi et al. 2019</a>)</span>.
+</p></section>
+<section id="faithful-counterfactuals" class="slide level2 scrollable">
+<h2>Faithful Counterfactuals</h2>
+<div class="columns">
+<div class="column" style="width:32%;">
+<div id="fig-mnist-eccco" class="quarto-figure quarto-figure-center quarto-float">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-mnist-eccco-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="www/mnist_eccco.png" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mnist-eccco-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Turning a 9 into a 7. <em>ECCCo</em> applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).
+</figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:68%;">
+<p><em>ECCCo</em><sup>1</sup> generates counterfactuals that</p>
+<ul>
+<li>faithfully represent model quality (<a href="#/faithful-counterfactuals" class="quarto-xref">Figure&nbsp;3</a>).</li>
+<li>achieve state-of-the-art plausibility (<a href="#/faithful-counterfactuals" class="quarto-xref">Figure&nbsp;4</a>).</li>
+</ul>
+<div id="fig-mnist-benchmark" class="quarto-figure quarto-figure-center quarto-float">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-mnist-benchmark-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="www/mnist_benchmark.png" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mnist-benchmark-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Results for different generators (from 3 to 5).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>Source code <a href="https://github.com/pat-alt/ECCCo.jl">ECCCo.jl</a> extends CE.jl, CP.jl and JEM.jl.</p></li></ol></aside></section>
+<section id="conformal-intent-classification" class="slide level2">
+<h2>Conformal Intent Classification</h2>
+</section>
+<section id="more-research" class="slide level2">
+<h2>More Research</h2>
+<ul>
+<li><em>Endogenous Macrodynamics in Algorithmic Recourse</em> <span class="citation" data-cites="altmeyer2023endogenous">(<a href="#/references" role="doc-biblioref" onclick="">Altmeyer et al. 2023</a>)</span> <a href="https://ieeexplore.ieee.org/abstract/document/10136130">published</a> at <em>IEEE SaTML 2023</em>.</li>
+</ul>
+<h4 id="students">Students</h4>
+<ul>
+<li>Bachelor’s thesis on <em>What Makes Models Explainable? Evidence from Counterfactuals</em> (work in progress).
+<ul>
+<li>Related development: <a href="https://github.com/JuliaTrustworthyAI/AdversarialRobustness.jl">AdversarialRobustness.jl</a>.</li>
+</ul></li>
+<li>Various Master’s theses on CE for imbalanced data <span class="citation" data-cites="zagorac2024study">(<a href="#/references" role="doc-biblioref" onclick="">Zagorac 2024</a>)</span>, CE as a tool for testing, operationalizing algorithmic recourse, explainability of LLMs (see <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/pull/413">draft PR</a>).</li>
+</ul>
+</section></section>
+<section>
+<section id="developments" class="title-slide slide level1 center">
+<h1>Developments</h1>
+
+</section>
+<section id="overview" class="slide level2">
+<h2>Overview</h2>
 <ul>
 <li><a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl">CounterfactualExplanations.jl</a>: refactoring, performance improvements, new features, JCon Proceedings <span class="citation" data-cites="altmeyer2023explaining">(<a href="#/references" role="doc-biblioref" onclick="">Altmeyer, Deursen, et al. 2023</a>)</span>.</li>
 <li><a href="https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl">LaplaceRedux.jl</a>: new features, interface to MLJ, JCon Proceedings (under review).</li>
 <li><a href="https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl">ConformalPrediction.jl</a>: new features.</li>
 <li><a href="https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl">JointEnergyModels.jl</a>: new package for Joint Energy-Based Models <span class="citation" data-cites="grathwohl2020your">(<a href="#/references" role="doc-biblioref" onclick="">Grathwohl et al. 2020</a>)</span>.</li>
-<li>Meta packages: <a href="https://github.com/JuliaTrustworthyAI/TaijaData.jl">TaijaData.jl</a>, <a href="https://github.com/JuliaTrustworthyAI/TaijaPlotting.jl">TaijaPlotting.jl</a>, <a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl">TaijaParallel.jl</a>, and <a href="https://github.com/JuliaTrustworthyAI/TaijaInteroperability.jl">TaijaInteroperability.jl</a>.</li>
+<li>Meta packages: <a href="https://github.com/JuliaTrustworthyAI/TaijaData.jl">TaijaData.jl</a>, <a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl">TaijaParallel.jl</a>, …</li>
 </ul>
-<h3 id="research">Research</h3>
+</section>
+<section id="composable-counterfactual-generators" class="slide level2">
+<h2>Composable Counterfactual Generators</h2>
+</section>
+<section id="explaining-different-models" class="slide level2">
+<h2>Explaining Different Models</h2>
+<p>NeuroTrees.jl</p>
+<p><a href="https://pretalx.com/juliacon2024/talk/D3BHTT/">Talk</a></p>
+</section>
+<section id="benchmarking-counterfactuals" class="slide level2">
+<h2>Benchmarking Counterfactuals</h2>
+</section>
+<section id="scaling-things-up" class="slide level2">
+<h2>Scaling Things Up</h2>
+</section>
+<section id="new-in-laplaceredux.jl" class="slide level2">
+<h2>New in LaplaceRedux.jl</h2>
+</section>
+<section id="new-in-conformalprediction.jl" class="slide level2">
+<h2>New in ConformalPrediction.jl</h2>
+</section>
+<section id="joint-energy-based-models" class="slide level2">
+<h2>Joint Energy-Based Models</h2>
+</section>
+<section id="ongoing-work" class="slide level2">
+<h2>Ongoing Work</h2>
 </section></section>
 <section>
 <section id="questions" class="title-slide slide level1 nostretch center">
@@ -559,14 +661,30 @@ Figure&nbsp;1: Overview of the Taija ecosystem. Packages in early development no
 </div>
 </div>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-altmeyer2023endogenous" class="csl-entry" role="listitem">
+Altmeyer, Patrick, Giovan Angela, Aleksander Buszydlik, Karol Dobiczek, Arie van Deursen, and Cynthia CS Liem. 2023. <span>“Endogenous Macrodynamics in Algorithmic Recourse.”</span> In <em>2023 IEEE Conference on Secure and Trustworthy Machine Learning (SaTML)</em>, 418–31. IEEE.
+</div>
 <div id="ref-altmeyer2023explaining" class="csl-entry" role="listitem">
 Altmeyer, Patrick, Arie van Deursen, et al. 2023. <span>“Explaining Black-Box Models Through Counterfactuals.”</span> In <em>Proceedings of the JuliaCon Conferences</em>, 1:130. 1.
 </div>
 <div id="ref-grathwohl2020your" class="csl-entry" role="listitem">
 Grathwohl, Will, Kuan-Chieh Wang, Joern-Henrik Jacobsen, David Duvenaud, Mohammad Norouzi, and Kevin Swersky. 2020. <span>“Your Classifier Is Secretly an Energy Based Model and You Should Treat It Like One.”</span> In <em>International Conference on Learning Representations</em>.
 </div>
+<div id="ref-joshi2019realistic" class="csl-entry" role="listitem">
+Joshi, Shalmali, Oluwasanmi Koyejo, Warut Vijitbenjaronk, Been Kim, and Joydeep Ghosh. 2019. <span>“Towards Realistic Individual Recourse and Actionable Explanations in Black-Box Decision Making Systems.”</span> <a href="https://arxiv.org/abs/1907.09615">https://arxiv.org/abs/1907.09615</a>.
+</div>
+<div id="ref-schut2021generating" class="csl-entry" role="listitem">
+Schut, Lisa, Oscar Key, Rory Mc Grath, Luca Costabello, Bogdan Sacaleanu, Yarin Gal, et al. 2021. <span>“Generating <span>Interpretable Counterfactual Explanations By Implicit Minimisation</span> of <span>Epistemic</span> and <span>Aleatoric Uncertainties</span>.”</span> In <em>International <span>Conference</span> on <span>Artificial Intelligence</span> and <span>Statistics</span></em>, 1756–64. <span>PMLR</span>.
+</div>
+<div id="ref-wachter2017counterfactual" class="csl-entry" role="listitem">
+Wachter, Sandra, Brent Mittelstadt, and Chris Russell. 2017. <span>“Counterfactual Explanations Without Opening the Black Box: <span>Automated</span> Decisions and the <span>GDPR</span>.”</span> <em>Harv. JL &amp; Tech.</em> 31: 841. <a href="https://doi.org/10.2139/ssrn.3063289">https://doi.org/10.2139/ssrn.3063289</a>.
+</div>
+<div id="ref-zagorac2024study" class="csl-entry" role="listitem">
+Zagorac, Ivor. 2024. <span>“A Study on Counterfactual Explanations: Investigating the Impact of Inter-Class Distance and Data Imbalance.”</span>
+</div>
 </div>
 </section></section>
+
     </div>
   </div>
 

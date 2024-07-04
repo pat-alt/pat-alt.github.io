@@ -69,6 +69,10 @@ flowchart TB
     lr["LaplaceRedux.jl"]
     jem["JointEnergyModels.jl"]
 
+    %% External
+    mlj["MLJ.jl"]
+    flux["Flux.jl"]
+
     class base base;
     class interop,data,parallel,plotting taija;
     class ce,cp,lr,jem core;
@@ -83,6 +87,10 @@ flowchart TB
     subgraph "Meta Packages"
         data & plotting & parallel & interop
     end 
+
+    subgraph "External Packages"
+        mlj & flux
+    end
 ```
 
 
@@ -105,17 +113,75 @@ flowchart TB
 
 :::
 
-## What's New? {.smaller}
+# Research 
 
-### Developments
+## Pick your Poison
+
+All of these counterfactuals are valid explanations for the model's prediction. 
+
+> Which one would you pick?
+
+![Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](www/mnist_motivation.png){#fig-cf-example width="80%"}
+
+## Faithful Counterfactuals
+
+::::{.columns}::::
+:::{.column width='32%'}
+![Turning a 9 into a 7. *ECCCo* applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).](www/mnist_eccco.png){#fig-mnist-eccco width="75%"}
+:::
+:::{.column width='68%'}
+*ECCCo*^[Source code [ECCCo.jl](https://github.com/pat-alt/ECCCo.jl) extends CE.jl, CP.jl and JEM.jl.] generates counterfactuals that
+
+- faithfully represent model quality (@fig-mnist-eccco).
+- achieve state-of-the-art plausibility (@fig-mnist-benchmark).
+
+![Results for different generators (from 3 to 5).](www/mnist_benchmark.png){#fig-mnist-benchmark width="100%"}
+:::
+::::
+
+## Conformal Intent Classification
+
+
+
+## More Research
+
+- *Endogenous Macrodynamics in Algorithmic Recourse* [@altmeyer2023endogenous] [published](https://ieeexplore.ieee.org/abstract/document/10136130) at *IEEE SaTML 2023*.
+
+#### Students
+
+- Bachelor's thesis on *What Makes Models Explainable? Evidence from Counterfactuals* (work in progress). 
+    - Related development: [AdversarialRobustness.jl](https://github.com/JuliaTrustworthyAI/AdversarialRobustness.jl).
+- Various Master's theses on CE for imbalanced data [@zagorac2024study], CE as a tool for testing, operationalizing algorithmic recourse, explainability of LLMs (see [draft PR](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/pull/413)).
+
+# Developments
+
+## Overview
 
 - [CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl): refactoring, performance improvements, new features, JCon Proceedings [@altmeyer2023explaining].
 - [LaplaceRedux.jl](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl): new features, interface to MLJ, JCon Proceedings (under review).
 - [ConformalPrediction.jl](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl): new features.
 - [JointEnergyModels.jl](https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl): new package for Joint Energy-Based Models [@grathwohl2020your].
-- Meta packages: [TaijaData.jl](https://github.com/JuliaTrustworthyAI/TaijaData.jl), [TaijaPlotting.jl](https://github.com/JuliaTrustworthyAI/TaijaPlotting.jl), [TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl), and [TaijaInteroperability.jl](https://github.com/JuliaTrustworthyAI/TaijaInteroperability.jl).
+- Meta packages: [TaijaData.jl](https://github.com/JuliaTrustworthyAI/TaijaData.jl), [TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl), ...
 
-### Research
+## Composable Counterfactual Generators
+
+## Explaining Different Models
+
+NeuroTrees.jl
+
+[Talk](https://pretalx.com/juliacon2024/talk/D3BHTT/)
+
+## Benchmarking Counterfactuals
+
+## Scaling Things Up
+
+## New in LaplaceRedux.jl
+
+## New in ConformalPrediction.jl
+
+## Joint Energy-Based Models
+
+## Ongoing Work
 
 # Questions? {.nostretch} 
 
