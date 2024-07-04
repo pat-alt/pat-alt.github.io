@@ -147,13 +147,30 @@ The package was developed to power [research](https://arxiv.org/abs/2312.10648) 
 :::
 ::::
 
-## Backend
-
-## Architecture
+## High-level Architecture
 
 - [TaijaBase.jl](https://github.com/JuliaTrustworthyAI/TaijaBase.jl) ships basic parallelization [functions and symbols](https://github.com/JuliaTrustworthyAI/TaijaBase.jl/blob/main/src/parallelization/base.jl) to make them available to all Taija packages.
   - `CounterfactualExplanations.benchmark`, for example, accepts a `parallelizer` argument of type `Union{Nothing,AbstractParallelizer}`.
 - [TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl) adds out-of-the-box support for parallelization through multi-threading.
 - Multi-processing through [MPI.jl](https://github.com/JuliaParallel/MPI.jl) handled through an extension. 
+
+## Backend
+
+- The `@with_parallelizer` macro defined [here](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/blob/8534c12b67a9f1ecda0186d992843d249e6a0a28/src/TaijaParallel.jl#L27C7-L27C24) parses inputs and calls the `parallelize` function.
+- `parallelize` is dispatched on the type of `parallelizer` and the function to be parallelized.
+- Easy to add support for new parallelization backends and functions by overloading `parallelize`.
+- Possible to combine different forms of parallelization, e.g., multi-threading and multi-processing (see [here](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/blob/8534c12b67a9f1ecda0186d992843d249e6a0a28/ext/MPIExt/generate_counterfactual.jl#L15) for an example).
+
+## Caveats and Future Work
+
+- The functions to be parallelized must be broadcastable: `generate_counterfactual`, for example, can be broadcasted over a batch of inputs.
+- Currently, the package only supports CounterfactualExplanations.jl.
+- Work on ConformalPrediction.jl is in progress, and hinges on the ability to parallelize cross-validation. Requires [changes](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/pull/119) to ConformalPrediction.jl.
+
+## Small Benchmark
+
+# Questions? {.nostretch} 
+
+![](/www/images/qr.png){width="25%" fig-align="center"}
 
 ## References

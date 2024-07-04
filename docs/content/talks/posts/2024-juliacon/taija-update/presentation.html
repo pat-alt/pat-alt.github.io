@@ -12,8 +12,8 @@
   <meta name="generator" content="quarto-1.4.550">
 
   <meta name="author" content="Patrick Altmeyer">
-  <meta name="dcterms.date" content="2024-07-03">
-  <title>patalt - Trustworthy AI in Julia meets Supercomputing</title>
+  <meta name="dcterms.date" content="2024-07-04">
+  <title>patalt - What’s new in Trustworthy AI in JuliA?</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -404,7 +404,7 @@
   <script src="../../../../../site_libs/quarto-diagram/mermaid.min.js"></script>
   <script src="../../../../../site_libs/quarto-diagram/mermaid-init.js"></script>
   <link href="../../../../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
-<meta property="og:title" content="patalt - Trustworthy AI in Julia meets Supercomputing">
+<meta property="og:title" content="patalt - What’s new in Trustworthy AI in JuliA?">
 <meta property="og:description" content="JuliaCon 2024">
 <meta property="og:site_name" content="patalt">
 </head>
@@ -413,7 +413,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Trustworthy AI in Julia meets Supercomputing</h1>
+  <h1 class="title">What’s new in <span style="color:#389836;">T</span>rustworthy <span style="color:#9558B2;">AI</span> in <span style="color:#CB3C33;">J</span>uli<span style="color:#CB3C33;">A</span>?</h1>
   <p class="subtitle">JuliaCon 2024</p>
 
 <div class="quarto-title-authors">
@@ -424,17 +424,21 @@ Patrick Altmeyer
 </div>
 </div>
 
-  <p class="date">2024-07-03</p>
+  <p class="date">2024-07-04</p>
 </section>
 <section>
-<section id="taijaparallel.jl" class="title-slide slide level1 center">
-<h1><a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl">TaijaParallel.jl</a></h1>
-<p><a href="https://JuliaTrustworthyAI.github.io/TaijaParallel.jl/stable/"><img data-src="https://img.shields.io/badge/docs-stable-blue.svg" alt="Stable"></a> <a href="https://JuliaTrustworthyAI.github.io/TaijaParallel.jl/dev/"><img data-src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Dev"></a> <a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/actions/workflows/CI.yml?query=branch%3Amain"><img data-src="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/actions/workflows/CI.yml/badge.svg?branch=main" alt="Build Status"></a> <a href="https://codecov.io/gh/JuliaTrustworthyAI/TaijaParallel.jl"><img data-src="https://codecov.io/gh/JuliaTrustworthyAI/TaijaParallel.jl/branch/main/graph/badge.svg" alt="Coverage"></a> <a href="https://github.com/invenia/BlueStyle"><img data-src="https://img.shields.io/badge/code%20style-blue-4495d1.svg" alt="Code Style: Blue"></a> <a href="https://github.com/JuliaTesting/Aqua.jl"><img data-src="https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg" alt="Aqua QA"></a></p>
-<p>This package adds custom support for parallelization for certain <a href="https://github.com/JuliaTrustworthyAI">Taija</a> packages.</p>
+<section id="whats-taija" class="title-slide slide level1 center">
+<h1>What’s <a href="https://github.com/JuliaTrustworthyAI">Taija</a>?</h1>
+<p>Taija is a small but growing ecosystem of packages geared towards <em>T</em>rustworthy <em>A</em>rtificial <em>I</em>ntelligence in <em>J</em>uli<em>a</em>—<a href="https://github.com/JuliaTrustworthyAI">Taija</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://github.com/JuliaTrustworthyAI"><img data-src="www/logo.png" class="quarto-figure quarto-figure-center" style="width:50.0%" alt="Trustworthy AI in Julia: github.com/JuliaTrustworthyAI"></a></p>
+<figcaption>Trustworthy AI in Julia: github.com/JuliaTrustworthyAI</figcaption>
+</figure>
+</div>
 </section>
-<section id="whats-taija" class="slide level2">
-<h2>What’s Taija?</h2>
-<p>Growing ecosystem of packages geared towards <em>T</em>rustworthy <em>A</em>rtificial <em>I</em>ntelligence in <em>J</em>uli<em>a</em>—<a href="https://github.com/JuliaTrustworthyAI">Taija</a>.</p>
+<section id="ecosystem-overview" class="slide level2">
+<h2>Ecosystem Overview</h2>
 <div class="cell" data-reveal="true" data-layout-align="default">
 <div class="cell-output-display">
 <div id="fig-overview" class="quarto-figure quarto-figure-center quarto-float">
@@ -482,132 +486,60 @@ flowchart TB
     class ce,cp,lr,jem core;
 
     %% Graph
-    subgraph "Meta Packages"
-        data &amp; plotting &amp; parallel &amp; interop
-    end
+    base --&gt; ce &amp; cp &amp; lr &amp; jem
 
     subgraph "Core Packages"
         ce &amp; cp &amp; lr &amp; jem 
     end
+
+    subgraph "Meta Packages"
+        data &amp; plotting &amp; parallel &amp; interop
+    end 
 </pre>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: An overview of the Taija ecosystem.
+Figure&nbsp;1: Overview of the Taija ecosystem. Packages in early development not shown.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="why-supercomputing" class="slide level2">
-<h2>Why Supercomputing?</h2>
-<p>Efforts towards trustworthy AI tend to increase the computational burden involved in training or inference:</p>
-<div class="fragment">
+<section id="whos-behind-taija" class="slide level2">
+<h2>Who’s behind Taija?</h2>
 <ul>
-<li>Explainable AI: we are often required to generate many explanations for many individuals.</li>
-<li>Conformal Prediction: many techniques involve cross-validation or bootstrapping.</li>
-<li>(Quasi) Bayesian DL like deep ensembles.</li>
+<li><strong>2021-2022</strong>: Initially developed by myself to support my PhD research in Trustworthy AI.</li>
+<li><strong>2023-2024</strong>: Expanded by a growing community of contributors, including TU Delft and G/JSoC students.</li>
 </ul>
-</div>
-<div class="fragment">
 <blockquote>
-<p>Good news: all of these tasks can be parallelized!</p>
+<p>Thanks to <a href="https://github.com/orgs/JuliaTrustworthyAI/people/MojiFarmanbar">@MojiFarmanbar</a>, <a href="https://github.com/orgs/JuliaTrustworthyAI/people/JorgeLuizFranco">@JorgeLuizFranco</a>, <a href="https://github.com/orgs/JuliaTrustworthyAI/people/Rockdeldiablo">@Rockdeldiablo</a>, <a href="https://github.com/orgs/JuliaTrustworthyAI/people/kmariuszk">@kmariuszk</a>, <a href="https://github.com/orgs/JuliaTrustworthyAI/people/RaunoArike">@RaunoArike</a>, <a href="https://github.com/orgs/JuliaTrustworthyAI/people/VincentPikand">@VincentPikand</a>, <a href="https://github.com/orgs/JuliaTrustworthyAI/people/severinbratus">@severinbratus</a>, <a href="https://github.com/orgs/JuliaTrustworthyAI/people/rithik83">@rithik83</a>, <a href="https://github.com/orgs/JuliaTrustworthyAI/people/navimakarov">@navimakarov</a>, <a href="https://github.com/orgs/JuliaTrustworthyAI/people/laurikskl">@laurikskl</a>, <a href="https://github.com/orgs/JuliaTrustworthyAI/people/MarkArdman">@MarkArdman</a>, <a href="https://github.com/orgs/JuliaTrustworthyAI/people/adelinacazacu">@adelinacazacu</a>, <a href="https://github.com/orgs/JuliaTrustworthyAI/people/Andrei32Ionescu">@Andrei32Ionescu</a> and many <a href="https://github.com/orgs/JuliaTrustworthyAI/people">others</a>!</p>
 </blockquote>
-<!-- A firm that is using a machine learning model to screen out job applicants, for example, might be required to explain to each unsuccessful applicant why they were not admitted to the interview stage. In a different context, researchers may need to generate many explanations for evaluation and benchmarking purposes. -->
-</div>
-</section></section>
-<section>
-<section id="motivating-example-counterfactual-explanations" class="title-slide slide level1 center">
-<h1>Motivating Example: Counterfactual Explanations</h1>
-<p>The package was developed to power <a href="https://arxiv.org/abs/2312.10648">research</a> presented at AAAI 2024 <span class="citation" data-cites="altmeyer2024faithful">(<a href="#/references" role="doc-biblioref" onclick="">Altmeyer et al. 2024</a>)</span>. The project involved large benchmarks of counterfactual explanations that had to be run on a supercomputer.</p>
 </section>
-<section id="benchmarking-explanations" class="slide level2 nostretch">
-<h2>Benchmarking Explanations</h2>
-<ul>
-<li>Final benchmark: total of <strong>~10 million</strong> counterfactuals across 8 datasets and different DL models.</li>
-<li>Parallelized across <strong>50 to 300 CPUs</strong> on <a href="https://www.tudelft.nl/dhpc/system">DelftBlue</a> using combination of multi-threading and -processing.</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="www/poc_gradient_fields.png" style="width:75.0%"></p>
-<figcaption>Gradients and counterfactuals for different generators. Source: <span class="citation" data-cites="altmeyer2024faithful">Altmeyer et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span></figcaption>
-</figure>
-</div>
-</section>
-<section id="source-code" class="slide level2">
-<h2>Source Code</h2>
-<ul>
-<li><a href="https://github.com/pat-alt/ECCCo.jl/tree/main">ECCCo.jl</a> is a small package build for <span class="citation" data-cites="altmeyer2024faithful">Altmeyer et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span> that leverages and extends <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl">CounterfactualExplanations.jl</a>, <a href="https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl">ConformalPrediction.jl</a>, and <a href="https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl">JointEnergyModels.jl</a>.</li>
-<li>Parallelization is achieved through <a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/tree/main">TaijaParallel.jl</a>.</li>
-<li>Functionality now being absorbed by CounterfactualExplanations.jl.</li>
-</ul>
-<div class="fragment">
+<section id="use-cases" class="slide level2">
+<h2>Use Cases</h2>
 <blockquote>
-<p>Code is open-sourced and available on <a href="https://github.com/pat-alt/ECCCo.jl/tree/main">GitHub</a>.</p>
+<p>Who could benefit from Taija?</p>
 </blockquote>
-</div>
-</section></section>
-<section>
-<section id="the-package" class="title-slide slide level1 center">
-<h1>The Package</h1>
-
-</section>
-<section id="user-interface" class="slide level2">
-<h2>User Interface</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<blockquote>
-<p>We aim to minimize the burden on users.</p>
-</blockquote>
+<div>
 <ul>
-<li>Users will mostly interact with custom macro <code>@with_parallelizer</code>.</li>
-<li>In <a href="#/user-interface" class="quarto-xref">Figure&nbsp;2</a>, <code>mpi</code> is an instance of type <code>MPIParallelizer</code>.</li>
+<li class="fragment">Researchers in AI and ML, particularly in the fields of explainability, uncertainty quantification, and Bayesian deep learning: (<img data-src="../../../../../www/profile.jpg" width="35">, …)</li>
+<li class="fragment">Practitioners using conventional ML and DL models who are interested in understanding the models’ decisions and their uncertainty.</li>
+<li class="fragment">Julia developers who want to contribute to the ecosystem (any level of expertise is welcome!).</li>
 </ul>
-</div><div class="column" style="width:50%;">
-<div id="fig-usage" class="quarto-figure quarto-figure-center quarto-float">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-usage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="www/usage.png">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-usage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Generating counterfactuals in parallel using MPI. See <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/stable/tutorials/parallelization/">docs</a> for details.
-</figcaption>
-</figure>
-</div>
-</div>
 </div>
 </section>
-<section id="high-level-architecture" class="slide level2">
-<h2>High-level Architecture</h2>
+<section id="whats-new" class="slide level2 smaller">
+<h2>What’s New?</h2>
+<h3 id="developments">Developments</h3>
 <ul>
-<li><a href="https://github.com/JuliaTrustworthyAI/TaijaBase.jl">TaijaBase.jl</a> ships basic parallelization <a href="https://github.com/JuliaTrustworthyAI/TaijaBase.jl/blob/main/src/parallelization/base.jl">functions and symbols</a> to make them available to all Taija packages.
-<ul>
-<li><code>CounterfactualExplanations.benchmark</code>, for example, accepts a <code>parallelizer</code> argument of type <code>Union{Nothing,AbstractParallelizer}</code>.</li>
-</ul></li>
-<li><a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl">TaijaParallel.jl</a> adds out-of-the-box support for parallelization through multi-threading.</li>
-<li>Multi-processing through <a href="https://github.com/JuliaParallel/MPI.jl">MPI.jl</a> handled through an extension.</li>
+<li><a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl">CounterfactualExplanations.jl</a>: refactoring, performance improvements, new features, JCon Proceedings <span class="citation" data-cites="altmeyer2023explaining">(<a href="#/references" role="doc-biblioref" onclick="">Altmeyer, Deursen, et al. 2023</a>)</span>.</li>
+<li><a href="https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl">LaplaceRedux.jl</a>: new features, interface to MLJ, JCon Proceedings (under review).</li>
+<li><a href="https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl">ConformalPrediction.jl</a>: new features.</li>
+<li><a href="https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl">JointEnergyModels.jl</a>: new package for Joint Energy-Based Models <span class="citation" data-cites="grathwohl2020your">(<a href="#/references" role="doc-biblioref" onclick="">Grathwohl et al. 2020</a>)</span>.</li>
+<li>Meta packages: <a href="https://github.com/JuliaTrustworthyAI/TaijaData.jl">TaijaData.jl</a>, <a href="https://github.com/JuliaTrustworthyAI/TaijaPlotting.jl">TaijaPlotting.jl</a>, <a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl">TaijaParallel.jl</a>, and <a href="https://github.com/JuliaTrustworthyAI/TaijaInteroperability.jl">TaijaInteroperability.jl</a>.</li>
 </ul>
-</section>
-<section id="backend" class="slide level2">
-<h2>Backend</h2>
-<ul>
-<li>The <code>@with_parallelizer</code> macro defined <a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/blob/8534c12b67a9f1ecda0186d992843d249e6a0a28/src/TaijaParallel.jl#L27C7-L27C24">here</a> parses inputs and calls the <code>parallelize</code> function.</li>
-<li><code>parallelize</code> is dispatched on the type of <code>parallelizer</code> and the function to be parallelized.</li>
-<li>Easy to add support for new parallelization backends and functions by overloading <code>parallelize</code>.</li>
-<li>Possible to combine different forms of parallelization, e.g., multi-threading and multi-processing (see <a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/blob/8534c12b67a9f1ecda0186d992843d249e6a0a28/ext/MPIExt/generate_counterfactual.jl#L15">here</a> for an example).</li>
-</ul>
-</section>
-<section id="caveats-and-future-work" class="slide level2">
-<h2>Caveats and Future Work</h2>
-<ul>
-<li>The functions to be parallelized must be broadcastable: <code>generate_counterfactual</code>, for example, can be broadcasted over a batch of inputs.</li>
-<li>Currently, the package only supports CounterfactualExplanations.jl.</li>
-<li>Work on ConformalPrediction.jl is in progress, and hinges on the ability to parallelize cross-validation. Requires <a href="https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/pull/119">changes</a> to ConformalPrediction.jl.</li>
-</ul>
-</section>
-<section id="small-benchmark" class="slide level2">
-<h2>Small Benchmark</h2>
+<h3 id="research">Research</h3>
 </section></section>
 <section>
 <section id="questions" class="title-slide slide level1 nostretch center">
@@ -627,8 +559,11 @@ Figure&nbsp;2: Generating counterfactuals in parallel using MPI. See <a href="ht
 </div>
 </div>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-altmeyer2024faithful" class="csl-entry" role="listitem">
-Altmeyer, Patrick, Mojtaba Farmanbar, Arie van Deursen, and Cynthia CS Liem. 2024. <span>“Faithful Model Explanations Through Energy-Constrained Conformal Counterfactuals.”</span> In <em>Proceedings of the AAAI Conference on Artificial Intelligence</em>, 38:10829–37. 10.
+<div id="ref-altmeyer2023explaining" class="csl-entry" role="listitem">
+Altmeyer, Patrick, Arie van Deursen, et al. 2023. <span>“Explaining Black-Box Models Through Counterfactuals.”</span> In <em>Proceedings of the JuliaCon Conferences</em>, 1:130. 1.
+</div>
+<div id="ref-grathwohl2020your" class="csl-entry" role="listitem">
+Grathwohl, Will, Kuan-Chieh Wang, Joern-Henrik Jacobsen, David Duvenaud, Mohammad Norouzi, and Kevin Swersky. 2020. <span>“Your Classifier Is Secretly an Energy Based Model and You Should Treat It Like One.”</span> In <em>International Conference on Learning Representations</em>.
 </div>
 </div>
 </section></section>

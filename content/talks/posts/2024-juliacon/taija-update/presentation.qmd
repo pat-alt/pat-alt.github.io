@@ -1,0 +1,124 @@
+---
+title: What's new in [T]{style="color:#389836;"}rustworthy [AI]{style="color:#9558B2;"} in [J]{style="color:#CB3C33;"}uli[A]{style="color:#CB3C33;"}?
+subtitle: JuliaCon 2024
+author: Patrick Altmeyer
+format:
+  julia-revealjs: 
+    scrollable: true
+date: last-modified
+bibliography: biblio.bib
+execute:
+  freeze: auto
+  eval: true
+  echo: true
+  output: false
+---
+
+```{julia}
+#| echo: false
+
+include("$(pwd())/content/talks/posts/2024-juliacon/taija-update/setup.jl")
+```
+
+# What's [Taija](https://github.com/JuliaTrustworthyAI)?
+
+Taija is a small but growing ecosystem of packages geared towards *T*rustworthy *A*rtificial *I*ntelligence in *J*uli*a*---[Taija](https://github.com/JuliaTrustworthyAI).  
+
+[![Trustworthy AI in Julia: github.com/JuliaTrustworthyAI](www/logo.png){width="50%" fig-align="center"}](https://github.com/JuliaTrustworthyAI)
+
+## Ecosystem Overview
+
+```{mermaid}
+%%| echo: false
+%%| label: fig-overview
+%%| fig-cap: "Overview of the Taija ecosystem. Packages in early development not shown."
+
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'primaryColor': '#BB2528',
+      'primaryTextColor': '#fff',
+      'primaryBorderColor': '#7C0000',
+      'lineColor': '#F8B229',
+      'secondaryColor': '#006100',
+      'tertiaryColor': '#e9edfb',
+      'fontFamily': "avenir"
+    }
+  }
+}%%
+
+flowchart TB
+
+    classDef taija fill:#389836,stroke:#333,color:#fff;
+    classDef core fill:#CB3C33,stroke:#333,color:#fff;
+    classDef base fill:#9558B2,stroke:#333,color:#fff;
+
+    %% Base
+    base["TaijaBase.jl"]
+
+    %% Meta
+    interop["TaijaInteroperability.jl"]
+    data["TaijaData.jl"]
+    parallel["TaijaParallel.jl"]
+    plotting["TaijaPlotting.jl"]
+
+    %% Core
+    ce["CounterfactualExplanations.jl"]
+    cp["ConformalPrediction.jl"]
+    lr["LaplaceRedux.jl"]
+    jem["JointEnergyModels.jl"]
+
+    class base base;
+    class interop,data,parallel,plotting taija;
+    class ce,cp,lr,jem core;
+
+    %% Graph
+    base --> ce & cp & lr & jem
+
+    subgraph "Core Packages"
+        ce & cp & lr & jem 
+    end
+
+    subgraph "Meta Packages"
+        data & plotting & parallel & interop
+    end 
+```
+
+
+## Who's behind Taija?
+
+- **2021-2022**: Initially developed by myself to support my PhD research in Trustworthy AI.
+- **2023-2024**: Expanded by a growing community of contributors, including TU Delft and G/JSoC students.
+
+> Thanks to [\@MojiFarmanbar](https://github.com/orgs/JuliaTrustworthyAI/people/MojiFarmanbar), [\@JorgeLuizFranco](https://github.com/orgs/JuliaTrustworthyAI/people/JorgeLuizFranco), [\@Rockdeldiablo](https://github.com/orgs/JuliaTrustworthyAI/people/Rockdeldiablo), [\@kmariuszk](https://github.com/orgs/JuliaTrustworthyAI/people/kmariuszk), [\@RaunoArike](https://github.com/orgs/JuliaTrustworthyAI/people/RaunoArike), [\@VincentPikand](https://github.com/orgs/JuliaTrustworthyAI/people/VincentPikand), [\@severinbratus](https://github.com/orgs/JuliaTrustworthyAI/people/severinbratus), [\@rithik83](https://github.com/orgs/JuliaTrustworthyAI/people/rithik83), [\@navimakarov](https://github.com/orgs/JuliaTrustworthyAI/people/navimakarov), [\@laurikskl](https://github.com/orgs/JuliaTrustworthyAI/people/laurikskl), [\@MarkArdman](https://github.com/orgs/JuliaTrustworthyAI/people/MarkArdman), [\@adelinacazacu](https://github.com/orgs/JuliaTrustworthyAI/people/adelinacazacu), [\@Andrei32Ionescu](https://github.com/orgs/JuliaTrustworthyAI/people/Andrei32Ionescu) and many [others](https://github.com/orgs/JuliaTrustworthyAI/people)!
+
+## Use Cases
+
+> Who could benefit from Taija?
+
+:::{.incremental}
+
+- Researchers in AI and ML, particularly in the fields of explainability, uncertainty quantification, and Bayesian deep learning: (![](/www/profile.jpg){width="35px"}, ...)
+- Practitioners using conventional ML and DL models who are interested in understanding the models' decisions and their uncertainty.
+- Julia developers who want to contribute to the ecosystem (any level of expertise is welcome!). 
+
+:::
+
+## What's New? {.smaller}
+
+### Developments
+
+- [CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl): refactoring, performance improvements, new features, JCon Proceedings [@altmeyer2023explaining].
+- [LaplaceRedux.jl](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl): new features, interface to MLJ, JCon Proceedings (under review).
+- [ConformalPrediction.jl](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl): new features.
+- [JointEnergyModels.jl](https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl): new package for Joint Energy-Based Models [@grathwohl2020your].
+- Meta packages: [TaijaData.jl](https://github.com/JuliaTrustworthyAI/TaijaData.jl), [TaijaPlotting.jl](https://github.com/JuliaTrustworthyAI/TaijaPlotting.jl), [TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl), and [TaijaInteroperability.jl](https://github.com/JuliaTrustworthyAI/TaijaInteroperability.jl).
+
+### Research
+
+# Questions? {.nostretch} 
+
+![](/www/images/qr.png){width="25%" fig-align="center"}
+
+## References

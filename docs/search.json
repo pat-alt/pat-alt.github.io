@@ -3714,6 +3714,76 @@
     "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#backend",
     "title": "Trustworthy AI in Julia meets Supercomputing",
     "section": "Backend",
-    "text": "Backend"
+    "text": "Backend\n\nThe @with_parallelizer macro defined here parses inputs and calls the parallelize function.\nparallelize is dispatched on the type of parallelizer and the function to be parallelized.\nEasy to add support for new parallelization backends and functions by overloading parallelize.\nPossible to combine different forms of parallelization, e.g., multi-threading and multi-processing (see here for an example)."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#high-level-architecture",
+    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#high-level-architecture",
+    "title": "Trustworthy AI in Julia meets Supercomputing",
+    "section": "High-level Architecture",
+    "text": "High-level Architecture\n\nTaijaBase.jl ships basic parallelization functions and symbols to make them available to all Taija packages.\n\nCounterfactualExplanations.benchmark, for example, accepts a parallelizer argument of type Union{Nothing,AbstractParallelizer}.\n\nTaijaParallel.jl adds out-of-the-box support for parallelization through multi-threading.\nMulti-processing through MPI.jl handled through an extension."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#caveats-and-future-work",
+    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#caveats-and-future-work",
+    "title": "Trustworthy AI in Julia meets Supercomputing",
+    "section": "Caveats and Future Work",
+    "text": "Caveats and Future Work\n\nThe functions to be parallelized must be broadcastable: generate_counterfactual, for example, can be broadcasted over a batch of inputs.\nCurrently, the package only supports CounterfactualExplanations.jl.\nWork on ConformalPrediction.jl is in progress, and hinges on the ability to parallelize cross-validation. Requires changes to ConformalPrediction.jl."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#small-benchmark",
+    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#small-benchmark",
+    "title": "Trustworthy AI in Julia meets Supercomputing",
+    "section": "Small Benchmark",
+    "text": "Small Benchmark"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#ecosystem-overview",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#ecosystem-overview",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Ecosystem Overview",
+    "text": "Ecosystem Overview\n\n\n\n\n\n\n%%{\n  init: {\n    'theme': 'base',\n    'themeVariables': {\n      'primaryColor': '#BB2528',\n      'primaryTextColor': '#fff',\n      'primaryBorderColor': '#7C0000',\n      'lineColor': '#F8B229',\n      'secondaryColor': '#006100',\n      'tertiaryColor': '#e9edfb',\n      'fontFamily': \"avenir\"\n    }\n  }\n}%%\n\nflowchart TB\n\n    classDef taija fill:#389836,stroke:#333,color:#fff;\n    classDef core fill:#CB3C33,stroke:#333,color:#fff;\n    classDef base fill:#9558B2,stroke:#333,color:#fff;\n\n    %% Base\n    base[\"TaijaBase.jl\"]\n\n    %% Meta\n    interop[\"TaijaInteroperability.jl\"]\n    data[\"TaijaData.jl\"]\n    parallel[\"TaijaParallel.jl\"]\n    plotting[\"TaijaPlotting.jl\"]\n\n    %% Core\n    ce[\"CounterfactualExplanations.jl\"]\n    cp[\"ConformalPrediction.jl\"]\n    lr[\"LaplaceRedux.jl\"]\n    jem[\"JointEnergyModels.jl\"]\n\n    class base base;\n    class interop,data,parallel,plotting taija;\n    class ce,cp,lr,jem core;\n\n    %% Graph\n    base --&gt; ce & cp & lr & jem\n\n    subgraph \"Core Packages\"\n        ce & cp & lr & jem \n    end\n\n    subgraph \"Meta Packages\"\n        data & plotting & parallel & interop\n    end \n\n\n\n\nFigure 1: Overview of the Taija ecosystem. Packages in early development not shown."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#whos-behind-taija",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#whos-behind-taija",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Who’s behind Taija?",
+    "text": "Who’s behind Taija?\n\n2021-2022: Initially developed by myself to support my PhD research in Trustworthy AI.\n2023-2024: Expanded by a growing community of contributors, including TU Delft and G/JSoC students.\n\n\nThanks to @MojiFarmanbar, @JorgeLuizFranco, @Rockdeldiablo, @kmariuszk, @RaunoArike, @VincentPikand, @severinbratus, @rithik83, @navimakarov, @laurikskl, @MarkArdman, @adelinacazacu, @Andrei32Ionescu and many others!"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#use-cases",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#use-cases",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Use Cases",
+    "text": "Use Cases\n\nWho could benefit from Taija?\n\n\n\nResearchers in AI and ML, particularly in the fields of explainability, uncertainty quantification, and Bayesian deep learning: (, …)\nPractitioners using conventional ML and DL models who are interested in understanding the models’ decisions and their uncertainty.\nJulia developers who want to contribute to the ecosystem (any level of expertise is welcome!)."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#references",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#references",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "References",
+    "text": "References\n\n\n\n\n\n\n\n\nAltmeyer, Patrick, Arie van Deursen, et al. 2023. “Explaining Black-Box Models Through Counterfactuals.” In Proceedings of the JuliaCon Conferences, 1:130. 1.\n\n\nGrathwohl, Will, Kuan-Chieh Wang, Joern-Henrik Jacobsen, David Duvenaud, Mohammad Norouzi, and Kevin Swersky. 2020. “Your Classifier Is Secretly an Energy Based Model and You Should Treat It Like One.” In International Conference on Learning Representations."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-research",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-research",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "New Research",
+    "text": "New Research\nTaija has been used in several research projects (some of which are still ongoing):"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-developments",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#new-developments",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "New Developments",
+    "text": "New Developments\nTaija has undergone significant development:\n\nCounterfactualExplanations.jl: refactoring, performance improvements, new features, JCon Proceedings (Altmeyer, Deursen, et al. 2023).\nLaplaceRedux.jl: new features, interface to MLJ, JCon Proceedings (under review).\nConformalPrediction.jl: new features.\nJointEnergyModels.jl: new package for Joint Energy-Based Models (Grathwohl et al. 2020).\nMeta packages: TaijaData.jl, TaijaPlotting.jl, TaijaParallel.jl, and TaijaInteroperability.jl."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#whats-new",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#whats-new",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "What’s New?",
+    "text": "What’s New?\nDevelopments\n\nCounterfactualExplanations.jl: refactoring, performance improvements, new features, JCon Proceedings (Altmeyer, Deursen, et al. 2023).\nLaplaceRedux.jl: new features, interface to MLJ, JCon Proceedings (under review).\nConformalPrediction.jl: new features.\nJointEnergyModels.jl: new package for Joint Energy-Based Models (Grathwohl et al. 2020).\nMeta packages: TaijaData.jl, TaijaPlotting.jl, TaijaParallel.jl, and TaijaInteroperability.jl.\n\nResearch"
   }
 ]
