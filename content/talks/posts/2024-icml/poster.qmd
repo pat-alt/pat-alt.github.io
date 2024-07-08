@@ -1,0 +1,120 @@
+---
+title: Stop Making Unscientific AGI Performance Claims
+format:
+  poster-typst: 
+    size: "48x36"
+    poster-authors: "Patrick Altmeyer, Andrew M. Demetriou, Antony Bartlett, Cynthia C. S. Liem"
+    departments: TU Delft
+    date: today
+    institution-logo: "www/delft-logo.png"
+    footer-text: "Forty-first International Conference on Machine Learning (ICML)"
+    footer-url: "https://arxiv.org/abs/2402.03962"
+    footer-emails: "p.altmeyer@tudelft.nl"
+    footer-color: "00A6D6"
+    keywords: ["Machine Learning", "Anthropomorphism", "Artificial General Intelligence"]
+    num-columns: 3
+    title-font-size: 96
+    title-column-size: 42
+    univ-logo-column-size: 6
+    authors-font-size: 54
+bibliography: biblio.bib
+---
+
+## Position
+
+**We therefore urge our fellow researchers to stop making unscientific AGI performance claims**.
+
+Current LLMs embed information. They don‘t „understand“ anything. They are useful tools, but tools nonetheless.
+
+- Meaningful patterns in embeddings are like doves in the sky.
+- Humans are prone to seek patterns and anthropomorphize. 
+- Observed ‘sparks’ of Artificial General Intelligence are spurious.
+- The academic community should exercise extra caution.
+- Publishing incentives need to be adjusted.
+
+## Are Neural Networks Born with World Models? {.smaller}
+
+::::{.columns}::::
+:::{.column width='60%'}
+- Llama-2 model tested in @gurnee2023languagev2 has ingested huge amounts of publicly available data [@touvron2023llama].
+  - Geographical locations are literally in the training data: e.g. Wikipedia [article](https://en.wikipedia.org/wiki/London) for "London". 
+  - Where would this information be encoded if not in the embedding space $\mathcal{A}$? Is it surprising that $A_{\text{LDN}}=enc(\text{"London"}) \not\!\perp\!\!\!\perp (\text{lat}_{\text{LDN}},\text{long}_{\text{LDN}})$?
+- @fig-map shows the predicted coordinates of a linear probe on the final-layer activations of an untrained neural network.
+:::
+:::{.column width='40%'}
+![Predicted coordinate values (out-of-sample) from a linear probe on final-layer activations of an untrained
+neural network.](www/map.png){#fig-map}
+
+- Model has seen noisy coordinates plus $d$ random features.
+- Single hidden layer with $h < d$ hidden units.
+:::
+::::
+
+## PCA as a Yield Curve Interpreter {.smaller .nostretch}
+
+What are principal components if not model embeddings?
+
+![Top chart: The first two principal components of US Treasury yields over time at daily frequency. Bottom chart: Observed average level and 10yr-3mo spread of the yield curve. Vertical stalks roughly indicate the onset (|GFC) and the beginning of the aftermath (GFC|) of the Global Financial Crisis.](www/pca_yield.png){#fig-pca width="80%"}
+
+## Autoencoders as Economic Growth Predictors {.smaller .nostretch auto-animate=true}
+
+- Yes, this can be used for feature extraction and forecasting:
+  - Bottle-neck layer embeddings predict spread and level of the yield curve.
+
+![The left chart shows the actual GDP growth and fitted values from the autoencoder model. The right chart shows the observed average level and spread of the yield curve (solid) along with the predicted values (in-sample) from the linear probe based on the latent embeddings (dashed)](www/dl.png){#fig-dl width="80%"}
+
+## Embedding FOMC comms {.smaller .nostretch}
+
+- BERT-based model trained on FOMC minutes, speeches and press conferences to classify statements as hawkish or dovish (or neutral) [@shah2023trillion].
+- We linearly probe all layers to predict unseen economic indicators (CPI, PPI, UST yields).
+- Predictive power increases with layer depth and probes outperform simple AR($p$) models.
+
+![Out-of-sample root mean squared error (RMSE) for the linear probe plotted against FOMC-RoBERTa’s n-th
+layer for different indicators. ](www/mse_pca_128.png){#fig-mse width="80%"}  
+
+## Sparks of Economic Understanding? {.smaller .nostretch}
+
+**Premise**: If probe results were indicative of some intrinsic ‘understanding’ of the economy, then the probe should not be sensitive to random sentences unrelated to economics. 
+
+#### Parrot Test
+
+1. Select the best-performing probe for each economic indicator.
+2. Predict inflation levels for real (related) and perturbed (unrelated) sentences.
+
+![Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB)
+and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted value
+of the probe for random noise.](www/attack_all_measures.png){#fig-attack width="80%"}
+
+As evidenced by @fig-attack, the probe is easily fooled. 
+
+## Spurious Relationships
+
+**Definiton**: Varies somewhat [@haig2003spurious] but distinctly implies that the observation of correlations does not imply causation.
+
+- Humans struggle to tell the difference between random and non-random sequences [@falk1997making].
+- Lack of expectation that randomness that hints towards a causal relationship will still appear at random. 
+- Even experts perceive correlations of inflated magnitude [@nickerson1998confirmation] and causal relationships where none exist [@zgraggen2018investigating].
+
+## Antropomorphism
+
+**Definition**: Human tendency to attribute human-like characteristics to non-human agents and/or objects.
+
+1. Experience as humans is an always-readily-available template to interpret the world [@epley2007seeing].
+2. Motivation to avoid loneliness may lead us to anthropomorphize inanimate objects [@epley2007seeing], [@waytz2010social].
+3. Motivation to be competent may lead us anthropomorphize opaque technologies like LLMs [@epley2007seeing], [@waytz2010social].
+
+## Confirmation Bias
+
+**Definition**: Favoring interpretations of evidence that support existing beliefs or hypotheses [@nickerson1998confirmation].
+
+- Hypotheses in present-day AI research are often implicit, often framed simply as a system being more accurate or efficient, compared to other systems.
+  - Failing to articulate a sufficiently strong null hypothesis leading to a ‘weak’ experiment [@claesen2022severity].
+- Individuals may place greater emphasis on evidence in support of their hypothesis, and lesser emphasis on evidence that opposes it [@nickerson1998confirmation].
+
+## Conclusion and Outlook
+
+- We call for the community to create explicit room for organized skepticism
+  - Welcome negative results
+  - Encouraging replication studies.
+  - Move from authorship to contribution-based credit (see e.g. [Liem and Demetriou, 2023](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10173886) and [Smith, 1997](https://www.bmj.com/content/315/7110/696.short)).
+- Return to the Mertonian norms (communism, universalism, disinterestedness, organized skepticism) [@merton1942science].
