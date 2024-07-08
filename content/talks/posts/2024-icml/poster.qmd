@@ -17,6 +17,9 @@ format:
     title-column-size: 42
     univ-logo-column-size: 6
     authors-font-size: 54
+    font-size: 28
+    mainfont: "Helvetica"
+    h1-size: 48
 bibliography: biblio.bib
 ---
 
@@ -34,21 +37,16 @@ Current LLMs embed information. They don‘t „understand“ anything. They are
 
 ## Are Neural Networks Born with World Models? {.smaller}
 
-::::{.columns}::::
-:::{.column width='60%'}
 - Llama-2 model tested in @gurnee2023languagev2 has ingested huge amounts of publicly available data [@touvron2023llama].
   - Geographical locations are literally in the training data: e.g. Wikipedia [article](https://en.wikipedia.org/wiki/London) for "London". 
   - Where would this information be encoded if not in the embedding space $\mathcal{A}$? Is it surprising that $A_{\text{LDN}}=enc(\text{"London"}) \not\!\perp\!\!\!\perp (\text{lat}_{\text{LDN}},\text{long}_{\text{LDN}})$?
 - @fig-map shows the predicted coordinates of a linear probe on the final-layer activations of an untrained neural network.
-:::
-:::{.column width='40%'}
+
 ![Predicted coordinate values (out-of-sample) from a linear probe on final-layer activations of an untrained
-neural network.](www/map.png){#fig-map}
+neural network.](www/map.png){#fig-map width="80%"}
 
 - Model has seen noisy coordinates plus $d$ random features.
 - Single hidden layer with $h < d$ hidden units.
-:::
-::::
 
 ## PCA as a Yield Curve Interpreter {.smaller .nostretch}
 

@@ -63,11 +63,22 @@
   // Footer's text font size (in pt).
   footer_text_font_size: "40",
 
+  // Body font size (in pt).
+  font_size: "16",
+
+  // Font family.
+  mainfont: "STIX Two Text",
+
+  // Header 1 font size (in pt).
+  h1_size: "32",
+
   // The poster's content.
   body
 ) = {
   // Set the body font.
-  set text(font: "STIX Two Text", size: 16pt)
+  mainfont = str(mainfont)
+  font_size = int(font_size) * 1pt
+  set text(font: mainfont, size: font_size)
   let sizes = size.split("x")
   let width = int(sizes.at(0)) * 1in
   let height = int(sizes.at(1)) * 1in
@@ -115,6 +126,7 @@
   set list(indent: 10pt, body-indent: 9pt)
 
   // Configure headings.
+  h1_size = int(h1_size) * 1pt
   set heading(numbering: "I.A.1.")
   show heading: it => locate(loc => {
     // Find out the final number of the heading counter.
@@ -129,7 +141,7 @@
     if it.level == 1 [
       // First-level headings are centered smallcaps.
       #set align(center)
-      #set text({ 32pt })
+      #set text({ h1_size })
       #show: smallcaps
       #v(50pt, weak: true)
       #if it.numbering != none {

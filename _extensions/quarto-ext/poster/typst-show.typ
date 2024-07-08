@@ -70,5 +70,14 @@
   // Footer's text font size (in pt).
   $if(footer-text-font-size)$ footer_text_font_size: [$footer-text-font-size$], $endif$
 
+  // Font size (in pt).
+  $if(font-size)$ font_size: $font-size$, $endif$
+
+  // Font family.
+  $if(mainfont)$ mainfont: "$mainfont$", $endif$
+
+  // Header 1 font size (in pt).
+  $if(h1-size)$ h1_size: $h1-size$, $endif$
+
   doc,
 )
