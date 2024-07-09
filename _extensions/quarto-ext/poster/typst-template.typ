@@ -39,6 +39,8 @@
   // For 2-column posters, you may need to tweak these values.
   // See ./examples/example_2_column_18_24.typ for an example.
 
+  tldr: "",
+
   // Any keywords or index terms that you want to highlight at the beginning.
   keywords: (),
 
@@ -74,6 +76,9 @@
 
   // Header 1 font size (in pt).
   h1_size: "32",
+
+  // Header 2 dont size (in pt).
+  h2_size: "24",
 
   // The poster's content.
   body
@@ -129,7 +134,9 @@
   set list(indent: 10pt, body-indent: 9pt)
 
   // Configure headings.
+  h2_size = int(h1_size) * 0.7pt
   h1_size = int(h1_size) * 1pt
+
   set heading(numbering: "I.A.1.")
   show heading: it => locate(loc => {
     // Find out the final number of the heading counter.
@@ -156,14 +163,14 @@
       #line(length: 100%)
     ] else if it.level == 2 [
       // Second-level headings are run-ins.
-      #set text(style: "italic")
+      #set text({ h2_size })
       #v(32pt, weak: true)
       #if it.numbering != none {
         numbering("i.", deepest)
         h(7pt, weak: true)
       }
       #it.body
-      #v(10pt, weak: true)
+      #v(25pt, weak: true)
     ] else [
       // Third level headings are run-ins too, but different.
       #if it.level == 3 {
@@ -186,13 +193,22 @@
       text(authors_font_size, emph(authors) + 
           "\n\n" + departments + " "),
       image(qrcode, width: 50%),
-    )
+    ),
   )
+
+  line(length: 100%, stroke: 4pt + rgb(217, 240, 246))
 
   // Start three column mode and configure paragraph properties.
   show: columns.with(num_columns, gutter: 64pt)
   set par(justify: true, first-line-indent: 0em)
   show par: set block(spacing: 0.65em)
+
+  // Abstract.
+  if tldr != "" [
+      #v(50pt, weak: true)
+      *TLDR* --- #tldr 
+      #v(20pt, weak: true)
+  ]
 
   // Display the keywords.
   if keywords != () [

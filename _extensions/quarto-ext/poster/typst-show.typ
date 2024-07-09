@@ -46,6 +46,8 @@
   // For 2-column posters, you may need to tweak these values.
   // See ./examples/example_2_column_18_24.typ for an example.
 
+  $if(tldr)$ tldr: "$tldr$", $endif$
+
   // Any keywords or index terms that you want to highlight at the beginning.
   $if(keywords)$ keywords: ($for(keywords)$"$it$"$sep$, $endfor$), $endif$
 
