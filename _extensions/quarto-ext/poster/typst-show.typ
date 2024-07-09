@@ -22,6 +22,9 @@
   // Institution logo.
   $if(institution-logo)$ univ_logo: "$institution-logo$", $endif$
 
+  // QR Code.
+  $if(qrcode)$ qrcode: "$qrcode$", $endif$
+
   // Footer text.
   // For instance, Name of Conference, Date, Location.
   // or Course Name, Date, Instructor.

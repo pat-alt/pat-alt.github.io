@@ -15,6 +15,9 @@
   // University logo.
   univ_logo: "Logo Path",
 
+  // QR Cocde.
+  qrcode: "QR Code Path",
+
   // Footer text.
   // For instance, Name of Conference, Date, Location.
   // or Course Name, Date, Instructor.
@@ -175,13 +178,14 @@
   align(center,
     grid(
       rows: 2,
-      columns: (univ_logo_column_size, title_column_size),
+      columns: (univ_logo_column_size, title_column_size, univ_logo_column_size,),
       column-gutter: 0pt,
       row-gutter: 50pt,
       image(univ_logo, width: univ_logo_scale),
       text(title_font_size, title + "\n\n") + 
       text(authors_font_size, emph(authors) + 
-          "   (" + departments + ") "),
+          "\n\n" + departments + " "),
+      image(qrcode, width: 50%),
     )
   )
 

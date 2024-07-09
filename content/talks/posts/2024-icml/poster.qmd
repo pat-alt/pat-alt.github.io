@@ -4,9 +4,10 @@ format:
   poster-typst: 
     size: "48x36"
     poster-authors: "Patrick Altmeyer, Andrew M. Demetriou, Antony Bartlett, Cynthia C. S. Liem"
-    departments: TU Delft
+    departments: Delft University of Technology, Department of Intelligent Systems
     date: today
     institution-logo: "www/delft-logo.png"
+    qrcode: "www/qrcodes/qr-gh.svg"
     footer-text: "Forty-first International Conference on Machine Learning (ICML)"
     footer-url: "https://arxiv.org/abs/2402.03962"
     footer-emails: "p.altmeyer@tudelft.nl"
@@ -14,20 +15,22 @@ format:
     keywords: ["Machine Learning", "Anthropomorphism", "Artificial General Intelligence"]
     num-columns: 3
     title-font-size: 96
-    title-column-size: 42
+    title-column-size: 32
     univ-logo-column-size: 6
     authors-font-size: 54
     font-size: 28
     mainfont: "Helvetica"
-    h1-size: 48
+    h1-size: 46
 bibliography: biblio.bib
 ---
 
 ## Position
 
-**We therefore urge our fellow researchers to stop making unscientific AGI performance claims**.
+::: {.block fill="rgb(217, 240, 246)" inset="8pt" radius="4pt"}
 
-Current LLMs embed information. They don‘t „understand“ anything. They are useful tools, but tools nonetheless.
+**We therefore urge our fellow researchers to stop making unscientific AGI performance claims**. Current LLMs embed information. They don‘t „understand“ anything. They are useful tools, but tools nonetheless.
+
+:::
 
 - Meaningful patterns in embeddings are like doves in the sky.
 - Humans are prone to seek patterns and anthropomorphize. 
@@ -37,29 +40,23 @@ Current LLMs embed information. They don‘t „understand“ anything. They are
 
 ## Are Neural Networks Born with World Models? {.smaller}
 
-- Llama-2 model tested in @gurnee2023languagev2 has ingested huge amounts of publicly available data [@touvron2023llama].
-  - Geographical locations are literally in the training data: e.g. Wikipedia [article](https://en.wikipedia.org/wiki/London) for "London". 
-  - Where would this information be encoded if not in the embedding space $\mathcal{A}$? Is it surprising that $A_{\text{LDN}}=enc(\text{"London"}) \not\!\perp\!\!\!\perp (\text{lat}_{\text{LDN}},\text{long}_{\text{LDN}})$?
-- @fig-map shows the predicted coordinates of a linear probe on the final-layer activations of an untrained neural network.
+Llama-2 model tested in @gurnee2023languagev2 has ingested huge amounts of data including Wikipedia dumps that contain geographical coordinates [@touvron2023llama]. Where would this information be encoded if not in the embedding space? 
 
 ![Predicted coordinate values (out-of-sample) from a linear probe on final-layer activations of an untrained
-neural network.](www/map.png){#fig-map width="80%"}
-
-- Model has seen noisy coordinates plus $d$ random features.
-- Single hidden layer with $h < d$ hidden units.
+neural network.](www/map.png){#fig-map width="100%"}
 
 ## PCA as a Yield Curve Interpreter {.smaller .nostretch}
 
 What are principal components if not model embeddings?
 
-![Top chart: The first two principal components of US Treasury yields over time at daily frequency. Bottom chart: Observed average level and 10yr-3mo spread of the yield curve. Vertical stalks roughly indicate the onset (|GFC) and the beginning of the aftermath (GFC|) of the Global Financial Crisis.](www/pca_yield.png){#fig-pca width="80%"}
+![Top chart: The first two principal components of US Treasury yields over time at daily frequency. Bottom chart: Observed average level and 10yr-3mo spread of the yield curve. Vertical stalks roughly indicate the onset (|GFC) and the beginning of the aftermath (GFC|) of the Global Financial Crisis.](www/pca_yield.png){#fig-pca width="100%"}
 
 ## Autoencoders as Economic Growth Predictors {.smaller .nostretch auto-animate=true}
 
 - Yes, this can be used for feature extraction and forecasting:
   - Bottle-neck layer embeddings predict spread and level of the yield curve.
 
-![The left chart shows the actual GDP growth and fitted values from the autoencoder model. The right chart shows the observed average level and spread of the yield curve (solid) along with the predicted values (in-sample) from the linear probe based on the latent embeddings (dashed)](www/dl.png){#fig-dl width="80%"}
+![The left chart shows the actual GDP growth and fitted values from the autoencoder model. The right chart shows the observed average level and spread of the yield curve (solid) along with the predicted values (in-sample) from the linear probe based on the latent embeddings (dashed)](www/dl.png){#fig-dl width="100%"}
 
 ## Embedding FOMC comms {.smaller .nostretch}
 
@@ -68,7 +65,7 @@ What are principal components if not model embeddings?
 - Predictive power increases with layer depth and probes outperform simple AR($p$) models.
 
 ![Out-of-sample root mean squared error (RMSE) for the linear probe plotted against FOMC-RoBERTa’s n-th
-layer for different indicators. ](www/mse_pca_128.png){#fig-mse width="80%"}  
+layer for different indicators. ](www/mse_pca_128.png){#fig-mse width="100%"}  
 
 ## Sparks of Economic Understanding? {.smaller .nostretch}
 
@@ -81,7 +78,7 @@ layer for different indicators. ](www/mse_pca_128.png){#fig-mse width="80%"}
 
 ![Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB)
 and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted value
-of the probe for random noise.](www/attack_all_measures.png){#fig-attack width="80%"}
+of the probe for random noise.](www/attack_all_measures.png){#fig-attack width="100%"}
 
 As evidenced by @fig-attack, the probe is easily fooled. 
 
