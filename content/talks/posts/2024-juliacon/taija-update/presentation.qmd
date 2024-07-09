@@ -1,0 +1,326 @@
+---
+title: What's new in [T]{style="color:#389836;"}rustworthy [AI]{style="color:#9558B2;"} in [J]{style="color:#CB3C33;"}uli[A]{style="color:#CB3C33;"}?
+subtitle: JuliaCon 2024
+author: Patrick Altmeyer
+format:
+  julia-revealjs: 
+    scrollable: true
+date: last-modified
+bibliography: biblio.bib
+execute:
+  freeze: auto
+  eval: true
+  echo: true
+  output: false
+---
+
+```{julia}
+#| echo: false
+
+include("$(pwd())/content/talks/posts/2024-juliacon/taija-update/setup.jl")
+```
+
+# What's [Taija](https://github.com/JuliaTrustworthyAI)?
+
+Taija is a small but growing ecosystem of packages geared towards *T*rustworthy *A*rtificial *I*ntelligence in *J*uli*a*---[Taija](https://github.com/JuliaTrustworthyAI)
+
+[![Trustworthy AI in Julia: github.com/JuliaTrustworthyAI](www/logo.png){width="50%" fig-align="center"}](https://github.com/JuliaTrustworthyAI)
+
+## Ecosystem Overview
+
+```{mermaid}
+%%| echo: false
+%%| label: fig-overview
+%%| fig-cap: "Overview of the Taija ecosystem. Packages in early development not shown."
+
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'primaryColor': '#BB2528',
+      'primaryTextColor': '#fff',
+      'primaryBorderColor': '#7C0000',
+      'lineColor': '#F8B229',
+      'secondaryColor': '#006100',
+      'tertiaryColor': '#e9edfb',
+      'fontFamily': "avenir"
+    }
+  }
+}%%
+
+flowchart TB
+
+    classDef taija fill:#389836,stroke:#333,color:#fff;
+    classDef core fill:#CB3C33,stroke:#333,color:#fff;
+    classDef base fill:#9558B2,stroke:#333,color:#fff;
+
+    %% Base
+    base["TaijaBase.jl"]
+
+    %% Meta
+    interop["TaijaInteroperability.jl"]
+    data["TaijaData.jl"]
+    parallel["TaijaParallel.jl"]
+    plotting["TaijaPlotting.jl"]
+
+    %% Core
+    ce["CounterfactualExplanations.jl"]
+    cp["ConformalPrediction.jl"]
+    lr["LaplaceRedux.jl"]
+    jem["JointEnergyModels.jl"]
+
+    %% External
+    mlj["MLJ.jl"]
+    flux["Flux.jl"]
+
+    class base base;
+    class interop,data,parallel,plotting taija;
+    class ce,cp,lr,jem core;
+
+    %% Graph
+    base --> ce & cp & lr & jem
+
+    subgraph "Core Packages"
+        ce & cp & lr & jem 
+    end
+
+    subgraph "Meta Packages"
+        data & plotting & parallel & interop
+    end 
+
+    subgraph "External Packages"
+        mlj & flux
+    end
+```
+
+
+## Who's behind Taija?
+
+- **2021-2022**: Initially developed by myself to support my PhD research in Trustworthy AI (still ongoing).
+- **2023-2024**: Expanded by a growing community of contributors, including TU Delft and G/JSoC students.
+
+> Thanks to [\@MojiFarmanbar](https://github.com/orgs/JuliaTrustworthyAI/people/MojiFarmanbar), [\@JorgeLuizFranco](https://github.com/orgs/JuliaTrustworthyAI/people/JorgeLuizFranco), [\@Rockdeldiablo](https://github.com/orgs/JuliaTrustworthyAI/people/Rockdeldiablo), [\@kmariuszk](https://github.com/orgs/JuliaTrustworthyAI/people/kmariuszk), [\@RaunoArike](https://github.com/orgs/JuliaTrustworthyAI/people/RaunoArike), [\@VincentPikand](https://github.com/orgs/JuliaTrustworthyAI/people/VincentPikand), [\@severinbratus](https://github.com/orgs/JuliaTrustworthyAI/people/severinbratus), [\@rithik83](https://github.com/orgs/JuliaTrustworthyAI/people/rithik83), [\@navimakarov](https://github.com/orgs/JuliaTrustworthyAI/people/navimakarov), [\@laurikskl](https://github.com/orgs/JuliaTrustworthyAI/people/laurikskl), [\@MarkArdman](https://github.com/orgs/JuliaTrustworthyAI/people/MarkArdman), [\@adelinacazacu](https://github.com/orgs/JuliaTrustworthyAI/people/adelinacazacu), [\@Andrei32Ionescu](https://github.com/orgs/JuliaTrustworthyAI/people/Andrei32Ionescu) and many [others](https://github.com/orgs/JuliaTrustworthyAI/people)!
+
+## Use Cases
+
+> Who could benefit from Taija?
+
+:::{.incremental}
+
+- Researchers in AI and ML, particularly in the fields of explainability, uncertainty quantification, and Bayesian deep learning: (![](/www/profile.jpg){width="35px"}, ...)
+- Practitioners using conventional ML and DL models who are interested in understanding the models' decisions and their uncertainty.
+- Julia developers who want to contribute to the ecosystem (any level of expertise is welcome!). 
+
+:::
+
+# Research 
+
+## Pick your Poison
+
+All of these counterfactuals are valid explanations for the model's prediction. 
+
+> Which one would you pick?
+
+![Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](www/mnist_motivation.png){#fig-cf-example width="80%"}
+
+## Faithful Counterfactuals
+
+::::{.columns}::::
+:::{.column width='32%'}
+![Turning a 9 into a 7. *ECCCo* applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).](www/mnist_eccco.png){#fig-mnist-eccco width="75%"}
+:::
+:::{.column width='68%'}
+*ECCCo*^[Source code [ECCCo.jl](https://github.com/pat-alt/ECCCo.jl) extends CE.jl, CP.jl and JEM.jl.] generates counterfactuals that
+
+- faithfully represent model quality (@fig-mnist-eccco).
+- achieve state-of-the-art plausibility (@fig-mnist-benchmark).
+
+![Results for different generators (from 3 to 5).](www/mnist_benchmark.png){#fig-mnist-benchmark width="100%"}
+:::
+::::
+
+## Intent Classification
+
+Intent classification (IC) in dialogue systems is a common task and a natural place for conformal prediction.
+
+::::{.columns}::::
+:::{.column width='50%'}
+- Simply returning top-1 softmax likely wrong.
+- Existing ad-hoc approach is top-$k$.
+- Conformal classifiers predict sets that fulfill coverage guarantee.
+:::
+:::{.column width='50%'}
+![A simple conformal chat bot in the Julia REPL.](www/conformal_bot.gif){#fig-llm}
+:::
+::::
+
+## Conformal IC and Clarification
+
+- Our NAACL 2024 [paper](https://aclanthology.org/2024.findings-naacl.156/) introduces CICC: a framework for fast and accurate intent classification in conversational AI.
+- In this context, ConformalPrediction.jl can be used to generate intent sets for user queries^[Experiments in @hengst2024conformal were run in parallel using Python's MAPIE and ConformalPrediction.jl, in order to cross-check results. Reported results were produced using MAPIE.]. 
+- Winning project at ING Experiment Week 2023.
+
+> See also [*Building a Conformal Chatbot in Julia*](https://www.patalt.org/blog/posts/conformal-llm/) with ConformalPrediction.jl and Transformers.jl.
+
+## More Research
+
+- *Endogenous Macrodynamics in Algorithmic Recourse* [@altmeyer2023endogenous] [published](https://ieeexplore.ieee.org/abstract/document/10136130) at *IEEE SaTML 2023*.
+
+#### Students
+
+- Bachelor's thesis on *What Makes Models Explainable? Evidence from Counterfactuals* (work in progress). 
+    - Related development: [AdversarialRobustness.jl](https://github.com/JuliaTrustworthyAI/AdversarialRobustness.jl).
+- Various Master's theses on CE for imbalanced data [@zagorac2024study], CE as a tool for testing, operationalizing algorithmic recourse, explainability of LLMs (see [draft PR](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/pull/413)).
+
+# Developments
+
+A brief overview of the highlights. For a more introductory presentation, see also this [slides](../../2024-turing/presentation.qmd){target="_blank"} presentation The Alan Turing Institute.
+
+# What's new in ... {.nostretch}
+
+`CounterfactualExplanations.jl`: A [package](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) for Counterfactual Explanations and Algorithmic Recourse in Julia.
+
+::::{.columns}::::
+:::{.column width='40%'}
+- refactoring
+- performance improvements
+- new features
+:::
+:::{.column width='60%'}
+- JCon Proceedings [@altmeyer2023explaining].
+[![](www/ce_logo.png){width="100%" fig-align="right"}](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)
+:::
+::::
+
+## Composable Generators
+
+The largest single category of CE methods solves the following optimization through gradient descent:
+
+$$
+\begin{aligned}
+\mathbf{s}^* &= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\} 
+\end{aligned} 
+$$ 
+
+. . .
+
+> Why not compose generators that combine ideas from different off-the-shelf generators?
+
+. . .
+
+```{.julia}
+@chain generator begin
+    @objective logitcrossentropy 
+      + 1.0ddp_diversity     # DiCE (Mothilal et al. 2020)
+    @with_optimiser Flux.Adam(0.1)                      
+    @search_latent_space     # REVISE (Joshi et al. 2019)
+end
+```
+
+## Explaining Different Models
+
+Besides any Flux.jl model, package extensions add support for 
+
+::::{.columns}::::
+:::{.column width='55%'}
+- [DecisionTree.jl](https://github.com/JuliaAI/DecisionTree.jl) 
+- [NeuroTrees.jl](https://github.com/Evovest/NeuroTreeModels.jl) (see Jeremie's [talk](https://pretalx.com/juliacon2024/talk/D3BHTT/))
+- [LaplaceRedux.jl](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl)
+- [JointEnergyModel.jl](https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl) (upcoming)
+:::
+:::{.column width='45%'}
+![Counterfactual for differentiable decision tree classifier.](www/neurotree.svg)
+:::
+::::
+
+
+## Benchmarking Explanations
+
+Extensive support for evaluating and benchmarking explanations.
+
+::::{.columns}::::
+:::{.column width='50%'}
+
+#### Evaluation
+
+```{.julia}
+# Generate counterfactuals
+ces = generate_counterfactual(
+  factual, 
+  target_label, 
+  data, 
+  M, 
+  generator; 
+  num_counterfactuals=5
+)
+
+# Evaluate them
+evaluate(ces)
+```
+
+:::
+:::{.column width='50%'}
+
+#### Benchmarks
+
+Benchmark all available generators and models at once in parallel^[[TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl) adds support for parallelization. Join [talk](https://pretalx.com/juliacon2024/me/submissions/XLCNXN/) at 11:50–12:00, Else (1.3)]:
+
+```{.julia}
+using TaijaParallel
+pllr = ThreadsParallelizer()
+bmk = benchmark(
+  counterfactual_data; 
+  parallelizer = pllr
+)
+```
+:::
+::::
+
+# What's new in ... {.nostretch}
+
+`ConformalPrediction.jl`: A [package](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) for Predictive Uncertainty Quantification through Conformal Prediction for Machine Learning models trained in MLJ.
+
+::::{.columns}::::
+:::{.column width='50%'}
+- refactoring
+- new features
+:::
+:::{.column width='50%'}
+[![](www/cp_logo.png){width="100%" fig-align="right"}](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl)
+:::
+::::
+
+# What's new in ... {.nostretch}
+
+`LaplaceRedux.jl`: A [package](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl) for Effortless Bayesian Deep Learning through Laplace Approximation for Flux.jl neural networks.
+
+::::{.columns}::::
+:::{.column width='50%'}
+- new features
+- interface to MLJ
+- JCon Proceedings (under review).
+:::
+:::{.column width='50%'}
+[![](www/lr_logo.png){width="100%" fig-align="right"}](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl)
+:::
+::::
+
+# Joint Energy Models
+
+`JointEnergyModels.jl`: A [package](https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl?tab=readme-ov-file) for Joint Energy Models and Energy-Based Models in Julia.
+
+![](www/jem.svg){.absolute bottom=-400 right=50 width="80%"}
+
+# Final Things
+
+## Student Testimonials
+
+## Ongoing Work
+
+## Get Involved
+
+# Questions? {.nostretch} 
+
+![](/www/images/qr.png){width="25%" fig-align="center"}
+
+## References
