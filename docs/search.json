@@ -2860,7 +2860,7 @@
     "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#context",
     "title": "💰 Trillion Dollar Words in Julia",
     "section": "Context",
-    "text": "Context\nDeveloped in the context of our position paper on LLM interpretability presented at ECONDAT 2024 and ICML 2024 (preprint, blog post, code):\n\nStop Making Unscientific AGI Performance Claims (Altmeyer et al. 2024)\n\n\n\nExperiments: We probe models of varying complexity including random projections, matrix decompositions, deep autoencoders and transformers.\n\nAll of them successfully distill knowledge and yet none of them develop true understanding.\n\nSocial sciences review: Humans are prone to seek patterns and anthropomorphize.\nConclusion and outlook: More caution at the individual level, and different incentives at the institutional level."
+    "text": "Context\nICML 2024 paper Stop Making Unscientific AGI Performance Claims (Altmeyer et al. 2024) (preprint, blog post, code):\n\n\n\nEven simple models can distill meaningful information that predicts external data.\nHumans are prone to seek patterns and anthropomorphize."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#basic-functionality",
@@ -2895,28 +2895,28 @@
     "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#motivation",
     "title": "💰 Trillion Dollar Words in Julia",
     "section": "Motivation",
-    "text": "Motivation\n\n: „It is essential to bring inflation back to target to avoid drifting into deflation territory.“\n: „It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“"
+    "text": "Motivation\n\n\\(A_1\\): \\(enc(\\)„It is essential to bring inflation back to target to avoid drifting into deflation territory.“\\()\\)\n\\(A_2\\): \\(enc(\\)„It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“\\()\\)"
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#motivation-1",
     "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#motivation-1",
     "title": "💰 Trillion Dollar Words in Julia",
     "section": "Motivation",
-    "text": "Motivation\n\n\n\n\n\n\n\n\n\n\n\n\n: „It is essential to bring inflation back to target to avoid drifting into deflation territory.“\n\n\n\n\n\n\n\n\n\n: \n\n\n\n\n\n\n\n\n\n\n\n\n„It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“\n\n\n\n\n\n\n\n\n\n“They’re exactly the same.”\n— Linear probe"
+    "text": "Motivation\n\n\n\n\\(A_1\\): \\(enc(\\)„It is essential to bring inflation back to target to avoid drifting into deflation territory.“\\()\\)\n\\(A_2\\): \\(enc(\\)„It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“\\()\\)\n\n\n“They’re exactly the same.”\n— Linear probe \\(\\widehat{cpi}=f(A)\\)"
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#embedding-fomc-comms",
     "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#embedding-fomc-comms",
     "title": "💰 Trillion Dollar Words in Julia",
     "section": "Embedding FOMC comms",
-    "text": "Embedding FOMC comms\n\nWe linearly probe all layers to predict unseen economic indicators (CPI, PPI, UST yields).\nPredictive power increases with layer depth and probes outperform simple AR(\n\n\n\n\n\n\n) models.\n\n\n\n\n\n\n\nFigure 1: Out-of-sample root mean squared error (RMSE) for the linear probe plotted against FOMC-RoBERTa’s n-th layer for different indicators."
+    "text": "Embedding FOMC comms\n\nWe linearly probe all layers to predict unseen economic indicators (CPI, PPI, UST yields).\nPredictive power increases with layer depth and probes outperform simple AR(\\(p\\)) models.\n\n\n\n\n\n\n\nFigure 1: Out-of-sample root mean squared error (RMSE) for the linear probe plotted against FOMC-RoBERTa’s n-th layer for different indicators."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#sparks-of-economic-understanding",
     "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#sparks-of-economic-understanding",
     "title": "💰 Trillion Dollar Words in Julia",
     "section": "Sparks of Economic Understanding?",
-    "text": "Sparks of Economic Understanding?\nIf probe results were indicative of some intrinsic ‘understanding’ of the economy, then the probe should not be sensitive to random sentences unrelated to economics.\n\n\n\n\n\n\nFigure 2: Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB) and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted value of the probe for random noise."
+    "text": "Sparks of Economic Understanding?\nIf probe results were indicative of some intrinsic ‘understanding’, probe should not be sensitive to unrelated sentences.\n\n\n\n\n\n\nFigure 2: Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB) and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted value of the probe for random noise."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#intended-purpose-and-goals",
