@@ -728,32 +728,32 @@
     "text": "In May 2023, I presented some of our work at the Delft FinTech Lab Launch organized by Mondai House of AI. You can find the slides below or click here to open them in full screen."
   },
   {
-    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#whats-taija",
-    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#whats-taija",
+    "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#trustworthy-ai-in-julia",
+    "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#trustworthy-ai-in-julia",
     "title": "Trustworthy AI in Julia meets Supercomputing",
-    "section": "What’s Taija?",
-    "text": "What’s Taija?\nGrowing ecosystem of packages geared towards Trustworthy Artificial Intelligence in Julia—Taija.\n\n\n\n\n\n\n%%{\n  init: {\n    'theme': 'base',\n    'themeVariables': {\n      'primaryColor': '#BB2528',\n      'primaryTextColor': '#fff',\n      'primaryBorderColor': '#7C0000',\n      'lineColor': '#F8B229',\n      'secondaryColor': '#006100',\n      'tertiaryColor': '#e9edfb',\n      'fontFamily': \"avenir\"\n    }\n  }\n}%%\n\nflowchart TB\n\n    classDef taija fill:#389836,stroke:#333,color:#fff;\n    classDef core fill:#CB3C33,stroke:#333,color:#fff;\n    classDef base fill:#9558B2,stroke:#333,color:#fff;\n\n    %% Base\n    base[\"TaijaBase.jl\"]\n\n    %% Meta\n    interop[\"TaijaInteroperability.jl\"]\n    data[\"TaijaData.jl\"]\n    parallel[\"TaijaParallel.jl\"]\n    plotting[\"TaijaPlotting.jl\"]\n\n    %% Core\n    ce[\"CounterfactualExplanations.jl\"]\n    cp[\"ConformalPrediction.jl\"]\n    lr[\"LaplaceRedux.jl\"]\n    jem[\"JointEnergyModels.jl\"]\n\n    class base base;\n    class interop,data,parallel,plotting taija;\n    class ce,cp,lr,jem core;\n\n    %% Graph\n    subgraph \"Meta Packages\"\n        data & plotting & parallel & interop\n    end\n\n    subgraph \"Core Packages\"\n        ce & cp & lr & jem \n    end\n\n\n\n\nFigure 1: An overview of the Taija ecosystem."
+    "section": "Trustworthy AI in JuliA",
+    "text": "Trustworthy AI in JuliA\n\n\n\n\n\n\n%%{\n  init: {\n    'theme': 'base',\n    'themeVariables': {\n      'primaryColor': '#BB2528',\n      'primaryTextColor': '#fff',\n      'primaryBorderColor': '#7C0000',\n      'lineColor': '#F8B229',\n      'secondaryColor': '#006100',\n      'tertiaryColor': '#e9edfb',\n      'fontFamily': \"avenir\"\n    }\n  }\n}%%\n\nflowchart TB\n\n    classDef taija fill:#389836,stroke:#333,color:#fff;\n    classDef core fill:#CB3C33,stroke:#333,color:#fff;\n    classDef base fill:#9558B2,stroke:#333,color:#fff;\n\n    %% Base\n    base[\"TaijaBase.jl\"]\n\n    %% Meta\n    interop[\"TaijaInteroperability.jl\"]\n    data[\"TaijaData.jl\"]\n    parallel[\"TaijaParallel.jl\"]\n    plotting[\"TaijaPlotting.jl\"]\n\n    %% Core\n    ce[\"CounterfactualExplanations.jl\"]\n    cp[\"ConformalPrediction.jl\"]\n    lr[\"LaplaceRedux.jl\"]\n    jem[\"JointEnergyModels.jl\"]\n\n    %% External\n    mlj[\"MLJ.jl\"]\n    flux[\"Flux.jl\"]\n\n    class base base;\n    class interop,data,parallel,plotting taija;\n    class ce,cp,lr,jem core;\n\n    %% Graph\n    base --&gt; ce & cp & lr & jem\n\n    subgraph \"Core Packages\"\n        ce & cp & lr & jem \n    end\n\n    subgraph \"Meta Packages\"\n        data & plotting & parallel & interop\n    end \n\n    subgraph \"External Packages\"\n        mlj & flux\n    end\n\n\n\n\nFigure 1: Overview of the Taija ecosystem. Early-stage packages ommitted."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#why-supercomputing",
     "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#why-supercomputing",
     "title": "Trustworthy AI in Julia meets Supercomputing",
     "section": "Why Supercomputing?",
-    "text": "Why Supercomputing?\nEfforts towards trustworthy AI tend to increase the computational burden involved in training or inference:\n\n\nExplainable AI: we are often required to generate many explanations for many individuals.\nConformal Prediction: many techniques involve cross-validation or bootstrapping.\n(Quasi) Bayesian DL like deep ensembles.\n\n\n\n\nGood news: all of these tasks can be parallelized!"
+    "text": "Why Supercomputing?\nEfforts towards trustworthy AI tend to increase the computational burden involved in training or inference:\n\n\nExplainable AI: we are often required to generate many local explanations for many individuals.\nConformal Prediction: many techniques involve cross-validation or bootstrapping.\n(Quasi) Bayesian DL like deep ensembles.\n\n\n\n\nGood news: all of these tasks can be parallelized!"
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#benchmarking-explanations",
     "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#benchmarking-explanations",
     "title": "Trustworthy AI in Julia meets Supercomputing",
     "section": "Benchmarking Explanations",
-    "text": "Benchmarking Explanations\n\nFinal benchmark: total of ~10 million counterfactuals across 8 datasets and different DL models.\nParallelized across 50 to 300 CPUs on DelftBlue using combination of multi-threading and -processing.\n\n\n\n\nGradients and counterfactuals for different generators. Source: Altmeyer et al. (2024)"
+    "text": "Benchmarking Explanations\n\n\nGoal: Generate faithful counterfactual explanations that reflect model quality.\n\nFinal benchmark: total of ~10 million counterfactuals across 8 datasets and different DL models.\nParallelized across 50 to 300 CPUs on DelftBlue using combination of multi-threading and -processing.\n\n\n\n\n\nCounterfactual explanations for different models. Source: Altmeyer et al. (2024)"
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#source-code",
     "href": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#source-code",
     "title": "Trustworthy AI in Julia meets Supercomputing",
     "section": "Source Code",
-    "text": "Source Code\n\nECCCo.jl is a small package build for Altmeyer et al. (2024) that leverages and extends CounterfactualExplanations.jl, ConformalPrediction.jl, and JointEnergyModels.jl.\nParallelization is achieved through TaijaParallel.jl.\nFunctionality now being absorbed by CounterfactualExplanations.jl.\n\n\n\nCode is open-sourced and available on GitHub."
+    "text": "Source Code\n\nECCCo.jl is a small package build for Altmeyer et al. (2024) that leverages and extends CounterfactualExplanations.jl, ConformalPrediction.jl, and JointEnergyModels.jl.\nParallelization is achieved through TaijaParallel.jl.\nFunctionality now being absorbed by CounterfactualExplanations.jl.\n\n\n\n\n\nCode is open-sourced and available on GitHub."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-supercomp/presentation.html#user-interface",
@@ -1978,28 +1978,28 @@
     "href": "content/talks/posts/2024-turing/presentation.html#background-2",
     "title": "Trustworthy AI in Julia",
     "section": "Background",
-    "text": "Background\nWe want BMA for neural networks underspecified by the data (Wilson 2020),\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwhere \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n is the likelihood,  is the posterior and \n\n\n\n\n\n\n is the training data.\n\n\n\nProblem 😢: Intractable posterior \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.\nConvention 🤔: Use MAP estimate \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n with \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.\nIdea 💡: Taylor approximation at the mode amounts to multivariate Gaussian centered around MAP.\n\n\n\n\n\nUnnormalized log-posterior and corresponding Laplace Approximation. Source: Murphy (2022)."
+    "text": "Background\nWe want BMA for neural networks underspecified by the data (Wilson 2020),\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwhere \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n is the likelihood, \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n is the posterior and \n\n\n\n\n\n\n is the training data.\n\n\n\nProblem 😢: Intractable posterior .\nConvention 🤔: Use MAP estimate  with .\nIdea 💡: Taylor approximation at the mode amounts to multivariate Gaussian centered around MAP.\n\n\n\n\n\nUnnormalized log-posterior and corresponding Laplace Approximation. Source: Murphy (2022)."
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#model-assumptions",
     "href": "content/talks/posts/2024-turing/presentation.html#model-assumptions",
     "title": "Trustworthy AI in Julia",
     "section": "Model Assumptions",
-    "text": "Model Assumptions\nExample (binary classification): We assume Bernoulli likelihood and a Gaussian prior for our weights …\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n… which yields the following negative log-likelihood (or energy) function (Murphy 2022):"
+    "text": "Model Assumptions\nExample (binary classification): We assume Bernoulli likelihood and a Gaussian prior for our weights …\n\n\n\n… which yields the following negative log-likelihood (or energy) function (Murphy 2022):"
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#taylor-expansion",
     "href": "content/talks/posts/2024-turing/presentation.html#taylor-expansion",
     "title": "Trustworthy AI in Julia",
     "section": "Taylor Expansion",
-    "text": "Taylor Expansion\nWe have the following normalized posterior:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwith \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.\n\nThen, second-order Taylor expansion of the energy function around the mode \n\n\n\n\n\n\n\n\n gives us the Laplace approximation (Murphy 2022):\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThus, we have"
+    "text": "Taylor Expansion\nWe have the following normalized posterior:\n\nwith .\n\nThen, second-order Taylor expansion of the energy function around the mode  gives us the Laplace approximation (Murphy 2022):\n\n\n\nThus, we have"
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#hessian-approximation",
     "href": "content/talks/posts/2024-turing/presentation.html#hessian-approximation",
     "title": "Trustworthy AI in Julia",
     "section": "Hessian Approximation",
-    "text": "Hessian Approximation\n\nChallenge lies in computing the Hessian \n\n\n\n\n\n\n.\nWe can use the Empirical Fisher or Generalized Gauss-Newton approximation (Murphy 2022).\n\nStill quadratic in the number of parameters.\n\nFor scalable solutions, we can use the diagonal approximation or the K-FAC approximation or work with a subnetwork."
+    "text": "Hessian Approximation\n\nChallenge lies in computing the Hessian .\nWe can use the Empirical Fisher or Generalized Gauss-Newton approximation (Murphy 2022).\n\nStill quadratic in the number of parameters.\n\nFor scalable solutions, we can use the diagonal approximation or the K-FAC approximation or work with a subnetwork."
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#examples-2",
