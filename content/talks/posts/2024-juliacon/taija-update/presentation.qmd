@@ -26,7 +26,7 @@ include("$(pwd())/content/talks/posts/2024-juliacon/taija-update/setup.jl")
 
 # What's [Taija](https://github.com/JuliaTrustworthyAI)?
 
-Taija is a small but growing ecosystem of packages geared towards *T*rustworthy *A*rtificial *I*ntelligence in *J*uli*a*---[Taija](https://github.com/JuliaTrustworthyAI)
+Taija is a small but growing ecosystem of packages geared towards [T]{style="color:#389836;"}rustworthy [AI]{style="color:#9558B2;"} in [J]{style="color:#CB3C33;"}uli[A]{style="color:#CB3C33;"}---[Taija](https://github.com/JuliaTrustworthyAI)
 
 [![Trustworthy AI in Julia: github.com/JuliaTrustworthyAI](www/logo.png){width="50%" fig-align="center"}](https://github.com/JuliaTrustworthyAI)
 
@@ -35,7 +35,7 @@ Taija is a small but growing ecosystem of packages geared towards *T*rustworthy 
 ```{mermaid}
 %%| echo: false
 %%| label: fig-overview
-%%| fig-cap: "Overview of the Taija ecosystem. Packages in early development not shown."
+%%| fig-cap: "Overview of the Taija ecosystem. Early-stage packages omitted."
 
 %%{
   init: {
@@ -134,7 +134,7 @@ All of these counterfactuals are valid explanations for the model's prediction.
 ![Turning a 9 into a 7. *ECCCo* applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).](www/mnist_eccco.png){#fig-mnist-eccco width="75%"}
 :::
 :::{.column width='68%'}
-*ECCCo*^[Source code [ECCCo.jl](https://github.com/pat-alt/ECCCo.jl) extends CE.jl, CP.jl and JEM.jl.] generates counterfactuals that
+*ECCCo*^[Source code [ECCCo.jl](https://github.com/pat-alt/ECCCo.jl) extends CE.jl, CP.jl and JEM.jl.] counterfactuals
 
 - faithfully represent model quality (@fig-mnist-eccco).
 - achieve state-of-the-art plausibility (@fig-mnist-benchmark).
@@ -174,7 +174,16 @@ Intent classification (IC) in dialogue systems is a common task and a natural pl
 
 # Developments
 
-A brief overview of the highlights. For a more introductory presentation, see also this [slides](../../2024-turing/presentation.qmd){target="_blank"} presentation The Alan Turing Institute.
+::::{.columns}::::
+:::{.column width='80%'}
+A brief overview of the highlights. For a more introductory presentation, see also this [slides](../../2024-turing/presentation.qmd){target="_blank"} presentation The Alan Turing Institute 
+:::
+:::{.column width='20%'}
+![](www/qr-turing.png)
+:::
+::::
+
+
 
 # What's new in ... {.nostretch}
 
@@ -317,7 +326,7 @@ bmk = benchmark(
 :::
 ::::
 
-# Joint Energy Models
+# Joint Energy Models 
 
 `JointEnergyModels.jl`: A [package](https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl?tab=readme-ov-file) for Joint Energy-Based Models Models in Julia (early development).
 
@@ -329,7 +338,9 @@ Hybrid models that can predict and generate [@grathwohl2020your].
 - MLJFlux.jl interface
 :::
 :::{.column width='50%'}
-![Predicted output class probabilities (contour) and generated input samples (stars) for a binary JEM classifier.](www/jem.svg)
+
+![Predicted output class probabilities (contour) and generated inputs (stars) for a binary JEM classifier.](www/jem.png){#fig-jem width="100%"}
+
 :::
 ::::
 

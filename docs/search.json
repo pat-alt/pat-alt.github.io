@@ -802,7 +802,7 @@
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#ecosystem-overview",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Ecosystem Overview",
-    "text": "Ecosystem Overview\n\n\n\n\n\n\n%%{\n  init: {\n    'theme': 'base',\n    'themeVariables': {\n      'primaryColor': '#BB2528',\n      'primaryTextColor': '#fff',\n      'primaryBorderColor': '#7C0000',\n      'lineColor': '#F8B229',\n      'secondaryColor': '#006100',\n      'tertiaryColor': '#e9edfb',\n      'fontFamily': \"avenir\"\n    }\n  }\n}%%\n\nflowchart TB\n\n    classDef taija fill:#389836,stroke:#333,color:#fff;\n    classDef core fill:#CB3C33,stroke:#333,color:#fff;\n    classDef base fill:#9558B2,stroke:#333,color:#fff;\n\n    %% Base\n    base[\"TaijaBase.jl\"]\n\n    %% Meta\n    interop[\"TaijaInteroperability.jl\"]\n    data[\"TaijaData.jl\"]\n    parallel[\"TaijaParallel.jl\"]\n    plotting[\"TaijaPlotting.jl\"]\n\n    %% Core\n    ce[\"CounterfactualExplanations.jl\"]\n    cp[\"ConformalPrediction.jl\"]\n    lr[\"LaplaceRedux.jl\"]\n    jem[\"JointEnergyModels.jl\"]\n\n    %% External\n    mlj[\"MLJ.jl\"]\n    flux[\"Flux.jl\"]\n\n    class base base;\n    class interop,data,parallel,plotting taija;\n    class ce,cp,lr,jem core;\n\n    %% Graph\n    base --&gt; ce & cp & lr & jem\n\n    subgraph \"Core Packages\"\n        ce & cp & lr & jem \n    end\n\n    subgraph \"Meta Packages\"\n        data & plotting & parallel & interop\n    end \n\n    subgraph \"External Packages\"\n        mlj & flux\n    end\n\n\n\n\nFigure 1: Overview of the Taija ecosystem. Packages in early development not shown."
+    "text": "Ecosystem Overview\n\n\n\n\n\n\n%%{\n  init: {\n    'theme': 'base',\n    'themeVariables': {\n      'primaryColor': '#BB2528',\n      'primaryTextColor': '#fff',\n      'primaryBorderColor': '#7C0000',\n      'lineColor': '#F8B229',\n      'secondaryColor': '#006100',\n      'tertiaryColor': '#e9edfb',\n      'fontFamily': \"avenir\"\n    }\n  }\n}%%\n\nflowchart TB\n\n    classDef taija fill:#389836,stroke:#333,color:#fff;\n    classDef core fill:#CB3C33,stroke:#333,color:#fff;\n    classDef base fill:#9558B2,stroke:#333,color:#fff;\n\n    %% Base\n    base[\"TaijaBase.jl\"]\n\n    %% Meta\n    interop[\"TaijaInteroperability.jl\"]\n    data[\"TaijaData.jl\"]\n    parallel[\"TaijaParallel.jl\"]\n    plotting[\"TaijaPlotting.jl\"]\n\n    %% Core\n    ce[\"CounterfactualExplanations.jl\"]\n    cp[\"ConformalPrediction.jl\"]\n    lr[\"LaplaceRedux.jl\"]\n    jem[\"JointEnergyModels.jl\"]\n\n    %% External\n    mlj[\"MLJ.jl\"]\n    flux[\"Flux.jl\"]\n\n    class base base;\n    class interop,data,parallel,plotting taija;\n    class ce,cp,lr,jem core;\n\n    %% Graph\n    base --&gt; ce & cp & lr & jem\n\n    subgraph \"Core Packages\"\n        ce & cp & lr & jem \n    end\n\n    subgraph \"Meta Packages\"\n        data & plotting & parallel & interop\n    end \n\n    subgraph \"External Packages\"\n        mlj & flux\n    end\n\n\n\n\nFigure 1: Overview of the Taija ecosystem. Early-stage packages omitted."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#whos-behind-taija",
@@ -830,7 +830,7 @@
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#faithful-counterfactuals",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Faithful Counterfactuals",
-    "text": "Faithful Counterfactuals\n\n\n\n\n\n\n\n\nFigure 3: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\nECCCo1 generates counterfactuals that\n\nfaithfully represent model quality (Figure 3).\nachieve state-of-the-art plausibility (Figure 4).\n\n\n\n\n\n\n\nFigure 4: Results for different generators (from 3 to 5).\n\n\n\n\n\nSource code ECCCo.jl extends CE.jl, CP.jl and JEM.jl."
+    "text": "Faithful Counterfactuals\n\n\n\n\n\n\n\n\nFigure 3: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\nECCCo1 counterfactuals\n\nfaithfully represent model quality (Figure 3).\nachieve state-of-the-art plausibility (Figure 4).\n\n\n\n\n\n\n\nFigure 4: Results for different generators (from 3 to 5).\n\n\n\n\n\nSource code ECCCo.jl extends CE.jl, CP.jl and JEM.jl."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#intent-classification",
@@ -3890,5 +3890,26 @@
     "title": "Spurious Sparks of AGI",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nI would be very surprised—concerned even—if our search for patterns in latent spaces of capable LLMs revealed nothing at all.↩︎\nThe data is taken from the US Department of the Treasury.↩︎"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#whats-new-in-2",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#whats-new-in-2",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "What’s new in …",
+    "text": "What’s new in …\nConformalPrediction.jl: A package for Predictive Uncertainty Quantification through Conformal Prediction for Machine Learning models trained in MLJ.\n\n\n\nrefactoring\nnew features (@MojiFarmanbar)\n\nTime Series\nQuantile Regression"
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#joint-energy-models",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#joint-energy-models",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Joint Energy Models",
+    "text": "Joint Energy Models\nJointEnergyModels.jl: A package for Joint Energy-Based Models Models in Julia (early development).\n\n\nHybrid models that can predict and generate (Grathwohl et al. 2020).\n\nFlux.jl interface\nMLJFlux.jl interface\n\n\n\n\n\n\n\n\nFigure 7: Predicted output class probabilities (contour) and generated input samples (stars) for a binary JEM classifier."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#joint-energy-based-models",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#joint-energy-based-models",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Joint Energy-Based Models",
+    "text": "Joint Energy-Based Models\nJointEnergyModels.jl: A package for Joint Energy-Based Models Models in Julia (early development).\n\n\nHybrid models that can predict and generate (Grathwohl et al. 2020).\n\nFlux.jl interface\nMLJFlux.jl interface\n\n\n\n\n\n\n\n\nFigure 7: Predicted output class probabilities (contour) and generated input samples (stars) for a binary JEM classifier."
   }
 ]
