@@ -837,7 +837,7 @@
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#intent-classification",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Intent Classification",
-    "text": "Intent Classification\nIntent classification (IC) in dialogue systems is a common task and a natural place for conformal prediction.\n\n\n\nSimply returning top-1 softmax likely wrong.\nExisting ad-hoc approach is top-.\nConformal classifiers predict sets that fulfill coverage guarantee.\n\n\n\n\n\n\n\n\nFigure 5: A simple conformal chat bot in the Julia REPL using ConformalPrediction.jl."
+    "text": "Intent Classification\nIntent classification (IC) in dialogue systems is a common task and a natural place for conformal prediction.\n\n\n\nSimply returning top-1 softmax likely wrong.\nExisting ad-hoc approach is top-\n\n\n\n\n\n\n.\nConformal classifiers predict sets that fulfill coverage guarantee.\n\n\n\n\n\n\n\n\nFigure 5: A simple conformal chat bot in the Julia REPL using ConformalPrediction.jl."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#conformal-ic-and-clarification",
@@ -858,14 +858,14 @@
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#composable-generators",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Composable Generators",
-    "text": "Composable Generators\nThe largest single category of CE methods solves the following optimization through gradient descent:\n\n\n\nWhy not compose generators that combine ideas from different off-the-shelf generators?\n\n\n\n@chain generator begin\n    @objective logitcrossentropy \n      + 1.0ddp_diversity     # DiCE (Mothilal et al. 2020)\n    @with_optimiser Flux.Adam(0.1)                      \n    @search_latent_space     # REVISE (Joshi et al. 2019)\nend"
+    "text": "Composable Generators\nThe largest single category of CE methods solves the following optimization through gradient descent:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWhy not compose generators that combine ideas from different off-the-shelf generators?\n\n\n\n@chain generator begin\n    @objective logitcrossentropy \n      + 1.0ddp_diversity     # DiCE (Mothilal et al. 2020)\n    @with_optimiser Flux.Adam(0.1)                      \n    @search_latent_space     # REVISE (Joshi et al. 2019)\nend"
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#explaining-different-models",
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#explaining-different-models",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Explaining Different Models",
-    "text": "Explaining Different Models\nBesides any Flux.jl model, package extensions add support for\n\n\n\nDecisionTree.jl\nNeuroTrees.jl (see Jeremie’s talk)\nLaplaceRedux.jl\nJointEnergyModel.jl (upcoming)\n\n\n\n\n\nCounterfactual for differentiable decision tree classifier."
+    "text": "Explaining Different Models\nBesides any Flux.jl model, package extensions add support for\n\n\n\nDecisionTree.jl\nNeuroTrees.jl (see Jeremie’s talk)\nLaplaceRedux.jl\nJointEnergyModel.jl (upcoming)\n\n\n\n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCounterfactual for differentiable decision tree classifier."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#benchmarking-explanations",
@@ -1978,28 +1978,28 @@
     "href": "content/talks/posts/2024-turing/presentation.html#background-2",
     "title": "Trustworthy AI in Julia",
     "section": "Background",
-    "text": "Background\nWe want BMA for neural networks underspecified by the data (Wilson 2020),\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwhere \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n is the likelihood, \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n is the posterior and \n\n\n\n\n\n\n is the training data.\n\n\n\nProblem 😢: Intractable posterior .\nConvention 🤔: Use MAP estimate  with .\nIdea 💡: Taylor approximation at the mode amounts to multivariate Gaussian centered around MAP.\n\n\n\n\n\nUnnormalized log-posterior and corresponding Laplace Approximation. Source: Murphy (2022)."
+    "text": "Background\nWe want BMA for neural networks underspecified by the data (Wilson 2020),\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwhere \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n is the likelihood,  is the posterior and \n\n\n\n\n\n\n is the training data.\n\n\n\nProblem 😢: Intractable posterior \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.\nConvention 🤔: Use MAP estimate \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n with \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.\nIdea 💡: Taylor approximation at the mode amounts to multivariate Gaussian centered around MAP.\n\n\n\n\n\nUnnormalized log-posterior and corresponding Laplace Approximation. Source: Murphy (2022)."
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#model-assumptions",
     "href": "content/talks/posts/2024-turing/presentation.html#model-assumptions",
     "title": "Trustworthy AI in Julia",
     "section": "Model Assumptions",
-    "text": "Model Assumptions\nExample (binary classification): We assume Bernoulli likelihood and a Gaussian prior for our weights …\n\n\n\n… which yields the following negative log-likelihood (or energy) function (Murphy 2022):"
+    "text": "Model Assumptions\nExample (binary classification): We assume Bernoulli likelihood and a Gaussian prior for our weights …\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n… which yields the following negative log-likelihood (or energy) function (Murphy 2022):"
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#taylor-expansion",
     "href": "content/talks/posts/2024-turing/presentation.html#taylor-expansion",
     "title": "Trustworthy AI in Julia",
     "section": "Taylor Expansion",
-    "text": "Taylor Expansion\nWe have the following normalized posterior:\n\nwith .\n\nThen, second-order Taylor expansion of the energy function around the mode  gives us the Laplace approximation (Murphy 2022):\n\n\n\nThus, we have"
+    "text": "Taylor Expansion\nWe have the following normalized posterior:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwith \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.\n\nThen, second-order Taylor expansion of the energy function around the mode \n\n\n\n\n\n\n\n\n gives us the Laplace approximation (Murphy 2022):\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThus, we have"
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#hessian-approximation",
     "href": "content/talks/posts/2024-turing/presentation.html#hessian-approximation",
     "title": "Trustworthy AI in Julia",
     "section": "Hessian Approximation",
-    "text": "Hessian Approximation\n\nChallenge lies in computing the Hessian .\nWe can use the Empirical Fisher or Generalized Gauss-Newton approximation (Murphy 2022).\n\nStill quadratic in the number of parameters.\n\nFor scalable solutions, we can use the diagonal approximation or the K-FAC approximation or work with a subnetwork."
+    "text": "Hessian Approximation\n\nChallenge lies in computing the Hessian \n\n\n\n\n\n\n.\nWe can use the Empirical Fisher or Generalized Gauss-Newton approximation (Murphy 2022).\n\nStill quadratic in the number of parameters.\n\nFor scalable solutions, we can use the diagonal approximation or the K-FAC approximation or work with a subnetwork."
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#examples-2",
@@ -2853,7 +2853,7 @@
     "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#trilliondollarwords.jl",
     "title": "💰 Trillion Dollar Words in Julia",
     "section": "TrillionDollarWords.jl",
-    "text": "TrillionDollarWords.jl\n    \nA light-weight package providing Julia users easy access to the Trillion Dollar Words dataset and model (Shah, Paturi, and Chava 2023).\n\n\n\nDisclaimer\n\n\nPlease note that I am not the author of the Trillion Dollar Words paper nor am I affiliated with the authors. The package was developed as a by-product of our research and is not officially endorsed by the authors of the paper."
+    "text": "TrillionDollarWords.jl\n   \n    \n        \n        \n    \n    \n        \n    \n    \n        \n        \n        \n    \n    \n        codecov\n        codecov\n        88%\n        88%\n    \n    \n        \n     \nA light-weight package providing Julia users easy access to the Trillion Dollar Words dataset and model (Shah, Paturi, and Chava 2023).\n\n\n\nDisclaimer\n\n\nPlease note that I am not the author of the Trillion Dollar Words paper nor am I affiliated with the authors. The package was developed as a by-product of our research and is not officially endorsed by the authors of the paper."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#context",
@@ -2902,14 +2902,14 @@
     "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#motivation-1",
     "title": "💰 Trillion Dollar Words in Julia",
     "section": "Motivation",
-    "text": "Motivation\n\n\n\n: „It is essential to bring inflation back to target to avoid drifting into deflation territory.“\n: „It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“\n\n\n“They’re exactly the same.”\n— Linear probe"
+    "text": "Motivation\n\n\n\n\n\n\n\n\n\n\n\n\n: „It is essential to bring inflation back to target to avoid drifting into deflation territory.“\n\n\n\n\n\n\n\n\n\n: \n\n\n\n\n\n\n\n\n\n\n\n\n„It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“\n\n\n\n\n\n\n\n\n\n“They’re exactly the same.”\n— Linear probe"
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#embedding-fomc-comms",
     "href": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#embedding-fomc-comms",
     "title": "💰 Trillion Dollar Words in Julia",
     "section": "Embedding FOMC comms",
-    "text": "Embedding FOMC comms\n\nWe linearly probe all layers to predict unseen economic indicators (CPI, PPI, UST yields).\nPredictive power increases with layer depth and probes outperform simple AR() models.\n\n\n\n\n\n\n\nFigure 1: Out-of-sample root mean squared error (RMSE) for the linear probe plotted against FOMC-RoBERTa’s n-th layer for different indicators."
+    "text": "Embedding FOMC comms\n\nWe linearly probe all layers to predict unseen economic indicators (CPI, PPI, UST yields).\nPredictive power increases with layer depth and probes outperform simple AR(\n\n\n\n\n\n\n) models.\n\n\n\n\n\n\n\nFigure 1: Out-of-sample root mean squared error (RMSE) for the linear probe plotted against FOMC-RoBERTa’s n-th layer for different indicators."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/trillion-dollar-words/presentation.html#sparks-of-economic-understanding",
