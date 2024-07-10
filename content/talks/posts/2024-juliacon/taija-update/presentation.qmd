@@ -8,6 +8,7 @@ format:
     title-slide-attributes:
       data-background-image: ../www/qr.png
     self-contained: true
+
 date: 2024-07-11
 date-format: full
 bibliography: biblio.bib
@@ -119,25 +120,45 @@ flowchart TB
 
 # Research 
 
+## Counterfactual Explanations
+
+The largest single category of CE methods solves the following optimization through gradient descent:
+
+$$
+\begin{aligned}
+\mathbf{s}^* &= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\} 
+\end{aligned} 
+$$ 
+
+::::{.columns}::::
+:::{.column width='45%'}
+**Counterfactual Explanations** explain how inputs into a model need to change for it to produce different outputs. 
+
+:::
+:::{.column width='55%'}
+![Gradient-based counterfactual search.](www/ce_intro.png){#fig-ce-intro width="60%"}
+:::
+::::
+
 ## Pick your Poison
 
-All of these counterfactuals are valid explanations for the model's prediction. 
+All of these counterfactuals are valid explanations ...
 
-> Which one would you pick?
+> ... which one would you pick?
 
 ![Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](www/mnist_motivation.png){#fig-cf-example width="80%"}
 
 ## Faithful Counterfactuals
 
 ::::{.columns}::::
-:::{.column width='32%'}
+:::{.column width='30%'}
 ![Turning a 9 into a 7. *ECCCo* applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).](www/mnist_eccco.png){#fig-mnist-eccco width="75%"}
 :::
-:::{.column width='68%'}
-*ECCCo*^[Source code [ECCCo.jl](https://github.com/pat-alt/ECCCo.jl) extends CE.jl, CP.jl and JEM.jl.] counterfactuals
+:::{.column width='70%'}
+*ECCCo*^[[Package](https://github.com/pat-alt/ECCCo.jl) and link to AAAI 2024 paper: [github.com/pat-alt/ECCCo.jl](https://github.com/pat-alt/ECCCo.jl).] counterfactuals
 
-- faithfully represent model quality (@fig-mnist-eccco).
-- achieve state-of-the-art plausibility (@fig-mnist-benchmark).
+- explain models faithfully  (@fig-mnist-eccco).
+- achieve SOTA plausibility (@fig-mnist-benchmark).
 
 ![Results for different generators (from 3 to 5).](www/mnist_benchmark.png){#fig-mnist-benchmark width="100%"}
 :::
@@ -196,14 +217,16 @@ A brief overview of the highlights. For a more introductory presentation, see al
 - new features
 :::
 :::{.column width='60%'}
-- JCon Proceedings [@altmeyer2023explaining].
+
 [![](www/ce_logo.png){width="100%" fig-align="right"}](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)
+
+- JCon Proceedings [@altmeyer2023explaining].
 :::
 ::::
 
 ## Composable Generators
 
-The largest single category of CE methods solves the following optimization through gradient descent:
+Recall that for most generators, we have:
 
 $$
 \begin{aligned}
@@ -228,17 +251,17 @@ end
 
 ## Explaining Different Models
 
-Besides any Flux.jl model, package extensions add support for 
+Besides any Flux.jl model, extensions add support for 
 
 ::::{.columns}::::
-:::{.column width='55%'}
+:::{.column width='60%'}
 - [DecisionTree.jl](https://github.com/JuliaAI/DecisionTree.jl) 
-- [NeuroTrees.jl](https://github.com/Evovest/NeuroTreeModels.jl) (see Jeremie's [talk](https://pretalx.com/juliacon2024/talk/D3BHTT/))
+- [NeuroTrees.jl](https://github.com/Evovest/NeuroTreeModels.jl) (see Jeremie's [talk](https://pretalx.com/juliacon2024/talk/D3BHTT/) Fri 10:10–10:20 For Loop)
 - [LaplaceRedux.jl](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl)
 - [JointEnergyModel.jl](https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl) (upcoming)
 :::
-:::{.column width='45%'}
-![Counterfactual for differentiable decision tree classifier.](www/neurotree.svg)
+:::{.column width='40%'}
+![Counterfactual for differentiable decision tree classifier.](www/neurotree.png){#fig-neurotree width="100%"}
 :::
 ::::
 

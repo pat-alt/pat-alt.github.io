@@ -823,21 +823,21 @@
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#pick-your-poison",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Pick your Poison",
-    "text": "Pick your Poison\nAll of these counterfactuals are valid explanations for the model’s prediction.\n\nWhich one would you pick?\n\n\n\nFigure 2: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using Wachter (Wachter, Mittelstadt, and Russell 2017), Schut (Schut et al. 2021) and REVISE (Joshi et al. 2019)."
+    "text": "Pick your Poison\nAll of these counterfactuals are valid explanations …\n\n… which one would you pick?\n\n\n\nFigure 3: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using Wachter (Wachter, Mittelstadt, and Russell 2017), Schut (Schut et al. 2021) and REVISE (Joshi et al. 2019)."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#faithful-counterfactuals",
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#faithful-counterfactuals",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Faithful Counterfactuals",
-    "text": "Faithful Counterfactuals\n\n\n\n\n\n\n\n\nFigure 3: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\nECCCo1 counterfactuals\n\nfaithfully represent model quality (Figure 3).\nachieve state-of-the-art plausibility (Figure 4).\n\n\n\n\n\n\n\nFigure 4: Results for different generators (from 3 to 5).\n\n\n\n\n\nSource code ECCCo.jl extends CE.jl, CP.jl and JEM.jl."
+    "text": "Faithful Counterfactuals\n\n\n\n\n\n\n\n\nFigure 4: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\nECCCo1 counterfactuals\n\nexplain models faithfully (Figure 4).\nachieve SOTA plausibility (Figure 5).\n\n\n\n\n\n\n\nFigure 5: Results for different generators (from 3 to 5).\n\n\n\n\n\nPackage and link to AAAI 2024 paper: github.com/pat-alt/ECCCo.jl."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#intent-classification",
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#intent-classification",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Intent Classification",
-    "text": "Intent Classification\nIntent classification (IC) in dialogue systems is a common task and a natural place for conformal prediction.\n\n\n\nSimply returning top-1 softmax likely wrong.\nExisting ad-hoc approach is top-\n\n\n\n\n\n\n.\nConformal classifiers predict sets that fulfill coverage guarantee.\n\n\n\n\n\n\n\n\nFigure 5: A simple conformal chat bot in the Julia REPL using ConformalPrediction.jl."
+    "text": "Intent Classification\nIntent classification (IC) in dialogue systems is a common task and a natural place for conformal prediction.\n\n\n\nSimply returning top-1 softmax likely wrong.\nExisting ad-hoc approach is top-\\(k\\).\nConformal classifiers predict sets that fulfill coverage guarantee.\n\n\n\n\n\n\n\n\nFigure 6: A simple conformal chat bot in the Julia REPL using ConformalPrediction.jl."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#conformal-ic-and-clarification",
@@ -858,14 +858,14 @@
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#composable-generators",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Composable Generators",
-    "text": "Composable Generators\nThe largest single category of CE methods solves the following optimization through gradient descent:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWhy not compose generators that combine ideas from different off-the-shelf generators?\n\n\n\n@chain generator begin\n    @objective logitcrossentropy \n      + 1.0ddp_diversity     # DiCE (Mothilal et al. 2020)\n    @with_optimiser Flux.Adam(0.1)                      \n    @search_latent_space     # REVISE (Joshi et al. 2019)\nend"
+    "text": "Composable Generators\nRecall that for most generators, we have:\n\\[\n\\begin{aligned}\n\\mathbf{s}^* &= \\arg \\min_{\\mathbf{s}^\\prime \\in \\mathcal{S}} \\left\\{  {\\text{yloss}(M(f(\\mathbf{s}^\\prime)),y^*)}+ \\lambda {\\text{cost}(f(\\mathbf{s}^\\prime)) }  \\right\\}\n\\end{aligned}\n\\]\n\n\nWhy not compose generators that combine ideas from different off-the-shelf generators?\n\n\n\n@chain generator begin\n    @objective logitcrossentropy \n      + 1.0ddp_diversity     # DiCE (Mothilal et al. 2020)\n    @with_optimiser Flux.Adam(0.1)                      \n    @search_latent_space     # REVISE (Joshi et al. 2019)\nend"
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#explaining-different-models",
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#explaining-different-models",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Explaining Different Models",
-    "text": "Explaining Different Models\nBesides any Flux.jl model, package extensions add support for\n\n\n\nDecisionTree.jl\nNeuroTrees.jl (see Jeremie’s talk)\nLaplaceRedux.jl\nJointEnergyModel.jl (upcoming)\n\n\n\n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCounterfactual for differentiable decision tree classifier."
+    "text": "Explaining Different Models\nBesides any Flux.jl model, extensions add support for\n\n\n\nDecisionTree.jl\nNeuroTrees.jl (see Jeremie’s talk Fri 10:10–10:20 For Loop)\nLaplaceRedux.jl\nJointEnergyModel.jl (upcoming)\n\n\n\n\n\n\n\n\nFigure 7: Counterfactual for differentiable decision tree classifier."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#benchmarking-explanations",
@@ -879,7 +879,7 @@
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#student-contributions",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Student Contributions",
-    "text": "Student Contributions\n\nSupport for multi-class problems.\nSupport for more scalable Hessian approximations.\nInterface to MLJ for easy model training and evaluation.\n\n\n\nFigure 6: Hessian approximations. Source: Daxberger et al. (2021)\n\nCheck out their blog post!"
+    "text": "Student Contributions\n\nSupport for multi-class problems.\nSupport for more scalable Hessian approximations.\nInterface to MLJ for easy model training and evaluation.\n\n\n\nFigure 8: Hessian approximations. Source: Daxberger et al. (2021)\n\nCheck out their blog post!"
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#ongoing-work",
@@ -3911,5 +3911,12 @@
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Joint Energy-Based Models",
     "text": "Joint Energy-Based Models\nJointEnergyModels.jl: A package for Joint Energy-Based Models Models in Julia (early development).\n\n\nHybrid models that can predict and generate (Grathwohl et al. 2020).\n\nFlux.jl interface\nMLJFlux.jl interface\n\n\n\n\n\n\n\n\nFigure 7: Predicted output class probabilities (contour) and generated input samples (stars) for a binary JEM classifier."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#counterfactual-explanations",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#counterfactual-explanations",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Counterfactual Explanations",
+    "text": "Counterfactual Explanations\nThe largest single category of CE methods solves the following optimization through gradient descent:\n\\[\n\\begin{aligned}\n\\mathbf{s}^* &= \\arg \\min_{\\mathbf{s}^\\prime \\in \\mathcal{S}} \\left\\{  {\\text{yloss}(M(f(\\mathbf{s}^\\prime)),y^*)}+ \\lambda {\\text{cost}(f(\\mathbf{s}^\\prime)) }  \\right\\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations explain how inputs into a model need to change for it to produce different outputs.\n\n\n\n\n\n\n\nFigure 2: Gradient-based counterfactual search."
   }
 ]
