@@ -5,7 +5,10 @@ author: Patrick Altmeyer
 format:
   julia-revealjs: 
     scrollable: true
-date: last-modified
+    title-slide-attributes:
+      data-background-image: ../www/qr.png
+date: 2024-07-12
+date-format: full
 bibliography: biblio.bib
 execute:
   freeze: auto
@@ -20,25 +23,12 @@ execute:
 include("$(pwd())/content/talks/posts/2024-juliacon/taija-supercomp/setup.jl")
 ```
 
-# [TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl)
-
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaTrustworthyAI.github.io/TaijaParallel.jl/stable/)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaTrustworthyAI.github.io/TaijaParallel.jl/dev/)
-[![Build Status](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/actions/workflows/CI.yml?query=branch%3Amain)
-[![Coverage](https://codecov.io/gh/JuliaTrustworthyAI/TaijaParallel.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaTrustworthyAI/TaijaParallel.jl)
-[![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
-[![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
-
-This package adds custom support for parallelization for certain [Taija](https://github.com/JuliaTrustworthyAI) packages.
-
-## What's Taija?
-
-Growing ecosystem of packages geared towards *T*rustworthy *A*rtificial *I*ntelligence in *J*uli*a*---[Taija](https://github.com/JuliaTrustworthyAI).  
+## [T]{style="color:#389836;"}rustworthy [AI]{style="color:#9558B2;"} in [J]{style="color:#CB3C33;"}uli[A]{style="color:#CB3C33;"}
 
 ```{mermaid}
 %%| echo: false
 %%| label: fig-overview
-%%| fig-cap: "An overview of the Taija ecosystem."
+%%| fig-cap: "Overview of the Taija ecosystem. Early-stage packages ommitted."
 
 %%{
   init: {
@@ -76,19 +66,46 @@ flowchart TB
     lr["LaplaceRedux.jl"]
     jem["JointEnergyModels.jl"]
 
+    %% External
+    mlj["MLJ.jl"]
+    flux["Flux.jl"]
+
     class base base;
     class interop,data,parallel,plotting taija;
     class ce,cp,lr,jem core;
 
     %% Graph
-    subgraph "Meta Packages"
-        data & plotting & parallel & interop
-    end
+    base --> ce & cp & lr & jem
 
     subgraph "Core Packages"
         ce & cp & lr & jem 
     end
+
+    subgraph "Meta Packages"
+        data & plotting & parallel & interop
+    end 
+
+    subgraph "External Packages"
+        mlj & flux
+    end
 ```
+
+# [TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl)
+
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaTrustworthyAI.github.io/TaijaParallel.jl/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaTrustworthyAI.github.io/TaijaParallel.jl/dev/)
+[![Build Status](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Coverage](https://codecov.io/gh/JuliaTrustworthyAI/TaijaParallel.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaTrustworthyAI/TaijaParallel.jl)
+[![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
+[![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
+
+This package adds custom support for parallelization for certain [Taija](https://github.com/JuliaTrustworthyAI) packages.
+
+. . . 
+
+- Intuitive user interface.
+- Support for multi-threading and multi-processing.
+- Easy to extend to new parallelization backends and functions.
 
 ## Why Supercomputing?
 
@@ -96,7 +113,7 @@ Efforts towards trustworthy AI tend to increase the computational burden involve
 
 . . .
 
-- Explainable AI: we are often required to generate many explanations for many individuals.
+- Explainable AI: we are often required to generate many *local* explanations for many individuals.
 - Conformal Prediction: many techniques involve cross-validation or bootstrapping.
 - (Quasi) Bayesian DL like deep ensembles.
 
@@ -106,16 +123,26 @@ Efforts towards trustworthy AI tend to increase the computational burden involve
 
 <!-- A firm that is using a machine learning model to screen out job applicants, for example, might be required to explain to each unsuccessful applicant why they were not admitted to the interview stage. In a different context, researchers may need to generate many explanations for evaluation and benchmarking purposes. -->
 
-# Motivating Example: Counterfactual Explanations
+# Motivating Example
 
-The package was developed to power [research](https://arxiv.org/abs/2312.10648) presented at AAAI 2024 [@altmeyer2024faithful]. The project involved large benchmarks of counterfactual explanations that had to be run on a supercomputer. 
+> Generate ALL the Counterfactual Explanations!
+
+- The package was developed to power [research](https://arxiv.org/abs/2312.10648) presented at AAAI 2024 [@altmeyer2024faithful]. 
+- The project involved large benchmarks of counterfactual explanations that had to be run on a supercomputer. 
 
 ## Benchmarking Explanations {.nostretch}
 
+::::{.columns}::::
+:::{.column width='75%'}
+**Goal**: Generate faithful counterfactual explanations that reflect model quality.
+
 - Final benchmark: total of **~10 million** counterfactuals across 8 datasets and different DL models.
 - Parallelized across **50 to 300 CPUs** on [DelftBlue](https://www.tudelft.nl/dhpc/system) using combination of multi-threading and -processing.
-
-![Gradients and counterfactuals for different generators. Source: @altmeyer2024faithful](www/poc_gradient_fields.png){width=75%}
+:::
+:::{.column width='25%'}
+![Counterfactual explanations for different models. Source: @altmeyer2024faithful](www/mnist_eccco.png)
+:::
+::::
 
 ## Source Code
 
@@ -125,7 +152,14 @@ The package was developed to power [research](https://arxiv.org/abs/2312.10648) 
 
 . . .
 
+::::{.columns}::::
+:::{.column width='90%'}
 > Code is open-sourced and available on [GitHub](https://github.com/pat-alt/ECCCo.jl/tree/main).
+:::
+:::{.column width='10%'}
+![](www/qr-eccco.png)
+:::
+::::
 
 # The Package
 

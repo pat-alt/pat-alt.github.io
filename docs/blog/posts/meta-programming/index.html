@@ -23,6 +23,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { line-height: 1.25; }
@@ -137,35 +138,6 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
@@ -518,7 +490,7 @@ end</pre>
 </div>
 <section id="from-off-the-shelf-counterfactual-generators" class="level3">
 <h3 class="anchored" data-anchor-id="from-off-the-shelf-counterfactual-generators">From Off-the-Shelf Counterfactual Generators …</h3>
-<p><a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> is a package for generating Counterfactual Explanations for predictive models <span class="math inline">\(f: \mathcal{X} \mapsto \mathcal{Y}\)</span>. This is a relatively recent approach to Explainable AI that I am (probably a little too) excited about and won’t dwell on here. For what follows, it suffices to say that generating Counterfactual Explanations can be seen as a generative modelling task because it involves generating samples in the input space: <span class="math inline">\(x \sim \mathcal{X}\)</span>. To this end, the package has previously shipped with a number of <code>Generators</code>: composite types that contain information about how counterfactuals ought to be generated.</p>
+<p><a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> is a package for generating Counterfactual Explanations for predictive models <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20f%3A%20%5Cmathcal%7BX%7D%20%5Cmapsto%20%5Cmathcal%7BY%7D" alt="f: \mathcal{X} \mapsto \mathcal{Y}" title="f: \mathcal{X} \mapsto \mathcal{Y}" class="math inline">. This is a relatively recent approach to Explainable AI that I am (probably a little too) excited about and won’t dwell on here. For what follows, it suffices to say that generating Counterfactual Explanations can be seen as a generative modelling task because it involves generating samples in the input space: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20x%20%5Csim%20%5Cmathcal%7BX%7D" alt="x \sim \mathcal{X}" title="x \sim \mathcal{X}" class="math inline">. To this end, the package has previously shipped with a number of <code>Generators</code>: composite types that contain information about how counterfactuals ought to be generated.</p>
 <p>This has allowed users to specify the type of generator they want to use by instantiating it. For example, the DiCE generator by <span class="citation" data-cites="mothilal2020explaining">Mothilal, Sharma, and Tan (<a href="#ref-mothilal2020explaining" role="doc-biblioref">2020</a>)</span> could (and still can) be instantiated as follows:</p>
 <div id="198cf363" class="cell" data-execution_count="10">
 <details class="code-fold">
@@ -531,12 +503,14 @@ end</pre>
 <section id="to-composable-generators" class="level3">
 <h3 class="anchored" data-anchor-id="to-composable-generators">… To Composable Generators</h3>
 <p>One of my key objectives for the package has always been composability. It turns out that many of the various counterfactual generators that have been proposed in the literature, essentially do the same thing: they optimize an objective function. In <span class="citation" data-cites="altmeyer2023endogenous">Altmeyer et al. (<a href="#ref-altmeyer2023endogenous" role="doc-biblioref">2023</a>)</span>, we denote that objective formally as follows,</p>
-<p><span id="eq-general"><span class="math display">\[
-\begin{aligned}
-\mathbf{s}^\prime &amp;= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\}
-\end{aligned}
-\tag{1}\]</span></span></p>
-<p>where <span class="math inline">\(\text{yloss}\)</span> denotes the main loss function and <span class="math inline">\(\text{cost}\)</span> is a penalty term. I won’t cover this in any more detail here, but you can read about it in the package <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators">docs</a>. The important thing is that <a href="#eq-general" class="quarto-xref">Equation&nbsp;1</a> very closely describes how counterfactual search is actually implemented in the package.</p>
+<p><span id="eq-general"><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Cdisplaystyle%20%5Cbegin%7Baligned%7D%0A%5Cmathbf%7Bs%7D%5E%5Cprime%20%26%3D%20%5Carg%20%5Cmin_%7B%5Cmathbf%7Bs%7D%5E%5Cprime%20%5Cin%20%5Cmathcal%7BS%7D%7D%20%5Cleft%5C%7B%20%20%7B%5Ctext%7Byloss%7D%28M%28f%28%5Cmathbf%7Bs%7D%5E%5Cprime%29%29%2Cy%5E%2A%29%7D%2B%20%5Clambda%20%7B%5Ctext%7Bcost%7D%28f%28%5Cmathbf%7Bs%7D%5E%5Cprime%29%29%20%7D%20%20%5Cright%5C%7D%20%0A%5Cend%7Baligned%7D%20%0A%20%5Cqquad%281%29" alt="\begin{aligned}
+\mathbf{s}^\prime &amp;= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\} 
+\end{aligned} 
+ \qquad(1)" title="\begin{aligned}
+\mathbf{s}^\prime &amp;= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\} 
+\end{aligned} 
+ \qquad(1)" class="math display"></span></p>
+<p>where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Ctext%7Byloss%7D" alt="\text{yloss}" title="\text{yloss}" class="math inline"> denotes the main loss function and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Ctext%7Bcost%7D" alt="\text{cost}" title="\text{cost}" class="math inline"> is a penalty term. I won’t cover this in any more detail here, but you can read about it in the package <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators">docs</a>. The important thing is that <a href="#eq-general" class="quarto-xref">Equation&nbsp;1</a> very closely describes how counterfactual search is actually implemented in the package.</p>
 <p>In other words, all generators currently implemented share a common starting point. They largely just vary in the exact way the objective function is specified. This gives rise to an interesting idea:</p>
 <blockquote class="blockquote">
 <p>Why not compose generators that combine ideas from different off-the-shelf generators?</p>
@@ -568,7 +542,7 @@ end</pre>
 <div class="sourceCode" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a>ex <span class="op">=</span> <span class="op">:</span>(yloss <span class="op">+</span> λ<span class="op">*</span>cost)</span>
 <span id="cb19-2"><a href="#cb19-2"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Of course, evaluating this expression throws an error because none of the variables are actually defined. Let’s work on that …</p>
-<p>For the loss and penalty functions, we will use methods available from the <code>CounterfactualExplanations.Objectives</code> module, while for <span class="math inline">\(\lambda\)</span> we will use a literal:</p>
+<p>For the loss and penalty functions, we will use methods available from the <code>CounterfactualExplanations.Objectives</code> module, while for <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Clambda" alt="\lambda" title="\lambda" class="math inline"> we will use a literal:</p>
 <div id="fa8a1842" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>

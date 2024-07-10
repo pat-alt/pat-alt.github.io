@@ -12,7 +12,6 @@
   <meta name="generator" content="quarto-1.4.550">
 
   <meta name="author" content="Patrick Altmeyer">
-  <meta name="dcterms.date" content="2024-07-03">
   <title>patalt - Trustworthy AI in Julia meets Supercomputing</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -31,6 +30,7 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
     /* CSS for citations */
     div.csl-bib-body { }
     div.csl-entry {
@@ -412,7 +412,7 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
+<section id="title-slide" data-background-image="../www/qr.png" data-background-position="bottom right" data-background-size="10%" class="quarto-title-block center">
   <h1 class="title">Trustworthy AI in Julia meets Supercomputing</h1>
   <p class="subtitle">JuliaCon 2024</p>
 
@@ -424,17 +424,10 @@ Patrick Altmeyer
 </div>
 </div>
 
-  <p class="date">2024-07-03</p>
+  <p class="date">Friday, July 12, 2024</p>
 </section>
-<section>
-<section id="taijaparallel.jl" class="title-slide slide level1 center">
-<h1><a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl">TaijaParallel.jl</a></h1>
-<p><a href="https://JuliaTrustworthyAI.github.io/TaijaParallel.jl/stable/"><img data-src="https://img.shields.io/badge/docs-stable-blue.svg" alt="Stable"></a> <a href="https://JuliaTrustworthyAI.github.io/TaijaParallel.jl/dev/"><img data-src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Dev"></a> <a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/actions/workflows/CI.yml?query=branch%3Amain"><img data-src="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/actions/workflows/CI.yml/badge.svg?branch=main" alt="Build Status"></a> <a href="https://codecov.io/gh/JuliaTrustworthyAI/TaijaParallel.jl"><img data-src="https://codecov.io/gh/JuliaTrustworthyAI/TaijaParallel.jl/branch/main/graph/badge.svg" alt="Coverage"></a> <a href="https://github.com/invenia/BlueStyle"><img data-src="https://img.shields.io/badge/code%20style-blue-4495d1.svg" alt="Code Style: Blue"></a> <a href="https://github.com/JuliaTesting/Aqua.jl"><img data-src="https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg" alt="Aqua QA"></a></p>
-<p>This package adds custom support for parallelization for certain <a href="https://github.com/JuliaTrustworthyAI">Taija</a> packages.</p>
-</section>
-<section id="whats-taija" class="slide level2">
-<h2>What’s Taija?</h2>
-<p>Growing ecosystem of packages geared towards <em>T</em>rustworthy <em>A</em>rtificial <em>I</em>ntelligence in <em>J</em>uli<em>a</em>—<a href="https://github.com/JuliaTrustworthyAI">Taija</a>.</p>
+<section id="trustworthy-ai-in-julia" class="slide level2">
+<h2><span style="color:#389836;">T</span>rustworthy <span style="color:#9558B2;">AI</span> in <span style="color:#CB3C33;">J</span>uli<span style="color:#CB3C33;">A</span></h2>
 <div class="cell" data-reveal="true" data-layout-align="default">
 <div class="cell-output-display">
 <div id="fig-overview" class="quarto-figure quarto-figure-center quarto-float">
@@ -477,27 +470,50 @@ flowchart TB
     lr["LaplaceRedux.jl"]
     jem["JointEnergyModels.jl"]
 
+    %% External
+    mlj["MLJ.jl"]
+    flux["Flux.jl"]
+
     class base base;
     class interop,data,parallel,plotting taija;
     class ce,cp,lr,jem core;
 
     %% Graph
-    subgraph "Meta Packages"
-        data &amp; plotting &amp; parallel &amp; interop
-    end
+    base --&gt; ce &amp; cp &amp; lr &amp; jem
 
     subgraph "Core Packages"
         ce &amp; cp &amp; lr &amp; jem 
+    end
+
+    subgraph "Meta Packages"
+        data &amp; plotting &amp; parallel &amp; interop
+    end 
+
+    subgraph "External Packages"
+        mlj &amp; flux
     end
 </pre>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: An overview of the Taija ecosystem.
+Figure&nbsp;1: Overview of the Taija ecosystem. Early-stage packages ommitted.
 </figcaption>
 </figure>
 </div>
 </div>
+</div>
+</section>
+<section>
+<section id="taijaparallel.jl" class="title-slide slide level1 center">
+<h1><a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl">TaijaParallel.jl</a></h1>
+<p><a href="https://JuliaTrustworthyAI.github.io/TaijaParallel.jl/stable/"><img data-src="https://img.shields.io/badge/docs-stable-blue.svg" alt="Stable"></a> <a href="https://JuliaTrustworthyAI.github.io/TaijaParallel.jl/dev/"><img data-src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Dev"></a> <a href="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/actions/workflows/CI.yml?query=branch%3Amain"><img data-src="https://github.com/JuliaTrustworthyAI/TaijaParallel.jl/actions/workflows/CI.yml/badge.svg?branch=main" alt="Build Status"></a> <a href="https://codecov.io/gh/JuliaTrustworthyAI/TaijaParallel.jl"><img data-src="https://codecov.io/gh/JuliaTrustworthyAI/TaijaParallel.jl/branch/main/graph/badge.svg" alt="Coverage"></a> <a href="https://github.com/invenia/BlueStyle"><img data-src="https://img.shields.io/badge/code%20style-blue-4495d1.svg" alt="Code Style: Blue"></a> <a href="https://github.com/JuliaTesting/Aqua.jl"><img data-src="https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg" alt="Aqua QA"></a></p>
+<p>This package adds custom support for parallelization for certain <a href="https://github.com/JuliaTrustworthyAI">Taija</a> packages.</p>
+<div class="fragment">
+<ul>
+<li>Intuitive user interface.</li>
+<li>Support for multi-threading and multi-processing.</li>
+<li>Easy to extend to new parallelization backends and functions.</li>
+</ul>
 </div>
 </section>
 <section id="why-supercomputing" class="slide level2">
@@ -505,7 +521,7 @@ Figure&nbsp;1: An overview of the Taija ecosystem.
 <p>Efforts towards trustworthy AI tend to increase the computational burden involved in training or inference:</p>
 <div class="fragment">
 <ul>
-<li>Explainable AI: we are often required to generate many explanations for many individuals.</li>
+<li>Explainable AI: we are often required to generate many <em>local</em> explanations for many individuals.</li>
 <li>Conformal Prediction: many techniques involve cross-validation or bootstrapping.</li>
 <li>(Quasi) Bayesian DL like deep ensembles.</li>
 </ul>
@@ -518,21 +534,33 @@ Figure&nbsp;1: An overview of the Taija ecosystem.
 </div>
 </section></section>
 <section>
-<section id="motivating-example-counterfactual-explanations" class="title-slide slide level1 center">
-<h1>Motivating Example: Counterfactual Explanations</h1>
-<p>The package was developed to power <a href="https://arxiv.org/abs/2312.10648">research</a> presented at AAAI 2024 <span class="citation" data-cites="altmeyer2024faithful">(<a href="#/references" role="doc-biblioref" onclick="">Altmeyer et al. 2024</a>)</span>. The project involved large benchmarks of counterfactual explanations that had to be run on a supercomputer.</p>
+<section id="motivating-example" class="title-slide slide level1 center">
+<h1>Motivating Example</h1>
+<blockquote>
+<p>Generate ALL the Counterfactual Explanations!</p>
+</blockquote>
+<ul>
+<li>The package was developed to power <a href="https://arxiv.org/abs/2312.10648">research</a> presented at AAAI 2024 <span class="citation" data-cites="altmeyer2024faithful">(<a href="#/references" role="doc-biblioref" onclick="">Altmeyer et al. 2024</a>)</span>.</li>
+<li>The project involved large benchmarks of counterfactual explanations that had to be run on a supercomputer.</li>
+</ul>
 </section>
 <section id="benchmarking-explanations" class="slide level2 nostretch">
 <h2>Benchmarking Explanations</h2>
+<div class="columns">
+<div class="column" style="width:75%;">
+<p><strong>Goal</strong>: Generate faithful counterfactual explanations that reflect model quality.</p>
 <ul>
 <li>Final benchmark: total of <strong>~10 million</strong> counterfactuals across 8 datasets and different DL models.</li>
 <li>Parallelized across <strong>50 to 300 CPUs</strong> on <a href="https://www.tudelft.nl/dhpc/system">DelftBlue</a> using combination of multi-threading and -processing.</li>
 </ul>
+</div><div class="column" style="width:25%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="www/poc_gradient_fields.png" style="width:75.0%"></p>
-<figcaption>Gradients and counterfactuals for different generators. Source: <span class="citation" data-cites="altmeyer2024faithful">Altmeyer et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span></figcaption>
+<p><img data-src="www/mnist_eccco.png"></p>
+<figcaption>Counterfactual explanations for different models. Source: <span class="citation" data-cites="altmeyer2024faithful">Altmeyer et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span></figcaption>
 </figure>
+</div>
+</div>
 </div>
 </section>
 <section id="source-code" class="slide level2">
@@ -543,9 +571,15 @@ Figure&nbsp;1: An overview of the Taija ecosystem.
 <li>Functionality now being absorbed by CounterfactualExplanations.jl.</li>
 </ul>
 <div class="fragment">
+<div class="columns">
+<div class="column" style="width:90%;">
 <blockquote>
 <p>Code is open-sourced and available on <a href="https://github.com/pat-alt/ECCCo.jl/tree/main">GitHub</a>.</p>
 </blockquote>
+</div><div class="column" style="width:10%;">
+<p><img data-src="www/qr-eccco.png"></p>
+</div>
+</div>
 </div>
 </section></section>
 <section>
@@ -648,7 +682,6 @@ Altmeyer, Patrick, Mojtaba Farmanbar, Arie van Deursen, and Cynthia CS Liem. 202
   <script src="../../../../../site_libs/revealjs/plugin/notes/notes.js"></script>
   <script src="../../../../../site_libs/revealjs/plugin/search/search.js"></script>
   <script src="../../../../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="../../../../../site_libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
@@ -815,27 +848,9 @@ Altmeyer, Patrick, Mojtaba Farmanbar, Arie van Deursen, and Cynthia CS Liem. 202
         // Factor of the display size that should remain empty around the content
         margin: 0.1,
 
-        math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
-          config: 'TeX-AMS_HTML-full',
-          tex2jax: {
-            inlineMath: [['\\(','\\)']],
-            displayMath: [['\\[','\\]']],
-            balanceBraces: true,
-            processEscapes: false,
-            processRefs: true,
-            processEnvironments: true,
-            preview: 'TeX',
-            skipTags: ['script','noscript','style','textarea','pre','code'],
-            ignoreClass: 'tex2jax_ignore',
-            processClass: 'tex2jax_process'
-          },
-        },
-
         // reveal.js plugins
         plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
 
-          RevealMath,
           RevealNotes,
           RevealSearch,
           RevealZoom

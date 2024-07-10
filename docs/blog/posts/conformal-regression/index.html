@@ -23,6 +23,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { line-height: 1.25; }
@@ -137,35 +138,6 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
@@ -379,7 +351,7 @@ Interactive Version
 <span id="cb1-12"><a href="#cb1-12"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p><a href="#fig-data" class="quarto-xref">Figure&nbsp;1</a> illustrates our observations (dots) along with the ground-truth mapping from inputs to outputs (line). We have defined that mapping <span class="math inline">\(f: \mathcal{X} \mapsto \mathcal{Y}\)</span> as follows:</p>
+<p><a href="#fig-data" class="quarto-xref">Figure&nbsp;1</a> illustrates our observations (dots) along with the ground-truth mapping from inputs to outputs (line). We have defined that mapping <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20f%3A%20%5Cmathcal%7BX%7D%20%5Cmapsto%20%5Cmathcal%7BY%7D" alt="f: \mathcal{X} \mapsto \mathcal{Y}" title="f: \mathcal{X} \mapsto \mathcal{Y}" class="math inline"> as follows:</p>
 <div id="2ca878e2" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
@@ -1978,7 +1950,7 @@ Figure&nbsp;2: Point predictions for our machine learning model.
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a>MLJBase.<span class="fu">fit!</span>(mach, rows<span class="op">=</span>train, verbosity<span class="op">=</span><span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Now let us look at the predictions for our test data again. The chart below shows the results for our conformalized model. Predictions from conformal regressors are range-valued: for each new sample the model returns an interval <span class="math inline">\((y_{\text{lb}},y_{\text{ub}})\in\mathcal{Y}\)</span> that covers the test sample with a user-specified probability <span class="math inline">\((1-\alpha)\)</span>, where <span class="math inline">\(\alpha\)</span> is the expected error rate. This is known as the <strong>marginal coverage guarantee</strong> and it is proven to hold under the assumption that training and test data are exchangeable.</p>
+<p>Now let us look at the predictions for our test data again. The chart below shows the results for our conformalized model. Predictions from conformal regressors are range-valued: for each new sample the model returns an interval <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%28y_%7B%5Ctext%7Blb%7D%7D%2Cy_%7B%5Ctext%7Bub%7D%7D%29%5Cin%5Cmathcal%7BY%7D" alt="(y_{\text{lb}},y_{\text{ub}})\in\mathcal{Y}" title="(y_{\text{lb}},y_{\text{ub}})\in\mathcal{Y}" class="math inline"> that covers the test sample with a user-specified probability <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%281-%5Calpha%29" alt="(1-\alpha)" title="(1-\alpha)" class="math inline">, where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Calpha" alt="\alpha" title="\alpha" class="math inline"> is the expected error rate. This is known as the <strong>marginal coverage guarantee</strong> and it is proven to hold under the assumption that training and test data are exchangeable.</p>
 <div id="cell-fig-interval" class="cell" data-execution_count="13">
 <div id="fig-interval" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored" data-execution_count="14">
 <figure class="quarto-float quarto-float-fig figure">
@@ -2437,7 +2409,7 @@ Figure&nbsp;3: Prediction intervals for our conformalized machine learning model
 </figure>
 </div>
 </div>
-<p>Intuitively, a higher coverage rate leads to larger prediction intervals: since a larger interval covers a larger subspace of <span class="math inline">\(\mathcal{Y}\)</span>, it is more likely to cover the true value.</p>
+<p>Intuitively, a higher coverage rate leads to larger prediction intervals: since a larger interval covers a larger subspace of <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathcal%7BY%7D" alt="\mathcal{Y}" title="\mathcal{Y}" class="math inline">, it is more likely to cover the true value.</p>
 <p>I don’t expect you to believe me that the marginal coverage property really holds. In fact, I couldn’t believe it myself when I first learned about it. If you like mathematical proofs, you can find one in this <a href="https://arxiv.org/pdf/2107.07511.pdf">tutorial</a>, for example. If you like convincing yourself through empirical observations, read on below …</p>
 </section>
 <section id="evaluation" class="level2">
@@ -2461,7 +2433,7 @@ Coverage per fold: [0.94, 0.928, 0.892, 0.874, 0.898, 0.922]</code></pre>
 <blockquote class="blockquote">
 <p>✅ ✅ ✅ Great! We got an empirical coverage rate that is slightly higher than desired 😁 … but why isn’t it exactly the same?</p>
 </blockquote>
-<p>In most cases it will be slightly higher than desired, since <span class="math inline">\((1-\alpha)\)</span> is a lower bound. But note that it can also be slightly lower than desired. That is because the coverage property is “marginal” in the sense that the probability is averaged over the randomness in the data. For most purposes a large enough calibration set size (<span class="math inline">\(n&gt;1000\)</span>) mitigates that randomness enough. Depending on your choices above, the calibration set may be quite small (set to 500), which can lead to <strong>coverage slack</strong> (see Section 3 in the <a href="https://arxiv.org/pdf/2107.07511.pdf">tutorial</a>).</p>
+<p>In most cases it will be slightly higher than desired, since <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%281-%5Calpha%29" alt="(1-\alpha)" title="(1-\alpha)" class="math inline"> is a lower bound. But note that it can also be slightly lower than desired. That is because the coverage property is “marginal” in the sense that the probability is averaged over the randomness in the data. For most purposes a large enough calibration set size (<img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20n%3E1000" alt="n>1000" title="n>1000" class="math inline">) mitigates that randomness enough. Depending on your choices above, the calibration set may be quite small (set to 500), which can lead to <strong>coverage slack</strong> (see Section 3 in the <a href="https://arxiv.org/pdf/2107.07511.pdf">tutorial</a>).</p>
 </div>
 </div>
 <section id="so-whats-happening-under-the-hood" class="level3">
@@ -2472,7 +2444,7 @@ Coverage per fold: [0.94, 0.928, 0.892, 0.874, 0.898, 0.922]</code></pre>
 <li>Train the machine learning model on the proper training set.</li>
 <li>Using some heuristic notion of uncertainty (e.g., absolute error in the regression case), compute nonconformity scores using the calibration data and the fitted model.</li>
 <li>For the given coverage ratio compute the corresponding quantile of the empirical distribution of nonconformity scores.</li>
-<li>For the given quantile and test sample <span class="math inline">\(X_{\text{test}}\)</span>, form the corresponding conformal prediction set like so: <span class="math inline">\(C(X_{\text{test}})=\{y:s(X_{\text{test}},y) \le \hat{q}\}\)</span></li>
+<li>For the given quantile and test sample <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20X_%7B%5Ctext%7Btest%7D%7D" alt="X_{\text{test}}" title="X_{\text{test}}" class="math inline">, form the corresponding conformal prediction set like so: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20C%28X_%7B%5Ctext%7Btest%7D%7D%29%3D%5C%7By%3As%28X_%7B%5Ctext%7Btest%7D%7D%2Cy%29%20%5Cle%20%5Chat%7Bq%7D%5C%7D" alt="C(X_{\text{test}})=\{y:s(X_{\text{test}},y) \le \hat{q}\}" title="C(X_{\text{test}})=\{y:s(X_{\text{test}},y) \le \hat{q}\}" class="math inline"></li>
 </ol>
 </section>
 </section>

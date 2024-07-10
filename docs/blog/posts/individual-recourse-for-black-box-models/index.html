@@ -23,6 +23,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { line-height: 1.25; }
@@ -134,35 +135,6 @@ gtag('js', new Date());
 gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 </script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
@@ -345,7 +317,7 @@ Figure&nbsp;1: Empirical distributions of simulated data set describing cats and
 </figcaption>
 </figure>
 </div>
-<p>Much to her dismay, Kitty has been recognized as a cat by a linear classifier <span class="math inline">\(g_n(X)\)</span> that we trained through stochastic gradient descent using the data on animals’ height and tail length. Once again interested readers may find technical details and code in the annex below. <a href="#fig-class" class="quarto-xref">Figure&nbsp;2</a> shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty’s location indicated by a red circle. Can we provide individual recourse to Kitty?</p>
+<p>Much to her dismay, Kitty has been recognized as a cat by a linear classifier <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20g_n%28X%29" alt="g_n(X)" title="g_n(X)" class="math inline"> that we trained through stochastic gradient descent using the data on animals’ height and tail length. Once again interested readers may find technical details and code in the annex below. <a href="#fig-class" class="quarto-xref">Figure&nbsp;2</a> shows the resulting linear separation in the attribute space with the decision boundary in solid black and Kitty’s location indicated by a red circle. Can we provide individual recourse to Kitty?</p>
 <div id="fig-class" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-class-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -358,12 +330,12 @@ Figure&nbsp;2: Linear separation of cats and dogs in the 2-dimensional attribute
 </div>
 <p>Let’s see if and how we can apply <code>REVISE</code> to Kitty’s problem. The following summary should give you some flavour of how the algorithm works:</p>
 <ol type="1">
-<li>Initialize <span class="math inline">\(\mathbf{x}_i'^{(0)}\)</span>, that is the attributes that will be revised recursively. Kitty’s original attributes seem like a reasonable place to start.</li>
-<li>Through gradient descent recursively revise <span class="math inline">\(\mathbf{x}_i'^{(t)}\)</span> until <span class="math inline">\(g_n(\mathbf{x}_i'^{(T)})=\)</span>🐶. At this point <span class="math inline">\(T\)</span> the descent terminates since for these revised attributes the classifier labels Kitty as a dog.</li>
-<li>Return <span class="math inline">\(\delta_i=\mathbf{x}_i'^{(T)}-\mathbf{x}_i\)</span>, that is the individual recourse for Kitty.</li>
+<li>Initialize <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bx%7D_i%27%5E%7B%280%29%7D" alt="\mathbf{x}_i'^{(0)}" title="\mathbf{x}_i'^{(0)}" class="math inline">, that is the attributes that will be revised recursively. Kitty’s original attributes seem like a reasonable place to start.</li>
+<li>Through gradient descent recursively revise <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bx%7D_i%27%5E%7B%28t%29%7D" alt="\mathbf{x}_i'^{(t)}" title="\mathbf{x}_i'^{(t)}" class="math inline"> until <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20g_n%28%5Cmathbf%7Bx%7D_i%27%5E%7B%28T%29%7D%29%3D" alt="g_n(\mathbf{x}_i'^{(T)})=" title="g_n(\mathbf{x}_i'^{(T)})=" class="math inline">🐶. At this point <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20T" alt="T" title="T" class="math inline"> the descent terminates since for these revised attributes the classifier labels Kitty as a dog.</li>
+<li>Return <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cdelta_i%3D%5Cmathbf%7Bx%7D_i%27%5E%7B%28T%29%7D-%5Cmathbf%7Bx%7D_i" alt="\delta_i=\mathbf{x}_i'^{(T)}-\mathbf{x}_i" title="\delta_i=\mathbf{x}_i'^{(T)}-\mathbf{x}_i" class="math inline">, that is the individual recourse for Kitty.</li>
 </ol>
-<p><a href="#fig-revise" class="quarto-xref">Figure&nbsp;3</a> illustrates what happens when this approach is applied to Kitty’s problem. The different panels show the results for different values of a regularization parameter <span class="math inline">\(\lambda\)</span> that governs the trade-off between achieving the desired label switch and keeping the distance between the original (<span class="math inline">\(\mathbf{x}_i\)</span>) and revised (<span class="math inline">\(\mathbf{x}_i'\)</span>) attributes small. In all but one case, <code>REVISE</code> converges: a decrease in tail length along with an increase in height eventually allows Kitty to cross the decision boundary. In other words, we have successfully turned Kitty into a dog - at least in the eyes of the linear classifier!</p>
-<p>We also observe that as we increase <span class="math inline">\(\lambda\)</span> for a fixed learning rate, <code>REVISE</code> takes longer to converge. This should come as no surprise, since higher values of <span class="math inline">\(\lambda\)</span> lead to greater regularization with respect to the penalty we place on the distance that Kitty has to travel. When we penalize too much (<span class="math inline">\(\lambda=10\)</span>), Kitty never reaches the decision boundary, because she is reluctant to change her characteristics beyond a certain point. While not visible to the naked eye, in this particular example <span class="math inline">\(\lambda=0.001\)</span> corresponds to the best choice among the candidate values.</p>
+<p><a href="#fig-revise" class="quarto-xref">Figure&nbsp;3</a> illustrates what happens when this approach is applied to Kitty’s problem. The different panels show the results for different values of a regularization parameter <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Clambda" alt="\lambda" title="\lambda" class="math inline"> that governs the trade-off between achieving the desired label switch and keeping the distance between the original (<img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bx%7D_i" alt="\mathbf{x}_i" title="\mathbf{x}_i" class="math inline">) and revised (<img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bx%7D_i%27" alt="\mathbf{x}_i'" title="\mathbf{x}_i'" class="math inline">) attributes small. In all but one case, <code>REVISE</code> converges: a decrease in tail length along with an increase in height eventually allows Kitty to cross the decision boundary. In other words, we have successfully turned Kitty into a dog - at least in the eyes of the linear classifier!</p>
+<p>We also observe that as we increase <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Clambda" alt="\lambda" title="\lambda" class="math inline"> for a fixed learning rate, <code>REVISE</code> takes longer to converge. This should come as no surprise, since higher values of <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Clambda" alt="\lambda" title="\lambda" class="math inline"> lead to greater regularization with respect to the penalty we place on the distance that Kitty has to travel. When we penalize too much (<img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Clambda%3D10" alt="\lambda=10" title="\lambda=10" class="math inline">), Kitty never reaches the decision boundary, because she is reluctant to change her characteristics beyond a certain point. While not visible to the naked eye, in this particular example <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Clambda%3D0.001" alt="\lambda=0.001" title="\lambda=0.001" class="math inline"> corresponds to the best choice among the candidate values.</p>
 <div id="fig-revise" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-revise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -402,20 +374,24 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 <section id="linear-classifier" class="level3">
 <h3 class="anchored" data-anchor-id="linear-classifier">Linear classifier</h3>
 <p>Linear classification is implemented through stochastic gradient descent (SGD) with Hinge loss</p>
-<p><span class="math display">\[
-\begin{aligned}
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Cdisplaystyle%20%5Cbegin%7Baligned%7D%0A%26%26%20%5Cell%28-%5Cmathbf%7Bw%7D%5ET%5Cmathbf%7Bx%7D_i%20y_i%29%26%3D%281-%5Cmathbf%7Bw%7D%5ET%5Cmathbf%7Bx%7D_i%20y_i%29_%2B%20%5C%5C%0A%5Cend%7Baligned%7D" alt="\begin{aligned}
 &amp;&amp; \ell(-\mathbf{w}^T\mathbf{x}_i y_i)&amp;=(1-\mathbf{w}^T\mathbf{x}_i y_i)_+ \\
-\end{aligned}
-\]</span></p>
-<p>where <span class="math inline">\(\mathbf{w}\)</span> is a coefficient vector, <span class="math inline">\(\mathbf{x}_i\)</span> is the attribute vector of individual <span class="math inline">\(i\)</span> and <span class="math inline">\(y_i\)</span> is the individual’s outcome. Since we apply SGD in order to minimize the loss function <span class="math inline">\(\ell\)</span> by varying <span class="math inline">\(\mathbf{w}\)</span>, we need an expression for its gradient with respect to <span class="math inline">\(\mathbf{w}\)</span>, which is given by:</p>
-<p><span id="eq-hinge"><span class="math display">\[
-\begin{equation}
+\end{aligned}" title="\begin{aligned}
+&amp;&amp; \ell(-\mathbf{w}^T\mathbf{x}_i y_i)&amp;=(1-\mathbf{w}^T\mathbf{x}_i y_i)_+ \\
+\end{aligned}" class="math display"></p>
+<p>where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D" alt="\mathbf{w}" title="\mathbf{w}" class="math inline"> is a coefficient vector, <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bx%7D_i" alt="\mathbf{x}_i" title="\mathbf{x}_i" class="math inline"> is the attribute vector of individual <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20i" alt="i" title="i" class="math inline"> and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20y_i" alt="y_i" title="y_i" class="math inline"> is the individual’s outcome. Since we apply SGD in order to minimize the loss function <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cell" alt="\ell" title="\ell" class="math inline"> by varying <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D" alt="\mathbf{w}" title="\mathbf{w}" class="math inline">, we need an expression for its gradient with respect to <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D" alt="\mathbf{w}" title="\mathbf{w}" class="math inline">, which is given by:</p>
+<p><span id="eq-hinge"><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Cdisplaystyle%20%5Cbegin%7Bequation%7D%20%0A%5Cbegin%7Baligned%7D%0A%26%26%20%5Cnabla_%7B%5Cmathbf%7BW%7D%7D%20%5Cleft%28%20%5Cell%28-%5Cmathbf%7Bw%7D%5ET%5Cmathbf%7Bx%7D_i%20y_i%29%20%5Cright%29%20%26%3D%20%5Cbegin%7Bcases%7D%20-%5Cmathbf%7Bx%7D_i%20y_i%20%26%20%5Ctext%7Bif%7D%20%5C%20%5C%20%5C%20%5Cmathbf%7Bw%7D%5ET%5Cmathbf%7Bx%7D_i%20y_i%20%5Cle%201%5C%5C%200%20%26%20%5Ctext%7Botherwise%7D%20%5Cend%7Bcases%7D%20%5C%5C%0A%5Cend%7Baligned%7D%0A%5Cend%7Bequation%7D%0A%20%5Cqquad%281%29" alt="\begin{equation} 
 \begin{aligned}
 &amp;&amp; \nabla_{\mathbf{W}} \left( \ell(-\mathbf{w}^T\mathbf{x}_i y_i) \right) &amp;= \begin{cases} -\mathbf{x}_i y_i &amp; \text{if} \ \ \ \mathbf{w}^T\mathbf{x}_i y_i \le 1\\ 0 &amp; \text{otherwise} \end{cases} \\
 \end{aligned}
 \end{equation}
-\tag{1}\]</span></span></p>
-<p>The code below uses this analytical solution to perform SGD over <span class="math inline">\(T\)</span> iterations or as long as updates yield feasible parameter values. As the final vector of coefficients the function returns <span class="math inline">\(\mathbf{\bar{w}}= \frac{1}{T} \sum_{t=1}^{T} \mathbf{w}_t\)</span>. Denoting the optimal coefficient vector as <span class="math inline">\(\mathbf{w}^*\)</span>, it can be shown that under certain conditions <span class="math inline">\(\ell(\mathbf{\bar{w}})\rightarrow\ell(\mathbf{w}^*)\)</span> as <span class="math inline">\(T\rightarrow\infty\)</span>.</p>
+ \qquad(1)" title="\begin{equation} 
+\begin{aligned}
+&amp;&amp; \nabla_{\mathbf{W}} \left( \ell(-\mathbf{w}^T\mathbf{x}_i y_i) \right) &amp;= \begin{cases} -\mathbf{x}_i y_i &amp; \text{if} \ \ \ \mathbf{w}^T\mathbf{x}_i y_i \le 1\\ 0 &amp; \text{otherwise} \end{cases} \\
+\end{aligned}
+\end{equation}
+ \qquad(1)" class="math display"></span></p>
+<p>The code below uses this analytical solution to perform SGD over <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20T" alt="T" title="T" class="math inline"> iterations or as long as updates yield feasible parameter values. As the final vector of coefficients the function returns <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7B%5Cbar%7Bw%7D%7D%3D%20%5Cfrac%7B1%7D%7BT%7D%20%5Csum_%7Bt%3D1%7D%5E%7BT%7D%20%5Cmathbf%7Bw%7D_t" alt="\mathbf{\bar{w}}= \frac{1}{T} \sum_{t=1}^{T} \mathbf{w}_t" title="\mathbf{\bar{w}}= \frac{1}{T} \sum_{t=1}^{T} \mathbf{w}_t" class="math inline">. Denoting the optimal coefficient vector as <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D%5E%2A" alt="\mathbf{w}^*" title="\mathbf{w}^*" class="math inline">, it can be shown that under certain conditions <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cell%28%5Cmathbf%7B%5Cbar%7Bw%7D%7D%29%5Crightarrow%5Cell%28%5Cmathbf%7Bw%7D%5E%2A%29" alt="\ell(\mathbf{\bar{w}})\rightarrow\ell(\mathbf{w}^*)" title="\ell(\mathbf{\bar{w}})\rightarrow\ell(\mathbf{w}^*)" class="math inline"> as <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20T%5Crightarrow%5Cinfty" alt="T\rightarrow\infty" title="T\rightarrow\infty" class="math inline">.</p>
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Code</summary>
@@ -516,24 +492,24 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 <section id="revise-simplified" class="level3">
 <h3 class="anchored" data-anchor-id="revise-simplified"><code>REVISE</code> (simplified)</h3>
 <p>As flagged above, we are looking at a slightly simplified version of the algorithm presented in <span class="citation" data-cites="joshi2019realistic">Joshi et al. (<a href="#ref-joshi2019realistic" role="doc-biblioref">2019</a>)</span>. In particular, the approach here does not incorporate the threshold on the likelihood nor does it account for immutable attributes.</p>
-<p>Let <span class="math inline">\(y\in\{-1,1\}\)</span> be a binary outcome variable, <span class="math inline">\(X\in\mathbb{R}^d\)</span> a feature matrix containing individuals’ attributes and <span class="math inline">\(g_n(X)\)</span> a corresponding data-dependent classifier. Suppose <span class="math inline">\(y_i=-1\)</span> (the negative outcome) for some individual characterized by attributes <span class="math inline">\(\mathbf{x}_i\)</span>. Then we want to find <span class="math inline">\(\mathbf{x}_i'\)</span> closest to <span class="math inline">\(\mathbf{x}_i\)</span> such that the classifier assigns the positive outcome <span class="math inline">\(g(\mathbf{x}_i^{'})=1\)</span>. In order to do so, we use gradient descent with Hinge loss <span class="math inline">\(\ell\)</span> to minimize the following function</p>
-<p><span class="math display">\[
-\begin{aligned}
+<p>Let <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20y%5Cin%5C%7B-1%2C1%5C%7D" alt="y\in\{-1,1\}" title="y\in\{-1,1\}" class="math inline"> be a binary outcome variable, <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20X%5Cin%5Cmathbb%7BR%7D%5Ed" alt="X\in\mathbb{R}^d" title="X\in\mathbb{R}^d" class="math inline"> a feature matrix containing individuals’ attributes and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20g_n%28X%29" alt="g_n(X)" title="g_n(X)" class="math inline"> a corresponding data-dependent classifier. Suppose <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20y_i%3D-1" alt="y_i=-1" title="y_i=-1" class="math inline"> (the negative outcome) for some individual characterized by attributes <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bx%7D_i" alt="\mathbf{x}_i" title="\mathbf{x}_i" class="math inline">. Then we want to find <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bx%7D_i%27" alt="\mathbf{x}_i'" title="\mathbf{x}_i'" class="math inline"> closest to <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bx%7D_i" alt="\mathbf{x}_i" title="\mathbf{x}_i" class="math inline"> such that the classifier assigns the positive outcome <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20g%28%5Cmathbf%7Bx%7D_i%5E%7B%27%7D%29%3D1" alt="g(\mathbf{x}_i^{'})=1" title="g(\mathbf{x}_i^{'})=1" class="math inline">. In order to do so, we use gradient descent with Hinge loss <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cell" alt="\ell" title="\ell" class="math inline"> to minimize the following function</p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Cdisplaystyle%20%5Cbegin%7Baligned%7D%0A%26%26%20%5Cmin_%7B%5Cmathbf%7Bx%7D_i%5E%7B%27%7D%7D%26%20%5C%20%5Cell%28g_n%28%5Cmathbf%7Bx%7D_i%5E%7B%27%7D%29%2C1%29%20%2B%20%5Clambda%20d%28%5Cmathbf%7Bx%7D_i%5E%7B%27%7D%2C%5Cmathbf%7Bx%7D_i%29%20%5C%5C%0A%5Cend%7Baligned%7D" alt="\begin{aligned}
 &amp;&amp; \min_{\mathbf{x}_i^{'}}&amp; \ \ell(g_n(\mathbf{x}_i^{'}),1) + \lambda d(\mathbf{x}_i^{'},\mathbf{x}_i) \\
-\end{aligned}
-\]</span></p>
-<p>where <span class="math inline">\(d=||\mathbf{x}_i^{'}-\mathbf{x}_i||\)</span> denotes the Euclidean distance. Note that this time we take the coefficient vector defining <span class="math inline">\(g_n\)</span> as given and instead vary the attributes. In particular, we will perform gradient descent steps as follows</p>
-<p><span class="math display">\[
-\begin{aligned}
+\end{aligned}" title="\begin{aligned}
+&amp;&amp; \min_{\mathbf{x}_i^{'}}&amp; \ \ell(g_n(\mathbf{x}_i^{'}),1) + \lambda d(\mathbf{x}_i^{'},\mathbf{x}_i) \\
+\end{aligned}" class="math display"></p>
+<p>where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20d%3D%7C%7C%5Cmathbf%7Bx%7D_i%5E%7B%27%7D-%5Cmathbf%7Bx%7D_i%7C%7C" alt="d=||\mathbf{x}_i^{'}-\mathbf{x}_i||" title="d=||\mathbf{x}_i^{'}-\mathbf{x}_i||" class="math inline"> denotes the Euclidean distance. Note that this time we take the coefficient vector defining <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20g_n" alt="g_n" title="g_n" class="math inline"> as given and instead vary the attributes. In particular, we will perform gradient descent steps as follows</p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Cdisplaystyle%20%5Cbegin%7Baligned%7D%0A%26%26%20%7B%5Cmathbf%7Bx%7D_i%5E%7B%27%7D%7D%5Et%26%5Cleftarrow%20%7B%5Cmathbf%7Bx%7D_i%5E%7B%27%7D%7D%5E%7Bt-1%7D%20%2B%20%5Ceta%20%5Cnabla_%7B%7B%5Cmathbf%7Bx%7D_i%5E%7B%27%7D%7D%7D%20%5Cleft%28%20%5Cell%28g_n%28%5Cmathbf%7Bx%7D_i%5E%7B%27%7D%29%2C1%29%20%2B%20%5Clambda%20d%28%5Cmathbf%7Bx%7D_i%5E%7B%27%7D%2C%5Cmathbf%7Bx%7D_i%29%20%20%5Cright%29%20%20%5C%5C%0A%5Cend%7Baligned%7D" alt="\begin{aligned}
 &amp;&amp; {\mathbf{x}_i^{'}}^t&amp;\leftarrow {\mathbf{x}_i^{'}}^{t-1} + \eta \nabla_{{\mathbf{x}_i^{'}}} \left( \ell(g_n(\mathbf{x}_i^{'}),1) + \lambda d(\mathbf{x}_i^{'},\mathbf{x}_i)  \right)  \\
-\end{aligned}
-\]</span></p>
-<p>where <span class="math inline">\(\eta\)</span> is the learning rate. The descent step is almost equivalent to the one described in <span class="citation" data-cites="joshi2019realistic">Joshi et al. (<a href="#ref-joshi2019realistic" role="doc-biblioref">2019</a>)</span>, but here we greatly simplify things by optimizing directly in the attribute space instead of a latent space. The gradient of the loss function looks very similar to <a href="#eq-hinge" class="quarto-xref">Equation&nbsp;1</a>. With respect to the Euclidean distance partial derivatives are of the following form:</p>
-<p><span class="math display">\[
-\begin{aligned}
+\end{aligned}" title="\begin{aligned}
+&amp;&amp; {\mathbf{x}_i^{'}}^t&amp;\leftarrow {\mathbf{x}_i^{'}}^{t-1} + \eta \nabla_{{\mathbf{x}_i^{'}}} \left( \ell(g_n(\mathbf{x}_i^{'}),1) + \lambda d(\mathbf{x}_i^{'},\mathbf{x}_i)  \right)  \\
+\end{aligned}" class="math display"></p>
+<p>where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Ceta" alt="\eta" title="\eta" class="math inline"> is the learning rate. The descent step is almost equivalent to the one described in <span class="citation" data-cites="joshi2019realistic">Joshi et al. (<a href="#ref-joshi2019realistic" role="doc-biblioref">2019</a>)</span>, but here we greatly simplify things by optimizing directly in the attribute space instead of a latent space. The gradient of the loss function looks very similar to <a href="#eq-hinge" class="quarto-xref">Equation&nbsp;1</a>. With respect to the Euclidean distance partial derivatives are of the following form:</p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Cdisplaystyle%20%5Cbegin%7Baligned%7D%0A%26%26%20%20%5Cfrac%7B%5Cpartial%20%7C%7C%5Cmathbf%7Bx%7D_i%5E%7B%27%7D-%5Cmathbf%7Bx%7D_i%7C%7C%7D%7B%5Cpartial%20%7Bx_i%27%7D%5E%7B%28d%29%7D%7D%20%20%26%3D%20%5Cfrac%7B%7Bx_i%27%7D%5E%7B%28d%29%7D-%7Bx_i%7D%5E%7B%28d%29%7D%7D%7B%7C%7C%5Cmathbf%7Bx%7D_i%5E%7B%27%7D-%5Cmathbf%7Bx%7D_i%7C%7C%7D%20%5C%5C%0A%5Cend%7Baligned%7D" alt="\begin{aligned}
 &amp;&amp;  \frac{\partial ||\mathbf{x}_i^{'}-\mathbf{x}_i||}{\partial {x_i'}^{(d)}}  &amp;= \frac{{x_i'}^{(d)}-{x_i}^{(d)}}{||\mathbf{x}_i^{'}-\mathbf{x}_i||} \\
-\end{aligned}
-\]</span></p>
+\end{aligned}" title="\begin{aligned}
+&amp;&amp;  \frac{\partial ||\mathbf{x}_i^{'}-\mathbf{x}_i||}{\partial {x_i'}^{(d)}}  &amp;= \frac{{x_i'}^{(d)}-{x_i}^{(d)}}{||\mathbf{x}_i^{'}-\mathbf{x}_i||} \\
+\end{aligned}" class="math display"></p>
 <p>The code that implements this optimization follows below.</p>
 <div class="cell" data-layout-align="center">
 <details class="code-fold">

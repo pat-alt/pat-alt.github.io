@@ -12,7 +12,6 @@
   <meta name="generator" content="quarto-1.4.550">
 
   <meta name="author" content="Patrick Altmeyer">
-  <meta name="dcterms.date" content="2024-06-24">
   <title>patalt - 💰 Trillion Dollar Words in Julia</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -31,6 +30,7 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
     pre > code.sourceCode > span { line-height: 1.25; }
@@ -474,7 +474,7 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
+<section id="title-slide" data-background-image="../www/qr.png" data-background-position="bottom right" data-background-size="10%" class="quarto-title-block center">
   <h1 class="title">💰 Trillion Dollar Words in Julia</h1>
   <p class="subtitle">JuliaCon 2024</p>
 
@@ -486,7 +486,7 @@ Patrick Altmeyer
 </div>
 </div>
 
-  <p class="date">2024-06-24</p>
+  <p class="date">Thursday, July 11, 2024</p>
 </section>
 <section id="trilliondollarwords.jl" class="slide level2">
 <h2><a href="https://github.com/pat-alt/TrillionDollarWords.jl">TrillionDollarWords.jl</a></h2>
@@ -542,7 +542,7 @@ Patrick Altmeyer
 <li>speeches</li>
 </ul>
 <p>by members of the Federal Open Market Committee (FOMC):</p>
-<div id="c529813e" class="cell" data-execution_count="2">
+<div id="14c8743f" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a></a><span class="im">using</span> <span class="bu">TrillionDollarWords</span></span>
 <span id="cb1-2"><a></a><span class="fu">load_all_sentences</span>() <span class="op">|&gt;</span></span>
 <span id="cb1-3"><a></a>  x <span class="op">-&gt;</span> <span class="fu">names</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -566,7 +566,7 @@ Patrick Altmeyer
 <li>Producer Price Index (PPI)</li>
 <li>US Treasury (UST) yields</li>
 </ul>
-<div id="77f7b566" class="cell" data-execution_count="3">
+<div id="dc5c4b85" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a></a><span class="fu">load_all_data</span>() <span class="op">|&gt;</span></span>
 <span id="cb3-2"><a></a>  x <span class="op">-&gt;</span> <span class="fu">names</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
@@ -594,7 +594,7 @@ Patrick Altmeyer
 <li>Uses <a href="https://github.com/chengchingwen/Transformers.jl">Transformers.jl</a> to retrieve the model from <a href="https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves">HuggingFace</a>.</li>
 <li>Any keyword arguments accepted by <code>Transformers.HuggingFace.HGFConfig</code> can also be passed.</li>
 </ul>
-<div id="ba24f7d1" class="cell" data-execution_count="4">
+<div id="1718a21b" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a></a><span class="fu">load_model</span>(; load_head<span class="op">=</span><span class="cn">false</span>, output_hidden_states<span class="op">=</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -604,7 +604,7 @@ Patrick Altmeyer
 <div class="column" style="width:50%;">
 <h4 id="from-scratch">From Scratch</h4>
 <p>Layer-wise activations can be computed as follows:</p>
-<div id="31761ebb" class="cell" data-execution_count="5">
+<div id="217f32e5" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a></a>df <span class="op">=</span> <span class="fu">load_all_sentences</span>()</span>
 <span id="cb6-2"><a></a>mod <span class="op">=</span> <span class="fu">load_model</span>(</span>
 <span id="cb6-3"><a></a>  load_head<span class="op">=</span><span class="cn">false</span>, </span>
@@ -640,8 +640,8 @@ Patrick Altmeyer
 <section id="motivation" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Motivation</h2>
 <ul>
-<li><span class="math inline">\(A_1\)</span>: <span class="math inline">\(enc(\)</span>„It is essential to bring inflation back to target to avoid drifting into deflation territory.“<span class="math inline">\()\)</span></li>
-<li><span class="math inline">\(A_2\)</span>: <span class="math inline">\(enc(\)</span>„It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“<span class="math inline">\()\)</span></li>
+<li><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20A_1" alt="A_1" title="A_1" class="math inline">: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20enc%28" alt="enc(" title="enc(" class="math inline">„It is essential to bring inflation back to target to avoid drifting into deflation territory.“<img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%29" alt=")" title=")" class="math inline"></li>
+<li><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20A_2" alt="A_2" title="A_2" class="math inline">: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20enc%28" alt="enc(" title="enc(" class="math inline">„It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“<img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%29" alt=")" title=")" class="math inline"></li>
 </ul>
 </section>
 <section id="motivation-1" class="slide level2 smaller" data-auto-animate="true">
@@ -649,12 +649,12 @@ Patrick Altmeyer
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
-<li><span class="math inline">\(A_1\)</span>: <span class="math inline">\(enc(\)</span>„It is essential to bring inflation back to target to avoid drifting into deflation territory.“<span class="math inline">\()\)</span></li>
-<li><span class="math inline">\(A_2\)</span>: <span class="math inline">\(enc(\)</span>„It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“<span class="math inline">\()\)</span></li>
+<li><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20A_1" alt="A_1" title="A_1" class="math inline">: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20enc%28" alt="enc(" title="enc(" class="math inline">„It is essential to bring inflation back to target to avoid drifting into deflation territory.“<img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%29" alt=")" title=")" class="math inline"></li>
+<li><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20A_2" alt="A_2" title="A_2" class="math inline">: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20enc%28" alt="enc(" title="enc(" class="math inline">„It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.“<img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%29" alt=")" title=")" class="math inline"></li>
 </ul>
 <blockquote>
 <p>“They’re exactly the same.”</p>
-<p>— Linear probe <span class="math inline">\(\widehat{cpi}=f(A)\)</span></p>
+<p>— Linear probe <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cwidehat%7Bcpi%7D%3Df%28A%29" alt="\widehat{cpi}=f(A)" title="\widehat{cpi}=f(A)" class="math inline"></p>
 </blockquote>
 </div><div class="column" style="width:50%;">
 <p><img data-src="www/spider.jpeg"></p>
@@ -665,7 +665,7 @@ Patrick Altmeyer
 <h2>Embedding FOMC comms</h2>
 <ul>
 <li>We linearly probe all layers to predict unseen economic indicators (CPI, PPI, UST yields).</li>
-<li>Predictive power increases with layer depth and probes outperform simple AR(<span class="math inline">\(p\)</span>) models.</li>
+<li>Predictive power increases with layer depth and probes outperform simple AR(<img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20p" alt="p" title="p" class="math inline">) models.</li>
 </ul>
 <div id="fig-mse" class="quarto-figure quarto-figure-center quarto-float">
 <figure class="quarto-float quarto-float-fig">
@@ -757,7 +757,6 @@ Shah, Agam, Suvan Paturi, and Sudheer Chava. 2023. <span>“<span>Trillion Dolla
   <script src="../../../../../site_libs/revealjs/plugin/notes/notes.js"></script>
   <script src="../../../../../site_libs/revealjs/plugin/search/search.js"></script>
   <script src="../../../../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="../../../../../site_libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
@@ -924,27 +923,9 @@ Shah, Agam, Suvan Paturi, and Sudheer Chava. 2023. <span>“<span>Trillion Dolla
         // Factor of the display size that should remain empty around the content
         margin: 0.1,
 
-        math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
-          config: 'TeX-AMS_HTML-full',
-          tex2jax: {
-            inlineMath: [['\\(','\\)']],
-            displayMath: [['\\[','\\]']],
-            balanceBraces: true,
-            processEscapes: false,
-            processRefs: true,
-            processEnvironments: true,
-            preview: 'TeX',
-            skipTags: ['script','noscript','style','textarea','pre','code'],
-            ignoreClass: 'tex2jax_ignore',
-            processClass: 'tex2jax_process'
-          },
-        },
-
         // reveal.js plugins
         plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
 
-          RevealMath,
           RevealNotes,
           RevealSearch,
           RevealZoom

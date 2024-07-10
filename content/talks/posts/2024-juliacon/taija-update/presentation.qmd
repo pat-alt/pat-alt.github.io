@@ -5,7 +5,10 @@ author: Patrick Altmeyer
 format:
   julia-revealjs: 
     scrollable: true
-date: last-modified
+    title-slide-attributes:
+      data-background-image: ../www/qr.png
+date: 2024-07-11
+date-format: full
 bibliography: biblio.bib
 execute:
   freeze: auto
@@ -150,27 +153,23 @@ Intent classification (IC) in dialogue systems is a common task and a natural pl
 - Conformal classifiers predict sets that fulfill coverage guarantee.
 :::
 :::{.column width='50%'}
-![A simple conformal chat bot in the Julia REPL.](www/conformal_bot.gif){#fig-llm}
+![A simple conformal chat bot in the Julia REPL using ConformalPrediction.jl.](www/conformal_bot.gif){#fig-llm}
 :::
 ::::
 
 ## Conformal IC and Clarification
 
 - Our NAACL 2024 [paper](https://aclanthology.org/2024.findings-naacl.156/) introduces CICC: a framework for fast and accurate intent classification in conversational AI.
-- In this context, ConformalPrediction.jl can be used to generate intent sets for user queries^[Experiments in @hengst2024conformal were run in parallel using Python's MAPIE and ConformalPrediction.jl, in order to cross-check results. Reported results were produced using MAPIE.]. 
 - Winning project at ING Experiment Week 2023.
 
-> See also [*Building a Conformal Chatbot in Julia*](https://www.patalt.org/blog/posts/conformal-llm/) with ConformalPrediction.jl and Transformers.jl.
+> See also [*Building a Conformal Chatbot in Julia*](https://www.patalt.org/blog/posts/conformal-llm/) with ConformalPrediction.jl and Transformers.jl^[Experiments in @hengst2024conformal were run in parallel using Python's MAPIE and ConformalPrediction.jl, in order to cross-check results. Reported results were produced using MAPIE.].
 
 ## More Research
 
+- *Stop Making Unscientific AGI Performance Claims* [@altmeyer2024position] [upcoming](https://arxiv.org/abs/2402.03962) at *ICML 2024*.^[Our related [package](https://github.com/pat-alt/TrillionDollarWords.jl) is not currently part of Taija but may be in the future.]
 - *Endogenous Macrodynamics in Algorithmic Recourse* [@altmeyer2023endogenous] [published](https://ieeexplore.ieee.org/abstract/document/10136130) at *IEEE SaTML 2023*.
-
-#### Students
-
-- Bachelor's thesis on *What Makes Models Explainable? Evidence from Counterfactuals* (work in progress). 
-    - Related development: [AdversarialRobustness.jl](https://github.com/JuliaTrustworthyAI/AdversarialRobustness.jl).
-- Various Master's theses on CE for imbalanced data [@zagorac2024study], CE as a tool for testing, operationalizing algorithmic recourse, explainability of LLMs (see [draft PR](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/pull/413)).
+- Various Master's theses on CE for imbalanced data [@zagorac2024study], CE for LLMs ([draft PR](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/pull/413)), and more ...
+- Bachelor's theses on *What Makes Models Explainable? Evidence from Counterfactuals* (related development: [AdversarialRobustness.jl](https://github.com/JuliaTrustworthyAI/AdversarialRobustness.jl)). 
 
 # Developments
 
@@ -182,7 +181,7 @@ A brief overview of the highlights. For a more introductory presentation, see al
 
 ::::{.columns}::::
 :::{.column width='40%'}
-- refactoring
+- refactoring (e.g. package extensions)
 - performance improvements
 - new features
 :::
@@ -263,7 +262,7 @@ evaluate(ces)
 
 #### Benchmarks
 
-Benchmark all available generators and models at once in parallel^[[TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl) adds support for parallelization. Join [talk](https://pretalx.com/juliacon2024/me/submissions/XLCNXN/) at 11:50–12:00, Else (1.3)]:
+Benchmark all available generators and models at once in parallel^[[TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl) adds support for parallelization. [Join](https://pretalx.com/juliacon2024/me/submissions/XLCNXN/) Friday 11:50–12:00, Else (1.3)]:
 
 ```{.julia}
 using TaijaParallel
@@ -273,20 +272,6 @@ bmk = benchmark(
   parallelizer = pllr
 )
 ```
-:::
-::::
-
-# What's new in ... {.nostretch}
-
-`ConformalPrediction.jl`: A [package](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) for Predictive Uncertainty Quantification through Conformal Prediction for Machine Learning models trained in MLJ.
-
-::::{.columns}::::
-:::{.column width='50%'}
-- refactoring
-- new features
-:::
-:::{.column width='50%'}
-[![](www/cp_logo.png){width="100%" fig-align="right"}](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl)
 :::
 ::::
 
@@ -305,19 +290,73 @@ bmk = benchmark(
 :::
 ::::
 
+## Student Contributions
+
+- Support for multi-class problems. 
+- Support for more scalable Hessian approximations.
+- Interface to MLJ for easy model training and evaluation.
+
+![Hessian approximations. Source: @daxberger2021laplace](www/fact.png){#fig-fact}
+
+> Check out their [blog post](https://www.patalt.org/blog/posts/guest-students-laplace/)!
+
+# What's new in ... {.nostretch}
+
+`ConformalPrediction.jl`: A [package](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl) for Predictive Uncertainty Quantification through Conformal Prediction for Machine Learning models trained in MLJ.
+
+::::{.columns}::::
+:::{.column width='60%'}
+- refactoring
+- new features ([\@MojiFarmanbar](https://github.com/orgs/JuliaTrustworthyAI/people/MojiFarmanbar))
+  - [Time Series](https://juliatrustworthyai.github.io/ConformalPrediction.jl/stable/how_to_guides/timeseries/)
+  - [Quantile Regression](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/pull/96)
+:::
+:::{.column width='40%'}
+[![](www/cp_logo.png){width="100%" fig-align="right"}](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl)
+:::
+::::
+
 # Joint Energy Models
 
-`JointEnergyModels.jl`: A [package](https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl?tab=readme-ov-file) for Joint Energy Models and Energy-Based Models in Julia.
+`JointEnergyModels.jl`: A [package](https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl?tab=readme-ov-file) for Joint Energy-Based Models Models in Julia (early development).
 
-![](www/jem.svg){.absolute bottom=-400 right=50 width="80%"}
+::::{.columns}::::
+:::{.column width='50%'}
+Hybrid models that can predict and generate [@grathwohl2020your].
+
+- Flux.jl interface
+- MLJFlux.jl interface
+:::
+:::{.column width='50%'}
+![Predicted output class probabilities (contour) and generated input samples (stars) for a binary JEM classifier.](www/jem.svg)
+:::
+::::
 
 # Final Things
 
-## Student Testimonials
-
 ## Ongoing Work
 
+Taija has been running two Julia Season of Code projects this summer.
+
+1. (*Conformal Bayes*) Bridging the gap between Bayesian and frequentist approaches to Predictive Uncertainty Quantification with [\@Rockdeldiablo](https://github.com/orgs/JuliaTrustworthyAI/people/Rockdeldiablo) and co-supervisor [\@MojiFarmanbar](https://github.com/orgs/JuliaTrustworthyAI/people/MojiFarmanbar)
+2. (*Causal Recourse*) From minimal perturbations to minimal interventions for Algorithmic Recourse with [\@JorgeLuizFranco](https://github.com/orgs/JuliaTrustworthyAI/people/JorgeLuizFranco) and co-supervisor [\@mschauer](https://github.com/mschauer).
+
+## Student Testimonials
+
+Students have generally been enthusiastic about their experience with Julia and Taija:
+
+> "Programming in Julia has definitely helped us become better programmers. [...] whenever we had such questions and asked them [to] the wider Julia community, there were always people ready to help in my experience, which was nice." 
+> 
+> --- [\@RaunoArike](https://github.com/orgs/JuliaTrustworthyAI/people/RaunoArike)
+
 ## Get Involved
+
+- Working on related projects?
+- Interested in contributing to Taija?
+- Want to learn more about Trustworthy AI in Julia?
+- Any suggestions or feedback?
+
+> Get in touch with me or any of the contributors! Join our \#taija channel on the [JuliaLang Slack](https://julialang.org/slack/) or visit our [GitHub organization](https://github.com/JuliaTrustworthyAI).
 
 # Questions? {.nostretch} 
 

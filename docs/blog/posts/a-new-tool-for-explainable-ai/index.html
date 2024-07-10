@@ -23,6 +23,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { line-height: 1.25; }
@@ -134,35 +135,6 @@ gtag('js', new Date());
 gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 </script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
@@ -330,7 +302,7 @@ Turning a 9 (nine) into a 4 (four).
 <p>Counterfactual explanations, which I introduced in one of my previous posts<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, offer a simple and intuitive way to explain black-box models without opening them. Still, as of today there exists only one open-source library that provides a unifying approach to generate and benchmark counterfactual explanations for models built and trained in Python <span class="citation" data-cites="pawelczyk2021carla">(<a href="#ref-pawelczyk2021carla" role="doc-biblioref">Pawelczyk et al. 2021</a>)</span>. This is great, but of limited use to users of other programming languages 🥲.</p>
 <p>Enter <a href="https://www.patalt.org/CounterfactualExplanations.jl/stable/"><code>CounterfactualExplanations.jl</code></a>: a Julia package that can be used to explain machine learning algorithms developed and trained in Julia, Python and R. Counterfactual explanations fall into the broader category of explainable artificial intelligence (XAI).</p>
 <p>Explainable AI typically involves models that are not inherently interpretable but require additional tools to be explainable to humans. Examples of the latter include ensembles, support vector machines and deep neural networks. This is not to be confused with interpretable AI, which involves models that are inherently interpretable and transparent such as general additive models (GAM), decision trees and rule-based models.</p>
-<p>Some would argue that we best avoid explaining black-box models altogether <span class="citation" data-cites="rudin2019stop">(<a href="#ref-rudin2019stop" role="doc-biblioref">Rudin 2019</a>)</span> and instead focus solely on interpretable AI. While I agree that initial efforts should always be geared towards interpretable models, stopping there would entail missed opportunities and anyway is probably not very realistic in times of <a href="https://openai.com/blog/dall-e/">DALL<span class="math inline">\(\cdot\)</span>E</a> and Co.</p>
+<p>Some would argue that we best avoid explaining black-box models altogether <span class="citation" data-cites="rudin2019stop">(<a href="#ref-rudin2019stop" role="doc-biblioref">Rudin 2019</a>)</span> and instead focus solely on interpretable AI. While I agree that initial efforts should always be geared towards interpretable models, stopping there would entail missed opportunities and anyway is probably not very realistic in times of <a href="https://openai.com/blog/dall-e/">DALL<img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Ccdot" alt="\cdot" title="\cdot" class="math inline">E</a> and Co.</p>
 <blockquote class="blockquote">
 <p>Even though […] interpretability is of great importance and should be pursued, explanations can, in principle, be offered without opening the “black box.”</p>
 <p>— <span class="citation" data-cites="wachter2017counterfactual">Wachter, Mittelstadt, and Russell (<a href="#ref-wachter2017counterfactual" role="doc-biblioref">2017</a>)</span></p>
