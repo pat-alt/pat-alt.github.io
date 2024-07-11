@@ -802,7 +802,14 @@
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#ecosystem-overview",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Ecosystem Overview",
-    "text": "Ecosystem Overview\n\n\n\n\n\n\n%%{\n  init: {\n    'theme': 'base',\n    'themeVariables': {\n      'primaryColor': '#BB2528',\n      'primaryTextColor': '#fff',\n      'primaryBorderColor': '#7C0000',\n      'lineColor': '#F8B229',\n      'secondaryColor': '#006100',\n      'tertiaryColor': '#e9edfb',\n      'fontFamily': \"avenir\"\n    }\n  }\n}%%\n\nflowchart TB\n\n    classDef taija fill:#389836,stroke:#333,color:#fff;\n    classDef core fill:#CB3C33,stroke:#333,color:#fff;\n    classDef base fill:#9558B2,stroke:#333,color:#fff;\n\n    %% Base\n    base[\"TaijaBase.jl\"]\n\n    %% Meta\n    interop[\"TaijaInteroperability.jl\"]\n    data[\"TaijaData.jl\"]\n    parallel[\"TaijaParallel.jl\"]\n    plotting[\"TaijaPlotting.jl\"]\n\n    %% Core\n    ce[\"CounterfactualExplanations.jl\"]\n    cp[\"ConformalPrediction.jl\"]\n    lr[\"LaplaceRedux.jl\"]\n    jem[\"JointEnergyModels.jl\"]\n\n    %% External\n    mlj[\"MLJ.jl\"]\n    flux[\"Flux.jl\"]\n\n    class base base;\n    class interop,data,parallel,plotting taija;\n    class ce,cp,lr,jem core;\n\n    %% Graph\n    base --&gt; ce & cp & lr & jem\n\n    subgraph \"Core Packages\"\n        ce & cp & lr & jem \n    end\n\n    subgraph \"Meta Packages\"\n        data & plotting & parallel & interop\n    end \n\n    subgraph \"External Packages\"\n        mlj & flux\n    end\n\n\n\n\nFigure 1: Overview of the Taija ecosystem. Early-stage packages omitted."
+    "text": "Ecosystem Overview\n\n\n\n\n\n%%{\n  init: {\n    'theme': 'base',\n    'themeVariables': {\n      'primaryColor': '#BB2528',\n      'primaryTextColor': '#fff',\n      'primaryBorderColor': '#7C0000',\n      'lineColor': '#F8B229',\n      'secondaryColor': '#006100',\n      'tertiaryColor': '#e9edfb',\n      'fontFamily': \"avenir\"\n    }\n  }\n}%%\n\nflowchart TB\n\n    classDef taija fill:#389836,stroke:#333,color:#fff;\n    classDef core fill:#CB3C33,stroke:#333,color:#fff;\n    classDef base fill:#9558B2,stroke:#333,color:#fff;\n\n    %% Base\n    base[\"TaijaBase.jl\"]\n\n    %% Meta\n    interop[\"TaijaInteroperability.jl\"]\n    data[\"TaijaData.jl\"]\n    parallel[\"TaijaParallel.jl\"]\n    plotting[\"TaijaPlotting.jl\"]\n\n    %% Core\n    ce[\"CounterfactualExplanations.jl\"]\n    cp[\"ConformalPrediction.jl\"]\n    lr[\"LaplaceRedux.jl\"]\n    jem[\"JointEnergyModels.jl\"]\n\n    %% External\n    mlj[\"MLJ.jl\"]\n    flux[\"Flux.jl\"]\n\n    class base base;\n    class interop,data,parallel,plotting taija;\n    class ce,cp,lr,jem core;\n\n    %% Graph\n    base --&gt; ce & cp & lr & jem\n\n    subgraph \"Core Packages\"\n        ce & cp & lr & jem \n    end\n\n    subgraph \"Meta Packages\"\n        data & plotting & parallel & interop\n    end \n\n    subgraph \"External Packages\"\n        mlj & flux\n    end\n\n\n Overview of the Taija ecosystem. Early-stage packages omitted."
+  },
+  {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#ecosystem-overview-1",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#ecosystem-overview-1",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Ecosystem Overview",
+    "text": "Ecosystem Overview\n\n\n\n\n\n%%{\n  init: {\n    'theme': 'base',\n    'themeVariables': {\n      'primaryColor': '#BB2528',\n      'primaryTextColor': '#fff',\n      'primaryBorderColor': '#7C0000',\n      'lineColor': '#F8B229',\n      'secondaryColor': '#006100',\n      'tertiaryColor': '#e9edfb',\n      'fontFamily': \"avenir\"\n    }\n  }\n}%%\n\nflowchart TB\n\n    classDef taija fill:#389836,stroke:#333,color:#fff;\n    classDef core fill:#CB3C33,stroke:#333,color:#fff;\n    classDef base fill:#9558B2,stroke:#333,color:#fff;\n\n    %% Base\n    base[\"TaijaBase.jl\"]\n\n    %% Meta\n    interop[\"TaijaInteroperability.jl\"]\n    data[\"TaijaData.jl\"]\n    parallel[\"TaijaParallel.jl\"]\n    plotting[\"TaijaPlotting.jl\"]\n\n    %% Core\n    ce[\"CounterfactualExplanations.jl\"]\n    cp[\"ConformalPrediction.jl\"]\n    lr[\"LaplaceRedux.jl\"]\n    jem[\"JointEnergyModels.jl\"]\n\n    %% External\n    mlj[\"MLJ.jl\"]\n    flux[\"Flux.jl\"]\n\n    class base base;\n    class interop,data,parallel,plotting taija;\n    class ce,cp,lr,jem core;\n\n    %% Graph\n    base --&gt; ce & cp & lr & jem\n\n    subgraph \"Core Packages\"\n        ce & cp & lr & jem \n    end\n\n    subgraph \"Meta Packages\"\n        data & plotting & parallel & interop\n    end \n\n    subgraph \"External Packages\"\n        mlj & flux\n    end\n\n\n Overview of the Taija ecosystem. Early-stage packages omitted."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#whos-behind-taija",
@@ -823,28 +830,28 @@
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#counterfactual-explanations",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Counterfactual Explanations",
-    "text": "Counterfactual Explanations\nThe largest single category of CE methods solves the following optimization through gradient descent:\n\\[\n\\begin{aligned}\n\\mathbf{s}^* &= \\arg \\min_{\\mathbf{s}^\\prime \\in \\mathcal{S}} \\left\\{  {\\text{yloss}(M(f(\\mathbf{s}^\\prime)),y^*)}+ \\lambda {\\text{cost}(f(\\mathbf{s}^\\prime)) }  \\right\\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations explain how inputs into a model need to change for it to produce different outputs.\n\n\n\n\n\n\n\nFigure 2: Gradient-based counterfactual search."
+    "text": "Counterfactual Explanations\nThe largest single category of CE methods solves the following optimization through gradient descent:\n\\[\n\\begin{aligned}\n\\mathbf{s}^* &= \\arg \\min_{\\mathbf{s}^\\prime \\in \\mathcal{S}} \\left\\{  {\\text{yloss}(M(f(\\mathbf{s}^\\prime)),y^*)}+ \\lambda {\\text{cost}(f(\\mathbf{s}^\\prime)) }  \\right\\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations explain how inputs into a model need to change for it to produce different outputs.\n\n\n\n\n\n\n\nFigure 1: Gradient-based counterfactual search."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#pick-your-poison",
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#pick-your-poison",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Pick your Poison",
-    "text": "Pick your Poison\nAll of these counterfactuals are valid explanations …\n\n… which one would you pick?\n\n\n\nFigure 3: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using Wachter (Wachter, Mittelstadt, and Russell 2017), Schut (Schut et al. 2021) and REVISE (Joshi et al. 2019)."
+    "text": "Pick your Poison\nAll of these counterfactuals are valid explanations …\n\n… which one would you pick?\n\n\n\nFigure 2: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using Wachter (Wachter, Mittelstadt, and Russell 2017), Schut (Schut et al. 2021) and REVISE (Joshi et al. 2019)."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#faithful-counterfactuals",
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#faithful-counterfactuals",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Faithful Counterfactuals",
-    "text": "Faithful Counterfactuals\n\n\n\n\n\n\n\n\nFigure 4: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\nECCCo1 counterfactuals\n\nexplain models faithfully (Figure 4).\nachieve SOTA plausibility (Figure 5).\n\n\n\n\n\n\n\nFigure 5: Results for different generators (from 3 to 5).\n\n\n\n\n\nPackage and link to AAAI 2024 paper: github.com/pat-alt/ECCCo.jl."
+    "text": "Faithful Counterfactuals\n\n\n\n\n\n\n\n\nFigure 3: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\nECCCo1 counterfactuals\n\nexplain models faithfully (Figure 3).\nachieve SOTA plausibility (Figure 4).\n\n\n\n\n\n\n\nFigure 4: Results for different generators (from 3 to 5).\n\n\n\n\n\nPackage and link to AAAI 2024 paper: github.com/pat-alt/ECCCo.jl."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#intent-classification",
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#intent-classification",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Intent Classification",
-    "text": "Intent Classification\nIntent classification (IC) in dialogue systems is a common task and a natural place for conformal prediction.\n\n\n\nSimply returning top-1 softmax likely wrong.\nExisting ad-hoc approach is top-\\(k\\).\nConformal classifiers predict sets that fulfill coverage guarantee.\n\n\n\n\n\n\n\n\nFigure 6: A simple conformal chat bot in the Julia REPL using ConformalPrediction.jl."
+    "text": "Intent Classification\nIntent classification (IC) in dialogue systems is a common task and a natural place for conformal prediction.\n\n\n\nSimply returning top-1 softmax likely wrong.\nExisting ad-hoc approach is top-\\(k\\).\nConformal classifiers predict sets that fulfill coverage guarantee.\n\n\n\n\n\n\n\n\nFigure 5: A simple conformal chat bot in the Julia REPL using ConformalPrediction.jl."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#conformal-ic-and-clarification",
@@ -872,7 +879,7 @@
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#explaining-different-models",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Explaining Different Models",
-    "text": "Explaining Different Models\nBesides any Flux.jl model, extensions add support for\n\n\n\nDecisionTree.jl\nNeuroTrees.jl (see Jeremie’s talk Fri 10:10–10:20 For Loop)\nLaplaceRedux.jl\nJointEnergyModel.jl (upcoming)\n\n\n\n\n\n\n\n\nFigure 7: Counterfactual for differentiable decision tree classifier."
+    "text": "Explaining Different Models\nBesides any Flux.jl model, extensions add support for\n\n\n\nDecisionTree.jl\nNeuroTrees.jl (see Jeremie’s talk Fri 10:10–10:20 For Loop)\nLaplaceRedux.jl\nJointEnergyModel.jl (upcoming)\n\n\n\n\n\n\n\n\nFigure 6: Counterfactual for differentiable decision tree classifier."
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#benchmarking-explanations",
@@ -886,7 +893,7 @@
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#student-contributions",
     "title": "What’s new in Trustworthy AI in JuliA?",
     "section": "Student Contributions",
-    "text": "Student Contributions\n\nSupport for multi-class problems.\nSupport for more scalable Hessian approximations.\nInterface to MLJ for easy model training and evaluation.\n\n\n\nFigure 8: Hessian approximations. Source: Daxberger et al. (2021)\n\nCheck out their blog post!"
+    "text": "Student Contributions\n\nSupport for multi-class problems.\nSupport for more scalable Hessian approximations.\nInterface to MLJ for easy model training and evaluation.\n\n\n\nFigure 7: Hessian approximations. Source: Daxberger et al. (2021)\n\nCheck out their blog post!"
   },
   {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#ongoing-work",
