@@ -202,7 +202,60 @@ Efforts towards trustworthy AI tend to increase the computational burden involve
 - Currently, the package only supports CounterfactualExplanations.jl.
 - Work on ConformalPrediction.jl is in progress, and hinges on the ability to parallelize cross-validation. Requires [changes](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl/pull/119) to ConformalPrediction.jl.
 
-## Small Benchmark
+## ALL the Counterfactuals!
+
+```{julia}
+#| echo: false
+#| eval: false
+
+using BenchmarkTools
+using CounterfactualExplanations
+using CounterfactualExplanations.Models
+using CounterfactualExplanations.Convergence
+using CounterfactualExplanations.Evaluation
+using Flux
+using TaijaParallel
+using TaijaData
+pllr = ThreadsParallelizer()
+data = CounterfactualData(load_mnist()...)
+X, y = CounterfactualExplanations.DataPreprocessing.unpack_data(data)
+M = load_mnist_mlp()
+opt = Flux.Adam(0.1)
+gen = GenericGenerator(opt=opt)
+conv = DecisionThresholdConvergence(decision_threshold=0.75, max_iter=10)
+factual_label = 8
+n = 10000
+idx = rand(findall(predict_label(M, data).==factual_label), n)
+xs = select_factual(data, idx)
+target = 3
+```
+
+```{julia}
+#| echo: false
+#| eval: false
+ces = @time @with_parallelizer pllr begin 
+  generate_counterfactual(
+    xs, target, data, M, gen; 
+    convergence=conv
+  )
+end
+@info "$(sum(Evaluation.validity.(ces)))/$n valid counterfactuals on $(Threads.nthreads()) threads."
+```
+
+::::{.columns}::::
+:::{.column width='75%'}
+Trustworthy AI may be slow but ...
+
+> Julia go vroom vroom!
+:::
+:::{.column width='25%'}
+![](www/meme.jpg){width="300" top=50 right=50}
+:::
+::::
+
+
+
+![Generating 10,000 counterfactuals for MNIST in parallel in under 2s on a MacBook.](www/all.png)
 
 # Questions? {.nostretch} 
 
