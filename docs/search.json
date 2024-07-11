@@ -819,6 +819,13 @@
     "text": "Use Cases\n\nWho could benefit from Taija?\n\n\n\nResearchers in AI and ML, particularly in the fields of explainability, uncertainty quantification, and Bayesian deep learning: (, …)\nPractitioners using conventional ML and DL models who are interested in understanding the models’ decisions and their uncertainty.\nJulia developers who want to contribute to the ecosystem (any level of expertise is welcome!)."
   },
   {
+    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#counterfactual-explanations",
+    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#counterfactual-explanations",
+    "title": "What’s new in Trustworthy AI in JuliA?",
+    "section": "Counterfactual Explanations",
+    "text": "Counterfactual Explanations\nThe largest single category of CE methods solves the following optimization through gradient descent:\n\\[\n\\begin{aligned}\n\\mathbf{s}^* &= \\arg \\min_{\\mathbf{s}^\\prime \\in \\mathcal{S}} \\left\\{  {\\text{yloss}(M(f(\\mathbf{s}^\\prime)),y^*)}+ \\lambda {\\text{cost}(f(\\mathbf{s}^\\prime)) }  \\right\\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations explain how inputs into a model need to change for it to produce different outputs.\n\n\n\n\n\n\n\nFigure 2: Gradient-based counterfactual search."
+  },
+  {
     "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#pick-your-poison",
     "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#pick-your-poison",
     "title": "What’s new in Trustworthy AI in JuliA?",
@@ -1908,7 +1915,7 @@
     "href": "content/talks/posts/2024-turing/presentation.html#background",
     "title": "Trustworthy AI in Julia",
     "section": "Background",
-    "text": "Background\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCounterfactual Explanations (CE) explain how inputs into a model need to change for it to produce different outputs.\n📜 Altmeyer, Deursen, et al. (2023) @ JuliaCon 2022.\n\n\n\n\n\n\n\nFigure 1: Gradient-based counterfactual search."
+    "text": "Background\n\\[\n\\begin{aligned}\n\\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {\\text{yloss}(M_{\\theta}(f(\\mathbf{Z}^\\prime)),\\mathbf{y}^+)} + \\lambda {\\text{cost}(f(\\mathbf{Z}^\\prime)) }  \\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations (CE) explain how inputs into a model need to change for it to produce different outputs.\n📜 Altmeyer, Deursen, et al. (2023) @ JuliaCon 2022.\n\n\n\n\n\n\n\nFigure 1: Gradient-based counterfactual search."
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#examples",
@@ -1929,7 +1936,7 @@
     "href": "content/talks/posts/2024-turing/presentation.html#ecccos-from-the-black-box",
     "title": "Trustworthy AI in Julia",
     "section": "ECCCos from the Black-Box",
-    "text": "ECCCos from the Black-Box\n\n\n📜 Altmeyer, Farmanbar, et al. (2023) @ AAAI 2024\n\n\n\nKey Idea\n\n\nUse the hybrid objective of joint energy models (JEM) and a model-agnostic penalty for predictive uncertainty: Energy-Constrained (\n\n\n\n\n\n\n\n\n) Conformal (\n\n\n\n\n\n\n) Counterfactuals (ECCCo).\n\n\n\n\nECCCo objective1:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 3: Gradient fields and counterfactual paths for different generators.\n\n\n\n\n\nWe leverage ideas from Grathwohl et al. (2020) and Stutz et al. (2022). See the paper and appendix for a derivation of the objective from first principles."
+    "text": "ECCCos from the Black-Box\n\n\n📜 Altmeyer, Farmanbar, et al. (2023) @ AAAI 2024\n\n\n\nKey Idea\n\n\nUse the hybrid objective of joint energy models (JEM) and a model-agnostic penalty for predictive uncertainty: Energy-Constrained (\\(\\mathcal{E}_{\\theta}\\)) Conformal (\\(\\Omega\\)) Counterfactuals (ECCCo).\n\n\n\n\nECCCo objective1:\n\\[\n\\begin{aligned}\n& \\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {L_{\\text{clf}}(f(\\mathbf{Z}^\\prime);M_{\\theta},\\mathbf{y}^+)}+ \\lambda_1 {\\text{cost}(f(\\mathbf{Z}^\\prime)) } \\\\\n&+ \\lambda_2 \\mathcal{E}_{\\theta}(f(\\mathbf{Z}^\\prime)|\\mathbf{y}^+) + \\lambda_3 \\Omega(C_{\\theta}(f(\\mathbf{Z}^\\prime);\\alpha)) \\}\n\\end{aligned}\n\\]\n\n\n\n\n\n\nFigure 3: Gradient fields and counterfactual paths for different generators.\n\n\n\n\n\nWe leverage ideas from Grathwohl et al. (2020) and Stutz et al. (2022). See the paper and appendix for a derivation of the objective from first principles."
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#faithful-counterfactuals",
@@ -1978,28 +1985,28 @@
     "href": "content/talks/posts/2024-turing/presentation.html#background-2",
     "title": "Trustworthy AI in Julia",
     "section": "Background",
-    "text": "Background\nWe want BMA for neural networks underspecified by the data (Wilson 2020),\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwhere \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n is the likelihood,  is the posterior and \n\n\n\n\n\n\n is the training data.\n\n\n\nProblem 😢: Intractable posterior \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.\nConvention 🤔: Use MAP estimate \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n with \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.\nIdea 💡: Taylor approximation at the mode amounts to multivariate Gaussian centered around MAP.\n\n\n\n\n\nUnnormalized log-posterior and corresponding Laplace Approximation. Source: Murphy (2022)."
+    "text": "Background\nWe want BMA for neural networks underspecified by the data (Wilson 2020),\n\\[\np(y|x,\\mathcal{D}) = \\int p(y|x,\\theta)p(\\theta|\\mathcal{D})d\\theta\n\\tag{1}\\]\nwhere \\(p(y|x,\\theta)\\) is the likelihood, \\(p(\\theta|\\mathcal{D})\\) is the posterior and \\(\\mathcal{D}\\) is the training data.\n\n\n\nProblem 😢: Intractable posterior \\(p(\\theta|\\mathcal{D})\\).\nConvention 🤔: Use MAP estimate \\(p(y|x,\\mathcal{D}) \\approx p(y|x,\\hat\\theta)\\) with \\(\\hat\\theta=\\arg\\max_{\\theta}p(\\theta|\\mathcal{D})\\).\nIdea 💡: Taylor approximation at the mode amounts to multivariate Gaussian centered around MAP.\n\n\n\n\n\nUnnormalized log-posterior and corresponding Laplace Approximation. Source: Murphy (2022)."
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#model-assumptions",
     "href": "content/talks/posts/2024-turing/presentation.html#model-assumptions",
     "title": "Trustworthy AI in Julia",
     "section": "Model Assumptions",
-    "text": "Model Assumptions\nExample (binary classification): We assume Bernoulli likelihood and a Gaussian prior for our weights …\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n… which yields the following negative log-likelihood (or energy) function (Murphy 2022):"
+    "text": "Model Assumptions\nExample (binary classification): We assume Bernoulli likelihood and a Gaussian prior for our weights …\n\\[\np(y_n|\\mathbf{x}_n;\\mathbf{w})\\sim\\text{Ber}(y_n|\\sigma(\\mathbf{w}^T\\mathbf{x}_n))\n\\tag{2}\\]\n\\[\np(\\theta) \\sim \\mathcal{N} \\left( \\theta | \\mathbf{0}, \\lambda^{-1} \\mathbf{I} \\right)=\\mathcal{N} \\left( \\theta | \\mathbf{0}, \\mathbf{H}_0^{-1} \\right)\n\\tag{3}\\]\n\n… which yields the following negative log-likelihood (or energy) function (Murphy 2022):\n\\[\n\\psi(\\theta)= - \\sum_{n}^N [y_n \\log \\mu_n + (1-y_n)\\log (1-\\mu_n)] + \\\\ \\frac{1}{2} (\\theta-\\theta_0)^T\\mathbf{H}_0(\\theta-\\theta_0)\n\\tag{4}\\]"
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#taylor-expansion",
     "href": "content/talks/posts/2024-turing/presentation.html#taylor-expansion",
     "title": "Trustworthy AI in Julia",
     "section": "Taylor Expansion",
-    "text": "Taylor Expansion\nWe have the following normalized posterior:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwith \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.\n\nThen, second-order Taylor expansion of the energy function around the mode \n\n\n\n\n\n\n\n\n gives us the Laplace approximation (Murphy 2022):\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThus, we have"
+    "text": "Taylor Expansion\nWe have the following normalized posterior:\n\\[\np(\\theta|\\mathcal{D}) = Z^{-1} p(\\mathcal{D}|\\theta)p(\\theta) = Z^{-1} \\exp(-\\psi(\\theta))\n\\tag{5}\\]\nwith \\(Z = \\int p(\\mathcal{D}|\\theta) p(\\theta)\\).\n\nThen, second-order Taylor expansion of the energy function around the mode \\(\\theta_0\\) gives us the Laplace approximation (Murphy 2022):\n\\[\n\\psi(\\theta) \\approxeq \\psi(\\hat\\theta) + \\frac{1}{2} (\\theta-\\hat\\theta)^T \\mathbf{H}(\\theta-\\hat\\theta)\n\\tag{6}\\]\n\n\nThus, we have\n\\[\np(\\theta|\\mathcal{D}) \\approxeq \\mathcal{N}(\\theta;\\hat\\theta,-\\mathbf{H}^{-1})\n\\tag{7}\\]"
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#hessian-approximation",
     "href": "content/talks/posts/2024-turing/presentation.html#hessian-approximation",
     "title": "Trustworthy AI in Julia",
     "section": "Hessian Approximation",
-    "text": "Hessian Approximation\n\nChallenge lies in computing the Hessian \n\n\n\n\n\n\n.\nWe can use the Empirical Fisher or Generalized Gauss-Newton approximation (Murphy 2022).\n\nStill quadratic in the number of parameters.\n\nFor scalable solutions, we can use the diagonal approximation or the K-FAC approximation or work with a subnetwork."
+    "text": "Hessian Approximation\n\nChallenge lies in computing the Hessian \\(\\mathbf{H}\\).\nWe can use the Empirical Fisher or Generalized Gauss-Newton approximation (Murphy 2022).\n\nStill quadratic in the number of parameters.\n\nFor scalable solutions, we can use the diagonal approximation or the K-FAC approximation or work with a subnetwork."
   },
   {
     "objectID": "content/talks/posts/2024-turing/presentation.html#examples-2",
@@ -3890,33 +3897,5 @@
     "title": "Spurious Sparks of AGI",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nI would be very surprised—concerned even—if our search for patterns in latent spaces of capable LLMs revealed nothing at all.↩︎\nThe data is taken from the US Department of the Treasury.↩︎"
-  },
-  {
-    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#whats-new-in-2",
-    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#whats-new-in-2",
-    "title": "What’s new in Trustworthy AI in JuliA?",
-    "section": "What’s new in …",
-    "text": "What’s new in …\nConformalPrediction.jl: A package for Predictive Uncertainty Quantification through Conformal Prediction for Machine Learning models trained in MLJ.\n\n\n\nrefactoring\nnew features (@MojiFarmanbar)\n\nTime Series\nQuantile Regression"
-  },
-  {
-    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#joint-energy-models",
-    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#joint-energy-models",
-    "title": "What’s new in Trustworthy AI in JuliA?",
-    "section": "Joint Energy Models",
-    "text": "Joint Energy Models\nJointEnergyModels.jl: A package for Joint Energy-Based Models Models in Julia (early development).\n\n\nHybrid models that can predict and generate (Grathwohl et al. 2020).\n\nFlux.jl interface\nMLJFlux.jl interface\n\n\n\n\n\n\n\n\nFigure 7: Predicted output class probabilities (contour) and generated input samples (stars) for a binary JEM classifier."
-  },
-  {
-    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#joint-energy-based-models",
-    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#joint-energy-based-models",
-    "title": "What’s new in Trustworthy AI in JuliA?",
-    "section": "Joint Energy-Based Models",
-    "text": "Joint Energy-Based Models\nJointEnergyModels.jl: A package for Joint Energy-Based Models Models in Julia (early development).\n\n\nHybrid models that can predict and generate (Grathwohl et al. 2020).\n\nFlux.jl interface\nMLJFlux.jl interface\n\n\n\n\n\n\n\n\nFigure 7: Predicted output class probabilities (contour) and generated input samples (stars) for a binary JEM classifier."
-  },
-  {
-    "objectID": "content/talks/posts/2024-juliacon/taija-update/presentation.html#counterfactual-explanations",
-    "href": "content/talks/posts/2024-juliacon/taija-update/presentation.html#counterfactual-explanations",
-    "title": "What’s new in Trustworthy AI in JuliA?",
-    "section": "Counterfactual Explanations",
-    "text": "Counterfactual Explanations\nThe largest single category of CE methods solves the following optimization through gradient descent:\n\\[\n\\begin{aligned}\n\\mathbf{s}^* &= \\arg \\min_{\\mathbf{s}^\\prime \\in \\mathcal{S}} \\left\\{  {\\text{yloss}(M(f(\\mathbf{s}^\\prime)),y^*)}+ \\lambda {\\text{cost}(f(\\mathbf{s}^\\prime)) }  \\right\\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations explain how inputs into a model need to change for it to produce different outputs.\n\n\n\n\n\n\n\nFigure 2: Gradient-based counterfactual search."
   }
 ]
