@@ -42,20 +42,21 @@ Please note that I am not the author of the Trillion Dollar Words paper nor am I
 
 :::
 
-## Context {.smaller}
+## Context
 
-Developed in the context of our position paper on LLM interpretability presented at [ECONDAT 2024](https://www.kcl.ac.uk/events/econdat-conference-2024) and [ICML 2024](https://icml.cc/Conferences/2024) ([preprint](https://arxiv.org/abs/2402.03962), [blog post](https://www.patalt.org/blog/posts/eccco/), [code](https://github.com/pat-alt/spurious_sentience)):
+[ICML 2024](https://icml.cc/Conferences/2024) paper *Stop Making Unscientific AGI Performance Claims* [@altmeyer2024position] ([preprint](https://arxiv.org/abs/2402.03962), [blog post](https://www.patalt.org/blog/posts/eccco/), [code](https://github.com/pat-alt/spurious_sentience)):
 
-> *Stop Making Unscientific AGI Performance Claims* [@altmeyer2024position]
-
-:::{.incremental}
-
-- **Experiments**: We probe models of varying complexity including random projections, matrix decompositions, deep autoencoders and transformers.
-  - All of them successfully distill knowledge and yet none of them develop true understanding.
-- **Social sciences review**: Humans are prone to seek patterns and anthropomorphize.
-- **Conclusion and outlook**: More caution at the individual level, and different incentives at the institutional level.
-
+::::{.columns}::::
+:::{.column width='75%'}
+- Even simple models can distill meaningful information that predicts external data.
+- Humans are prone to seek patterns and anthropomorphize.
 :::
+:::{.column width='25%'}
+![](www/qr.png)
+:::
+::::
+
+
 
 ## Basic Functionality
 
@@ -200,9 +201,9 @@ artifact"activations_layer_24"
 ![Out-of-sample root mean squared error (RMSE) for the linear probe plotted against FOMC-RoBERTa’s n-th
 layer for different indicators. ](www/mse_pca_128.png){#fig-mse width="80%"}  
 
-## Sparks of Economic Understanding? {.smaller .nostretch}
+## Sparks of Economic Understanding? {.nostretch}
 
-If probe results were indicative of some intrinsic ‘understanding’ of the economy, then the probe should not be sensitive to random sentences unrelated to economics. 
+If probe results were indicative of some intrinsic ‘understanding’, probe should not be sensitive to unrelated sentences.
 
 ![Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB)
 and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted value
