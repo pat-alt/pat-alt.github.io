@@ -35,7 +35,6 @@ Taija is a small but growing ecosystem of packages geared towards [T]{style="col
 
 ```{mermaid}
 %%| echo: false
-%%| label: fig-overview
 %%| fig-cap: "Overview of the Taija ecosystem. Early-stage packages omitted."
 
 %%{
@@ -98,6 +97,73 @@ flowchart TB
     end
 ```
 
+## Ecosystem Overview
+
+```{mermaid}
+%%| echo: false
+%%| fig-cap: "Overview of the Taija ecosystem. Early-stage packages omitted."
+
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'primaryColor': '#BB2528',
+      'primaryTextColor': '#fff',
+      'primaryBorderColor': '#7C0000',
+      'lineColor': '#F8B229',
+      'secondaryColor': '#006100',
+      'tertiaryColor': '#e9edfb',
+      'fontFamily': "avenir"
+    }
+  }
+}%%
+
+flowchart TB
+
+    classDef taija fill:#389836,stroke:#333,color:#fff;
+    classDef core fill:#CB3C33,stroke:#333,color:#fff;
+    classDef base fill:#9558B2,stroke:#333,color:#fff;
+
+    %% Base
+    base["TaijaBase.jl"]
+
+    %% Meta
+    interop["TaijaInteroperability.jl"]
+    data["TaijaData.jl"]
+    parallel["TaijaParallel.jl"]
+    plotting["TaijaPlotting.jl"]
+
+    %% Core
+    ce["CounterfactualExplanations.jl"]
+    cp["ConformalPrediction.jl"]
+    lr["LaplaceRedux.jl"]
+    jem["JointEnergyModels.jl"]
+
+    %% External
+    mlj["MLJ.jl"]
+    flux["Flux.jl"]
+
+    class base base;
+    class interop,data,parallel,plotting taija;
+    class ce,cp,lr,jem core;
+
+    %% Graph
+    base --> ce & cp & lr & jem
+
+    subgraph "Core Packages"
+        ce & cp & lr & jem 
+    end
+
+    subgraph "Meta Packages"
+        data & plotting & parallel & interop
+    end 
+
+    subgraph "External Packages"
+        mlj & flux
+    end
+```
+
+![](www/pirate.jpg){.absolute top=180 left=370 width="100"}
 
 ## Who's behind Taija?
 
