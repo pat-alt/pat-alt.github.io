@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.5.54">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2024-02-08">
 <meta name="description" content="ECCCo is a new way to generate faithful model explanations through counterfactuals that are as plausible as the underlying model permits. Companion post to our AAAI 2024 paper.">
 
-<title>patalt - ECCCos from the Black Box</title>
+<title>ECCCos from the Black Box – patalt</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,7 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-.display.math{display: block; text-align: center; margin: 0.5rem auto;}
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { line-height: 1.25; }
@@ -37,7 +36,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -138,7 +137,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="patalt - ECCCos from the Black Box">
+<meta property="og:title" content="ECCCos from the Black Box – patalt">
 <meta property="og:description" content="ECCCo is a new way to generate faithful model explanations through counterfactuals that are as plausible as the underlying model permits. Companion post to our AAAI 2024 paper.">
 <meta property="og:image" content="https://www.patalt.org/blog/posts/eccco/www/density_model.png">
 <meta property="og:site_name" content="patalt">
@@ -161,7 +160,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -209,7 +208,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -329,7 +328,7 @@ Intermezzo: Why Bother?
 </div>
 </div>
 <p>The second major debate is about what constitutes a good explanation, because, crucially, explanations are not unique: was your headache cured by the aspirin you took before going to sleep or sleep itself? Or a combination of both? This multiplicity of explanations arises almost naturally in the context of counterfactual explanations. Unless the combination of input features for which the model predicts the target class or value is unique, there is always more than one possible explanation. As an illustrative example, consider the counterfactuals presented in <a href="#fig-cf-example" class="quarto-xref">Figure&nbsp;1</a>. All of these are valid explanations for turning a ‘nine’ into ‘seven’ according to the underlying classifier (a simple multi-layer perceptron). They are all valid in the sense the model predicts the target label with high probability in each case. The troubling part is that even though all of the generated counterfactuals provide valid explanations for why the model predicts ‘seven’ instead of ‘nine’, they all look very different.</p>
-<div id="fig-cf-example" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-cf-example" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cf-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/mnist_motivation.png" class="img-fluid figure-img" style="width:80.0%">
@@ -353,7 +352,7 @@ Figure&nbsp;1: Turning a 9 into a 7: Counterfactual explanations for an image cl
 <p><a href="#fig-faithful" class="quarto-xref">Figure&nbsp;2</a> illustrates this concept. It shows samples (yellow stars) drawn from the posterior of a simple JEM trained on linearly separable data. The contour shows the kernel density estimate (KDE) for the learned conditional distribution. Although it seems that the posterior is too sharp in this case, the learned conditional distribution is overall consistent with the data (at least the mode is).</p>
 
 <div class="no-row-height column-margin column-container"><div class="">
-<div id="fig-faithful" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-faithful" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-faithful-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/density_model.png" class="img-fluid figure-img">
@@ -371,7 +370,7 @@ Figure&nbsp;2: Kernel Density Estimate (KDE) for the learned conditional distrib
 <p>If you have followed the discussion so far, then you have already understood the trickiest concept in our paper. Plausibility can be defined much like we have done for faithfulness, but it is a bit more straightforward. In our paper, we broadly define plausible counterfactals as those that are indistinguishable from the observed data in the target domain. We already touched on this above when discussing the counterfactual images in <a href="#fig-cf-example" class="quarto-xref">Figure&nbsp;1</a>.</p>
 
 <div class="no-row-height column-margin column-container"><div class="">
-<div id="fig-plausible" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-plausible" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-plausible-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/density_true.png" class="img-fluid figure-img">
@@ -392,7 +391,7 @@ Figure&nbsp;3: KDE for the conditional distribution based on observed data. Coun
 <p>The counterfactual generated by <em>ECCCo (no EBM)</em> is deeper inside the blue class and has avoided points near the decision boundary on its path to its final destination. This is because <em>ECCCo (no EBM)</em> involves a penalty term for predictive uncertainty, which is high near the decision boundary. Intuitively, we would expect that avoiding regions of high predictive uncertainty in our counterfactual search should help with plausibility <span class="citation" data-cites="schut2021generating">(<a href="#ref-schut2021generating" role="doc-biblioref">Schut et al. 2021</a>)</span>. In this particular case, the final counterfactual is neither more faithful nor more plausible than the one generated by <em>Wachter</em>, but in our experiments we have generally found that penalizing predictive uncertainty alone can help to generate more faithful and plausible counterfactuals.</p>
 <p>The counterfactual generated by <em>ECCCo (no CP)</em> is more faithful than the one generated by <em>Wachter</em> and <em>ECCCo (no EBM)</em>. This is because the energy constraint induces counterfactuals that are more consistent with the learned conditional distribution (as in <a href="#fig-faithful" class="quarto-xref">Figure&nbsp;2</a>). Since the model has learned something meaningful about the data, the counterfactual is also more plausible than the one generated by <em>Wachter</em> and <em>ECCCo (no EBM)</em> in this case.</p>
 <p>The counterfactual path generated by <em>ECCCo</em> combines benefits from both the energy constraint and the conformal prediction component. It avoids regions of high predictive uncertainty and ends up at a point that is consistent with the learned conditional distribution.</p>
-<div id="fig-poc" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-poc" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-poc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/poc_gradient_fields.png" class="img-fluid figure-img">
@@ -407,7 +406,7 @@ Figure&nbsp;4: Gradient fields and counterfactual paths for different generators
 <h2 class="anchored" data-anchor-id="results">Results</h2>
 <p>In the paper, we present results from extensive empirical studies involving eight datasets from different domains and a variety of models. We compare <em>ECCCo</em> to state-of-the-art counterfactual generators and show that it consistently outperforms these in terms of faithfulness and often achieves the highest degrees of plausibility. Here we will highlight some visual results from the MNIST dataset.</p>
 <p><a href="#fig-mnist-benchmark" class="quarto-xref">Figure&nbsp;5</a> shows counterfactuals generated using different counterfactual generators on the MNIST dataset. In this example, the goal is to generate a counterfactual in class ‘five’ for the factual ‘three’. The <em>ECCCo+</em> generator is a variant of <em>ECCCo</em> that performs gradient search in the space spanned by the first few principal components. This reduces computational costs and often helps with plausibility, sometimes at a small cost of faithfulness. The counterfactuals generated by <em>ECCCo</em> and <em>ECCCo+</em> are visibly more plausible than those generated by the other generators. In the paper, we quantify this using custom metrics for plausibility and faithfulness that we propose.</p>
-<div id="fig-mnist-benchmark" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-mnist-benchmark" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-mnist-benchmark-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/mnist_benchmark.png" class="img-fluid figure-img" style="width:100.0%">
@@ -421,7 +420,7 @@ Figure&nbsp;5: Results for different generators (from 3 to 5).
 <p>More generally, we find that <em>ECCCo</em> is particularly effective at producing plausible counterfactuals for models that we would expect to have learned more meaningful representations of the data. This is consistent with our claim that <em>ECCCo</em> generates faithful counterfactuals. <a href="#fig-mnist-benchmark" class="quarto-xref">Figure&nbsp;5</a> shows the results for applying <em>ECCCo</em> to the same factual ‘nine’ as in <a href="#fig-cf-example" class="quarto-xref">Figure&nbsp;1</a> for different models from left to right and top to bottom: (a) an MLP, (b) a deep ensemble of MLPs, (c) a JEM, and, (d) a deep ensemble of JEMs. The plausibility of the generated counterfactual gradually improves from left to right and top to bottom as we get more rigorous about model complexity and training: deep ensembling can help to capture predictive uncertainty and joint-energy modelling is explicitly concerned with learning meaningful representations in the data.</p>
 
 <div class="no-row-height column-margin column-container"><div class="">
-<div id="fig-mnist-eccco" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-mnist-eccco" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-mnist-eccco-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/mnist_eccco.png" class="img-fluid figure-img">
@@ -519,12 +518,12 @@ Welling, Max, and Yee W Teh. 2011. <span>“Bayesian Learning via Stochastic Gra
   author = {Altmeyer, Patrick},
   title = {ECCCos from the {Black} {Box}},
   date = {2024-02-08},
-  url = {https://www.patalt.org//blog/posts/eccco},
+  url = {https://www.patalt.org/blog/posts/eccco/},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2024" class="csl-entry quarto-appendix-citeas" role="listitem">
 Altmeyer, Patrick. 2024. <span>“ECCCos from the Black Box.”</span>
-February 8, 2024. <a href="https://www.patalt.org//blog/posts/eccco">https://www.patalt.org//blog/posts/eccco</a>.
+February 8, 2024. <a href="https://www.patalt.org/blog/posts/eccco/">https://www.patalt.org/blog/posts/eccco/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -561,18 +560,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -604,7 +592,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
   const viewSource = window.document.getElementById('quarto-view-source') ||
                      window.document.getElementById('quarto-code-tools-source');
   if (viewSource) {
@@ -656,6 +666,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.patalt\.org\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -690,7 +718,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -1099,7 +1131,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-131"><a href="#cb1-131"></a></span>
 <span id="cb1-132"><a href="#cb1-132"></a>The code for the experiments in the paper is available on GitHub: <span class="co">[</span><span class="ot">https://github.com/pat-alt/ECCCo.jl</span><span class="co">](https://github.com/pat-alt/ECCCo.jl)</span>. The repo contains job scripts for running the experiments on a SLURM cluster, as well as the source code for the *ECCCo* package. The package is written in Julia and built on top of [CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl), which will eventually absorb the functionality of *ECCCo*.</span>
 <span id="cb1-133"><a href="#cb1-133"></a></span>
-<span id="cb1-134"><a href="#cb1-134"></a><span class="fu">## References</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-134"><a href="#cb1-134"></a><span class="fu">## References</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.5.54">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2023-03-13">
 <meta name="description" content="In this slightly different post, I talk about my first experience with metaprogramming in Julia.">
 
-<title>patalt - A Leap of Faith into Julia’s Metaverse</title>
+<title>A Leap of Faith into Julia’s Metaverse – patalt</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,7 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-.display.math{display: block; text-align: center; margin: 0.5rem auto;}
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { line-height: 1.25; }
@@ -37,7 +36,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -138,10 +137,39 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="patalt - A Leap of Faith into Julia’s Metaverse">
+<meta property="og:title" content="A Leap of Faith into Julia’s Metaverse – patalt">
 <meta property="og:description" content="In this slightly different post, I talk about my first experience with metaprogramming in Julia.">
 <meta property="og:image" content="https://www.patalt.org/blog/posts/meta-programming/www/intro.png">
 <meta property="og:site_name" content="patalt">
@@ -164,7 +192,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -212,7 +240,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -335,7 +363,7 @@ A leap of faith into Julia’s metaverse.
 <section id="code-as-data-structures" class="level3">
 <h3 class="anchored" data-anchor-id="code-as-data-structures">Code as Data Structures</h3>
 <p>Skipping the details here, it turns out that when I write <code>1 + 1</code> in the REPL, Julia first parses this program as a string <code>"1 + 1</code> into an expression <code>ex=:(1 + 1)::Expr</code>, which is then evaluated <code>eval(ex)</code> (<a href="#fig-code" class="quarto-xref">Figure&nbsp;1</a>). I’ve used a <code>quote</code> here to generate the expression because I’ve used <strong>quoting</strong> before for use with <code>Documenter.jl</code>.</p>
-<div id="fig-code" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-code" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-code-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="www/code-as-data.png" class="img-fluid figure-img">
@@ -457,7 +485,7 @@ end</pre>
 </blockquote>
 <div class="quarto-figure quarto-figure-right">
 <figure class="figure">
-<p><img src="www/macroland.png" class="img-fluid quarto-figure quarto-figure-right figure-img"></p>
+<p><img src="www/macroland.png" class="img-fluid figure-img"></p>
 <figcaption>Arrived in Macroland.</figcaption>
 </figure>
 </div>
@@ -484,13 +512,13 @@ end</pre>
 <p>I’ll leave it to you to thoroughly read that section in the Julia <a href="https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Building-an-advanced-macro">docs</a>. Here, we’ll jump straight into building the macro I want to have for <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>. I now think it’ll be less involved than I thought — optimism in the face of uncertainty!</p>
 <div class="quarto-figure quarto-figure-right">
 <figure class="figure">
-<p><img src="www/final-boss.png" class="img-fluid quarto-figure quarto-figure-right figure-img"></p>
+<p><img src="www/final-boss.png" class="img-fluid figure-img"></p>
 <figcaption>Advanced Macro: the final boss.</figcaption>
 </figure>
 </div>
 <section id="from-off-the-shelf-counterfactual-generators" class="level3">
 <h3 class="anchored" data-anchor-id="from-off-the-shelf-counterfactual-generators">From Off-the-Shelf Counterfactual Generators …</h3>
-<p><a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> is a package for generating Counterfactual Explanations for predictive models <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20f%3A%20%5Cmathcal%7BX%7D%20%5Cmapsto%20%5Cmathcal%7BY%7D" alt="f: \mathcal{X} \mapsto \mathcal{Y}" title="f: \mathcal{X} \mapsto \mathcal{Y}" class="math inline">. This is a relatively recent approach to Explainable AI that I am (probably a little too) excited about and won’t dwell on here. For what follows, it suffices to say that generating Counterfactual Explanations can be seen as a generative modelling task because it involves generating samples in the input space: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20x%20%5Csim%20%5Cmathcal%7BX%7D" alt="x \sim \mathcal{X}" title="x \sim \mathcal{X}" class="math inline">. To this end, the package has previously shipped with a number of <code>Generators</code>: composite types that contain information about how counterfactuals ought to be generated.</p>
+<p><a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a> is a package for generating Counterfactual Explanations for predictive models <span class="math inline">\(f: \mathcal{X} \mapsto \mathcal{Y}\)</span>. This is a relatively recent approach to Explainable AI that I am (probably a little too) excited about and won’t dwell on here. For what follows, it suffices to say that generating Counterfactual Explanations can be seen as a generative modelling task because it involves generating samples in the input space: <span class="math inline">\(x \sim \mathcal{X}\)</span>. To this end, the package has previously shipped with a number of <code>Generators</code>: composite types that contain information about how counterfactuals ought to be generated.</p>
 <p>This has allowed users to specify the type of generator they want to use by instantiating it. For example, the DiCE generator by <span class="citation" data-cites="mothilal2020explaining">Mothilal, Sharma, and Tan (<a href="#ref-mothilal2020explaining" role="doc-biblioref">2020</a>)</span> could (and still can) be instantiated as follows:</p>
 <div id="198cf363" class="cell" data-execution_count="10">
 <details class="code-fold">
@@ -503,14 +531,12 @@ end</pre>
 <section id="to-composable-generators" class="level3">
 <h3 class="anchored" data-anchor-id="to-composable-generators">… To Composable Generators</h3>
 <p>One of my key objectives for the package has always been composability. It turns out that many of the various counterfactual generators that have been proposed in the literature, essentially do the same thing: they optimize an objective function. In <span class="citation" data-cites="altmeyer2023endogenous">Altmeyer et al. (<a href="#ref-altmeyer2023endogenous" role="doc-biblioref">2023</a>)</span>, we denote that objective formally as follows,</p>
-<p><span id="eq-general"><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Cdisplaystyle%20%5Cbegin%7Baligned%7D%0A%5Cmathbf%7Bs%7D%5E%5Cprime%20%26%3D%20%5Carg%20%5Cmin_%7B%5Cmathbf%7Bs%7D%5E%5Cprime%20%5Cin%20%5Cmathcal%7BS%7D%7D%20%5Cleft%5C%7B%20%20%7B%5Ctext%7Byloss%7D%28M%28f%28%5Cmathbf%7Bs%7D%5E%5Cprime%29%29%2Cy%5E%2A%29%7D%2B%20%5Clambda%20%7B%5Ctext%7Bcost%7D%28f%28%5Cmathbf%7Bs%7D%5E%5Cprime%29%29%20%7D%20%20%5Cright%5C%7D%20%0A%5Cend%7Baligned%7D%20%0A%20%5Cqquad%281%29" alt="\begin{aligned}
-\mathbf{s}^\prime &amp;= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\} 
-\end{aligned} 
- \qquad(1)" title="\begin{aligned}
-\mathbf{s}^\prime &amp;= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\} 
-\end{aligned} 
- \qquad(1)" class="math display"></span></p>
-<p>where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Ctext%7Byloss%7D" alt="\text{yloss}" title="\text{yloss}" class="math inline"> denotes the main loss function and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Ctext%7Bcost%7D" alt="\text{cost}" title="\text{cost}" class="math inline"> is a penalty term. I won’t cover this in any more detail here, but you can read about it in the package <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators">docs</a>. The important thing is that <a href="#eq-general" class="quarto-xref">Equation&nbsp;1</a> very closely describes how counterfactual search is actually implemented in the package.</p>
+<p><span id="eq-general"><span class="math display">\[
+\begin{aligned}
+\mathbf{s}^\prime &amp;= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \left\{  {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)}+ \lambda {\text{cost}(f(\mathbf{s}^\prime)) }  \right\}
+\end{aligned}
+\tag{1}\]</span></span></p>
+<p>where <span class="math inline">\(\text{yloss}\)</span> denotes the main loss function and <span class="math inline">\(\text{cost}\)</span> is a penalty term. I won’t cover this in any more detail here, but you can read about it in the package <a href="https://juliatrustworthyai.github.io/CounterfactualExplanations.jl/v0.1/explanation/generators/overview/#Gradient-based-Counterfactual-Generators">docs</a>. The important thing is that <a href="#eq-general" class="quarto-xref">Equation&nbsp;1</a> very closely describes how counterfactual search is actually implemented in the package.</p>
 <p>In other words, all generators currently implemented share a common starting point. They largely just vary in the exact way the objective function is specified. This gives rise to an interesting idea:</p>
 <blockquote class="blockquote">
 <p>Why not compose generators that combine ideas from different off-the-shelf generators?</p>
@@ -542,7 +568,7 @@ end</pre>
 <div class="sourceCode" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a>ex <span class="op">=</span> <span class="op">:</span>(yloss <span class="op">+</span> λ<span class="op">*</span>cost)</span>
 <span id="cb19-2"><a href="#cb19-2"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Of course, evaluating this expression throws an error because none of the variables are actually defined. Let’s work on that …</p>
-<p>For the loss and penalty functions, we will use methods available from the <code>CounterfactualExplanations.Objectives</code> module, while for <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Clambda" alt="\lambda" title="\lambda" class="math inline"> we will use a literal:</p>
+<p>For the loss and penalty functions, we will use methods available from the <code>CounterfactualExplanations.Objectives</code> module, while for <span class="math inline">\(\lambda\)</span> we will use a literal:</p>
 <div id="fa8a1842" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
@@ -711,7 +737,7 @@ end</pre>
 </div>
 <p>It worked! 🎉 The resulting counterfactual search is illustrated in <a href="#fig-search" class="quarto-xref">Figure&nbsp;2</a>. I may have overspecified the size of the <code>ddp_diversity</code> penalty a little bit here, but it sure makes for a cool chart!</p>
 <div id="cell-fig-search" class="cell" data-execution_count="23">
-<div id="fig-search" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored" data-execution_count="24">
+<div id="fig-search" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="24">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-search-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <!--?xml version="1.0" encoding="utf-8"?-->
@@ -2382,12 +2408,12 @@ Mothilal, Ramaravind K, Amit Sharma, and Chenhao Tan. 2020. <span>“Explaining 
   author = {Altmeyer, Patrick},
   title = {A {Leap} of {Faith} into {Julia’s} {Metaverse}},
   date = {2023-03-13},
-  url = {https://www.patalt.org//blog/posts/meta-programming},
+  url = {https://www.patalt.org/blog/posts/meta-programming/},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2023" class="csl-entry quarto-appendix-citeas" role="listitem">
 Altmeyer, Patrick. 2023. <span>“A Leap of Faith into Julia’s
-Metaverse.”</span> March 13, 2023. <a href="https://www.patalt.org//blog/posts/meta-programming">https://www.patalt.org//blog/posts/meta-programming</a>.
+Metaverse.”</span> March 13, 2023. <a href="https://www.patalt.org/blog/posts/meta-programming/">https://www.patalt.org/blog/posts/meta-programming/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -2424,18 +2450,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -2467,7 +2482,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
   const viewSource = window.document.getElementById('quarto-view-source') ||
                      window.document.getElementById('quarto-code-tools-source');
   if (viewSource) {
@@ -2519,6 +2556,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.patalt\.org\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -2553,7 +2608,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -3259,7 +3318,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb36-474"><a href="#cb36-474"></a>Throughout this post, I have skipped various important details that (I think) were not immediately relevant to the goal I had in mind: adding my first macro to  <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)</span>. In the future, I may write about this topic again and cover some of these missing details (hopefully with a bit more insight at that point!).</span>
 <span id="cb36-475"><a href="#cb36-475"></a></span>
 <span id="cb36-476"><a href="#cb36-476"></a><span class="fu">## 🎓 References</span></span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

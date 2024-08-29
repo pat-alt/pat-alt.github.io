@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.5.54">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2024-02-07">
 <meta name="description" content="This post questions the idea that finding patterns in latent embeddings of models is indicative of AGI or even surprising. I illustrate this using examples from Economics, a discipline that does not typically anthropomorphize the models it produces.">
 
-<title>patalt - Spurious Sparks of AGI</title>
+<title>Spurious Sparks of AGI – patalt</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,7 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-.display.math{display: block; text-align: center; margin: 0.5rem auto;}
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { line-height: 1.25; }
@@ -37,7 +36,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -138,10 +137,39 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="patalt - Spurious Sparks of AGI">
+<meta property="og:title" content="Spurious Sparks of AGI – patalt">
 <meta property="og:description" content="This post questions the idea that finding patterns in latent embeddings of models is indicative of AGI or even surprising. I illustrate this using examples from Economics, a discipline that does not typically anthropomorphize the models it produces.">
 <meta property="og:image" content="https://www.patalt.org/blog/posts/spurious-sparks/results/figures/intro.jpeg">
 <meta property="og:site_name" content="patalt">
@@ -162,7 +190,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -210,7 +238,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -347,7 +375,7 @@ Position
 <h3 class="anchored" data-anchor-id="are-neural-networks-born-with-world-models">Are Neural Networks Born with World Models?</h3>
 <p>Before diving into the world of Economics, let’s start with a somewhat contrived and yet very illustrative example underpinning my point that patterns in latent spaces should not surprise us.</p>
 <p><span class="citation" data-cites="gurnee2023language">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span> extract and visualize the alleged geographical world model by training linear regression probes on internal activations in LLMs (including Llama-2) for the names of places, to predict geographical coordinates associated with these places. Now, the Llama-2 model has ingested huge amounts of publicly available data from the internet, including Wikipedia dumps from the June-August 2022 period <span class="citation" data-cites="touvron2023llama">(<a href="#ref-touvron2023llama" role="doc-biblioref">Touvron et al. 2023</a>)</span>. It is therefore highly likely that the training data contains geographical coordinates, either directly or indirectly. At the very least, we should expect that the model has seen features during training that are highly correlated with geographical coordinates. The model itself is essentially a very large latent space to which all features are randomly projected in the very first instance before being passed through a series of layers which are gradually trained for its downstream task (next token prediction).</p>
-<p>In our first example, we simulate this scenario, stopping short of training the model. In particular, we take the <a href="https://github.com/wesg52/world-models/blob/main/data/entity_datasets/world_place.csv">world_place.csv</a> that was used in <span class="citation" data-cites="gurnee2023language">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span>, which maps locations/areas to their latitude and longitude. For each place, it also indicates the corresponding country. From this, we take the subset that contains countries that are currently part of the top 10 <a href="https://www.fifa.com/fifa-world-ranking/men?dateId=id14142">FIFA world ranking</a>, and assign the current rank to each country (i.e., Argentina gets 1, France gets 2, …). To ensure that the training data only involves a noisy version of the coordinates, we transform the longitude and latitude data as follows: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Crho%20%5Ccdot%20%5Ctext%7Bcoord%7D%20%2B%20%281-%5Crho%29%20%5Ccdot%20%5Cepsilon" alt="\rho \cdot \text{coord} + (1-\rho) \cdot \epsilon" title="\rho \cdot \text{coord} + (1-\rho) \cdot \epsilon" class="math inline"> where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Crho%3D0.5" alt="\rho=0.5" title="\rho=0.5" class="math inline"> and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cepsilon%20%5Csim%20%5Cmathcal%7BN%7D%280%2C%205%29" alt="\epsilon \sim \mathcal{N}(0, 5)" title="\epsilon \sim \mathcal{N}(0, 5)" class="math inline">.</p>
+<p>In our first example, we simulate this scenario, stopping short of training the model. In particular, we take the <a href="https://github.com/wesg52/world-models/blob/main/data/entity_datasets/world_place.csv">world_place.csv</a> that was used in <span class="citation" data-cites="gurnee2023language">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span>, which maps locations/areas to their latitude and longitude. For each place, it also indicates the corresponding country. From this, we take the subset that contains countries that are currently part of the top 10 <a href="https://www.fifa.com/fifa-world-ranking/men?dateId=id14142">FIFA world ranking</a>, and assign the current rank to each country (i.e., Argentina gets 1, France gets 2, …). To ensure that the training data only involves a noisy version of the coordinates, we transform the longitude and latitude data as follows: <span class="math inline">\(\rho \cdot \text{coord} + (1-\rho) \cdot \epsilon\)</span> where <span class="math inline">\(\rho=0.5\)</span> and <span class="math inline">\(\epsilon \sim \mathcal{N}(0, 5)\)</span>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -361,13 +389,13 @@ Code
 <p>In the process of writing the paper, most of the code has been moved into scripts in a designated repository to ensure reproducibility. The code for this example can be found <a href="https://anonymous.4open.science/r/spurious_sentience/src/world_map/run_experiment.jl">here</a>.</p>
 </div>
 </div>
-<p>Next, we encode all features except the FIFA world rank indicator as continuous variables: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20X%5E%7B%28n%20%5Ctimes%20m%29%7D" alt="X^{(n \times m)}" title="X^{(n \times m)}" class="math inline"> where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20n" alt="n" title="n" class="math inline"> is the number of samples and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20m" alt="m" title="m" class="math inline"> is the number of resulting features. Additionally, we add a large number of random features to <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20X" alt="X" title="X" class="math inline"> to simulate the fact that not all features ingested by Llama-2 are necessarily correlated with geographical coordinates. Let <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20d" alt="d" title="d" class="math inline"> denote the final number of features, i.e.~<img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20d%3Dm%2Bk" alt="d=m+k" title="d=m+k" class="math inline"> where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20k" alt="k" title="k" class="math inline"> is the number of random features.</p>
-<p>We then initialize a small neural network, considered a <em>projector</em>, mapping from <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20X" alt="X" title="X" class="math inline"> to a single hidden layer with <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20h%3Cd" alt="h<d" title="h<d" class="math inline"> hidden units and sigmoid activation, and from there, to a lower-dimensional output space. Without performing any training on the <em>projector</em>, we simply compute a forward pass of <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20X" alt="X" title="X" class="math inline"> and retrieve activations <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7BZ%7D%5E%7B%28n%5Ctimes%20h%29%7D" alt="\mathbf{Z}^{(n\times h)}" title="\mathbf{Z}^{(n\times h)}" class="math inline">. Next, we perform the linear probe on a subset of <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7BZ%7D" alt="\mathbf{Z}" title="\mathbf{Z}" class="math inline"> through Ridge regression: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7BW%7D%20%3D%20%28%5Cmathbf%7BZ%7D_%7B%5Ctext%7Btrain%7D%7D%27%5Cmathbf%7BZ%7D_%7B%5Ctext%7Btrain%7D%7D%20%2B%20%5Clambda%20%5Cmathbf%7BI%7D%29%20%28%5Cmathbf%7BZ%7D_%7B%5Ctext%7Btrain%7D%7D%27%5Ctextbf%7Bcoord%7D%29%5E%7B-1%7D" alt="\mathbf{W} = (\mathbf{Z}_{\text{train}}'\mathbf{Z}_{\text{train}} + \lambda \mathbf{I}) (\mathbf{Z}_{\text{train}}'\textbf{coord})^{-1}" title="\mathbf{W} = (\mathbf{Z}_{\text{train}}'\mathbf{Z}_{\text{train}} + \lambda \mathbf{I}) (\mathbf{Z}_{\text{train}}'\textbf{coord})^{-1}" class="math inline">, where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Ctextbf%7Bcoord%7D" alt="\textbf{coord}" title="\textbf{coord}" class="math inline"> is the <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%28n%20%5Ctimes%202%29" alt="(n \times 2)" title="(n \times 2)" class="math inline"> matrix containing the longitude and latitude for each sample. A hold-out set is reserved for testing, on which we compute predicted coordinates for each sample as <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cwidehat%7B%5Ctextbf%7Bcoord%7D%7D%3D%5Cmathbf%7BZ%7D_%7B%5Ctext%7Btest%7D%7D%5Cmathbf%7BW%7D" alt="\widehat{\textbf{coord}}=\mathbf{Z}_{\text{test}}\mathbf{W}" title="\widehat{\textbf{coord}}=\mathbf{Z}_{\text{test}}\mathbf{W}" class="math inline"> and plot these on a world map (<a href="#fig-map" class="quarto-xref">Figure&nbsp;1</a>).</p>
+<p>Next, we encode all features except the FIFA world rank indicator as continuous variables: <span class="math inline">\(X^{(n \times m)}\)</span> where <span class="math inline">\(n\)</span> is the number of samples and <span class="math inline">\(m\)</span> is the number of resulting features. Additionally, we add a large number of random features to <span class="math inline">\(X\)</span> to simulate the fact that not all features ingested by Llama-2 are necessarily correlated with geographical coordinates. Let <span class="math inline">\(d\)</span> denote the final number of features, i.e.~<span class="math inline">\(d=m+k\)</span> where <span class="math inline">\(k\)</span> is the number of random features.</p>
+<p>We then initialize a small neural network, considered a <em>projector</em>, mapping from <span class="math inline">\(X\)</span> to a single hidden layer with <span class="math inline">\(h&lt;d\)</span> hidden units and sigmoid activation, and from there, to a lower-dimensional output space. Without performing any training on the <em>projector</em>, we simply compute a forward pass of <span class="math inline">\(X\)</span> and retrieve activations <span class="math inline">\(\mathbf{Z}^{(n\times h)}\)</span>. Next, we perform the linear probe on a subset of <span class="math inline">\(\mathbf{Z}\)</span> through Ridge regression: <span class="math inline">\(\mathbf{W} = (\mathbf{Z}_{\text{train}}'\mathbf{Z}_{\text{train}} + \lambda \mathbf{I}) (\mathbf{Z}_{\text{train}}'\textbf{coord})^{-1}\)</span>, where <span class="math inline">\(\textbf{coord}\)</span> is the <span class="math inline">\((n \times 2)\)</span> matrix containing the longitude and latitude for each sample. A hold-out set is reserved for testing, on which we compute predicted coordinates for each sample as <span class="math inline">\(\widehat{\textbf{coord}}=\mathbf{Z}_{\text{test}}\mathbf{W}\)</span> and plot these on a world map (<a href="#fig-map" class="quarto-xref">Figure&nbsp;1</a>).</p>
 <blockquote class="blockquote">
 <p>If we can expect even random projections to contain useful representations, then should we really be surprised that a large language model, trained on a diverse set of data, contains representations that are useful for a wide range of tasks? 🤔</p>
 </blockquote>
 <p>While the fit certainly is not perfect, the results do indicate that the random projection contains representations that are useful for the task at hand. Thus, this simple example illustrates that meaningful target representations should be recoverable from a sufficiently large latent space, given the <em>random</em> projection of a small number of highly correlated features. Similarly, <span class="citation" data-cites="alain2018understanding">Alain and Bengio (<a href="#ref-alain2018understanding" role="doc-biblioref">2018</a>)</span> observe that even before training a convolutional neural network on MNIST data, the layer-wise activations can already be used to perform binary classification. In fact, it is well-known that random projections can be used for prediction tasks <span class="citation" data-cites="dasgupta2013experiments">(<a href="#ref-dasgupta2013experiments" role="doc-biblioref">Dasgupta 2013</a>)</span>.</p>
-<div id="fig-map" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-map" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="results/figures/map.png" class="img-fluid figure-img">
@@ -432,7 +460,7 @@ Figure&nbsp;1: Predicted coordinate values (out-of-sample) from a linear probe o
 <div aria-describedby="fig-gfc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-gfc" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-gfc-1" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-gfc-1" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-gfc-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <!--?xml version="1.0" encoding="utf-8"?-->
@@ -500,7 +528,7 @@ Figure&nbsp;1: Predicted coordinate values (out-of-sample) from a linear probe o
 </div>
 </div>
 <div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-gfc" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-gfc-2" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-gfc-2" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-gfc-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <!--?xml version="1.0" encoding="utf-8"?-->
@@ -575,7 +603,7 @@ Figure&nbsp;2: Yield curve of US Treasury bonds.
 </figure>
 </div>
 <p>Of course, US Treasuries are not the only bonds that are traded in the market. To get a more complete picture of the economy, analysts might therefore be interested in looking at the yield curves of other bonds as well. In particular, we might be interested in predicting economic growth based on the yield curves of many different bonds. The problem with that idea is that it is cursed by high dimensionality: we would end up modelling a single variable of interest (economic growth) with a large number of predictors (the yields of many different bonds). To deal with the curse of high dimensionality it can be useful to decompose the yield curves into sets of principal components.</p>
-<p>To compute the principal components we can decompose the matrix of yields <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7BY%7D" alt="\mathbf{Y}" title="\mathbf{Y}" class="math inline"> into a product of its singular vectors and values: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7BY%7D%3D%5Cmathbf%7BU%7D%5CSigma%5Cmathbf%7BV%7D%5E%7B%5Cprime%7D" alt="\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}" title="\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}" class="math inline">. I will not go into the details here, because Professor Gilbert Strang has already done a much better job than I ever could in his <a href="https://www.youtube.com/watch?v=mBcLRGuAFUk">Linear Algebra lectures</a>. To put this into the broader context of the article, however, let us simply refer to <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7BU%7D" alt="\mathbf{U}" title="\mathbf{U}" class="math inline">, <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5CSigma" alt="\Sigma" title="\Sigma" class="math inline"> and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7BV%7D%5E%7B%5Cprime%7D" alt="\mathbf{V}^{\prime}" title="\mathbf{V}^{\prime}" class="math inline"> as latent embeddings of the yield curve (they are latent because they are not directly observable).</p>
+<p>To compute the principal components we can decompose the matrix of yields <span class="math inline">\(\mathbf{Y}\)</span> into a product of its singular vectors and values: <span class="math inline">\(\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}\)</span>. I will not go into the details here, because Professor Gilbert Strang has already done a much better job than I ever could in his <a href="https://www.youtube.com/watch?v=mBcLRGuAFUk">Linear Algebra lectures</a>. To put this into the broader context of the article, however, let us simply refer to <span class="math inline">\(\mathbf{U}\)</span>, <span class="math inline">\(\Sigma\)</span> and <span class="math inline">\(\mathbf{V}^{\prime}\)</span> as latent embeddings of the yield curve (they are latent because they are not directly observable).</p>
 <p>The top panel in <a href="#fig-pca" class="quarto-xref">Figure&nbsp;3</a> shows the first two principal components of the yield curves of US Treasury bonds over time. Vertical stalks indicate the key dates during the onset and aftermath of the crisis, which we discussed above. For both components, we can observe some marked shifts between the two dates - but can we attribute any meaning to these shifts? It turns out we can: for comparison, the bottom panel in <a href="#fig-pca" class="quarto-xref">Figure&nbsp;3</a> shows the average level and spread of the yield curves over time. The first principal component is strongly correlated with the level of the yield curve, while the second principal component is strongly correlated with the spread of the yield curve.</p>
 <div class="cell" data-execution_count="3">
 <details class="code-fold">
@@ -588,7 +616,7 @@ Figure&nbsp;2: Yield curve of US Treasury bonds.
 <span id="cb2-6"><a href="#cb2-6"></a>U, Σ, V <span class="op">=</span> <span class="fu">svd</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="fig-pca" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-pca" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-pca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="results/figures/pca.png" class="img-fluid figure-img">
@@ -598,7 +626,7 @@ Figure&nbsp;3: Comparison of latent embeddings and observed data of the US Treas
 </figcaption>
 </figure>
 </div>
-<p>Not convinced? Let us use <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7BY%7D%3D%5Cmathbf%7BU%7D%5CSigma%5Cmathbf%7BV%7D%5E%7B%5Cprime%7D" alt="\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}" title="\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}" class="math inline"> in true autoencoder fashion to reconstruct yield curves from principal components. Let <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20z_1" alt="z_1" title="z_1" class="math inline"> denote the first principal component and consider the following: we keep all other <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20M-1" alt="M-1" title="M-1" class="math inline"> principal components fixed at zero where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20M" alt="M" title="M" class="math inline"> denotes the total number of maturities; next we traverse the latent space by varying the value of <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20z_1" alt="z_1" title="z_1" class="math inline"> over a fixed grid of length <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20K" alt="K" title="K" class="math inline"> each time storing the full vector <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bz%7D" alt="\mathbf{z}" title="\mathbf{z}" class="math inline">; finally, we vertically concatenate the vectors and end up with a matrix <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7BZ%7D" alt="\mathbf{Z}" title="\mathbf{Z}" class="math inline"> of dimension <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%28K%20%5Ctimes%20M%29" alt="(K \times M)" title="(K \times M)" class="math inline">. To reconstruct yields, we simply multiply <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20Z" alt="Z" title="Z" class="math inline"> by the singular values and right singular vectors: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7BY%7D%3D%5Cmathbf%7BZ%7D%5CSigma%5Cmathbf%7BV%7D%5E%7B%5Cprime%7D" alt="\mathbf{Y}=\mathbf{Z}\Sigma\mathbf{V}^{\prime}" title="\mathbf{Y}=\mathbf{Z}\Sigma\mathbf{V}^{\prime}" class="math inline">.</p>
+<p>Not convinced? Let us use <span class="math inline">\(\mathbf{Y}=\mathbf{U}\Sigma\mathbf{V}^{\prime}\)</span> in true autoencoder fashion to reconstruct yield curves from principal components. Let <span class="math inline">\(z_1\)</span> denote the first principal component and consider the following: we keep all other <span class="math inline">\(M-1\)</span> principal components fixed at zero where <span class="math inline">\(M\)</span> denotes the total number of maturities; next we traverse the latent space by varying the value of <span class="math inline">\(z_1\)</span> over a fixed grid of length <span class="math inline">\(K\)</span> each time storing the full vector <span class="math inline">\(\mathbf{z}\)</span>; finally, we vertically concatenate the vectors and end up with a matrix <span class="math inline">\(\mathbf{Z}\)</span> of dimension <span class="math inline">\((K \times M)\)</span>. To reconstruct yields, we simply multiply <span class="math inline">\(Z\)</span> by the singular values and right singular vectors: <span class="math inline">\(\mathbf{Y}=\mathbf{Z}\Sigma\mathbf{V}^{\prime}\)</span>.</p>
 <p><a href="#fig-pca-anim" class="quarto-xref">Figure&nbsp;4</a> shows the result of this exercise in the left panel. As we can see, our generated yield curves shift vertically as we traverse the latent space. The right panel of <a href="#fig-pca-anim" class="quarto-xref">Figure&nbsp;4</a> shows the result of a similar exercise, but this time we keep the first principal component fixed at zero and vary the second principal component. This time the slope of our generated yield curves shifts as we traverse the latent space.</p>
 <div class="cell" data-execution_count="4">
 <details class="code-fold">
@@ -642,7 +670,7 @@ Figure&nbsp;3: Comparison of latent embeddings and observed data of the US Treas
 <span id="cb3-37"><a href="#cb3-37"></a><span class="fu">gif</span>(anim, <span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"results/figures/pc_anim.gif"</span>), fps<span class="op">=</span><span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="fig-pca-anim" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-pca-anim" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-pca-anim-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="results/figures/pc_anim.gif" class="img-fluid figure-img">
@@ -706,7 +734,7 @@ Figure&nbsp;4: Yield curve decomposition through PCA.
 <span id="cb4-42"><a href="#cb4-42"></a>)</span>
 <span id="cb4-43"><a href="#cb4-43"></a><span class="fu">plot</span>(p_gdp, p_yields, layout<span class="op">=</span>(<span class="fl">2</span>,<span class="fl">1</span>), size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">600</span>), left_margin<span class="op">=</span><span class="fl">5</span>mm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="fig-dl-data" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored" data-execution_count="6">
+<div id="fig-dl-data" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="6">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dl-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <!--?xml version="1.0" encoding="utf-8"?-->
@@ -794,8 +822,8 @@ Figure&nbsp;5: GDP growth and yield curve data.
 </section>
 <section id="model" class="level4">
 <h4 class="anchored" data-anchor-id="model">Model</h4>
-<p>Using a simple autoencoder architecture (<a href="#fig-dl-model" class="quarto-xref">Figure&nbsp;6</a>), we let our model <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20g_t" alt="g_t" title="g_t" class="math inline"> denote growth and our conditional <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Br%7D_t" alt="\mathbf{r}_t" title="\mathbf{r}_t" class="math inline"> the matrix of aggregated Treasury yield rates at time <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20t" alt="t" title="t" class="math inline">. Finally, we let <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Ctheta" alt="\theta" title="\theta" class="math inline"> denote our model parameters. Formally, we are interested in maximizing the likelihood <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20p_%7B%5Ctheta%7D%28g_t%7C%5Cmathbf%7Br%7D_t%29" alt="p_{\theta}(g_t|\mathbf{r}_t)" title="p_{\theta}(g_t|\mathbf{r}_t)" class="math inline">.</p>
-<p>The encoder consists of a single fully connected hidden layer with 32 neurons and a hyperbolic tangent activation function. The bottleneck layer connecting the encoder to the decoder, is a fully connected layer with 6 neurons. The decoder consists of two fully connected layers, each with a hyperbolic tangent activation function: the first layer consists of 32 neurons and the second layer will have the same dimension as the input data. The output layer consists of a single neuron for our output variable, <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20g_t" alt="g_t" title="g_t" class="math inline">. We train the model over 1,000 epochs to minimize mean squared error loss using the Adam optimizer~.</p>
+<p>Using a simple autoencoder architecture (<a href="#fig-dl-model" class="quarto-xref">Figure&nbsp;6</a>), we let our model <span class="math inline">\(g_t\)</span> denote growth and our conditional <span class="math inline">\(\mathbf{r}_t\)</span> the matrix of aggregated Treasury yield rates at time <span class="math inline">\(t\)</span>. Finally, we let <span class="math inline">\(\theta\)</span> denote our model parameters. Formally, we are interested in maximizing the likelihood <span class="math inline">\(p_{\theta}(g_t|\mathbf{r}_t)\)</span>.</p>
+<p>The encoder consists of a single fully connected hidden layer with 32 neurons and a hyperbolic tangent activation function. The bottleneck layer connecting the encoder to the decoder, is a fully connected layer with 6 neurons. The decoder consists of two fully connected layers, each with a hyperbolic tangent activation function: the first layer consists of 32 neurons and the second layer will have the same dimension as the input data. The output layer consists of a single neuron for our output variable, <span class="math inline">\(g_t\)</span>. We train the model over 1,000 epochs to minimize mean squared error loss using the Adam optimizer~.</p>
 <div class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
@@ -821,7 +849,7 @@ Figure&nbsp;5: GDP growth and yield curve data.
 <span id="cb5-20"><a href="#cb5-20"></a>plt <span class="op">=</span> <span class="fu">plot</span>(model, <span class="fu">rand</span>(input_dim))</span>
 <span id="cb5-21"><a href="#cb5-21"></a><span class="fu">display</span>(plt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="fig-dl-model" class="cell-output cell-output-display quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-dl-model" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dl-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <!--?xml version="1.0" encoding="utf-8"?-->
@@ -2163,9 +2191,9 @@ Figure&nbsp;6: Model architecture.
 </section>
 <section id="linear-probe" class="level4">
 <h4 class="anchored" data-anchor-id="linear-probe">Linear Probe</h4>
-<p>While the loss function applies most direct pressure on layers near the final output layer, any information useful for the downstream task first needs to pass through the bottleneck layer <span class="citation" data-cites="alain2018understanding">(<a href="#ref-alain2018understanding" role="doc-biblioref">Alain and Bengio 2018</a>)</span>. On a per-neuron basis, the pressure to distill useful representation is therefore likely maximized there. Consequently, the bottleneck layer activations seem like a natural place to start looking for compact, meaningful representations of distilled information. I compute and extract these activations <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20A_t" alt="A_t" title="A_t" class="math inline"> for all time periods <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20t%3D1%2C...%2CT" alt="t=1,...,T" title="t=1,...,T" class="math inline">. Next, we use a linear probe to regress the observed yield curve factors on the latent embeddings. Let <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20Y_t" alt="Y_t" title="Y_t" class="math inline"> denote the vector containing the two factors of interest in time <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20t" alt="t" title="t" class="math inline">: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20y_%7Bt%2Cl%7D" alt="y_{t,l}" title="y_{t,l}" class="math inline"> and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20y_%7Bt%2Cs%7D" alt="y_{t,s}" title="y_{t,s}" class="math inline"> for the level and spread, respectively. Formally, we are interested in the following regression model: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20p_%7Bw%7D%28Y_t%7CA_t%29" alt="p_{w}(Y_t|A_t)" title="p_{w}(Y_t|A_t)" class="math inline"> where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20w" alt="w" title="w" class="math inline"> denotes the regression parameters. I use Ridge regression with <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Clambda" alt="\lambda" title="\lambda" class="math inline"> set to <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%200.1" alt="0.1" title="0.1" class="math inline">. Using the estimated regression parameters <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Chat%7Bw%7D" alt="\hat{w}" title="\hat{w}" class="math inline">, we then predict the yield curve factors from the latent embeddings: <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Chat%7BY%7D_t%3D%5Chat%7Bw%7D%5E%7B%5Cprime%7DA_t" alt="\hat{Y}_t=\hat{w}^{\prime}A_t" title="\hat{Y}_t=\hat{w}^{\prime}A_t" class="math inline">.</p>
+<p>While the loss function applies most direct pressure on layers near the final output layer, any information useful for the downstream task first needs to pass through the bottleneck layer <span class="citation" data-cites="alain2018understanding">(<a href="#ref-alain2018understanding" role="doc-biblioref">Alain and Bengio 2018</a>)</span>. On a per-neuron basis, the pressure to distill useful representation is therefore likely maximized there. Consequently, the bottleneck layer activations seem like a natural place to start looking for compact, meaningful representations of distilled information. I compute and extract these activations <span class="math inline">\(A_t\)</span> for all time periods <span class="math inline">\(t=1,...,T\)</span>. Next, we use a linear probe to regress the observed yield curve factors on the latent embeddings. Let <span class="math inline">\(Y_t\)</span> denote the vector containing the two factors of interest in time <span class="math inline">\(t\)</span>: <span class="math inline">\(y_{t,l}\)</span> and <span class="math inline">\(y_{t,s}\)</span> for the level and spread, respectively. Formally, we are interested in the following regression model: <span class="math inline">\(p_{w}(Y_t|A_t)\)</span> where <span class="math inline">\(w\)</span> denotes the regression parameters. I use Ridge regression with <span class="math inline">\(\lambda\)</span> set to <span class="math inline">\(0.1\)</span>. Using the estimated regression parameters <span class="math inline">\(\hat{w}\)</span>, we then predict the yield curve factors from the latent embeddings: <span class="math inline">\(\hat{Y}_t=\hat{w}^{\prime}A_t\)</span>.</p>
 <p>The in-sample predictions of the probe are shown in the right chart of <a href="#fig-dl-results" class="quarto-xref">Figure&nbsp;7</a>. Solid lines show the observed yield curve factors over time, while dashed lines show predicted values. We can observe that the latent embeddings predict the two yield curve factors reasonably well, in particular the spread.</p>
-<div id="fig-dl-results" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-dl-results" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dl-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="results/figures/dl.png" class="img-fluid figure-img">
@@ -2185,18 +2213,18 @@ Figure&nbsp;7: The left chart shows the actual GDP growth and fitted values from
 </section>
 <section id="sec-ex-llm" class="level3">
 <h3 class="anchored" data-anchor-id="sec-ex-llm">LLMs for Economic Sentiment Prediction</h3>
-<p>To round up this section, we will jump back on the hype train and consider an example involving an LLM. In particular, we will closely follow the approach in <span class="citation" data-cites="gurnee2023language">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span> and apply it to a novel financial dataset: the <em>Trillion Dollar Words</em> dataset introduced by <span class="citation" data-cites="shah2023trillion">Shah, Paturi, and Chava (<a href="#ref-shah2023trillion" role="doc-biblioref">2023</a>)</span>. The dataset contains a curated selection of sentences formulated by central bankers of the US Federal Reserve and communicated to the public in speeches, meeting minutes and press conferences. The authors of the paper use this dataset to train LLMs to classify sentences as either ‘dovish’, ‘hawkish’ or ‘neutral’. To this end, they first manually annotate a subsample of the available data and then fine-tune various foundation models. Their model of choice, <em>FOMC-RoBERTa</em> (a fine-tuned version of RoBERTa <span class="citation" data-cites="liu2019roberta">(<a href="#ref-liu2019roberta" role="doc-biblioref">Liu et al. 2019</a>)</span>), achieves an <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20F_1" alt="F_1" title="F_1" class="math inline"> score of around <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%3E0.7" alt=">0.7" title=">0.7" class="math inline"> for the classification task. To illustrate the potential usefulness of the learned classifier, they use predicted labels for the entire dataset to compute an ad-hoc, count-based measure of ‘hawkishness’. They then go on to show that this measure correlates with key economic indicators in the expected direction: when inflationary pressures rise, the measured level of ‘hawkishness’ increases as central bankers need to raise interest rates to bring inflation back to target.</p>
+<p>To round up this section, we will jump back on the hype train and consider an example involving an LLM. In particular, we will closely follow the approach in <span class="citation" data-cites="gurnee2023language">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span> and apply it to a novel financial dataset: the <em>Trillion Dollar Words</em> dataset introduced by <span class="citation" data-cites="shah2023trillion">Shah, Paturi, and Chava (<a href="#ref-shah2023trillion" role="doc-biblioref">2023</a>)</span>. The dataset contains a curated selection of sentences formulated by central bankers of the US Federal Reserve and communicated to the public in speeches, meeting minutes and press conferences. The authors of the paper use this dataset to train LLMs to classify sentences as either ‘dovish’, ‘hawkish’ or ‘neutral’. To this end, they first manually annotate a subsample of the available data and then fine-tune various foundation models. Their model of choice, <em>FOMC-RoBERTa</em> (a fine-tuned version of RoBERTa <span class="citation" data-cites="liu2019roberta">(<a href="#ref-liu2019roberta" role="doc-biblioref">Liu et al. 2019</a>)</span>), achieves an <span class="math inline">\(F_1\)</span> score of around <span class="math inline">\(&gt;0.7\)</span> for the classification task. To illustrate the potential usefulness of the learned classifier, they use predicted labels for the entire dataset to compute an ad-hoc, count-based measure of ‘hawkishness’. They then go on to show that this measure correlates with key economic indicators in the expected direction: when inflationary pressures rise, the measured level of ‘hawkishness’ increases as central bankers need to raise interest rates to bring inflation back to target.</p>
 <section id="linear-probes" class="level4">
 <h4 class="anchored" data-anchor-id="linear-probes">Linear Probes</h4>
 <p>Instead of computing a measure based on predicted labels, we can use linear probes to assess if the fine-tuned model has learned associative patterns between central bank communications and key economic indicators. To this end, I have further pre-processed the data provided by <span class="citation" data-cites="shah2023trillion">Shah, Paturi, and Chava (<a href="#ref-shah2023trillion" role="doc-biblioref">2023</a>)</span> and used their proposed model to compute layer-wise embeddings for all available sentences. I have made these available and easily accessible through a small Julia package: <a href="https://github.com/pat-alt/TrillionDollarWords.jl">TrillionDollarWords.jl</a>. For each layer, I have then computed linear probes on two inflation indicators—the Consumer Price Index (CPI) and the Producer Price Index (PPI)—as well as US Treasury yields at different levels of maturity. To mitigate issues related to over-parameterization, I follow the recommendation in <span class="citation" data-cites="alain2018understanding">Alain and Bengio (<a href="#ref-alain2018understanding" role="doc-biblioref">2018</a>)</span> to first reduce the dimensionality of the embeddings each time. In particular, linear probes are restricted to the first 128 principal components of the embeddings of each layer.</p>
-<p><a href="#fig-fomc" class="quarto-xref">Figure&nbsp;8</a> shows the out-of-sample root mean squared error (RMSE) for the linear probe, plotted against <em>FOMC-RoBERTa</em>’s <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20n" alt="n" title="n" class="math inline">-th layer. The values correspond to averages across cross-validation folds where I have used an expanding window scheme. Consistent with related work <span class="citation" data-cites="alain2018understanding">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span>, we can observe that model performance tends to be higher for layers near the end of the transformer model. Curiously, for yields at longer maturities, we see that performance eventually deteriorates for the very final layers. This is not the case for the training data, so I would attribute this to overfitting. A detailed discussion of all our results including a benchmark of these probes against baseline autoregressive models can be found in the paper.</p>
-<div id="fig-fomc" class="quarto-figure quarto-figure-center quarto-float anchored">
+<p><a href="#fig-fomc" class="quarto-xref">Figure&nbsp;8</a> shows the out-of-sample root mean squared error (RMSE) for the linear probe, plotted against <em>FOMC-RoBERTa</em>’s <span class="math inline">\(n\)</span>-th layer. The values correspond to averages across cross-validation folds where I have used an expanding window scheme. Consistent with related work <span class="citation" data-cites="alain2018understanding">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span>, we can observe that model performance tends to be higher for layers near the end of the transformer model. Curiously, for yields at longer maturities, we see that performance eventually deteriorates for the very final layers. This is not the case for the training data, so I would attribute this to overfitting. A detailed discussion of all our results including a benchmark of these probes against baseline autoregressive models can be found in the paper.</p>
+<div id="fig-fomc" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-fomc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="results/figures/rmse_pca_128.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fomc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8: Out-of-sample root mean squared error (RMSE) for the linear probe plotted against <em>FOMC-RoBERTa</em>’s <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20n" alt="n" title="n" class="math inline figure-img">-th layer for different indicators. The values correspond to averages computed across cross-validation folds, where we have used an expanding window approach to split the time series.
+Figure&nbsp;8: Out-of-sample root mean squared error (RMSE) for the linear probe plotted against <em>FOMC-RoBERTa</em>’s <span class="math inline">\(n\)</span>-th layer for different indicators. The values correspond to averages computed across cross-validation folds, where we have used an expanding window approach to split the time series.
 </figcaption>
 </figure>
 </div>
@@ -2210,20 +2238,20 @@ Figure&nbsp;8: Out-of-sample root mean squared error (RMSE) for the linear probe
 <p>Personally, I am having a very hard time believing this. To argue my case, I will now produce a counter-example demonstrating that, if anything, these findings are very much in line with the parrot metaphor. The counter-example is based on the following premise: if the results from the linear probe truly were indicative of some intrinsic understanding of the economy, then the probe should not be sensitive to random sentences that are most definitely not related to consumer prices.</p>
 <p>To test this, I select the best-performing probe trained on the final-layer activations to predict changes in the CPI. I then make up sentences that fall into one of these four categories: <em>Inflation/Prices</em> (IP)—sentences about price inflation, <em>Deflation/Prices</em> (DP)—sentences about price deflation, <em>Inflation/Birds</em> (IB)—sentences about inflation in the number of birds and <em>Deflation/Birds</em> (DB)—sentences about deflation in the number of birds. A sensible sentence for category DP, for example, could be: “It is essential to bring inflation back to target to avoid drifting into deflation territory.”. Analogically, we could construct the following sentence for the DB category: “It is essential to bring the numbers of doves back to target to avoid drifting into dovelation territory.”.</p>
 <p>In light of the encouraging results for the probe in <a href="#fig-fomc" class="quarto-xref">Figure&nbsp;8</a>, we should expect the probe to predict higher levels of inflation for activations for sentences in the IP category than for sentences in the DP category. If this was indicative of true intrinsic understanding, we would not expect to see any significant difference in predicted inflation levels for sentences about birds, independent of whether or not their numbers are increasing. More specifically, we would not expect the probe to predict values for sentences about birds that are substantially different from the values it can be expected to predict when using actual white noise as inputs.</p>
-<p>To get to this last point, I also generate many probe predictions for samples of noise. Let <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20f%3A%20%5Cmathcal%7BA%7D%5Ek%20%5Cmapsto%20%5Cmathcal%7BY%7D" alt="f: \mathcal{A}^k \mapsto \mathcal{Y}" title="f: \mathcal{A}^k \mapsto \mathcal{Y}" class="math inline"> denote the linear probe that maps from the <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20k" alt="k" title="k" class="math inline">-dimensional space spanned by <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20k" alt="k" title="k" class="math inline"> first principal components of the final-layer activations to the output variable of interest (CPI growth in this case). Then I sample <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cvarepsilon_i%20%5Csim%20%5Cmathcal%7BN%7D%28%5Cmathbf%7B0%7D%2C%5Cmathbf%7BI%7D%5E%7B%28k%20%5Ctimes%20k%29%7D%29" alt="\varepsilon_i \sim \mathcal{N}(\mathbf{0},\mathbf{I}^{(k \times k)})" title="\varepsilon_i \sim \mathcal{N}(\mathbf{0},\mathbf{I}^{(k \times k)})" class="math inline"> for <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20i%20%5Cin%20%5B1%2C1000%5D" alt="i \in [1,1000]" title="i \in [1,1000]" class="math inline"> and compute the sample average. I repeat this process <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%2010000" alt="10000" title="10000" class="math inline"> times and compute the median-of-means to get an estimate for <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbb%7BE%7D%5Bf%28%5Cvarepsilon%29%5D%3D%5Cmathbb%7BE%7D%5By%7C%5Cvarepsilon%5D" alt="\mathbb{E}[f(\varepsilon)]=\mathbb{E}[y|\varepsilon]" title="\mathbb{E}[f(\varepsilon)]=\mathbb{E}[y|\varepsilon]" class="math inline">, that is the predicted value of the probe conditional on white noise.</p>
+<p>To get to this last point, I also generate many probe predictions for samples of noise. Let <span class="math inline">\(f: \mathcal{A}^k \mapsto \mathcal{Y}\)</span> denote the linear probe that maps from the <span class="math inline">\(k\)</span>-dimensional space spanned by <span class="math inline">\(k\)</span> first principal components of the final-layer activations to the output variable of interest (CPI growth in this case). Then I sample <span class="math inline">\(\varepsilon_i \sim \mathcal{N}(\mathbf{0},\mathbf{I}^{(k \times k)})\)</span> for <span class="math inline">\(i \in [1,1000]\)</span> and compute the sample average. I repeat this process <span class="math inline">\(10000\)</span> times and compute the median-of-means to get an estimate for <span class="math inline">\(\mathbb{E}[f(\varepsilon)]=\mathbb{E}[y|\varepsilon]\)</span>, that is the predicted value of the probe conditional on white noise.</p>
 <p>Next, I propose the following hypothesis test as a minimum viable testing framework to assess if the probe results (may) provide evidence for an actual understanding of key economic relationships learned purely from text:</p>
 <div id="prp-line" class="theorem proposition">
 <p><span class="theorem-title"><strong>Proposition 1 (Parrot Test)</strong></span> &nbsp;</p>
 <ul>
-<li><em>H0</em> (Null): The probe never predicts values that are statistically significantly different from <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbb%7BE%7D%5Bf%28%5Cvarepsilon%29%5D" alt="\mathbb{E}[f(\varepsilon)]" title="\mathbb{E}[f(\varepsilon)]" class="math inline">.</li>
-<li><em>H1</em> (Stochastic Parrots): The probe predicts values that are statistically significantly different from <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbb%7BE%7D%5Bf%28%5Cvarepsilon%29%5D" alt="\mathbb{E}[f(\varepsilon)]" title="\mathbb{E}[f(\varepsilon)]" class="math inline"> for sentences related to the outcome of interest <em>and</em> those that are independent (i.e.&nbsp;sentences in all categories).</li>
-<li><em>H2</em> (More than Mere Stochastic Parrots): The probe predicts values that are statistically significantly different from <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbb%7BE%7D%20%5Bf%28%5Cvarepsilon%29%5D" alt="\mathbb{E} [f(\varepsilon)]" title="\mathbb{E} [f(\varepsilon)]" class="math inline"> for sentences that are related to the outcome variable (IP and DP), but not for sentences that are independent of the outcome (IB and DB).</li>
+<li><em>H0</em> (Null): The probe never predicts values that are statistically significantly different from <span class="math inline">\(\mathbb{E}[f(\varepsilon)]\)</span>.</li>
+<li><em>H1</em> (Stochastic Parrots): The probe predicts values that are statistically significantly different from <span class="math inline">\(\mathbb{E}[f(\varepsilon)]\)</span> for sentences related to the outcome of interest <em>and</em> those that are independent (i.e.&nbsp;sentences in all categories).</li>
+<li><em>H2</em> (More than Mere Stochastic Parrots): The probe predicts values that are statistically significantly different from <span class="math inline">\(\mathbb{E} [f(\varepsilon)]\)</span> for sentences that are related to the outcome variable (IP and DP), but not for sentences that are independent of the outcome (IB and DB).</li>
 </ul>
 </div>
 <p>To be clear, if in such a test we did find substantial evidence in favour of rejecting both <em>HO</em> and <em>H1</em>, this would not automatically imply that <em>H2</em> is true. But to even continue investigating if based on having learned meaningful representation the underlying LLM is more than just a parrot, it should be able to pass this simple test.</p>
 <p>In this particular case, <a href="#fig-attack" class="quarto-xref">Figure&nbsp;9</a> demonstrates that we find some evidence to reject <em>H0</em> but not <em>H1</em> for <em>FOMC-RoBERTa</em>. The median linear probe predictions for sentences about inflation and deflation are indeed substantially higher and lower, respectively than for random noise. Unfortunately, the same is true for sentences about the inflation and deflation in the number of birds, albeit to a somewhat lower degree.</p>
 <p>I should note that the number of sentences in each category is very small here (10), so the results in <a href="#fig-attack" class="quarto-xref">Figure&nbsp;9</a> cannot be used to establish statistical significance. That being said, even a handful of convincing counter-examples should be enough for us to seriously question the claim that results from linear probes provide evidence against the parrot metaphor. In fact, even a handful of sentences for which any human annotator would easily arrive at the conclusion of independence, a prediction by the probe in either direction casts doubt.</p>
-<div id="fig-attack" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-attack" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-attack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="results/figures/attack_all_measures.png" class="img-fluid figure-img">
@@ -2294,12 +2322,12 @@ Touvron, Hugo, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne Lach
   author = {Altmeyer, Patrick and Altmeyer, Patrick},
   title = {Spurious {Sparks} of {AGI}},
   date = {2024-02-07},
-  url = {https://www.patalt.org//blog/posts/spurious-sparks},
+  url = {https://www.patalt.org/blog/posts/spurious-sparks/},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2024" class="csl-entry quarto-appendix-citeas" role="listitem">
 Altmeyer, Patrick, and Patrick Altmeyer. 2024. <span>“Spurious Sparks of
-AGI.”</span> February 7, 2024. <a href="https://www.patalt.org//blog/posts/spurious-sparks">https://www.patalt.org//blog/posts/spurious-sparks</a>.
+AGI.”</span> February 7, 2024. <a href="https://www.patalt.org/blog/posts/spurious-sparks/">https://www.patalt.org/blog/posts/spurious-sparks/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -2336,18 +2364,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -2379,7 +2396,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
   const viewSource = window.document.getElementById('quarto-view-source') ||
                      window.document.getElementById('quarto-code-tools-source');
   if (viewSource) {
@@ -2431,6 +2470,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.patalt\.org\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -2465,7 +2522,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -3141,7 +3202,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-410"><a href="#cb6-410"></a>A huge thank you to my co-authors <span class="co">[</span><span class="ot">Andrew M. Demetriou</span><span class="co">](https://www.amdemetriou.com/)</span>, <span class="co">[</span><span class="ot">Antony Bartlett</span><span class="co">](https://codegonewild.com/)</span> and <span class="co">[</span><span class="ot">Cynthia C. S. Liem</span><span class="co">](https://www.cynthialiem.com/)</span> who are also my colleagues at TU Delft and (in the case of Cynthia) my supervisor. It's been a real pleasure working with you on this project.</span>
 <span id="cb6-411"><a href="#cb6-411"></a></span>
 <span id="cb6-412"><a href="#cb6-412"></a><span class="fu">## References</span></span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

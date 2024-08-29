@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.5.54">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2021-11-15">
 <meta name="description" content="An introduction to Bayesian Logistic Regression from the bottom up with examples in Julia language.">
 
-<title>patalt - Bayesian Logistic Regression</title>
+<title>Bayesian Logistic Regression – patalt</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,7 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-.display.math{display: block; text-align: center; margin: 0.5rem auto;}
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { line-height: 1.25; }
@@ -37,7 +36,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -135,10 +134,39 @@ gtag('js', new Date());
 gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="patalt - Bayesian Logistic Regression">
+<meta property="og:title" content="Bayesian Logistic Regression – patalt">
 <meta property="og:description" content="An introduction to Bayesian Logistic Regression from the bottom up with examples in Julia language.">
 <meta property="og:image" content="https://www.patalt.org/blog/posts/bayesian-logit/www/intro.gif">
 <meta property="og:site_name" content="patalt">
@@ -159,7 +187,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -207,7 +235,7 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -306,23 +334,19 @@ Simulation of changing parameter distribution.
 </section>
 <section id="the-ground-truth" class="level2">
 <h2 class="anchored" data-anchor-id="the-ground-truth">The ground truth</h2>
-<p>In this post we will work with a synthetic toy data set <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathcal%7BD%7D" alt="\mathcal{D}" title="\mathcal{D}" class="math inline"> composed of <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20N" alt="N" title="N" class="math inline"> binary labels <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20y_n%5Cin%5C%7B0%2C1%5C%7D" alt="y_n\in\{0,1\}" title="y_n\in\{0,1\}" class="math inline"> and corresponding feature vectors <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bx%7D_n%5Cin%20%5Cmathbb%7BR%7D%5ED" alt="\mathbf{x}_n\in \mathbb{R}^D" title="\mathbf{x}_n\in \mathbb{R}^D" class="math inline">. Working with synthetic data has the benefit that we have control over the <strong>ground truth</strong> that generates our data. In particular, we will assume that the binary labels <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20y_n" alt="y_n" title="y_n" class="math inline"> are generated by a logistic regression model</p>
-<p><span id="eq-logreg"><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Cdisplaystyle%20%5Cbegin%7Bequation%7D%20%0A%5Cbegin%7Baligned%7D%0A%26%26%20p%28y_n%7C%5Cmathbf%7Bx%7D_n%3B%5Cmathbf%7Bw%7D%29%26%5Csim%5Ctext%7BBer%7D%28y_n%7C%5Csigma%28%5Cmathbf%7Bw%7D%5ET%5Cmathbf%7Bx%7D_n%29%29%20%5C%5C%0A%5Cend%7Baligned%7D%0A%5Cend%7Bequation%7D%0A%20%5Cqquad%281%29" alt="\begin{equation} 
+<p>In this post we will work with a synthetic toy data set <span class="math inline">\(\mathcal{D}\)</span> composed of <span class="math inline">\(N\)</span> binary labels <span class="math inline">\(y_n\in\{0,1\}\)</span> and corresponding feature vectors <span class="math inline">\(\mathbf{x}_n\in \mathbb{R}^D\)</span>. Working with synthetic data has the benefit that we have control over the <strong>ground truth</strong> that generates our data. In particular, we will assume that the binary labels <span class="math inline">\(y_n\)</span> are generated by a logistic regression model</p>
+<p><span id="eq-logreg"><span class="math display">\[
+\begin{equation}
 \begin{aligned}
 &amp;&amp; p(y_n|\mathbf{x}_n;\mathbf{w})&amp;\sim\text{Ber}(y_n|\sigma(\mathbf{w}^T\mathbf{x}_n)) \\
 \end{aligned}
 \end{equation}
- \qquad(1)" title="\begin{equation} 
-\begin{aligned}
-&amp;&amp; p(y_n|\mathbf{x}_n;\mathbf{w})&amp;\sim\text{Ber}(y_n|\sigma(\mathbf{w}^T\mathbf{x}_n)) \\
-\end{aligned}
-\end{equation}
- \qquad(1)" class="math display"></span></p>
-<p>where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Csigma%28a%29%3D1%2F%281%2Be%5E%7B-a%7D%29" alt="\sigma(a)=1/(1+e^{-a})" title="\sigma(a)=1/(1+e^{-a})" class="math inline"> is the <strong>sigmoid</strong> or <strong>logit</strong> function <span class="citation" data-cites="murphy2022probabilistic">(<a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy 2022</a>)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Features are generated from a mixed Gaussian model.</p>
-<p>To add a little bit of life to our example we will assume that the binary labels classify samples into cats and dogs, based on their height and tail length. <a href="#fig-ground" class="quarto-xref">Figure&nbsp;1</a> shows the synthetic data in the two-dimensional feature domain. Following an introduction to Bayesian Logistic Regression in the next section we will use the synthetic data <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathcal%7BD%7D" alt="\mathcal{D}" title="\mathcal{D}" class="math inline"> to estimate our model.</p>
+\tag{1}\]</span></span></p>
+<p>where <span class="math inline">\(\sigma(a)=1/(1+e^{-a})\)</span> is the <strong>sigmoid</strong> or <strong>logit</strong> function <span class="citation" data-cites="murphy2022probabilistic">(<a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy 2022</a>)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Features are generated from a mixed Gaussian model.</p>
+<p>To add a little bit of life to our example we will assume that the binary labels classify samples into cats and dogs, based on their height and tail length. <a href="#fig-ground" class="quarto-xref">Figure&nbsp;1</a> shows the synthetic data in the two-dimensional feature domain. Following an introduction to Bayesian Logistic Regression in the next section we will use the synthetic data <span class="math inline">\(\mathcal{D}\)</span> to estimate our model.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-ground" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<div id="fig-ground" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ground-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="index_files/figure-html/fig-ground-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
@@ -337,95 +361,76 @@ Figure&nbsp;1: Ground truth labels.
 </section>
 <section id="the-maths" class="level2">
 <h2 class="anchored" data-anchor-id="the-maths">The maths</h2>
-<p>Estimation usually boils down to finding the vector of parameters <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Chat%7B%5Cmathbf%7Bw%7D%7D" alt="\hat{\mathbf{w}}" title="\hat{\mathbf{w}}" class="math inline"> that maximizes the likelihood of observing <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathcal%7BD%7D" alt="\mathcal{D}" title="\mathcal{D}" class="math inline"> under the assumed model. That estimate can then be used to compute predictions for some new unlabelled data set <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathcal%7BD%7D%3D%5C%7Bx_m%3Am%3D1%2C...%2CM%5C%7D" alt="\mathcal{D}=\{x_m:m=1,...,M\}" title="\mathcal{D}=\{x_m:m=1,...,M\}" class="math inline">.</p>
+<p>Estimation usually boils down to finding the vector of parameters <span class="math inline">\(\hat{\mathbf{w}}\)</span> that maximizes the likelihood of observing <span class="math inline">\(\mathcal{D}\)</span> under the assumed model. That estimate can then be used to compute predictions for some new unlabelled data set <span class="math inline">\(\mathcal{D}=\{x_m:m=1,...,M\}\)</span>.</p>
 <section id="problem-setup" class="level3">
 <h3 class="anchored" data-anchor-id="problem-setup">Problem setup</h3>
 <p>The starting point for Bayesian Logistic Regression is <strong>Bayes’ Theorem</strong>:</p>
-<p><span id="eq-posterior"><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Cdisplaystyle%20%5Cbegin%7Bequation%7D%20%0A%5Cbegin%7Baligned%7D%0A%26%26%20p%28%5Cmathbf%7Bw%7D%7C%5Cmathcal%7BD%7D%29%26%5Cpropto%20p%28%5Cmathcal%7BD%7D%7C%5Cmathbf%7Bw%7D%29p%28%5Cmathbf%7Bw%7D%29%20%5C%5C%0A%5Cend%7Baligned%7D%0A%5Cend%7Bequation%7D%0A%20%5Cqquad%282%29" alt="\begin{equation} 
+<p><span id="eq-posterior"><span class="math display">\[
+\begin{equation}
 \begin{aligned}
 &amp;&amp; p(\mathbf{w}|\mathcal{D})&amp;\propto p(\mathcal{D}|\mathbf{w})p(\mathbf{w}) \\
 \end{aligned}
 \end{equation}
- \qquad(2)" title="\begin{equation} 
-\begin{aligned}
-&amp;&amp; p(\mathbf{w}|\mathcal{D})&amp;\propto p(\mathcal{D}|\mathbf{w})p(\mathbf{w}) \\
-\end{aligned}
-\end{equation}
- \qquad(2)" class="math display"></span></p>
-<p>Formally, this says that the posterior distribution of parameters <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D" alt="\mathbf{w}" title="\mathbf{w}" class="math inline"> is proportional to the product of the likelihood of observing <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathcal%7BD%7D" alt="\mathcal{D}" title="\mathcal{D}" class="math inline"> given <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D" alt="\mathbf{w}" title="\mathbf{w}" class="math inline"> and the prior density of <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D" alt="\mathbf{w}" title="\mathbf{w}" class="math inline">. Applied to our context this can intuitively be understood as follows: our posterior beliefs around <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D" alt="\mathbf{w}" title="\mathbf{w}" class="math inline"> are formed by both our prior beliefs and the evidence we observe. Yet another way to look at this is that maximising <a href="#eq-posterior" class="quarto-xref">Equation&nbsp;2</a> with respect to <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D" alt="\mathbf{w}" title="\mathbf{w}" class="math inline"> corresponds to maximum likelihood estimation regularized by prior beliefs (we will come back to this).</p>
-<p>Under the assumption that individual label-feature pairs are <strong>independently</strong> and <strong>identically</strong> distributed, their joint likelihood is simply the product over their individual densities. The prior beliefs around <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D" alt="\mathbf{w}" title="\mathbf{w}" class="math inline"> are at our discretion. In practice they may be derived from previous experiments. Here we will use a zero-mean spherical Gaussian prior for reasons explained further below. To sum this up we have</p>
-<p><span id="eq-prior"><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Cdisplaystyle%20%5Cbegin%7Bequation%7D%20%0A%5Cbegin%7Baligned%7D%0A%26%26%20p%28%5Cmathcal%7BD%7D%7C%5Cmathbf%7Bw%7D%29%26%20%5Csim%20%5Cprod_%7Bn%3D1%7D%5EN%20p%28y_n%7C%5Cmathbf%7Bx%7D_n%3B%5Cmathbf%7Bw%7D%29%5C%5C%0A%26%26%20p%28%5Cmathbf%7Bw%7D%29%26%20%5Csim%20%5Cmathcal%7BN%7D%20%5Cleft%28%20%5Cmathbf%7Bw%7D%20%7C%20%5Cmathbf%7Bw%7D_0%2C%20%5CSigma_0%20%5Cright%29%20%5C%5C%0A%5Cend%7Baligned%7D%0A%5Cend%7Bequation%7D%0A%20%5Cqquad%283%29" alt="\begin{equation} 
+\tag{2}\]</span></span></p>
+<p>Formally, this says that the posterior distribution of parameters <span class="math inline">\(\mathbf{w}\)</span> is proportional to the product of the likelihood of observing <span class="math inline">\(\mathcal{D}\)</span> given <span class="math inline">\(\mathbf{w}\)</span> and the prior density of <span class="math inline">\(\mathbf{w}\)</span>. Applied to our context this can intuitively be understood as follows: our posterior beliefs around <span class="math inline">\(\mathbf{w}\)</span> are formed by both our prior beliefs and the evidence we observe. Yet another way to look at this is that maximising <a href="#eq-posterior" class="quarto-xref">Equation&nbsp;2</a> with respect to <span class="math inline">\(\mathbf{w}\)</span> corresponds to maximum likelihood estimation regularized by prior beliefs (we will come back to this).</p>
+<p>Under the assumption that individual label-feature pairs are <strong>independently</strong> and <strong>identically</strong> distributed, their joint likelihood is simply the product over their individual densities. The prior beliefs around <span class="math inline">\(\mathbf{w}\)</span> are at our discretion. In practice they may be derived from previous experiments. Here we will use a zero-mean spherical Gaussian prior for reasons explained further below. To sum this up we have</p>
+<p><span id="eq-prior"><span class="math display">\[
+\begin{equation}
 \begin{aligned}
 &amp;&amp; p(\mathcal{D}|\mathbf{w})&amp; \sim \prod_{n=1}^N p(y_n|\mathbf{x}_n;\mathbf{w})\\
 &amp;&amp; p(\mathbf{w})&amp; \sim \mathcal{N} \left( \mathbf{w} | \mathbf{w}_0, \Sigma_0 \right) \\
 \end{aligned}
 \end{equation}
- \qquad(3)" title="\begin{equation} 
+\tag{3}\]</span></span></p>
+<p>with <span class="math inline">\(\mathbf{w}_0=\mathbf{0}\)</span> and <span class="math inline">\(\Sigma_0=\sigma^2\mathbf{I}\)</span>. Plugging this into Bayes’ rule we finally have</p>
+<p><span class="math display">\[
 \begin{aligned}
-&amp;&amp; p(\mathcal{D}|\mathbf{w})&amp; \sim \prod_{n=1}^N p(y_n|\mathbf{x}_n;\mathbf{w})\\
-&amp;&amp; p(\mathbf{w})&amp; \sim \mathcal{N} \left( \mathbf{w} | \mathbf{w}_0, \Sigma_0 \right) \\
+&amp;&amp; p(\mathbf{w}|\mathcal{D})&amp;\propto\prod_{n=1}^N \text{Ber}(y_n|\sigma(\mathbf{w}^T\mathbf{x}_n))\mathcal{N} \left( \mathbf{w} | \mathbf{w}_0, \Sigma_0 \right) \\
 \end{aligned}
-\end{equation}
- \qquad(3)" class="math display"></span></p>
-<p>with <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D_0%3D%5Cmathbf%7B0%7D" alt="\mathbf{w}_0=\mathbf{0}" title="\mathbf{w}_0=\mathbf{0}" class="math inline"> and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5CSigma_0%3D%5Csigma%5E2%5Cmathbf%7BI%7D" alt="\Sigma_0=\sigma^2\mathbf{I}" title="\Sigma_0=\sigma^2\mathbf{I}" class="math inline">. Plugging this into Bayes’ rule we finally have</p>
-<p><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Cdisplaystyle%20%5Cbegin%7Baligned%7D%0A%26%26%20p%28%5Cmathbf%7Bw%7D%7C%5Cmathcal%7BD%7D%29%26%5Cpropto%5Cprod_%7Bn%3D1%7D%5EN%20%5Ctext%7BBer%7D%28y_n%7C%5Csigma%28%5Cmathbf%7Bw%7D%5ET%5Cmathbf%7Bx%7D_n%29%29%5Cmathcal%7BN%7D%20%5Cleft%28%20%5Cmathbf%7Bw%7D%20%7C%20%5Cmathbf%7Bw%7D_0%2C%20%5CSigma_0%20%5Cright%29%20%5C%5C%0A%5Cend%7Baligned%7D" alt="\begin{aligned}
-&amp;&amp; p(\mathbf{w}|\mathcal{D})&amp;\propto\prod_{n=1}^N \text{Ber}(y_n|\sigma(\mathbf{w}^T\mathbf{x}_n))\mathcal{N} \left( \mathbf{w} | \mathbf{w}_0, \Sigma_0 \right) \\
-\end{aligned}" title="\begin{aligned}
-&amp;&amp; p(\mathbf{w}|\mathcal{D})&amp;\propto\prod_{n=1}^N \text{Ber}(y_n|\sigma(\mathbf{w}^T\mathbf{x}_n))\mathcal{N} \left( \mathbf{w} | \mathbf{w}_0, \Sigma_0 \right) \\
-\end{aligned}" class="math display"></p>
-<p>Unlike with linear regression there are no closed-form analytical solutions to estimating or maximising this posterior, but fortunately accurate approximations do exist <span class="citation" data-cites="murphy2022probabilistic">(<a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy 2022</a>)</span>. One of the simplest approaches called <strong>Laplace Approximation</strong> is straight-forward to implement and computationally very efficient. It relies on the observation that under the assumption of a Gaussian prior, the posterior of logistic regression is also approximately Gaussian: in particular, this Gaussian distribution is centered around the <strong>maximum a posteriori</strong> (MAP) estimate <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Chat%7B%5Cmathbf%7Bw%7D%7D%3D%5Carg%5Cmax_%7B%5Cmathbf%7Bw%7D%7D%20p%28%5Cmathbf%7Bw%7D%7C%5Cmathcal%7BD%7D%29" alt="\hat{\mathbf{w}}=\arg\max_{\mathbf{w}} p(\mathbf{w}|\mathcal{D})" title="\hat{\mathbf{w}}=\arg\max_{\mathbf{w}} p(\mathbf{w}|\mathcal{D})" class="math inline"> with a covariance matrix equal to the inverse Hessian evaluated at the mode <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Chat%7B%5CSigma%7D%3D%28%5Cmathbf%7BH%7D%28%5Chat%7B%5Cmathbf%7Bw%7D%7D%29%29%5E%7B-1%7D" alt="\hat{\Sigma}=(\mathbf{H}(\hat{\mathbf{w}}))^{-1}" title="\hat{\Sigma}=(\mathbf{H}(\hat{\mathbf{w}}))^{-1}" class="math inline">. With that in mind, finding <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Chat%7B%5Cmathbf%7Bw%7D%7D" alt="\hat{\mathbf{w}}" title="\hat{\mathbf{w}}" class="math inline"> seems like a natural next step.</p>
+\]</span></p>
+<p>Unlike with linear regression there are no closed-form analytical solutions to estimating or maximising this posterior, but fortunately accurate approximations do exist <span class="citation" data-cites="murphy2022probabilistic">(<a href="#ref-murphy2022probabilistic" role="doc-biblioref">Murphy 2022</a>)</span>. One of the simplest approaches called <strong>Laplace Approximation</strong> is straight-forward to implement and computationally very efficient. It relies on the observation that under the assumption of a Gaussian prior, the posterior of logistic regression is also approximately Gaussian: in particular, this Gaussian distribution is centered around the <strong>maximum a posteriori</strong> (MAP) estimate <span class="math inline">\(\hat{\mathbf{w}}=\arg\max_{\mathbf{w}} p(\mathbf{w}|\mathcal{D})\)</span> with a covariance matrix equal to the inverse Hessian evaluated at the mode <span class="math inline">\(\hat{\Sigma}=(\mathbf{H}(\hat{\mathbf{w}}))^{-1}\)</span>. With that in mind, finding <span class="math inline">\(\hat{\mathbf{w}}\)</span> seems like a natural next step.</p>
 </section>
 <section id="solving-the-problem" class="level3">
 <h3 class="anchored" data-anchor-id="solving-the-problem">Solving the problem</h3>
-<p>In practice we do not maximize the posterior <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20p%28%5Cmathbf%7Bw%7D%7C%5Cmathcal%7BD%7D%29" alt="p(\mathbf{w}|\mathcal{D})" title="p(\mathbf{w}|\mathcal{D})" class="math inline"> directly. Instead we minimize the negative log likelihood, which is an equivalent optimization problem and easier to implement. In <a href="#eq-likeli" class="quarto-xref">Equation&nbsp;4</a> below I have denoted the negative log likelihood as <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cell%28%5Cmathbf%7Bw%7D%29" alt="\ell(\mathbf{w})" title="\ell(\mathbf{w})" class="math inline"> indicating that this is the <strong>loss function</strong> we aim to minimize. The following two lines in <a href="#eq-likeli" class="quarto-xref">Equation&nbsp;4</a> show the gradient and Hessian - so the first- and second-order derivatives of <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cell" alt="\ell" title="\ell" class="math inline"> with respect to <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D" alt="\mathbf{w}" title="\mathbf{w}" class="math inline"> - where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7BH%7D_0%3D%5CSigma_0%5E%7B-1%7D" alt="\mathbf{H}_0=\Sigma_0^{-1}" title="\mathbf{H}_0=\Sigma_0^{-1}" class="math inline"> and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmu_n%3D%5Csigma%28%5Cmathbf%7Bw%7D%5ET%5Cmathbf%7Bx%7D_n%29" alt="\mu_n=\sigma(\mathbf{w}^T\mathbf{x}_n)" title="\mu_n=\sigma(\mathbf{w}^T\mathbf{x}_n)" class="math inline">. To understand how exactly the gradient and Hessian are derived see for example chapter 10 in <span class="citation" data-cites="murphy2022probabilistic">Murphy (<a href="#ref-murphy2022probabilistic" role="doc-biblioref">2022</a>)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
-<p><span id="eq-likeli"><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Cdisplaystyle%20%5Cbegin%7Bequation%7D%20%0A%5Cbegin%7Baligned%7D%0A%26%26%20%5Cell%28%5Cmathbf%7Bw%7D%29%26%3D-%20%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%5By_n%20%5Clog%20%5Cmu_n%20%2B%20%281-y_n%29%5Clog%20%281-%5Cmu_n%29%5D%20%2B%20%5Cfrac%7B1%7D%7B2%7D%20%28%5Cmathbf%7Bw%7D-%5Cmathbf%7Bw%7D_0%29%5ET%5Cmathbf%7BH%7D_0%28%5Cmathbf%7Bw%7D-%5Cmathbf%7Bw%7D_0%29%20%5C%5C%0A%26%26%20%5Cnabla_%7B%5Cmathbf%7Bw%7D%7D%5Cell%28%5Cmathbf%7Bw%7D%29%26%3D%20%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%28%5Cmu_n-y_n%29%20%5Cmathbf%7Bx%7D_n%20%2B%20%5Cmathbf%7BH%7D_0%28%5Cmathbf%7Bw%7D-%5Cmathbf%7Bw%7D_0%29%20%5C%5C%0A%26%26%20%5Cnabla%5E2_%7B%5Cmathbf%7Bw%7D%7D%5Cell%28%5Cmathbf%7Bw%7D%29%26%3D%20%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%28%5Cmu_n-y_n%29%20%5Cleft%28%20%5Cmu_n%281-%5Cmu_n%29%20%5Cmathbf%7Bx%7D_n%20%5Cmathbf%7Bx%7D_n%5ET%20%5Cright%29%20%2B%20%5Cmathbf%7BH%7D_0%5C%5C%0A%5Cend%7Baligned%7D%0A%5Cend%7Bequation%7D%0A%20%5Cqquad%284%29" alt="\begin{equation} 
+<p>In practice we do not maximize the posterior <span class="math inline">\(p(\mathbf{w}|\mathcal{D})\)</span> directly. Instead we minimize the negative log likelihood, which is an equivalent optimization problem and easier to implement. In <a href="#eq-likeli" class="quarto-xref">Equation&nbsp;4</a> below I have denoted the negative log likelihood as <span class="math inline">\(\ell(\mathbf{w})\)</span> indicating that this is the <strong>loss function</strong> we aim to minimize. The following two lines in <a href="#eq-likeli" class="quarto-xref">Equation&nbsp;4</a> show the gradient and Hessian - so the first- and second-order derivatives of <span class="math inline">\(\ell\)</span> with respect to <span class="math inline">\(\mathbf{w}\)</span> - where <span class="math inline">\(\mathbf{H}_0=\Sigma_0^{-1}\)</span> and <span class="math inline">\(\mu_n=\sigma(\mathbf{w}^T\mathbf{x}_n)\)</span>. To understand how exactly the gradient and Hessian are derived see for example chapter 10 in <span class="citation" data-cites="murphy2022probabilistic">Murphy (<a href="#ref-murphy2022probabilistic" role="doc-biblioref">2022</a>)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p><span id="eq-likeli"><span class="math display">\[
+\begin{equation}
 \begin{aligned}
 &amp;&amp; \ell(\mathbf{w})&amp;=- \sum_{n=1}^{N} [y_n \log \mu_n + (1-y_n)\log (1-\mu_n)] + \frac{1}{2} (\mathbf{w}-\mathbf{w}_0)^T\mathbf{H}_0(\mathbf{w}-\mathbf{w}_0) \\
 &amp;&amp; \nabla_{\mathbf{w}}\ell(\mathbf{w})&amp;= \sum_{n=1}^{N} (\mu_n-y_n) \mathbf{x}_n + \mathbf{H}_0(\mathbf{w}-\mathbf{w}_0) \\
 &amp;&amp; \nabla^2_{\mathbf{w}}\ell(\mathbf{w})&amp;= \sum_{n=1}^{N} (\mu_n-y_n) \left( \mu_n(1-\mu_n) \mathbf{x}_n \mathbf{x}_n^T \right) + \mathbf{H}_0\\
 \end{aligned}
 \end{equation}
- \qquad(4)" title="\begin{equation} 
-\begin{aligned}
-&amp;&amp; \ell(\mathbf{w})&amp;=- \sum_{n=1}^{N} [y_n \log \mu_n + (1-y_n)\log (1-\mu_n)] + \frac{1}{2} (\mathbf{w}-\mathbf{w}_0)^T\mathbf{H}_0(\mathbf{w}-\mathbf{w}_0) \\
-&amp;&amp; \nabla_{\mathbf{w}}\ell(\mathbf{w})&amp;= \sum_{n=1}^{N} (\mu_n-y_n) \mathbf{x}_n + \mathbf{H}_0(\mathbf{w}-\mathbf{w}_0) \\
-&amp;&amp; \nabla^2_{\mathbf{w}}\ell(\mathbf{w})&amp;= \sum_{n=1}^{N} (\mu_n-y_n) \left( \mu_n(1-\mu_n) \mathbf{x}_n \mathbf{x}_n^T \right) + \mathbf{H}_0\\
-\end{aligned}
-\end{equation}
- \qquad(4)" class="math display"></span></p>
+\tag{4}\]</span></span></p>
 <div class="sidenote">
 <p><strong>SIDENOTE</strong> 💡</p>
-<p>Note how earlier I mentioned that maximising the posterior likelihood can be seen as regularized maximum likelihood estimation. We can now make that connection explicit: in <a href="#eq-likeli" class="quarto-xref">Equation&nbsp;4</a> let us assume that <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D_0%3D%5Cmathbf%7B0%7D" alt="\mathbf{w}_0=\mathbf{0}" title="\mathbf{w}_0=\mathbf{0}" class="math inline">. Then since <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7BH%7D_0%3D%5Clambda%5Cmathbf%7BI%7D" alt="\mathbf{H}_0=\lambda\mathbf{I}" title="\mathbf{H}_0=\lambda\mathbf{I}" class="math inline"> with <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%201%2F%5Csigma%5E2" alt="1/\sigma^2" title="1/\sigma^2" class="math inline"> the second term in the first line is simply <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Clambda%20%5Cfrac%7B1%7D%7B2%7D%20%5Cmathbf%7Bw%7D%5ET%5Cmathbf%7Bw%7D%3D%5Clambda%20%5Cfrac%7B1%7D%7B2%7D%20%7C%7C%5Cmathbf%7Bw%7D%7C%7C_2%5E2" alt="\lambda \frac{1}{2} \mathbf{w}^T\mathbf{w}=\lambda \frac{1}{2} ||\mathbf{w}||_2^2" title="\lambda \frac{1}{2} \mathbf{w}^T\mathbf{w}=\lambda \frac{1}{2} ||\mathbf{w}||_2^2" class="math inline">. This is equivalent to running logistic regression with an <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cell_2" alt="\ell_2" title="\ell_2" class="math inline">-penalty <span class="citation" data-cites="bishop2006pattern">(<a href="#ref-bishop2006pattern" role="doc-biblioref">Bishop 2006</a>)</span>.</p>
+<p>Note how earlier I mentioned that maximising the posterior likelihood can be seen as regularized maximum likelihood estimation. We can now make that connection explicit: in <a href="#eq-likeli" class="quarto-xref">Equation&nbsp;4</a> let us assume that <span class="math inline">\(\mathbf{w}_0=\mathbf{0}\)</span>. Then since <span class="math inline">\(\mathbf{H}_0=\lambda\mathbf{I}\)</span> with <span class="math inline">\(1/\sigma^2\)</span> the second term in the first line is simply <span class="math inline">\(\lambda \frac{1}{2} \mathbf{w}^T\mathbf{w}=\lambda \frac{1}{2} ||\mathbf{w}||_2^2\)</span>. This is equivalent to running logistic regression with an <span class="math inline">\(\ell_2\)</span>-penalty <span class="citation" data-cites="bishop2006pattern">(<a href="#ref-bishop2006pattern" role="doc-biblioref">Bishop 2006</a>)</span>.</p>
 </div>
 <p><br></p>
 <p>Since minimizing the loss function in <a href="#eq-likeli" class="quarto-xref">Equation&nbsp;4</a> is a convex optimization problem we have many efficient algorithms to choose from in order to solve this problem. With the Hessian at hand it seems natural to use a second-order method, because incorporating information about the curvature of the loss function generally leads to faster convergence. Here we will implement <strong>Newton’s method</strong> in line with the presentation in chapter 8 of <span class="citation" data-cites="murphy2022probabilistic">Murphy (<a href="#ref-murphy2022probabilistic" role="doc-biblioref">2022</a>)</span>.</p>
 </section>
 <section id="posterior-predictive" class="level3">
 <h3 class="anchored" data-anchor-id="posterior-predictive">Posterior predictive</h3>
-<p>Suppose now that we have trained the Bayesian Logistic Regression model as our binary classifier <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20g_N%28%5Cmathbf%7Bx%7D%29" alt="g_N(\mathbf{x})" title="g_N(\mathbf{x})" class="math inline"> using our training data <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathcal%7BD%7D" alt="\mathcal{D}" title="\mathcal{D}" class="math inline">. A new unlabelled sample <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%28%5Cmathbf%7Bx%7D_%7BN%2B1%7D%2C%3F%29" alt="(\mathbf{x}_{N+1},?)" title="(\mathbf{x}_{N+1},?)" class="math inline"> arrives. As with any binary classifier we can predict the missing label by simply plugging the new sample into our classifier <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Chat%7By%7D_%7BN%2B1%7D%3Dg_N%28%5Cmathbf%7Bx%7D_%7BN%2B1%7D%29%3D%5Csigma%28%5Chat%7B%5Cmathbf%7Bw%7D%7D%5ET%5Cmathbf%7Bx%7D_%7BN%2B1%7D%29" alt="\hat{y}_{N+1}=g_N(\mathbf{x}_{N+1})=\sigma(\hat{\mathbf{w}}^T\mathbf{x}_{N+1})" title="\hat{y}_{N+1}=g_N(\mathbf{x}_{N+1})=\sigma(\hat{\mathbf{w}}^T\mathbf{x}_{N+1})" class="math inline">, where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Chat%7B%5Cmathbf%7Bw%7D%7D" alt="\hat{\mathbf{w}}" title="\hat{\mathbf{w}}" class="math inline"> is the MAP estimate as before. If at training phase we have found <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20g_N%28%5Cmathbf%7Bx%7D%29" alt="g_N(\mathbf{x})" title="g_N(\mathbf{x})" class="math inline"> to achieve good accuracy, we may expect <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%28%5Cmathbf%7Bx%7D_%7BN%2B1%7D%2C%5Chat%7By%7D_%7BN%2B1%7D%29" alt="(\mathbf{x}_{N+1},\hat{y}_{N+1})" title="(\mathbf{x}_{N+1},\hat{y}_{N+1})" class="math inline"> to be a reasonably good approximation of the true and unobserved pair <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%28%5Cmathbf%7Bx%7D_%7BN%2B1%7D%2Cy_%7BN%2B1%7D%29" alt="(\mathbf{x}_{N+1},y_{N+1})" title="(\mathbf{x}_{N+1},y_{N+1})" class="math inline">. But since we are still dealing with an expected value of a random variable, we would generally like to have an idea of how noisy this prediction is.</p>
+<p>Suppose now that we have trained the Bayesian Logistic Regression model as our binary classifier <span class="math inline">\(g_N(\mathbf{x})\)</span> using our training data <span class="math inline">\(\mathcal{D}\)</span>. A new unlabelled sample <span class="math inline">\((\mathbf{x}_{N+1},?)\)</span> arrives. As with any binary classifier we can predict the missing label by simply plugging the new sample into our classifier <span class="math inline">\(\hat{y}_{N+1}=g_N(\mathbf{x}_{N+1})=\sigma(\hat{\mathbf{w}}^T\mathbf{x}_{N+1})\)</span>, where <span class="math inline">\(\hat{\mathbf{w}}\)</span> is the MAP estimate as before. If at training phase we have found <span class="math inline">\(g_N(\mathbf{x})\)</span> to achieve good accuracy, we may expect <span class="math inline">\((\mathbf{x}_{N+1},\hat{y}_{N+1})\)</span> to be a reasonably good approximation of the true and unobserved pair <span class="math inline">\((\mathbf{x}_{N+1},y_{N+1})\)</span>. But since we are still dealing with an expected value of a random variable, we would generally like to have an idea of how noisy this prediction is.</p>
 <p>Formally, we are interested in the <strong>posterior predictive</strong> distribution:</p>
-<p><span id="eq-posterior-pred"><img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Cdisplaystyle%20%5Cbegin%7Bequation%7D%20%0A%5Cbegin%7Baligned%7D%0A%26%26%20p%28y%3D1%7C%5Cmathbf%7Bx%7D%2C%20%5Cmathcal%7BD%7D%29%26%3D%20%5Cint%20%5Csigma%28%5Cmathbf%7Bw%7D%5ET%20%5Cmathbf%7Bx%7D%29p%28%5Cmathbf%7Bw%7D%7C%5Cmathcal%7BD%7D%29d%5Cmathbf%7Bw%7D%20%5C%5C%0A%5Cend%7Baligned%7D%0A%5Cend%7Bequation%7D%0A%20%5Cqquad%285%29" alt="\begin{equation} 
+<p><span id="eq-posterior-pred"><span class="math display">\[
+\begin{equation}
 \begin{aligned}
 &amp;&amp; p(y=1|\mathbf{x}, \mathcal{D})&amp;= \int \sigma(\mathbf{w}^T \mathbf{x})p(\mathbf{w}|\mathcal{D})d\mathbf{w} \\
 \end{aligned}
 \end{equation}
- \qquad(5)" title="\begin{equation} 
-\begin{aligned}
-&amp;&amp; p(y=1|\mathbf{x}, \mathcal{D})&amp;= \int \sigma(\mathbf{w}^T \mathbf{x})p(\mathbf{w}|\mathcal{D})d\mathbf{w} \\
-\end{aligned}
-\end{equation}
- \qquad(5)" class="math display"></span></p>
+\tag{5}\]</span></span></p>
 <div class="sidenote">
 <p><strong>SIDENOTE</strong> 💡</p>
-<p>The approach that ignores uncertainty altogether corresponds to what is referred to as <strong>plugin</strong> approximation of the posterior predictive. Formally, it imposes <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20p%28y%3D1%7C%5Cmathbf%7Bx%7D%2C%20%5Cmathcal%7BD%7D%29%5Capprox%20p%28y%3D1%7C%5Cmathbf%7Bx%7D%2C%20%5Chat%7B%5Cmathbf%7Bw%7D%7D%29" alt="p(y=1|\mathbf{x}, \mathcal{D})\approx p(y=1|\mathbf{x}, \hat{\mathbf{w}})" title="p(y=1|\mathbf{x}, \mathcal{D})\approx p(y=1|\mathbf{x}, \hat{\mathbf{w}})" class="math inline">.</p>
+<p>The approach that ignores uncertainty altogether corresponds to what is referred to as <strong>plugin</strong> approximation of the posterior predictive. Formally, it imposes <span class="math inline">\(p(y=1|\mathbf{x}, \mathcal{D})\approx p(y=1|\mathbf{x}, \hat{\mathbf{w}})\)</span>.</p>
 </div>
 <p><br></p>
-<p>With the posterior distribution over model parameters <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20p%28%5Cmathbf%7Bw%7D%7C%5Cmathcal%7BD%7D%29" alt="p(\mathbf{w}|\mathcal{D})" title="p(\mathbf{w}|\mathcal{D})" class="math inline"> at hand we have the necessary ingredients to estimate the posterior predictive distribution <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20p%28y%3D1%7C%5Cmathbf%7Bx%7D%2C%20%5Cmathcal%7BD%7D%29" alt="p(y=1|\mathbf{x}, \mathcal{D})" title="p(y=1|\mathbf{x}, \mathcal{D})" class="math inline">.</p>
-<p>An obvious, but computationally expensive way to estimate it is through Monte Carlo: draw <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D_s" alt="\mathbf{w}_s" title="\mathbf{w}_s" class="math inline"> from <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20p%28%5Cmathbf%7Bw%7D%7C%5Cmathcal%7BD%7D%29" alt="p(\mathbf{w}|\mathcal{D})" title="p(\mathbf{w}|\mathcal{D})" class="math inline"> for <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20s%3D1%3AS" alt="s=1:S" title="s=1:S" class="math inline"> and compute fitted values <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Csigma%28%5Cmathbf%7Bw_s%7D%5ET%5Cmathbf%7Bx%7D%29" alt="\sigma(\mathbf{w_s}^T\mathbf{x})" title="\sigma(\mathbf{w_s}^T\mathbf{x})" class="math inline"> each. Then the posterior predictive distribution corresponds to the average over all fitted values, <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20p%28y%3D1%7C%5Cmathbf%7Bx%7D%2C%20%5Cmathcal%7BD%7D%29%3D1%2FS%20%5Csum_%7Bs%3D1%7D%5E%7BS%7D%5Csigma%28%5Cmathbf%7Bw_s%7D%5ET%5Cmathbf%7Bx%7D%29" alt="p(y=1|\mathbf{x}, \mathcal{D})=1/S \sum_{s=1}^{S}\sigma(\mathbf{w_s}^T\mathbf{x})" title="p(y=1|\mathbf{x}, \mathcal{D})=1/S \sum_{s=1}^{S}\sigma(\mathbf{w_s}^T\mathbf{x})" class="math inline">. By the law of large numbers the Monte Carlo estimate is an accurate estimate of the true posterior predictive for large enough <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20S" alt="S" title="S" class="math inline">. Of course, “large enough” is somewhat loosely defined here and depending on the problem can mean “very large”. Consequently, the computational costs involved essentially know no upper bound.</p>
-<p>Fortunately, it turns out that we can trade off a little bit of accuracy in return for a convenient analytical solution. In particular, we have that <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Csigma%28a%29%20%5Capprox%20%5CPhi%28%5Clambda%20a%29" alt="\sigma(a) \approx \Phi(\lambda a)" title="\sigma(a) \approx \Phi(\lambda a)" class="math inline"> where <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5CPhi%28.%29" alt="\Phi(.)" title="\Phi(.)" class="math inline"> is the standard Gaussian cdf and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Clambda%3D%5Cpi%2F8" alt="\lambda=\pi/8" title="\lambda=\pi/8" class="math inline"> ensures that the two functions have the same slope at the origin (<a href="#fig-probit" class="quarto-xref">Figure&nbsp;2</a>). Without dwelling further on the details we can use this finding to approximate the integral in <a href="#eq-posterior-pred" class="quarto-xref">Equation&nbsp;5</a> as a sigmoid function. This is called <strong>probit approximation</strong> and implemented below.</p>
+<p>With the posterior distribution over model parameters <span class="math inline">\(p(\mathbf{w}|\mathcal{D})\)</span> at hand we have the necessary ingredients to estimate the posterior predictive distribution <span class="math inline">\(p(y=1|\mathbf{x}, \mathcal{D})\)</span>.</p>
+<p>An obvious, but computationally expensive way to estimate it is through Monte Carlo: draw <span class="math inline">\(\mathbf{w}_s\)</span> from <span class="math inline">\(p(\mathbf{w}|\mathcal{D})\)</span> for <span class="math inline">\(s=1:S\)</span> and compute fitted values <span class="math inline">\(\sigma(\mathbf{w_s}^T\mathbf{x})\)</span> each. Then the posterior predictive distribution corresponds to the average over all fitted values, <span class="math inline">\(p(y=1|\mathbf{x}, \mathcal{D})=1/S \sum_{s=1}^{S}\sigma(\mathbf{w_s}^T\mathbf{x})\)</span>. By the law of large numbers the Monte Carlo estimate is an accurate estimate of the true posterior predictive for large enough <span class="math inline">\(S\)</span>. Of course, “large enough” is somewhat loosely defined here and depending on the problem can mean “very large”. Consequently, the computational costs involved essentially know no upper bound.</p>
+<p>Fortunately, it turns out that we can trade off a little bit of accuracy in return for a convenient analytical solution. In particular, we have that <span class="math inline">\(\sigma(a) \approx \Phi(\lambda a)\)</span> where <span class="math inline">\(\Phi(.)\)</span> is the standard Gaussian cdf and <span class="math inline">\(\lambda=\pi/8\)</span> ensures that the two functions have the same slope at the origin (<a href="#fig-probit" class="quarto-xref">Figure&nbsp;2</a>). Without dwelling further on the details we can use this finding to approximate the integral in <a href="#eq-posterior-pred" class="quarto-xref">Equation&nbsp;5</a> as a sigmoid function. This is called <strong>probit approximation</strong> and implemented below.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-probit" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<div id="fig-probit" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-probit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="index_files/figure-html/fig-probit-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
@@ -452,25 +457,25 @@ Figure&nbsp;2: Demonstration of the probit approximation.
 </section>
 <section id="the-estimates" class="level2">
 <h2 class="anchored" data-anchor-id="the-estimates">The estimates</h2>
-<p><a href="#fig-posterior" class="quarto-xref">Figure&nbsp;3</a> below shows the resulting posterior distribution for <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20w_2" alt="w_2" title="w_2" class="math inline"> and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20w_3" alt="w_3" title="w_3" class="math inline"> at varying degrees of prior uncertainty <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Csigma" alt="\sigma" title="\sigma" class="math inline">. The constant <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20w_1" alt="w_1" title="w_1" class="math inline"> is held constant at the mode (<img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Chat%7Bw%7D_1" alt="\hat{w}_1" title="\hat{w}_1" class="math inline">). The red dot indicates the MLE. Note how for the choice of <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Csigma%5Crightarrow%200" alt="\sigma\rightarrow 0" title="\sigma\rightarrow 0" class="math inline"> the posterior is equal to the prior. This is intuitive since we have imposed that we have no uncertainty around our prior beliefs and hence no amount of new evidence can move us in any direction. Conversely, for <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Csigma%20%5Crightarrow%20%5Cinfty" alt="\sigma \rightarrow \infty" title="\sigma \rightarrow \infty" class="math inline"> the posterior distribution is centered around the unconstrained MLE: prior knowledge is very uncertain and hence the posterior is dominated by the likelihood of the data.</p>
-<div id="fig-posterior" class="quarto-figure quarto-figure-center quarto-float anchored">
+<p><a href="#fig-posterior" class="quarto-xref">Figure&nbsp;3</a> below shows the resulting posterior distribution for <span class="math inline">\(w_2\)</span> and <span class="math inline">\(w_3\)</span> at varying degrees of prior uncertainty <span class="math inline">\(\sigma\)</span>. The constant <span class="math inline">\(w_1\)</span> is held constant at the mode (<span class="math inline">\(\hat{w}_1\)</span>). The red dot indicates the MLE. Note how for the choice of <span class="math inline">\(\sigma\rightarrow 0\)</span> the posterior is equal to the prior. This is intuitive since we have imposed that we have no uncertainty around our prior beliefs and hence no amount of new evidence can move us in any direction. Conversely, for <span class="math inline">\(\sigma \rightarrow \infty\)</span> the posterior distribution is centered around the unconstrained MLE: prior knowledge is very uncertain and hence the posterior is dominated by the likelihood of the data.</p>
+<div id="fig-posterior" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-posterior-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../../../www/images/posterior.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-posterior-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Posterior distribution for <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20w_2" alt="w_2" title="w_2" class="math inline figure-img"> and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20w_3" alt="w_3" title="w_3" class="math inline figure-img"> at varying degrees of prior uncertainty <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Csigma" alt="\sigma" title="\sigma" class="math inline figure-img">.
+Figure&nbsp;3: Posterior distribution for <span class="math inline">\(w_2\)</span> and <span class="math inline">\(w_3\)</span> at varying degrees of prior uncertainty <span class="math inline">\(\sigma\)</span>.
 </figcaption>
 </figure>
 </div>
-<p>What about the posterior predictive? The story is similar: since for <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Csigma%5Crightarrow%200" alt="\sigma\rightarrow 0" title="\sigma\rightarrow 0" class="math inline"> the posterior is completely dominated by the zero-mean prior we have <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20p%28y%3D1%7C%5Cmathbf%7Bx%7D%2C%5Chat%7B%5Cmathbf%7Bw%7D%7D%29%3D0.5" alt="p(y=1|\mathbf{x},\hat{\mathbf{w}})=0.5" title="p(y=1|\mathbf{x},\hat{\mathbf{w}})=0.5" class="math inline"> everywhere (top left panel in <a href="#fig-predictive" class="quarto-xref">Figure&nbsp;4</a>. As we gradually increase uncertainty around our prior the predictive posterior depends more and more on the data <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathcal%7BD%7D" alt="\mathcal{D}" title="\mathcal{D}" class="math inline">: uncertainty around predicted labels is high only in regions that are not populated by samples <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%28y_n%2C%20%5Cmathbf%7Bx%7D_n%29" alt="(y_n, \mathbf{x}_n)" title="(y_n, \mathbf{x}_n)" class="math inline">. Not surprisingly, this effect is strongest for the MLE (<img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Csigma%5Crightarrow%20%5Cinfty" alt="\sigma\rightarrow \infty" title="\sigma\rightarrow \infty" class="math inline">) where we see some evidence of overfitting.</p>
-<div id="fig-predictive" class="quarto-figure quarto-figure-center quarto-float anchored">
+<p>What about the posterior predictive? The story is similar: since for <span class="math inline">\(\sigma\rightarrow 0\)</span> the posterior is completely dominated by the zero-mean prior we have <span class="math inline">\(p(y=1|\mathbf{x},\hat{\mathbf{w}})=0.5\)</span> everywhere (top left panel in <a href="#fig-predictive" class="quarto-xref">Figure&nbsp;4</a>. As we gradually increase uncertainty around our prior the predictive posterior depends more and more on the data <span class="math inline">\(\mathcal{D}\)</span>: uncertainty around predicted labels is high only in regions that are not populated by samples <span class="math inline">\((y_n, \mathbf{x}_n)\)</span>. Not surprisingly, this effect is strongest for the MLE (<span class="math inline">\(\sigma\rightarrow \infty\)</span>) where we see some evidence of overfitting.</p>
+<div id="fig-predictive" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-predictive-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../../../www/images/predictive.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-predictive-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Predictive posterior distribution at varying degrees of prior uncertainty <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Csigma" alt="\sigma" title="\sigma" class="math inline figure-img">.
+Figure&nbsp;4: Predictive posterior distribution at varying degrees of prior uncertainty <span class="math inline">\(\sigma\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -510,19 +515,19 @@ Schut, Lisa, Oscar Key, Rory Mc Grath, Luca Costabello, Bogdan Sacaleanu, Yarin 
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>We let <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bw%7D%3D%2810%2C%200.75%2C%20-2.5%29%5ET" alt="\mathbf{w}=(10, 0.75, -2.5)^T" title="\mathbf{w}=(10, 0.75, -2.5)^T" class="math inline"> define the true coefficients.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>We let <span class="math inline">\(\mathbf{w}=(10, 0.75, -2.5)^T\)</span> define the true coefficients.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Note that the author works with the negative log likelihood scaled by the sample size<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2021,
   author = {Altmeyer, Patrick},
   title = {Bayesian {Logistic} {Regression}},
   date = {2021-11-15},
-  url = {https://www.patalt.org//blog/posts/bayesian-logit},
+  url = {https://www.patalt.org/blog/posts/bayesian-logit/},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-altmeyer2021" class="csl-entry quarto-appendix-citeas" role="listitem">
 Altmeyer, Patrick. 2021. <span>“Bayesian Logistic Regression.”</span>
-November 15, 2021. <a href="https://www.patalt.org//blog/posts/bayesian-logit">https://www.patalt.org//blog/posts/bayesian-logit</a>.
+November 15, 2021. <a href="https://www.patalt.org/blog/posts/bayesian-logit/">https://www.patalt.org/blog/posts/bayesian-logit/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -559,18 +564,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -602,7 +596,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
   const viewSource = window.document.getElementById('quarto-view-source') ||
                      window.document.getElementById('quarto-code-tools-source');
   if (viewSource) {
@@ -654,6 +670,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.patalt\.org\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -688,7 +722,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -1331,7 +1369,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-375"><a href="#cb1-375"></a></span>
 <span id="cb1-376"><a href="#cb1-376"></a></span>
 <span id="cb1-377"><a href="#cb1-377"></a></span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
