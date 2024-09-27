@@ -7,7 +7,6 @@ project:
     - "_extensions/"
     - "CNAME"
     - "www/"
-    - "www/cv/"
     - "www/images"
 
 website:
@@ -30,6 +29,14 @@ website:
         file: content/software.qmd
       - text: About
         file: content/about/index.qmd
+      - text: CV
+        menu: 
+          - text: Compact
+            file: /www/resume.pdf
+            target: _blank
+          - text: "Detailed"
+            file: /www/resume_long.pdf
+            target: _blank
     right:
       - icon: rss
         href: blog/index.xml
