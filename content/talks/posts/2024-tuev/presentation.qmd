@@ -140,8 +140,6 @@ Individuelle Kostenminimierung ist nicht immer optimal.^[Mehr zu dem Thema in un
 :::
 ::::
 
-## Verwandte Themen
-
 # Wer die Wahl hat ... {#sec-wahl}
 
 > ... hat meistens auch die Qual.
@@ -201,28 +199,48 @@ Alle Erklärungen in @fig-cf-example sind gültig.
 :::
 ::::
 
-## Robustness fördert Erklärbarkeit
+## Robustheit fördert Erklärbarkeit
 
-
-# Fragen? {#sec-questions}
-
-## Taija {.smaller}
+Mehrere Bachelorarbeiten, die untersuchen welche Methoden die Qualität von Modellen verbessern.
 
 ::::{.columns}::::
-:::{.column width='50%'}
-- Model Explainability ([CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl))
-- Predictive Uncertainty Quantification ([ConformalPrediction.jl](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl))
-- Effortless Bayesian Deep Learning ([LaplaceRedux.jl](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl))
-- ... and more!
+:::{.column width='40%'}
+Vorallem *Aversarial Training* scheint zu helfen (@fig-at)^[Mehr zum Thema in Rithik Appachi's [Thesis](https://resolver.tudelft.nl/uuid:47786bb4-ae24-4972-94a0-1bd18d756486).].
+
+![](/www/images/panda.png)
 :::
-:::{.column width='50%'}
-- Work presented \@ JuliaCon 2022, 2023, 2024.
-- Running project \@ Google Summer of Code 2024.
-- Total of three software projects \@ TU Delft.
+:::{.column width='60%'}
+![ECCCos für standard Model (mitte) und Model mit *Aversarial Training* (rechts).](/www/images/rithik_ce.png){#fig-at}
 :::
 ::::
 
-[![Trustworthy AI in Julia: github.com/JuliaTrustworthyAI](www/logo.png){width="50%" fig-align="center"}](https://github.com/JuliaTrustworthyAI)
+## Weitere Themen
+
+::: {.incremental}
+
+- **Forschung**: Können wir CE schon während des Trainings verwenden?
+- **Open-Source**: Unser open-source Ökosystem for Trustworthy AI in Julia ([Taija](https://www.taija.org/)) wächst
+
+:::
+
+::::{.columns}::::
+:::{.column width='50%'}
+::: {.incremental}
+  - Counterfactual Explanations
+  - Conformal Prediction
+  - Bayesian Deep Learning
+:::
+:::
+:::{.column width='50%'}
+::: {.incremental}
+  - Joint Energy Models
+  - Adversarial Robustness 
+  - ...
+:::
+:::
+::::
+
+# Fragen? {#sec-questions}
 
 ## References {.scrollable .smaller}
 
