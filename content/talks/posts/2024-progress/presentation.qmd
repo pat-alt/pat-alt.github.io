@@ -1,0 +1,250 @@
+---
+title: Trustworthy Artificial Intelligence
+author: 
+  - name: "**Patrick Altmeyer**"
+    url: https://www.patalt.org/
+  - name: Arie van Deursen
+  - name: Cynthia C. S. Liem
+institute: Delft University of Technology
+date: today
+format: 
+  tudelft-revealjs:
+    theme: custom.scss
+    self-contained: true
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    fig-align: center
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+classoption: "notheorems"
+---
+
+## Agenda
+
+::: {.incremental}
+- **Stocktake**---what has been accomplished and where are we at?
+- **Next Steps**---plans for the 3-4 months
+- **Big Picture**---putting it all together and some tentative career plans
+- **Housekeeping**---meeting series, ...
+:::
+
+# Stocktake
+
+## Papers 
+
+Solid progress on chapters 3 to 5 of the thesis:
+
+::: {.incremental}
+- 2 papers published (*ECCCo* @ AAAI: [**Ch3**], *Stop Making Unscientific AGI Claims* @ ICML: [**Ch5**]).
+- 1 paper in progress (*CE and Adversarial Robustness* @ ICML/NeurIPS/workshops ❓: [**Ch4.1**])
+- 1 paper initiated (*Counterfactual Training* @ ICML ❓ (timing's good): [**Ch4.2**])
+- 1 paper (extended abstract) submitted (`LaplaceRedux.jl` @ JuliaCon)
+:::
+
+## Talks and Posters
+
+A total of 12 talks and posters
+
+::: {.incremental}
+
+- Academia (4): AAAI (poster), ECONDAT, Imperial College London, ICML (poster)
+- Companies (3): De Nederlandsche Bank, The Alan Turing Institute, TÜV AI Lab (next week)
+- Software (5): JuliaCon (4 talks), *Julia on HPC* tutorial @ TU Delft
+
+:::
+
+## Open Source and Science
+
+::: {.incremental}
+
+- Unified ecosystem for Trustworthy AI in Julia, [Taija](https://www.taija.org/).
+  - Continuous maintenance and development, in particular CE.jl, LR.jl and CP.jl.
+  - Work on various base and meta packages for parallelization, visualization and more. 
+- Published 7 blog posts: [personal](https://www.patalt.org/blog/) (4), [Taija](https://www.taija.org/blog/) (3)
+- Mentored two Google/Julia Summer of Code students who contributed to Taija: (1) [causal recourse](https://www.taija.org/blog/posts/causal-recourse/), (2) [conformal Bayes](https://summerofcode.withgoogle.com/programs/2024/projects/fkvFPluF).
+
+:::
+
+## Graduate School
+
+::::{.columns}::::
+:::{.column width='50%'}
+- 1 Research project (4 ECTS: *research*).
+- 1 Software project (2 ECTS: *research*).
+- 4 Master's theses (4 ECTS: *research*)
+:::
+:::{.column width='50%'}
+- NeurIPS 2024 reviewing (3 ECTS: *research*).
+- JuliaCon, ICML, AAAI, ECONDAT (2 ECTS each: *research*).
+- 2-week Dutch course (4 ECTS: *transferable*).
+:::
+::::
+
+Total (missing): *research* (-21.5 ⚠️), *discipline* (5), *transferable* (6)
+
+## Time Management (1)
+
+::: {.incremental}
+
+- Last year I thought it should be feasible to have the following papers in (near-) final form by now: ECCCo [**Ch3**] ✅, LaplaceRedux [not planned as chapter] ✅, ~~ConformalPrediction~~ ❌, 3rd research paper [**Ch5**] ✅.
+- At that point, I thought we'd be looking at a comprehensive thesis: JuliaCon paper(s) forming the introduction and 3 research papers forming the core.
+  - Still missing work on imroving models 🟨🟨🟨🟨⬛ 
+
+:::
+  
+## Time Management (2)
+
+4th year can then be used to:
+
+1. Tackle 4th research paper and collate chapters (thesis).
+2. Ensure Taija and Graduate School credits are in order and next career steps are planned.
+3. ~~Google Summer of Code~~ ✅? ~~Teaching~~ ✅? ~~Research Visit~~? Internship? Book about Taija?
+4. ~~Write paper on `JointEnergyModels.jl`.~~
+
+# Next Steps
+
+## CE and Adversial Robustness 
+
+Promising results but ...
+
+- Need more granular grid for gradient-based adversarial training and additional datasets.
+- Need to test other forms of adversarial robustness (e.g. LBDN), because
+  - Link above has been established to some degree.
+  - Link above is not surprising, because AE and CE are virtually identical.
+
+@ ICML 2025, NeurIPS Data & Bmks 2025, workshops, ❓
+
+## Counterfactual Training 
+
+::: {.callout-tip}
+
+## AE ⊆ CE
+
+Adversarial Examples (AE) can be thought of as a specific type of CE. Why not use CE in a similar fashion during training?
+
+:::
+
+::::{.columns}::::
+:::{.column width='50%'}
+::: {.incremental}
+- Literature review ✅
+- Proof-of-concept ✅
+- Exploration phase ⏳ (until mid-November)
+:::
+:::
+:::{.column width='50%'}
+::: {.incremental}
+- Run experiments 🔲 (mid-Novermber to early January)
+- Wrap up 🔲 (January)
+:::
+:::
+::::
+
+. . .
+
+❓ Aiming for ICML but in 2024 there was little on CE. 
+
+# Big Picture
+
+## Thesis Structure {auto-animate=true}
+
+### Chapter 1
+
+#### Introduction
+
+1. Broadly: Taija---Trustworthy AI in Julia (reference relevant **blog posts**, **NAACL** and **student papers**.)
+2. Focus: Counterfactual Explanations (**JCon Proc**) ✅
+
+## Thesis Structure {auto-animate=true}
+
+### Chapter 2
+
+#### Algorithmic Recourse in Practice
+
+1. Focus: Endogenous Macrodynamics in Algorithmic Recourse (**SaTML**) ✅
+2. Transition: If not minimal costs, then what? (integrate **blog post** on REVISE)
+
+## Thesis Structure {auto-animate=true}
+
+### Chapter 3
+
+#### Learning Plausible Explanations
+
+1. Transition: Adversarial Training and Counterfactual Explanations ⏳
+2. Focus: Counterfactual Training ⏳
+
+## Thesis Structure {auto-animate=true}
+
+### Chapter 4
+
+#### Faithfulness first, Plausibility second
+
+1. Focus: Faithful Model Explanations Through Energy-Constrained Conformal Counterfactuals (**AAAI**) ✅
+2. Intermezzo: Assessing the endogenous macrodynamics caused by ECCCo
+
+## Thesis Structure {auto-animate=true}
+
+### Chapter 5
+
+#### Trustworthy AI in Times of LLMs
+
+1. Intermezzo: Stop Making Unscientific AGI Claims (**ICML**) ✅
+2. Discussion: Can AI be Trustworthy? (reference works by **Karol** and **Aleks**)
+
+## Summer 2025 
+
+- Connected with Tom Bewley from J.P. Morgan AI Research at ICML and [implemented](https://www.taija.org/blog/posts/counterfactual-rule-explanations/) his paper.
+  - Novel approach to generate global counterfactual rule explanations.
+  - Motivated me to apply to Summer Associate Program (could work on extension [**Ch6**]), although I was aiming to defend in September.
+- Alternatively, hoping for HuggingFace to offer internships again but nothing yet. 
+
+# Beyond PhD
+
+## In an ideal world ...
+
+- Pretty set on either Amsterdam or Düsseldorf.
+- Leaning towards industry, but remain curious about opportunities in academia.
+- Desire to continue with Julia, ideally Taija.
+- Continue *developing* and *implementing* interesting research ideas in software, add *application* and *deployment* (research engineer?).
+- Curious to explore subject areas outside of my PhD but maintain focus on "AI for Good". 
+
+## Industry
+
+- J.P. Morgan AI Research
+- HuggingFace
+- EU AI Office
+- Julia shops: LazyDynamics, EvoVest
+
+If industry, ideally combine my backgrounds in economics and AI. 
+
+## Academia
+
+- Potentially, post-doc at Delft/VU/UvA with interesting external partner, i.e. any of the companies on previous slide or:
+  - EScience Centre
+  - DNB (?)
+- Assistant professor at Delft (EWI/TPM), VU, UvA
+
+# Housekeeping
+
+

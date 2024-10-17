@@ -1,0 +1,247 @@
+---
+title: Vertrauens(un)würdige KI durch Counterfactual Explanations
+author: 
+  - name: "**Patrick Altmeyer**"
+    url: https://www.patalt.org/
+  - name: Arie van Deursen
+  - name: Cynthia C. S. Liem
+institute: Technische Universität Delft
+date: today
+format: 
+  tudelft-revealjs:
+    theme: custom.scss
+    self-contained: true
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    fig-align: center
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
+    lightbox: true
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+classoption: "notheorems"
+---
+
+## Kurz zu mir ...
+
+::::{.columns}::::
+:::{.column width='75%'}
+- MA Hons Economics an der *University of Edinburgh*, dann Master in Economics and Finance an der *Barcelona School of Economics* (BSE)
+- Zwei Jahre Geldpolitik bei der *Bank of England*, dann Master in Data Science an der BSE.
+- Heute Doktorand im Fachbereich Vertrauenswürdige KI an der *Technischen Universität Delft*.
+:::
+:::{.column width='25%'}
+> Hier geht's zur Website:
+> ![](/www/images/qr.png){width="100%" fig-align="center"}
+:::
+::::
+
+# Wieso? Weshalb? Warum?
+
+> “You cannot appeal to (algorithms). They do not listen. Nor do they bend.”
+>
+> — Cathy O'Neil in [*Weapons of Math Destruction*](https://en.wikipedia.org/wiki/Weapons_of_Math_Destruction), 2016
+
+## Agenda 
+
+::: {.incremental}
+
+- Einführung: Counterfactual Explantions (@sec-intro).
+- Probleme bei der Anwendung (@sec-praxis).
+- Wer die Wahl hat ... (@sec-wahl).
+- Vertrauenswürdig oder nicht? (@sec-trust).
+- Q&A (12:30-13:00) (@sec-questions).
+<!-- - **Papers**: @altmeyer2023endogenous, @altmeyer2023explaining, @altmeyer2023faithful, @hengst2024conformal, @altmeyer2024position -->
+
+:::
+
+# Einführung: Counterfactual Explantions {#sec-intro}
+
+> Wenn das Wörtchen "wenn" nicht wär ...
+
+## Problemstellung {auto-animate=true}
+
+Typischerweise geht es um belangreiche diskrete Entscheidungen:
+
+::: {.incremental}
+
+- Kreditwürdig oder nicht?
+- Betrugsverdacht oder nicht?
+- Straßenzulassung oder nicht?
+- Krebs oder nicht?
+
+:::
+
+## Problemstellung {auto-animate=true}
+
+Typischerweise geht es um belangreiche diskrete Entscheidungen:
+
+::::{.columns}::::
+:::{.column width='45%'}
+#### Hund 🐶 oder Katze 🐱?
+
+![](www/class.png){width="70%" align="center"}
+:::
+:::{.column width='55%'}
+
+::: {style="color: lightgrey;"}
+- Kreditwürdig oder nicht?
+- Betrugsverdacht oder nicht?
+- Straßenzulassung oder nicht?
+- Krebs oder nicht?
+:::
+:::
+::::
+
+## Counterfactual Explanations
+
+::::{.columns}::::
+:::{.column width='50%'}
+**Counterfactual Explanations** (CE) erklären welche Veränderungen nötig gewesen wären, damit der Algorithmus eine andere Entscheidung trifft.^[Weitere einleitende Lektüre: Blog [post](https://www.patalt.org/blog/posts/individual-recourse-for-black-box-models/) oder 📜 @altmeyer2023explaining.]
+:::
+:::{.column width='50%'}
+![](www/revise.gif)
+:::
+::::
+
+# Probleme bei der Anwendung {#sec-praxis}
+
+> "No such thing as a free lunch"
+
+## Wer trägt die Kosten? 
+
+![](www/bank_cartoon.png){width="55%" fig-align="center"}
+
+::::{.columns}::::
+:::{.column width='50%'}
+Individuelle Kostenminimierung ist nicht immer optimal.^[Mehr zu dem Thema in unserem SaTML 📜 [@altmeyer2023endogenous].]
+:::
+:::{.column width='50%'}
+![](www/poc.png){width="100%"}
+:::
+::::
+
+# Wer die Wahl hat ... {#sec-wahl}
+
+> ... hat meistens auch die Qual.
+
+## Mangelnde Eindeutigkeit
+
+::::{.columns}::::
+:::{.column width='40%'}
+- Erklärungen für Algorithmen sind selten eindeutig.
+
+- Diversität kann sogar erwünschlich sein [@mothilal2020explaining].
+:::
+:::{.column width='60%'}
+
+![Diverse Erklärungen durch CE. Quelle: @altmeyer2023explaining.](www/ce_intro.png){fig-align="center"}
+
+:::
+::::
+
+
+## Viele Bedürfnisse
+
+::: {.incremental}
+
+- **Proximität**: individuelle Kostenminimierung [@wachter2017counterfactual].
+- **Umsetzbarkeit**: nicht alle Veränderungen sind möglich [@ustun2019actionable].
+- **Robustheit**: Erklärungen sollten auch morgen noch gültig sein [@upadhyay2021robust; @slack2021counterfactual; @pawelczyk2022probabilistically].
+- **Plausibilität**: nicht alle Veränderungen sind plausibel [@joshi2019realistic; @poyiadzi2020face].
+
+:::
+
+# Vertrauenswürdig oder nicht? {#sec-trust}
+
+> Nicht alles, was gut aussieht, ist auch wirklich gut.
+
+## Pick your Poison
+
+Alle Erklärungen in @fig-cf-example sind gültig. 
+
+> Welche nehmen wir?
+
+![Aus 9 wird 7: CEs für einen Bildklassifikator generiert durch *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](www/mnist_motivation.png){#fig-cf-example width="80%"}
+
+## Treue trumpft Plausibilität
+
+::::{.columns}::::
+:::{.column width='30%'}
+![*ECCCos* für MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).](www/mnist_eccco.png){#fig-mnist-eccco width="75%"}
+:::
+:::{.column width='70%'}
+*ECCCo* generiert CE die^[Mehr zum Thema in unserem AAAI 📜 [@altmeyer2024faithful].]
+
+- Qualität treu repräsentiert (@fig-mnist-eccco).
+- Plausibilität erreicht (@fig-mnist-benchmark).
+
+![Ergebnisse für verschiedene Generatoren (from 3 to 5).](www/mnist_benchmark.png){#fig-mnist-benchmark width="100%"}
+:::
+::::
+
+## Robustheit fördert Erklärbarkeit
+
+Mehrere Bachelorarbeiten, die untersuchen welche Methoden die Qualität von Modellen verbessern.
+
+::::{.columns}::::
+:::{.column width='40%'}
+Vorallem *Aversarial Training* scheint zu helfen (@fig-at)^[Mehr zum Thema in Rithik Appachi's [Thesis](https://resolver.tudelft.nl/uuid:47786bb4-ae24-4972-94a0-1bd18d756486).].
+
+![](/www/images/panda.png)
+:::
+:::{.column width='60%'}
+![ECCCos für standard Model (mitte) und Model mit *Aversarial Training* (rechts).](/www/images/rithik_ce.png){#fig-at}
+:::
+::::
+
+## Weitere Themen
+
+::: {.incremental}
+
+- **Forschung**: Können wir CE schon während des Trainings verwenden?
+- **Open-Source**: Unser open-source Ökosystem for Trustworthy AI in Julia ([Taija](https://www.taija.org/)) wächst
+
+:::
+
+::::{.columns}::::
+:::{.column width='50%'}
+::: {.incremental}
+  - Counterfactual Explanations
+  - Conformal Prediction
+  - Bayesian Deep Learning
+:::
+:::
+:::{.column width='50%'}
+::: {.incremental}
+  - Joint Energy Models
+  - Adversarial Robustness 
+  - ...
+:::
+:::
+::::
+
+# Fragen? {#sec-questions}
+
+## References {.scrollable .smaller}
+
+
