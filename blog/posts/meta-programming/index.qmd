@@ -9,14 +9,17 @@ categories:
 description: >-
   In this slightly different post, I talk about my first experience with metaprogramming in Julia.
 image: www/intro.png
-jupyter: julia-1.10
+engine: julia
 draft: false
 ---
 
 ```{julia}
 #| echo: false
+projectdir = splitpath(pwd()) |>
+    ss -> joinpath(ss[1:findall([s == "pat-alt.github.io" for s in ss])[1]]...) 
+cd(projectdir)
 
-using Pkg; Pkg.activate("blog/posts/meta-programming")
+using Pkg; Pkg.activate("$projectdir/blog/posts/meta-programming")
 using CounterfactualExplanations
 using Markdown
 using Plots

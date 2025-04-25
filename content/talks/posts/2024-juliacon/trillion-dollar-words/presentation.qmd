@@ -11,6 +11,7 @@ format:
 date: 2024-07-11
 date-format: full
 bibliography: biblio.bib
+engine: julia
 execute:
   freeze: auto
   eval: true
@@ -20,8 +21,11 @@ execute:
 
 ```{julia}
 #| echo: false
+projectdir = splitpath(pwd()) |>
+    ss -> joinpath(ss[1:findall([s == "pat-alt.github.io" for s in ss])[1]]...) 
+cd(projectdir)
 
-include("$(pwd())/content/talks/posts/2024-juliacon/trillion-dollar-words/setup.jl")
+include("$projectdir/content/talks/posts/2024-juliacon/trillion-dollar-words/setup.jl")
 ```
 
 ## [TrillionDollarWords.jl](https://github.com/pat-alt/TrillionDollarWords.jl)

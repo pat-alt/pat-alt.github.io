@@ -11,6 +11,7 @@ format:
 date: 2024-07-12
 date-format: full
 bibliography: biblio.bib
+engine: julia
 execute:
   freeze: auto
   eval: true
@@ -21,7 +22,11 @@ execute:
 ```{julia}
 #| echo: false
 
-include("$(pwd())/content/talks/posts/2024-juliacon/taija-supercomp/setup.jl")
+projectdir = splitpath(pwd()) |>
+    ss -> joinpath(ss[1:findall([s == "pat-alt.github.io" for s in ss])[1]]...) 
+cd(projectdir)
+
+include("$projectdir/content/talks/posts/2024-juliacon/taija-supercomp/setup.jl")
 ```
 
 ## [T]{style="color:#389836;"}rustworthy [AI]{style="color:#9558B2;"} in [J]{style="color:#CB3C33;"}uli[A]{style="color:#CB3C33;"}

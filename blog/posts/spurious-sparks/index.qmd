@@ -15,14 +15,18 @@ categories:
 description: >-
   This post questions the idea that finding patterns in latent embeddings of models is indicative of AGI or even surprising. I illustrate this using examples from Economics, a discipline that does not typically anthropomorphize the models it produces. 
 image: results/figures/intro.jpeg
-jupyter: julia-1.10
+engine: julia
 draft: false
 ---
 
 ```{julia}
 #| echo: false
+    
+projectdir = splitpath(pwd()) |>
+    ss -> joinpath(ss[1:findall([s == "pat-alt.github.io" for s in ss])[1]]...) 
+cd(projectdir)
 
-include("$(pwd())/blog/posts/spurious-sparks/src/setup.jl")
+include("$projectdir/blog/posts/spurious-sparks/src/setup.jl")
 ```
 
 <div class="intro-gif">
@@ -239,7 +243,7 @@ To estimate economic growth we will rely on a quarterly [series](https://fred.st
 df_gdp_full = CSV.read(joinpath(BLOG_DIR, "data/gdp.csv"), DataFrame) |>
     x -> @rename(x, Date=DATE, gdp=GDPC1) |>
     x -> @mutate(x, gdp_l1=lag(gdp)) |>
-    x -> @mutate(x, growth=log(gdp)-log(gdp_l1)) |>
+    x -> @mutate(x, growth=(gdp_l1-gdp)/gdp) |>
     x -> @select(x, Date, growth) |>
     x -> @mutate(x, year=Dates.year(Date)) |>
     x -> @mutate(x, quarter=Dates.quarter(Date)) 

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -93,7 +93,7 @@ div.csl-indent {
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-4811ef7f1cb7aef68e11ca9f111c1a42.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-abf567cae1b23626b35839fface88527.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-30aadfaea4ea965e36e18717492786ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -281,7 +281,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">TrillionDollarWords.jl</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title">TrillionDollarWords.jl</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 <p class="subtitle lead">The Trillion Dollar Words dataset and model in Julia</p>
   <div class="quarto-categories">
     <div class="quarto-category">llm</div>
@@ -331,6 +331,13 @@ window.Quarto = {
 </header>
 
 
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>#| echo: false</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a>projectdir = splitpath(pwd()) |&gt;</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    ss -&gt; joinpath(ss[1:findall([s == "pat-alt.github.io" for s in ss])[1]]...) </span>
+<span id="cb1-5"><a href="#cb1-5"></a>cd(projectdir)</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a>include("$(projectdir)/blog/posts/trillion-dollar-words/src/setup.jl")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="intro-gif">
 <figure class="figure">
 <img src="intro.jpeg" class="figure-img">
@@ -358,11 +365,11 @@ Disclaimer
 </div>
 </div>
 <p>You can install the package from Julia’s general registry as follows:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">using</span> <span class="bu">Pkg</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(url<span class="op">=</span><span class="st">"TrillionDollarWords.jl"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>To install the development version, use the following command:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">using</span> <span class="bu">Pkg</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(url<span class="op">=</span><span class="st">"https://github.com/pat-alt/TrillionDollarWords.jl"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(url<span class="op">=</span><span class="st">"TrillionDollarWords.jl"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To install the development version, use the following command:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">using</span> <span class="bu">Pkg</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(url<span class="op">=</span><span class="st">"https://github.com/pat-alt/TrillionDollarWords.jl"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="basic-functionality" class="level3">
 <h3 class="anchored" data-anchor-id="basic-functionality">Basic Functionality</h3>
 <p>The package provides the following functionality:</p>
@@ -378,159 +385,41 @@ Disclaimer
 <h3 class="anchored" data-anchor-id="loading-the-data">Loading the Data</h3>
 <p>The Trillion Dollar Words dataset is a collection of preprocessed sentences around 40,000 time-stamped sentences from meeting minutes, press conferences and speeches by members of the Federal Open Market Committee (FOMC) <span class="citation" data-cites="shah2023trillion">(<a href="#ref-shah2023trillion" role="doc-biblioref">Shah, Paturi, and Chava 2023</a>)</span>. The total sample period spans from January, 1996, to October, 2022. In order to train various rule-based models and large language models (LLM) to classify sentences as either ‘hawkish’, ‘dovish’ or ‘neutral’, they have manually annotated a subset of around 2,500 sentences. The best-performing model, a large BERT model with around 355 million parameters, was open-sourced on <a href="https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves">HuggingFace</a>. The authors also link the sentences to market data, which makes it possible to study the relationship between language and financial markets. While the authors of the paper did publish their data, much of it is unfortunately scattered across CSV and Excel files stored in a public GitHub <a href="https://github.com/gtfintechlab/fomc-hawkish-dovish">repo</a>. I have collected and merged that data, yielding a combined dataset with indexed sentences and additional metadata that may be useful for downstream tasks.</p>
 <p>The entire dataset of all available sentences used in the paper can be loaded as follows:</p>
-<div id="c3a49107" class="cell" data-execution_count="2">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">using</span> <span class="bu">TrillionDollarWords</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">load_all_sentences</span>() <span class="op">|&gt;</span> show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>38358×8 DataFrame
-   Row │ sentence_id  doc_id  date        event_type        label    sentence  ⋯
-       │ Int64        Int64   Date        String31          String7  String    ⋯
-───────┼────────────────────────────────────────────────────────────────────────
-     1 │           1       1  1996-01-30  meeting minutes   neutral  The Commi ⋯
-     2 │           2       1  1996-01-30  meeting minutes   neutral  Consumer
-     3 │           3       1  1996-01-30  meeting minutes   dovish   Slower gr
-     4 │           4       1  1996-01-30  meeting minutes   hawkish  The deman
-     5 │           5       1  1996-01-30  meeting minutes   neutral  The recen ⋯
-     6 │           6       1  1996-01-30  meeting minutes   neutral  Nonfarm p
-     7 │           7       1  1996-01-30  meeting minutes   hawkish  Job growt
-     8 │           8       1  1996-01-30  meeting minutes   hawkish  Elsewhere
-     9 │           9       1  1996-01-30  meeting minutes   neutral  The outpu ⋯
-    10 │          10       1  1996-01-30  meeting minutes   neutral  Recent in
-    11 │          11       1  1996-01-30  meeting minutes   hawkish  Incoming
-   ⋮   │      ⋮         ⋮         ⋮              ⋮             ⋮               ⋱
- 38349 │       38349      63  2015-09-17  press conference  dovish   monetary
- 38350 │       38350      63  2015-09-17  press conference  neutral  When we—w ⋯
- 38351 │       38351      63  2015-09-17  press conference  neutral  It’s one
- 38352 │       38352      63  2015-09-17  press conference  neutral  1 Chair Y
- 38353 │       38353      63  2015-09-17  press conference  neutral  It remain
- 38354 │       38354      63  2015-09-17  press conference  neutral  And, reme ⋯
- 38355 │       38355      63  2015-09-17  press conference  neutral  It is tru
- 38356 │       38356      63  2015-09-17  press conference  dovish   To me, th
- 38357 │       38357      63  2015-09-17  press conference  hawkish  And since
- 38358 │       38358      63  2015-09-17  press conference  neutral  There hav ⋯
-                                                3 columns and 38337 rows omitted</code></pre>
-</div>
-</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>#| output: true</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a>using TrillionDollarWords</span>
+<span id="cb4-4"><a href="#cb4-4"></a>load_all_sentences() |&gt; show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The combined dataset is also available as a <code>DataFrame</code> and can be loaded as follows:</p>
-<div id="5d34ae52" class="cell" data-execution_count="3">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">load_all_data</span>() <span class="op">|&gt;</span> show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>524395×11 DataFrame
-    Row │ sentence_id  doc_id  date        event_type       label    sentence  ⋯
-        │ Int64        Int64   Date        String31         String7  String    ⋯
-────────┼───────────────────────────────────────────────────────────────────────
-      1 │           1       1  1996-01-30  meeting minutes  neutral  The Commi ⋯
-      2 │           2       1  1996-01-30  meeting minutes  neutral  Consumer
-      3 │           3       1  1996-01-30  meeting minutes  dovish   Slower gr
-      4 │           4       1  1996-01-30  meeting minutes  hawkish  The deman
-      5 │           5       1  1996-01-30  meeting minutes  neutral  The recen ⋯
-      6 │           6       1  1996-01-30  meeting minutes  neutral  Nonfarm p
-      7 │           7       1  1996-01-30  meeting minutes  hawkish  Job growt
-      8 │           8       1  1996-01-30  meeting minutes  hawkish  Elsewhere
-      9 │           9       1  1996-01-30  meeting minutes  neutral  The outpu ⋯
-     10 │          10       1  1996-01-30  meeting minutes  neutral  Recent in
-     11 │          11       1  1996-01-30  meeting minutes  hawkish  Incoming
-   ⋮    │      ⋮         ⋮         ⋮              ⋮            ⋮               ⋱
- 524386 │       29435     125  2022-10-12  speech           hawkish  However,
- 524387 │       29436     125  2022-10-12  speech           hawkish  My genera ⋯
- 524388 │       29429     125  2022-10-12  speech           neutral  I will fo
- 524389 │       29430     125  2022-10-12  speech           hawkish  Inflation
- 524390 │       29431     125  2022-10-12  speech           neutral  At this p
- 524391 │       29432     125  2022-10-12  speech           hawkish  If we do  ⋯
- 524392 │       29433     125  2022-10-12  speech           hawkish  However,
- 524393 │       29434     125  2022-10-12  speech           hawkish  To bring
- 524394 │       29435     125  2022-10-12  speech           hawkish  However,
- 524395 │       29436     125  2022-10-12  speech           hawkish  My genera ⋯
-                                               6 columns and 524374 rows omitted</code></pre>
-</div>
-</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href="#cb5-1"></a>#| output: true</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>load_all_data() |&gt; show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Additional functionality for data loading is available (see <a href="https://www.patalt.org/TrillionDollarWords.jl/dev/">docs</a>).</p>
 </section>
 <section id="loading-the-model" class="level3">
 <h3 class="anchored" data-anchor-id="loading-the-model">Loading the Model</h3>
 <p>The model can be loaded with or without the classifier head (below without the head). Under the hood, this function uses <a href="https://github.com/chengchingwen/Transformers.jl">Transformers.jl</a> to retrieve the model from <a href="https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves">HuggingFace</a>. Any keyword arguments accepted by <code>Transformers.HuggingFace.HGFConfig</code> can also be passed. For example, to load the model without the classifier head and enable access to layer-wise activations, the following command can be used:</p>
-<div id="8375363f" class="cell" data-execution_count="4">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">load_model</span>(; load_head<span class="op">=</span><span class="cn">false</span>, output_hidden_states<span class="op">=</span><span class="cn">true</span>) <span class="op">|&gt;</span> show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>BaselineModel(GPT2TextEncoder(
-├─ TextTokenizer(MatchTokenization(CodeNormalizer(BPETokenization(GPT2Tokenization, bpe = CachedBPE(BPE(50000 merges))), codemap = CodeMap{UInt8 =&gt; UInt16}(3 code-ranges)), 5 patterns)),
-├─ vocab = Vocab{String, SizedArray}(size = 50265, unk = &lt;unk&gt;, unki = 4),
-├─ codemap = CodeMap{UInt8 =&gt; UInt16}(3 code-ranges),
-├─ startsym = &lt;s&gt;,
-├─ endsym = &lt;/s&gt;,
-├─ padsym = &lt;pad&gt;,
-├─ trunc = 256,
-└─ process = Pipelines:
-  ╰─ target[token] := TextEncodeBase.nestedcall(string_getvalue, source)
-  ╰─ target[token] := Transformers.TextEncoders.grouping_sentence(target.token)
-  ╰─ target[(token, segment)] := SequenceTemplate{String}(&lt;s&gt;:&lt;type=1&gt; Input:&lt;type=1&gt; &lt;/s&gt;:&lt;type=1&gt; (&lt;/s&gt;:&lt;type=1&gt; Input:&lt;type=1&gt; &lt;/s&gt;:&lt;type=1&gt;)...)(target.token)
-  ╰─ target[attention_mask] := (NeuralAttentionlib.LengthMask ∘ Transformers.TextEncoders.getlengths(256))(target.token)
-  ╰─ target[token] := TextEncodeBase.trunc_or_pad(256, &lt;pad&gt;, tail, tail)(target.token)
-  ╰─ target[token] := TextEncodeBase.nested2batch(target.token)
-  ╰─ target := (target.token, target.attention_mask)
-), HGFRobertaModel(Chain(CompositeEmbedding(token = Embed(1024, 50265), position = ApplyEmbed(.+, FixedLenPositionEmbed(1024, 514), Transformers.HuggingFace.roberta_pe_indices(1,)), segment = ApplyEmbed(.+, Embed(1024, 1), Transformers.HuggingFace.bert_ones_like)), DropoutLayer&lt;nothing&gt;(LayerNorm(1024, ϵ = 1.0e-5))), Transformer&lt;24&gt;(PostNormTransformerBlock(DropoutLayer&lt;nothing&gt;(SelfAttention(MultiheadQKVAttenOp(head = 16, p = nothing), Fork&lt;3&gt;(Dense(W = (1024, 1024), b = true)), Dense(W = (1024, 1024), b = true))), LayerNorm(1024, ϵ = 1.0e-5), DropoutLayer&lt;nothing&gt;(Chain(Dense(σ = NNlib.gelu, W = (1024, 4096), b = true), Dense(W = (4096, 1024), b = true))), LayerNorm(1024, ϵ = 1.0e-5))), Branch{(:pooled,) = (:hidden_state,)}(BertPooler(Dense(σ = NNlib.tanh_fast, W = (1024, 1024), b = true)))), Transformers.HuggingFace.HGFConfig{:roberta, JSON3.Object{Vector{UInt8}, Vector{UInt64}}, Dict{Symbol, Any}}(:use_cache =&gt; true, :torch_dtype =&gt; "float32", :vocab_size =&gt; 50265, :output_hidden_states =&gt; true, :hidden_act =&gt; "gelu", :num_hidden_layers =&gt; 24, :num_attention_heads =&gt; 16, :classifier_dropout =&gt; nothing, :type_vocab_size =&gt; 1, :intermediate_size =&gt; 4096, :max_position_embeddings =&gt; 514, :model_type =&gt; "roberta", :layer_norm_eps =&gt; 1.0e-5, :id2label =&gt; Dict(0 =&gt; "LABEL_0", 2 =&gt; "LABEL_2", 1 =&gt; "LABEL_1"), :_name_or_path =&gt; "roberta-large", :hidden_size =&gt; 1024, :transformers_version =&gt; "4.21.2", :attention_probs_dropout_prob =&gt; 0.1, :bos_token_id =&gt; 0, :problem_type =&gt; "single_label_classification", :eos_token_id =&gt; 2, :initializer_range =&gt; 0.02, :hidden_dropout_prob =&gt; 0.1, :label2id =&gt; Dict("LABEL_1" =&gt; 1, "LABEL_2" =&gt; 2, "LABEL_0" =&gt; 0), :pad_token_id =&gt; 1, :position_embedding_type =&gt; "absolute", :architectures =&gt; ["RobertaForSequenceClassification"]))</code></pre>
-</div>
-</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>#| output: true</span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>load_model(; load_head=false, output_hidden_states=true) |&gt; show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="basic-model-inference" class="level3">
 <h3 class="anchored" data-anchor-id="basic-model-inference">Basic Model Inference</h3>
 <p>Using the model and data, layer-wise activations can be computed as below (here for the first 5 sentences). When called on a <code>DataFrame</code>, the <code>layerwise_activations</code> returns a data frame that links activations to sentence identifiers. This makes it possible to relate activations to market data by using the <code>sentence_id</code> key. Alternatively, <code>layerwise_activations</code> also accepts a vector of sentences.</p>
-<div id="99d7242a" class="cell" data-execution_count="5">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a>df <span class="op">=</span> <span class="fu">load_all_sentences</span>()</span>
-<span id="cb9-2"><a href="#cb9-2"></a>mod <span class="op">=</span> <span class="fu">load_model</span>(; load_head<span class="op">=</span><span class="cn">false</span>, output_hidden_states<span class="op">=</span><span class="cn">true</span>)</span>
-<span id="cb9-3"><a href="#cb9-3"></a>n <span class="op">=</span> <span class="fl">5</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a>queries <span class="op">=</span> df[<span class="fl">1</span><span class="op">:</span>n, <span class="op">:</span>]</span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="fu">layerwise_activations</span>(mod, queries) <span class="op">|&gt;</span> show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>122880×4 DataFrame
-    Row │ sentence_id  activations  layer  activation_id 
-        │ Int64        Float32      Int64  Int64         
-────────┼────────────────────────────────────────────────
-      1 │           1   0.202931        1              1
-      2 │           1  -0.00693996      1              2
-      3 │           1   0.12731         1              3
-      4 │           1  -0.0129803       1              4
-      5 │           1   0.122843        1              5
-      6 │           1   0.258675        1              6
-      7 │           1   0.0466324       1              7
-      8 │           1   0.0318548       1              8
-      9 │           1   1.18888         1              9
-     10 │           1  -0.0386651       1             10
-     11 │           1  -0.116031        1             11
-   ⋮    │      ⋮            ⋮         ⋮          ⋮
- 122871 │           5  -0.769513       24           1015
- 122872 │           5   0.834678       24           1016
- 122873 │           5   0.212098       24           1017
- 122874 │           5  -0.556661       24           1018
- 122875 │           5   0.0957697      24           1019
- 122876 │           5   1.04358        24           1020
- 122877 │           5   1.71445        24           1021
- 122878 │           5   1.162          24           1022
- 122879 │           5  -1.58513        24           1023
- 122880 │           5  -1.01479        24           1024
-                                      122859 rows omitted</code></pre>
-</div>
-</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a href="#cb7-1"></a>#| output: true</span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a>df = load_all_sentences()</span>
+<span id="cb7-4"><a href="#cb7-4"></a>mod = load_model(; load_head=false, output_hidden_states=true)</span>
+<span id="cb7-5"><a href="#cb7-5"></a>n = 5</span>
+<span id="cb7-6"><a href="#cb7-6"></a>queries = df[1:n, :]</span>
+<span id="cb7-7"><a href="#cb7-7"></a>layerwise_activations(mod, queries) |&gt; show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="probe-findings" class="level3">
 <h3 class="anchored" data-anchor-id="probe-findings">Probe Findings</h3>
-<p>For our own <a href="https://arxiv.org/abs/2402.03962">research</a> <span class="citation" data-cites="altmeyer2024position">(<a href="#ref-altmeyer2024position" role="doc-biblioref">Altmeyer et al. 2024</a>)</span>, we have been interested in probing the model. This involves using linear models to estimate the relationship between layer-wise transformer embeddings and some outcome variable of interest <span class="citation" data-cites="alain2018understanding">(<a href="#ref-alain2018understanding" role="doc-biblioref">Alain and Bengio 2018</a>)</span>. To do this, we first had to run a single forward pass for each sentence through the RoBERTa model and store the layerwise emeddings. As we have seen above, the package ships with functionality for doing just that, but to save others valuable GPU hours we have archived activations of the hidden state on the first entity token for each layer as <a href="https://github.com/pat-alt/TrillionDollarWords.jl/releases/tag/activations_2024-01-17">artifacts</a>. To download the last-layer activations in an interactive Julia session, for example, users can proceed as follows:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="im">using</span> <span class="bu">LazyArtifacts</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a></span>
-<span id="cb11-3"><a href="#cb11-3"></a>julia<span class="op">&gt;</span> artifact<span class="st">"activations_layer_24"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>We have found that despite the small sample size, the <em>FOMC-RoBERTa</em> model appears to have distilled useful representations for downstream tasks that it was not explicitly trained for. <a href="#fig-rmse-pca-128" class="quarto-xref">Figure&nbsp;1</a> below shows the average out-of-sample root mean squared error for predicting various market indicators from layer activations. Consistent with findings in related work <span class="citation" data-cites="alain2018understanding">(<a href="#ref-alain2018understanding" role="doc-biblioref">Alain and Bengio 2018</a>)</span>, we find that performance typically improves for layers closer to the final output layer of the transformer model. The measured performance is at least on par with baseline autoregressive models. For more information on this, see also my other recent <a href="../../../blog/posts/spurious-sparks/index.html">post</a>.</p>
+<p>For our own <a href="https://arxiv.org/abs/2402.03962">research</a> <span class="citation" data-cites="altmeyer2024position">(<a href="#ref-altmeyer2024position" role="doc-biblioref">Altmeyer et al. 2024</a>)</span>, we have been interested in probing the model. This involves using linear models to estimate the relationship between layer-wise transformer embeddings and some outcome variable of interest <span class="citation" data-cites="alain2018understanding">(<a href="#ref-alain2018understanding" role="doc-biblioref">Alain and Bengio 2016</a>)</span>. To do this, we first had to run a single forward pass for each sentence through the RoBERTa model and store the layerwise emeddings. As we have seen above, the package ships with functionality for doing just that, but to save others valuable GPU hours we have archived activations of the hidden state on the first entity token for each layer as <a href="https://github.com/pat-alt/TrillionDollarWords.jl/releases/tag/activations_2024-01-17">artifacts</a>. To download the last-layer activations in an interactive Julia session, for example, users can proceed as follows:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a><span class="im">using</span> <span class="bu">LazyArtifacts</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>julia<span class="op">&gt;</span> artifact<span class="st">"activations_layer_24"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We have found that despite the small sample size, the <em>FOMC-RoBERTa</em> model appears to have distilled useful representations for downstream tasks that it was not explicitly trained for. <a href="#fig-rmse-pca-128" class="quarto-xref">Figure&nbsp;1</a> below shows the average out-of-sample root mean squared error for predicting various market indicators from layer activations. Consistent with findings in related work <span class="citation" data-cites="alain2018understanding">(<a href="#ref-alain2018understanding" role="doc-biblioref">Alain and Bengio 2016</a>)</span>, we find that performance typically improves for layers closer to the final output layer of the transformer model. The measured performance is at least on par with baseline autoregressive models. For more information on this, see also my other recent <a href="../../../blog/posts/spurious-sparks/index.html">post</a>.</p>
 <div id="fig-rmse-pca-128" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rmse-pca-128-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -564,13 +453,13 @@ Figure&nbsp;1: Out-of-sample root mean squared error (RMSE) for the linear probe
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-alain2018understanding" class="csl-entry" role="listitem">
-Alain, Guillaume, and Yoshua Bengio. 2018. <span>“Understanding Intermediate Layers Using Linear Classifier Probes.”</span> <a href="https://arxiv.org/abs/1610.01644">https://arxiv.org/abs/1610.01644</a>.
+Alain, Guillaume, and Yoshua Bengio. 2016. <span>“<span class="nocase">Understanding intermediate layers using linear classifier probes</span>.”</span> <em>ArXiv</em> abs/1610.01644. <a href="https://api.semanticscholar.org/CorpusID:9794990">https://api.semanticscholar.org/CorpusID:9794990</a>.
 </div>
 <div id="ref-altmeyer2024position" class="csl-entry" role="listitem">
 Altmeyer, Patrick, Andrew M. Demetriou, Antony Bartlett, and Cynthia C. S. Liem. 2024. <span>“Position Paper: Against Spurious Sparks-Dovelating Inflated AI Claims.”</span> <a href="https://arxiv.org/abs/2402.03962">https://arxiv.org/abs/2402.03962</a>.
 </div>
 <div id="ref-shah2023trillion" class="csl-entry" role="listitem">
-Shah, Agam, Suvan Paturi, and Sudheer Chava. 2023. <span>“Trillion Dollar Words: A New Financial Dataset, Task &amp; Market Analysis.”</span> <a href="https://arxiv.org/abs/2305.07972">https://arxiv.org/abs/2305.07972</a>.
+Shah, Agam, Suvan Paturi, and Sudheer Chava. 2023. <span>“<span>Trillion Dollar Words: A New Financial Dataset, Task &amp; Market Analysis</span>.”</span> <em>arXiv Preprint arXiv:2310.02207v1</em>. <a href="https://arxiv.org/abs/2305.07972">https://arxiv.org/abs/2305.07972</a>.
 </div>
 </div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{altmeyer2024,
   author = {Altmeyer, Patrick},
@@ -1053,153 +942,158 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb12" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1"></a><span class="co">---</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="an">title:</span><span class="co"> TrillionDollarWords.jl</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="an">subtitle:</span><span class="co"> The Trillion Dollar Words dataset and model in Julia</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a><span class="an">date:</span><span class="co"> '2024-02-18'</span></span>
-<span id="cb12-5"><a href="#cb12-5"></a><span class="an">categories:</span></span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="co">  - llm</span></span>
-<span id="cb12-7"><a href="#cb12-7"></a><span class="co">  - mechanistic interpretability</span></span>
-<span id="cb12-8"><a href="#cb12-8"></a><span class="co">  - finance</span></span>
-<span id="cb12-9"><a href="#cb12-9"></a><span class="co">  - Julia</span></span>
-<span id="cb12-10"><a href="#cb12-10"></a><span class="an">description:</span><span class="co"> &gt;-</span></span>
-<span id="cb12-11"><a href="#cb12-11"></a><span class="co">  A short post introducing a small new Julia package that facilitates working with the Trillion Dollar Words dataset and model published in a recent ACL 2023 [paper](https://arxiv.org/abs/2305.07972).</span></span>
-<span id="cb12-12"><a href="#cb12-12"></a><span class="an">image:</span><span class="co"> intro.jpeg</span></span>
-<span id="cb12-13"><a href="#cb12-13"></a><span class="an">draft:</span><span class="co"> false</span></span>
-<span id="cb12-14"><a href="#cb12-14"></a><span class="an">code-fold:</span><span class="co"> show</span></span>
-<span id="cb12-15"><a href="#cb12-15"></a><span class="co">---</span>  </span>
-<span id="cb12-16"><a href="#cb12-16"></a></span>
-<span id="cb12-19"><a href="#cb12-19"></a><span class="in">```{julia}</span></span>
-<span id="cb12-20"><a href="#cb12-20"></a><span class="in">#| echo: false</span></span>
-<span id="cb12-21"><a href="#cb12-21"></a></span>
-<span id="cb12-22"><a href="#cb12-22"></a><span class="in">include("$(pwd())/blog/posts/trillion-dollar-words/src/setup.jl")</span></span>
-<span id="cb12-23"><a href="#cb12-23"></a><span class="in">```</span></span>
-<span id="cb12-24"><a href="#cb12-24"></a></span>
-<span id="cb12-25"><a href="#cb12-25"></a>&lt;div class="intro-gif"&gt;</span>
-<span id="cb12-26"><a href="#cb12-26"></a>  &lt;figure&gt;</span>
-<span id="cb12-27"><a href="#cb12-27"></a>    &lt;img src="intro.jpeg"&gt;</span>
-<span id="cb12-28"><a href="#cb12-28"></a>    &lt;figcaption&gt;Photo by &lt;a href="https://unsplash.com/@neonbrand?utm_content=creditCopyText&amp;utm_medium=referral&amp;utm_source=unsplash"&gt;Kenny Eliason&lt;/a&gt; on &lt;a href="https://unsplash.com/photos/1-us-dollar-banknote-8fDhgAN5zG0?utm_content=creditCopyText&amp;utm_medium=referral&amp;utm_source=unsplash"&gt;Unsplash&lt;/a&gt;&lt;/figcaption&gt;</span>
-<span id="cb12-29"><a href="#cb12-29"></a>  &lt;/figure&gt;</span>
-<span id="cb12-30"><a href="#cb12-30"></a>&lt;/div&gt; </span>
-<span id="cb12-31"><a href="#cb12-31"></a></span>
-<span id="cb12-32"><a href="#cb12-32"></a></span>
-<span id="cb12-33"><a href="#cb12-33"></a>In a recent <span class="co">[</span><span class="ot">post</span><span class="co">](../spurious-sparks/index.qmd)</span>, I questioned the idea that finding patterns in latent embeddings of models is indicative of AGI or even surprising. One of the models we investigate in our related <span class="co">[</span><span class="ot">paper</span><span class="co">](https://arxiv.org/abs/2402.03962)</span> <span class="co">[</span><span class="ot">@altmeyer2024position</span><span class="co">]</span> is the *FOMC-RoBERTa* model trained on the Trillion Dollar Words dataset, both of which were published by @shah2023trillion in a recent ACL 2023 paper: <span class="co">[</span><span class="ot">Trillion Dollar Words: A New Financial Dataset, Task &amp; Market Analysis</span><span class="co">](https://arxiv.org/abs/2305.07972)</span> <span class="co">[</span><span class="ot">@shah2023trillion</span><span class="co">]</span>. To run our experiments and facilitate working with the data and model in Julia, I have developed a small package: <span class="co">[</span><span class="ot">TrillionDollarWords.jl</span><span class="co">](https://github.com/pat-alt/TrillionDollarWords.jl)</span>. This short post introduces the package and its basic functionality.</span>
-<span id="cb12-34"><a href="#cb12-34"></a></span>
-<span id="cb12-35"><a href="#cb12-35"></a><span class="fu">## TrillionDollarWords.jl</span></span>
-<span id="cb12-36"><a href="#cb12-36"></a></span>
-<span id="cb12-37"><a href="#cb12-37"></a><span class="co">[</span><span class="al">![Stable](https://img.shields.io/badge/docs-stable-blue.svg)</span><span class="co">](https://pat-alt.github.io/TrillionDollarWords.jl/stable/)</span></span>
-<span id="cb12-38"><a href="#cb12-38"></a><span class="co">[</span><span class="al">![Dev](https://img.shields.io/badge/docs-dev-blue.svg)</span><span class="co">](https://pat-alt.github.io/TrillionDollarWords.jl/dev/)</span></span>
-<span id="cb12-39"><a href="#cb12-39"></a><span class="co">[</span><span class="al">![Build Status](https://github.com/pat-alt/TrillionDollarWords.jl/actions/workflows/CI.yml/badge.svg?branch=main)</span><span class="co">](https://github.com/pat-alt/TrillionDollarWords.jl/actions/workflows/CI.yml?query=branch%3Amain)</span></span>
-<span id="cb12-40"><a href="#cb12-40"></a><span class="co">[</span><span class="al">![Coverage](https://codecov.io/gh/pat-alt/TrillionDollarWords.jl/branch/main/graph/badge.svg)</span><span class="co">](https://codecov.io/gh/pat-alt/TrillionDollarWords.jl)</span></span>
-<span id="cb12-41"><a href="#cb12-41"></a><span class="co">[</span><span class="al">![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)</span><span class="co">](https://github.com/invenia/BlueStyle)</span></span>
-<span id="cb12-42"><a href="#cb12-42"></a></span>
-<span id="cb12-43"><a href="#cb12-43"></a><span class="co">[</span><span class="ot">TrillionDollarWords.jl</span><span class="co">](https://github.com/pat-alt/TrillionDollarWords.jl)</span> is a light-weight package that provides Julia useres easy access to the Trillion Dollar Words dataset and model <span class="co">[</span><span class="ot">@shah2023trillion</span><span class="co">]</span>.</span>
-<span id="cb12-44"><a href="#cb12-44"></a></span>
-<span id="cb12-45"><a href="#cb12-45"></a>::: {.callout-note}</span>
-<span id="cb12-46"><a href="#cb12-46"></a></span>
-<span id="cb12-47"><a href="#cb12-47"></a><span class="fu">## Disclaimer  </span></span>
-<span id="cb12-48"><a href="#cb12-48"></a></span>
-<span id="cb12-49"><a href="#cb12-49"></a>Please note that I am not the author of the Trillion Dollar Words paper nor am I affiliated with the authors. The package was developed as a by-product of our research and is not officially endorsed by the authors of the paper. </span>
-<span id="cb12-50"><a href="#cb12-50"></a></span>
-<span id="cb12-51"><a href="#cb12-51"></a>:::</span>
-<span id="cb12-52"><a href="#cb12-52"></a></span>
-<span id="cb12-53"><a href="#cb12-53"></a>You can install the package from Julia's general registry as follows:</span>
-<span id="cb12-54"><a href="#cb12-54"></a></span>
-<span id="cb12-55"><a href="#cb12-55"></a><span class="in">``` julia</span></span>
-<span id="cb12-56"><a href="#cb12-56"></a><span class="in">using Pkg</span></span>
-<span id="cb12-57"><a href="#cb12-57"></a><span class="in">Pkg.add(url="TrillionDollarWords.jl")</span></span>
-<span id="cb12-58"><a href="#cb12-58"></a><span class="in">```</span></span>
-<span id="cb12-59"><a href="#cb12-59"></a></span>
-<span id="cb12-60"><a href="#cb12-60"></a>To install the development version, use the following command:</span>
-<span id="cb12-61"><a href="#cb12-61"></a></span>
-<span id="cb12-62"><a href="#cb12-62"></a><span class="in">``` julia</span></span>
-<span id="cb12-63"><a href="#cb12-63"></a><span class="in">using Pkg</span></span>
-<span id="cb12-64"><a href="#cb12-64"></a><span class="in">Pkg.add(url="https://github.com/pat-alt/TrillionDollarWords.jl")</span></span>
-<span id="cb12-65"><a href="#cb12-65"></a><span class="in">```</span></span>
-<span id="cb12-66"><a href="#cb12-66"></a></span>
-<span id="cb12-67"><a href="#cb12-67"></a><span class="fu">### Basic Functionality</span></span>
-<span id="cb12-68"><a href="#cb12-68"></a></span>
-<span id="cb12-69"><a href="#cb12-69"></a>The package provides the following functionality:</span>
-<span id="cb12-70"><a href="#cb12-70"></a></span>
-<span id="cb12-71"><a href="#cb12-71"></a><span class="ss">- </span>Load pre-processed data.</span>
-<span id="cb12-72"><a href="#cb12-72"></a><span class="ss">- </span>Load the model proposed in the paper. </span>
-<span id="cb12-73"><a href="#cb12-73"></a><span class="ss">- </span>Basic model inference: compute forward passes and layer-wise activations.</span>
-<span id="cb12-74"><a href="#cb12-74"></a><span class="ss">- </span>Download pre-computed activations for probing the model.</span>
-<span id="cb12-75"><a href="#cb12-75"></a></span>
-<span id="cb12-76"><a href="#cb12-76"></a>The latter two are particularly useful for downstream tasks related to <span class="co">[</span><span class="ot">mechanistic interpretability</span><span class="co">](https://en.wikipedia.org/wiki/Large_language_model#Interpretation)</span>. In times of increasing scrutiny of AI models, it is important to understand how they work and what they have learned. Mechanistic interpretability is a promising approach to this end, as it aims to understand the model's internal representations and how they relate to the task at hand. As we make abundantly clear in our own <span class="co">[</span><span class="ot">paper</span><span class="co">](https://arxiv.org/abs/2402.03962)</span> <span class="co">[</span><span class="ot">@altmeyer2024position</span><span class="co">]</span>, interpretability is not a silver bullet, but merely a step towards understanding, monitoring and improving AI models.</span>
-<span id="cb12-77"><a href="#cb12-77"></a></span>
-<span id="cb12-78"><a href="#cb12-78"></a><span class="fu">### Loading the Data</span></span>
-<span id="cb12-79"><a href="#cb12-79"></a></span>
-<span id="cb12-80"><a href="#cb12-80"></a>The Trillion Dollar Words dataset is a collection of preprocessed sentences around 40,000 time-stamped sentences from meeting minutes, press conferences and speeches by members of the Federal Open Market Committee (FOMC) <span class="co">[</span><span class="ot">@shah2023trillion</span><span class="co">]</span>. The total sample period spans from January, 1996, to October, 2022. In order to train various rule-based models and large language models (LLM) to classify sentences as either ‘hawkish’, ‘dovish’ or ‘neutral’, they have manually annotated a subset of around 2,500 sentences. The best-performing model, a large BERT model with around 355 million parameters, was open-sourced on <span class="co">[</span><span class="ot">HuggingFace</span><span class="co">](https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves)</span>. The authors also link the sentences to market data, which makes it possible to study the relationship between language and financial markets. While the authors of the paper did publish their data, much of it is unfortunately scattered across CSV and Excel files stored in a public GitHub <span class="co">[</span><span class="ot">repo</span><span class="co">](https://github.com/gtfintechlab/fomc-hawkish-dovish)</span>. I have collected and merged that data, yielding a combined dataset with indexed sentences and additional metadata that may be useful for downstream tasks.</span>
-<span id="cb12-81"><a href="#cb12-81"></a></span>
-<span id="cb12-82"><a href="#cb12-82"></a>The entire dataset of all available sentences used in the paper can be loaded as follows:</span>
-<span id="cb12-83"><a href="#cb12-83"></a></span>
-<span id="cb12-86"><a href="#cb12-86"></a><span class="in">```{julia}</span></span>
-<span id="cb12-87"><a href="#cb12-87"></a><span class="in">#| output: true</span></span>
-<span id="cb12-88"><a href="#cb12-88"></a></span>
-<span id="cb12-89"><a href="#cb12-89"></a><span class="in">using TrillionDollarWords</span></span>
-<span id="cb12-90"><a href="#cb12-90"></a><span class="in">load_all_sentences() |&gt; show</span></span>
-<span id="cb12-91"><a href="#cb12-91"></a><span class="in">```</span></span>
-<span id="cb12-92"><a href="#cb12-92"></a></span>
-<span id="cb12-93"><a href="#cb12-93"></a>The combined dataset is also available as a <span class="in">`DataFrame`</span> and can be loaded as follows:</span>
-<span id="cb12-94"><a href="#cb12-94"></a></span>
-<span id="cb12-97"><a href="#cb12-97"></a><span class="in">```{julia}</span></span>
-<span id="cb12-98"><a href="#cb12-98"></a><span class="in">#| output: true</span></span>
-<span id="cb12-99"><a href="#cb12-99"></a></span>
-<span id="cb12-100"><a href="#cb12-100"></a><span class="in">load_all_data() |&gt; show</span></span>
-<span id="cb12-101"><a href="#cb12-101"></a><span class="in">```</span></span>
-<span id="cb12-102"><a href="#cb12-102"></a></span>
-<span id="cb12-103"><a href="#cb12-103"></a>Additional functionality for data loading is available (see <span class="co">[</span><span class="ot">docs</span><span class="co">](https://www.patalt.org/TrillionDollarWords.jl/dev/)</span>).</span>
-<span id="cb12-104"><a href="#cb12-104"></a></span>
-<span id="cb12-105"><a href="#cb12-105"></a><span class="fu">### Loading the Model</span></span>
-<span id="cb12-106"><a href="#cb12-106"></a></span>
-<span id="cb12-107"><a href="#cb12-107"></a>The model can be loaded with or without the classifier head (below without the head). Under the hood, this function uses <span class="co">[</span><span class="ot">Transformers.jl</span><span class="co">](https://github.com/chengchingwen/Transformers.jl)</span> to retrieve the model from <span class="co">[</span><span class="ot">HuggingFace</span><span class="co">](https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves)</span>. Any keyword arguments accepted by <span class="in">`Transformers.HuggingFace.HGFConfig`</span> can also be passed. For example, to load the model without the classifier head and enable access to layer-wise activations, the following command can be used:</span>
-<span id="cb12-108"><a href="#cb12-108"></a></span>
-<span id="cb12-111"><a href="#cb12-111"></a><span class="in">```{julia}</span></span>
-<span id="cb12-112"><a href="#cb12-112"></a><span class="in">#| output: true</span></span>
-<span id="cb12-113"><a href="#cb12-113"></a></span>
-<span id="cb12-114"><a href="#cb12-114"></a><span class="in">load_model(; load_head=false, output_hidden_states=true) |&gt; show</span></span>
-<span id="cb12-115"><a href="#cb12-115"></a><span class="in">```</span></span>
-<span id="cb12-116"><a href="#cb12-116"></a></span>
-<span id="cb12-117"><a href="#cb12-117"></a><span class="fu">### Basic Model Inference</span></span>
-<span id="cb12-118"><a href="#cb12-118"></a></span>
-<span id="cb12-119"><a href="#cb12-119"></a>Using the model and data, layer-wise activations can be computed as below (here for the first 5 sentences). When called on a <span class="in">`DataFrame`</span>, the <span class="in">`layerwise_activations`</span> returns a data frame that links activations to sentence identifiers. This makes it possible to relate activations to market data by using the <span class="in">`sentence_id`</span> key. Alternatively, <span class="in">`layerwise_activations`</span> also accepts a vector of sentences.</span>
-<span id="cb12-120"><a href="#cb12-120"></a></span>
-<span id="cb12-123"><a href="#cb12-123"></a><span class="in">```{julia}</span></span>
-<span id="cb12-124"><a href="#cb12-124"></a><span class="in">#| output: true</span></span>
-<span id="cb12-125"><a href="#cb12-125"></a></span>
-<span id="cb12-126"><a href="#cb12-126"></a><span class="in">df = load_all_sentences()</span></span>
-<span id="cb12-127"><a href="#cb12-127"></a><span class="in">mod = load_model(; load_head=false, output_hidden_states=true)</span></span>
-<span id="cb12-128"><a href="#cb12-128"></a><span class="in">n = 5</span></span>
-<span id="cb12-129"><a href="#cb12-129"></a><span class="in">queries = df[1:n, :]</span></span>
-<span id="cb12-130"><a href="#cb12-130"></a><span class="in">layerwise_activations(mod, queries) |&gt; show</span></span>
-<span id="cb12-131"><a href="#cb12-131"></a><span class="in">```</span></span>
-<span id="cb12-132"><a href="#cb12-132"></a></span>
-<span id="cb12-133"><a href="#cb12-133"></a><span class="fu">### Probe Findings</span></span>
-<span id="cb12-134"><a href="#cb12-134"></a></span>
-<span id="cb12-135"><a href="#cb12-135"></a>For our own <span class="co">[</span><span class="ot">research</span><span class="co">](https://arxiv.org/abs/2402.03962)</span> <span class="co">[</span><span class="ot">@altmeyer2024position</span><span class="co">]</span>, we have been interested in probing the model. This involves using linear models to estimate the relationship between layer-wise transformer embeddings and some outcome variable of interest <span class="co">[</span><span class="ot">@alain2018understanding</span><span class="co">]</span>. To do this, we first had to run a single forward pass for each sentence through the RoBERTa model and store the layerwise emeddings. As we have seen above, the package ships with functionality for doing just that, but to save others valuable GPU hours we have archived activations of the hidden state on the first entity token for each layer as <span class="co">[</span><span class="ot">artifacts</span><span class="co">](https://github.com/pat-alt/TrillionDollarWords.jl/releases/tag/activations_2024-01-17)</span>. To download the last-layer activations in an interactive Julia session, for example, users can proceed as follows:</span>
-<span id="cb12-136"><a href="#cb12-136"></a></span>
-<span id="cb12-137"><a href="#cb12-137"></a><span class="in">``` julia</span></span>
-<span id="cb12-138"><a href="#cb12-138"></a><span class="in">using LazyArtifacts</span></span>
-<span id="cb12-139"><a href="#cb12-139"></a></span>
-<span id="cb12-140"><a href="#cb12-140"></a><span class="in">julia&gt; artifact"activations_layer_24"</span></span>
-<span id="cb12-141"><a href="#cb12-141"></a><span class="in">```</span></span>
-<span id="cb12-142"><a href="#cb12-142"></a></span>
-<span id="cb12-143"><a href="#cb12-143"></a>We have found that despite the small sample size, the *FOMC-RoBERTa* model appears to have distilled useful representations for downstream tasks that it was not explicitly trained for. @fig-rmse-pca-128 below shows the average out-of-sample root mean squared error for predicting various market indicators from layer activations. Consistent with findings in related work <span class="co">[</span><span class="ot">@alain2018understanding</span><span class="co">]</span>, we find that performance typically improves for layers closer to the final output layer of the transformer model. The measured performance is at least on par with baseline autoregressive models. For more information on this, see also my other recent <span class="co">[</span><span class="ot">post</span><span class="co">](../spurious-sparks/index.qmd)</span>.</span>
-<span id="cb12-144"><a href="#cb12-144"></a></span>
-<span id="cb12-145"><a href="#cb12-145"></a><span class="al">![Out-of-sample root mean squared error (RMSE) for the linear probe plotted against *FOMC-RoBERTa*'s $n$-th layer for different indicators. The values correspond to averages computed across cross-validation folds, where we have used an expanding window approach to split the time series.](https://raw.githubusercontent.com/pat-alt/TrillionDollarWords.jl/11-activations-for-cls-head/dev/juliacon/rmse_pca_128.png)</span>{#fig-rmse-pca-128}</span>
-<span id="cb12-146"><a href="#cb12-146"></a></span>
-<span id="cb12-147"><a href="#cb12-147"></a><span class="fu">## Intended Purpose and Goals</span></span>
-<span id="cb12-148"><a href="#cb12-148"></a></span>
-<span id="cb12-149"><a href="#cb12-149"></a>I hope that this small package may be useful to members of the Julia community who are interested in the interplay between Economics, Finance and Artificial Intelligence. It should serve as a good starting point for the following ideas:</span>
-<span id="cb12-150"><a href="#cb12-150"></a></span>
-<span id="cb12-151"><a href="#cb12-151"></a><span class="ss">- </span>Fine-tune additional models on the classification task or other tasks of interest.</span>
-<span id="cb12-152"><a href="#cb12-152"></a><span class="ss">- </span>Further model probing, e.g. using other market indicators not discussed in the original paper.</span>
-<span id="cb12-153"><a href="#cb12-153"></a><span class="ss">- </span>Improve and extend the label annotations. </span>
-<span id="cb12-154"><a href="#cb12-154"></a></span>
-<span id="cb12-155"><a href="#cb12-155"></a>Any contributions are very much welcome.</span>
-<span id="cb12-156"><a href="#cb12-156"></a></span>
-<span id="cb12-157"><a href="#cb12-157"></a><span class="fu">## References</span></span>
+<div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">---</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="an">title:</span><span class="co"> TrillionDollarWords.jl</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="an">subtitle:</span><span class="co"> The Trillion Dollar Words dataset and model in Julia</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="an">date:</span><span class="co"> '2024-02-18'</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="an">categories:</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">  - llm</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">  - mechanistic interpretability</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">  - finance</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">  - Julia</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="an">description:</span><span class="co"> &gt;-</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">  A short post introducing a small new Julia package that facilitates working with the Trillion Dollar Words dataset and model published in a recent ACL 2023 [paper](https://arxiv.org/abs/2305.07972).</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="an">image:</span><span class="co"> intro.jpeg</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="an">draft:</span><span class="co"> false</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="an">code-fold:</span><span class="co"> show</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="an">engine:</span><span class="co"> julia</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co">---</span>  </span>
+<span id="cb9-17"><a href="#cb9-17"></a></span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="in">```{julia}</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="in">#| echo: false</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a></span>
+<span id="cb9-23"><a href="#cb9-23"></a><span class="in">projectdir = splitpath(pwd()) |&gt;</span></span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="in">    ss -&gt; joinpath(ss[1:findall([s == "pat-alt.github.io" for s in ss])[1]]...) </span></span>
+<span id="cb9-25"><a href="#cb9-25"></a><span class="in">cd(projectdir)</span></span>
+<span id="cb9-26"><a href="#cb9-26"></a></span>
+<span id="cb9-27"><a href="#cb9-27"></a><span class="in">include("$(projectdir)/blog/posts/trillion-dollar-words/src/setup.jl")</span></span>
+<span id="cb9-28"><a href="#cb9-28"></a><span class="in">```</span></span>
+<span id="cb9-29"><a href="#cb9-29"></a></span>
+<span id="cb9-30"><a href="#cb9-30"></a>&lt;div class="intro-gif"&gt;</span>
+<span id="cb9-31"><a href="#cb9-31"></a>  &lt;figure&gt;</span>
+<span id="cb9-32"><a href="#cb9-32"></a>    &lt;img src="intro.jpeg"&gt;</span>
+<span id="cb9-33"><a href="#cb9-33"></a>    &lt;figcaption&gt;Photo by &lt;a href="https://unsplash.com/@neonbrand?utm_content=creditCopyText&amp;utm_medium=referral&amp;utm_source=unsplash"&gt;Kenny Eliason&lt;/a&gt; on &lt;a href="https://unsplash.com/photos/1-us-dollar-banknote-8fDhgAN5zG0?utm_content=creditCopyText&amp;utm_medium=referral&amp;utm_source=unsplash"&gt;Unsplash&lt;/a&gt;&lt;/figcaption&gt;</span>
+<span id="cb9-34"><a href="#cb9-34"></a>  &lt;/figure&gt;</span>
+<span id="cb9-35"><a href="#cb9-35"></a>&lt;/div&gt; </span>
+<span id="cb9-36"><a href="#cb9-36"></a></span>
+<span id="cb9-37"><a href="#cb9-37"></a></span>
+<span id="cb9-38"><a href="#cb9-38"></a>In a recent <span class="co">[</span><span class="ot">post</span><span class="co">](../spurious-sparks/index.qmd)</span>, I questioned the idea that finding patterns in latent embeddings of models is indicative of AGI or even surprising. One of the models we investigate in our related <span class="co">[</span><span class="ot">paper</span><span class="co">](https://arxiv.org/abs/2402.03962)</span> <span class="co">[</span><span class="ot">@altmeyer2024position</span><span class="co">]</span> is the *FOMC-RoBERTa* model trained on the Trillion Dollar Words dataset, both of which were published by @shah2023trillion in a recent ACL 2023 paper: <span class="co">[</span><span class="ot">Trillion Dollar Words: A New Financial Dataset, Task &amp; Market Analysis</span><span class="co">](https://arxiv.org/abs/2305.07972)</span> <span class="co">[</span><span class="ot">@shah2023trillion</span><span class="co">]</span>. To run our experiments and facilitate working with the data and model in Julia, I have developed a small package: <span class="co">[</span><span class="ot">TrillionDollarWords.jl</span><span class="co">](https://github.com/pat-alt/TrillionDollarWords.jl)</span>. This short post introduces the package and its basic functionality.</span>
+<span id="cb9-39"><a href="#cb9-39"></a></span>
+<span id="cb9-40"><a href="#cb9-40"></a><span class="fu">## TrillionDollarWords.jl</span></span>
+<span id="cb9-41"><a href="#cb9-41"></a></span>
+<span id="cb9-42"><a href="#cb9-42"></a><span class="co">[</span><span class="al">![Stable](https://img.shields.io/badge/docs-stable-blue.svg)</span><span class="co">](https://pat-alt.github.io/TrillionDollarWords.jl/stable/)</span></span>
+<span id="cb9-43"><a href="#cb9-43"></a><span class="co">[</span><span class="al">![Dev](https://img.shields.io/badge/docs-dev-blue.svg)</span><span class="co">](https://pat-alt.github.io/TrillionDollarWords.jl/dev/)</span></span>
+<span id="cb9-44"><a href="#cb9-44"></a><span class="co">[</span><span class="al">![Build Status](https://github.com/pat-alt/TrillionDollarWords.jl/actions/workflows/CI.yml/badge.svg?branch=main)</span><span class="co">](https://github.com/pat-alt/TrillionDollarWords.jl/actions/workflows/CI.yml?query=branch%3Amain)</span></span>
+<span id="cb9-45"><a href="#cb9-45"></a><span class="co">[</span><span class="al">![Coverage](https://codecov.io/gh/pat-alt/TrillionDollarWords.jl/branch/main/graph/badge.svg)</span><span class="co">](https://codecov.io/gh/pat-alt/TrillionDollarWords.jl)</span></span>
+<span id="cb9-46"><a href="#cb9-46"></a><span class="co">[</span><span class="al">![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)</span><span class="co">](https://github.com/invenia/BlueStyle)</span></span>
+<span id="cb9-47"><a href="#cb9-47"></a></span>
+<span id="cb9-48"><a href="#cb9-48"></a><span class="co">[</span><span class="ot">TrillionDollarWords.jl</span><span class="co">](https://github.com/pat-alt/TrillionDollarWords.jl)</span> is a light-weight package that provides Julia useres easy access to the Trillion Dollar Words dataset and model <span class="co">[</span><span class="ot">@shah2023trillion</span><span class="co">]</span>.</span>
+<span id="cb9-49"><a href="#cb9-49"></a></span>
+<span id="cb9-50"><a href="#cb9-50"></a>::: {.callout-note}</span>
+<span id="cb9-51"><a href="#cb9-51"></a></span>
+<span id="cb9-52"><a href="#cb9-52"></a><span class="fu">## Disclaimer  </span></span>
+<span id="cb9-53"><a href="#cb9-53"></a></span>
+<span id="cb9-54"><a href="#cb9-54"></a>Please note that I am not the author of the Trillion Dollar Words paper nor am I affiliated with the authors. The package was developed as a by-product of our research and is not officially endorsed by the authors of the paper. </span>
+<span id="cb9-55"><a href="#cb9-55"></a></span>
+<span id="cb9-56"><a href="#cb9-56"></a>:::</span>
+<span id="cb9-57"><a href="#cb9-57"></a></span>
+<span id="cb9-58"><a href="#cb9-58"></a>You can install the package from Julia's general registry as follows:</span>
+<span id="cb9-59"><a href="#cb9-59"></a></span>
+<span id="cb9-60"><a href="#cb9-60"></a><span class="in">``` julia</span></span>
+<span id="cb9-61"><a href="#cb9-61"></a><span class="in">using Pkg</span></span>
+<span id="cb9-62"><a href="#cb9-62"></a><span class="in">Pkg.add(url="TrillionDollarWords.jl")</span></span>
+<span id="cb9-63"><a href="#cb9-63"></a><span class="in">```</span></span>
+<span id="cb9-64"><a href="#cb9-64"></a></span>
+<span id="cb9-65"><a href="#cb9-65"></a>To install the development version, use the following command:</span>
+<span id="cb9-66"><a href="#cb9-66"></a></span>
+<span id="cb9-67"><a href="#cb9-67"></a><span class="in">``` julia</span></span>
+<span id="cb9-68"><a href="#cb9-68"></a><span class="in">using Pkg</span></span>
+<span id="cb9-69"><a href="#cb9-69"></a><span class="in">Pkg.add(url="https://github.com/pat-alt/TrillionDollarWords.jl")</span></span>
+<span id="cb9-70"><a href="#cb9-70"></a><span class="in">```</span></span>
+<span id="cb9-71"><a href="#cb9-71"></a></span>
+<span id="cb9-72"><a href="#cb9-72"></a><span class="fu">### Basic Functionality</span></span>
+<span id="cb9-73"><a href="#cb9-73"></a></span>
+<span id="cb9-74"><a href="#cb9-74"></a>The package provides the following functionality:</span>
+<span id="cb9-75"><a href="#cb9-75"></a></span>
+<span id="cb9-76"><a href="#cb9-76"></a><span class="ss">- </span>Load pre-processed data.</span>
+<span id="cb9-77"><a href="#cb9-77"></a><span class="ss">- </span>Load the model proposed in the paper. </span>
+<span id="cb9-78"><a href="#cb9-78"></a><span class="ss">- </span>Basic model inference: compute forward passes and layer-wise activations.</span>
+<span id="cb9-79"><a href="#cb9-79"></a><span class="ss">- </span>Download pre-computed activations for probing the model.</span>
+<span id="cb9-80"><a href="#cb9-80"></a></span>
+<span id="cb9-81"><a href="#cb9-81"></a>The latter two are particularly useful for downstream tasks related to <span class="co">[</span><span class="ot">mechanistic interpretability</span><span class="co">](https://en.wikipedia.org/wiki/Large_language_model#Interpretation)</span>. In times of increasing scrutiny of AI models, it is important to understand how they work and what they have learned. Mechanistic interpretability is a promising approach to this end, as it aims to understand the model's internal representations and how they relate to the task at hand. As we make abundantly clear in our own <span class="co">[</span><span class="ot">paper</span><span class="co">](https://arxiv.org/abs/2402.03962)</span> <span class="co">[</span><span class="ot">@altmeyer2024position</span><span class="co">]</span>, interpretability is not a silver bullet, but merely a step towards understanding, monitoring and improving AI models.</span>
+<span id="cb9-82"><a href="#cb9-82"></a></span>
+<span id="cb9-83"><a href="#cb9-83"></a><span class="fu">### Loading the Data</span></span>
+<span id="cb9-84"><a href="#cb9-84"></a></span>
+<span id="cb9-85"><a href="#cb9-85"></a>The Trillion Dollar Words dataset is a collection of preprocessed sentences around 40,000 time-stamped sentences from meeting minutes, press conferences and speeches by members of the Federal Open Market Committee (FOMC) <span class="co">[</span><span class="ot">@shah2023trillion</span><span class="co">]</span>. The total sample period spans from January, 1996, to October, 2022. In order to train various rule-based models and large language models (LLM) to classify sentences as either ‘hawkish’, ‘dovish’ or ‘neutral’, they have manually annotated a subset of around 2,500 sentences. The best-performing model, a large BERT model with around 355 million parameters, was open-sourced on <span class="co">[</span><span class="ot">HuggingFace</span><span class="co">](https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves)</span>. The authors also link the sentences to market data, which makes it possible to study the relationship between language and financial markets. While the authors of the paper did publish their data, much of it is unfortunately scattered across CSV and Excel files stored in a public GitHub <span class="co">[</span><span class="ot">repo</span><span class="co">](https://github.com/gtfintechlab/fomc-hawkish-dovish)</span>. I have collected and merged that data, yielding a combined dataset with indexed sentences and additional metadata that may be useful for downstream tasks.</span>
+<span id="cb9-86"><a href="#cb9-86"></a></span>
+<span id="cb9-87"><a href="#cb9-87"></a>The entire dataset of all available sentences used in the paper can be loaded as follows:</span>
+<span id="cb9-88"><a href="#cb9-88"></a></span>
+<span id="cb9-91"><a href="#cb9-91"></a><span class="in">```{julia}</span></span>
+<span id="cb9-92"><a href="#cb9-92"></a><span class="in">#| output: true</span></span>
+<span id="cb9-93"><a href="#cb9-93"></a></span>
+<span id="cb9-94"><a href="#cb9-94"></a><span class="in">using TrillionDollarWords</span></span>
+<span id="cb9-95"><a href="#cb9-95"></a><span class="in">load_all_sentences() |&gt; show</span></span>
+<span id="cb9-96"><a href="#cb9-96"></a><span class="in">```</span></span>
+<span id="cb9-97"><a href="#cb9-97"></a></span>
+<span id="cb9-98"><a href="#cb9-98"></a>The combined dataset is also available as a <span class="in">`DataFrame`</span> and can be loaded as follows:</span>
+<span id="cb9-99"><a href="#cb9-99"></a></span>
+<span id="cb9-102"><a href="#cb9-102"></a><span class="in">```{julia}</span></span>
+<span id="cb9-103"><a href="#cb9-103"></a><span class="in">#| output: true</span></span>
+<span id="cb9-104"><a href="#cb9-104"></a></span>
+<span id="cb9-105"><a href="#cb9-105"></a><span class="in">load_all_data() |&gt; show</span></span>
+<span id="cb9-106"><a href="#cb9-106"></a><span class="in">```</span></span>
+<span id="cb9-107"><a href="#cb9-107"></a></span>
+<span id="cb9-108"><a href="#cb9-108"></a>Additional functionality for data loading is available (see <span class="co">[</span><span class="ot">docs</span><span class="co">](https://www.patalt.org/TrillionDollarWords.jl/dev/)</span>).</span>
+<span id="cb9-109"><a href="#cb9-109"></a></span>
+<span id="cb9-110"><a href="#cb9-110"></a><span class="fu">### Loading the Model</span></span>
+<span id="cb9-111"><a href="#cb9-111"></a></span>
+<span id="cb9-112"><a href="#cb9-112"></a>The model can be loaded with or without the classifier head (below without the head). Under the hood, this function uses <span class="co">[</span><span class="ot">Transformers.jl</span><span class="co">](https://github.com/chengchingwen/Transformers.jl)</span> to retrieve the model from <span class="co">[</span><span class="ot">HuggingFace</span><span class="co">](https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves)</span>. Any keyword arguments accepted by <span class="in">`Transformers.HuggingFace.HGFConfig`</span> can also be passed. For example, to load the model without the classifier head and enable access to layer-wise activations, the following command can be used:</span>
+<span id="cb9-113"><a href="#cb9-113"></a></span>
+<span id="cb9-116"><a href="#cb9-116"></a><span class="in">```{julia}</span></span>
+<span id="cb9-117"><a href="#cb9-117"></a><span class="in">#| output: true</span></span>
+<span id="cb9-118"><a href="#cb9-118"></a></span>
+<span id="cb9-119"><a href="#cb9-119"></a><span class="in">load_model(; load_head=false, output_hidden_states=true) |&gt; show</span></span>
+<span id="cb9-120"><a href="#cb9-120"></a><span class="in">```</span></span>
+<span id="cb9-121"><a href="#cb9-121"></a></span>
+<span id="cb9-122"><a href="#cb9-122"></a><span class="fu">### Basic Model Inference</span></span>
+<span id="cb9-123"><a href="#cb9-123"></a></span>
+<span id="cb9-124"><a href="#cb9-124"></a>Using the model and data, layer-wise activations can be computed as below (here for the first 5 sentences). When called on a <span class="in">`DataFrame`</span>, the <span class="in">`layerwise_activations`</span> returns a data frame that links activations to sentence identifiers. This makes it possible to relate activations to market data by using the <span class="in">`sentence_id`</span> key. Alternatively, <span class="in">`layerwise_activations`</span> also accepts a vector of sentences.</span>
+<span id="cb9-125"><a href="#cb9-125"></a></span>
+<span id="cb9-128"><a href="#cb9-128"></a><span class="in">```{julia}</span></span>
+<span id="cb9-129"><a href="#cb9-129"></a><span class="in">#| output: true</span></span>
+<span id="cb9-130"><a href="#cb9-130"></a></span>
+<span id="cb9-131"><a href="#cb9-131"></a><span class="in">df = load_all_sentences()</span></span>
+<span id="cb9-132"><a href="#cb9-132"></a><span class="in">mod = load_model(; load_head=false, output_hidden_states=true)</span></span>
+<span id="cb9-133"><a href="#cb9-133"></a><span class="in">n = 5</span></span>
+<span id="cb9-134"><a href="#cb9-134"></a><span class="in">queries = df[1:n, :]</span></span>
+<span id="cb9-135"><a href="#cb9-135"></a><span class="in">layerwise_activations(mod, queries) |&gt; show</span></span>
+<span id="cb9-136"><a href="#cb9-136"></a><span class="in">```</span></span>
+<span id="cb9-137"><a href="#cb9-137"></a></span>
+<span id="cb9-138"><a href="#cb9-138"></a><span class="fu">### Probe Findings</span></span>
+<span id="cb9-139"><a href="#cb9-139"></a></span>
+<span id="cb9-140"><a href="#cb9-140"></a>For our own <span class="co">[</span><span class="ot">research</span><span class="co">](https://arxiv.org/abs/2402.03962)</span> <span class="co">[</span><span class="ot">@altmeyer2024position</span><span class="co">]</span>, we have been interested in probing the model. This involves using linear models to estimate the relationship between layer-wise transformer embeddings and some outcome variable of interest <span class="co">[</span><span class="ot">@alain2018understanding</span><span class="co">]</span>. To do this, we first had to run a single forward pass for each sentence through the RoBERTa model and store the layerwise emeddings. As we have seen above, the package ships with functionality for doing just that, but to save others valuable GPU hours we have archived activations of the hidden state on the first entity token for each layer as <span class="co">[</span><span class="ot">artifacts</span><span class="co">](https://github.com/pat-alt/TrillionDollarWords.jl/releases/tag/activations_2024-01-17)</span>. To download the last-layer activations in an interactive Julia session, for example, users can proceed as follows:</span>
+<span id="cb9-141"><a href="#cb9-141"></a></span>
+<span id="cb9-142"><a href="#cb9-142"></a><span class="in">``` julia</span></span>
+<span id="cb9-143"><a href="#cb9-143"></a><span class="in">using LazyArtifacts</span></span>
+<span id="cb9-144"><a href="#cb9-144"></a></span>
+<span id="cb9-145"><a href="#cb9-145"></a><span class="in">julia&gt; artifact"activations_layer_24"</span></span>
+<span id="cb9-146"><a href="#cb9-146"></a><span class="in">```</span></span>
+<span id="cb9-147"><a href="#cb9-147"></a></span>
+<span id="cb9-148"><a href="#cb9-148"></a>We have found that despite the small sample size, the *FOMC-RoBERTa* model appears to have distilled useful representations for downstream tasks that it was not explicitly trained for. @fig-rmse-pca-128 below shows the average out-of-sample root mean squared error for predicting various market indicators from layer activations. Consistent with findings in related work <span class="co">[</span><span class="ot">@alain2018understanding</span><span class="co">]</span>, we find that performance typically improves for layers closer to the final output layer of the transformer model. The measured performance is at least on par with baseline autoregressive models. For more information on this, see also my other recent <span class="co">[</span><span class="ot">post</span><span class="co">](../spurious-sparks/index.qmd)</span>.</span>
+<span id="cb9-149"><a href="#cb9-149"></a></span>
+<span id="cb9-150"><a href="#cb9-150"></a><span class="al">![Out-of-sample root mean squared error (RMSE) for the linear probe plotted against *FOMC-RoBERTa*'s $n$-th layer for different indicators. The values correspond to averages computed across cross-validation folds, where we have used an expanding window approach to split the time series.](https://raw.githubusercontent.com/pat-alt/TrillionDollarWords.jl/11-activations-for-cls-head/dev/juliacon/rmse_pca_128.png)</span>{#fig-rmse-pca-128}</span>
+<span id="cb9-151"><a href="#cb9-151"></a></span>
+<span id="cb9-152"><a href="#cb9-152"></a><span class="fu">## Intended Purpose and Goals</span></span>
+<span id="cb9-153"><a href="#cb9-153"></a></span>
+<span id="cb9-154"><a href="#cb9-154"></a>I hope that this small package may be useful to members of the Julia community who are interested in the interplay between Economics, Finance and Artificial Intelligence. It should serve as a good starting point for the following ideas:</span>
+<span id="cb9-155"><a href="#cb9-155"></a></span>
+<span id="cb9-156"><a href="#cb9-156"></a><span class="ss">- </span>Fine-tune additional models on the classification task or other tasks of interest.</span>
+<span id="cb9-157"><a href="#cb9-157"></a><span class="ss">- </span>Further model probing, e.g. using other market indicators not discussed in the original paper.</span>
+<span id="cb9-158"><a href="#cb9-158"></a><span class="ss">- </span>Improve and extend the label annotations. </span>
+<span id="cb9-159"><a href="#cb9-159"></a></span>
+<span id="cb9-160"><a href="#cb9-160"></a>Any contributions are very much welcome.</span>
+<span id="cb9-161"><a href="#cb9-161"></a></span>
+<span id="cb9-162"><a href="#cb9-162"></a><span class="fu">## References</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
