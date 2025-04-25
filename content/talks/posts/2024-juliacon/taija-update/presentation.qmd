@@ -12,6 +12,7 @@ format:
 date: 2024-07-11
 date-format: full
 bibliography: biblio.bib
+engine: julia
 execute:
   freeze: auto
   eval: true
@@ -21,8 +22,11 @@ execute:
 
 ```{julia}
 #| echo: false
+projectdir = splitpath(pwd()) |>
+    ss -> joinpath(ss[1:findall([s == "pat-alt.github.io" for s in ss])[1]]...) 
+cd(projectdir)
 
-include("$(pwd())/content/talks/posts/2024-juliacon/taija-update/setup.jl")
+include("$projectdir/content/talks/posts/2024-juliacon/taija-update/setup.jl")
 ```
 
 # What's [Taija](https://github.com/JuliaTrustworthyAI)?
@@ -178,7 +182,7 @@ flowchart TB
 
 :::{.incremental}
 
-- Researchers in AI and ML, particularly in the fields of explainability, uncertainty quantification, and Bayesian deep learning: (![](/www/profile.jpg){width="35px"}, ...)
+- Researchers in AI and ML, particularly in the fields of explainability, uncertainty quantification, and Bayesian deep learning: (![](/www/profile.png){width="35px"}, ...)
 - Practitioners using conventional ML and DL models who are interested in understanding the models' decisions and their uncertainty.
 - Julia developers who want to contribute to the ecosystem (any level of expertise is welcome!). 
 

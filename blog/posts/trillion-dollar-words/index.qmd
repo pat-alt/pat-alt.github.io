@@ -12,12 +12,17 @@ description: >-
 image: intro.jpeg
 draft: false
 code-fold: show
+engine: julia
 ---  
 
 ```{julia}
 #| echo: false
 
-include("$(pwd())/blog/posts/trillion-dollar-words/src/setup.jl")
+projectdir = splitpath(pwd()) |>
+    ss -> joinpath(ss[1:findall([s == "pat-alt.github.io" for s in ss])[1]]...) 
+cd(projectdir)
+
+include("$(projectdir)/blog/posts/trillion-dollar-words/src/setup.jl")
 ```
 
 <div class="intro-gif">

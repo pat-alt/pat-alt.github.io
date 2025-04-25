@@ -13,6 +13,7 @@ image: www/intro.gif
 comments:
   utterances:
     repo: pat-alt/pat-alt.github.io
+engine: julia
 execute:
     echo: false
     eval: false
@@ -228,10 +229,11 @@ crossref:
   tbl-prefix: Table
 bibliography: https://raw.githubusercontent.com/pat-alt/bib/main/bib.bib
 output: asis
+engine: julia
 execute: 
   echo: true
   eval: false
-jupyter: julia-1.10
+
 ```
 
 You can see that it points to Bibtex file I host on another Github repository. This makes it very easy to generate citations and references for the rendered Markdown documents, that also show up in the docs (e.g. [here](https://www.patalt.org/CounterfactualExplanations.jl/stable/cats_dogs/)). Unfortunately, cross-referencing only partially works, because it relies on auto-generated HTML and `Documenter.jl` expects this to be passed in blocks. Choosing `variant: -raw_html` is only a workaround as I have discussed [here](https://github.com/JuliaDocs/Documenter.jl/issues/1778). Ideally, `Documenter.jl` would just accept HTML documents rendered from Quarto, but currently only Markdown documents are accepted by `make_docs`. Still, if anything this workaround is a nice gimmick that extends the default `Documenter.jl` functionality, without any hassle involved. Hopefully, this can be improved in the future.

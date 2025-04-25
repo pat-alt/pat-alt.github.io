@@ -11,7 +11,19 @@ categories:
   - reproducibility
 image: /www/images/julia_quarto.gif
 draft: false
+engine: julia
 ---
+
+```{julia}
+#| echo: false
+
+projectdir = splitpath(pwd()) |>
+    ss -> joinpath(ss[1:findall([s == "pat-alt.github.io" for s in ss])[1]]...) 
+cd(projectdir)
+
+blogdir = "$(projectdir)/blog/posts/tips-and-tricks-for-using-quarto-with-julia"
+using Pkg; Pkg.activate(blogdir)
+```
 
 <div class="intro-gif">
   <figure>
@@ -105,6 +117,7 @@ plot(snp[:Close], legend=false)
 Related to the previous point, I typically define the following execution options in my `_quarto.yml` or `_metadata.yml`. The `freeze: auto` option ensures that documents are only rerendered if the source changes. In cases where code should always be re-executed you whould want to set `freeze: false`, instead. I set `output: false` because typically I have a lot of code chunks that don't generate any output that is of immediate interest to readers. 
 
 ```{.yml}
+engine: julia
 execute:
   freeze: auto
   eval: true
@@ -114,7 +127,7 @@ execute:
 
 ### Reproducibility
 
-To ensure that your content can be repoduced easily, it may additionally be helpful to explicitly specify the Julia version you used (`jupyter: julia-1.8`) and set up a global or local Julia environments. Inserting the following at the beginning of your Quarto notebook
+To ensure that your content can be repoduced easily, it may additionally be helpful to explicitly specify the Julia version you used (``) and set up a global or local Julia environments. Inserting the following at the beginning of your Quarto notebook
 
 ```{.julia}
 using Pkg; Pkg.activate("<path>")
