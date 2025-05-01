@@ -1,0 +1,149 @@
+---
+title: Stop Making Unscientific AGI Performance Claims
+format:
+  poster-typst: 
+    size: "48x36"
+    poster-authors: "Patrick Altmeyer, Andrew M. Demetriou, Antony Bartlett, Cynthia C. S. Liem"
+    departments: Delft University of Technology, Department of Intelligent Systems
+    date: today
+    institution-logo: "www/delft-logo.png"
+    qrcode: "www/qrcodes/qr-gh.png"
+    footer-text: "Forty-first International Conference on Machine Learning (ICML)"
+    footer-url: "https://arxiv.org/abs/2402.03962"
+    footer-emails: "p.altmeyer@tudelft.nl"
+    footer-color: "00A6D6"
+    tldr: |
+        We probe models of varying complexity including random projections, matrix decompositions, deep autoencoders and transformers: all of them successfully distill information that can be used to predict latent or external variables and yet none of them have previously been linked to AGI. We argue and empirically demonstrate that the finding of meaningful patterns in latent spaces of LLMs cannot be seen as evidence in favor of AGI. Additionally, we review literature from the social sciences that shows that humans are prone to seek such patterns and anthropomorphize.
+    keywords: ["Machine Learning", "Anthropomorphism", "Artificial General Intelligence"]
+    num-columns: 3
+    title-font-size: 96
+    title-column-size: 32
+    univ-logo-column-size: 6
+    authors-font-size: 54
+    font-size: 29
+    font-paths: /www/fonts/
+    mainfont: "Roboto"
+    h1-size: 46
+bibliography: biblio.bib
+bibliographystyle: apa
+suppress-bibliography: true
+---
+
+<!-- BUG: Can't compile typst on rpi5 (or Debian/Ubuntu) -->
+
+## Position
+
+::: {.block fill="rgb(217, 240, 246)" inset="8pt" radius="4pt"}
+
+**We therefore urge our fellow researchers to stop making unscientific AGI performance claims**. Current LLMs embed information. They don‘t „understand“ anything. They are useful tools, but tools nonetheless.
+
+:::
+
+- Meaningful patterns in embeddings are like doves in the sky.
+- Humans are prone to seek patterns and anthropomorphize. 
+- The academic community should exercise extra caution.
+
+## Experiments
+
+### Are Neural Networks Born with World Models? 
+
+Llama-2 model tested in @gurnee2023languagev2 has ingested huge amounts of data including Wikipedia dumps that contain geographical coordinates [@touvron2023llama]: e.g. Wikipedia [article](https://en.wikipedia.org/wiki/London) for "London".
+
+::: {.block fill="rgb(217, 240, 246)" inset="8pt" radius="4pt"}
+
+Where would this information be encoded if not in the embedding space $\mathcal{A}$? Is it really surprising that $A_{\text{LDN}}=enc(\text{"London"})$ predicts $(\text{lat}_{\text{LDN}},\text{long}_{\text{LDN}})$?
+
+:::
+
+A simple experiment:
+
+- Model in @fig-map has seen noisy coordinates of top-10 FIFA World Cup countries plus $d$ random features.
+- Randomly initialized single hidden layer with $h < d$ units.
+
+![Predicted coordinate values (out-of-sample) from a linear probe on final-layer activations of an untrained
+neural network.](www/map.png){#fig-map width="100%"}
+
+### PCA as a Yield Curve Interpreter 
+
+It is common practice to use principal component analysis (PCA) to extract meaningful latent features of yield curves [@crump2019deconstructing].
+
+::: {.block fill="rgb(217, 240, 246)" inset="8pt" radius="4pt"}
+
+What are principal components, if not model embeddings?
+
+:::
+
+![The first two principal components of US Treasury yields (top) and the observed average level and 10yr-3mo spread (bottom).](www/pca_yield.png){#fig-pca width="100%"}
+
+### Sparks of Economic Understanding?
+
+::: {.block fill="rgb(217, 240, 246)" inset="8pt" radius="4pt"}
+
+If probe results were indicative of some intrinsic ‘understanding’ of the economy, then the probe should not be sensitive to unrelated sentences. As evidenced by @fig-attack, probes are easily. 
+
+:::
+
+BERT-based model trained on FOMC minutes, speeches and press conferences to classify statements as hawkish or dovish (or neutral) [@shah2023trillion].
+
+- We linearly probe all layers to predict unseen economic indicators (CPI, PPI, UST yields).
+- Predictive power increases with layer depth (@fig-mse) and probes outperform simple AR($p$) models.
+
+![Out-of-sample root mean squared error (RMSE) for the linear probe plotted against FOMC-RoBERTa’s n-th
+layer for different indicators. ](www/mse_pca_128.png){#fig-mse width="100%"}  
+
+![Probe predictions for sentences about inflation of prices (IP), deflation of prices (DP), inflation of birds (IB)
+and deflation of birds (DB). The vertical axis shows predicted inflation levels subtracted by the average predicted value
+of the probe for random noise.](www/attack_all_measures.png){#fig-attack width="100%"}
+
+## Social Sciences Review
+
+### Spurious Relationships
+
+::: {.block fill="rgb(217, 240, 246)" inset="8pt" radius="4pt"}
+
+**Definiton**: Varies somewhat [@haig2003spurious] but distinctly implies that the observation of correlations does not imply causation.
+
+:::
+
+- Humans struggle to tell the difference between random and non-random sequences [@falk1997making].
+- Lack of expectation that randomness that hints towards a causal relationship will still appear at random. 
+- Even experts perceive correlations of inflated magnitude [@nickerson1998confirmation] and causal relationships where none exist [@zgraggen2018investigating].
+
+### Anthropomorphism
+
+::: {.block fill="rgb(217, 240, 246)" inset="8pt" radius="4pt"}
+
+**Definition**: Human tendency to attribute human-like characteristics to non-human agents and/or objects.
+
+:::
+
+1. Experience as humans is an always-readily-available template to interpret the world [@epley2007seeing].
+2. Anthropomorphize inanimate objects to avoid loneliness [@epley2007seeing], [@waytz2010social].
+3. Anthropomorphize opaque technologies like LLMs to be competent [@epley2007seeing], [@waytz2010social].
+
+### Confirmation Bias
+
+::: {.block fill="rgb(217, 240, 246)" inset="8pt" radius="4pt"}
+
+**Definition**: Favoring interpretations of evidence that support existing beliefs or hypotheses [@nickerson1998confirmation].
+
+:::
+
+- Hypotheses in present-day AI research are often implicit, often framed simply as a system being more accurate or efficient, compared to other systems.
+- Failing to articulate a sufficiently strong null hypothesis leading to a ‘weak’ experiment [@claesen2022severity].
+- Individuals may place greater emphasis on evidence in support of their hypothesis, and lesser emphasis on evidence that opposes it [@nickerson1998confirmation].
+
+## Conclusion and Outlook
+
+::: {.block fill="rgb(217, 240, 246)" inset="8pt" radius="4pt"}
+
+Concrete recommendations for future research
+
+- (*Acknowledge Human Bias*) Be explicit about risks of human bias and anthropomorphization.
+- (*Stronger Testing*) Refrain from premature AGI conclusions.
+- (*Epistemologically Robust Standards*) Define terms like ‘intelligence’ and ‘AGI’ precisely.
+
+:::
+
+Furthermore: create explicit room for organized skepticism; welcome negative results; encourage replication studies; move from authorship to contribution-based credit (see e.g. [Liem and Demetriou, 2023](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10173886) and [Smith, 1997](https://www.bmj.com/content/315/7110/696.short)).
+

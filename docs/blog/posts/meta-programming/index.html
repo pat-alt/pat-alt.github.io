@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-99.9.9">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,8 +24,9 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -36,7 +37,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -88,15 +89,16 @@ div.csl-indent {
 <script src="../../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../../">
 <link href="../../..//www/favicon.ico" rel="icon">
-<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-abf567cae1b23626b35839fface88527.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-b6f44e91ea1901a440a45c9549c43889.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-30aadfaea4ea965e36e18717492786ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-ebda7bd90d0689a2999561878a24e90d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -176,7 +178,7 @@ window.Quarto = {
 <meta property="og:image:width" content="782">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -2428,287 +2430,293 @@ Altmeyer, Patrick. 2023. <span>“A Leap of Faith into Julia’s
 Metaverse.”</span> March 13, 2023. <a href="https://www.patalt.org/blog/posts/meta-programming/">https://www.patalt.org/blog/posts/meta-programming/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
-      }
-    }
-    return false;
-  }
-  const onCopySuccess = function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
-  });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
-  const viewSource = window.document.getElementById('quarto-view-source') ||
-                     window.document.getElementById('quarto-code-tools-source');
-  if (viewSource) {
-    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-    viewSource.addEventListener("click", function(e) {
-      if (sourceUrl) {
-        // rstudio viewer pane
-        if (/\bcapabilities=\b/.test(window.location)) {
-          window.open(sourceUrl);
-        } else {
-          window.location.href = sourceUrl;
-        }
-      } else {
-        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-        modal.show();
-      }
-      return false;
-    });
-  }
-  function toggleCodeHandler(show) {
-    return function(e) {
-      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-      for (let i=0; i<detailsSrc.length; i++) {
-        const details = detailsSrc[i].parentElement;
-        if (show) {
-          details.open = true;
-        } else {
-          details.removeAttribute("open");
-        }
-      }
-      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-      const fromCls = show ? "hidden" : "unhidden";
-      const toCls = show ? "unhidden" : "hidden";
-      for (let i=0; i<cellCodeDivs.length; i++) {
-        const codeDiv = cellCodeDivs[i];
-        if (codeDiv.classList.contains(fromCls)) {
-          codeDiv.classList.remove(fromCls);
-          codeDiv.classList.add(toCls);
-        } 
-      }
-      return false;
-    }
-  }
-  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-  if (hideAllCode) {
-    hideAllCode.addEventListener("click", toggleCodeHandler(false));
-  }
-  const showAllCode = window.document.getElementById("quarto-show-all-code");
-  if (showAllCode) {
-    showAllCode.addEventListener("click", toggleCodeHandler(true));
-  }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/www\.patalt\.org\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-    const config = {
-      allowHTML: true,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start',
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
         }
       }
+      return false;
     }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
           }
         }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
         }
-        return container.innerHTML
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/www\.patalt\.org\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
       } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
         if (window.Quarto?.typesetMath) {
           window.Quarto.typesetMath(note);
         }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
       }
     }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
           }
         } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
           .then(res => res.text())
           .then(html => {
             const parser = new DOMParser();
             const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
+            const note = htmlDoc.querySelector('main.content');
             if (note !== null) {
-              const html = processXRef(id, note);
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
               instance.setContent(html);
             } 
           }).finally(() => {
@@ -2716,185 +2724,161 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             instance.show();
           });
         }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            div.style.left = 0;
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+      }, function(instance) {
       });
     }
-  }
-});
-</script>
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="sourceCode" id="cb37" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb37-1"><a href="#cb37-1"></a><span class="co">---</span></span>
@@ -2913,25 +2897,25 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb37-14"><a href="#cb37-14"></a><span class="co">---</span></span>
 <span id="cb37-15"><a href="#cb37-15"></a></span>
 <span id="cb37-18"><a href="#cb37-18"></a><span class="in">```{julia}</span></span>
-<span id="cb37-19"><a href="#cb37-19"></a><span class="in">#| echo: false</span></span>
-<span id="cb37-20"><a href="#cb37-20"></a><span class="in">projectdir = splitpath(pwd()) |&gt;</span></span>
-<span id="cb37-21"><a href="#cb37-21"></a><span class="in">    ss -&gt; joinpath(ss[1:findall([s == "pat-alt.github.io" for s in ss])[1]]...) </span></span>
-<span id="cb37-22"><a href="#cb37-22"></a><span class="in">cd(projectdir)</span></span>
+<span id="cb37-19"><a href="#cb37-19"></a><span class="co">#| echo: false</span></span>
+<span id="cb37-20"><a href="#cb37-20"></a>projectdir <span class="op">=</span> <span class="fu">splitpath</span>(<span class="fu">pwd</span>()) <span class="op">|&gt;</span></span>
+<span id="cb37-21"><a href="#cb37-21"></a>    ss <span class="op">-&gt;</span> <span class="fu">joinpath</span>(ss[<span class="fl">1</span><span class="op">:</span><span class="fu">findall</span>([s <span class="op">==</span> <span class="st">"pat-alt.github.io"</span> for s <span class="kw">in</span> ss])[<span class="fl">1</span>]]<span class="op">...</span>) </span>
+<span id="cb37-22"><a href="#cb37-22"></a><span class="fu">cd</span>(projectdir)</span>
 <span id="cb37-23"><a href="#cb37-23"></a></span>
-<span id="cb37-24"><a href="#cb37-24"></a><span class="in">using Pkg; Pkg.activate("$projectdir/blog/posts/meta-programming")</span></span>
-<span id="cb37-25"><a href="#cb37-25"></a><span class="in">using CounterfactualExplanations</span></span>
-<span id="cb37-26"><a href="#cb37-26"></a><span class="in">using Markdown</span></span>
-<span id="cb37-27"><a href="#cb37-27"></a><span class="in">using Plots</span></span>
-<span id="cb37-28"><a href="#cb37-28"></a><span class="in">using TaijaData</span></span>
-<span id="cb37-29"><a href="#cb37-29"></a><span class="in">using TaijaPlotting</span></span>
+<span id="cb37-24"><a href="#cb37-24"></a><span class="im">using</span> <span class="bu">Pkg;</span> Pkg.activate("$projectdir/blog/posts/meta-programming")</span>
+<span id="cb37-25"><a href="#cb37-25"></a><span class="im">using</span> <span class="bu">CounterfactualExplanations</span></span>
+<span id="cb37-26"><a href="#cb37-26"></a><span class="im">using</span> <span class="bu">Markdown</span></span>
+<span id="cb37-27"><a href="#cb37-27"></a><span class="im">using</span> <span class="bu">Plots</span></span>
+<span id="cb37-28"><a href="#cb37-28"></a><span class="im">using</span> <span class="bu">TaijaData</span></span>
+<span id="cb37-29"><a href="#cb37-29"></a><span class="im">using</span> <span class="bu">TaijaPlotting</span></span>
 <span id="cb37-30"><a href="#cb37-30"></a><span class="in">```</span></span>
 <span id="cb37-31"><a href="#cb37-31"></a></span>
-<span id="cb37-32"><a href="#cb37-32"></a>&lt;div class="intro-gif"&gt;</span>
-<span id="cb37-33"><a href="#cb37-33"></a>  &lt;figure&gt;</span>
-<span id="cb37-34"><a href="#cb37-34"></a>    &lt;img src="www/intro.png"&gt;</span>
-<span id="cb37-35"><a href="#cb37-35"></a>    &lt;figcaption&gt;A leap of faith into Julia's metaverse.&lt;/figcaption&gt;</span>
-<span id="cb37-36"><a href="#cb37-36"></a>  &lt;/figure&gt;</span>
-<span id="cb37-37"><a href="#cb37-37"></a>&lt;/div&gt;</span>
+<span id="cb37-32"><a href="#cb37-32"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"intro-gif"</span><span class="dt">&gt;</span></span>
+<span id="cb37-33"><a href="#cb37-33"></a>  <span class="dt">&lt;</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
+<span id="cb37-34"><a href="#cb37-34"></a>    <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"www/intro.png"</span><span class="dt">&gt;</span></span>
+<span id="cb37-35"><a href="#cb37-35"></a>    <span class="dt">&lt;</span><span class="kw">figcaption</span><span class="dt">&gt;</span>A leap of faith into Julia's metaverse.<span class="dt">&lt;/</span><span class="kw">figcaption</span><span class="dt">&gt;</span></span>
+<span id="cb37-36"><a href="#cb37-36"></a>  <span class="dt">&lt;/</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
+<span id="cb37-37"><a href="#cb37-37"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
 <span id="cb37-38"><a href="#cb37-38"></a></span>
 <span id="cb37-39"><a href="#cb37-39"></a>On this blog, I typically talk about things that I have *some* understanding of. In this post, I want to try something a little different and instead cover a topic that I am utterly *clueless* about. There's an interesting aspect about Julia, which I know embarrassingly little about at this point: <span class="co">[</span><span class="ot">Metaprogramming</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/)</span>. </span>
 <span id="cb37-40"><a href="#cb37-40"></a></span>
@@ -2954,11 +2938,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb37-57"><a href="#cb37-57"></a>Right ... What about ChatGPT? I wanted to try out <span class="co">[</span><span class="ot">ReplGPT</span><span class="co">](https://github.com/ThatcherC/ReplGPT.jl)</span> anyway so here goes^<span class="co">[</span><span class="ot">A very cool package! Funny story, though, I somehow managed to commit my OpenAI API key to GitHub on the first go ([developing](https://github.com/ThatcherC/ReplGPT.jl/issues/8))</span><span class="co">]</span>:</span>
 <span id="cb37-58"><a href="#cb37-58"></a></span>
 <span id="cb37-59"><a href="#cb37-59"></a><span class="in">```{.julia-repl}</span></span>
-<span id="cb37-60"><a href="#cb37-60"></a><span class="in">julia&gt; using ReplGPT</span></span>
-<span id="cb37-61"><a href="#cb37-61"></a><span class="in">ChatGPT&gt; Hey hey, can you please explain metaprogramming to me (I have no computer science background, but am experienced with programming and data science)</span></span>
-<span id="cb37-62"><a href="#cb37-62"></a><span class="in">  Metaprogramming is a programming technique where a program is capable of creating or manipulating code at</span></span>
-<span id="cb37-63"><a href="#cb37-63"></a><span class="in">  runtime. It involves writing computer programs that create, modify, or analyze other computer programs or data</span></span>
-<span id="cb37-64"><a href="#cb37-64"></a><span class="in">  about those programs.</span></span>
+<span id="cb37-60"><a href="#cb37-60"></a>julia<span class="op">&gt;</span> <span class="im">using</span> <span class="bu">ReplGPT</span></span>
+<span id="cb37-61"><a href="#cb37-61"></a>ChatGPT<span class="op">&gt;</span> Hey hey, can you please explain metaprogramming to me (I have no computer science background, but am experienced with programming and data science)</span>
+<span id="cb37-62"><a href="#cb37-62"></a>  Metaprogramming is a programming technique <span class="kw">where</span> a program is capable of creating or manipulating code at</span>
+<span id="cb37-63"><a href="#cb37-63"></a>  runtime. It involves writing computer programs that create, modify, or analyze other computer programs or data</span>
+<span id="cb37-64"><a href="#cb37-64"></a>  about those programs.</span>
 <span id="cb37-65"><a href="#cb37-65"></a><span class="in">```</span></span>
 <span id="cb37-66"><a href="#cb37-66"></a></span>
 <span id="cb37-67"><a href="#cb37-67"></a>So, in layman's terms, metaprogramming involves code that generates code - I guess we really have entered the metaverse!</span>
@@ -2976,9 +2960,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb37-79"><a href="#cb37-79"></a>And if I understand this correctly, the expression <span class="in">`ex::Expr`</span> is literally **code as a data structure**:</span>
 <span id="cb37-80"><a href="#cb37-80"></a></span>
 <span id="cb37-83"><a href="#cb37-83"></a><span class="in">```{julia}</span></span>
-<span id="cb37-84"><a href="#cb37-84"></a><span class="in">#| output: true</span></span>
-<span id="cb37-85"><a href="#cb37-85"></a><span class="in">ex = :(sum([1,2,3]))</span></span>
-<span id="cb37-86"><a href="#cb37-86"></a><span class="in">dump(ex)</span></span>
+<span id="cb37-84"><a href="#cb37-84"></a><span class="co">#| output: true</span></span>
+<span id="cb37-85"><a href="#cb37-85"></a>ex <span class="op">=</span> <span class="op">:</span>(<span class="fu">sum</span>([<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]))</span>
+<span id="cb37-86"><a href="#cb37-86"></a><span class="fu">dump</span>(ex)</span>
 <span id="cb37-87"><a href="#cb37-87"></a><span class="in">```</span></span>
 <span id="cb37-88"><a href="#cb37-88"></a></span>
 <span id="cb37-89"><a href="#cb37-89"></a>That data structure can be "manipulated from within the language". </span>
@@ -2986,16 +2970,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb37-91"><a href="#cb37-91"></a>Let's try that! Currently, evaluating this expression yields the <span class="in">`sum`</span> of the <span class="in">`Array`</span>:</span>
 <span id="cb37-92"><a href="#cb37-92"></a></span>
 <span id="cb37-95"><a href="#cb37-95"></a><span class="in">```{julia}</span></span>
-<span id="cb37-96"><a href="#cb37-96"></a><span class="in">#| output: true</span></span>
-<span id="cb37-97"><a href="#cb37-97"></a><span class="in">eval(ex)</span></span>
+<span id="cb37-96"><a href="#cb37-96"></a><span class="co">#| output: true</span></span>
+<span id="cb37-97"><a href="#cb37-97"></a><span class="fu">eval</span>(ex)</span>
 <span id="cb37-98"><a href="#cb37-98"></a><span class="in">```</span></span>
 <span id="cb37-99"><a href="#cb37-99"></a></span>
 <span id="cb37-100"><a href="#cb37-100"></a>Upon manipulation (that sounds weird!), we have:</span>
 <span id="cb37-101"><a href="#cb37-101"></a></span>
 <span id="cb37-104"><a href="#cb37-104"></a><span class="in">```{julia}</span></span>
-<span id="cb37-105"><a href="#cb37-105"></a><span class="in">#| output: true</span></span>
-<span id="cb37-106"><a href="#cb37-106"></a><span class="in">ex.args[1] = :maximum</span></span>
-<span id="cb37-107"><a href="#cb37-107"></a><span class="in">eval(ex)</span></span>
+<span id="cb37-105"><a href="#cb37-105"></a><span class="co">#| output: true</span></span>
+<span id="cb37-106"><a href="#cb37-106"></a>ex.args[<span class="fl">1</span>] <span class="op">=</span> <span class="op">:</span>maximum</span>
+<span id="cb37-107"><a href="#cb37-107"></a><span class="fu">eval</span>(ex)</span>
 <span id="cb37-108"><a href="#cb37-108"></a><span class="in">```</span></span>
 <span id="cb37-109"><a href="#cb37-109"></a></span>
 <span id="cb37-110"><a href="#cb37-110"></a>Ok ok, things are starting to make sense now! </span>
@@ -3005,37 +2989,37 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb37-114"><a href="#cb37-114"></a>Back to the Julia documentation and next on the agenda we have <span class="co">[</span><span class="ot">Interpolation</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-expression-interpolation)</span>. Skipping the details again, it seems like I can interpolate an expression much like strings. Using interpolation I can recreate the expression from above as follows:</span>
 <span id="cb37-115"><a href="#cb37-115"></a></span>
 <span id="cb37-118"><a href="#cb37-118"></a><span class="in">```{julia}</span></span>
-<span id="cb37-119"><a href="#cb37-119"></a><span class="in">fun = maximum</span></span>
-<span id="cb37-120"><a href="#cb37-120"></a><span class="in">x = [1,2,3]</span></span>
-<span id="cb37-121"><a href="#cb37-121"></a><span class="in">ex_from_ex_interpoliation = :($fun($x))</span></span>
-<span id="cb37-122"><a href="#cb37-122"></a><span class="in">a = eval(ex_from_ex_interpoliation)</span></span>
+<span id="cb37-119"><a href="#cb37-119"></a>fun <span class="op">=</span> maximum</span>
+<span id="cb37-120"><a href="#cb37-120"></a>x <span class="op">=</span> [<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]</span>
+<span id="cb37-121"><a href="#cb37-121"></a>ex_from_ex_interpoliation <span class="op">=</span> <span class="op">:</span>(<span class="op">$</span><span class="fu">fun</span>(<span class="op">$</span>x))</span>
+<span id="cb37-122"><a href="#cb37-122"></a>a <span class="op">=</span> <span class="fu">eval</span>(ex_from_ex_interpoliation)</span>
 <span id="cb37-123"><a href="#cb37-123"></a><span class="in">```</span></span>
 <span id="cb37-124"><a href="#cb37-124"></a></span>
 <span id="cb37-125"><a href="#cb37-125"></a>Using string interpolation is quite similar:</span>
 <span id="cb37-126"><a href="#cb37-126"></a></span>
 <span id="cb37-129"><a href="#cb37-129"></a><span class="in">```{julia}</span></span>
-<span id="cb37-130"><a href="#cb37-130"></a><span class="in">#| output: true</span></span>
+<span id="cb37-130"><a href="#cb37-130"></a><span class="co">#| output: true</span></span>
 <span id="cb37-131"><a href="#cb37-131"></a></span>
-<span id="cb37-132"><a href="#cb37-132"></a><span class="in">fun = maximum</span></span>
-<span id="cb37-133"><a href="#cb37-133"></a><span class="in">x = [1,2,3]</span></span>
-<span id="cb37-134"><a href="#cb37-134"></a><span class="in">ex_from_string_interpolation = Meta.parse("$fun($x)")</span></span>
-<span id="cb37-135"><a href="#cb37-135"></a><span class="in">eval(ex_from_string_interpolation) == a</span></span>
+<span id="cb37-132"><a href="#cb37-132"></a>fun <span class="op">=</span> maximum</span>
+<span id="cb37-133"><a href="#cb37-133"></a>x <span class="op">=</span> [<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]</span>
+<span id="cb37-134"><a href="#cb37-134"></a>ex_from_string_interpolation <span class="op">=</span> <span class="bu">Meta</span>.<span class="fu">parse</span>(<span class="st">"</span><span class="sc">$</span>fun<span class="st">(</span><span class="sc">$</span>x<span class="st">)"</span>)</span>
+<span id="cb37-135"><a href="#cb37-135"></a><span class="fu">eval</span>(ex_from_string_interpolation) <span class="op">==</span> a</span>
 <span id="cb37-136"><a href="#cb37-136"></a><span class="in">```</span></span>
 <span id="cb37-137"><a href="#cb37-137"></a></span>
 <span id="cb37-138"><a href="#cb37-138"></a>And much like with function arguments, we can also use splatting:</span>
 <span id="cb37-139"><a href="#cb37-139"></a></span>
 <span id="cb37-142"><a href="#cb37-142"></a><span class="in">```{julia}</span></span>
-<span id="cb37-143"><a href="#cb37-143"></a><span class="in">#| output: true</span></span>
+<span id="cb37-143"><a href="#cb37-143"></a><span class="co">#| output: true</span></span>
 <span id="cb37-144"><a href="#cb37-144"></a></span>
-<span id="cb37-145"><a href="#cb37-145"></a><span class="in">eval(:(zeros($x...)))</span></span>
+<span id="cb37-145"><a href="#cb37-145"></a><span class="fu">eval</span>(<span class="op">:</span>(<span class="fu">zeros</span>(<span class="op">$</span>x<span class="op">...</span>)))</span>
 <span id="cb37-146"><a href="#cb37-146"></a><span class="in">```</span></span>
 <span id="cb37-147"><a href="#cb37-147"></a></span>
 <span id="cb37-148"><a href="#cb37-148"></a>Next off, we have <span class="co">[</span><span class="ot">**nested quotes**</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Nested-quote)</span>. I can't see myself using these anytime soon but anyway it seems that for each <span class="in">`$`</span> sign that we prepend to <span class="in">`x`</span>, an evaluation is trigged: </span>
 <span id="cb37-149"><a href="#cb37-149"></a></span>
 <span id="cb37-152"><a href="#cb37-152"></a><span class="in">```{julia}</span></span>
-<span id="cb37-153"><a href="#cb37-153"></a><span class="in">#| output: true</span></span>
+<span id="cb37-153"><a href="#cb37-153"></a><span class="co">#| output: true</span></span>
 <span id="cb37-154"><a href="#cb37-154"></a></span>
-<span id="cb37-155"><a href="#cb37-155"></a><span class="in">eval(quote quote $$:(x) end end)</span></span>
+<span id="cb37-155"><a href="#cb37-155"></a><span class="fu">eval</span>(<span class="kw">quote</span> <span class="kw">quote</span> <span class="op">$$:</span>(x) <span class="kw">end</span> <span class="kw">end</span>)</span>
 <span id="cb37-156"><a href="#cb37-156"></a><span class="in">```</span></span>
 <span id="cb37-157"><a href="#cb37-157"></a></span>
 <span id="cb37-158"><a href="#cb37-158"></a>Moving on, we have <span class="co">[</span><span class="ot">`QuoteNodes`</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#man-quote-node)</span>, which I will steer clear of because I probably won't be doing any super advanced metaprogramming anytime soon. The next two sections on <span class="co">[</span><span class="ot">evaluating expressions</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Evaluating-expressions)</span> and <span class="co">[</span><span class="ot">functions on `Expr`essions</span><span class="co">](https://docs.julialang.org/en/v1.8/manual/metaprogramming/#Functions-on-Expressions)</span> also look somewhat more involved than what I need right now, but I expect I'll find myself back here when I write that first macro for <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)</span>.</span>
@@ -3051,12 +3035,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb37-168"><a href="#cb37-168"></a>Let's see if we can make sense of this as we move on. The <span class="in">`Hello, world!`</span> example makes the concept quite clear:</span>
 <span id="cb37-169"><a href="#cb37-169"></a></span>
 <span id="cb37-172"><a href="#cb37-172"></a><span class="in">```{julia}</span></span>
-<span id="cb37-173"><a href="#cb37-173"></a><span class="in">#| output: true</span></span>
+<span id="cb37-173"><a href="#cb37-173"></a><span class="co">#| output: true</span></span>
 <span id="cb37-174"><a href="#cb37-174"></a></span>
-<span id="cb37-175"><a href="#cb37-175"></a><span class="in">macro sayhello(name)</span></span>
-<span id="cb37-176"><a href="#cb37-176"></a><span class="in">    return :( println("Hello, ", $name) )   # return the expression ...</span></span>
-<span id="cb37-177"><a href="#cb37-177"></a><span class="in">end</span></span>
-<span id="cb37-178"><a href="#cb37-178"></a><span class="in">@sayhello "reader"                          # ... to be immediately compiled.</span></span>
+<span id="cb37-175"><a href="#cb37-175"></a><span class="kw">macro</span> <span class="fu">sayhello</span>(name)</span>
+<span id="cb37-176"><a href="#cb37-176"></a>    <span class="cf">return</span> <span class="op">:</span>( <span class="fu">println</span>(<span class="st">"Hello, "</span>, <span class="op">$</span>name) )   <span class="co"># return the expression ...</span></span>
+<span id="cb37-177"><a href="#cb37-177"></a><span class="kw">end</span></span>
+<span id="cb37-178"><a href="#cb37-178"></a><span class="pp">@sayhello</span> <span class="st">"reader"</span>                          <span class="co"># ... to be immediately compiled.</span></span>
 <span id="cb37-179"><a href="#cb37-179"></a><span class="in">```</span></span>
 <span id="cb37-180"><a href="#cb37-180"></a></span>
 <span id="cb37-181"><a href="#cb37-181"></a>It seems that a macro is a way to build and return expressions inside a block (a bit like a function) but on call that expression is immediately evaluated. In other words, we can use macros to write code that generates code that is then evaluated. </span>
@@ -3078,7 +3062,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb37-197"><a href="#cb37-197"></a>This has allowed users to specify the type of generator they want to use by instantiating it. For example, the DiCE generator by @mothilal2020explaining could (and still can) be instantiated as follows:</span>
 <span id="cb37-198"><a href="#cb37-198"></a></span>
 <span id="cb37-201"><a href="#cb37-201"></a><span class="in">```{julia}</span></span>
-<span id="cb37-202"><a href="#cb37-202"></a><span class="in">generator = DiCEGenerator()</span></span>
+<span id="cb37-202"><a href="#cb37-202"></a>generator <span class="op">=</span> <span class="fu">DiCEGenerator</span>()</span>
 <span id="cb37-203"><a href="#cb37-203"></a><span class="in">```</span></span>
 <span id="cb37-204"><a href="#cb37-204"></a></span>
 <span id="cb37-205"><a href="#cb37-205"></a>This has been a straightforward way for users to use off-the-shelf counterfactual generators. But relying on separate composite types for this task may have been an overkill. In fact, all this time there was some untapped potential here, as we will see next.</span>
@@ -3104,8 +3088,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb37-225"><a href="#cb37-225"></a>Let's try and see if we can make that work. We'll simply extend <span class="in">`CounterfactualExplanations`</span> right here in this repo hosting the blog (easily done in Julia) and provided everything works out well create a pull request. I already have a GitHub <span class="co">[</span><span class="ot">issue</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/118)</span> for this with a linked branch, so that's the one I'll use in my environment:</span>
 <span id="cb37-226"><a href="#cb37-226"></a></span>
 <span id="cb37-227"><a href="#cb37-227"></a><span class="in">```{.julia}</span></span>
-<span id="cb37-228"><a href="#cb37-228"></a><span class="in">(metaprogramming) pkg&gt; add https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl#118-add-losses-and-penalties-modules-or-group-under-objectives-module</span></span>
-<span id="cb37-229"><a href="#cb37-229"></a><span class="in">julia&gt; using CounterfactualExplanations</span></span>
+<span id="cb37-228"><a href="#cb37-228"></a>(metaprogramming) pkg<span class="op">&gt;</span> add https<span class="op">://</span>github.com<span class="op">/</span>JuliaTrustworthyAI<span class="op">/</span>CounterfactualExplanations.jl<span class="co">#118-add-losses-and-penalties-modules-or-group-under-objectives-module</span></span>
+<span id="cb37-229"><a href="#cb37-229"></a>julia<span class="op">&gt;</span> <span class="im">using</span> <span class="bu">CounterfactualExplanations</span></span>
 <span id="cb37-230"><a href="#cb37-230"></a><span class="in">```</span></span>
 <span id="cb37-231"><a href="#cb37-231"></a></span>
 <span id="cb37-232"><a href="#cb37-232"></a>By the time you're reading this, all changes to that branch will have hopefully already been committed and merged.</span>
@@ -3113,7 +3097,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb37-234"><a href="#cb37-234"></a>Let's start by instantiating a generic generator:</span>
 <span id="cb37-235"><a href="#cb37-235"></a></span>
 <span id="cb37-238"><a href="#cb37-238"></a><span class="in">```{julia}</span></span>
-<span id="cb37-239"><a href="#cb37-239"></a><span class="in">generator = GenericGenerator()</span></span>
+<span id="cb37-239"><a href="#cb37-239"></a>generator <span class="op">=</span> <span class="fu">GenericGenerator</span>()</span>
 <span id="cb37-240"><a href="#cb37-240"></a><span class="in">```</span></span>
 <span id="cb37-241"><a href="#cb37-241"></a></span>
 <span id="cb37-242"><a href="#cb37-242"></a>Our goal is to create macros that build expressions that, when evaluated, mutate the <span class="in">`generator`</span> instance. </span>
@@ -3127,8 +3111,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb37-250"><a href="#cb37-250"></a>Let's start with that part. Naively, we could begin by writing it out very literally:</span>
 <span id="cb37-251"><a href="#cb37-251"></a></span>
 <span id="cb37-252"><a href="#cb37-252"></a><span class="in">```{.julia}</span></span>
-<span id="cb37-253"><a href="#cb37-253"></a><span class="in">ex = :(yloss + λ*cost)</span></span>
-<span id="cb37-254"><a href="#cb37-254"></a><span class="in">eval(ex)</span></span>
+<span id="cb37-253"><a href="#cb37-253"></a>ex <span class="op">=</span> <span class="op">:</span>(yloss <span class="op">+</span> λ<span class="op">*</span>cost)</span>
+<span id="cb37-254"><a href="#cb37-254"></a><span class="fu">eval</span>(ex)</span>
 <span id="cb37-255"><a href="#cb37-255"></a><span class="in">```</span></span>
 <span id="cb37-256"><a href="#cb37-256"></a></span>
 <span id="cb37-257"><a href="#cb37-257"></a>Of course, evaluating this expression throws an error because none of the variables are actually defined. Let's work on that ...</span>
@@ -3136,171 +3120,171 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb37-259"><a href="#cb37-259"></a>For the loss and penalty functions, we will use methods available from the <span class="in">`CounterfactualExplanations.Objectives`</span> module, while for $\lambda$ we will use a literal:</span>
 <span id="cb37-260"><a href="#cb37-260"></a></span>
 <span id="cb37-263"><a href="#cb37-263"></a><span class="in">```{julia}</span></span>
-<span id="cb37-264"><a href="#cb37-264"></a><span class="in">ex = :(logitbinarycrossentropy + 0.1 * distance_l2)</span></span>
+<span id="cb37-264"><a href="#cb37-264"></a>ex <span class="op">=</span> <span class="op">:</span>(logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span> <span class="op">*</span> distance_l2)</span>
 <span id="cb37-265"><a href="#cb37-265"></a><span class="in">```</span></span>
 <span id="cb37-266"><a href="#cb37-266"></a></span>
 <span id="cb37-267"><a href="#cb37-267"></a>Let's try to make sense of the data structure we have created:</span>
 <span id="cb37-268"><a href="#cb37-268"></a></span>
 <span id="cb37-271"><a href="#cb37-271"></a><span class="in">```{julia}</span></span>
-<span id="cb37-272"><a href="#cb37-272"></a><span class="in">#| output: true</span></span>
+<span id="cb37-272"><a href="#cb37-272"></a><span class="co">#| output: true</span></span>
 <span id="cb37-273"><a href="#cb37-273"></a></span>
-<span id="cb37-274"><a href="#cb37-274"></a><span class="in">ex.args</span></span>
+<span id="cb37-274"><a href="#cb37-274"></a>ex.args</span>
 <span id="cb37-275"><a href="#cb37-275"></a><span class="in">```</span></span>
 <span id="cb37-276"><a href="#cb37-276"></a></span>
 <span id="cb37-277"><a href="#cb37-277"></a>My first naive approach is shown below. It errors because I forgot to interpolate the variables inside the <span class="in">`quote`</span>.</span>
 <span id="cb37-278"><a href="#cb37-278"></a></span>
 <span id="cb37-279"><a href="#cb37-279"></a><span class="in">```{.julia}</span></span>
-<span id="cb37-280"><a href="#cb37-280"></a><span class="in">macro objective(generator, ex)</span></span>
-<span id="cb37-281"><a href="#cb37-281"></a><span class="in">    loss = ex.args[2]</span></span>
-<span id="cb37-282"><a href="#cb37-282"></a><span class="in">    ex_penalty = ex.args[3]</span></span>
-<span id="cb37-283"><a href="#cb37-283"></a><span class="in">    λ = ex_penalty.args[2]</span></span>
-<span id="cb37-284"><a href="#cb37-284"></a><span class="in">    cost = ex_penalty.args[3]</span></span>
-<span id="cb37-285"><a href="#cb37-285"></a><span class="in">    ex_generator = quote </span></span>
-<span id="cb37-286"><a href="#cb37-286"></a><span class="in">        generator.loss = loss</span></span>
-<span id="cb37-287"><a href="#cb37-287"></a><span class="in">        generator.cost = cost</span></span>
-<span id="cb37-288"><a href="#cb37-288"></a><span class="in">        generator.λ = λ</span></span>
-<span id="cb37-289"><a href="#cb37-289"></a><span class="in">    end</span></span>
-<span id="cb37-290"><a href="#cb37-290"></a><span class="in">    return ex_generator</span></span>
-<span id="cb37-291"><a href="#cb37-291"></a><span class="in">end</span></span>
+<span id="cb37-280"><a href="#cb37-280"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<span id="cb37-281"><a href="#cb37-281"></a>    loss <span class="op">=</span> ex.args[<span class="fl">2</span>]</span>
+<span id="cb37-282"><a href="#cb37-282"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
+<span id="cb37-283"><a href="#cb37-283"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
+<span id="cb37-284"><a href="#cb37-284"></a>    cost <span class="op">=</span> ex_penalty.args[<span class="fl">3</span>]</span>
+<span id="cb37-285"><a href="#cb37-285"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
+<span id="cb37-286"><a href="#cb37-286"></a>        generator.loss <span class="op">=</span> loss</span>
+<span id="cb37-287"><a href="#cb37-287"></a>        generator.cost <span class="op">=</span> cost</span>
+<span id="cb37-288"><a href="#cb37-288"></a>        generator.λ <span class="op">=</span> λ</span>
+<span id="cb37-289"><a href="#cb37-289"></a>    <span class="kw">end</span></span>
+<span id="cb37-290"><a href="#cb37-290"></a>    <span class="cf">return</span> ex_generator</span>
+<span id="cb37-291"><a href="#cb37-291"></a><span class="kw">end</span></span>
 <span id="cb37-292"><a href="#cb37-292"></a><span class="in">```</span></span>
 <span id="cb37-293"><a href="#cb37-293"></a></span>
 <span id="cb37-294"><a href="#cb37-294"></a>Having fixed that below, I still get an error because <span class="in">`loss`</span> and <span class="in">`cost`</span> functions are not part of the global scope. I am pretty sure that this error would have occurred anyway and has nothing to do with the fact that I'm writing a macro. </span>
 <span id="cb37-295"><a href="#cb37-295"></a></span>
 <span id="cb37-296"><a href="#cb37-296"></a><span class="in">```{.julia}</span></span>
-<span id="cb37-297"><a href="#cb37-297"></a><span class="in">macro objective(generator, ex)</span></span>
-<span id="cb37-298"><a href="#cb37-298"></a><span class="in">    loss = ex.args[2]</span></span>
-<span id="cb37-299"><a href="#cb37-299"></a><span class="in">    ex_penalty = ex.args[3]</span></span>
-<span id="cb37-300"><a href="#cb37-300"></a><span class="in">    λ = ex_penalty.args[2]</span></span>
-<span id="cb37-301"><a href="#cb37-301"></a><span class="in">    cost = ex_penalty.args[3]</span></span>
-<span id="cb37-302"><a href="#cb37-302"></a><span class="in">    ex_generator = quote </span></span>
-<span id="cb37-303"><a href="#cb37-303"></a><span class="in">        $generator.loss = $loss</span></span>
-<span id="cb37-304"><a href="#cb37-304"></a><span class="in">        $generator.cost = $cost</span></span>
-<span id="cb37-305"><a href="#cb37-305"></a><span class="in">        $generator.λ = $λ</span></span>
-<span id="cb37-306"><a href="#cb37-306"></a><span class="in">    end</span></span>
-<span id="cb37-307"><a href="#cb37-307"></a><span class="in">    return ex_generator</span></span>
-<span id="cb37-308"><a href="#cb37-308"></a><span class="in">end</span></span>
+<span id="cb37-297"><a href="#cb37-297"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<span id="cb37-298"><a href="#cb37-298"></a>    loss <span class="op">=</span> ex.args[<span class="fl">2</span>]</span>
+<span id="cb37-299"><a href="#cb37-299"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
+<span id="cb37-300"><a href="#cb37-300"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
+<span id="cb37-301"><a href="#cb37-301"></a>    cost <span class="op">=</span> ex_penalty.args[<span class="fl">3</span>]</span>
+<span id="cb37-302"><a href="#cb37-302"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
+<span id="cb37-303"><a href="#cb37-303"></a>        <span class="op">$</span>generator.loss <span class="op">=</span> <span class="op">$</span>loss</span>
+<span id="cb37-304"><a href="#cb37-304"></a>        <span class="op">$</span>generator.cost <span class="op">=</span> <span class="op">$</span>cost</span>
+<span id="cb37-305"><a href="#cb37-305"></a>        <span class="op">$</span>generator.λ <span class="op">=</span> <span class="op">$</span>λ</span>
+<span id="cb37-306"><a href="#cb37-306"></a>    <span class="kw">end</span></span>
+<span id="cb37-307"><a href="#cb37-307"></a>    <span class="cf">return</span> ex_generator</span>
+<span id="cb37-308"><a href="#cb37-308"></a><span class="kw">end</span></span>
 <span id="cb37-309"><a href="#cb37-309"></a><span class="in">```</span></span>
 <span id="cb37-310"><a href="#cb37-310"></a></span>
 <span id="cb37-311"><a href="#cb37-311"></a>Instead of importing the functions, I just get them explicitly from the <span class="in">`Objectives`</span> module, </span>
 <span id="cb37-312"><a href="#cb37-312"></a></span>
 <span id="cb37-315"><a href="#cb37-315"></a><span class="in">```{julia}</span></span>
-<span id="cb37-316"><a href="#cb37-316"></a><span class="in">macro objective(generator, ex)</span></span>
-<span id="cb37-317"><a href="#cb37-317"></a><span class="in">    loss = getfield(CounterfactualExplanations.Objectives, ex.args[2])</span></span>
-<span id="cb37-318"><a href="#cb37-318"></a><span class="in">    ex_penalty = ex.args[3]</span></span>
-<span id="cb37-319"><a href="#cb37-319"></a><span class="in">    λ = ex_penalty.args[2]</span></span>
-<span id="cb37-320"><a href="#cb37-320"></a><span class="in">    cost = getfield(CounterfactualExplanations.Objectives, ex_penalty.args[3])</span></span>
-<span id="cb37-321"><a href="#cb37-321"></a><span class="in">    ex_generator = quote </span></span>
-<span id="cb37-322"><a href="#cb37-322"></a><span class="in">        $generator.loss = $loss</span></span>
-<span id="cb37-323"><a href="#cb37-323"></a><span class="in">        $generator.penalty = $cost</span></span>
-<span id="cb37-324"><a href="#cb37-324"></a><span class="in">        $generator.λ = $λ</span></span>
-<span id="cb37-325"><a href="#cb37-325"></a><span class="in">        generator</span></span>
-<span id="cb37-326"><a href="#cb37-326"></a><span class="in">    end</span></span>
-<span id="cb37-327"><a href="#cb37-327"></a><span class="in">    return ex_generator</span></span>
-<span id="cb37-328"><a href="#cb37-328"></a><span class="in">end</span></span>
+<span id="cb37-316"><a href="#cb37-316"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<span id="cb37-317"><a href="#cb37-317"></a>    loss <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex.args[<span class="fl">2</span>])</span>
+<span id="cb37-318"><a href="#cb37-318"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
+<span id="cb37-319"><a href="#cb37-319"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
+<span id="cb37-320"><a href="#cb37-320"></a>    cost <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex_penalty.args[<span class="fl">3</span>])</span>
+<span id="cb37-321"><a href="#cb37-321"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
+<span id="cb37-322"><a href="#cb37-322"></a>        <span class="op">$</span>generator.loss <span class="op">=</span> <span class="op">$</span>loss</span>
+<span id="cb37-323"><a href="#cb37-323"></a>        <span class="op">$</span>generator.penalty <span class="op">=</span> <span class="op">$</span>cost</span>
+<span id="cb37-324"><a href="#cb37-324"></a>        <span class="op">$</span>generator.λ <span class="op">=</span> <span class="op">$</span>λ</span>
+<span id="cb37-325"><a href="#cb37-325"></a>        generator</span>
+<span id="cb37-326"><a href="#cb37-326"></a>    <span class="kw">end</span></span>
+<span id="cb37-327"><a href="#cb37-327"></a>    <span class="cf">return</span> ex_generator</span>
+<span id="cb37-328"><a href="#cb37-328"></a><span class="kw">end</span></span>
 <span id="cb37-329"><a href="#cb37-329"></a><span class="in">```</span></span>
 <span id="cb37-330"><a href="#cb37-330"></a></span>
 <span id="cb37-331"><a href="#cb37-331"></a>and, finally, this works:</span>
 <span id="cb37-332"><a href="#cb37-332"></a></span>
 <span id="cb37-335"><a href="#cb37-335"></a><span class="in">```{julia}</span></span>
-<span id="cb37-336"><a href="#cb37-336"></a><span class="in">#| output: ture</span></span>
+<span id="cb37-336"><a href="#cb37-336"></a><span class="co">#| output: ture</span></span>
 <span id="cb37-337"><a href="#cb37-337"></a></span>
-<span id="cb37-338"><a href="#cb37-338"></a><span class="in">@objective(generator, logitbinarycrossentropy + 0.1distance_l2)</span></span>
+<span id="cb37-338"><a href="#cb37-338"></a><span class="pp">@objective</span>(generator, logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span>distance_l2)</span>
 <span id="cb37-339"><a href="#cb37-339"></a><span class="in">```</span></span>
 <span id="cb37-340"><a href="#cb37-340"></a></span>
 <span id="cb37-341"><a href="#cb37-341"></a>But what about adding multiple penalties? The DiCE generator, for example, also takes into account how diverse the counterfactual explanations are <span class="co">[</span><span class="ot">@mothilal2020explaining</span><span class="co">]</span>. The corresponding penalty is called <span class="in">`ddp_diversity`</span>. Let's start with the expression again:</span>
 <span id="cb37-342"><a href="#cb37-342"></a></span>
 <span id="cb37-345"><a href="#cb37-345"></a><span class="in">```{julia}</span></span>
-<span id="cb37-346"><a href="#cb37-346"></a><span class="in">#| output: true</span></span>
+<span id="cb37-346"><a href="#cb37-346"></a><span class="co">#| output: true</span></span>
 <span id="cb37-347"><a href="#cb37-347"></a></span>
-<span id="cb37-348"><a href="#cb37-348"></a><span class="in">ex = :(logitbinarycrossentropy + 0.1distance_l2 + 1.0ddp_diversity)</span></span>
-<span id="cb37-349"><a href="#cb37-349"></a><span class="in">ex.args</span></span>
+<span id="cb37-348"><a href="#cb37-348"></a>ex <span class="op">=</span> <span class="op">:</span>(logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span>distance_l2 <span class="op">+</span> <span class="fl">1.0</span>ddp_diversity)</span>
+<span id="cb37-349"><a href="#cb37-349"></a>ex.args</span>
 <span id="cb37-350"><a href="#cb37-350"></a><span class="in">```</span></span>
 <span id="cb37-351"><a href="#cb37-351"></a></span>
 <span id="cb37-354"><a href="#cb37-354"></a><span class="in">```{julia}</span></span>
-<span id="cb37-355"><a href="#cb37-355"></a><span class="in">#| output: true</span></span>
-<span id="cb37-356"><a href="#cb37-356"></a><span class="in">#| echo: false</span></span>
+<span id="cb37-355"><a href="#cb37-355"></a><span class="co">#| output: true</span></span>
+<span id="cb37-356"><a href="#cb37-356"></a><span class="co">#| echo: false</span></span>
 <span id="cb37-357"><a href="#cb37-357"></a></span>
-<span id="cb37-358"><a href="#cb37-358"></a><span class="in">Markdown.parse(</span></span>
-<span id="cb37-359"><a href="#cb37-359"></a><span class="in">    """</span></span>
-<span id="cb37-360"><a href="#cb37-360"></a><span class="in">    This time there's a second nested `Expr`ession among the arguments: `:($(ex.args[end]))`.</span></span>
-<span id="cb37-361"><a href="#cb37-361"></a><span class="in">    """</span></span>
-<span id="cb37-362"><a href="#cb37-362"></a><span class="in">)</span></span>
+<span id="cb37-358"><a href="#cb37-358"></a>Markdown.<span class="fu">parse</span>(</span>
+<span id="cb37-359"><a href="#cb37-359"></a>    <span class="st">"""</span></span>
+<span id="cb37-360"><a href="#cb37-360"></a><span class="st">    This time there's a second nested `Expr`ession among the arguments: `:(</span><span class="sc">$</span>(ex.args[<span class="kw">end</span>])<span class="st">)`.</span></span>
+<span id="cb37-361"><a href="#cb37-361"></a><span class="st">    """</span></span>
+<span id="cb37-362"><a href="#cb37-362"></a>)</span>
 <span id="cb37-363"><a href="#cb37-363"></a><span class="in">```</span></span>
 <span id="cb37-364"><a href="#cb37-364"></a></span>
 <span id="cb37-367"><a href="#cb37-367"></a><span class="in">```{julia}</span></span>
-<span id="cb37-368"><a href="#cb37-368"></a><span class="in">macro objective(generator, ex)</span></span>
-<span id="cb37-369"><a href="#cb37-369"></a><span class="in">    loss = getfield(CounterfactualExplanations.Objectives, ex.args[2])</span></span>
-<span id="cb37-370"><a href="#cb37-370"></a><span class="in">    Λ = Vector{AbstractFloat}()</span></span>
-<span id="cb37-371"><a href="#cb37-371"></a><span class="in">    costs = Vector{Function}()</span></span>
-<span id="cb37-372"><a href="#cb37-372"></a><span class="in">    for i in 3:length(ex.args)</span></span>
-<span id="cb37-373"><a href="#cb37-373"></a><span class="in">        ex_penalty = ex.args[i]</span></span>
-<span id="cb37-374"><a href="#cb37-374"></a><span class="in">        λ = ex_penalty.args[2]</span></span>
-<span id="cb37-375"><a href="#cb37-375"></a><span class="in">        push!(Λ, λ)</span></span>
-<span id="cb37-376"><a href="#cb37-376"></a><span class="in">        cost = getfield(CounterfactualExplanations.Objectives, ex_penalty.args[3])</span></span>
-<span id="cb37-377"><a href="#cb37-377"></a><span class="in">        push!(costs, cost)</span></span>
-<span id="cb37-378"><a href="#cb37-378"></a><span class="in">    end</span></span>
-<span id="cb37-379"><a href="#cb37-379"></a><span class="in">    ex_generator = quote </span></span>
-<span id="cb37-380"><a href="#cb37-380"></a><span class="in">        $generator.loss = $loss</span></span>
-<span id="cb37-381"><a href="#cb37-381"></a><span class="in">        $generator.penalty = $costs</span></span>
-<span id="cb37-382"><a href="#cb37-382"></a><span class="in">        $generator.λ = $Λ</span></span>
-<span id="cb37-383"><a href="#cb37-383"></a><span class="in">        generator</span></span>
-<span id="cb37-384"><a href="#cb37-384"></a><span class="in">    end</span></span>
-<span id="cb37-385"><a href="#cb37-385"></a><span class="in">    return ex_generator</span></span>
-<span id="cb37-386"><a href="#cb37-386"></a><span class="in">end</span></span>
+<span id="cb37-368"><a href="#cb37-368"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<span id="cb37-369"><a href="#cb37-369"></a>    loss <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex.args[<span class="fl">2</span>])</span>
+<span id="cb37-370"><a href="#cb37-370"></a>    Λ <span class="op">=</span> <span class="fu">Vector</span><span class="dt">{AbstractFloat}</span>()</span>
+<span id="cb37-371"><a href="#cb37-371"></a>    costs <span class="op">=</span> <span class="fu">Vector</span><span class="dt">{Function}</span>()</span>
+<span id="cb37-372"><a href="#cb37-372"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">3</span><span class="op">:</span><span class="fu">length</span>(ex.args)</span>
+<span id="cb37-373"><a href="#cb37-373"></a>        ex_penalty <span class="op">=</span> ex.args[i]</span>
+<span id="cb37-374"><a href="#cb37-374"></a>        λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
+<span id="cb37-375"><a href="#cb37-375"></a>        <span class="fu">push!</span>(Λ, λ)</span>
+<span id="cb37-376"><a href="#cb37-376"></a>        cost <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex_penalty.args[<span class="fl">3</span>])</span>
+<span id="cb37-377"><a href="#cb37-377"></a>        <span class="fu">push!</span>(costs, cost)</span>
+<span id="cb37-378"><a href="#cb37-378"></a>    <span class="cf">end</span></span>
+<span id="cb37-379"><a href="#cb37-379"></a>    ex_generator <span class="op">=</span> <span class="kw">quote</span> </span>
+<span id="cb37-380"><a href="#cb37-380"></a>        <span class="op">$</span>generator.loss <span class="op">=</span> <span class="op">$</span>loss</span>
+<span id="cb37-381"><a href="#cb37-381"></a>        <span class="op">$</span>generator.penalty <span class="op">=</span> <span class="op">$</span>costs</span>
+<span id="cb37-382"><a href="#cb37-382"></a>        <span class="op">$</span>generator.λ <span class="op">=</span> <span class="op">$</span>Λ</span>
+<span id="cb37-383"><a href="#cb37-383"></a>        generator</span>
+<span id="cb37-384"><a href="#cb37-384"></a>    <span class="kw">end</span></span>
+<span id="cb37-385"><a href="#cb37-385"></a>    <span class="cf">return</span> ex_generator</span>
+<span id="cb37-386"><a href="#cb37-386"></a><span class="kw">end</span></span>
 <span id="cb37-387"><a href="#cb37-387"></a><span class="in">```</span></span>
 <span id="cb37-388"><a href="#cb37-388"></a></span>
 <span id="cb37-389"><a href="#cb37-389"></a>That works well,</span>
 <span id="cb37-390"><a href="#cb37-390"></a></span>
 <span id="cb37-393"><a href="#cb37-393"></a><span class="in">```{julia}</span></span>
-<span id="cb37-394"><a href="#cb37-394"></a><span class="in">#| output: true</span></span>
+<span id="cb37-394"><a href="#cb37-394"></a><span class="co">#| output: true</span></span>
 <span id="cb37-395"><a href="#cb37-395"></a></span>
-<span id="cb37-396"><a href="#cb37-396"></a><span class="in">@objective(generator, logitbinarycrossentropy + 0.05distance_l2 + 1.0ddp_diversity)</span></span>
+<span id="cb37-396"><a href="#cb37-396"></a><span class="pp">@objective</span>(generator, logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.05</span>distance_l2 <span class="op">+</span> <span class="fl">1.0</span>ddp_diversity)</span>
 <span id="cb37-397"><a href="#cb37-397"></a><span class="in">```</span></span>
 <span id="cb37-398"><a href="#cb37-398"></a></span>
 <span id="cb37-399"><a href="#cb37-399"></a>but we should still make sure that this <span class="in">`generator`</span> is also compatible with our package. Below we go through some of the typical workflows associated with Counterfactual Explanations. Firstly, we load some synthetic data and fit a black-box model to it.</span>
 <span id="cb37-400"><a href="#cb37-400"></a></span>
 <span id="cb37-403"><a href="#cb37-403"></a><span class="in">```{julia}</span></span>
-<span id="cb37-404"><a href="#cb37-404"></a><span class="in">using CounterfactualExplanations.Models: fit_model</span></span>
-<span id="cb37-405"><a href="#cb37-405"></a><span class="in">n_dim = 2</span></span>
-<span id="cb37-406"><a href="#cb37-406"></a><span class="in">n_classes = 4</span></span>
-<span id="cb37-407"><a href="#cb37-407"></a><span class="in">n_samples = 400</span></span>
-<span id="cb37-408"><a href="#cb37-408"></a><span class="in">model_name = :MLP</span></span>
-<span id="cb37-409"><a href="#cb37-409"></a><span class="in">counterfactual_data = TaijaData.load_blobs(n_samples; k=n_dim, centers=n_classes) |&gt;</span></span>
-<span id="cb37-410"><a href="#cb37-410"></a><span class="in">    data -&gt; CounterfactualData(data...)</span></span>
-<span id="cb37-411"><a href="#cb37-411"></a><span class="in">M = fit_model(counterfactual_data, model_name)</span></span>
-<span id="cb37-412"><a href="#cb37-412"></a><span class="in">plot(M, counterfactual_data)</span></span>
+<span id="cb37-404"><a href="#cb37-404"></a><span class="im">using</span> <span class="bu">CounterfactualExplanations.Models</span>: fit_model</span>
+<span id="cb37-405"><a href="#cb37-405"></a>n_dim <span class="op">=</span> <span class="fl">2</span></span>
+<span id="cb37-406"><a href="#cb37-406"></a>n_classes <span class="op">=</span> <span class="fl">4</span></span>
+<span id="cb37-407"><a href="#cb37-407"></a>n_samples <span class="op">=</span> <span class="fl">400</span></span>
+<span id="cb37-408"><a href="#cb37-408"></a>model_name <span class="op">=</span> <span class="op">:</span>MLP</span>
+<span id="cb37-409"><a href="#cb37-409"></a>counterfactual_data <span class="op">=</span> TaijaData.<span class="fu">load_blobs</span>(n_samples; k<span class="op">=</span>n_dim, centers<span class="op">=</span>n_classes) <span class="op">|&gt;</span></span>
+<span id="cb37-410"><a href="#cb37-410"></a>    data <span class="op">-&gt;</span> <span class="fu">CounterfactualData</span>(data<span class="op">...</span>)</span>
+<span id="cb37-411"><a href="#cb37-411"></a>M <span class="op">=</span> <span class="fu">fit_model</span>(counterfactual_data, model_name)</span>
+<span id="cb37-412"><a href="#cb37-412"></a><span class="fu">plot</span>(M, counterfactual_data)</span>
 <span id="cb37-413"><a href="#cb37-413"></a><span class="in">```</span></span>
 <span id="cb37-414"><a href="#cb37-414"></a></span>
 <span id="cb37-415"><a href="#cb37-415"></a>Next, we begin by specifying our target and factual label. We then draw a random sample from the non-target (factual) class.</span>
 <span id="cb37-416"><a href="#cb37-416"></a></span>
 <span id="cb37-419"><a href="#cb37-419"></a><span class="in">```{julia}</span></span>
-<span id="cb37-420"><a href="#cb37-420"></a><span class="in"># Factual and target:</span></span>
-<span id="cb37-421"><a href="#cb37-421"></a><span class="in">target = 2</span></span>
-<span id="cb37-422"><a href="#cb37-422"></a><span class="in">factual = 4</span></span>
-<span id="cb37-423"><a href="#cb37-423"></a><span class="in">chosen = rand(findall(predict_label(M, counterfactual_data) .== factual))</span></span>
-<span id="cb37-424"><a href="#cb37-424"></a><span class="in">x = select_factual(counterfactual_data,chosen)</span></span>
+<span id="cb37-420"><a href="#cb37-420"></a><span class="co"># Factual and target:</span></span>
+<span id="cb37-421"><a href="#cb37-421"></a>target <span class="op">=</span> <span class="fl">2</span></span>
+<span id="cb37-422"><a href="#cb37-422"></a>factual <span class="op">=</span> <span class="fl">4</span></span>
+<span id="cb37-423"><a href="#cb37-423"></a>chosen <span class="op">=</span> <span class="fu">rand</span>(<span class="fu">findall</span>(<span class="fu">predict_label</span>(M, counterfactual_data) <span class="op">.==</span> factual))</span>
+<span id="cb37-424"><a href="#cb37-424"></a>x <span class="op">=</span> <span class="fu">select_factual</span>(counterfactual_data,chosen)</span>
 <span id="cb37-425"><a href="#cb37-425"></a><span class="in">```</span></span>
 <span id="cb37-426"><a href="#cb37-426"></a></span>
 <span id="cb37-427"><a href="#cb37-427"></a>Finally, we use our <span class="in">`generator`</span> to generate counterfactuals:</span>
 <span id="cb37-428"><a href="#cb37-428"></a></span>
 <span id="cb37-431"><a href="#cb37-431"></a><span class="in">```{julia}</span></span>
-<span id="cb37-432"><a href="#cb37-432"></a><span class="in">using CounterfactualExplanations.Convergence</span></span>
-<span id="cb37-433"><a href="#cb37-433"></a><span class="in">ce = generate_counterfactual(</span></span>
-<span id="cb37-434"><a href="#cb37-434"></a><span class="in">    x, target, counterfactual_data, M, generator;</span></span>
-<span id="cb37-435"><a href="#cb37-435"></a><span class="in">    num_counterfactuals = 5,</span></span>
-<span id="cb37-436"><a href="#cb37-436"></a><span class="in">    convergence = GeneratorConditionsConvergence()</span></span>
-<span id="cb37-437"><a href="#cb37-437"></a><span class="in">)</span></span>
+<span id="cb37-432"><a href="#cb37-432"></a><span class="im">using</span> <span class="bu">CounterfactualExplanations.Convergence</span></span>
+<span id="cb37-433"><a href="#cb37-433"></a>ce <span class="op">=</span> <span class="fu">generate_counterfactual</span>(</span>
+<span id="cb37-434"><a href="#cb37-434"></a>    x, target, counterfactual_data, M, generator;</span>
+<span id="cb37-435"><a href="#cb37-435"></a>    num_counterfactuals <span class="op">=</span> <span class="fl">5</span>,</span>
+<span id="cb37-436"><a href="#cb37-436"></a>    convergence <span class="op">=</span> <span class="fu">GeneratorConditionsConvergence</span>()</span>
+<span id="cb37-437"><a href="#cb37-437"></a>)</span>
 <span id="cb37-438"><a href="#cb37-438"></a><span class="in">```</span></span>
 <span id="cb37-439"><a href="#cb37-439"></a></span>
 <span id="cb37-440"><a href="#cb37-440"></a>It worked! 🎉 The resulting counterfactual search is illustrated in @fig-search. I may have overspecified the size of the <span class="in">`ddp_diversity`</span> penalty a little bit here, but it sure makes for a cool chart!</span>
 <span id="cb37-441"><a href="#cb37-441"></a></span>
 <span id="cb37-444"><a href="#cb37-444"></a><span class="in">```{julia}</span></span>
-<span id="cb37-445"><a href="#cb37-445"></a><span class="in">#| fig-cap: "Counterfactual search using our composed generator."</span></span>
-<span id="cb37-446"><a href="#cb37-446"></a><span class="in">#| label: fig-search</span></span>
-<span id="cb37-447"><a href="#cb37-447"></a><span class="in">#| output: true</span></span>
-<span id="cb37-448"><a href="#cb37-448"></a><span class="in">#| echo: false</span></span>
+<span id="cb37-445"><a href="#cb37-445"></a><span class="co">#| fig-cap: "Counterfactual search using our composed generator."</span></span>
+<span id="cb37-446"><a href="#cb37-446"></a><span class="co">#| label: fig-search</span></span>
+<span id="cb37-447"><a href="#cb37-447"></a><span class="co">#| output: true</span></span>
+<span id="cb37-448"><a href="#cb37-448"></a><span class="co">#| echo: false</span></span>
 <span id="cb37-449"><a href="#cb37-449"></a></span>
-<span id="cb37-450"><a href="#cb37-450"></a><span class="in">plot(ce)</span></span>
+<span id="cb37-450"><a href="#cb37-450"></a><span class="fu">plot</span>(ce)</span>
 <span id="cb37-451"><a href="#cb37-451"></a><span class="in">```</span></span>
 <span id="cb37-452"><a href="#cb37-452"></a></span>
 <span id="cb37-453"><a href="#cb37-453"></a>Time for me to add this all to <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)</span> ... ⏳</span>
