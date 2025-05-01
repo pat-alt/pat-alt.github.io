@@ -102,7 +102,7 @@ Provided CE is valid, plausible and actionable, it can be used to provide recour
 :::
 :::
 
-
+# Hidden costs of implausible counterfactuals ... 
 
 ## Dynamics of Counterfactuals
 
@@ -117,6 +117,10 @@ Provided CE is valid, plausible and actionable, it can be used to provide recour
 
 ![Illustration of external cost of individual recourse.](www/bank_cartoon.png){#fig-bank-cartoon width="65%"}
 
+<!-- TODO: possibly add slide on mitigation here -->
+
+# Plausibility at all cost?
+
 ## Pick your Poison
 
 All of these counterfactuals are valid explanations for the model's prediction. 
@@ -124,6 +128,8 @@ All of these counterfactuals are valid explanations for the model's prediction.
 > Which one would you pick?
 
 ![Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](www/mnist_motivation.png){#fig-cf-example width="80%"}
+
+<!-- TODO: Add slide with density charts and link to blog post -->
 
 ## ECCCos from the Black-Box {.nostretch .smaller} 
 
@@ -172,11 +178,39 @@ $$
 :::
 ::::
 
+# Teaching models plausible explanations
+
+## Counterfactual Training: Method
+::: {.callout-tip}
+## Idea
+
+Let the model compare its own explanations to plausible ones. 
+:::
+
+::: {.columns}
+::: {.column width="50%"}
+- Generate faithful counterfactuals on the fly. 
+- Bonus: get adversarial examples for free.
+:::
+::: {.column width="50%"}
+![Explanation or attack?](www/ce_ae.png)
+:::
+:::
+
+## Counterfactual Training: Results
+
+![Illustration of how CT improves model explainability: (a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, *age* immutable; (d) CT, *age* immutable.](www/ct_poc.png)
+
+- Models trained with CT learn more plausible and (provably) actionable explanations.
+- Predictive performance does not suffer, robust performance improves.
+
+# If we still have time ...
+
 ## Spurious Sparks of AGI
 
 ::::{.columns}::::
 :::{.column width='50%'}
-📜 In @altmeyer2024position \@ ECONDAT 2024, we challenge the idea that the finding of meaningful patterns in latent spaces of large models is indicative of AGI.
+📜 In @altmeyer2024position \@ ICML 2024, we challenge the idea that the finding of meaningful patterns in latent spaces of large models is indicative of AGI.
 :::
 :::{.column width='50%'}
 ![Inflation of prices or birds? It doesn't matter!](www/attack_inflation.png){#fig-attack-inflation width="100%"}
