@@ -1,0 +1,238 @@
+---
+title: Explaining Models or Modelling Explanations
+subtitle: Challenging Existing Paradigms in Trustworthy AI
+author: 
+  - name: "**Patrick Altmeyer**"
+    url: https://www.patalt.org/
+  - name: Arie van Deursen
+  - name: Cynthia C. S. Liem
+institute: Delft University of Technology
+date: today
+format: 
+  tudelft-revealjs:
+    theme: custom.scss
+    self-contained: true
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    fig-align: center
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            options: {
+              menuOptions: {
+                settings: {
+                  assistiveMml: false
+                }
+              }
+            }
+          };
+          </script>
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+classoption: "notheorems"
+draft: false
+---
+
+## Background 
+
+::::{.columns}::::
+:::{.column width='65%'}
+
+::: {.incremental}
+
+- {{< fa circle-question >}} How can we make opaque AI more trustworthy?
+- {{< fa toolbox >}} Explainable AI, Adversarial ML, Probabilistic ML
+- {{< fa earth-europe >}} Banking, Finance, Economics
+- {{< fa code >}} Maintainer of [Taija](https://github.com/JuliaTrustworthyAI) (trustworthy AI in Julia)
+
+:::
+
+:::
+:::{.column width='35%'}
+![Scan for slides.](/www/images/qr.png){width="100%" fig-align="center"}
+:::
+::::
+
+## Agenda 
+
+::: {.incremental}
+
+- What are counterfactual explanations (CE) and algorithmic recourse (AR) and why are they useful? 
+- What dynamics are generated when off-the-shelf solutions to CE and AR are implemented in practice? 
+- Can we generate plausible counterfactuals relying only on the opaque model itself?
+- How can we leverage counterfactuals during training to build more trustworthy models?
+:::
+
+# Background
+
+## Counterfactual Explanations
+
+$$
+\begin{aligned}
+\min_{\mathbf{Z}^\prime \in \mathcal{Z}^L} \{  {\text{yloss}(M_{\theta}(f(\mathbf{Z}^\prime)),\mathbf{y}^+)} + \lambda {\text{cost}(f(\mathbf{Z}^\prime)) }  \} 
+\end{aligned} 
+$$ 
+
+::::{.columns}::::
+:::{.column width='60%'}
+**Counterfactual Explanations** explain how inputs into a model need to change for it to produce different outputs^[{{< fa scroll >}} @altmeyer2023explaining \@ JuliaCon 2022].
+:::
+:::{.column width='40%'}
+![Gradient-based counterfactual search.](www/simple_ce.png){#fig-ce-intro width="60%"}
+:::
+::::
+
+## Algorithmic Recourse
+
+::: {.columns}
+::: {.column width="50%"}
+
+Provided CE is valid, plausible and actionable, it can be used to provide recourse to individuals negatively affected by models.
+
+> "If your income had been X, then ..."
+
+:::
+::: {.column width="50%"}
+
+![Counterfactuals for random samples from the Give Me Some Credit dataset [@kaggle2011give]. Features 'age' and 'income' are shown.](www/credit.png){#fig-credit width=80%}
+
+:::
+:::
+
+# Dynamics of CE and AR
+
+## Hidden Cost of Implausibility
+
+
+::::{.columns}::::
+:::{.column width='50%'}
+AR can introduce costly dynamics^[{{< fa scroll >}} @altmeyer2023endogenous \@ SaTML 2023.]
+
+![Endogenous Macrodynamics in Algorithmic Recourse.](www/poc.png){width="100%"}
+:::
+:::{.column width='50%'}
+![Illustration of external cost of individual recourse.](www/bank_cartoon.png){#fig-bank-cartoon width="100%"}
+:::
+::::
+
+{{< fa key >}} **Insight**: individual recourse neglects bigger picture.
+
+## Mitigation Strategies
+
+- Incorporate hidden cost in reframed objective (@eq-satml).
+- Reducing hidden cost is equivalent to ensuring plausibility.
+
+$$
+\begin{aligned}
+\mathbf{s}^\prime &= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \{ {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)} \\ &+ \lambda_1 {\text{cost}(f(\mathbf{s}^\prime))} + \lambda_2 {\text{extcost}(f(\mathbf{s}^\prime))} \}  
+\end{aligned} 
+$$ {#eq-satml}
+
+# Plausibility at all cost?
+
+## Pick your Poison
+
+All of these counterfactuals are valid explanations for the model's prediction. 
+
+> Which one would you pick?
+
+![Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](www/mnist_motivation.png){#fig-cf-example width="80%"}
+
+## Faithful First, Plausible Second
+
+Counterfactuals as plausible as the model permits^[{{< fa scroll >}} @altmeyer2023faithful \@ AAAI 2024. [[blog]](/blog/posts/eccco/index.qmd)].
+
+::: {.columns}
+::: {.column width="50%"}
+![KDE for training data.](www/density_true.png){#fig-dens-true width=70%}
+:::
+::: {.column width="50%"}
+![KDE for model posterior.](www/density_model.png){#fig-dens-mod width=70%}
+:::
+:::
+
+## Faithful Counterfactuals
+
+::::{.columns}::::
+:::{.column width='30%'}
+![Turning a 9 into a 7. *ECCCo* applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).](www/mnist_eccco.png){#fig-mnist-eccco width="75%"}
+:::
+:::{.column width='70%'}
+{{< fa key >}} **Insight**: faithfulness facilitates
+
+- model quality checks (@fig-mnist-eccco).
+- state-of-the-art plausibility (@fig-mnist-benchmark).
+
+![Results for different generators (from 3 to 5).](www/mnist_benchmark.png){#fig-mnist-benchmark width="100%"}
+:::
+::::
+
+# Teaching models plausible explanations
+
+## Counterfactual Training: Method
+::: {.callout-tip}
+## Idea
+
+Let the model compare its own explanations to plausible ones^[{{< fa scroll >}} under review]. 
+:::
+
+::: {.columns}
+::: {.column width="50%"}
+1. Contrast faithful counterfactuals with data.
+2. Use nascent CE as adversarial examples.
+:::
+::: {.column width="50%"}
+![Explanation or attack?](www/ce_ae.png)
+:::
+:::
+
+## Counterfactual Training: Results
+
+![(a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, *age* immutable; (d) CT, *age* immutable.](www/ct_poc.png){#fig-ecml width="80%"}
+
+- Models trained with CT learn more plausible and (provably) actionable explanations.
+- Predictive performance does not suffer, robust performance improves.
+
+# If we still have time ...
+
+## Spurious Sparks of AGI
+
+::::{.columns}::::
+:::{.column width='50%'}
+We challenge the idea that the finding of meaningful patterns in latent spaces of large models is indicative of AGI^[{{< fa scroll >}} In @altmeyer2024position \@ ICML 2024].
+:::
+:::{.column width='50%'}
+![Inflation of prices or birds? It doesn't matter!](www/attack_inflation.png){#fig-attack-inflation width="100%"}
+:::
+::::
+
+## Taija {.smaller}
+
+::::{.columns}::::
+:::{.column width='50%'}
+- Model Explainability ([CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl))
+- Predictive Uncertainty Quantification ([ConformalPrediction.jl](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl))
+- Effortless Bayesian Deep Learning ([LaplaceRedux.jl](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl))
+- ... and more!
+:::
+:::{.column width='50%'}
+- Work presented \@ JuliaCon 2022, 2023, 2024.
+- Google Summer of Code and Julia Season of Contributions 2024.
+- Total of three software projects \@ TU Delft.
+:::
+::::
+
+[![Trustworthy AI in Julia: github.com/JuliaTrustworthyAI](www/logo.png){width="50%" fig-align="center"}](https://github.com/JuliaTrustworthyAI)
+
+## References {.scrollable .smaller}
+
+
