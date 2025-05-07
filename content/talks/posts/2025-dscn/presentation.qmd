@@ -74,7 +74,56 @@ draft: false
 
 # Background
 
-## Counterfactual Explanations
+## Counterfactual Explanations {auto-animate=true}
+
+### Model Training
+
+**Objective**:
+
+$$
+\begin{aligned}
+\min_{\theta} \{  {\text{yloss}(M_{\theta}(x),\mathbf{y})} \}
+\end{aligned} 
+$$ 
+
+**Solution**:
+
+$$
+\begin{aligned}
+\nabla_{\theta} \{  {\text{yloss}(M_{\theta}(x),\mathbf{y})} \}
+\end{aligned} 
+$$ 
+
+## Counterfactual Explanations {auto-animate=true}
+
+### Counterfactual Search
+
+**Objective**:
+
+$$
+\begin{aligned}
+\min_{x} \{  {\text{yloss}(M_{\theta}(x),\mathbf{y})} \}
+\end{aligned} 
+$$ 
+
+**Solution**:
+
+$$
+\begin{aligned}
+\nabla_{x} \{  {\text{yloss}(M_{\theta}(x),\mathbf{y})} \}
+\end{aligned} 
+$$ 
+
+## Counterfactual Explanations {auto-animate=true}
+
+$$
+\begin{aligned}
+\min_{\mathbf{Z}^\prime \in \mathcal{Z}^L} \{  {\text{yloss}(M_{\theta}(f(\mathbf{Z}^\prime)),\mathbf{y}^+)} \}
+\end{aligned} 
+$$ 
+
+
+## Counterfactual Explanations {auto-animate=true}
 
 $$
 \begin{aligned}

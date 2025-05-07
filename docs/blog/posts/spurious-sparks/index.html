@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-99.9.9">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,9 +24,8 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -37,7 +36,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -89,16 +88,15 @@ div.csl-indent {
 <script src="../../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../../">
 <link href="../../..//www/favicon.ico" rel="icon">
-<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-b6f44e91ea1901a440a45c9549c43889.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-abf567cae1b23626b35839fface88527.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-113f225bf34269975c7f70b0f979ce53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-30aadfaea4ea965e36e18717492786ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -176,7 +174,7 @@ window.Quarto = {
 <meta property="og:site_name" content="patalt">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -2349,293 +2347,287 @@ Altmeyer, Patrick, and Patrick Altmeyer. 2024. <span>“Spurious Sparks of
 AGI.”</span> February 7, 2024. <a href="https://www.patalt.org/blog/posts/spurious-sparks/">https://www.patalt.org/blog/posts/spurious-sparks/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-  window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
-    const isCodeAnnotation = (el) => {
-      for (const clz of el.classList) {
-        if (clz.startsWith('code-annotation-')) {                     
-          return true;
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
       }
       return false;
     }
-    const onCopySuccess = function(e) {
-      // button target
-      const button = e.trigger;
-      // don't keep focus
-      button.blur();
-      // flash "checked"
-      button.classList.add('code-copy-button-checked');
-      var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
-      let tooltip;
-      if (window.bootstrap) {
-        button.setAttribute("data-bs-toggle", "tooltip");
-        button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
-        tooltip = new bootstrap.Tooltip(button, 
-          { trigger: "manual", 
-            customClass: "code-copy-button-tooltip",
-            offset: [0, -8]});
-        tooltip.show();    
-      }
-      setTimeout(function() {
-        if (tooltip) {
-          tooltip.hide();
-          button.removeAttribute("data-bs-title");
-          button.removeAttribute("data-bs-toggle");
-          button.removeAttribute("data-bs-placement");
-        }
-        button.setAttribute("title", currentTitle);
-        button.classList.remove('code-copy-button-checked');
-      }, 1000);
-      // clear code selection
-      e.clearSelection();
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.patalt\.org\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
-    const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
-        }
-        return codeEl.innerText;
-    }
-    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-      text: getTextToCopy
-    });
-    clipboard.on('success', onCopySuccess);
-    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-        text: getTextToCopy,
-        container: window.document.getElementById('quarto-embedded-source-code-modal')
-      });
-      clipboardModal.on('success', onCopySuccess);
-    }
-    const viewSource = window.document.getElementById('quarto-view-source') ||
-                       window.document.getElementById('quarto-code-tools-source');
-    if (viewSource) {
-      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-      viewSource.addEventListener("click", function(e) {
-        if (sourceUrl) {
-          // rstudio viewer pane
-          if (/\bcapabilities=\b/.test(window.location)) {
-            window.open(sourceUrl);
-          } else {
-            window.location.href = sourceUrl;
-          }
-        } else {
-          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-          modal.show();
-        }
-        return false;
-      });
-    }
-    function toggleCodeHandler(show) {
-      return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
-          if (show) {
-            details.open = true;
-          } else {
-            details.removeAttribute("open");
-          }
-        }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-        const fromCls = show ? "hidden" : "unhidden";
-        const toCls = show ? "unhidden" : "hidden";
-        for (let i=0; i<cellCodeDivs.length; i++) {
-          const codeDiv = cellCodeDivs[i];
-          if (codeDiv.classList.contains(fromCls)) {
-            codeDiv.classList.remove(fromCls);
-            codeDiv.classList.add(toCls);
-          } 
-        }
-        return false;
-      }
-    }
-    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-    if (hideAllCode) {
-      hideAllCode.addEventListener("click", toggleCodeHandler(false));
-    }
-    const showAllCode = window.document.getElementById("quarto-show-all-code");
-    if (showAllCode) {
-      showAllCode.addEventListener("click", toggleCodeHandler(true));
-    }
-      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/www\.patalt\.org\/");
-      var isInternal = (href) => {
-          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-      }
-      // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-      for (var i=0; i<links.length; i++) {
-        const link = links[i];
-        if (!isInternal(link.href)) {
-          // undo the damage that might have been done by quarto-nav.js in the case of
-          // links that we want to consider external
-          if (link.dataset.originalHref !== undefined) {
-            link.href = link.dataset.originalHref;
-          }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
         }
       }
-    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-      const config = {
-        allowHTML: true,
-        maxWidth: 500,
-        delay: 100,
-        arrow: false,
-        appendTo: function(el) {
-            return el.parentElement;
-        },
-        interactive: true,
-        interactiveBorder: 10,
-        theme: 'quarto',
-        placement: 'bottom-start',
-      };
-      if (contentFn) {
-        config.content = contentFn;
-      }
-      if (onTriggerFn) {
-        config.onTrigger = onTriggerFn;
-      }
-      if (onUntriggerFn) {
-        config.onUntrigger = onUntriggerFn;
-      }
-      window.tippy(el, config); 
     }
-    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-    for (var i=0; i<noterefs.length; i++) {
-      const ref = noterefs[i];
-      tippyHover(ref, function() {
-        // use id or data attribute instead here
-        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-        try { href = new URL(href).hash; } catch {}
-        const id = href.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note) {
-          return note.innerHTML;
-        } else {
-          return "";
-        }
-      });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
     }
-    const xrefs = window.document.querySelectorAll('a.quarto-xref');
-    const processXRef = (id, note) => {
-      // Strip column container classes
-      const stripColumnClz = (el) => {
-        el.classList.remove("page-full", "page-columns");
-        if (el.children) {
-          for (const child of el.children) {
-            stripColumnClz(child);
-          }
-        }
-      }
-      stripColumnClz(note)
-      if (id === null || id.startsWith('sec-')) {
-        // Special case sections, only their first couple elements
-        const container = document.createElement("div");
-        if (note.children && note.children.length > 2) {
-          container.appendChild(note.children[0].cloneNode(true));
-          for (let i = 1; i < note.children.length; i++) {
-            const child = note.children[i];
-            if (child.tagName === "P" && child.innerText === "") {
-              continue;
-            } else {
-              container.appendChild(child.cloneNode(true));
-              break;
-            }
-          }
-          if (window.Quarto?.typesetMath) {
-            window.Quarto.typesetMath(container);
-          }
-          return container.innerHTML
-        } else {
-          if (window.Quarto?.typesetMath) {
-            window.Quarto.typesetMath(note);
-          }
-          return note.innerHTML;
-        }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
       } else {
-        // Remove any anchor links if they are present
-        const anchorLink = note.querySelector('a.anchorjs-link');
-        if (anchorLink) {
-          anchorLink.remove();
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
         }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
         if (window.Quarto?.typesetMath) {
           window.Quarto.typesetMath(note);
         }
-        if (note.classList.contains("callout")) {
-          return note.outerHTML;
-        } else {
-          return note.innerHTML;
-        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
       }
     }
-    for (var i=0; i<xrefs.length; i++) {
-      const xref = xrefs[i];
-      tippyHover(xref, undefined, function(instance) {
-        instance.disable();
-        let url = xref.getAttribute('href');
-        let hash = undefined; 
-        if (url.startsWith('#')) {
-          hash = url;
-        } else {
-          try { hash = new URL(url).hash; } catch {}
-        }
-        if (hash) {
-          const id = hash.replace(/^#\/?/, "");
-          const note = window.document.getElementById(id);
-          if (note !== null) {
-            try {
-              const html = processXRef(id, note.cloneNode(true));
-              instance.setContent(html);
-            } finally {
-              instance.enable();
-              instance.show();
-            }
-          } else {
-            // See if we can fetch this
-            fetch(url.split('#')[0])
-            .then(res => res.text())
-            .then(html => {
-              const parser = new DOMParser();
-              const htmlDoc = parser.parseFromString(html, "text/html");
-              const note = htmlDoc.getElementById(id);
-              if (note !== null) {
-                const html = processXRef(id, note);
-                instance.setContent(html);
-              } 
-            }).finally(() => {
-              instance.enable();
-              instance.show();
-            });
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
           }
         } else {
-          // See if we can fetch a full url (with no hash to target)
-          // This is a special case and we should probably do some content thinning / targeting
-          fetch(url)
+          // See if we can fetch this
+          fetch(url.split('#')[0])
           .then(res => res.text())
           .then(html => {
             const parser = new DOMParser();
             const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.querySelector('main.content');
+            const note = htmlDoc.getElementById(id);
             if (note !== null) {
-              // This should only happen for chapter cross references
-              // (since there is no id in the URL)
-              // remove the first header
-              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-                note.children[0].remove();
-              }
-              const html = processXRef(null, note);
+              const html = processXRef(id, note);
               instance.setContent(html);
             } 
           }).finally(() => {
@@ -2643,161 +2635,185 @@ AGI.”</span> February 7, 2024. <a href="https://www.patalt.org/blog/posts/spur
             instance.show();
           });
         }
-      }, function(instance) {
-      });
-    }
-        let selectedAnnoteEl;
-        const selectorForAnnotation = ( cell, annotation) => {
-          let cellAttr = 'data-code-cell="' + cell + '"';
-          let lineAttr = 'data-code-annotation="' +  annotation + '"';
-          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-          return selector;
-        }
-        const selectCodeLines = (annoteEl) => {
-          const doc = window.document;
-          const targetCell = annoteEl.getAttribute("data-target-cell");
-          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-          const lineIds = lines.map((line) => {
-            return targetCell + "-" + line;
-          })
-          let top = null;
-          let height = null;
-          let parent = null;
-          if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
-            }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
-            }
-            selectedAnnoteEl = annoteEl;
-          }
-        };
-        const unselectCodeLines = () => {
-          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-          elementsIds.forEach((elId) => {
-            const div = window.document.getElementById(elId);
-            if (div) {
-              div.remove();
-            }
-          });
-          selectedAnnoteEl = undefined;
-        };
-          // Handle positioning of the toggle
-      window.addEventListener(
-        "resize",
-        throttle(() => {
-          elRect = undefined;
-          if (selectedAnnoteEl) {
-            selectCodeLines(selectedAnnoteEl);
-          }
-        }, 10)
-      );
-      function throttle(fn, ms) {
-      let throttle = false;
-      let timer;
-        return (...args) => {
-          if(!throttle) { // first call gets through
-              fn.apply(this, args);
-              throttle = true;
-          } else { // all the others get throttled
-              if(timer) clearTimeout(timer); // cancel #2
-              timer = setTimeout(() => {
-                fn.apply(this, args);
-                timer = throttle = false;
-              }, ms);
-          }
-        };
-      }
-        // Attach click handler to the DT
-        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-        for (const annoteDlNode of annoteDls) {
-          annoteDlNode.addEventListener('click', (event) => {
-            const clickedEl = event.target;
-            if (clickedEl !== selectedAnnoteEl) {
-              unselectCodeLines();
-              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-              if (activeEl) {
-                activeEl.classList.remove('code-annotation-active');
-              }
-              selectCodeLines(clickedEl);
-              clickedEl.classList.add('code-annotation-active');
-            } else {
-              // Unselect the line
-              unselectCodeLines();
-              clickedEl.classList.remove('code-annotation-active');
-            }
-          });
-        }
-    const findCites = (el) => {
-      const parentEl = el.parentElement;
-      if (parentEl) {
-        const cites = parentEl.dataset.cites;
-        if (cites) {
-          return {
-            el,
-            cites: cites.split(' ')
-          };
-        } else {
-          return findCites(el.parentElement)
-        }
       } else {
-        return undefined;
-      }
-    };
-    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-    for (var i=0; i<bibliorefs.length; i++) {
-      const ref = bibliorefs[i];
-      const citeInfo = findCites(ref);
-      if (citeInfo) {
-        tippyHover(citeInfo.el, function() {
-          var popup = window.document.createElement('div');
-          citeInfo.cites.forEach(function(cite) {
-            var citeDiv = window.document.createElement('div');
-            citeDiv.classList.add('hanging-indent');
-            citeDiv.classList.add('csl-entry');
-            var biblioDiv = window.document.getElementById('ref-' + cite);
-            if (biblioDiv) {
-              citeDiv.innerHTML = biblioDiv.innerHTML;
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
             }
-            popup.appendChild(citeDiv);
-          });
-          return popup.innerHTML;
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
         });
       }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
     }
-  });
-  </script>
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">---</span></span>
@@ -2822,21 +2838,21 @@ AGI.”</span> February 7, 2024. <a href="https://www.patalt.org/blog/posts/spur
 <span id="cb7-20"><a href="#cb7-20"></a><span class="co">---</span></span>
 <span id="cb7-21"><a href="#cb7-21"></a></span>
 <span id="cb7-24"><a href="#cb7-24"></a><span class="in">```{julia}</span></span>
-<span id="cb7-25"><a href="#cb7-25"></a><span class="co">#| echo: false</span></span>
-<span id="cb7-26"><a href="#cb7-26"></a>    </span>
-<span id="cb7-27"><a href="#cb7-27"></a>projectdir <span class="op">=</span> <span class="fu">splitpath</span>(<span class="fu">pwd</span>()) <span class="op">|&gt;</span></span>
-<span id="cb7-28"><a href="#cb7-28"></a>    ss <span class="op">-&gt;</span> <span class="fu">joinpath</span>(ss[<span class="fl">1</span><span class="op">:</span><span class="fu">findall</span>([s <span class="op">==</span> <span class="st">"pat-alt.github.io"</span> for s <span class="kw">in</span> ss])[<span class="fl">1</span>]]<span class="op">...</span>) </span>
-<span id="cb7-29"><a href="#cb7-29"></a><span class="fu">cd</span>(projectdir)</span>
+<span id="cb7-25"><a href="#cb7-25"></a><span class="in">#| echo: false</span></span>
+<span id="cb7-26"><a href="#cb7-26"></a><span class="in">    </span></span>
+<span id="cb7-27"><a href="#cb7-27"></a><span class="in">projectdir = splitpath(pwd()) |&gt;</span></span>
+<span id="cb7-28"><a href="#cb7-28"></a><span class="in">    ss -&gt; joinpath(ss[1:findall([s == "pat-alt.github.io" for s in ss])[1]]...) </span></span>
+<span id="cb7-29"><a href="#cb7-29"></a><span class="in">cd(projectdir)</span></span>
 <span id="cb7-30"><a href="#cb7-30"></a></span>
-<span id="cb7-31"><a href="#cb7-31"></a><span class="fu">include</span>(<span class="st">"</span><span class="sc">$</span>projectdir<span class="st">/blog/posts/spurious-sparks/src/setup.jl"</span>)</span>
+<span id="cb7-31"><a href="#cb7-31"></a><span class="in">include("$projectdir/blog/posts/spurious-sparks/src/setup.jl")</span></span>
 <span id="cb7-32"><a href="#cb7-32"></a><span class="in">```</span></span>
 <span id="cb7-33"><a href="#cb7-33"></a></span>
-<span id="cb7-34"><a href="#cb7-34"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"intro-gif"</span><span class="dt">&gt;</span></span>
-<span id="cb7-35"><a href="#cb7-35"></a>  <span class="dt">&lt;</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
-<span id="cb7-36"><a href="#cb7-36"></a>    <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"results/figures/intro.jpeg"</span><span class="dt">&gt;</span></span>
-<span id="cb7-37"><a href="#cb7-37"></a>    <span class="dt">&lt;</span><span class="kw">figcaption</span><span class="dt">&gt;</span>Photo by <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://unsplash.com/@jake_oates2000?utm_content=creditCopyText</span><span class="er">&amp;</span><span class="st">utm_medium=referral</span><span class="er">&amp;</span><span class="st">utm_source=unsplash"</span><span class="dt">&gt;</span>Jake Oates<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span> on <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://unsplash.com/photos/steel-wool-photography-MovsEr-Bgts?utm_content=creditCopyText</span><span class="er">&amp;</span><span class="st">utm_medium=referral</span><span class="er">&amp;</span><span class="st">utm_source=unsplash"</span><span class="dt">&gt;</span>Unsplash<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">figcaption</span><span class="dt">&gt;</span></span>
-<span id="cb7-38"><a href="#cb7-38"></a>  <span class="dt">&lt;/</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
-<span id="cb7-39"><a href="#cb7-39"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span> </span>
+<span id="cb7-34"><a href="#cb7-34"></a>&lt;div class="intro-gif"&gt;</span>
+<span id="cb7-35"><a href="#cb7-35"></a>  &lt;figure&gt;</span>
+<span id="cb7-36"><a href="#cb7-36"></a>    &lt;img src="results/figures/intro.jpeg"&gt;</span>
+<span id="cb7-37"><a href="#cb7-37"></a>    &lt;figcaption&gt;Photo by &lt;a href="https://unsplash.com/@jake_oates2000?utm_content=creditCopyText&amp;utm_medium=referral&amp;utm_source=unsplash"&gt;Jake Oates&lt;/a&gt; on &lt;a href="https://unsplash.com/photos/steel-wool-photography-MovsEr-Bgts?utm_content=creditCopyText&amp;utm_medium=referral&amp;utm_source=unsplash"&gt;Unsplash&lt;/a&gt;&lt;/figcaption&gt;</span>
+<span id="cb7-38"><a href="#cb7-38"></a>  &lt;/figure&gt;</span>
+<span id="cb7-39"><a href="#cb7-39"></a>&lt;/div&gt; </span>
 <span id="cb7-40"><a href="#cb7-40"></a></span>
 <span id="cb7-41"><a href="#cb7-41"></a>We humans are prone to seek patterns everywhere. Meaningful patterns have often proven to help us make sense of our past, navigate our presence and predict the future. Our society is so invested in finding patterns that today it seems we are more willing than ever to outsource this task to an Artificial Intelligence (AI): an omniscient oracle that leads us down the right path. </span>
 <span id="cb7-42"><a href="#cb7-42"></a></span>
@@ -2909,55 +2925,55 @@ AGI.”</span> February 7, 2024. <a href="https://www.patalt.org/blog/posts/spur
 <span id="cb7-109"><a href="#cb7-109"></a>@fig-gfc-2 shows the corresponding yield curve during the aftermath of the GFC on 20 April 2009. On that day the influential Time Magazine <span class="co">[</span><span class="ot">reported</span><span class="co">](https://content.time.com/time/business/article/0,8599,1890560,00.html)</span> that the "Banking Crisis is Over". The yield curve was steeply sloped with a positive spread between the 10-year and 3-month yields, indicative of the market's expectation of a recovery. The overall level of the yield curve was still very low though, indicative of the fact that US economy had not fully recovered at that point.</span>
 <span id="cb7-110"><a href="#cb7-110"></a></span>
 <span id="cb7-113"><a href="#cb7-113"></a><span class="in">```{julia}</span></span>
-<span id="cb7-114"><a href="#cb7-114"></a><span class="co">#| fig-cap: Yield curve of US Treasury bonds.</span></span>
-<span id="cb7-115"><a href="#cb7-115"></a><span class="co">#| fig-subcap: </span></span>
-<span id="cb7-116"><a href="#cb7-116"></a><span class="co">#|    - "Onset of GFC: 27 February 2007."</span></span>
-<span id="cb7-117"><a href="#cb7-117"></a><span class="co">#|    - "Aftermath of GFC: 20 April 2009."</span></span>
-<span id="cb7-118"><a href="#cb7-118"></a><span class="co">#| label: fig-gfc</span></span>
-<span id="cb7-119"><a href="#cb7-119"></a><span class="co">#| output: true</span></span>
-<span id="cb7-120"><a href="#cb7-120"></a><span class="co">#| layout-ncol: 2</span></span>
+<span id="cb7-114"><a href="#cb7-114"></a><span class="in">#| fig-cap: Yield curve of US Treasury bonds.</span></span>
+<span id="cb7-115"><a href="#cb7-115"></a><span class="in">#| fig-subcap: </span></span>
+<span id="cb7-116"><a href="#cb7-116"></a><span class="in">#|    - "Onset of GFC: 27 February 2007."</span></span>
+<span id="cb7-117"><a href="#cb7-117"></a><span class="in">#|    - "Aftermath of GFC: 20 April 2009."</span></span>
+<span id="cb7-118"><a href="#cb7-118"></a><span class="in">#| label: fig-gfc</span></span>
+<span id="cb7-119"><a href="#cb7-119"></a><span class="in">#| output: true</span></span>
+<span id="cb7-120"><a href="#cb7-120"></a><span class="in">#| layout-ncol: 2</span></span>
 <span id="cb7-121"><a href="#cb7-121"></a></span>
-<span id="cb7-122"><a href="#cb7-122"></a>df <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"data/ust_yields.csv"</span>), DataFrame) <span class="op">|&gt;</span></span>
-<span id="cb7-123"><a href="#cb7-123"></a>    x <span class="op">-&gt;</span> <span class="pp">@pivot_longer</span>(x, <span class="op">-</span><span class="dt">Date</span>) <span class="op">|&gt;</span></span>
-<span id="cb7-124"><a href="#cb7-124"></a>    x <span class="op">-&gt;</span> <span class="pp">@mutate</span>(x, variable<span class="op">=</span><span class="fu">to_year</span>(variable)) <span class="op">|&gt;</span></span>
-<span id="cb7-125"><a href="#cb7-125"></a>    x <span class="op">-&gt;</span> <span class="pp">@mutate</span>(x, year<span class="op">=</span><span class="bu">Dates</span>.<span class="fu">year</span>(<span class="dt">Date</span>)) <span class="op">|&gt;</span></span>
-<span id="cb7-126"><a href="#cb7-126"></a>    x <span class="op">-&gt;</span> <span class="pp">@mutate</span>(x, quarter<span class="op">=</span><span class="bu">Dates</span>.<span class="fu">quarter</span>(<span class="dt">Date</span>)) <span class="op">|&gt;</span></span>
-<span id="cb7-127"><a href="#cb7-127"></a>    x <span class="op">-&gt;</span> <span class="pp">@mutate</span>(x, <span class="dt">Date</span><span class="op">=</span><span class="bu">Dates</span>.<span class="fu">format</span>(<span class="dt">Date</span>, <span class="st">"yyyy-mm-dd"</span>)) <span class="op">|&gt;</span></span>
-<span id="cb7-128"><a href="#cb7-128"></a>    x <span class="op">-&gt;</span> <span class="pp">@arrange</span>(x, <span class="dt">Date</span>) <span class="op">|&gt;</span></span>
-<span id="cb7-129"><a href="#cb7-129"></a>    x <span class="op">-&gt;</span> <span class="pp">@fill_missing</span>(x, <span class="st">"down"</span>)</span>
-<span id="cb7-130"><a href="#cb7-130"></a>ylims <span class="op">=</span> <span class="fu">extrema</span>(<span class="fu">skipmissing</span>(df.value))</span>
+<span id="cb7-122"><a href="#cb7-122"></a><span class="in">df = CSV.read(joinpath(BLOG_DIR, "data/ust_yields.csv"), DataFrame) |&gt;</span></span>
+<span id="cb7-123"><a href="#cb7-123"></a><span class="in">    x -&gt; @pivot_longer(x, -Date) |&gt;</span></span>
+<span id="cb7-124"><a href="#cb7-124"></a><span class="in">    x -&gt; @mutate(x, variable=to_year(variable)) |&gt;</span></span>
+<span id="cb7-125"><a href="#cb7-125"></a><span class="in">    x -&gt; @mutate(x, year=Dates.year(Date)) |&gt;</span></span>
+<span id="cb7-126"><a href="#cb7-126"></a><span class="in">    x -&gt; @mutate(x, quarter=Dates.quarter(Date)) |&gt;</span></span>
+<span id="cb7-127"><a href="#cb7-127"></a><span class="in">    x -&gt; @mutate(x, Date=Dates.format(Date, "yyyy-mm-dd")) |&gt;</span></span>
+<span id="cb7-128"><a href="#cb7-128"></a><span class="in">    x -&gt; @arrange(x, Date) |&gt;</span></span>
+<span id="cb7-129"><a href="#cb7-129"></a><span class="in">    x -&gt; @fill_missing(x, "down")</span></span>
+<span id="cb7-130"><a href="#cb7-130"></a><span class="in">ylims = extrema(skipmissing(df.value))</span></span>
 <span id="cb7-131"><a href="#cb7-131"></a></span>
-<span id="cb7-132"><a href="#cb7-132"></a><span class="co"># Peak-crisis:</span></span>
-<span id="cb7-133"><a href="#cb7-133"></a>onset_date <span class="op">=</span> <span class="st">"2007-02-27"</span></span>
-<span id="cb7-134"><a href="#cb7-134"></a>plt_df <span class="op">=</span> df[df.<span class="dt">Date</span> <span class="op">.==</span> onset_date, <span class="op">:</span>]</span>
-<span id="cb7-135"><a href="#cb7-135"></a>plt <span class="op">=</span> <span class="fu">plot</span>(</span>
-<span id="cb7-136"><a href="#cb7-136"></a>    plt_df.variable, plt_df.value;</span>
-<span id="cb7-137"><a href="#cb7-137"></a>    label<span class="op">=</span><span class="st">""</span>, color<span class="op">=:</span>blue,</span>
-<span id="cb7-138"><a href="#cb7-138"></a>    xlabel<span class="op">=</span><span class="st">"Maturity (years)"</span>, ylabel<span class="op">=</span><span class="st">"Yield (%)"</span>,</span>
-<span id="cb7-139"><a href="#cb7-139"></a>    size<span class="op">=</span>(<span class="fl">380</span>, <span class="fl">350</span>)</span>
-<span id="cb7-140"><a href="#cb7-140"></a>)</span>
-<span id="cb7-141"><a href="#cb7-141"></a><span class="fu">scatter!</span>(</span>
-<span id="cb7-142"><a href="#cb7-142"></a>    plt_df.variable, plt_df.value;</span>
-<span id="cb7-143"><a href="#cb7-143"></a>    label<span class="op">=</span><span class="st">""</span>, color<span class="op">=:</span>blue, alpha<span class="op">=</span><span class="fl">0.5</span>,</span>
-<span id="cb7-144"><a href="#cb7-144"></a>    ylims<span class="op">=</span>(<span class="fl">0</span>,<span class="fl">6</span>)</span>
-<span id="cb7-145"><a href="#cb7-145"></a>)</span>
-<span id="cb7-146"><a href="#cb7-146"></a><span class="fu">display</span>(plt)</span>
+<span id="cb7-132"><a href="#cb7-132"></a><span class="in"># Peak-crisis:</span></span>
+<span id="cb7-133"><a href="#cb7-133"></a><span class="in">onset_date = "2007-02-27"</span></span>
+<span id="cb7-134"><a href="#cb7-134"></a><span class="in">plt_df = df[df.Date .== onset_date, :]</span></span>
+<span id="cb7-135"><a href="#cb7-135"></a><span class="in">plt = plot(</span></span>
+<span id="cb7-136"><a href="#cb7-136"></a><span class="in">    plt_df.variable, plt_df.value;</span></span>
+<span id="cb7-137"><a href="#cb7-137"></a><span class="in">    label="", color=:blue,</span></span>
+<span id="cb7-138"><a href="#cb7-138"></a><span class="in">    xlabel="Maturity (years)", ylabel="Yield (%)",</span></span>
+<span id="cb7-139"><a href="#cb7-139"></a><span class="in">    size=(380, 350)</span></span>
+<span id="cb7-140"><a href="#cb7-140"></a><span class="in">)</span></span>
+<span id="cb7-141"><a href="#cb7-141"></a><span class="in">scatter!(</span></span>
+<span id="cb7-142"><a href="#cb7-142"></a><span class="in">    plt_df.variable, plt_df.value;</span></span>
+<span id="cb7-143"><a href="#cb7-143"></a><span class="in">    label="", color=:blue, alpha=0.5,</span></span>
+<span id="cb7-144"><a href="#cb7-144"></a><span class="in">    ylims=(0,6)</span></span>
+<span id="cb7-145"><a href="#cb7-145"></a><span class="in">)</span></span>
+<span id="cb7-146"><a href="#cb7-146"></a><span class="in">display(plt)</span></span>
 <span id="cb7-147"><a href="#cb7-147"></a></span>
-<span id="cb7-148"><a href="#cb7-148"></a><span class="co"># Post-crisis:</span></span>
-<span id="cb7-149"><a href="#cb7-149"></a>aftermath_date <span class="op">=</span> <span class="st">"2009-04-20"</span></span>
-<span id="cb7-150"><a href="#cb7-150"></a>plt_df <span class="op">=</span> df[df.<span class="dt">Date</span> <span class="op">.==</span> aftermath_date, <span class="op">:</span>]</span>
-<span id="cb7-151"><a href="#cb7-151"></a>plt <span class="op">=</span> <span class="fu">plot</span>(</span>
-<span id="cb7-152"><a href="#cb7-152"></a>    plt_df.variable, plt_df.value;</span>
-<span id="cb7-153"><a href="#cb7-153"></a>    label<span class="op">=</span><span class="st">""</span>, color<span class="op">=:</span>blue,</span>
-<span id="cb7-154"><a href="#cb7-154"></a>    xlabel<span class="op">=</span><span class="st">"Maturity (years)"</span>, ylabel<span class="op">=</span><span class="st">"Yield (%)"</span>,</span>
-<span id="cb7-155"><a href="#cb7-155"></a>    size<span class="op">=</span>(<span class="fl">380</span>, <span class="fl">350</span>)</span>
-<span id="cb7-156"><a href="#cb7-156"></a>)</span>
-<span id="cb7-157"><a href="#cb7-157"></a><span class="fu">scatter!</span>(</span>
-<span id="cb7-158"><a href="#cb7-158"></a>    plt_df.variable, plt_df.value;</span>
-<span id="cb7-159"><a href="#cb7-159"></a>    label<span class="op">=</span><span class="st">""</span>, color<span class="op">=:</span>blue, alpha<span class="op">=</span><span class="fl">0.5</span>,</span>
-<span id="cb7-160"><a href="#cb7-160"></a>    ylims<span class="op">=</span>(<span class="fl">0</span>,<span class="fl">6</span>)</span>
-<span id="cb7-161"><a href="#cb7-161"></a>)</span>
-<span id="cb7-162"><a href="#cb7-162"></a><span class="fu">display</span>(plt)</span>
+<span id="cb7-148"><a href="#cb7-148"></a><span class="in"># Post-crisis:</span></span>
+<span id="cb7-149"><a href="#cb7-149"></a><span class="in">aftermath_date = "2009-04-20"</span></span>
+<span id="cb7-150"><a href="#cb7-150"></a><span class="in">plt_df = df[df.Date .== aftermath_date, :]</span></span>
+<span id="cb7-151"><a href="#cb7-151"></a><span class="in">plt = plot(</span></span>
+<span id="cb7-152"><a href="#cb7-152"></a><span class="in">    plt_df.variable, plt_df.value;</span></span>
+<span id="cb7-153"><a href="#cb7-153"></a><span class="in">    label="", color=:blue,</span></span>
+<span id="cb7-154"><a href="#cb7-154"></a><span class="in">    xlabel="Maturity (years)", ylabel="Yield (%)",</span></span>
+<span id="cb7-155"><a href="#cb7-155"></a><span class="in">    size=(380, 350)</span></span>
+<span id="cb7-156"><a href="#cb7-156"></a><span class="in">)</span></span>
+<span id="cb7-157"><a href="#cb7-157"></a><span class="in">scatter!(</span></span>
+<span id="cb7-158"><a href="#cb7-158"></a><span class="in">    plt_df.variable, plt_df.value;</span></span>
+<span id="cb7-159"><a href="#cb7-159"></a><span class="in">    label="", color=:blue, alpha=0.5,</span></span>
+<span id="cb7-160"><a href="#cb7-160"></a><span class="in">    ylims=(0,6)</span></span>
+<span id="cb7-161"><a href="#cb7-161"></a><span class="in">)</span></span>
+<span id="cb7-162"><a href="#cb7-162"></a><span class="in">display(plt)</span></span>
 <span id="cb7-163"><a href="#cb7-163"></a><span class="in">```</span></span>
 <span id="cb7-164"><a href="#cb7-164"></a></span>
 <span id="cb7-165"><a href="#cb7-165"></a>Of course, US Treasuries are not the only bonds that are traded in the market. To get a more complete picture of the economy, analysts might therefore be interested in looking at the yield curves of other bonds as well. In particular, we might be interested in predicting economic growth based on the yield curves of many different bonds. The problem with that idea is that it is cursed by high dimensionality: we would end up modelling a single variable of interest (economic growth) with a large number of predictors (the yields of many different bonds). To deal with the curse of high dimensionality it can be useful to decompose the yield curves into sets of principal components. </span>
@@ -2967,14 +2983,14 @@ AGI.”</span> February 7, 2024. <a href="https://www.patalt.org/blog/posts/spur
 <span id="cb7-169"><a href="#cb7-169"></a>The top panel in @fig-pca shows the first two principal components of the yield curves of US Treasury bonds over time. Vertical stalks indicate the key dates during the onset and aftermath of the crisis, which we discussed above. For both components, we can observe some marked shifts between the two dates - but can we attribute any meaning to these shifts? It turns out we can: for comparison, the bottom panel in @fig-pca shows the average level and spread of the yield curves over time. The first principal component is strongly correlated with the level of the yield curve, while the second principal component is strongly correlated with the spread of the yield curve.</span>
 <span id="cb7-170"><a href="#cb7-170"></a></span>
 <span id="cb7-173"><a href="#cb7-173"></a><span class="in">```{julia}</span></span>
-<span id="cb7-174"><a href="#cb7-174"></a><span class="co">#| output: false</span></span>
+<span id="cb7-174"><a href="#cb7-174"></a><span class="in">#| output: false</span></span>
 <span id="cb7-175"><a href="#cb7-175"></a></span>
-<span id="cb7-176"><a href="#cb7-176"></a><span class="co"># PCA:</span></span>
-<span id="cb7-177"><a href="#cb7-177"></a>df_wide <span class="op">=</span> <span class="pp">@select</span>(df, <span class="dt">Date</span>, variable, value) <span class="op">|&gt;</span></span>
-<span id="cb7-178"><a href="#cb7-178"></a>    x <span class="op">-&gt;</span> <span class="pp">@pivot_wider</span>(x, names_from <span class="op">=</span> variable, values_from <span class="op">=</span> value) <span class="op">|&gt;</span></span>
-<span id="cb7-179"><a href="#cb7-179"></a>    x <span class="op">-&gt;</span> <span class="fu">dropmissing</span>(x)</span>
-<span id="cb7-180"><a href="#cb7-180"></a>X <span class="op">=</span> <span class="pp">@select</span>(df_wide, <span class="op">-</span><span class="dt">Date</span>) <span class="op">|&gt;</span> <span class="dt">Matrix</span></span>
-<span id="cb7-181"><a href="#cb7-181"></a>U, Σ, V <span class="op">=</span> <span class="fu">svd</span>(X)</span>
+<span id="cb7-176"><a href="#cb7-176"></a><span class="in"># PCA:</span></span>
+<span id="cb7-177"><a href="#cb7-177"></a><span class="in">df_wide = @select(df, Date, variable, value) |&gt;</span></span>
+<span id="cb7-178"><a href="#cb7-178"></a><span class="in">    x -&gt; @pivot_wider(x, names_from = variable, values_from = value) |&gt;</span></span>
+<span id="cb7-179"><a href="#cb7-179"></a><span class="in">    x -&gt; dropmissing(x)</span></span>
+<span id="cb7-180"><a href="#cb7-180"></a><span class="in">X = @select(df_wide, -Date) |&gt; Matrix</span></span>
+<span id="cb7-181"><a href="#cb7-181"></a><span class="in">U, Σ, V = svd(X)</span></span>
 <span id="cb7-182"><a href="#cb7-182"></a><span class="in">```</span></span>
 <span id="cb7-183"><a href="#cb7-183"></a></span>
 <span id="cb7-184"><a href="#cb7-184"></a><span class="al">![Comparison of latent embeddings and observed data of the US Treasury yield curve.](results/figures/pca.png)</span>{#fig-pca}</span>
@@ -2984,43 +3000,43 @@ AGI.”</span> February 7, 2024. <a href="https://www.patalt.org/blog/posts/spur
 <span id="cb7-188"><a href="#cb7-188"></a>@fig-pca-anim shows the result of this exercise in the left panel. As we can see, our generated yield curves shift vertically as we traverse the latent space. The right panel of @fig-pca-anim shows the result of a similar exercise, but this time we keep the first principal component fixed at zero and vary the second principal component. This time the slope of our generated yield curves shifts as we traverse the latent space. </span>
 <span id="cb7-189"><a href="#cb7-189"></a></span>
 <span id="cb7-192"><a href="#cb7-192"></a><span class="in">```{julia}</span></span>
-<span id="cb7-193"><a href="#cb7-193"></a>n_vals <span class="op">=</span> <span class="fl">50</span></span>
-<span id="cb7-194"><a href="#cb7-194"></a>pc1_range <span class="op">=</span> <span class="fu">range</span>(<span class="fu">extrema</span>(U[<span class="op">:</span>,<span class="fl">1</span>])<span class="op">...</span>, length<span class="op">=</span>n_vals)</span>
-<span id="cb7-195"><a href="#cb7-195"></a>pc2_range <span class="op">=</span> <span class="fu">range</span>(<span class="fu">extrema</span>(U[<span class="op">:</span>,<span class="fl">2</span>])<span class="op">...</span>, length<span class="op">=</span>n_vals)</span>
-<span id="cb7-196"><a href="#cb7-196"></a>Z_1 <span class="op">=</span> [[pc1, <span class="fl">0</span>, <span class="fu">zeros</span>(<span class="fu">size</span>(U, <span class="fl">2</span>)<span class="op">-</span><span class="fl">2</span>)<span class="op">...</span>] for pc1 <span class="kw">in</span> pc1_range] <span class="op">|&gt;</span> x <span class="op">-&gt;</span> <span class="fu">reduce</span>(vcat, x<span class="op">'</span>)</span>
-<span id="cb7-197"><a href="#cb7-197"></a>Y_1 <span class="op">=</span> Z_1 <span class="op">*</span> <span class="fu">diagm</span>(Σ) <span class="op">*</span> V<span class="op">'</span></span>
-<span id="cb7-198"><a href="#cb7-198"></a>Z_2 <span class="op">=</span> [[<span class="fl">0</span>, pc2, <span class="fu">zeros</span>(<span class="fu">size</span>(U, <span class="fl">2</span>)<span class="op">-</span><span class="fl">2</span>)<span class="op">...</span>] for pc2 <span class="kw">in</span> pc2_range] <span class="op">|&gt;</span> x <span class="op">-&gt;</span> <span class="fu">reduce</span>(vcat, x<span class="op">'</span>)</span>
-<span id="cb7-199"><a href="#cb7-199"></a>Y_2 <span class="op">=</span> Z_2 <span class="op">*</span> <span class="fu">diagm</span>(Σ) <span class="op">*</span> V<span class="op">'</span></span>
-<span id="cb7-200"><a href="#cb7-200"></a>anim <span class="op">=</span> <span class="pp">@animate</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n_vals</span>
-<span id="cb7-201"><a href="#cb7-201"></a>    <span class="co"># Level shifts:</span></span>
-<span id="cb7-202"><a href="#cb7-202"></a>    y <span class="op">=</span> Y_1[i,<span class="op">:</span>]</span>
-<span id="cb7-203"><a href="#cb7-203"></a>    p1 <span class="op">=</span> <span class="fu">plot</span>(</span>
-<span id="cb7-204"><a href="#cb7-204"></a>        <span class="fu">unique</span>(df.variable), y;</span>
-<span id="cb7-205"><a href="#cb7-205"></a>        label<span class="op">=</span><span class="st">""</span>, color<span class="op">=:</span>blue,</span>
-<span id="cb7-206"><a href="#cb7-206"></a>        xlabel<span class="op">=</span><span class="st">"Maturity (years)"</span>, ylabel<span class="op">=</span><span class="st">"Yield (%)"</span>,</span>
-<span id="cb7-207"><a href="#cb7-207"></a>        title<span class="op">=</span><span class="st">"PC1: </span><span class="sc">$</span>(<span class="fu">round</span>(<span class="fu">collect</span>(pc1_range)[i], digits<span class="op">=</span><span class="fl">5</span>))<span class="st">"</span>,</span>
-<span id="cb7-208"><a href="#cb7-208"></a>        ylims<span class="op">=</span><span class="fu">extrema</span>(Y_1)</span>
-<span id="cb7-209"><a href="#cb7-209"></a>    )</span>
-<span id="cb7-210"><a href="#cb7-210"></a>    <span class="fu">scatter!</span>(</span>
-<span id="cb7-211"><a href="#cb7-211"></a>        <span class="fu">unique</span>(df.variable), y;</span>
-<span id="cb7-212"><a href="#cb7-212"></a>        label<span class="op">=</span><span class="st">""</span>, color<span class="op">=:</span>blue, alpha<span class="op">=</span><span class="fl">0.5</span>,</span>
-<span id="cb7-213"><a href="#cb7-213"></a>    )</span>
-<span id="cb7-214"><a href="#cb7-214"></a>    <span class="co"># Spread shifts:</span></span>
-<span id="cb7-215"><a href="#cb7-215"></a>    y <span class="op">=</span> Y_2[i,<span class="op">:</span>]</span>
-<span id="cb7-216"><a href="#cb7-216"></a>    p2 <span class="op">=</span> <span class="fu">plot</span>(</span>
-<span id="cb7-217"><a href="#cb7-217"></a>        <span class="fu">unique</span>(df.variable), y;</span>
-<span id="cb7-218"><a href="#cb7-218"></a>        label<span class="op">=</span><span class="st">""</span>, color<span class="op">=:</span>blue,</span>
-<span id="cb7-219"><a href="#cb7-219"></a>        xlabel<span class="op">=</span><span class="st">"Maturity (years)"</span>, ylabel<span class="op">=</span><span class="st">"Yield (%)"</span>,</span>
-<span id="cb7-220"><a href="#cb7-220"></a>        title<span class="op">=</span><span class="st">"PC2: </span><span class="sc">$</span>(<span class="fu">round</span>(<span class="fu">collect</span>(pc2_range)[i], digits<span class="op">=</span><span class="fl">5</span>))<span class="st">"</span>,</span>
-<span id="cb7-221"><a href="#cb7-221"></a>        ylims<span class="op">=</span><span class="fu">extrema</span>(Y_2)</span>
-<span id="cb7-222"><a href="#cb7-222"></a>    )</span>
-<span id="cb7-223"><a href="#cb7-223"></a>    <span class="fu">scatter!</span>(</span>
-<span id="cb7-224"><a href="#cb7-224"></a>        <span class="fu">unique</span>(df.variable), y;</span>
-<span id="cb7-225"><a href="#cb7-225"></a>        label<span class="op">=</span><span class="st">""</span>, color<span class="op">=:</span>blue, alpha<span class="op">=</span><span class="fl">0.5</span>,</span>
-<span id="cb7-226"><a href="#cb7-226"></a>    )</span>
-<span id="cb7-227"><a href="#cb7-227"></a>    <span class="fu">plot</span>(p1, p2, layout<span class="op">=</span>(<span class="fl">1</span>,<span class="fl">2</span>), size<span class="op">=</span>(<span class="fl">1000</span>, <span class="fl">400</span>), left_margin<span class="op">=</span><span class="fl">5</span>mm, bottom_margin<span class="op">=</span><span class="fl">5</span>mm)</span>
-<span id="cb7-228"><a href="#cb7-228"></a><span class="cf">end</span></span>
-<span id="cb7-229"><a href="#cb7-229"></a><span class="fu">gif</span>(anim, <span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"results/figures/pc_anim.gif"</span>), fps<span class="op">=</span><span class="fl">5</span>)</span>
+<span id="cb7-193"><a href="#cb7-193"></a><span class="in">n_vals = 50</span></span>
+<span id="cb7-194"><a href="#cb7-194"></a><span class="in">pc1_range = range(extrema(U[:,1])..., length=n_vals)</span></span>
+<span id="cb7-195"><a href="#cb7-195"></a><span class="in">pc2_range = range(extrema(U[:,2])..., length=n_vals)</span></span>
+<span id="cb7-196"><a href="#cb7-196"></a><span class="in">Z_1 = [[pc1, 0, zeros(size(U, 2)-2)...] for pc1 in pc1_range] |&gt; x -&gt; reduce(vcat, x')</span></span>
+<span id="cb7-197"><a href="#cb7-197"></a><span class="in">Y_1 = Z_1 * diagm(Σ) * V'</span></span>
+<span id="cb7-198"><a href="#cb7-198"></a><span class="in">Z_2 = [[0, pc2, zeros(size(U, 2)-2)...] for pc2 in pc2_range] |&gt; x -&gt; reduce(vcat, x')</span></span>
+<span id="cb7-199"><a href="#cb7-199"></a><span class="in">Y_2 = Z_2 * diagm(Σ) * V'</span></span>
+<span id="cb7-200"><a href="#cb7-200"></a><span class="in">anim = @animate for i in 1:n_vals</span></span>
+<span id="cb7-201"><a href="#cb7-201"></a><span class="in">    # Level shifts:</span></span>
+<span id="cb7-202"><a href="#cb7-202"></a><span class="in">    y = Y_1[i,:]</span></span>
+<span id="cb7-203"><a href="#cb7-203"></a><span class="in">    p1 = plot(</span></span>
+<span id="cb7-204"><a href="#cb7-204"></a><span class="in">        unique(df.variable), y;</span></span>
+<span id="cb7-205"><a href="#cb7-205"></a><span class="in">        label="", color=:blue,</span></span>
+<span id="cb7-206"><a href="#cb7-206"></a><span class="in">        xlabel="Maturity (years)", ylabel="Yield (%)",</span></span>
+<span id="cb7-207"><a href="#cb7-207"></a><span class="in">        title="PC1: $(round(collect(pc1_range)[i], digits=5))",</span></span>
+<span id="cb7-208"><a href="#cb7-208"></a><span class="in">        ylims=extrema(Y_1)</span></span>
+<span id="cb7-209"><a href="#cb7-209"></a><span class="in">    )</span></span>
+<span id="cb7-210"><a href="#cb7-210"></a><span class="in">    scatter!(</span></span>
+<span id="cb7-211"><a href="#cb7-211"></a><span class="in">        unique(df.variable), y;</span></span>
+<span id="cb7-212"><a href="#cb7-212"></a><span class="in">        label="", color=:blue, alpha=0.5,</span></span>
+<span id="cb7-213"><a href="#cb7-213"></a><span class="in">    )</span></span>
+<span id="cb7-214"><a href="#cb7-214"></a><span class="in">    # Spread shifts:</span></span>
+<span id="cb7-215"><a href="#cb7-215"></a><span class="in">    y = Y_2[i,:]</span></span>
+<span id="cb7-216"><a href="#cb7-216"></a><span class="in">    p2 = plot(</span></span>
+<span id="cb7-217"><a href="#cb7-217"></a><span class="in">        unique(df.variable), y;</span></span>
+<span id="cb7-218"><a href="#cb7-218"></a><span class="in">        label="", color=:blue,</span></span>
+<span id="cb7-219"><a href="#cb7-219"></a><span class="in">        xlabel="Maturity (years)", ylabel="Yield (%)",</span></span>
+<span id="cb7-220"><a href="#cb7-220"></a><span class="in">        title="PC2: $(round(collect(pc2_range)[i], digits=5))",</span></span>
+<span id="cb7-221"><a href="#cb7-221"></a><span class="in">        ylims=extrema(Y_2)</span></span>
+<span id="cb7-222"><a href="#cb7-222"></a><span class="in">    )</span></span>
+<span id="cb7-223"><a href="#cb7-223"></a><span class="in">    scatter!(</span></span>
+<span id="cb7-224"><a href="#cb7-224"></a><span class="in">        unique(df.variable), y;</span></span>
+<span id="cb7-225"><a href="#cb7-225"></a><span class="in">        label="", color=:blue, alpha=0.5,</span></span>
+<span id="cb7-226"><a href="#cb7-226"></a><span class="in">    )</span></span>
+<span id="cb7-227"><a href="#cb7-227"></a><span class="in">    plot(p1, p2, layout=(1,2), size=(1000, 400), left_margin=5mm, bottom_margin=5mm)</span></span>
+<span id="cb7-228"><a href="#cb7-228"></a><span class="in">end</span></span>
+<span id="cb7-229"><a href="#cb7-229"></a><span class="in">gif(anim, joinpath(BLOG_DIR, "results/figures/pc_anim.gif"), fps=5)</span></span>
 <span id="cb7-230"><a href="#cb7-230"></a><span class="in">```</span></span>
 <span id="cb7-231"><a href="#cb7-231"></a></span>
 <span id="cb7-232"><a href="#cb7-232"></a>::: {.content-visible when-format="html"}</span>
@@ -3038,53 +3054,53 @@ AGI.”</span> February 7, 2024. <a href="https://www.patalt.org/blog/posts/spur
 <span id="cb7-244"><a href="#cb7-244"></a>To estimate economic growth we will rely on a quarterly <span class="co">[</span><span class="ot">series</span><span class="co">](https://fred.stlouisfed.org/series/GDPC1)</span> of the real gross domestic product (GDP) provided by the Federal Reserve Bank of St. Louis. The data arrives in terms of levels of real GDP. In order to estimate growth, we will transform the data into log differences. Since our yield curve data is daily, we will need to aggregate it to the quarterly frequency. To do this, we will simply take the average of the daily yields for each maturity. We will also standardize yields since deep learning models tend to perform better with standardized data. Since COVID-19 was a huge structural break, we will also filter out all observations after 2018. @fig-dl-data shows the pre-processed data.</span>
 <span id="cb7-245"><a href="#cb7-245"></a></span>
 <span id="cb7-248"><a href="#cb7-248"></a><span class="in">```{julia}</span></span>
-<span id="cb7-249"><a href="#cb7-249"></a><span class="co">#| output: true</span></span>
-<span id="cb7-250"><a href="#cb7-250"></a><span class="co">#| fig-cap: GDP growth and yield curve data.</span></span>
-<span id="cb7-251"><a href="#cb7-251"></a><span class="co">#| label: fig-dl-data</span></span>
+<span id="cb7-249"><a href="#cb7-249"></a><span class="in">#| output: true</span></span>
+<span id="cb7-250"><a href="#cb7-250"></a><span class="in">#| fig-cap: GDP growth and yield curve data.</span></span>
+<span id="cb7-251"><a href="#cb7-251"></a><span class="in">#| label: fig-dl-data</span></span>
 <span id="cb7-252"><a href="#cb7-252"></a></span>
-<span id="cb7-253"><a href="#cb7-253"></a>df_gdp_full <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"data/gdp.csv"</span>), DataFrame) <span class="op">|&gt;</span></span>
-<span id="cb7-254"><a href="#cb7-254"></a>    x <span class="op">-&gt;</span> <span class="pp">@rename</span>(x, <span class="dt">Date</span><span class="op">=</span>DATE, gdp<span class="op">=</span>GDPC1) <span class="op">|&gt;</span></span>
-<span id="cb7-255"><a href="#cb7-255"></a>    x <span class="op">-&gt;</span> <span class="pp">@mutate</span>(x, gdp_l1<span class="op">=</span><span class="fu">lag</span>(gdp)) <span class="op">|&gt;</span></span>
-<span id="cb7-256"><a href="#cb7-256"></a>    x <span class="op">-&gt;</span> <span class="pp">@mutate</span>(x, growth<span class="op">=</span>(gdp_l1<span class="op">-</span>gdp)<span class="op">/</span>gdp) <span class="op">|&gt;</span></span>
-<span id="cb7-257"><a href="#cb7-257"></a>    x <span class="op">-&gt;</span> <span class="pp">@select</span>(x, <span class="dt">Date</span>, growth) <span class="op">|&gt;</span></span>
-<span id="cb7-258"><a href="#cb7-258"></a>    x <span class="op">-&gt;</span> <span class="pp">@mutate</span>(x, year<span class="op">=</span><span class="bu">Dates</span>.<span class="fu">year</span>(<span class="dt">Date</span>)) <span class="op">|&gt;</span></span>
-<span id="cb7-259"><a href="#cb7-259"></a>    x <span class="op">-&gt;</span> <span class="pp">@mutate</span>(x, quarter<span class="op">=</span><span class="bu">Dates</span>.<span class="fu">quarter</span>(<span class="dt">Date</span>)) </span>
-<span id="cb7-260"><a href="#cb7-260"></a>df_gdp <span class="op">=</span> df_gdp_full <span class="op">|&gt;</span></span>
-<span id="cb7-261"><a href="#cb7-261"></a>    x <span class="op">-&gt;</span> <span class="pp">@filter</span>(x, year <span class="op">&lt;=</span> <span class="fl">2018</span>)</span>
+<span id="cb7-253"><a href="#cb7-253"></a><span class="in">df_gdp_full = CSV.read(joinpath(BLOG_DIR, "data/gdp.csv"), DataFrame) |&gt;</span></span>
+<span id="cb7-254"><a href="#cb7-254"></a><span class="in">    x -&gt; @rename(x, Date=DATE, gdp=GDPC1) |&gt;</span></span>
+<span id="cb7-255"><a href="#cb7-255"></a><span class="in">    x -&gt; @mutate(x, gdp_l1=lag(gdp)) |&gt;</span></span>
+<span id="cb7-256"><a href="#cb7-256"></a><span class="in">    x -&gt; @mutate(x, growth=(gdp_l1-gdp)/gdp) |&gt;</span></span>
+<span id="cb7-257"><a href="#cb7-257"></a><span class="in">    x -&gt; @select(x, Date, growth) |&gt;</span></span>
+<span id="cb7-258"><a href="#cb7-258"></a><span class="in">    x -&gt; @mutate(x, year=Dates.year(Date)) |&gt;</span></span>
+<span id="cb7-259"><a href="#cb7-259"></a><span class="in">    x -&gt; @mutate(x, quarter=Dates.quarter(Date)) </span></span>
+<span id="cb7-260"><a href="#cb7-260"></a><span class="in">df_gdp = df_gdp_full |&gt;</span></span>
+<span id="cb7-261"><a href="#cb7-261"></a><span class="in">    x -&gt; @filter(x, year &lt;= 2018)</span></span>
 <span id="cb7-262"><a href="#cb7-262"></a></span>
-<span id="cb7-263"><a href="#cb7-263"></a>df_yields_qtr <span class="op">=</span> <span class="pp">@group_by</span>(df, year, quarter, variable) <span class="op">|&gt;</span></span>
-<span id="cb7-264"><a href="#cb7-264"></a>    x <span class="op">-&gt;</span> <span class="pp">@mutate</span>(x, value<span class="op">=</span><span class="fu">mean</span>(value)) <span class="op">|&gt;</span></span>
-<span id="cb7-265"><a href="#cb7-265"></a>    x <span class="op">-&gt;</span> <span class="pp">@ungroup</span>(x) <span class="op">|&gt;</span></span>
-<span id="cb7-266"><a href="#cb7-266"></a>    x <span class="op">-&gt;</span> <span class="pp">@select</span>(x, <span class="op">-</span><span class="dt">Date</span>) <span class="op">|&gt;</span></span>
-<span id="cb7-267"><a href="#cb7-267"></a>    unique</span>
+<span id="cb7-263"><a href="#cb7-263"></a><span class="in">df_yields_qtr = @group_by(df, year, quarter, variable) |&gt;</span></span>
+<span id="cb7-264"><a href="#cb7-264"></a><span class="in">    x -&gt; @mutate(x, value=mean(value)) |&gt;</span></span>
+<span id="cb7-265"><a href="#cb7-265"></a><span class="in">    x -&gt; @ungroup(x) |&gt;</span></span>
+<span id="cb7-266"><a href="#cb7-266"></a><span class="in">    x -&gt; @select(x, -Date) |&gt;</span></span>
+<span id="cb7-267"><a href="#cb7-267"></a><span class="in">    unique</span></span>
 <span id="cb7-268"><a href="#cb7-268"></a></span>
-<span id="cb7-269"><a href="#cb7-269"></a>df_all <span class="op">=</span> <span class="pp">@inner_join</span>(df_gdp, df_yields_qtr, (year, quarter)) <span class="op">|&gt;</span> </span>
-<span id="cb7-270"><a href="#cb7-270"></a>    x <span class="op">-&gt;</span> <span class="pp">@pivot_wider</span>(x, names_from<span class="op">=</span>variable, values_from<span class="op">=</span>value) <span class="op">|&gt;</span></span>
-<span id="cb7-271"><a href="#cb7-271"></a>    dropmissing</span>
+<span id="cb7-269"><a href="#cb7-269"></a><span class="in">df_all = @inner_join(df_gdp, df_yields_qtr, (year, quarter)) |&gt; </span></span>
+<span id="cb7-270"><a href="#cb7-270"></a><span class="in">    x -&gt; @pivot_wider(x, names_from=variable, values_from=value) |&gt;</span></span>
+<span id="cb7-271"><a href="#cb7-271"></a><span class="in">    dropmissing</span></span>
 <span id="cb7-272"><a href="#cb7-272"></a></span>
-<span id="cb7-273"><a href="#cb7-273"></a>y <span class="op">=</span> df_all.growth <span class="op">|&gt;</span> </span>
-<span id="cb7-274"><a href="#cb7-274"></a>    x <span class="op">-&gt;</span> <span class="fu">Float32</span>.(x)</span>
-<span id="cb7-275"><a href="#cb7-275"></a>X <span class="op">=</span> <span class="pp">@select</span>(df_all, <span class="fu">-</span>(<span class="dt">Date</span><span class="op">:</span>quarter)) <span class="op">|&gt;</span> </span>
-<span id="cb7-276"><a href="#cb7-276"></a>    <span class="dt">Matrix</span> <span class="op">|&gt;</span></span>
-<span id="cb7-277"><a href="#cb7-277"></a>    x <span class="op">-&gt;</span> <span class="fu">Float32</span>.(x) <span class="op">|&gt;</span></span>
-<span id="cb7-278"><a href="#cb7-278"></a>    x <span class="op">-&gt;</span> Flux.<span class="fu">normalise</span>(x; dims<span class="op">=</span><span class="fl">1</span>)</span>
+<span id="cb7-273"><a href="#cb7-273"></a><span class="in">y = df_all.growth |&gt; </span></span>
+<span id="cb7-274"><a href="#cb7-274"></a><span class="in">    x -&gt; Float32.(x)</span></span>
+<span id="cb7-275"><a href="#cb7-275"></a><span class="in">X = @select(df_all, -(Date:quarter)) |&gt; </span></span>
+<span id="cb7-276"><a href="#cb7-276"></a><span class="in">    Matrix |&gt;</span></span>
+<span id="cb7-277"><a href="#cb7-277"></a><span class="in">    x -&gt; Float32.(x) |&gt;</span></span>
+<span id="cb7-278"><a href="#cb7-278"></a><span class="in">    x -&gt; Flux.normalise(x; dims=1)</span></span>
 <span id="cb7-279"><a href="#cb7-279"></a></span>
-<span id="cb7-280"><a href="#cb7-280"></a><span class="co"># Plot:</span></span>
-<span id="cb7-281"><a href="#cb7-281"></a>p_gdp <span class="op">=</span> <span class="fu">plot</span>(</span>
-<span id="cb7-282"><a href="#cb7-282"></a>    df_all.<span class="dt">Date</span>, y;</span>
-<span id="cb7-283"><a href="#cb7-283"></a>    label<span class="op">=</span><span class="st">""</span>, color<span class="op">=:</span>blue,</span>
-<span id="cb7-284"><a href="#cb7-284"></a>    size<span class="op">=</span>(<span class="fl">800</span>,<span class="fl">200</span>),</span>
-<span id="cb7-285"><a href="#cb7-285"></a>    ylabel<span class="op">=</span><span class="st">"GDP Growth (log difference)"</span></span>
-<span id="cb7-286"><a href="#cb7-286"></a>)</span>
-<span id="cb7-287"><a href="#cb7-287"></a>p_yields <span class="op">=</span> <span class="fu">plot</span>(</span>
-<span id="cb7-288"><a href="#cb7-288"></a>    df_all.<span class="dt">Date</span>, X;</span>
-<span id="cb7-289"><a href="#cb7-289"></a>    label<span class="op">=</span><span class="st">""</span>, color<span class="op">=:</span>blue,</span>
-<span id="cb7-290"><a href="#cb7-290"></a>    ylabel<span class="op">=</span><span class="st">"Yield (standardized))"</span>,</span>
-<span id="cb7-291"><a href="#cb7-291"></a>    legend<span class="op">=:</span>bottomright,</span>
-<span id="cb7-292"><a href="#cb7-292"></a>    alpha<span class="op">=</span><span class="fl">0.5</span>,</span>
-<span id="cb7-293"><a href="#cb7-293"></a>    size<span class="op">=</span>(<span class="fl">800</span>,<span class="fl">400</span>)</span>
-<span id="cb7-294"><a href="#cb7-294"></a>)</span>
-<span id="cb7-295"><a href="#cb7-295"></a><span class="fu">plot</span>(p_gdp, p_yields, layout<span class="op">=</span>(<span class="fl">2</span>,<span class="fl">1</span>), size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">600</span>), left_margin<span class="op">=</span><span class="fl">5</span>mm)</span>
+<span id="cb7-280"><a href="#cb7-280"></a><span class="in"># Plot:</span></span>
+<span id="cb7-281"><a href="#cb7-281"></a><span class="in">p_gdp = plot(</span></span>
+<span id="cb7-282"><a href="#cb7-282"></a><span class="in">    df_all.Date, y;</span></span>
+<span id="cb7-283"><a href="#cb7-283"></a><span class="in">    label="", color=:blue,</span></span>
+<span id="cb7-284"><a href="#cb7-284"></a><span class="in">    size=(800,200),</span></span>
+<span id="cb7-285"><a href="#cb7-285"></a><span class="in">    ylabel="GDP Growth (log difference)"</span></span>
+<span id="cb7-286"><a href="#cb7-286"></a><span class="in">)</span></span>
+<span id="cb7-287"><a href="#cb7-287"></a><span class="in">p_yields = plot(</span></span>
+<span id="cb7-288"><a href="#cb7-288"></a><span class="in">    df_all.Date, X;</span></span>
+<span id="cb7-289"><a href="#cb7-289"></a><span class="in">    label="", color=:blue,</span></span>
+<span id="cb7-290"><a href="#cb7-290"></a><span class="in">    ylabel="Yield (standardized))",</span></span>
+<span id="cb7-291"><a href="#cb7-291"></a><span class="in">    legend=:bottomright,</span></span>
+<span id="cb7-292"><a href="#cb7-292"></a><span class="in">    alpha=0.5,</span></span>
+<span id="cb7-293"><a href="#cb7-293"></a><span class="in">    size=(800,400)</span></span>
+<span id="cb7-294"><a href="#cb7-294"></a><span class="in">)</span></span>
+<span id="cb7-295"><a href="#cb7-295"></a><span class="in">plot(p_gdp, p_yields, layout=(2,1), size=(800, 600), left_margin=5mm)</span></span>
 <span id="cb7-296"><a href="#cb7-296"></a><span class="in">```</span></span>
 <span id="cb7-297"><a href="#cb7-297"></a></span>
 <span id="cb7-298"><a href="#cb7-298"></a><span class="fu">#### Model</span></span>
@@ -3094,31 +3110,31 @@ AGI.”</span> February 7, 2024. <a href="https://www.patalt.org/blog/posts/spur
 <span id="cb7-302"><a href="#cb7-302"></a>The encoder consists of a single fully connected hidden layer with 32 neurons and a hyperbolic tangent activation function. The bottleneck layer connecting the encoder to the decoder, is a fully connected layer with 6 neurons. The decoder consists of two fully connected layers, each with a hyperbolic tangent activation function: the first layer consists of 32 neurons and the second layer will have the same dimension as the input data. The output layer consists of a single neuron for our output variable, $g_t$. We train the model over 1,000 epochs to minimize mean squared error loss using the Adam optimizer~\citep{kingma2017adam}.</span>
 <span id="cb7-303"><a href="#cb7-303"></a></span>
 <span id="cb7-306"><a href="#cb7-306"></a><span class="in">```{julia}</span></span>
-<span id="cb7-307"><a href="#cb7-307"></a><span class="co">#| output: true</span></span>
-<span id="cb7-308"><a href="#cb7-308"></a><span class="co">#| fig-cap: Model architecture.</span></span>
-<span id="cb7-309"><a href="#cb7-309"></a><span class="co">#| label: fig-dl-model</span></span>
+<span id="cb7-307"><a href="#cb7-307"></a><span class="in">#| output: true</span></span>
+<span id="cb7-308"><a href="#cb7-308"></a><span class="in">#| fig-cap: Model architecture.</span></span>
+<span id="cb7-309"><a href="#cb7-309"></a><span class="in">#| label: fig-dl-model</span></span>
 <span id="cb7-310"><a href="#cb7-310"></a></span>
-<span id="cb7-311"><a href="#cb7-311"></a>dl <span class="op">=</span> Flux.MLUtils.<span class="fu">DataLoader</span>((<span class="fu">permutedims</span>(X), <span class="fu">permutedims</span>(y)), batchsize<span class="op">=</span><span class="fl">24</span>, shuffle<span class="op">=</span><span class="cn">true</span>) </span>
-<span id="cb7-312"><a href="#cb7-312"></a>input_dim <span class="op">=</span> <span class="fu">size</span>(X,<span class="fl">2</span>)</span>
-<span id="cb7-313"><a href="#cb7-313"></a>n_pc <span class="op">=</span> <span class="fl">6</span></span>
-<span id="cb7-314"><a href="#cb7-314"></a>n_hidden <span class="op">=</span> <span class="fl">32</span></span>
-<span id="cb7-315"><a href="#cb7-315"></a>epochs <span class="op">=</span> <span class="fl">1000</span></span>
-<span id="cb7-316"><a href="#cb7-316"></a>activation <span class="op">=</span> tanh_fast</span>
-<span id="cb7-317"><a href="#cb7-317"></a>encoder <span class="op">=</span> Flux.<span class="fu">Chain</span>(</span>
-<span id="cb7-318"><a href="#cb7-318"></a>    <span class="fu">Dense</span>(input_dim <span class="op">=&gt;</span> n_hidden, activation),</span>
-<span id="cb7-319"><a href="#cb7-319"></a>    <span class="fu">Dense</span>(n_hidden <span class="op">=&gt;</span> n_pc, activation),</span>
-<span id="cb7-320"><a href="#cb7-320"></a>) </span>
-<span id="cb7-321"><a href="#cb7-321"></a>decoder <span class="op">=</span> Flux.<span class="fu">Chain</span>(</span>
-<span id="cb7-322"><a href="#cb7-322"></a>    <span class="fu">Dense</span>(n_pc <span class="op">=&gt;</span> n_hidden, activation),</span>
-<span id="cb7-323"><a href="#cb7-323"></a>    <span class="fu">Dense</span>(n_hidden <span class="op">=&gt;</span> input_dim, activation),</span>
-<span id="cb7-324"><a href="#cb7-324"></a>) </span>
-<span id="cb7-325"><a href="#cb7-325"></a>model <span class="op">=</span> Flux.<span class="fu">Chain</span>(</span>
-<span id="cb7-326"><a href="#cb7-326"></a>    encoder.layers<span class="op">...</span>,</span>
-<span id="cb7-327"><a href="#cb7-327"></a>    decoder.layers<span class="op">...</span>,</span>
-<span id="cb7-328"><a href="#cb7-328"></a>    <span class="fu">Dense</span>(input_dim, <span class="fl">1</span>),</span>
-<span id="cb7-329"><a href="#cb7-329"></a>) </span>
-<span id="cb7-330"><a href="#cb7-330"></a>plt <span class="op">=</span> <span class="fu">plot</span>(model, <span class="fu">rand</span>(input_dim))</span>
-<span id="cb7-331"><a href="#cb7-331"></a><span class="fu">display</span>(plt)</span>
+<span id="cb7-311"><a href="#cb7-311"></a><span class="in">dl = Flux.MLUtils.DataLoader((permutedims(X), permutedims(y)), batchsize=24, shuffle=true) </span></span>
+<span id="cb7-312"><a href="#cb7-312"></a><span class="in">input_dim = size(X,2)</span></span>
+<span id="cb7-313"><a href="#cb7-313"></a><span class="in">n_pc = 6</span></span>
+<span id="cb7-314"><a href="#cb7-314"></a><span class="in">n_hidden = 32</span></span>
+<span id="cb7-315"><a href="#cb7-315"></a><span class="in">epochs = 1000</span></span>
+<span id="cb7-316"><a href="#cb7-316"></a><span class="in">activation = tanh_fast</span></span>
+<span id="cb7-317"><a href="#cb7-317"></a><span class="in">encoder = Flux.Chain(</span></span>
+<span id="cb7-318"><a href="#cb7-318"></a><span class="in">    Dense(input_dim =&gt; n_hidden, activation),</span></span>
+<span id="cb7-319"><a href="#cb7-319"></a><span class="in">    Dense(n_hidden =&gt; n_pc, activation),</span></span>
+<span id="cb7-320"><a href="#cb7-320"></a><span class="in">) </span></span>
+<span id="cb7-321"><a href="#cb7-321"></a><span class="in">decoder = Flux.Chain(</span></span>
+<span id="cb7-322"><a href="#cb7-322"></a><span class="in">    Dense(n_pc =&gt; n_hidden, activation),</span></span>
+<span id="cb7-323"><a href="#cb7-323"></a><span class="in">    Dense(n_hidden =&gt; input_dim, activation),</span></span>
+<span id="cb7-324"><a href="#cb7-324"></a><span class="in">) </span></span>
+<span id="cb7-325"><a href="#cb7-325"></a><span class="in">model = Flux.Chain(</span></span>
+<span id="cb7-326"><a href="#cb7-326"></a><span class="in">    encoder.layers...,</span></span>
+<span id="cb7-327"><a href="#cb7-327"></a><span class="in">    decoder.layers...,</span></span>
+<span id="cb7-328"><a href="#cb7-328"></a><span class="in">    Dense(input_dim, 1),</span></span>
+<span id="cb7-329"><a href="#cb7-329"></a><span class="in">) </span></span>
+<span id="cb7-330"><a href="#cb7-330"></a><span class="in">plt = plot(model, rand(input_dim))</span></span>
+<span id="cb7-331"><a href="#cb7-331"></a><span class="in">display(plt)</span></span>
 <span id="cb7-332"><a href="#cb7-332"></a><span class="in">```</span></span>
 <span id="cb7-333"><a href="#cb7-333"></a></span>
 <span id="cb7-334"><a href="#cb7-334"></a>The in-sample fit of the model is shown in the left chart of @fig-dl-results, which shows actual GDP growth and fitted values from the autoencoder</span>
@@ -3135,7 +3151,7 @@ AGI.”</span> February 7, 2024. <a href="https://www.patalt.org/blog/posts/spur
 <span id="cb7-345"><a href="#cb7-345"></a></span>
 <span id="cb7-346"><a href="#cb7-346"></a>Did the neural network now learn an intrinsic understanding of the economic relationship between growth and the yield curve? To me, that would be too big of a statement. Still, the current form of information distillation can be useful, even beyond its intended use for monitoring models. </span>
 <span id="cb7-347"><a href="#cb7-347"></a></span>
-<span id="cb7-348"><a href="#cb7-348"></a><span class="dt">&lt;</span><span class="kw">iframe</span><span class="ot"> src</span><span class="op">=</span><span class="st">"results/regression.html"</span><span class="ot"> width</span><span class="op">=</span><span class="st">"400"</span><span class="ot"> height</span><span class="op">=</span><span class="st">"455"</span><span class="ot"> style</span><span class="op">=</span><span class="st">'float:right;'</span><span class="dt">&gt;&lt;/</span><span class="kw">iframe</span><span class="dt">&gt;</span></span>
+<span id="cb7-348"><a href="#cb7-348"></a>&lt;iframe src="results/regression.html" width="400" height="455" style='float:right;'&gt;&lt;/iframe&gt;</span>
 <span id="cb7-349"><a href="#cb7-349"></a></span>
 <span id="cb7-350"><a href="#cb7-350"></a>For example, an interesting idea could be to use the latent embeddings as features in a more traditional and interpretable econometric model. To demonstrate this, let us consider a simple linear regression model for GDP growth. We might be interested in understanding to what degree economic growth in the past is associated with economic growth today. As we might expect, linearly regressing economic growth on lagged growth, as in column (1) of the table below, yields a statistically significant coefficient. However, this coefficient suffers from confounding bias since there are many other confounding variables at play, of which some may be readily observable and measurable, but others may not.</span>
 <span id="cb7-351"><a href="#cb7-351"></a></span>
