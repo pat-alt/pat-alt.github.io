@@ -9,6 +9,10 @@ author:
 institute: Delft University of Technology
 date: today
 format: 
+  beamer: 
+    slide-level: 2
+    theme: Berlin
+    fontsize: 10pt
   tudelft-revealjs:
     theme: custom.scss
     self-contained: true
@@ -48,15 +52,16 @@ draft: false
 :::{.column width='65%'}
 
 ::: {.fragment .fade-in}
-{{< fa circle-question >}} How can we make opaque AI more trustworthy?
+{{< fa user>}} Economist, now PhD CS
+:::
+
+
+::: {.fragment .fade-in}
+{{< fa question >}} How can we make opaque AI more trustworthy?
 :::
 
 ::: {.fragment .fade-in}
 {{< fa toolbox >}} Explainable AI, Adversarial ML, Probabilistic ML
-:::
-
-::: {.fragment .fade-in}
-{{< fa earth-europe >}} Banking, Finance, Economics
 :::
 
 ::: {.fragment .fade-in}
@@ -66,7 +71,7 @@ draft: false
 
 :::
 :::{.column width='35%'}
-![Scan for slides.](/www/images/qr.png){width="100%" fig-align="center"}
+![Scan for slides. Links to [www.patalt.org](www.patalt.org).](/www/images/qr.png){width="100%" fig-align="center"}
 :::
 ::::
 
@@ -82,7 +87,30 @@ draft: false
 
 # Background
 
-## Counterfactual Explanations {auto-animate=true}
+## Intuition {.nostretch}
+
+::: {.content-visible when-format="html"}
+![Counterfactual explanation for what it takes to be a dog.](www/cat.gif){width="60%"}
+:::
+
+::: {.content-visible when-format="pdf"}
+![Counterfactual explanation for what it takes to be a dog.](www/cat.png){width="60%"}
+:::
+
+## Methodology {auto-animate=true}
+
+[*Model Training*]{style="color: orange;"}
+
+**Objective**:
+
+$$
+\begin{aligned}
+\min_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} \}
+\end{aligned} 
+$$ 
+
+
+## Methodology {auto-animate=true}
 
 [*Model Training*]{style="color: orange;"}
 
@@ -103,7 +131,19 @@ $$
 \end{aligned} 
 $$ 
 
-## Counterfactual Explanations {auto-animate=true}
+## Methodology {auto-animate=true}
+
+[*Counterfactual Search*]{style="color: purple;"}
+
+**Objective**:
+
+$$
+\begin{aligned}
+\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} })} \}
+\end{aligned} 
+$$ 
+
+## Methodology {auto-animate=true}
 
 [*Counterfactual Search*]{style="color: purple;"}
 
@@ -124,7 +164,7 @@ $$
 \end{aligned} 
 $$
 
-## Counterfactual Explanations {auto-animate=true}
+## Methodology {auto-animate=true}
 
 $$
 \begin{aligned}
@@ -137,7 +177,15 @@ $$
 **Counterfactual Explanations** explain how inputs into a model need to change for it to produce different outputs^[{{< fa scroll >}} @altmeyer2023explaining \@ JuliaCon 2022].
 :::
 :::{.column width='40%'}
-![Gradient-based counterfactual search.](www/ce_intro.gif){#fig-ce-intro width="60%"}
+
+::: {.content-visible when-format="html"}
+![Gradient-based counterfactual search.](www/ce_intro.gif){#fig-ce-intro width="85%"}
+:::
+
+::: {.content-visible when-format="pdf"}
+![Gradient-based counterfactual search.](www/ce_intro.png){#fig-ce-intro width="85%"}
+:::
+
 :::
 ::::
 
@@ -185,7 +233,7 @@ $$
 \begin{aligned}
 \mathbf{s}^\prime &= \arg \min_{\mathbf{s}^\prime \in \mathcal{S}} \{ {\text{yloss}(M(f(\mathbf{s}^\prime)),y^*)} \\ &+ \lambda_1 {\text{cost}(f(\mathbf{s}^\prime))} + \lambda_2 {\text{extcost}(f(\mathbf{s}^\prime))} \}  
 \end{aligned} 
-$$ {#eq-satml}
+$$ 
 
 # Plausibility at all cost?
 
@@ -195,7 +243,7 @@ All of these counterfactuals are valid explanations for the model's prediction.
 
 > Which one would you pick?
 
-![Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](www/mnist_motivation.png){#fig-cf-example width="80%"}
+![Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](www/mnist_motivation.png){#fig-cf-example width="75%"}
 
 ## Faithful First, Plausible Second
 

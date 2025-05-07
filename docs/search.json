@@ -3301,7 +3301,7 @@
     "href": "content/talks/posts/2025-dscn/presentation.html#background",
     "title": "Explaining Models or Modelling Explanations",
     "section": "Background",
-    "text": "Background\n\n\n\n How can we make opaque AI more trustworthy?\n\n\n Explainable AI, Adversarial ML, Probabilistic ML\n\n\n Banking, Finance, Economics\n\n\n Maintainer of Taija (trustworthy AI in Julia)\n\n\n\n\n\n\n\n\n\nScan for slides."
+    "text": "Background\n\n\n\n Economist, now PhD CS\n\n\n How can we make opaque AI more trustworthy?\n\n\n Explainable AI, Adversarial ML, Probabilistic ML\n\n\n Maintainer of Taija (trustworthy AI in Julia)\n\n\n\n\n\n\n\n\n\nScan for slides. Links to www.patalt.org."
   },
   {
     "objectID": "content/talks/posts/2025-dscn/presentation.html#agenda",
@@ -3311,25 +3311,46 @@
     "text": "Agenda\n\n\nWhat are counterfactual explanations (CE) and algorithmic recourse (AR) and why are they useful?\nWhat dynamics are generated when off-the-shelf solutions to CE and AR are implemented in practice?\nCan we generate plausible counterfactuals relying only on the opaque model itself?\nHow can we leverage counterfactuals during training to build more trustworthy models?"
   },
   {
-    "objectID": "content/talks/posts/2025-dscn/presentation.html#counterfactual-explanations",
-    "href": "content/talks/posts/2025-dscn/presentation.html#counterfactual-explanations",
+    "objectID": "content/talks/posts/2025-dscn/presentation.html#intuition",
+    "href": "content/talks/posts/2025-dscn/presentation.html#intuition",
     "title": "Explaining Models or Modelling Explanations",
-    "section": "Counterfactual Explanations",
-    "text": "Counterfactual Explanations\nModel Training\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\theta_{t+1} &= \\theta_t - \\nabla_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\} \\\\\n\\textcolor{orange}{\\theta^*}&=\\theta_T\n\\end{aligned}\n\\]"
+    "section": "Intuition",
+    "text": "Intuition\n\n\n\nCounterfactual explanation for what it takes to be a dog."
   },
   {
-    "objectID": "content/talks/posts/2025-dscn/presentation.html#counterfactual-explanations-1",
-    "href": "content/talks/posts/2025-dscn/presentation.html#counterfactual-explanations-1",
+    "objectID": "content/talks/posts/2025-dscn/presentation.html#methodology",
+    "href": "content/talks/posts/2025-dscn/presentation.html#methodology",
     "title": "Explaining Models or Modelling Explanations",
-    "section": "Counterfactual Explanations",
-    "text": "Counterfactual Explanations\nCounterfactual Search\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\mathbf{x}_{t+1} &= \\mathbf{x}_t - \\nabla_{\\textcolor{purple}{\\theta}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\} \\\\\n\\textcolor{purple}{\\mathbf{x}^*}&=\\mathbf{x}_T\n\\end{aligned}\n\\]"
+    "section": "Methodology",
+    "text": "Methodology\nModel Training\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\}\n\\end{aligned}\n\\]"
   },
   {
-    "objectID": "content/talks/posts/2025-dscn/presentation.html#counterfactual-explanations-2",
-    "href": "content/talks/posts/2025-dscn/presentation.html#counterfactual-explanations-2",
+    "objectID": "content/talks/posts/2025-dscn/presentation.html#methodology-1",
+    "href": "content/talks/posts/2025-dscn/presentation.html#methodology-1",
     "title": "Explaining Models or Modelling Explanations",
-    "section": "Counterfactual Explanations",
-    "text": "Counterfactual Explanations\n\\[\n\\begin{aligned}\n\\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {\\text{yloss}(M_{\\theta}(f(\\mathbf{Z}^\\prime)),\\mathbf{y}^+)} + \\lambda {\\text{cost}(f(\\mathbf{Z}^\\prime)) }  \\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations explain how inputs into a model need to change for it to produce different outputs1.\n\n\n\n\n\n\n\nFigure 1: Gradient-based counterfactual search.\n\n\n\n\n Altmeyer, Deursen, and Liem (2023) @ JuliaCon 2022"
+    "section": "Methodology",
+    "text": "Methodology\nModel Training\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\theta_{t+1} &= \\theta_t - \\nabla_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\} \\\\\n\\textcolor{orange}{\\theta^*}&=\\theta_T\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2025-dscn/presentation.html#methodology-2",
+    "href": "content/talks/posts/2025-dscn/presentation.html#methodology-2",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Methodology",
+    "text": "Methodology\nCounterfactual Search\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\}\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2025-dscn/presentation.html#methodology-3",
+    "href": "content/talks/posts/2025-dscn/presentation.html#methodology-3",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Methodology",
+    "text": "Methodology\nCounterfactual Search\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\mathbf{x}_{t+1} &= \\mathbf{x}_t - \\nabla_{\\textcolor{purple}{\\theta}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\} \\\\\n\\textcolor{purple}{\\mathbf{x}^*}&=\\mathbf{x}_T\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2025-dscn/presentation.html#methodology-4",
+    "href": "content/talks/posts/2025-dscn/presentation.html#methodology-4",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Methodology",
+    "text": "Methodology\n\\[\n\\begin{aligned}\n\\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {\\text{yloss}(M_{\\theta}(f(\\mathbf{Z}^\\prime)),\\mathbf{y}^+)} + \\lambda {\\text{cost}(f(\\mathbf{Z}^\\prime)) }  \\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations explain how inputs into a model need to change for it to produce different outputs1.\n\n\n\n\n\n\n\nFigure 1: Gradient-based counterfactual search.\n\n\n\n\n Altmeyer, Deursen, and Liem (2023) @ JuliaCon 2022"
   },
   {
     "objectID": "content/talks/posts/2025-dscn/presentation.html#algorithmic-recourse",
@@ -3350,7 +3371,7 @@
     "href": "content/talks/posts/2025-dscn/presentation.html#mitigation-strategies",
     "title": "Explaining Models or Modelling Explanations",
     "section": "Mitigation Strategies",
-    "text": "Mitigation Strategies\n\nIncorporate hidden cost in reframed objective (Equation 1).\nReducing hidden cost is equivalent to ensuring plausibility.\n\n\\[\n\\begin{aligned}\n\\mathbf{s}^\\prime &= \\arg \\min_{\\mathbf{s}^\\prime \\in \\mathcal{S}} \\{ {\\text{yloss}(M(f(\\mathbf{s}^\\prime)),y^*)} \\\\ &+ \\lambda_1 {\\text{cost}(f(\\mathbf{s}^\\prime))} + \\lambda_2 {\\text{extcost}(f(\\mathbf{s}^\\prime))} \\}  \n\\end{aligned}\n\\tag{1}\\]"
+    "text": "Mitigation Strategies\n\nIncorporate hidden cost in reframed objective (?@eq-satml).\nReducing hidden cost is equivalent to ensuring plausibility.\n\n\\[\n\\begin{aligned}\n\\mathbf{s}^\\prime &= \\arg \\min_{\\mathbf{s}^\\prime \\in \\mathcal{S}} \\{ {\\text{yloss}(M(f(\\mathbf{s}^\\prime)),y^*)} \\\\ &+ \\lambda_1 {\\text{cost}(f(\\mathbf{s}^\\prime))} + \\lambda_2 {\\text{extcost}(f(\\mathbf{s}^\\prime))} \\}  \n\\end{aligned}\n\\]"
   },
   {
     "objectID": "content/talks/posts/2025-dscn/presentation.html#pick-your-poison",
