@@ -47,14 +47,22 @@ draft: false
 ::::{.columns}::::
 :::{.column width='65%'}
 
-::: {.incremental}
-
-- {{< fa circle-question >}} How can we make opaque AI more trustworthy?
-- {{< fa toolbox >}} Explainable AI, Adversarial ML, Probabilistic ML
-- {{< fa earth-europe >}} Banking, Finance, Economics
-- {{< fa code >}} Maintainer of [Taija](https://github.com/JuliaTrustworthyAI) (trustworthy AI in Julia)
-
+::: {.fragment .fade-in-then-out}
+{{< fa circle-question >}} How can we make opaque AI more trustworthy?
 :::
+
+::: {.fragment .fade-in-then-out}
+{{< fa toolbox >}} Explainable AI, Adversarial ML, Probabilistic ML
+:::
+
+::: {.fragment .fade-in-then-out}
+{{< fa earth-europe >}} Banking, Finance, Economics
+:::
+
+::: {.fragment .fade-in-then-out}
+{{< fa code >}} Maintainer of [Taija](https://github.com/JuliaTrustworthyAI) (trustworthy AI in Julia)
+:::
+
 
 :::
 :::{.column width='35%'}
@@ -76,13 +84,13 @@ draft: false
 
 ## Counterfactual Explanations {auto-animate=true}
 
-### Model Training
+[*Model Training*]{style="color: orange;"}
 
 **Objective**:
 
 $$
 \begin{aligned}
-\min_{\theta} \{  {\text{yloss}(M_{\theta}(x),\mathbf{y})} \}
+\min_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} \}
 \end{aligned} 
 $$ 
 
@@ -90,19 +98,20 @@ $$
 
 $$
 \begin{aligned}
-\nabla_{\theta} \{  {\text{yloss}(M_{\theta}(x),\mathbf{y})} \}
+\theta_{t+1} &= \theta_t - \nabla_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} \} \\
+\textcolor{orange}{\theta^*}&=\theta_T
 \end{aligned} 
 $$ 
 
 ## Counterfactual Explanations {auto-animate=true}
 
-### Counterfactual Search
+[*Counterfactual Search*]{style="color: purple;"}
 
 **Objective**:
 
 $$
 \begin{aligned}
-\min_{x} \{  {\text{yloss}(M_{\theta}(x),\mathbf{y})} \}
+\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} })} \}
 \end{aligned} 
 $$ 
 
@@ -110,18 +119,10 @@ $$
 
 $$
 \begin{aligned}
-\nabla_{x} \{  {\text{yloss}(M_{\theta}(x),\mathbf{y})} \}
+\mathbf{x}_{t+1} &= \mathbf{x}_t - \nabla_{\textcolor{purple}{\theta}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} })} \} \\
+\textcolor{purple}{\mathbf{x}^*}&=\mathbf{x}_T
 \end{aligned} 
-$$ 
-
-## Counterfactual Explanations {auto-animate=true}
-
 $$
-\begin{aligned}
-\min_{\mathbf{Z}^\prime \in \mathcal{Z}^L} \{  {\text{yloss}(M_{\theta}(f(\mathbf{Z}^\prime)),\mathbf{y}^+)} \}
-\end{aligned} 
-$$ 
-
 
 ## Counterfactual Explanations {auto-animate=true}
 
@@ -136,7 +137,7 @@ $$
 **Counterfactual Explanations** explain how inputs into a model need to change for it to produce different outputs^[{{< fa scroll >}} @altmeyer2023explaining \@ JuliaCon 2022].
 :::
 :::{.column width='40%'}
-![Gradient-based counterfactual search.](www/simple_ce.png){#fig-ce-intro width="60%"}
+![Gradient-based counterfactual search.](www/ce_intro.gif){#fig-ce-intro width="60%"}
 :::
 ::::
 
@@ -240,7 +241,7 @@ Let the model compare its own explanations to plausible ones^[{{< fa scroll >}} 
 2. Use nascent CE as adversarial examples.
 :::
 ::: {.column width="50%"}
-![Explanation or attack?](www/ce_ae.png)
+![Example of an adversarial attack. Source: @goodfellow2014explaining](www/panda.png)
 :::
 :::
 
