@@ -3311,88 +3311,95 @@
     "text": "Agenda\n\n\nWhat are counterfactual explanations (CE) and algorithmic recourse (AR) and why are they useful?\nWhat dynamics are generated when off-the-shelf solutions to CE and AR are implemented in practice?\nCan we generate plausible counterfactuals relying only on the opaque model itself?\nHow can we leverage counterfactuals during training to build more trustworthy models?"
   },
   {
-    "objectID": "content/talks/posts/2025-dscn/presentation.html#intuition",
-    "href": "content/talks/posts/2025-dscn/presentation.html#intuition",
+    "objectID": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides",
+    "href": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides",
     "title": "Explaining Models or Modelling Explanations",
-    "section": "Intuition",
-    "text": "Intuition\n\n\n\nCounterfactual explanation for what it takes to be a dog."
+    "section": "CE in Five Slides",
+    "text": "CE in Five Slides\n\n\n\nCats and dogs in two dimensions."
   },
   {
-    "objectID": "content/talks/posts/2025-dscn/presentation.html#methodology",
-    "href": "content/talks/posts/2025-dscn/presentation.html#methodology",
+    "objectID": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides-1",
+    "href": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides-1",
     "title": "Explaining Models or Modelling Explanations",
-    "section": "Methodology",
-    "text": "Methodology\nModel Training\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\}\n\\end{aligned}\n\\]"
+    "section": "CE in Five Slides",
+    "text": "CE in Five Slides\nModel Training\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\}\n\\end{aligned}\n\\]"
   },
   {
-    "objectID": "content/talks/posts/2025-dscn/presentation.html#methodology-1",
-    "href": "content/talks/posts/2025-dscn/presentation.html#methodology-1",
+    "objectID": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides-2",
+    "href": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides-2",
     "title": "Explaining Models or Modelling Explanations",
-    "section": "Methodology",
-    "text": "Methodology\nModel Training\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\theta_{t+1} &= \\theta_t - \\nabla_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\} \\\\\n\\textcolor{orange}{\\theta^*}&=\\theta_T\n\\end{aligned}\n\\]"
+    "section": "CE in Five Slides",
+    "text": "CE in Five Slides\nModel Training\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\theta_{t+1} &= \\theta_t - \\nabla_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\} \\\\\n\\textcolor{orange}{\\theta^*}&=\\theta_T\n\\end{aligned}\n\\]"
   },
   {
-    "objectID": "content/talks/posts/2025-dscn/presentation.html#methodology-2",
-    "href": "content/talks/posts/2025-dscn/presentation.html#methodology-2",
+    "objectID": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides-3",
+    "href": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides-3",
     "title": "Explaining Models or Modelling Explanations",
-    "section": "Methodology",
-    "text": "Methodology\nCounterfactual Search\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\}\n\\end{aligned}\n\\]"
+    "section": "CE in Five Slides",
+    "text": "CE in Five Slides\n\n\n\nFitted model: contour shows predicted probability \\(y=🐶\\)."
   },
   {
-    "objectID": "content/talks/posts/2025-dscn/presentation.html#methodology-3",
-    "href": "content/talks/posts/2025-dscn/presentation.html#methodology-3",
+    "objectID": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides-4",
+    "href": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides-4",
     "title": "Explaining Models or Modelling Explanations",
-    "section": "Methodology",
-    "text": "Methodology\nCounterfactual Search\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\mathbf{x}_{t+1} &= \\mathbf{x}_t - \\nabla_{\\textcolor{purple}{\\theta}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\} \\\\\n\\textcolor{purple}{\\mathbf{x}^*}&=\\mathbf{x}_T\n\\end{aligned}\n\\]"
+    "section": "CE in Five Slides",
+    "text": "CE in Five Slides\nCounterfactual Search\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\}\n\\end{aligned}\n\\]"
   },
   {
-    "objectID": "content/talks/posts/2025-dscn/presentation.html#methodology-4",
-    "href": "content/talks/posts/2025-dscn/presentation.html#methodology-4",
+    "objectID": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides-5",
+    "href": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides-5",
     "title": "Explaining Models or Modelling Explanations",
-    "section": "Methodology",
-    "text": "Methodology\n\\[\n\\begin{aligned}\n\\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {\\text{yloss}(M_{\\theta}(f(\\mathbf{Z}^\\prime)),\\mathbf{y}^+)} + \\lambda {\\text{cost}(f(\\mathbf{Z}^\\prime)) }  \\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations explain how inputs into a model need to change for it to produce different outputs1.\n\n\n\n\n\n\n\nFigure 1: Gradient-based counterfactual search.\n\n\n\n\n Altmeyer, Deursen, and Liem (2023) @ JuliaCon 2022"
+    "section": "CE in Five Slides",
+    "text": "CE in Five Slides\nCounterfactual Search\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\mathbf{x}_{t+1} &= \\mathbf{x}_t - \\nabla_{\\textcolor{purple}{\\theta}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\} \\\\\n\\textcolor{purple}{\\mathbf{x}^*}&=\\mathbf{x}_T\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides-6",
+    "href": "content/talks/posts/2025-dscn/presentation.html#ce-in-five-slides-6",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "CE in Five Slides",
+    "text": "CE in Five Slides\n\\[\n\\begin{aligned}\n\\min_{\\mathbf{Z}^\\prime \\in \\mathcal{Z}^L} \\{  {\\text{yloss}(M_{\\theta}(f(\\mathbf{Z}^\\prime)),\\mathbf{y}^+)} + \\lambda {\\text{cost}(f(\\mathbf{Z}^\\prime)) }  \\}\n\\end{aligned}\n\\]\n\n\nCounterfactual Explanations explain how inputs into a model need to change for it to produce different outputs1.\n\n\n\n\nCounterfactual explanation for what it takes to be a dog.\n\n\n\n Altmeyer, Deursen, and Liem (2023) @ JuliaCon 2022"
   },
   {
     "objectID": "content/talks/posts/2025-dscn/presentation.html#algorithmic-recourse",
     "href": "content/talks/posts/2025-dscn/presentation.html#algorithmic-recourse",
     "title": "Explaining Models or Modelling Explanations",
     "section": "Algorithmic Recourse",
-    "text": "Algorithmic Recourse\n\n\nProvided CE is valid, plausible and actionable, it can be used to provide recourse to individuals negatively affected by models.\n\n“If your income had been X, then …”\n\n\n\n\n\n\n\n\nFigure 2: Counterfactuals for random samples from the Give Me Some Credit dataset (Kaggle 2011). Features ‘age’ and ‘income’ are shown."
+    "text": "Algorithmic Recourse\n\n\nProvided CE is valid, plausible and actionable, it can be used to provide recourse to individuals negatively affected by models.\n\n“If your income had been X, then …”\n\n\n\n\n\n\n\n\nFigure 1: Counterfactuals for random samples from the Give Me Some Credit dataset (Kaggle 2011). Features ‘age’ and ‘income’ are shown."
   },
   {
     "objectID": "content/talks/posts/2025-dscn/presentation.html#hidden-cost-of-implausibility",
     "href": "content/talks/posts/2025-dscn/presentation.html#hidden-cost-of-implausibility",
     "title": "Explaining Models or Modelling Explanations",
     "section": "Hidden Cost of Implausibility",
-    "text": "Hidden Cost of Implausibility\n\n\nAR can introduce costly dynamics1\n\n\n\nEndogenous Macrodynamics in Algorithmic Recourse.\n\n\n\n\n\n\n\n\n\nFigure 3: Illustration of external cost of individual recourse.\n\n\n\n\n Insight: individual recourse neglects bigger picture.\n Altmeyer, Angela, et al. (2023) @ SaTML 2023."
+    "text": "Hidden Cost of Implausibility\n\n\nAR can introduce costly dynamics1\n\n\n\nEndogenous Macrodynamics in Algorithmic Recourse.\n\n\n\n\n\n\n\n\n\nFigure 2: Illustration of external cost of individual recourse.\n\n\n\n\n Insight: individual recourse neglects bigger picture.\n Altmeyer, Angela, et al. (2023) @ SaTML 2023."
   },
   {
     "objectID": "content/talks/posts/2025-dscn/presentation.html#mitigation-strategies",
     "href": "content/talks/posts/2025-dscn/presentation.html#mitigation-strategies",
     "title": "Explaining Models or Modelling Explanations",
     "section": "Mitigation Strategies",
-    "text": "Mitigation Strategies\n\nIncorporate hidden cost in reframed objective (?@eq-satml).\nReducing hidden cost is equivalent to ensuring plausibility.\n\n\\[\n\\begin{aligned}\n\\mathbf{s}^\\prime &= \\arg \\min_{\\mathbf{s}^\\prime \\in \\mathcal{S}} \\{ {\\text{yloss}(M(f(\\mathbf{s}^\\prime)),y^*)} \\\\ &+ \\lambda_1 {\\text{cost}(f(\\mathbf{s}^\\prime))} + \\lambda_2 {\\text{extcost}(f(\\mathbf{s}^\\prime))} \\}  \n\\end{aligned}\n\\]"
+    "text": "Mitigation Strategies\n\nIncorporate hidden cost in reframed objective.\nReducing hidden cost is equivalent to ensuring plausibility.\n\n\\[\n\\begin{aligned}\n\\mathbf{s}^\\prime &= \\arg \\min_{\\mathbf{s}^\\prime \\in \\mathcal{S}} \\{ {\\text{yloss}(M(f(\\mathbf{s}^\\prime)),y^*)} \\\\ &+ \\lambda_1 {\\text{cost}(f(\\mathbf{s}^\\prime))} + \\lambda_2 {\\text{extcost}(f(\\mathbf{s}^\\prime))} \\}  \n\\end{aligned}\n\\]"
   },
   {
     "objectID": "content/talks/posts/2025-dscn/presentation.html#pick-your-poison",
     "href": "content/talks/posts/2025-dscn/presentation.html#pick-your-poison",
     "title": "Explaining Models or Modelling Explanations",
     "section": "Pick your Poison",
-    "text": "Pick your Poison\nAll of these counterfactuals are valid explanations for the model’s prediction.\n\nWhich one would you pick?\n\n\n\n\n\n\n\nFigure 4: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using Wachter (Wachter, Mittelstadt, and Russell 2017), Schut (Schut et al. 2021) and REVISE (Joshi et al. 2019)."
+    "text": "Pick your Poison\nAll of these counterfactuals are valid explanations for the model’s prediction.\n\nWhich one would you pick?\n\n\n\n\n\n\n\nFigure 3: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using Wachter (Wachter, Mittelstadt, and Russell 2017), Schut (Schut et al. 2021) and REVISE (Joshi et al. 2019)."
   },
   {
     "objectID": "content/talks/posts/2025-dscn/presentation.html#faithful-first-plausible-second",
     "href": "content/talks/posts/2025-dscn/presentation.html#faithful-first-plausible-second",
     "title": "Explaining Models or Modelling Explanations",
     "section": "Faithful First, Plausible Second",
-    "text": "Faithful First, Plausible Second\nCounterfactuals as plausible as the model permits1.\n\n\n\n\n\n\n\n\nFigure 5: KDE for training data.\n\n\n\n\n\n\n\n\n\n\nFigure 6: KDE for model posterior.\n\n\n\n\n Altmeyer, Farmanbar, et al. (2023) @ AAAI 2024. [blog]"
+    "text": "Faithful First, Plausible Second\nCounterfactuals as plausible as the model permits1.\n\n\n\n\n\n\n\n\nFigure 4: KDE for training data.\n\n\n\n\n\n\n\n\n\n\nFigure 5: KDE for model posterior.\n\n\n\n\n Altmeyer, Farmanbar, et al. (2023) @ AAAI 2024. [blog]"
   },
   {
     "objectID": "content/talks/posts/2025-dscn/presentation.html#faithful-counterfactuals",
     "href": "content/talks/posts/2025-dscn/presentation.html#faithful-counterfactuals",
     "title": "Explaining Models or Modelling Explanations",
     "section": "Faithful Counterfactuals",
-    "text": "Faithful Counterfactuals\n\n\n\n\n\n\n\n\nFigure 7: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\n Insight: faithfulness facilitates\n\nmodel quality checks (Figure 7).\nstate-of-the-art plausibility (Figure 8).\n\n\n\n\n\n\n\nFigure 8: Results for different generators (from 3 to 5)."
+    "text": "Faithful Counterfactuals\n\n\n\n\n\n\n\n\nFigure 6: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\n Insight: faithfulness facilitates\n\nmodel quality checks (Figure 6).\nstate-of-the-art plausibility (Figure 7).\n\n\n\n\n\n\n\nFigure 7: Results for different generators (from 3 to 5)."
   },
   {
     "objectID": "content/talks/posts/2025-dscn/presentation.html#counterfactual-training-method",
@@ -3406,14 +3413,14 @@
     "href": "content/talks/posts/2025-dscn/presentation.html#counterfactual-training-results",
     "title": "Explaining Models or Modelling Explanations",
     "section": "Counterfactual Training: Results",
-    "text": "Counterfactual Training: Results\n\n\n\n\n\n\nFigure 9: (a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, age immutable; (d) CT, age immutable.\n\n\n\n\nModels trained with CT learn more plausible and (provably) actionable explanations.\nPredictive performance does not suffer, robust performance improves."
+    "text": "Counterfactual Training: Results\n\n\n\n\n\n\nFigure 8: (a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, age immutable; (d) CT, age immutable.\n\n\n\n\nModels trained with CT learn more plausible and (provably) actionable explanations.\nPredictive performance does not suffer, robust performance improves."
   },
   {
     "objectID": "content/talks/posts/2025-dscn/presentation.html#spurious-sparks-of-agi",
     "href": "content/talks/posts/2025-dscn/presentation.html#spurious-sparks-of-agi",
     "title": "Explaining Models or Modelling Explanations",
     "section": "Spurious Sparks of AGI",
-    "text": "Spurious Sparks of AGI\n\n\nWe challenge the idea that the finding of meaningful patterns in latent spaces of large models is indicative of AGI1.\n\n\n\n\n\n\n\nFigure 10: Inflation of prices or birds? It doesn’t matter!\n\n\n\n\n In Altmeyer et al. (2024) @ ICML 2024"
+    "text": "Spurious Sparks of AGI\n\n\nWe challenge the idea that the finding of meaningful patterns in latent spaces of large models is indicative of AGI1.\n\n\n\n\n\n\n\nFigure 9: Inflation of prices or birds? It doesn’t matter!\n\n\n\n\n In Altmeyer et al. (2024) @ ICML 2024"
   },
   {
     "objectID": "content/talks/posts/2025-dscn/presentation.html#taija",

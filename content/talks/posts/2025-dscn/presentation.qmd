@@ -87,17 +87,11 @@ draft: false
 
 # Background
 
-## Intuition {.nostretch}
+## CE in Five Slides {.nostretch}
 
-::: {.content-visible when-format="html"}
-![Counterfactual explanation for what it takes to be a dog.](www/cat.gif){width="60%"}
-:::
+![Cats and dogs in two dimensions.](www/cat_pre.png){width="50%"}
 
-::: {.content-visible when-format="pdf"}
-![Counterfactual explanation for what it takes to be a dog.](www/cat.png){width="60%"}
-:::
-
-## Methodology {auto-animate=true}
+## CE in Five Slides {auto-animate=true}
 
 [*Model Training*]{style="color: orange;"}
 
@@ -110,7 +104,7 @@ $$
 $$ 
 
 
-## Methodology {auto-animate=true}
+## CE in Five Slides {auto-animate=true}
 
 [*Model Training*]{style="color: orange;"}
 
@@ -129,9 +123,13 @@ $$
 \theta_{t+1} &= \theta_t - \nabla_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} \} \\
 \textcolor{orange}{\theta^*}&=\theta_T
 \end{aligned} 
-$$ 
+$$
 
-## Methodology {auto-animate=true}
+## CE in Five Slides {auto-animate=true .nostretch}
+
+![Fitted model. Contour shows predicted probability $y=🐶$.](www/cat_fitted.png){width="65%"}
+
+## CE in Five Slides {auto-animate=true}
 
 [*Counterfactual Search*]{style="color: purple;"}
 
@@ -143,7 +141,7 @@ $$
 \end{aligned} 
 $$ 
 
-## Methodology {auto-animate=true}
+## CE in Five Slides {auto-animate=true}
 
 [*Counterfactual Search*]{style="color: purple;"}
 
@@ -164,7 +162,7 @@ $$
 \end{aligned} 
 $$
 
-## Methodology {auto-animate=true}
+## CE in Five Slides {auto-animate=true}
 
 $$
 \begin{aligned}
@@ -179,11 +177,11 @@ $$
 :::{.column width='40%'}
 
 ::: {.content-visible when-format="html"}
-![Gradient-based counterfactual search.](www/ce_intro.gif){#fig-ce-intro width="85%"}
+![Counterfactual explanation for what it takes to be a dog.](www/cat.gif){width="85%"}
 :::
 
 ::: {.content-visible when-format="pdf"}
-![Gradient-based counterfactual search.](www/ce_intro.png){#fig-ce-intro width="85%"}
+![Counterfactual explanation for what it takes to be a dog.](www/cat.png){width="85%"}
 :::
 
 :::
@@ -226,7 +224,7 @@ AR can introduce costly dynamics^[{{< fa scroll >}} @altmeyer2023endogenous \@ S
 
 ## Mitigation Strategies
 
-- Incorporate hidden cost in reframed objective (@eq-satml).
+- Incorporate hidden cost in reframed objective.
 - Reducing hidden cost is equivalent to ensuring plausibility.
 
 $$
