@@ -11,3 +11,77 @@ $navbar-bg: lighten($primary, 50%);
 
 // Footer
 $footer-bg: lighten($primary, 50%);
+
+/* Style for the typing cursor */
+.dynamic-text {
+  font-size: 2.5rem;
+  width: 100%;
+  font-weight: bold;
+  display: inline-block;
+  background: -webkit-linear-gradient(top left, $primary, $navbar-bg);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+}
+
+/* Animation for blinking cursor */
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-webkit-keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+// Hero banner 
+.hero-banner {
+    position: relative;
+    background-color: $navbar-bg;
+    display: flex;
+    justify-content: center;
+    padding-left: 30px;
+    padding-right: 30px;
+    // padding-top: 10px;
+    flex-wrap: wrap;
+}
+
+.hero-banner-text {
+    flex: 1; /* Each item will take equal space */
+    min-width: 300px; /* Minimum width of each item */
+    margin: 10px;
+}
+
+.hero-banner-carousel {
+    flex: 1; /* Each item will take equal space */
+    min-width: 300px; /* Minimum width of each item */
+    margin: 10px;
+}
+
+// Carousel
+.carousel {
+    margin-top: 50px;
+}
+
+.carousel img {
+    width: 300px;
+    height: 300px;
+    max-width: 70%;
+    margin-bottom: 110px;
+    background-color: lighten($primary, 45%);
+}
+
+.carousel .carousel-control-prev-icon, 
+.carousel .carousel-control-next-icon {
+  margin-bottom: 110px;
+}
+
+.content-block {
+    padding-top: 50px;
+    padding-bottom: 10px;
+    margin-left: 20%;
+    margin-right: 20%;
+}
