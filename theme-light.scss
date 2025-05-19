@@ -15,6 +15,10 @@ $footer-bg: $navbar-bg;
 // Hero banner:
 $hero-bg: lighten($primary, 55%);
 
+// Fonts:
+$larger: 1.25em;
+
+/*-- scss:rules --*/
 /* Style for the typing cursor */
 .dynamic-text {
   font-size: 2.5rem;
@@ -41,6 +45,10 @@ $hero-bg: lighten($primary, 55%);
   100% { opacity: 1; }
 }
 
+.welcome-text {
+  font-size: $larger;
+}
+
 // Hero banner 
 .hero-banner {
   position: relative;
@@ -57,6 +65,7 @@ $hero-bg: lighten($primary, 55%);
   flex: 1; /* Each item will take equal space */
   min-width: 300px; /* Minimum width of each item */
   margin: 10px;
+  font-size: $larger;
 }
 
 .hero-banner-carousel {
