@@ -10,7 +10,10 @@ $body-color: darken($primary, 50%);
 $navbar-bg: lighten($primary, 50%);
 
 // Footer
-$footer-bg: lighten($primary, 50%);
+$footer-bg: $navbar-bg;
+
+// Hero banner:
+$hero-bg: lighten($primary, 55%);
 
 /* Style for the typing cursor */
 .dynamic-text {
@@ -21,7 +24,8 @@ $footer-bg: lighten($primary, 50%);
   background: -webkit-linear-gradient(top left, $primary, $navbar-bg);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 /* Animation for blinking cursor */
@@ -39,39 +43,40 @@ $footer-bg: lighten($primary, 50%);
 
 // Hero banner 
 .hero-banner {
-    position: relative;
-    background-color: $navbar-bg;
-    display: flex;
-    justify-content: center;
-    padding-left: 30px;
-    padding-right: 30px;
-    // padding-top: 10px;
-    flex-wrap: wrap;
+  position: relative;
+  background-color: $hero-bg;
+  display: flex;
+  justify-content: center;
+  padding-left: 30px;
+  padding-right: 30px;
+  // padding-top: 10px;
+  flex-wrap: wrap;
 }
 
 .hero-banner-text {
-    flex: 1; /* Each item will take equal space */
-    min-width: 300px; /* Minimum width of each item */
-    margin: 10px;
+  flex: 1; /* Each item will take equal space */
+  min-width: 300px; /* Minimum width of each item */
+  margin: 10px;
 }
 
 .hero-banner-carousel {
-    flex: 1; /* Each item will take equal space */
-    min-width: 300px; /* Minimum width of each item */
-    margin: 10px;
+  flex: 1; /* Each item will take equal space */
+  min-width: 300px; /* Minimum width of each item */
+  margin: 10px;
 }
 
 // Carousel
 .carousel {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 
 .carousel img {
-    width: 300px;
-    height: 300px;
-    max-width: 70%;
-    margin-bottom: 110px;
-    background-color: lighten($primary, 45%);
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  max-width: 70%;
+  margin-bottom: 110px;
+  background-color: transparent;
 }
 
 .carousel .carousel-control-prev-icon, 
@@ -80,8 +85,8 @@ $footer-bg: lighten($primary, 50%);
 }
 
 .content-block {
-    padding-top: 50px;
-    padding-bottom: 10px;
-    margin-left: 20%;
-    margin-right: 20%;
+  padding-top: 50px;
+  padding-bottom: 10px;
+  margin-left: 20%;
+  margin-right: 20%;
 }
