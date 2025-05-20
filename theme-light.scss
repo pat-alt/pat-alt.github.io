@@ -98,17 +98,23 @@ $larger: 1.25em;
 .content-block {
   padding-top: 50px;
   padding-bottom: 10px;
-  margin-left: 20%;
-  margin-right: 20%;
-  min-width: 350px;
+  width: 60%;
+  /* Dynamic margin calculation that approaches zero as width approaches 350px */
+  margin-left: auto;
+  margin-right: auto;
+  /* Use calc to set minimum width while allowing responsive behavior */
+  min-width: min(350px, 100%);
 }
 
 // Bluesky
 .bsky {
   padding-top: 20px;
-  margin-left: 10%;
-  margin-right: 10%;
-  min-width: 300px;
+  width: 80%;
+  /* Dynamic margin calculation that approaches zero as width approaches 350px */
+  margin-left: auto;
+  margin-right: auto;
+  /* Use calc to set minimum width while allowing responsive behavior */
+  min-width: min(300px, 100%);
 }
 
 // Profile picture
