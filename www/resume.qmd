@@ -1,7 +1,10 @@
 ---
 date: last-modified
 format:
-  quarto-cv-pdf: default
+  quarto-cv-pdf: 
+    include-in-header:
+      - text: |
+          \usepackage{xurl}
 author: Patrick Altmeyer
 address: Amsterdam, North Holland, The Netherlands
 # The following are optional
@@ -13,71 +16,140 @@ orcid: 0000-0003-4726-8613
 web: patalt.org
 fontawesome: yes
 bibliography: 
-  peer: bib/peer.bib
-  tech: bib/other.bib
-  pre: bib/pre.bib
+  peer: ../bib/peer.bib
+  tech: ../bib/other.bib
+  pre: ../bib/pre.bib
+  mast: ../bib/sup_masters.bib
+  bach: ../bib/sup_bachelors.bib
+  soft: ../bib/soft.bib
 validate-yaml: false
 nocite: '@*'
+csl: apa-cv.csl
+long-cv: false
 ---
 
 # Employment
 
-*Bank of England*
+## Bank of England
 
-Economist (London, UK) \hfill 2018-2020
+*Economist* (London, UK) \hfill 2018-2020
+
+::: {.content-hidden unless-meta="long-cv"}
+
+This content will be hidden unless there exists a metadata entry like such:
 
 - Co-initiated and led the development of an analysis tool that is still used internally today.
 - Conducted research and analysis as co-author of staff working papers on yield curve pricing and the demand for central bank reserves.
 - Policy briefing work for the Monetary Policy Committee and Financial Policy Committee involving econometric data analysis, presentations and speaking notes.
 
+:::
+
+::: {.content-hidden unless-meta="long-cv"}
+
+*Postgraduate Intern* (London, UK) \hfill 06/2017-08/2017
+
+::: {.content-hidden unless-meta="long-cv"}
+
+- Econometric analysis of large panel data set in R.
+- Presentation of results in a seminar to senior members of my division as well as a summary of the results in a written report using R Markdown.
+
+:::
+
+## University of Edinburgh
+
+*Teaching Assistant (part-time)* (Edinburgh, UK) \hfill 2016-2017
+
+::: {.content-hidden unless-meta="long-cv"}
+
+- Helped third-year econometrics students to familiarize themselves with applications of econometrics in Stata during labs.
+- Actively taught econometrics in tutorials jointly with senior teaching fellow.
+- Supported students in help desk sessions.
+
+:::
+
+## Handelsblatt Research Institute
+
+*Third-Year Intern* (Dusseldorf, Germany) \hfill 07/2016-08/2016
+
+- Researched economic and financial data using Bloomberg Terminal and Datastream.
+- Started research on my undergraduate dissertation.
+
+*First-Year Intern* (Dusseldorf, Germany) \hfill 06/2014-08/2014
+
+- Data research and analysis in MS Excel for in-depth study of the experiences of German entrepreneurs trading and investing in the African market
+- Used Bloomberg Terminal for daily research activities
+
+## von Poll Immobilien GmbH
+
+*Second-Year Intern* (Dusseldorf, German) \hfill 06/2015-07/2015
+
+- Integrated various house price estimation models in Excel templates.
+- Went to various client meetings together with colleagues and independently.
+
+## FreshSight Ltd.
+
+*Student Consultant (part-time)* (Edinburgh, UK) \hfill 09/2014-12/2014
+
+- Consulted client, The Turing Trust, on how to improve its organizational management and recruitment efforts.
+- Helped to create a 70 page deliverable together with a team of consultants.
+- Presented results in front of client and industry experts.
+
+:::
+
 # Education
 
-*Delft University of Technology*
+## Delft University of Technology
 
-Ph.D. Computer Science \hfill 2021-2025
+*Ph.D. Computer Science* \hfill 2021-2025
+
+::: {.content-hidden unless-meta="long-cv"}
 
 - Published research on Counterfactual Explanations, Predictive Uncertainty Quantification and Mechanistic Interpretability in top-tier venues: ICML, AAAI, IEEE SaTML.
-- Founded and maintained Taija, an open-source software organization for Trustworthy Artificial Intelligence in Julia. Presented at JuliaCon Global for three consecutive years.
 - Supervised multiple bachelor’s and master’s theses as well as software projects on related research topics.
+- Frequently invited as speaker at organizations including The Alan Turing Institute, The Bank of England, De Nederlandsche Bank, Verbond van Verzekeraars.
+- Founded and maintained Taija, an open-source software organization for Trustworthy Artificial Intelligence in Julia. Presented at JuliaCon Global for three consecutive years.
+- Mentored first-time open-source contributors as part of Google Summer of Code and Julia Season of Contributions.
 
-*Barcelona School of Economics (BSE)*
+:::
 
-Master’s Degree in Data Science, GPA 8.67/10 \hfill 2020-2021
+## Barcelona School of Economics (BSE)
+
+*Master’s Degree in Data Science*, GPA 8.67/10 \hfill 2020-2021
+
+::: {.content-hidden unless-meta="long-cv"}
 
 - Dissertation: Deep Vector Autoregression for Macroeconomic Data (9.5)
 - Relevant modules: Machine Learning (9.0), Reinforcement Learning (10.0)
 
-Master’s Degree in Economics and Finance, GPA 9.03/10 (top student) \hfill 2017-2018
+:::
+
+*Master’s Degree in Economics and Finance*, GPA 9.03/10 (top student) \hfill 2017-2018
+
+::: {.content-hidden unless-meta="long-cv"}
 
 - Dissertation: Option Pricing in the Heston Stochastic Volatility Model (10.0)
 - Relevant modules: Financial Econometrics (10.0), Pricing Financial Derivatives (9.3)
 
-*The University of Edinburgh*
+::::
 
-Master of Arts with Honours in Economics, First Class (among top three students) \hfill 2013-2017
+## The University of Edinburgh
+
+*Master of Arts with Honours in Economics*, First Class (among top three students) \hfill 2013-2017
+
+::: {.content-hidden unless-meta="long-cv"}
 
 - Dissertation: Can misguided monetary policy explain the European housing bubble? (82%)
 - Honours modules: Economics of Financial Markets (86%), Adv. Mathematical Economics
 (79%), Behavioural Economics (71%), Economics of Asymmetric Information (74%)
 
-# Skills
-
-- Languages: German (native), English (fluent), Spanish (intermediate), Dutch (intermediate)
-- Programming: Julia, R, Python, MATLAB, C++, SQL, git, Bash, Quarto, LaTeX
-
-# Selected Awards & Honours
-
-- 2nd Prize Winner of JuliaCon Pluto Notebook Competition. (2023)
-- 1st Prize Winner of ING Experiment Week. (2023)
-- Full scholarship for master’s in data science awarded jointly by Bank of England and BSE. (2020)
-- Full scholarship for master’s in economics and finance awarded BSE. (2017)
-- Edinburgh University School of Economics Joint Prize for the best performance in Economics. (2017)
-- School of Economics Prize for academic excellence in Economics. (2014)
+:::
 
 # Publications
 
 ::: {#refs-peer}
 :::
+
+::: {.content-hidden unless-meta="long-cv"}
 
 # Technical Reports
 
@@ -88,6 +160,40 @@ Master of Arts with Honours in Economics, First Class (among top three students)
 
 ::: {#refs-pre}
 :::
+
+# Supervision
+
+## Master's Students
+
+::: {#refs-mast}
+:::
+
+## Bachelor's Students
+
+::: {#refs-bach}
+:::
+
+# Software
+
+::: {#refs-soft}
+:::
+
+:::
+
+# Skills
+
+- Languages: German (native), English (fluent), Spanish (intermediate), Dutch (intermediate)
+- Programming: Julia, R, Python, MATLAB, C++, SQL, git, Bash, Quarto, LaTeX
+
+# Selected Awards & Honours
+
+- 2nd Prize Winner of JuliaCon Pluto Notebook Competition. (2023)
+- 1st Prize Winner of ING Experiment Week. (2023)
+- 3rd Price Winner of Novartis Datathon. (2020)
+- Full scholarship for master’s in data science awarded jointly by Bank of England and BSE. (2020)
+- Full scholarship for master’s in economics and finance awarded BSE. (2017)
+- Edinburgh University School of Economics Joint Prize for the best performance in Economics. (2017)
+- School of Economics Prize for academic excellence in Economics. (2014)
 
 # References
 
