@@ -1,71 +1,42 @@
----
-date: last-modified
-format:
-  quarto-cv-pdf: 
-    include-in-header:
-      - text: |
-          \usepackage{xurl}
-author: Patrick Altmeyer
-address: Amsterdam, North Holland, The Netherlands
-# The following are optional
-# phone: your contact number
-email: patalt@patalt.org
-github: pat-alt
-orcid: 0000-0003-4726-8613
-# osf: five character osf id
-web: patalt.org
-fontawesome: yes
-bibliography: 
-  peer: ../bib/peer.bib
-  tech: ../bib/other.bib
-  pre: ../bib/pre.bib
-  mast: ../bib/sup_masters.bib
-  bach: ../bib/sup_bachelors.bib
-  soft: ../bib/soft.bib
-validate-yaml: false
-nocite: '@*'
-csl: apa-cv.csl
-long-cv: false
----
-
 # Employment
 
 ## Bank of England
 
 *Economist* (London, UK) \hfill 2018-2020
 
-::: {.content-hidden unless-meta="long-cv"}
-
-This content will be hidden unless there exists a metadata entry like such:
+::: {.content-hidden when-meta="cv.academic"}
 
 - Co-initiated and led the development of an analysis tool that is still used internally today.
-- Conducted research and analysis as co-author of staff working papers on yield curve pricing and the demand for central bank reserves.
+- Research and analysis as co-author of staff working papers on yield curve pricing and demand for central bank reserves.
 - Policy briefing work for the Monetary Policy Committee and Financial Policy Committee involving econometric data analysis, presentations and speaking notes.
 
 :::
 
-::: {.content-hidden unless-meta="long-cv"}
-
 *Postgraduate Intern* (London, UK) \hfill 06/2017-08/2017
 
-::: {.content-hidden unless-meta="long-cv"}
+::: {.content-hidden when-meta="cv.academic"}
 
 - Econometric analysis of large panel data set in R.
-- Presentation of results in a seminar to senior members of my division as well as a summary of the results in a written report using R Markdown.
+- Presentation of results in to senior members of division and delivery of internal technical report
 
 :::
+
+::: {.content-hidden when-meta="cv.industry"}
 
 ## University of Edinburgh
 
 *Teaching Assistant (part-time)* (Edinburgh, UK) \hfill 2016-2017
 
-::: {.content-hidden unless-meta="long-cv"}
+::: {.content-hidden when-meta="cv.academic"}
 
 - Helped third-year econometrics students to familiarize themselves with applications of econometrics in Stata during labs.
 - Actively taught econometrics in tutorials jointly with senior teaching fellow.
 - Supported students in help desk sessions.
 
 :::
+
+::: {.content-hidden when-meta="cv.industry"}
+::: {.content-hidden when-meta="cv.academic"}
 
 ## Handelsblatt Research Institute
 
@@ -95,6 +66,8 @@ This content will be hidden unless there exists a metadata entry like such:
 - Presented results in front of client and industry experts.
 
 :::
+:::
+:::
 
 # Education
 
@@ -102,7 +75,7 @@ This content will be hidden unless there exists a metadata entry like such:
 
 *Ph.D. Computer Science* \hfill 2021-2025
 
-::: {.content-hidden unless-meta="long-cv"}
+::: {.content-hidden when-meta="cv.industry"}
 
 - Published research on Counterfactual Explanations, Predictive Uncertainty Quantification and Mechanistic Interpretability in top-tier venues: ICML, AAAI, IEEE SaTML.
 - Supervised multiple bachelor’s and master’s theses as well as software projects on related research topics.
@@ -116,7 +89,7 @@ This content will be hidden unless there exists a metadata entry like such:
 
 *Master’s Degree in Data Science*, GPA 8.67/10 \hfill 2020-2021
 
-::: {.content-hidden unless-meta="long-cv"}
+::: {.content-hidden when-meta="cv.industry"}
 
 - Dissertation: Deep Vector Autoregression for Macroeconomic Data (9.5)
 - Relevant modules: Machine Learning (9.0), Reinforcement Learning (10.0)
@@ -125,18 +98,18 @@ This content will be hidden unless there exists a metadata entry like such:
 
 *Master’s Degree in Economics and Finance*, GPA 9.03/10 (top student) \hfill 2017-2018
 
-::: {.content-hidden unless-meta="long-cv"}
+::: {.content-hidden when-meta="cv.industry"}
 
 - Dissertation: Option Pricing in the Heston Stochastic Volatility Model (10.0)
 - Relevant modules: Financial Econometrics (10.0), Pricing Financial Derivatives (9.3)
 
-::::
+:::
 
 ## The University of Edinburgh
 
 *Master of Arts with Honours in Economics*, First Class (among top three students) \hfill 2013-2017
 
-::: {.content-hidden unless-meta="long-cv"}
+::: {.content-hidden when-meta="cv.industry"}
 
 - Dissertation: Can misguided monetary policy explain the European housing bubble? (82%)
 - Honours modules: Economics of Financial Markets (86%), Adv. Mathematical Economics
@@ -146,10 +119,16 @@ This content will be hidden unless there exists a metadata entry like such:
 
 # Publications
 
-::: {#refs-peer}
+::: {.content-visible when-meta="cv.industry"}
+
+See [academic](academic.qmd) or [full](full.qmd) CV for details.
+
 :::
 
-::: {.content-hidden unless-meta="long-cv"}
+::: {.content-hidden when-meta="cv.industry"}
+
+::: {#refs-peer}
+:::
 
 # Technical Reports
 
@@ -187,8 +166,8 @@ This content will be hidden unless there exists a metadata entry like such:
 
 # Selected Awards & Honours
 
-- 2nd Prize Winner of JuliaCon Pluto Notebook Competition. (2023)
 - 1st Prize Winner of ING Experiment Week. (2023)
+- 2nd Prize Winner of JuliaCon Pluto Notebook Competition. (2023)
 - 3rd Price Winner of Novartis Datathon. (2020)
 - Full scholarship for master’s in data science awarded jointly by Bank of England and BSE. (2020)
 - Full scholarship for master’s in economics and finance awarded BSE. (2017)
