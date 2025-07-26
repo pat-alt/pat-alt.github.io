@@ -9,7 +9,7 @@
 <link>https://www.patalt.org/blog/</link>
 <atom:link href="https://www.patalt.org/blog/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-1.6.42</generator>
+<generator>quarto-1.7.31</generator>
 <lastBuildDate>Tue, 26 Nov 2024 23:00:00 GMT</lastBuildDate>
 <item>
   <title>Sidequest</title>
@@ -243,7 +243,7 @@ Figure&nbsp;1: Out-of-sample root mean squared error (RMSE) for the linear probe
 Alain, Guillaume, and Yoshua Bengio. 2016. <span>“<span class="nocase">Understanding intermediate layers using linear classifier probes</span>.”</span> <em>ArXiv</em> abs/1610.01644. <a href="https://api.semanticscholar.org/CorpusID:9794990">https://api.semanticscholar.org/CorpusID:9794990</a>.
 </div>
 <div id="ref-altmeyer2024position" class="csl-entry">
-Altmeyer, Patrick, Andrew M. Demetriou, Antony Bartlett, and Cynthia C. S. Liem. 2024. <span>“Position Paper: Against Spurious Sparks-Dovelating Inflated AI Claims.”</span> <a href="https://arxiv.org/abs/2402.03962">https://arxiv.org/abs/2402.03962</a>.
+Altmeyer, Patrick, Andrew M Demetriou, Antony Bartlett, and Cynthia CS Liem. 2024. <span>“Position: Stop Making Unscientific AGI Performance Claims.”</span> In <em>International Conference on Machine Learning</em>, 1222–42. PMLR.
 </div>
 <div id="ref-shah2023trillion" class="csl-entry">
 Shah, Agam, Suvan Paturi, and Sudheer Chava. 2023. <span>“<span>Trillion Dollar Words: A New Financial Dataset, Task &amp; Market Analysis</span>.”</span> <em>arXiv Preprint arXiv:2310.02207v1</em>. <a href="https://arxiv.org/abs/2305.07972">https://arxiv.org/abs/2305.07972</a>.
@@ -3356,7 +3356,7 @@ Figure&nbsp;9: Probe predictions for sentences about inflation of prices (IP), d
 Alain, Guillaume, and Yoshua Bengio. 2016. <span>“<span class="nocase">Understanding intermediate layers using linear classifier probes</span>.”</span> <em>ArXiv</em> abs/1610.01644. <a href="https://api.semanticscholar.org/CorpusID:9794990">https://api.semanticscholar.org/CorpusID:9794990</a>.
 </div>
 <div id="ref-altmeyer2024position" class="csl-entry">
-Altmeyer, Patrick, Andrew M. Demetriou, Antony Bartlett, and Cynthia C. S. Liem. 2024. <span>“Position Paper: Against Spurious Sparks-Dovelating Inflated AI Claims.”</span> <a href="https://arxiv.org/abs/2402.03962">https://arxiv.org/abs/2402.03962</a>.
+Altmeyer, Patrick, Andrew M Demetriou, Antony Bartlett, and Cynthia CS Liem. 2024. <span>“Position: Stop Making Unscientific AGI Performance Claims.”</span> In <em>International Conference on Machine Learning</em>, 1222–42. PMLR.
 </div>
 <div id="ref-belinkov2021probing" class="csl-entry">
 Belinkov, Yonatan. 2021. <span>“Probing Classifiers: Promises, Shortcomings, and Advances.”</span> <a href="https://arxiv.org/abs/2102.12452">https://arxiv.org/abs/2102.12452</a>.
@@ -6736,8 +6736,12 @@ font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> preserve</span></span></code></pre></div>
 <p>When working with <code>.qmd</code> files you also need to use a slightly different syntax for <a href="https://documenter.juliadocs.org/stable/showcase/#Admonitions">admonitions</a>. The following syntax inside the <code>.qmd</code></p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb8-1">| !!! note \"An optional title\"</span>
-<span id="cb8-2">|     Here is something that you should pay attention to.   </span></code></pre></div>
+<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">|</span> !!! note \"An optional title\"</span>
+<span id="cb8-2"><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">|</span>     Here is something that you should pay attention to.   </span></code></pre></div>
 <p>will generate the desired output inside the rendered <code>.md</code>:<sup>2</sup></p>
 <div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1">!!! note "An optional title"</span>
 <span id="cb9-2">    Here is something that you should pay attention to.   </span></code></pre></div>
@@ -6911,12 +6915,18 @@ Just had my first go <a href="https://twitter.com/hashtag/quarto?src=hash&amp;re
 <div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><span class="in" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">```{julia}</span></span>
-<span id="cb2-2"><span class="in" style="color: #5E5E5E;
+<span id="cb2-2"><span class="im" style="color: #00769E;
 background-color: null;
-font-style: inherit;">using Pkg</span></span>
-<span id="cb2-3"><span class="in" style="color: #5E5E5E;
+font-style: inherit;">using</span> <span class="bu" style="color: null;
 background-color: null;
-font-style: inherit;">Pkg.add("CounterfactualExplanations")</span></span>
+font-style: inherit;">Pkg</span></span>
+<span id="cb2-3"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">Pkg</span>.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"CounterfactualExplanations"</span>)</span>
 <span id="cb2-4"><span class="in" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">```</span></span></code></pre></div>
