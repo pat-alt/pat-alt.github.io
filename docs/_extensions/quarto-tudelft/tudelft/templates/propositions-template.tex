@@ -1,0 +1,86 @@
+% Propositions Template for TU Delft PhD Thesis
+% Adapted with the help of Claude Sonnet 3.7
+% !TeX spellcheck = en_GB
+
+\documentclass[10pt]{tudelft}
+
+% List handling
+\usepackage{enumitem}
+
+% Pandoc compatibility - define \tightlist
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% Hyperlinks (if needed)
+\usepackage{hyperref}
+
+% Graphics (if needed)
+$if(graphics)$
+\usepackage{graphicx}
+$endif$
+
+% Override geometry for A5 paper AFTER geometry is loaded by tudelft class
+\geometry{a5paper,margin=15mm}
+
+% Set title and author for the tudelft class
+\title{$title$}
+\author{$author$}
+
+\begin{document}
+
+% Don't call \maketitle - we'll create our own title
+
+% Disable headers and footers for propositions pages
+\thispagestyle{empty}
+\pagestyle{empty}
+
+% Save current section numbering depth
+\newcounter{savedsecnumdepth}
+\setcounter{savedsecnumdepth}{\value{secnumdepth}}
+
+% Disable section numbering
+\setcounter{secnumdepth}{-1}
+
+% Disable TOC entries
+\begingroup
+\renewcommand{\addcontentsline}[3]{}
+
+% Temporarily override header styling
+\addtokomafont{disposition}{\color{black}\rmfamily\normalfont\mdseries}
+\renewcommand*{\raggedchapter}{\centering}
+\renewcommand*{\raggedsection}{\centering}
+
+% Add centered title section
+\begin{center}
+{\LARGE\bfseries\titlefont Propositions}
+
+\vspace{0.5\baselineskip}
+
+accompanying the dissertation
+
+\vspace{0.5\baselineskip}
+
+{\large\bfseries\titlefont $title$}
+
+\vspace{0.5\baselineskip}
+
+by
+
+\vspace{0.5\baselineskip}
+
+{\large\bfseries\titlefont $author$}
+\end{center}
+
+\vspace{1.5\baselineskip}
+
+% Insert propositions content
+\small
+$body$
+
+\endgroup
+
+% Restore section numbering
+\setcounter{secnumdepth}{\value{savedsecnumdepth}}
+
+\end{document}
+
