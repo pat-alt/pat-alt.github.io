@@ -15,9 +15,6 @@
   // University logo.
   univ_logo: "Logo Path",
 
-  // QR Cocde.
-  qrcode: "QR Code Path",
-
   // Footer text.
   // For instance, Name of Conference, Date, Location.
   // or Course Name, Date, Instructor.
@@ -38,8 +35,6 @@
   // Tested on 36in x 24in, 48in x 36in, and 36in x 48in posters.
   // For 2-column posters, you may need to tweak these values.
   // See ./examples/example_2_column_18_24.typ for an example.
-
-  tldr: "",
 
   // Any keywords or index terms that you want to highlight at the beginning.
   keywords: (),
@@ -68,25 +63,11 @@
   // Footer's text font size (in pt).
   footer_text_font_size: "40",
 
-  // Body font size (in pt).
-  font_size: "16",
-
-  // Font family.
-  mainfont: "STIX Two Text",
-
-  // Header 1 font size (in pt).
-  h1_size: "32",
-
-  // Header 2 dont size (in pt).
-  h2_size: "24",
-
   // The poster's content.
   body
 ) = {
   // Set the body font.
-  mainfont = str(mainfont)
-  font_size = int(font_size) * 1pt
-  set text(font: mainfont, size: font_size)
+  set text(font: "STIX Two Text", size: 16pt)
   let sizes = size.split("x")
   let width = int(sizes.at(0)) * 1in
   let height = int(sizes.at(1)) * 1in
@@ -134,9 +115,6 @@
   set list(indent: 10pt, body-indent: 9pt)
 
   // Configure headings.
-  h2_size = int(h1_size) * 0.7pt
-  h1_size = int(h1_size) * 1pt
-
   set heading(numbering: "I.A.1.")
   show heading: it => locate(loc => {
     // Find out the final number of the heading counter.
@@ -151,7 +129,7 @@
     if it.level == 1 [
       // First-level headings are centered smallcaps.
       #set align(center)
-      #set text({ h1_size })
+      #set text({ 32pt })
       #show: smallcaps
       #v(50pt, weak: true)
       #if it.numbering != none {
@@ -163,14 +141,14 @@
       #line(length: 100%)
     ] else if it.level == 2 [
       // Second-level headings are run-ins.
-      #set text({ h2_size })
+      #set text(style: "italic")
       #v(32pt, weak: true)
       #if it.numbering != none {
         numbering("i.", deepest)
         h(7pt, weak: true)
       }
       #it.body
-      #v(25pt, weak: true)
+      #v(10pt, weak: true)
     ] else [
       // Third level headings are run-ins too, but different.
       #if it.level == 3 {
@@ -185,30 +163,20 @@
   align(center,
     grid(
       rows: 2,
-      columns: (univ_logo_column_size, title_column_size, univ_logo_column_size,),
+      columns: (univ_logo_column_size, title_column_size),
       column-gutter: 0pt,
       row-gutter: 50pt,
       image(univ_logo, width: univ_logo_scale),
       text(title_font_size, title + "\n\n") + 
       text(authors_font_size, emph(authors) + 
-          "\n\n" + departments + " "),
-      image(qrcode, width: 50%),
-    ),
+          "   (" + departments + ") "),
+    )
   )
-
-  line(length: 100%, stroke: 4pt + rgb(217, 240, 246))
 
   // Start three column mode and configure paragraph properties.
   show: columns.with(num_columns, gutter: 64pt)
   set par(justify: true, first-line-indent: 0em)
   show par: set block(spacing: 0.65em)
-
-  // Abstract.
-  if tldr != "" [
-      #v(50pt, weak: true)
-      *TLDR* --- #tldr 
-      #v(20pt, weak: true)
-  ]
 
   // Display the keywords.
   if keywords != () [
