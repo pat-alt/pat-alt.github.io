@@ -9,7 +9,7 @@
 <link>https://www.patalt.org/blog/</link>
 <atom:link href="https://www.patalt.org/blog/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-1.7.31</generator>
+<generator>quarto-1.8.27</generator>
 <lastBuildDate>Tue, 26 Nov 2024 23:00:00 GMT</lastBuildDate>
 <item>
   <title>Sidequest</title>
@@ -86,13 +86,13 @@ Altmeyer, Patrick. 2024. <span>“Sidequest.”</span> November 27, 2024. <a hre
 
 
 
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1">#| echo: false</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1">#| echo: false</span>
 <span id="cb1-2"></span>
 <span id="cb1-3">projectdir = splitpath(pwd()) |&gt;</span>
 <span id="cb1-4">    ss -&gt; joinpath(ss[1:findall([s == "pat-alt.github.io" for s in ss])[1]]...) </span>
 <span id="cb1-5">cd(projectdir)</span>
 <span id="cb1-6"></span>
-<span id="cb1-7">include("$(projectdir)/blog/posts/trillion-dollar-words/src/setup.jl")</span></code></pre></div>
+<span id="cb1-7">include("$(projectdir)/blog/posts/trillion-dollar-words/src/setup.jl")</span></code></pre></div></div>
 <div class="intro-gif">
 <figure class="figure">
 <img src="https://www.patalt.org/blog/posts/trillion-dollar-words/intro.jpeg" class="figure-img">
@@ -112,7 +112,7 @@ Photo by <a href="https://unsplash.com/@neonbrand?utm_content=creditCopyText&amp
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Disclaimer
+<span class="screen-reader-only">Note</span>Disclaimer
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -120,7 +120,7 @@ Disclaimer
 </div>
 </div>
 <p>You can install the package from Julia’s general registry as follows:</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><span class="im" style="color: #00769E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">using</span> <span class="bu" style="color: null;
 background-color: null;
@@ -133,9 +133,9 @@ font-style: inherit;">add</span>(url<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"TrillionDollarWords.jl"</span>)</span></code></pre></div>
+font-style: inherit;">"TrillionDollarWords.jl"</span>)</span></code></pre></div></div>
 <p>To install the development version, use the following command:</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><span class="im" style="color: #00769E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">using</span> <span class="bu" style="color: null;
 background-color: null;
@@ -148,7 +148,7 @@ font-style: inherit;">add</span>(url<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"https://github.com/pat-alt/TrillionDollarWords.jl"</span>)</span></code></pre></div>
+font-style: inherit;">"https://github.com/pat-alt/TrillionDollarWords.jl"</span>)</span></code></pre></div></div>
 <section id="basic-functionality" class="level3">
 <h3 class="anchored" data-anchor-id="basic-functionality">Basic Functionality</h3>
 <p>The package provides the following functionality:</p>
@@ -164,38 +164,38 @@ font-style: inherit;">"https://github.com/pat-alt/TrillionDollarWords.jl"</span>
 <h3 class="anchored" data-anchor-id="loading-the-data">Loading the Data</h3>
 <p>The Trillion Dollar Words dataset is a collection of preprocessed sentences around 40,000 time-stamped sentences from meeting minutes, press conferences and speeches by members of the Federal Open Market Committee (FOMC) <span class="citation" data-cites="shah2023trillion">(Shah, Paturi, and Chava 2023)</span>. The total sample period spans from January, 1996, to October, 2022. In order to train various rule-based models and large language models (LLM) to classify sentences as either ‘hawkish’, ‘dovish’ or ‘neutral’, they have manually annotated a subset of around 2,500 sentences. The best-performing model, a large BERT model with around 355 million parameters, was open-sourced on <a href="https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves">HuggingFace</a>. The authors also link the sentences to market data, which makes it possible to study the relationship between language and financial markets. While the authors of the paper did publish their data, much of it is unfortunately scattered across CSV and Excel files stored in a public GitHub <a href="https://github.com/gtfintechlab/fomc-hawkish-dovish">repo</a>. I have collected and merged that data, yielding a combined dataset with indexed sentences and additional metadata that may be useful for downstream tasks.</p>
 <p>The entire dataset of all available sentences used in the paper can be loaded as follows:</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1">#| output: true</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1">#| output: true</span>
 <span id="cb4-2"></span>
 <span id="cb4-3">using TrillionDollarWords</span>
-<span id="cb4-4">load_all_sentences() |&gt; show</span></code></pre></div>
+<span id="cb4-4">load_all_sentences() |&gt; show</span></code></pre></div></div>
 <p>The combined dataset is also available as a <code>DataFrame</code> and can be loaded as follows:</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1">#| output: true</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1">#| output: true</span>
 <span id="cb5-2"></span>
-<span id="cb5-3">load_all_data() |&gt; show</span></code></pre></div>
+<span id="cb5-3">load_all_data() |&gt; show</span></code></pre></div></div>
 <p>Additional functionality for data loading is available (see <a href="https://www.patalt.org/TrillionDollarWords.jl/dev/">docs</a>).</p>
 </section>
 <section id="loading-the-model" class="level3">
 <h3 class="anchored" data-anchor-id="loading-the-model">Loading the Model</h3>
 <p>The model can be loaded with or without the classifier head (below without the head). Under the hood, this function uses <a href="https://github.com/chengchingwen/Transformers.jl">Transformers.jl</a> to retrieve the model from <a href="https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves">HuggingFace</a>. Any keyword arguments accepted by <code>Transformers.HuggingFace.HGFConfig</code> can also be passed. For example, to load the model without the classifier head and enable access to layer-wise activations, the following command can be used:</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1">#| output: true</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1">#| output: true</span>
 <span id="cb6-2"></span>
-<span id="cb6-3">load_model(; load_head=false, output_hidden_states=true) |&gt; show</span></code></pre></div>
+<span id="cb6-3">load_model(; load_head=false, output_hidden_states=true) |&gt; show</span></code></pre></div></div>
 </section>
 <section id="basic-model-inference" class="level3">
 <h3 class="anchored" data-anchor-id="basic-model-inference">Basic Model Inference</h3>
 <p>Using the model and data, layer-wise activations can be computed as below (here for the first 5 sentences). When called on a <code>DataFrame</code>, the <code>layerwise_activations</code> returns a data frame that links activations to sentence identifiers. This makes it possible to relate activations to market data by using the <code>sentence_id</code> key. Alternatively, <code>layerwise_activations</code> also accepts a vector of sentences.</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1">#| output: true</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1">#| output: true</span>
 <span id="cb7-2"></span>
 <span id="cb7-3">df = load_all_sentences()</span>
 <span id="cb7-4">mod = load_model(; load_head=false, output_hidden_states=true)</span>
 <span id="cb7-5">n = 5</span>
 <span id="cb7-6">queries = df[1:n, :]</span>
-<span id="cb7-7">layerwise_activations(mod, queries) |&gt; show</span></code></pre></div>
+<span id="cb7-7">layerwise_activations(mod, queries) |&gt; show</span></code></pre></div></div>
 </section>
 <section id="probe-findings" class="level3">
 <h3 class="anchored" data-anchor-id="probe-findings">Probe Findings</h3>
-<p>For our own <a href="https://arxiv.org/abs/2402.03962">research</a> <span class="citation" data-cites="altmeyer2024position">(Altmeyer et al. 2024)</span>, we have been interested in probing the model. This involves using linear models to estimate the relationship between layer-wise transformer embeddings and some outcome variable of interest <span class="citation" data-cites="alain2018understanding">(Alain and Bengio 2016)</span>. To do this, we first had to run a single forward pass for each sentence through the RoBERTa model and store the layerwise emeddings. As we have seen above, the package ships with functionality for doing just that, but to save others valuable GPU hours we have archived activations of the hidden state on the first entity token for each layer as <a href="https://github.com/pat-alt/TrillionDollarWords.jl/releases/tag/activations_2024-01-17">artifacts</a>. To download the last-layer activations in an interactive Julia session, for example, users can proceed as follows:</p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><span class="im" style="color: #00769E;
+<p>For our own <a href="https://arxiv.org/abs/2402.03962">research</a> <span class="citation" data-cites="altmeyer2024position">(Altmeyer et al. 2024)</span>, we have been interested in probing the model. This involves using linear models to estimate the relationship between layer-wise transformer embeddings and some outcome variable of interest <span class="citation" data-cites="alain2018understanding">(Alain and Bengio 2018)</span>. To do this, we first had to run a single forward pass for each sentence through the RoBERTa model and store the layerwise emeddings. As we have seen above, the package ships with functionality for doing just that, but to save others valuable GPU hours we have archived activations of the hidden state on the first entity token for each layer as <a href="https://github.com/pat-alt/TrillionDollarWords.jl/releases/tag/activations_2024-01-17">artifacts</a>. To download the last-layer activations in an interactive Julia session, for example, users can proceed as follows:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">using</span> <span class="bu" style="color: null;
 background-color: null;
@@ -205,8 +205,8 @@ font-style: inherit;">LazyArtifacts</span></span>
 background-color: null;
 font-style: inherit;">&gt;</span> artifact<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"activations_layer_24"</span></span></code></pre></div>
-<p>We have found that despite the small sample size, the <em>FOMC-RoBERTa</em> model appears to have distilled useful representations for downstream tasks that it was not explicitly trained for. Figure&nbsp;1 below shows the average out-of-sample root mean squared error for predicting various market indicators from layer activations. Consistent with findings in related work <span class="citation" data-cites="alain2018understanding">(Alain and Bengio 2016)</span>, we find that performance typically improves for layers closer to the final output layer of the transformer model. The measured performance is at least on par with baseline autoregressive models. For more information on this, see also my other recent <a href="../../../blog/posts/spurious-sparks/index.html">post</a>.</p>
+font-style: inherit;">"activations_layer_24"</span></span></code></pre></div></div>
+<p>We have found that despite the small sample size, the <em>FOMC-RoBERTa</em> model appears to have distilled useful representations for downstream tasks that it was not explicitly trained for. Figure&nbsp;1 below shows the average out-of-sample root mean squared error for predicting various market indicators from layer activations. Consistent with findings in related work <span class="citation" data-cites="alain2018understanding">(Alain and Bengio 2018)</span>, we find that performance typically improves for layers closer to the final output layer of the transformer model. The measured performance is at least on par with baseline autoregressive models. For more information on this, see also my other recent <a href="../../../blog/posts/spurious-sparks/index.html">post</a>.</p>
 <div id="fig-rmse-pca-128" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rmse-pca-128-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -240,7 +240,7 @@ Figure&nbsp;1: Out-of-sample root mean squared error (RMSE) for the linear probe
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0">
 <div id="ref-alain2018understanding" class="csl-entry">
-Alain, Guillaume, and Yoshua Bengio. 2016. <span>“<span class="nocase">Understanding intermediate layers using linear classifier probes</span>.”</span> <em>ArXiv</em> abs/1610.01644. <a href="https://api.semanticscholar.org/CorpusID:9794990">https://api.semanticscholar.org/CorpusID:9794990</a>.
+Alain, Guillaume, and Yoshua Bengio. 2018. <span>“Understanding Intermediate Layers Using Linear Classifier Probes.”</span> <a href="https://arxiv.org/abs/1610.01644">https://arxiv.org/abs/1610.01644</a>.
 </div>
 <div id="ref-altmeyer2024position" class="csl-entry">
 Altmeyer, Patrick, Andrew M Demetriou, Antony Bartlett, and Cynthia C. S. Liem. 2024. <span>“Position: Stop Making Unscientific AGI Performance Claims.”</span> In <em>International Conference on Machine Learning</em>, 1222–42. PMLR. <a href="https://proceedings.mlr.press/v235/altmeyer24a.html">https://proceedings.mlr.press/v235/altmeyer24a.html</a>.
@@ -301,7 +301,7 @@ Note
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Intermezzo: Why Bother?
+<span class="screen-reader-only">Tip</span>Intermezzo: Why Bother?
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -561,7 +561,7 @@ Note
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Position
+<span class="screen-reader-only">Important</span>Position
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -570,7 +570,7 @@ Position
 <li>Linear probes are straightforward, the visualizations in <span class="citation" data-cites="gurnee2023language">Gurnee and Tegmark (2023)</span> are intriguing, the code is open-sourced and the findings are interesting.</li>
 <li>I am surprised that people are surprised by the findings: if we agree that LLMs exhibit strong capabilities that can only be connected to the patterns observed in the data they were trained on, then where exactly should we expect this information to be stored if not in the parameters of the model?<sup>1</sup></li>
 <li>I therefore do take issue with the way that these findings are being overblown by people with clout. Perhaps the parrot metaphor should not be taken too literally either, but if anything the paper’s findings seem to support the notion that LLMs are remarkably capable of memorizing and regurgitating explicit and implicit knowledge contained in text.</li>
-<li>I want to point out that linear probes were proposed in the context of monitoring models and diagnosing potential problems <span class="citation" data-cites="alain2018understanding">Alain and Bengio (2016)</span>. Favorable outcomes from probes merely indicate that the model in question “has learned information relevant for the property [of interest]” <span class="citation" data-cites="belinkov2021probing">(Belinkov 2021)</span>. This is useful but not the same as demonstrating that the model has attained a true “understanding” of the world.</li>
+<li>I want to point out that linear probes were proposed in the context of monitoring models and diagnosing potential problems <span class="citation" data-cites="alain2018understanding">Alain and Bengio (2018)</span>. Favorable outcomes from probes merely indicate that the model in question “has learned information relevant for the property [of interest]” <span class="citation" data-cites="belinkov2021probing">(Belinkov 2021)</span>. This is useful but not the same as demonstrating that the model has attained a true “understanding” of the world.</li>
 </ol>
 </div>
 </div>
@@ -590,7 +590,7 @@ Position
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Code
+<span class="screen-reader-only">Note</span>Code
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -602,7 +602,7 @@ Code
 <blockquote class="blockquote">
 <p>If we can expect even random projections to contain useful representations, then should we really be surprised that a large language model, trained on a diverse set of data, contains representations that are useful for a wide range of tasks? 🤔</p>
 </blockquote>
-<p>While the fit certainly is not perfect, the results do indicate that the random projection contains representations that are useful for the task at hand. Thus, this simple example illustrates that meaningful target representations should be recoverable from a sufficiently large latent space, given the <em>random</em> projection of a small number of highly correlated features. Similarly, <span class="citation" data-cites="alain2018understanding">Alain and Bengio (2016)</span> observe that even before training a convolutional neural network on MNIST data, the layer-wise activations can already be used to perform binary classification. In fact, it is well-known that random projections can be used for prediction tasks <span class="citation" data-cites="dasgupta2013experiments">(Dasgupta 2013)</span>.</p>
+<p>While the fit certainly is not perfect, the results do indicate that the random projection contains representations that are useful for the task at hand. Thus, this simple example illustrates that meaningful target representations should be recoverable from a sufficiently large latent space, given the <em>random</em> projection of a small number of highly correlated features. Similarly, <span class="citation" data-cites="alain2018understanding">Alain and Bengio (2018)</span> observe that even before training a convolutional neural network on MNIST data, the layer-wise activations can already be used to perform binary classification. In fact, it is well-known that random projections can be used for prediction tasks <span class="citation" data-cites="dasgupta2013experiments">(Dasgupta 2013)</span>.</p>
 <div id="fig-map" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -621,7 +621,7 @@ Figure&nbsp;1: Predicted coordinate values (out-of-sample) from a linear probe o
 <p>Figure&nbsp;2 (b) shows the corresponding yield curve during the aftermath of the GFC on 20 April 2009. On that day the influential Time Magazine <a href="https://content.time.com/time/business/article/0,8599,1890560,00.html">reported</a> that the “Banking Crisis is Over”. The yield curve was steeply sloped with a positive spread between the 10-year and 3-month yields, indicative of the market’s expectation of a recovery. The overall level of the yield curve was still very low though, indicative of the fact that US economy had not fully recovered at that point.</p>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1">df <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1">df <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> CSV.<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -873,7 +873,7 @@ font-style: inherit;">6</span>)</span>
 <span id="cb1-40">)</span>
 <span id="cb1-41"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">display</span>(plt)</span></code></pre></div>
+font-style: inherit;">display</span>(plt)</span></code></pre></div></div>
 </details>
 <div id="fig-gfc" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1028,7 +1028,7 @@ Figure&nbsp;2: Yield curve of US Treasury bonds.
 <div id="6" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># PCA:</span></span>
 <span id="cb2-2">df_wide <span class="op" style="color: #5E5E5E;
@@ -1073,7 +1073,7 @@ font-style: inherit;">Matrix</span></span>
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">svd</span>(X)</span></code></pre></div>
+font-style: inherit;">svd</span>(X)</span></code></pre></div></div>
 </details>
 </div>
 <div id="fig-pca" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1091,7 +1091,7 @@ Figure&nbsp;3: Comparison of latent embeddings and observed data of the US Treas
 <div id="8" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1">n_vals <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1">n_vals <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
 background-color: null;
@@ -1402,7 +1402,7 @@ font-style: inherit;">"results/figures/pc_anim.gif"</span>), fps<span class="op"
 background-color: null;
 font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">5</span>)</span></code></pre></div>
+font-style: inherit;">5</span>)</span></code></pre></div></div>
 </details>
 </div>
 <div id="fig-pca-anim" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1425,7 +1425,7 @@ Figure&nbsp;4: Yield curve decomposition through PCA.
 <div id="cell-fig-dl-data" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1">df_gdp_full <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1">df_gdp_full <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> CSV.<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1713,7 +1713,7 @@ font-style: inherit;">600</span>), left_margin<span class="op" style="color: #5E
 background-color: null;
 font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">5</span>mm)</span></code></pre></div>
+font-style: inherit;">5</span>mm)</span></code></pre></div></div>
 </details>
 <div id="fig-dl-data" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="1">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1808,7 +1808,7 @@ Figure&nbsp;5: GDP growth and yield curve data.
 <div id="cell-fig-dl-model" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1">dl <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1">dl <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> Flux.MLUtils.<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1908,7 +1908,7 @@ background-color: null;
 font-style: inherit;">rand</span>(input_dim))</span>
 <span id="cb5-21"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">display</span>(plt)</span></code></pre></div>
+font-style: inherit;">display</span>(plt)</span></code></pre></div></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>GKS: could not find font Sans.ttf</code></pre>
@@ -3255,7 +3255,7 @@ Figure&nbsp;6: Model architecture.
 </section>
 <section id="linear-probe" class="level4">
 <h4 class="anchored" data-anchor-id="linear-probe">Linear Probe</h4>
-<p>While the loss function applies most direct pressure on layers near the final output layer, any information useful for the downstream task first needs to pass through the bottleneck layer <span class="citation" data-cites="alain2018understanding">(Alain and Bengio 2016)</span>. On a per-neuron basis, the pressure to distill useful representation is therefore likely maximized there. Consequently, the bottleneck layer activations seem like a natural place to start looking for compact, meaningful representations of distilled information. I compute and extract these activations <img src="https://latex.codecogs.com/png.latex?A_t"> for all time periods <img src="https://latex.codecogs.com/png.latex?t=1,...,T">. Next, we use a linear probe to regress the observed yield curve factors on the latent embeddings. Let <img src="https://latex.codecogs.com/png.latex?Y_t"> denote the vector containing the two factors of interest in time <img src="https://latex.codecogs.com/png.latex?t">: <img src="https://latex.codecogs.com/png.latex?y_%7Bt,l%7D"> and <img src="https://latex.codecogs.com/png.latex?y_%7Bt,s%7D"> for the level and spread, respectively. Formally, we are interested in the following regression model: <img src="https://latex.codecogs.com/png.latex?p_%7Bw%7D(Y_t%7CA_t)"> where <img src="https://latex.codecogs.com/png.latex?w"> denotes the regression parameters. I use Ridge regression with <img src="https://latex.codecogs.com/png.latex?%5Clambda"> set to <img src="https://latex.codecogs.com/png.latex?0.1">. Using the estimated regression parameters <img src="https://latex.codecogs.com/png.latex?%5Chat%7Bw%7D">, we then predict the yield curve factors from the latent embeddings: <img src="https://latex.codecogs.com/png.latex?%5Chat%7BY%7D_t=%5Chat%7Bw%7D%5E%7B%5Cprime%7DA_t">.</p>
+<p>While the loss function applies most direct pressure on layers near the final output layer, any information useful for the downstream task first needs to pass through the bottleneck layer <span class="citation" data-cites="alain2018understanding">(Alain and Bengio 2018)</span>. On a per-neuron basis, the pressure to distill useful representation is therefore likely maximized there. Consequently, the bottleneck layer activations seem like a natural place to start looking for compact, meaningful representations of distilled information. I compute and extract these activations <img src="https://latex.codecogs.com/png.latex?A_t"> for all time periods <img src="https://latex.codecogs.com/png.latex?t=1,...,T">. Next, we use a linear probe to regress the observed yield curve factors on the latent embeddings. Let <img src="https://latex.codecogs.com/png.latex?Y_t"> denote the vector containing the two factors of interest in time <img src="https://latex.codecogs.com/png.latex?t">: <img src="https://latex.codecogs.com/png.latex?y_%7Bt,l%7D"> and <img src="https://latex.codecogs.com/png.latex?y_%7Bt,s%7D"> for the level and spread, respectively. Formally, we are interested in the following regression model: <img src="https://latex.codecogs.com/png.latex?p_%7Bw%7D(Y_t%7CA_t)"> where <img src="https://latex.codecogs.com/png.latex?w"> denotes the regression parameters. I use Ridge regression with <img src="https://latex.codecogs.com/png.latex?%5Clambda"> set to <img src="https://latex.codecogs.com/png.latex?0.1">. Using the estimated regression parameters <img src="https://latex.codecogs.com/png.latex?%5Chat%7Bw%7D">, we then predict the yield curve factors from the latent embeddings: <img src="https://latex.codecogs.com/png.latex?%5Chat%7BY%7D_t=%5Chat%7Bw%7D%5E%7B%5Cprime%7DA_t">.</p>
 <p>The in-sample predictions of the probe are shown in the right chart of Figure&nbsp;7. Solid lines show the observed yield curve factors over time, while dashed lines show predicted values. We can observe that the latent embeddings predict the two yield curve factors reasonably well, in particular the spread.</p>
 <div id="fig-dl-results" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -3280,7 +3280,7 @@ Figure&nbsp;7: The left chart shows the actual GDP growth and fitted values from
 <p>To round up this section, we will jump back on the hype train and consider an example involving an LLM. In particular, we will closely follow the approach in <span class="citation" data-cites="gurnee2023language">Gurnee and Tegmark (2023)</span> and apply it to a novel financial dataset: the <em>Trillion Dollar Words</em> dataset introduced by <span class="citation" data-cites="shah2023trillion">Shah, Paturi, and Chava (2023)</span>. The dataset contains a curated selection of sentences formulated by central bankers of the US Federal Reserve and communicated to the public in speeches, meeting minutes and press conferences. The authors of the paper use this dataset to train LLMs to classify sentences as either ‘dovish’, ‘hawkish’ or ‘neutral’. To this end, they first manually annotate a subsample of the available data and then fine-tune various foundation models. Their model of choice, <em>FOMC-RoBERTa</em> (a fine-tuned version of RoBERTa <span class="citation" data-cites="liu2019roberta">(Liu et al. 2019)</span>), achieves an <img src="https://latex.codecogs.com/png.latex?F_1"> score of around <img src="https://latex.codecogs.com/png.latex?%3E0.7"> for the classification task. To illustrate the potential usefulness of the learned classifier, they use predicted labels for the entire dataset to compute an ad-hoc, count-based measure of ‘hawkishness’. They then go on to show that this measure correlates with key economic indicators in the expected direction: when inflationary pressures rise, the measured level of ‘hawkishness’ increases as central bankers need to raise interest rates to bring inflation back to target.</p>
 <section id="linear-probes" class="level4">
 <h4 class="anchored" data-anchor-id="linear-probes">Linear Probes</h4>
-<p>Instead of computing a measure based on predicted labels, we can use linear probes to assess if the fine-tuned model has learned associative patterns between central bank communications and key economic indicators. To this end, I have further pre-processed the data provided by <span class="citation" data-cites="shah2023trillion">Shah, Paturi, and Chava (2023)</span> and used their proposed model to compute layer-wise embeddings for all available sentences. I have made these available and easily accessible through a small Julia package: <a href="https://github.com/pat-alt/TrillionDollarWords.jl">TrillionDollarWords.jl</a>. For each layer, I have then computed linear probes on two inflation indicators—the Consumer Price Index (CPI) and the Producer Price Index (PPI)—as well as US Treasury yields at different levels of maturity. To mitigate issues related to over-parameterization, I follow the recommendation in <span class="citation" data-cites="alain2018understanding">Alain and Bengio (2016)</span> to first reduce the dimensionality of the embeddings each time. In particular, linear probes are restricted to the first 128 principal components of the embeddings of each layer.</p>
+<p>Instead of computing a measure based on predicted labels, we can use linear probes to assess if the fine-tuned model has learned associative patterns between central bank communications and key economic indicators. To this end, I have further pre-processed the data provided by <span class="citation" data-cites="shah2023trillion">Shah, Paturi, and Chava (2023)</span> and used their proposed model to compute layer-wise embeddings for all available sentences. I have made these available and easily accessible through a small Julia package: <a href="https://github.com/pat-alt/TrillionDollarWords.jl">TrillionDollarWords.jl</a>. For each layer, I have then computed linear probes on two inflation indicators—the Consumer Price Index (CPI) and the Producer Price Index (PPI)—as well as US Treasury yields at different levels of maturity. To mitigate issues related to over-parameterization, I follow the recommendation in <span class="citation" data-cites="alain2018understanding">Alain and Bengio (2018)</span> to first reduce the dimensionality of the embeddings each time. In particular, linear probes are restricted to the first 128 principal components of the embeddings of each layer.</p>
 <p>Figure&nbsp;8 shows the out-of-sample root mean squared error (RMSE) for the linear probe, plotted against <em>FOMC-RoBERTa</em>’s <img src="https://latex.codecogs.com/png.latex?n">-th layer. The values correspond to averages across cross-validation folds where I have used an expanding window scheme. Consistent with related work <span class="citation" data-cites="alain2018understanding">Gurnee and Tegmark (2023)</span>, we can observe that model performance tends to be higher for layers near the end of the transformer model. Curiously, for yields at longer maturities, we see that performance eventually deteriorates for the very final layers. This is not the case for the training data, so I would attribute this to overfitting. A detailed discussion of all our results including a benchmark of these probes against baseline autoregressive models can be found in the paper.</p>
 <div id="fig-fomc" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -3330,7 +3330,7 @@ Figure&nbsp;9: Probe predictions for sentences about inflation of prices (IP), d
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>Linear probes and related tools from mechanistic interpretability were proposed in the context of monitoring models and diagnosing potential problems <span class="citation" data-cites="alain2018understanding">Alain and Bengio (2016)</span>. Favorable outcomes from probes merely indicate that the model “has learned information relevant for the property [of interest]” <span class="citation" data-cites="belinkov2021probing">Belinkov (2021)</span>. The examples shown here demonstrate that this is achievable even for small models, while these have certainly not developed an intrinsic “understanding” of the world. Thus, my co-authors and I argue that more conservative and rigorous tests for emerging capabilities of AI model are needed.</p>
+<p>Linear probes and related tools from mechanistic interpretability were proposed in the context of monitoring models and diagnosing potential problems <span class="citation" data-cites="alain2018understanding">Alain and Bengio (2018)</span>. Favorable outcomes from probes merely indicate that the model “has learned information relevant for the property [of interest]” <span class="citation" data-cites="belinkov2021probing">Belinkov (2021)</span>. The examples shown here demonstrate that this is achievable even for small models, while these have certainly not developed an intrinsic “understanding” of the world. Thus, my co-authors and I argue that more conservative and rigorous tests for emerging capabilities of AI model are needed.</p>
 <p>I want to conclude this blog post just as we conclude in our paper:</p>
 <blockquote class="blockquote">
 <p>“We as academic researchers carry great responsibility for how the narrative will unfold, and what claims are believed. We call upon our colleagues to be explicitly mindful of this. As attractive as it may be to beat the state-of-the-art with a grander claim, let us return to the Mertonian norms, and thus safeguard our academic legitimacy in a world that only will be eager to run with made claims.”</p>
@@ -3353,7 +3353,7 @@ Figure&nbsp;9: Probe predictions for sentences about inflation of prices (IP), d
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0">
 <div id="ref-alain2018understanding" class="csl-entry">
-Alain, Guillaume, and Yoshua Bengio. 2016. <span>“<span class="nocase">Understanding intermediate layers using linear classifier probes</span>.”</span> <em>ArXiv</em> abs/1610.01644. <a href="https://api.semanticscholar.org/CorpusID:9794990">https://api.semanticscholar.org/CorpusID:9794990</a>.
+Alain, Guillaume, and Yoshua Bengio. 2018. <span>“Understanding Intermediate Layers Using Linear Classifier Probes.”</span> <a href="https://arxiv.org/abs/1610.01644">https://arxiv.org/abs/1610.01644</a>.
 </div>
 <div id="ref-altmeyer2024position" class="csl-entry">
 Altmeyer, Patrick, Andrew M Demetriou, Antony Bartlett, and Cynthia C. S. Liem. 2024. <span>“Position: Stop Making Unscientific AGI Performance Claims.”</span> In <em>International Conference on Machine Learning</em>, 1222–42. PMLR. <a href="https://proceedings.mlr.press/v235/altmeyer24a.html">https://proceedings.mlr.press/v235/altmeyer24a.html</a>.
@@ -3595,11 +3595,11 @@ A leap of faith into Julia’s metaverse.
 <p>Metaprogramming is a programming technique in which computer programs have the ability to treat other programs as their data.</p>
 </blockquote>
 <p>Right … What about ChatGPT? I wanted to try out <a href="https://github.com/ThatcherC/ReplGPT.jl">ReplGPT</a> anyway so here goes<sup>1</sup>:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia-repl number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1">julia&gt; using ReplGPT</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia-repl number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1">julia&gt; using ReplGPT</span>
 <span id="cb1-2">ChatGPT&gt; Hey hey, can you please explain metaprogramming to me (I have no computer science background, but am experienced with programming and data science)</span>
 <span id="cb1-3">  Metaprogramming is a programming technique where a program is capable of creating or manipulating code at</span>
 <span id="cb1-4">  runtime. It involves writing computer programs that create, modify, or analyze other computer programs or data</span>
-<span id="cb1-5">  about those programs.</span></code></pre></div>
+<span id="cb1-5">  about those programs.</span></code></pre></div></div>
 <p>So, in layman’s terms, metaprogramming involves code that generates code - I guess we really have entered the metaverse!</p>
 </section>
 <section id="julia-docs" class="level2">
@@ -3622,7 +3622,7 @@ Figure&nbsp;1: Key concept: code as a data structure.
 <div id="4" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1">ex <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1">ex <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -3637,7 +3637,7 @@ background-color: null;
 font-style: inherit;">3</span>]))</span>
 <span id="cb2-2"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">dump</span>(ex)</span></code></pre></div>
+font-style: inherit;">dump</span>(ex)</span></code></pre></div></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Expr
@@ -3657,9 +3657,9 @@ font-style: inherit;">dump</span>(ex)</span></code></pre></div>
 <div id="6" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">eval</span>(ex)</span></code></pre></div>
+font-style: inherit;">eval</span>(ex)</span></code></pre></div></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>6</code></pre>
@@ -3669,7 +3669,7 @@ font-style: inherit;">eval</span>(ex)</span></code></pre></div>
 <div id="8" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1">ex.args[<span class="fl" style="color: #AD0000;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1">ex.args[<span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>] <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -3678,7 +3678,7 @@ background-color: null;
 font-style: inherit;">:</span>maximum</span>
 <span id="cb6-2"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">eval</span>(ex)</span></code></pre></div>
+font-style: inherit;">eval</span>(ex)</span></code></pre></div></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3</code></pre>
@@ -3692,7 +3692,7 @@ font-style: inherit;">eval</span>(ex)</span></code></pre></div>
 <div id="10" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1">fun <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1">fun <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> maximum</span>
 <span id="cb8-2">x <span class="op" style="color: #5E5E5E;
@@ -3719,14 +3719,14 @@ font-style: inherit;">$</span>x))</span>
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">eval</span>(ex_from_ex_interpoliation)</span></code></pre></div>
+font-style: inherit;">eval</span>(ex_from_ex_interpoliation)</span></code></pre></div></div>
 </details>
 </div>
 <p>Using string interpolation is quite similar:</p>
 <div id="12" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1">fun <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1">fun <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> maximum</span>
 <span id="cb9-2">x <span class="op" style="color: #5E5E5E;
@@ -3759,7 +3759,7 @@ font-style: inherit;">)"</span>)</span>
 background-color: null;
 font-style: inherit;">eval</span>(ex_from_string_interpolation) <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">==</span> a</span></code></pre></div>
+font-style: inherit;">==</span> a</span></code></pre></div></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>true</code></pre>
@@ -3769,7 +3769,7 @@ font-style: inherit;">==</span> a</span></code></pre></div>
 <div id="14" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">eval</span>(<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -3779,7 +3779,7 @@ font-style: inherit;">zeros</span>(<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>x<span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">...</span>)))</span></code></pre></div>
+font-style: inherit;">...</span>)))</span></code></pre></div></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>1×2×3 Array{Float64, 3}:
@@ -3797,7 +3797,7 @@ font-style: inherit;">...</span>)))</span></code></pre></div>
 <div id="16" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">eval</span>(<span class="kw" style="color: #003B4F;
 background-color: null;
@@ -3813,7 +3813,7 @@ font-weight: bold;
 font-style: inherit;">end</span> <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
-font-style: inherit;">end</span>)</span></code></pre></div>
+font-style: inherit;">end</span>)</span></code></pre></div></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>quote
@@ -3840,7 +3840,7 @@ end</code></pre>
 <div id="18" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><span class="kw" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">macro</span> <span class="fu" style="color: #4758AB;
@@ -3870,7 +3870,7 @@ font-style: inherit;">@sayhello</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"reader"</span>                          <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># ... to be immediately compiled.</span></span></code></pre></div>
+font-style: inherit;"># ... to be immediately compiled.</span></span></code></pre></div></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Hello, reader</code></pre>
@@ -3897,11 +3897,11 @@ font-style: inherit;"># ... to be immediately compiled.</span></span></code></pr
 <div id="20" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1">generator <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1">generator <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">DiCEGenerator</span>()</span></code></pre></div>
+font-style: inherit;">DiCEGenerator</span>()</span></code></pre></div></div>
 </details>
 </div>
 <p>This has been a straightforward way for users to use off-the-shelf counterfactual generators. But relying on separate composite types for this task may have been an overkill. In fact, all this time there was some untapped potential here, as we will see next.</p>
@@ -3917,7 +3917,7 @@ font-style: inherit;">DiCEGenerator</span>()</span></code></pre></div>
 </blockquote>
 <p>I want to give users an easy way to do that, without having to build custom <code>Generator</code> types from scratch. This (I think) is a good use case for metaprogramming.</p>
 <p>Let’s try and see if we can make that work. We’ll simply extend <code>CounterfactualExplanations</code> right here in this repo hosting the blog (easily done in Julia) and provided everything works out well create a pull request. I already have a GitHub <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/118">issue</a> for this with a linked branch, so that’s the one I’ll use in my environment:</p>
-<div class="sourceCode" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1">(metaprogramming) pkg<span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1">(metaprogramming) pkg<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">&gt;</span> add https<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -3934,17 +3934,17 @@ font-style: inherit;">&gt;</span> <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">using</span> <span class="bu" style="color: null;
 background-color: null;
-font-style: inherit;">CounterfactualExplanations</span></span></code></pre></div>
+font-style: inherit;">CounterfactualExplanations</span></span></code></pre></div></div>
 <p>By the time you’re reading this, all changes to that branch will have hopefully already been committed and merged.</p>
 <p>Let’s start by instantiating a generic generator:</p>
 <div id="22" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1">generator <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1">generator <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">GenericGenerator</span>()</span></code></pre></div>
+font-style: inherit;">GenericGenerator</span>()</span></code></pre></div></div>
 </details>
 </div>
 <p>Our goal is to create macros that build expressions that, when evaluated, mutate the <code>generator</code> instance.</p>
@@ -3959,7 +3959,7 @@ font-style: inherit;">GenericGenerator</span>()</span></code></pre></div>
 </figure>
 </div>
 <p>Let’s start with that part. Naively, we could begin by writing it out very literally:</p>
-<div class="sourceCode" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1">ex <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1">ex <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -3970,13 +3970,13 @@ background-color: null;
 font-style: inherit;">*</span>cost)</span>
 <span id="cb20-2"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">eval</span>(ex)</span></code></pre></div>
+font-style: inherit;">eval</span>(ex)</span></code></pre></div></div>
 <p>Of course, evaluating this expression throws an error because none of the variables are actually defined. Let’s work on that …</p>
 <p>For the loss and penalty functions, we will use methods available from the <code>CounterfactualExplanations.Objectives</code> module, while for <img src="https://latex.codecogs.com/png.latex?%5Clambda"> we will use a literal:</p>
 <div id="24" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1">ex <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1">ex <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -3986,14 +3986,14 @@ font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.1</span> <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">*</span> distance_l2)</span></code></pre></div>
+font-style: inherit;">*</span> distance_l2)</span></code></pre></div></div>
 </details>
 </div>
 <p>Let’s try to make sense of the data structure we have created:</p>
 <div id="26" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1">ex.args</span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1">ex.args</span></code></pre></div></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3-element Vector{Any}:
@@ -4003,7 +4003,7 @@ font-style: inherit;">*</span> distance_l2)</span></code></pre></div>
 </div>
 </div>
 <p>My first naive approach is shown below. It errors because I forgot to interpolate the variables inside the <code>quote</code>.</p>
-<div class="sourceCode" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><span class="kw" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">macro</span> <span class="fu" style="color: #4758AB;
@@ -4055,9 +4055,9 @@ font-style: inherit;">return</span> ex_generator</span>
 <span id="cb24-12"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
-font-style: inherit;">end</span></span></code></pre></div>
+font-style: inherit;">end</span></span></code></pre></div></div>
 <p>Having fixed that below, I still get an error because <code>loss</code> and <code>cost</code> functions are not part of the global scope. I am pretty sure that this error would have occurred anyway and has nothing to do with the fact that I’m writing a macro.</p>
-<div class="sourceCode" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><span class="kw" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">macro</span> <span class="fu" style="color: #4758AB;
@@ -4121,12 +4121,12 @@ font-style: inherit;">return</span> ex_generator</span>
 <span id="cb25-12"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
-font-style: inherit;">end</span></span></code></pre></div>
+font-style: inherit;">end</span></span></code></pre></div></div>
 <p>Instead of importing the functions, I just get them explicitly from the <code>Objectives</code> module,</p>
 <div id="28" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><span class="kw" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">macro</span> <span class="fu" style="color: #4758AB;
@@ -4195,20 +4195,20 @@ font-style: inherit;">return</span> ex_generator</span>
 <span id="cb26-13"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
-font-style: inherit;">end</span></span></code></pre></div>
+font-style: inherit;">end</span></span></code></pre></div></div>
 </details>
 </div>
 <p>and, finally, this works:</p>
 <div id="30" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><span class="pp" style="color: #AD0000;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><span class="pp" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">@objective</span>(generator, logitbinarycrossentropy <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">0.1</span>distance_l2)</span></code></pre></div>
+font-style: inherit;">0.1</span>distance_l2)</span></code></pre></div></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>CounterfactualExplanations.Generators.GradientBasedGenerator(Flux.Losses.logitbinarycrossentropy, CounterfactualExplanations.Objectives.distance_l2, 0.1, false, false, Flux.Optimise.Descent(0.1), NamedTuple())</code></pre>
@@ -4218,7 +4218,7 @@ font-style: inherit;">0.1</span>distance_l2)</span></code></pre></div>
 <div id="32" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb29-1">ex <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb29-1">ex <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -4231,7 +4231,7 @@ background-color: null;
 font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1.0</span>ddp_diversity)</span>
-<span id="cb29-2">ex.args</span></code></pre></div>
+<span id="cb29-2">ex.args</span></code></pre></div></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Any}:
@@ -4250,7 +4250,7 @@ font-style: inherit;">1.0</span>ddp_diversity)</span>
 <div id="36" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><span class="kw" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">macro</span> <span class="fu" style="color: #4758AB;
@@ -4354,14 +4354,14 @@ font-style: inherit;">return</span> ex_generator</span>
 <span id="cb31-19"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
-font-style: inherit;">end</span></span></code></pre></div>
+font-style: inherit;">end</span></span></code></pre></div></div>
 </details>
 </div>
 <p>That works well,</p>
 <div id="38" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><span class="pp" style="color: #AD0000;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><span class="pp" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">@objective</span>(generator, logitbinarycrossentropy <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -4371,7 +4371,7 @@ font-style: inherit;">0.05</span>distance_l2 <span class="op" style="color: #5E5
 background-color: null;
 font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">1.0</span>ddp_diversity)</span></code></pre></div>
+font-style: inherit;">1.0</span>ddp_diversity)</span></code></pre></div></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>CounterfactualExplanations.Generators.GradientBasedGenerator(Flux.Losses.logitbinarycrossentropy, Function[CounterfactualExplanations.Objectives.distance_l2, CounterfactualExplanations.Objectives.ddp_diversity], AbstractFloat[0.05, 1.0], false, false, Flux.Optimise.Descent(0.1), NamedTuple())</code></pre>
@@ -4381,7 +4381,7 @@ font-style: inherit;">1.0</span>ddp_diversity)</span></code></pre></div>
 <div id="40" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><span class="im" style="color: #00769E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">using</span> <span class="bu" style="color: null;
 background-color: null;
@@ -4431,14 +4431,14 @@ background-color: null;
 font-style: inherit;">fit_model</span>(counterfactual_data, model_name)</span>
 <span id="cb34-9"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">plot</span>(M, counterfactual_data)</span></code></pre></div>
+font-style: inherit;">plot</span>(M, counterfactual_data)</span></code></pre></div></div>
 </details>
 </div>
 <p>Next, we begin by specifying our target and factual label. We then draw a random sample from the non-target (factual) class.</p>
 <div id="42" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Factual and target:</span></span>
 <span id="cb35-2">target <span class="op" style="color: #5E5E5E;
@@ -4466,14 +4466,14 @@ font-style: inherit;">.==</span> factual))</span>
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">select_factual</span>(counterfactual_data,chosen)</span></code></pre></div>
+font-style: inherit;">select_factual</span>(counterfactual_data,chosen)</span></code></pre></div></div>
 </details>
 </div>
 <p>Finally, we use our <code>generator</code> to generate counterfactuals:</p>
 <div id="44" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb36" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><span class="im" style="color: #00769E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">using</span> <span class="bu" style="color: null;
 background-color: null;
@@ -4494,7 +4494,7 @@ background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">GeneratorConditionsConvergence</span>()</span>
-<span id="cb36-6">)</span></code></pre></div>
+<span id="cb36-6">)</span></code></pre></div></div>
 </details>
 </div>
 <p>It worked! 🎉 The resulting counterfactual search is illustrated in Figure&nbsp;2. I may have overspecified the size of the <code>ddp_diversity</code> penalty a little bit here, but it sure makes for a cool chart!</p>
@@ -6218,21 +6218,21 @@ A TU Delft Theme for Quarto.
 <section id="setup" class="level3">
 <h3 class="anchored" data-anchor-id="setup">Setup</h3>
 <p>To get started with building the TU Delft Custom Format I followed the official <a href="https://quarto.org/docs/extensions/formats.html#quick-start">Quarto docs</a>. I first used the appropriate Quarto command, which initiates an interactive process in the command line:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb1-1"><span class="ex" style="color: null;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb1-1"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">$</span> quarto create extension format:revealjs</span>
 <span id="cb1-2"> <span class="ex" style="color: null;
 background-color: null;
-font-style: inherit;">?</span> Extension Name › lexdoc</span></code></pre></div>
+font-style: inherit;">?</span> Extension Name › lexdoc</span></code></pre></div></div>
 <p>Once done, the basic folder structure for my extension was set up and ready to be pushed to a remote Github repository for distribution: <a href="https://github.com/pat-alt/quarto-tudelft">https://github.com/pat-alt/quarto-tudelft</a>. Even though I had not yet added any custom formatting rules, anyone would now be able to use this empty extension for their work.</p>
 </section>
 <section id="adding-rules" class="level3">
 <h3 class="anchored" data-anchor-id="adding-rules">Adding Rules</h3>
 <p>To actually add some custom formatting rules to the extension I started working on the files contained in <code>_extensions/tudelft/</code>. Using my institution’s PowerPoint template as a reference, I previewed the <code>template.qmd</code> file and simply made appropriate adjustments to the <a href="https://github.com/pat-alt/quarto-tudelft/blob/main/_extensions/tudelft/custom.scss"><code>_extensions/tudelft/custom.scss</code></a> and <a href="https://github.com/pat-alt/quarto-tudelft/blob/main/_extensions/tudelft/_extension.yml"><code>_extensions/tudelft/_extension.yml</code></a> files until I was satisfied. To help me in that process, I took inspiration from various existing Revealjs extensions all listed in the <a href="https://github.com/mcanouil/awesome-quarto#presentations">awesome-quarto</a> repository.</p>
 <p>I am no expert in CSS (far from it!), so this was very much trial-and-error based, but I got there eventually. One feature I am particularly happy about is the custom transition slides: by default all slides at level 1, so slides that initiate a new section,</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;"># Transition Slide</span></span></code></pre></div>
+font-style: inherit;"># Transition Slide</span></span></code></pre></div></div>
 <p>will be formatted in a standardized way. The relevant CSS rule can be found <a href="https://github.com/pat-alt/quarto-tudelft/blob/b324cee4a6860a5ed5385dc607330d49de052875/_extensions/tudelft/custom.scss#L96">here</a></p>
 </section>
 <section id="adding-assets" class="level3">
@@ -6247,26 +6247,26 @@ font-style: inherit;"># Transition Slide</span></span></code></pre></div>
 <p>With the template built and distributed, how do you actually use it?</p>
 </blockquote>
 <p>This part is truly a walk in the park. As outlined in the <a href="https://github.com/pat-alt/quarto-tudelft">README</a> users can either work directly with the template,</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb3-1"><span class="ex" style="color: null;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb3-1"><span class="ex" style="color: null;
 background-color: null;
-font-style: inherit;">quarto</span> use template pat-alt/quarto-tudelft</span></code></pre></div>
+font-style: inherit;">quarto</span> use template pat-alt/quarto-tudelft</span></code></pre></div></div>
 <p>or add the template to an existing Quarto project:</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb4-1"><span class="ex" style="color: null;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb4-1"><span class="ex" style="color: null;
 background-color: null;
-font-style: inherit;">quarto</span> add pat-alt/quarto-tudelft</span></code></pre></div>
+font-style: inherit;">quarto</span> add pat-alt/quarto-tudelft</span></code></pre></div></div>
 <p>The first option will get you started with a working document straight away. For my paper presentation, I worked with the second option. At the time of writing, I am building and hosting all of my presentations in my website repository (the repo that also builds this very article you’re reading): <a href="https://github.com/pat-alt/pat-alt.github.io">https://github.com/pat-alt/pat-alt.github.io</a>.</p>
 <p>With the extension added to the project, I can now use it anywhere within that project by simply specifying,</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">format</span><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;"> tudelft-revealjs</span></span></code></pre></div>
+font-style: inherit;"> tudelft-revealjs</span></span></code></pre></div></div>
 <p>in the YAML header of my Quarto document where <code>tudelft-revealjs</code> is just the name of the custom format.</p>
 <p>It gets better … The extension can be extended further by providing yet another <a href="https://github.com/pat-alt/pat-alt.github.io/blob/b6207a616f6ef9c7ec09cf8ad3383db788b9148b/content/talks/posts/2023-ieee-satml/custom.scss#L1">custom style sheet</a>, as I have done for my paper presentation:</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">format</span><span class="kw" style="color: #003B4F;
 background-color: null;
@@ -6291,7 +6291,7 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;"> custom.scss</span></span></code></pre></div>
+font-style: inherit;"> custom.scss</span></span></code></pre></div></div>
 <p>Check out the final presentation <a href="../../../content/talks/posts/2023-ieee-satml/presentation.html" target="_blank">here</a> or see the embedded version below:</p>
 <iframe src="https://www.patalt.org/content/talks/posts/2023-ieee-satml/presentation.html#/title-slide" width="100%" height="350">
 </iframe>
@@ -6377,7 +6377,7 @@ A year of using Quarto with Julia.
 <section id="setup" class="level3">
 <h3 class="anchored" data-anchor-id="setup">Setup</h3>
 <p>I continue to recommend using VSCode for any work with Quarto and Julia. The Quarto <a href="https://quarto.org/docs/computations/julia.html#vs-code">docs</a> explain how to get started by installing the necessary Quarto and IJulia extensions. Since most Julia users will regularly want to update their Julia version, I would additionally recommend to add <code>IJulia.jl</code> to your <code>~/.julia/config/startup.jl</code> file:<sup>1</sup></p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Setup OhMyREPL, Revise and Term</span></span>
 <span id="cb1-2"><span class="im" style="color: #00769E;
@@ -6435,7 +6435,7 @@ font-style: inherit;">end</span></span>
 <span id="cb1-10"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
-font-style: inherit;">end</span></span></code></pre></div>
+font-style: inherit;">end</span></span></code></pre></div></div>
 <p>Additionally, you only need to remember that …</p>
 <blockquote class="blockquote">
 <p>… if you install a new Julia binary […], you must update the IJulia installation […] by running <code>Pkg.build("IJulia")</code></p>
@@ -6458,7 +6458,7 @@ font-style: inherit;">end</span></span></code></pre></div>
 <div id="4" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><span class="im" style="color: #00769E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">using</span> <span class="bu" style="color: null;
 background-color: null;
@@ -6506,14 +6506,14 @@ font-style: inherit;">Dates</span>.<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">format</span>(last_trade_day, <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"U d, yyyy"</span>)</span></code></pre></div>
+font-style: inherit;">"U d, yyyy"</span>)</span></code></pre></div></div>
 </details>
 </div>
 <p>It loads the most recent publicly available data on equity prices from Yahoo finance. In an ideal world, we’d like any updates to these inputs to be reflected in our output. That way you can just re-render the Quarto notebook to get an updated report. To render Julia code inline, we use <code>Markdown.jl</code> like so:</p>
 <div id="6" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><span class="im" style="color: #00769E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">using</span> <span class="bu" style="color: null;
 background-color: null;
@@ -6536,7 +6536,7 @@ background-color: null;
 font-style: inherit;">. </span></span>
 <span id="cb3-4"><span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"""</span>)</span></code></pre></div>
+font-style: inherit;">"""</span>)</span></code></pre></div></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="markdown"><p>When the S&amp;P 500 last traded, on April 25, 2025, it closed at 5482.16015625. </p>
@@ -6618,7 +6618,7 @@ Figure&nbsp;1: Price history of the S&amp;P 500.
 <section id="code-execution" class="level3">
 <h3 class="anchored" data-anchor-id="code-execution">Code Execution</h3>
 <p>Related to the previous point, I typically define the following execution options in my <code>_quarto.yml</code> or <code>_metadata.yml</code>. The <code>freeze: auto</code> option ensures that documents are only rerendered if the source changes. In cases where code should always be re-executed you whould want to set <code>freeze: false</code>, instead. I set <code>output: false</code> because typically I have a lot of code chunks that don’t generate any output that is of immediate interest to readers.</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">engine</span><span class="kw" style="color: #003B4F;
 background-color: null;
@@ -6677,16 +6677,16 @@ font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="ch" style="color: #20794D;
 background-color: null;
-font-style: inherit;">false</span></span></code></pre></div>
+font-style: inherit;">false</span></span></code></pre></div></div>
 </section>
 <section id="reproducibility" class="level3">
 <h3 class="anchored" data-anchor-id="reproducibility">Reproducibility</h3>
 <p>To ensure that your content can be repoduced easily, it may additionally be helpful to explicitly specify the Julia version you used (``) and set up a global or local Julia environments. Inserting the following at the beginning of your Quarto notebook</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><span class="im" style="color: #00769E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">using</span> <span class="bu" style="color: null;
 background-color: null;
-font-style: inherit;">Pkg;</span> Pkg.activate("&lt;path&gt;")</span></code></pre></div>
+font-style: inherit;">Pkg;</span> Pkg.activate("&lt;path&gt;")</span></code></pre></div></div>
 <p>ensures that the desired environemnt that lives in <code>&lt;path&gt;</code> is actually activated and used.</p>
 </section>
 </section>
@@ -6699,7 +6699,7 @@ font-style: inherit;">Pkg;</span> Pkg.activate("&lt;path&gt;")</span></code></pr
 <li>You can use Quarto execution options like <code>execute-dir: project</code> and <code>resources: www/</code> to globally specify the working directory and a directory for external resources like images.</li>
 </ol>
 <p>There are also a few peculiarities to be aware of. To avoid any issues with <code>Documenter.jl</code>, I’ve found it useful to ensure that the rendered <code>.md</code> files do not contain any raw HTML and to preserve text wrapping:</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">format</span><span class="kw" style="color: #003B4F;
 background-color: null;
@@ -6734,17 +6734,17 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;"> preserve</span></span></code></pre></div>
+font-style: inherit;"> preserve</span></span></code></pre></div></div>
 <p>When working with <code>.qmd</code> files you also need to use a slightly different syntax for <a href="https://documenter.juliadocs.org/stable/showcase/#Admonitions">admonitions</a>. The following syntax inside the <code>.qmd</code></p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><span class="pp" style="color: #AD0000;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><span class="pp" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">|</span> !!! note \"An optional title\"</span>
 <span id="cb8-2"><span class="pp" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">|</span>     Here is something that you should pay attention to.   </span></code></pre></div>
+font-style: inherit;">|</span>     Here is something that you should pay attention to.   </span></code></pre></div></div>
 <p>will generate the desired output inside the rendered <code>.md</code>:<sup>2</sup></p>
-<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1">!!! note "An optional title"</span>
-<span id="cb9-2">    Here is something that you should pay attention to.   </span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1">!!! note "An optional title"</span>
+<span id="cb9-2">    Here is something that you should pay attention to.   </span></code></pre></div></div>
 <p>Any of my package repos — <a href="https://github.com/juliatrustworthyai/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>, <a href="https://github.com/juliatrustworthyai/LaplaceRedux.jl"><code>LaplaceRedux.jl</code></a>, <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a> — should provide additional colour on this topic.</p>
 </section>
 <section id="quarto-for-academic-journal-articles" class="level2">
@@ -6842,16 +6842,16 @@ Julia and Quarto: a perfect match.
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Cross-referencing
+<span class="screen-reader-only">Tip</span>Cross-referencing
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>There is a standard recipe for generating cross-references in Quarto. The example below involves a section cross-reference.</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1">If you are a Julia user that really couldn't care less about my previous experiences with R Markdown, this is a good time to skip straight ahead to @sec-match.</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1">If you are a Julia user that really couldn't care less about my previous experiences with R Markdown, this is a good time to skip straight ahead to @sec-match.</span>
 <span id="cb1-2"></span>
 <span id="cb1-3"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">## Quarto and Julia - a perfect match {#sec-match}</span></span></code></pre></div>
+font-style: inherit;">## Quarto and Julia - a perfect match {#sec-match}</span></span></code></pre></div></div>
 <p>There is actually a comprehensive 8-step guide explaining how to achieve something similar in MS Word, but personally I wouldn’t go there. Anyway, take your pick:</p>
 <ol type="a">
 <li>🔴 <a href="https://support.microsoft.com/en-us/office/create-a-cross-reference-300b208c-e45a-487a-880b-a02767d9774b">Go there</a>.</li>
@@ -6912,7 +6912,7 @@ Just had my first go <a href="https://twitter.com/hashtag/quarto?src=hash&amp;re
 <li>If you choose to also do that, make sure that the <code>.qmd</code> document has access to a <code>Pkg.jl</code> environment that has <code>IJulia</code> added.</li>
 </ol>
 <p>Julia code cells can be added anywhere along with your plain text Markdown. They look like this:</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><span class="in" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><span class="in" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">```{julia}</span></span>
 <span id="cb2-2"><span class="im" style="color: #00769E;
@@ -6929,9 +6929,9 @@ background-color: null;
 font-style: inherit;">"CounterfactualExplanations"</span>)</span>
 <span id="cb2-4"><span class="in" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">```</span></span></code></pre></div>
+font-style: inherit;">```</span></span></code></pre></div></div>
 <p>Contrary to Jupyter notebooks, executing this code cells will start a Julia REPL in VSCode. I find this very helpful, because it lets me fiddle with anything I have created inside the Quarto notebook without having to click into cells all the time. Quarto comes with great support for specifying <a href="https://quarto.org/docs/computations/julia.html">code executing options</a>. For example, for the code below I have specified <code>#| echo: true</code> in order for the code to be rendered. The code itself is the code I actually used to build the animation above (heavily borrowed from this <code>Javis.jl</code> <a href="https://juliaanimators.github.io/Javis.jl/stable/tutorials/tutorial_7/">tutorial</a>).</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#| echo: true</span></span>
 <span id="cb3-2"><span class="im" style="color: #00769E;
@@ -7538,13 +7538,13 @@ background-color: null;
 font-style: inherit;">joinpath</span>(www_path, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"intro.gif"</span>),</span>
-<span id="cb3-93">)</span></code></pre></div>
+<span id="cb3-93">)</span></code></pre></div></div>
 </section>
 <section id="working-with-documenter.jl-and-quarto" class="level4">
 <h4 class="anchored" data-anchor-id="working-with-documenter.jl-and-quarto">Working with <code>Documenter.jl</code> and Quarto</h4>
 <p>An interesting application of Quarto in the Julia ecosystem is package documentation. This is of course best done using <code>Documenter.jl</code> and fortunately the two play nicely with each other, since both share a common ground (Markdown). Their interaction is perhaps best demonstrated through this Julia library I recently developed: <a href="https://github.com/juliatrustworthyai/CounterfactualExplanations.jl"><code>CounterfactualExplanatinos.jl</code></a>. On there you will find lot of Julia scripts <code>*.jl</code> under <code>src/</code> and <code>test/</code>, as well as many Markdown <code>.md</code> and Quarto documents <code>.qmd</code> under <code>docs</code>. I <em>wrote</em> the package documentation in the Quarto documents, <em>rendered</em> documents individually through <code>quarto render [doc].qmd</code> and then fed the resulting Markdown documents to <code>Documenter.jl</code> as always.</p>
 <p>Below is my standard YAML header for those Quarto documents:</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">format</span><span class="kw" style="color: #003B4F;
 background-color: null;
@@ -7673,7 +7673,7 @@ font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="ch" style="color: #20794D;
 background-color: null;
-font-style: inherit;">false</span></span></code></pre></div>
+font-style: inherit;">false</span></span></code></pre></div></div>
 <p>You can see that it points to Bibtex file I host on another Github repository. This makes it very easy to generate citations and references for the rendered Markdown documents, that also show up in the docs (e.g.&nbsp;<a href="https://www.patalt.org/CounterfactualExplanations.jl/stable/cats_dogs/">here</a>). Unfortunately, cross-referencing only partially works, because it relies on auto-generated HTML and <code>Documenter.jl</code> expects this to be passed in blocks. Choosing <code>variant: -raw_html</code> is only a workaround as I have discussed <a href="https://github.com/JuliaDocs/Documenter.jl/issues/1778">here</a>. Ideally, <code>Documenter.jl</code> would just accept HTML documents rendered from Quarto, but currently only Markdown documents are accepted by <code>make_docs</code>. Still, if anything this workaround is a nice gimmick that extends the default <code>Documenter.jl</code> functionality, without any hassle involved. Hopefully, this can be improved in the future.</p>
 </section>
 <section id="using-quarto-for-juliacon-proceedings" class="level4">
@@ -8013,7 +8013,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#' Stochastic gradient descent</span></span>
 <span id="cb1-2"><span class="co" style="color: #5E5E5E;
@@ -8523,7 +8523,7 @@ background-color: null;
 font-style: inherit;">UseMethod</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"predict"</span>)</span>
-<span id="cb1-91">}</span></code></pre></div>
+<span id="cb1-91">}</span></code></pre></div></div>
 </details>
 </div>
 </section>
@@ -8540,7 +8540,7 @@ font-style: inherit;">"predict"</span>)</span>
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#' REVISE algoritm - a simplified version</span></span>
 <span id="cb2-2"><span class="co" style="color: #5E5E5E;
@@ -8998,7 +8998,7 @@ background-color: null;
 font-style: inherit;">UseMethod</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"revise"</span>)</span>
-<span id="cb2-75">}</span></code></pre></div>
+<span id="cb2-75">}</span></code></pre></div></div>
 </details>
 </div>
 </section>
@@ -9008,7 +9008,7 @@ font-style: inherit;">"revise"</span>)</span>
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1">sim_data <span class="ot" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1">sim_data <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -9148,7 +9148,7 @@ background-color: null;
 font-style: inherit;">X=</span>X,<span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">y=</span>y))</span>
-<span id="cb3-12">}</span></code></pre></div>
+<span id="cb3-12">}</span></code></pre></div></div>
 </details>
 </div>
 
@@ -9352,7 +9352,7 @@ patalt.github.io/
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1">blogdown<span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1">blogdown<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -9362,7 +9362,7 @@ font-style: inherit;">"Your new post"</span>, <span class="at" style="color: #65
 background-color: null;
 font-style: inherit;">ext =</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">".Rmd"</span>)</span></code></pre></div>
+font-style: inherit;">".Rmd"</span>)</span></code></pre></div></div>
 </details>
 </div>
 <p>where the first argument is just the title of your post and the <code>ext</code> argument can be used to specify that you want to create an R Markdown document that can include code chucks. The wrapper function will automatically set up a directory for your post under <code>/post/</code>. R Studio will redirect you to the relevant <code>.Rmd</code> file that you can then fill with content. By default that folder will look roughly like this:</p>
@@ -9379,7 +9379,7 @@ font-style: inherit;">".Rmd"</span>)</span></code></pre></div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource cpp number-lines code-with-copy"><code class="sourceCode cpp"><span id="cb4-1"><span class="pp" style="color: #AD0000;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource cpp number-lines code-with-copy"><code class="sourceCode cpp"><span id="cb4-1"><span class="pp" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">#include </span><span class="im" style="color: #00769E;
 background-color: null;
@@ -9627,14 +9627,14 @@ background-color: null;
 font-style: inherit;">;</span></span>
 <span id="cb4-31"><span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">}</span></span></code></pre></div>
+font-style: inherit;">}</span></span></code></pre></div></div>
 </details>
 </div>
 <p>In terms of performance it turns out that the simple C++ program actually does somewhat better than the base R alternative:</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">library</span>(microbenchmark)</span>
 <span id="cb5-2"><span class="fu" style="color: #4758AB;
@@ -9680,7 +9680,7 @@ font-style: inherit;">simCategorical</span>(n, p)}</span>
 <span id="cb5-8">)</span>
 <span id="cb5-9"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">autoplot</span>(mb)</span></code></pre></div>
+font-style: inherit;">autoplot</span>(mb)</span></code></pre></div></div>
 </details>
 </div>
 </section>
