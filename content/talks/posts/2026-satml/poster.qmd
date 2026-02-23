@@ -1,0 +1,115 @@
+---
+title: "Counterfactual Training: Teaching Models Plausible and Actionable Explanations"
+format:
+  typst:
+    template-partials:
+      - typst-template.typ
+      - typst-show.typ
+    size: "33x47"
+    poster-authors: "Patrick Altmeyer, Aleksander Buszydlik, Arie van Deursen, Cynthia C.S. Liem"
+    departments: Delft University of Technology
+    date: today
+    institution-logo: "www/delft-logo.png"
+    footer-text: "IEEE Conference on Secure and Trustworthy Machine Learning (SaTML)"
+    footer-url: "arxiv.org/abs/2601.16205"
+    footer-emails: "p.altmeyer@tudelft.nl"
+    footer-color: "00A6D6"
+    # keywords: ["Counterfactual Explanations", "Algorithmic Recourse", "Adversarial ML"]
+    num-columns: 2
+    title-font-size: 96
+    title-column-size: 24
+    univ-logo-column-size: 6
+    authors-font-size: 54
+    tldr-image: "www/poc.svg"
+    tldr-image-vspace: 80
+    tldr: "Counterfactual training leverages counterfactual explanations to make models more 1) explainable, 2) sensitive to actionability constraints and 3) adversarially robust."
+    tldr-font-size: 58
+quarto-required: <= 1.6
+---
+
+<!-- BUG: Not working on new Quarto versions: https://github.com/quarto-ext/typst-templates/issues/17 -->
+
+```{=typst}
+#set text(size: 46pt)
+#show heading.where(level: 1): it => {
+  set align(center)
+  set text(68pt)
+  show: smallcaps
+  v(50pt, weak: true)
+  it.body
+  v(35.75pt, weak: true)
+  line(length: 100%)
+}
+#show heading.where(level: 2): it => {
+  set text(50pt)
+  show: smallcaps
+  v(50pt, weak: true)
+  it.body
+  v(35.75pt, weak: true)
+}
+```
+
+## Methodology
+
+::: {.block fill="rgb(217, 240, 246)" inset="8pt" radius="4pt"}
+
+Counterfactual search objective (equation (1)):
+
+:::
+
+![](www/ce_obj.png){width="70%" fig-align="center"}
+
+::: {.block fill="rgb(217, 240, 246)" inset="8pt" radius="4pt"}
+
+Counterfactual training objective (equation (2)):
+
+:::
+
+![](www/objective.png)
+
+::: {.block fill="rgb(217, 240, 246)" inset="8pt" radius="4pt"}
+
+Pseudo-Code for counterfactual training:
+
+:::
+
+![](www/algo.png)
+
+### Summary
+
+::: {.block fill="rgb(217, 240, 246)" inset="8pt" radius="4pt"}
+
+On-the-fly counterfactual explanations are used to induce explainability and actionability through contrastive divergence and recycled as adversarial examples to further improve robustness.
+:::
+
+
+## Improved Plausibility
+
+![](www/results.png)
+
+![](www/mnist_ce.png)
+
+## Improved Actionability
+
+![](www/mnist_ig.png)
+
+## Improved Robustness
+
+![](www/acc_full.png)
+
+### Further Resources
+
+```{=typst}
+#align(center,
+  block(height: 150pt,
+    grid(
+      columns: (1fr, 1fr, 1fr),
+      gutter: 1pt,
+      image("www/qr/paper.png", height: 100%),
+      image("www/qr/taija.png", height: 100%),
+      image("www/qr/home.png", height: 100%),
+    )
+  )
+)
+```
+

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -91,14 +91,15 @@ div.csl-indent {
 <link href="../../..//www/favicon.ico" rel="icon">
 <script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-5b84aa08c4b1afb5b57ff5167575c7ed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-c67d2184a1e990fa07c41f8bf1ddb47e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-7a7beb1cfbb781086111a8e8f7a805ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-e275d2373ec5967f8031784141c9f1af.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -154,7 +155,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -187,7 +188,8 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../../www/icon.png" alt="" class="navbar-logo">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo light-content">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">patalt</span>
@@ -374,11 +376,11 @@ A leap of faith into Julia’s metaverse.
 <p>Metaprogramming is a programming technique in which computer programs have the ability to treat other programs as their data.</p>
 </blockquote>
 <p>Right … What about ChatGPT? I wanted to try out <a href="https://github.com/ThatcherC/ReplGPT.jl">ReplGPT</a> anyway so here goes<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource julia-repl number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>julia&gt; using ReplGPT</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource julia-repl number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>julia&gt; using ReplGPT</span>
 <span id="cb1-2"><a href="#cb1-2"></a>ChatGPT&gt; Hey hey, can you please explain metaprogramming to me (I have no computer science background, but am experienced with programming and data science)</span>
 <span id="cb1-3"><a href="#cb1-3"></a>  Metaprogramming is a programming technique where a program is capable of creating or manipulating code at</span>
 <span id="cb1-4"><a href="#cb1-4"></a>  runtime. It involves writing computer programs that create, modify, or analyze other computer programs or data</span>
-<span id="cb1-5"><a href="#cb1-5"></a>  about those programs.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5"></a>  about those programs.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>So, in layman’s terms, metaprogramming involves code that generates code - I guess we really have entered the metaverse!</p>
 </section>
 <section id="julia-docs" class="level2">
@@ -401,8 +403,8 @@ Figure&nbsp;1: Key concept: code as a data structure.
 <div id="4" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a>ex <span class="op">=</span> <span class="op">:</span>(<span class="fu">sum</span>([<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]))</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">dump</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a>ex <span class="op">=</span> <span class="op">:</span>(<span class="fu">sum</span>([<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]))</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">dump</span>(ex)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Expr
@@ -422,7 +424,7 @@ Figure&nbsp;1: Key concept: code as a data structure.
 <div id="6" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">eval</span>(ex)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>6</code></pre>
@@ -432,8 +434,8 @@ Figure&nbsp;1: Key concept: code as a data structure.
 <div id="8" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a>ex.args[<span class="fl">1</span>] <span class="op">=</span> <span class="op">:</span>maximum</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a>ex.args[<span class="fl">1</span>] <span class="op">=</span> <span class="op">:</span>maximum</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">eval</span>(ex)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3</code></pre>
@@ -447,20 +449,20 @@ Figure&nbsp;1: Key concept: code as a data structure.
 <div id="10" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a>fun <span class="op">=</span> maximum</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a>fun <span class="op">=</span> maximum</span>
 <span id="cb8-2"><a href="#cb8-2"></a>x <span class="op">=</span> [<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]</span>
 <span id="cb8-3"><a href="#cb8-3"></a>ex_from_ex_interpoliation <span class="op">=</span> <span class="op">:</span>(<span class="op">$</span><span class="fu">fun</span>(<span class="op">$</span>x))</span>
-<span id="cb8-4"><a href="#cb8-4"></a>a <span class="op">=</span> <span class="fu">eval</span>(ex_from_ex_interpoliation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-4"><a href="#cb8-4"></a>a <span class="op">=</span> <span class="fu">eval</span>(ex_from_ex_interpoliation)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Using string interpolation is quite similar:</p>
 <div id="12" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a>fun <span class="op">=</span> maximum</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a>fun <span class="op">=</span> maximum</span>
 <span id="cb9-2"><a href="#cb9-2"></a>x <span class="op">=</span> [<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]</span>
 <span id="cb9-3"><a href="#cb9-3"></a>ex_from_string_interpolation <span class="op">=</span> <span class="bu">Meta</span>.<span class="fu">parse</span>(<span class="st">"</span><span class="sc">$</span>fun<span class="st">(</span><span class="sc">$</span>x<span class="st">)"</span>)</span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="fu">eval</span>(ex_from_string_interpolation) <span class="op">==</span> a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="fu">eval</span>(ex_from_string_interpolation) <span class="op">==</span> a</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>true</code></pre>
@@ -470,7 +472,7 @@ Figure&nbsp;1: Key concept: code as a data structure.
 <div id="14" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">eval</span>(<span class="op">:</span>(<span class="fu">zeros</span>(<span class="op">$</span>x<span class="op">...</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">eval</span>(<span class="op">:</span>(<span class="fu">zeros</span>(<span class="op">$</span>x<span class="op">...</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>1×2×3 Array{Float64, 3}:
@@ -488,7 +490,7 @@ Figure&nbsp;1: Key concept: code as a data structure.
 <div id="16" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">eval</span>(<span class="kw">quote</span> <span class="kw">quote</span> <span class="op">$$:</span>(x) <span class="kw">end</span> <span class="kw">end</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">eval</span>(<span class="kw">quote</span> <span class="kw">quote</span> <span class="op">$$:</span>(x) <span class="kw">end</span> <span class="kw">end</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>quote
@@ -515,10 +517,10 @@ end</code></pre>
 <div id="18" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">macro</span> <span class="fu">sayhello</span>(name)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">macro</span> <span class="fu">sayhello</span>(name)</span>
 <span id="cb15-2"><a href="#cb15-2"></a>    <span class="cf">return</span> <span class="op">:</span>( <span class="fu">println</span>(<span class="st">"Hello, "</span>, <span class="op">$</span>name) )   <span class="co"># return the expression ...</span></span>
 <span id="cb15-3"><a href="#cb15-3"></a><span class="kw">end</span></span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="pp">@sayhello</span> <span class="st">"reader"</span>                          <span class="co"># ... to be immediately compiled.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="pp">@sayhello</span> <span class="st">"reader"</span>                          <span class="co"># ... to be immediately compiled.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Hello, reader</code></pre>
@@ -545,7 +547,7 @@ end</code></pre>
 <div id="20" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a>generator <span class="op">=</span> <span class="fu">DiCEGenerator</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a>generator <span class="op">=</span> <span class="fu">DiCEGenerator</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>This has been a straightforward way for users to use off-the-shelf counterfactual generators. But relying on separate composite types for this task may have been an overkill. In fact, all this time there was some untapped potential here, as we will see next.</p>
@@ -565,14 +567,14 @@ end</code></pre>
 </blockquote>
 <p>I want to give users an easy way to do that, without having to build custom <code>Generator</code> types from scratch. This (I think) is a good use case for metaprogramming.</p>
 <p>Let’s try and see if we can make that work. We’ll simply extend <code>CounterfactualExplanations</code> right here in this repo hosting the blog (easily done in Julia) and provided everything works out well create a pull request. I already have a GitHub <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/118">issue</a> for this with a linked branch, so that’s the one I’ll use in my environment:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1"></a>(metaprogramming) pkg<span class="op">&gt;</span> add https<span class="op">://</span>github.com<span class="op">/</span>JuliaTrustworthyAI<span class="op">/</span>CounterfactualExplanations.jl<span class="co">#118-add-losses-and-penalties-modules-or-group-under-objectives-module</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a>julia<span class="op">&gt;</span> <span class="im">using</span> <span class="bu">CounterfactualExplanations</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1"></a>(metaprogramming) pkg<span class="op">&gt;</span> add https<span class="op">://</span>github.com<span class="op">/</span>JuliaTrustworthyAI<span class="op">/</span>CounterfactualExplanations.jl<span class="co">#118-add-losses-and-penalties-modules-or-group-under-objectives-module</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>julia<span class="op">&gt;</span> <span class="im">using</span> <span class="bu">CounterfactualExplanations</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>By the time you’re reading this, all changes to that branch will have hopefully already been committed and merged.</p>
 <p>Let’s start by instantiating a generic generator:</p>
 <div id="22" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a>generator <span class="op">=</span> <span class="fu">GenericGenerator</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a>generator <span class="op">=</span> <span class="fu">GenericGenerator</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Our goal is to create macros that build expressions that, when evaluated, mutate the <code>generator</code> instance.</p>
@@ -587,21 +589,21 @@ end</code></pre>
 </figure>
 </div>
 <p>Let’s start with that part. Naively, we could begin by writing it out very literally:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1"></a>ex <span class="op">=</span> <span class="op">:</span>(yloss <span class="op">+</span> λ<span class="op">*</span>cost)</span>
-<span id="cb20-2"><a href="#cb20-2"></a><span class="fu">eval</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1"></a>ex <span class="op">=</span> <span class="op">:</span>(yloss <span class="op">+</span> λ<span class="op">*</span>cost)</span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="fu">eval</span>(ex)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Of course, evaluating this expression throws an error because none of the variables are actually defined. Let’s work on that …</p>
 <p>For the loss and penalty functions, we will use methods available from the <code>CounterfactualExplanations.Objectives</code> module, while for <span class="math inline">\(\lambda\)</span> we will use a literal:</p>
 <div id="24" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1"></a>ex <span class="op">=</span> <span class="op">:</span>(logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span> <span class="op">*</span> distance_l2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1"></a>ex <span class="op">=</span> <span class="op">:</span>(logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span> <span class="op">*</span> distance_l2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Let’s try to make sense of the data structure we have created:</p>
 <div id="26" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1"></a>ex.args</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1"></a>ex.args</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3-element Vector{Any}:
@@ -611,7 +613,7 @@ end</code></pre>
 </div>
 </div>
 <p>My first naive approach is shown below. It errors because I forgot to interpolate the variables inside the <code>quote</code>.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
 <span id="cb24-2"><a href="#cb24-2"></a>    loss <span class="op">=</span> ex.args[<span class="fl">2</span>]</span>
 <span id="cb24-3"><a href="#cb24-3"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
 <span id="cb24-4"><a href="#cb24-4"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
@@ -622,9 +624,9 @@ end</code></pre>
 <span id="cb24-9"><a href="#cb24-9"></a>        generator.λ <span class="op">=</span> λ</span>
 <span id="cb24-10"><a href="#cb24-10"></a>    <span class="kw">end</span></span>
 <span id="cb24-11"><a href="#cb24-11"></a>    <span class="cf">return</span> ex_generator</span>
-<span id="cb24-12"><a href="#cb24-12"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-12"><a href="#cb24-12"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Having fixed that below, I still get an error because <code>loss</code> and <code>cost</code> functions are not part of the global scope. I am pretty sure that this error would have occurred anyway and has nothing to do with the fact that I’m writing a macro.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
 <span id="cb25-2"><a href="#cb25-2"></a>    loss <span class="op">=</span> ex.args[<span class="fl">2</span>]</span>
 <span id="cb25-3"><a href="#cb25-3"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
 <span id="cb25-4"><a href="#cb25-4"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
@@ -635,12 +637,12 @@ end</code></pre>
 <span id="cb25-9"><a href="#cb25-9"></a>        <span class="op">$</span>generator.λ <span class="op">=</span> <span class="op">$</span>λ</span>
 <span id="cb25-10"><a href="#cb25-10"></a>    <span class="kw">end</span></span>
 <span id="cb25-11"><a href="#cb25-11"></a>    <span class="cf">return</span> ex_generator</span>
-<span id="cb25-12"><a href="#cb25-12"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-12"><a href="#cb25-12"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Instead of importing the functions, I just get them explicitly from the <code>Objectives</code> module,</p>
 <div id="28" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
 <span id="cb26-2"><a href="#cb26-2"></a>    loss <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex.args[<span class="fl">2</span>])</span>
 <span id="cb26-3"><a href="#cb26-3"></a>    ex_penalty <span class="op">=</span> ex.args[<span class="fl">3</span>]</span>
 <span id="cb26-4"><a href="#cb26-4"></a>    λ <span class="op">=</span> ex_penalty.args[<span class="fl">2</span>]</span>
@@ -652,14 +654,14 @@ end</code></pre>
 <span id="cb26-10"><a href="#cb26-10"></a>        generator</span>
 <span id="cb26-11"><a href="#cb26-11"></a>    <span class="kw">end</span></span>
 <span id="cb26-12"><a href="#cb26-12"></a>    <span class="cf">return</span> ex_generator</span>
-<span id="cb26-13"><a href="#cb26-13"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-13"><a href="#cb26-13"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>and, finally, this works:</p>
 <div id="30" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1"></a><span class="pp">@objective</span>(generator, logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span>distance_l2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1"></a><span class="pp">@objective</span>(generator, logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span>distance_l2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>CounterfactualExplanations.Generators.GradientBasedGenerator(Flux.Losses.logitbinarycrossentropy, CounterfactualExplanations.Objectives.distance_l2, 0.1, false, false, Flux.Optimise.Descent(0.1), NamedTuple())</code></pre>
@@ -669,8 +671,8 @@ end</code></pre>
 <div id="32" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1"></a>ex <span class="op">=</span> <span class="op">:</span>(logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span>distance_l2 <span class="op">+</span> <span class="fl">1.0</span>ddp_diversity)</span>
-<span id="cb29-2"><a href="#cb29-2"></a>ex.args</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1"></a>ex <span class="op">=</span> <span class="op">:</span>(logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.1</span>distance_l2 <span class="op">+</span> <span class="fl">1.0</span>ddp_diversity)</span>
+<span id="cb29-2"><a href="#cb29-2"></a>ex.args</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Any}:
@@ -689,7 +691,7 @@ end</code></pre>
 <div id="36" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1"></a><span class="kw">macro</span> <span class="fu">objective</span>(generator, ex)</span>
 <span id="cb31-2"><a href="#cb31-2"></a>    loss <span class="op">=</span> <span class="fu">getfield</span>(CounterfactualExplanations.Objectives, ex.args[<span class="fl">2</span>])</span>
 <span id="cb31-3"><a href="#cb31-3"></a>    Λ <span class="op">=</span> <span class="fu">Vector</span><span class="dt">{AbstractFloat}</span>()</span>
 <span id="cb31-4"><a href="#cb31-4"></a>    costs <span class="op">=</span> <span class="fu">Vector</span><span class="dt">{Function}</span>()</span>
@@ -707,14 +709,14 @@ end</code></pre>
 <span id="cb31-16"><a href="#cb31-16"></a>        generator</span>
 <span id="cb31-17"><a href="#cb31-17"></a>    <span class="kw">end</span></span>
 <span id="cb31-18"><a href="#cb31-18"></a>    <span class="cf">return</span> ex_generator</span>
-<span id="cb31-19"><a href="#cb31-19"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-19"><a href="#cb31-19"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>That works well,</p>
 <div id="38" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1"></a><span class="pp">@objective</span>(generator, logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.05</span>distance_l2 <span class="op">+</span> <span class="fl">1.0</span>ddp_diversity)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1"></a><span class="pp">@objective</span>(generator, logitbinarycrossentropy <span class="op">+</span> <span class="fl">0.05</span>distance_l2 <span class="op">+</span> <span class="fl">1.0</span>ddp_diversity)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>CounterfactualExplanations.Generators.GradientBasedGenerator(Flux.Losses.logitbinarycrossentropy, Function[CounterfactualExplanations.Objectives.distance_l2, CounterfactualExplanations.Objectives.ddp_diversity], AbstractFloat[0.05, 1.0], false, false, Flux.Optimise.Descent(0.1), NamedTuple())</code></pre>
@@ -724,7 +726,7 @@ end</code></pre>
 <div id="40" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1"></a><span class="im">using</span> <span class="bu">CounterfactualExplanations.Models</span>: fit_model</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1"></a><span class="im">using</span> <span class="bu">CounterfactualExplanations.Models</span>: fit_model</span>
 <span id="cb34-2"><a href="#cb34-2"></a>n_dim <span class="op">=</span> <span class="fl">2</span></span>
 <span id="cb34-3"><a href="#cb34-3"></a>n_classes <span class="op">=</span> <span class="fl">4</span></span>
 <span id="cb34-4"><a href="#cb34-4"></a>n_samples <span class="op">=</span> <span class="fl">400</span></span>
@@ -732,30 +734,30 @@ end</code></pre>
 <span id="cb34-6"><a href="#cb34-6"></a>counterfactual_data <span class="op">=</span> TaijaData.<span class="fu">load_blobs</span>(n_samples; k<span class="op">=</span>n_dim, centers<span class="op">=</span>n_classes) <span class="op">|&gt;</span></span>
 <span id="cb34-7"><a href="#cb34-7"></a>    data <span class="op">-&gt;</span> <span class="fu">CounterfactualData</span>(data<span class="op">...</span>)</span>
 <span id="cb34-8"><a href="#cb34-8"></a>M <span class="op">=</span> <span class="fu">fit_model</span>(counterfactual_data, model_name)</span>
-<span id="cb34-9"><a href="#cb34-9"></a><span class="fu">plot</span>(M, counterfactual_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-9"><a href="#cb34-9"></a><span class="fu">plot</span>(M, counterfactual_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Next, we begin by specifying our target and factual label. We then draw a random sample from the non-target (factual) class.</p>
 <div id="42" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># Factual and target:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># Factual and target:</span></span>
 <span id="cb35-2"><a href="#cb35-2"></a>target <span class="op">=</span> <span class="fl">2</span></span>
 <span id="cb35-3"><a href="#cb35-3"></a>factual <span class="op">=</span> <span class="fl">4</span></span>
 <span id="cb35-4"><a href="#cb35-4"></a>chosen <span class="op">=</span> <span class="fu">rand</span>(<span class="fu">findall</span>(<span class="fu">predict_label</span>(M, counterfactual_data) <span class="op">.==</span> factual))</span>
-<span id="cb35-5"><a href="#cb35-5"></a>x <span class="op">=</span> <span class="fu">select_factual</span>(counterfactual_data,chosen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-5"><a href="#cb35-5"></a>x <span class="op">=</span> <span class="fu">select_factual</span>(counterfactual_data,chosen)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Finally, we use our <code>generator</code> to generate counterfactuals:</p>
 <div id="44" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1"></a><span class="im">using</span> <span class="bu">CounterfactualExplanations.Convergence</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1"></a><span class="im">using</span> <span class="bu">CounterfactualExplanations.Convergence</span></span>
 <span id="cb36-2"><a href="#cb36-2"></a>ce <span class="op">=</span> <span class="fu">generate_counterfactual</span>(</span>
 <span id="cb36-3"><a href="#cb36-3"></a>    x, target, counterfactual_data, M, generator;</span>
 <span id="cb36-4"><a href="#cb36-4"></a>    num_counterfactuals <span class="op">=</span> <span class="fl">5</span>,</span>
 <span id="cb36-5"><a href="#cb36-5"></a>    convergence <span class="op">=</span> <span class="fu">GeneratorConditionsConvergence</span>()</span>
-<span id="cb36-6"><a href="#cb36-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb36-6"><a href="#cb36-6"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>It worked! 🎉 The resulting counterfactual search is illustrated in <a href="#fig-search" class="quarto-xref">Figure&nbsp;2</a>. I may have overspecified the size of the <code>ddp_diversity</code> penalty a little bit here, but it sure makes for a cool chart!</p>
@@ -2488,13 +2490,14 @@ Metaverse.”</span> March 13, 2023. <a href="https://www.patalt.org/blog/posts/
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -2889,7 +2892,7 @@ Metaverse.”</span> March 13, 2023. <a href="https://www.patalt.org/blog/posts/
   </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb37" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb37-1"><a href="#cb37-1"></a><span class="co">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb37-1"><a href="#cb37-1"></a><span class="co">---</span></span>
 <span id="cb37-2"><a href="#cb37-2"></a><span class="an">title:</span><span class="co"> A Leap of Faith into Julia's Metaverse</span></span>
 <span id="cb37-3"><a href="#cb37-3"></a><span class="an">subtitle:</span><span class="co"> Getting started with metaprogramming in Julia</span></span>
 <span id="cb37-4"><a href="#cb37-4"></a><span class="an">date:</span><span class="co"> '2023-03-13'</span></span>
@@ -3322,7 +3325,7 @@ Metaverse.”</span> March 13, 2023. <a href="https://www.patalt.org/blog/posts/
 <span id="cb37-477"><a href="#cb37-477"></a>Throughout this post, I have skipped various important details that (I think) were not immediately relevant to the goal I had in mind: adding my first macro to  <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)</span>. In the future, I may write about this topic again and cover some of these missing details (hopefully with a bit more insight at that point!).</span>
 <span id="cb37-478"><a href="#cb37-478"></a></span>
 <span id="cb37-479"><a href="#cb37-479"></a><span class="fu">## 🎓 References</span></span>
-</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

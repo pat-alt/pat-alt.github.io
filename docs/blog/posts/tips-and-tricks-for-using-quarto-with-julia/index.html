@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../..//www/favicon.ico" rel="icon">
 <script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-5b84aa08c4b1afb5b57ff5167575c7ed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-c67d2184a1e990fa07c41f8bf1ddb47e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-7a7beb1cfbb781086111a8e8f7a805ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-e275d2373ec5967f8031784141c9f1af.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -134,7 +135,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -165,7 +166,8 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../../www/icon.png" alt="" class="navbar-logo">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo light-content">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">patalt</span>
@@ -341,7 +343,7 @@ A year of using Quarto with Julia.
 <section id="setup" class="level3">
 <h3 class="anchored" data-anchor-id="setup">Setup</h3>
 <p>I continue to recommend using VSCode for any work with Quarto and Julia. The Quarto <a href="https://quarto.org/docs/computations/julia.html#vs-code">docs</a> explain how to get started by installing the necessary Quarto and IJulia extensions. Since most Julia users will regularly want to update their Julia version, I would additionally recommend to add <code>IJulia.jl</code> to your <code>~/.julia/config/startup.jl</code> file:<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Setup OhMyREPL, Revise and Term</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Setup OhMyREPL, Revise and Term</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> <span class="bu">Pkg</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="kw">let</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a>    pkgs <span class="op">=</span> [<span class="st">"Revise"</span>, <span class="st">"OhMyREPL"</span>, <span class="st">"Term"</span>, <span class="st">"IJulia"</span>]</span>
@@ -350,7 +352,7 @@ A year of using Quarto with Julia.
 <span id="cb1-7"><a href="#cb1-7"></a>            <span class="bu">Pkg</span>.<span class="fu">add</span>(pkg)</span>
 <span id="cb1-8"><a href="#cb1-8"></a>        <span class="cf">end</span></span>
 <span id="cb1-9"><a href="#cb1-9"></a>    <span class="cf">end</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Additionally, you only need to remember that …</p>
 <blockquote class="blockquote">
 <p>… if you install a new Julia binary […], you must update the IJulia installation […] by running <code>Pkg.build("IJulia")</code></p>
@@ -373,23 +375,23 @@ A year of using Quarto with Julia.
 <div id="4" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">using</span> <span class="bu">MarketData</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">using</span> <span class="bu">MarketData</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>snp <span class="op">=</span> <span class="fu">yahoo</span>(<span class="st">"^GSPC"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3"></a></span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="im">using</span> <span class="bu">Dates</span></span>
 <span id="cb2-5"><a href="#cb2-5"></a>last_trade_day <span class="op">=</span> <span class="fu">timestamp</span>(snp[<span class="kw">end</span>])[<span class="fl">1</span>]</span>
 <span id="cb2-6"><a href="#cb2-6"></a>p_close <span class="op">=</span> <span class="fu">values</span>(snp[<span class="kw">end</span>,<span class="op">:</span>Close])[<span class="fl">1</span>]</span>
-<span id="cb2-7"><a href="#cb2-7"></a>last_trade_day_formatted <span class="op">=</span> <span class="bu">Dates</span>.<span class="fu">format</span>(last_trade_day, <span class="st">"U d, yyyy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-7"><a href="#cb2-7"></a>last_trade_day_formatted <span class="op">=</span> <span class="bu">Dates</span>.<span class="fu">format</span>(last_trade_day, <span class="st">"U d, yyyy"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>It loads the most recent publicly available data on equity prices from Yahoo finance. In an ideal world, we’d like any updates to these inputs to be reflected in our output. That way you can just re-render the Quarto notebook to get an updated report. To render Julia code inline, we use <code>Markdown.jl</code> like so:</p>
 <div id="6" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">using</span> <span class="bu">Markdown</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">using</span> <span class="bu">Markdown</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>Markdown.<span class="fu">parse</span>(<span class="st">"""</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="st">When the S&amp;P 500 last traded, on </span><span class="sc">$</span>(last_trade_day_formatted)<span class="st">, it closed at </span><span class="sc">$</span>(p_close)<span class="st">. </span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="st">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="st">"""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="markdown"><p>When the S&amp;P 500 last traded, on April 25, 2025, it closed at 5482.16015625. </p>
@@ -471,17 +473,17 @@ Figure&nbsp;1: Price history of the S&amp;P 500.
 <section id="code-execution" class="level3">
 <h3 class="anchored" data-anchor-id="code-execution">Code Execution</h3>
 <p>Related to the previous point, I typically define the following execution options in my <code>_quarto.yml</code> or <code>_metadata.yml</code>. The <code>freeze: auto</code> option ensures that documents are only rerendered if the source changes. In cases where code should always be re-executed you whould want to set <code>freeze: false</code>, instead. I set <code>output: false</code> because typically I have a lot of code chunks that don’t generate any output that is of immediate interest to readers.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">engine</span><span class="kw">:</span><span class="at"> julia</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">engine</span><span class="kw">:</span><span class="at"> julia</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="fu">execute</span><span class="kw">:</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="at">  </span><span class="fu">freeze</span><span class="kw">:</span><span class="at"> auto</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a><span class="at">  </span><span class="fu">eval</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
 <span id="cb5-5"><a href="#cb5-5"></a><span class="at">  </span><span class="fu">echo</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="at">  </span><span class="fu">output</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="at">  </span><span class="fu">output</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="reproducibility" class="level3">
 <h3 class="anchored" data-anchor-id="reproducibility">Reproducibility</h3>
 <p>To ensure that your content can be repoduced easily, it may additionally be helpful to explicitly specify the Julia version you used (``) and set up a global or local Julia environments. Inserting the following at the beginning of your Quarto notebook</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">using</span> <span class="bu">Pkg;</span> Pkg.activate("&lt;path&gt;")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">using</span> <span class="bu">Pkg;</span> Pkg.activate("&lt;path&gt;")</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>ensures that the desired environemnt that lives in <code>&lt;path&gt;</code> is actually activated and used.</p>
 </section>
 </section>
@@ -494,16 +496,16 @@ Figure&nbsp;1: Price history of the S&amp;P 500.
 <li>You can use Quarto execution options like <code>execute-dir: project</code> and <code>resources: www/</code> to globally specify the working directory and a directory for external resources like images.</li>
 </ol>
 <p>There are also a few peculiarities to be aware of. To avoid any issues with <code>Documenter.jl</code>, I’ve found it useful to ensure that the rendered <code>.md</code> files do not contain any raw HTML and to preserve text wrapping:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> </span></span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="at">  </span><span class="fu">commonmark</span><span class="kw">:</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="at">    </span><span class="fu">variant</span><span class="kw">:</span><span class="at"> -raw_html</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="at">    </span><span class="fu">wrap</span><span class="kw">:</span><span class="at"> preserve</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="at">    </span><span class="fu">wrap</span><span class="kw">:</span><span class="at"> preserve</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>When working with <code>.qmd</code> files you also need to use a slightly different syntax for <a href="https://documenter.juliadocs.org/stable/showcase/#Admonitions">admonitions</a>. The following syntax inside the <code>.qmd</code></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1"></a><span class="pp">|</span> !!! note \"An optional title\"</span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="pp">|</span>     Here is something that you should pay attention to.   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1"></a><span class="pp">|</span> !!! note \"An optional title\"</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="pp">|</span>     Here is something that you should pay attention to.   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>will generate the desired output inside the rendered <code>.md</code>:<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1"></a>!!! note "An optional title"</span>
-<span id="cb9-2"><a href="#cb9-2"></a>    Here is something that you should pay attention to.   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1"></a>!!! note "An optional title"</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    Here is something that you should pay attention to.   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Any of my package repos — <a href="https://github.com/juliatrustworthyai/CounterfactualExplanations.jl"><code>CounterfactualExplanations.jl</code></a>, <a href="https://github.com/juliatrustworthyai/LaplaceRedux.jl"><code>LaplaceRedux.jl</code></a>, <a href="https://github.com/juliatrustworthyai/ConformalPrediction.jl"><code>ConformalPrediction.jl</code></a> — should provide additional colour on this topic.</p>
 </section>
 <section id="quarto-for-academic-journal-articles" class="level2">
@@ -588,13 +590,14 @@ Julia.”</span> November 21, 2022. <a href="https://www.patalt.org/blog/posts/t
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -989,7 +992,7 @@ Julia.”</span> November 21, 2022. <a href="https://www.patalt.org/blog/posts/t
   </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb10" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">---</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a><span class="an">title:</span><span class="co"> "A year of using Quarto with Julia"</span></span>
 <span id="cb10-3"><a href="#cb10-3"></a><span class="an">subtitle:</span><span class="co"> "Tips and tricks for Julia practitioners"</span></span>
 <span id="cb10-4"><a href="#cb10-4"></a><span class="an">date:</span><span class="co"> '2022-11-21'</span></span>
@@ -1166,7 +1169,7 @@ Julia.”</span> November 21, 2022. <a href="https://www.patalt.org/blog/posts/t
 <span id="cb10-183"><a href="#cb10-183"></a><span class="fu">## Wrapping up</span></span>
 <span id="cb10-184"><a href="#cb10-184"></a></span>
 <span id="cb10-185"><a href="#cb10-185"></a>This short post has provided a bit of an update on using Quarto with Julia. From my own experience so far, things have been getting easier and better (thanks to the amazing work of Quarto dev team). I'm exicted to see things improve even further and still think that Quarto is a revolutionary new tool for scientific publishing. Let's hope publishers eventually recognise this value 👀.</span>
-</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

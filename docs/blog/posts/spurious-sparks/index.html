@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -91,14 +91,15 @@ div.csl-indent {
 <link href="../../..//www/favicon.ico" rel="icon">
 <script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-5b84aa08c4b1afb5b57ff5167575c7ed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-c67d2184a1e990fa07c41f8bf1ddb47e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-7a7beb1cfbb781086111a8e8f7a805ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-e275d2373ec5967f8031784141c9f1af.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -154,7 +155,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -185,7 +186,8 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../../www/icon.png" alt="" class="navbar-logo">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo light-content">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">patalt</span>
@@ -377,7 +379,7 @@ Note
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Position
+<span class="screen-reader-only">Important</span>Position
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -386,7 +388,7 @@ Position
 <li>Linear probes are straightforward, the visualizations in <span class="citation" data-cites="gurnee2023language">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span> are intriguing, the code is open-sourced and the findings are interesting.</li>
 <li>I am surprised that people are surprised by the findings: if we agree that LLMs exhibit strong capabilities that can only be connected to the patterns observed in the data they were trained on, then where exactly should we expect this information to be stored if not in the parameters of the model?<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
 <li>I therefore do take issue with the way that these findings are being overblown by people with clout. Perhaps the parrot metaphor should not be taken too literally either, but if anything the paper’s findings seem to support the notion that LLMs are remarkably capable of memorizing and regurgitating explicit and implicit knowledge contained in text.</li>
-<li>I want to point out that linear probes were proposed in the context of monitoring models and diagnosing potential problems <span class="citation" data-cites="alain2018understanding">Alain and Bengio (<a href="#ref-alain2018understanding" role="doc-biblioref">2016</a>)</span>. Favorable outcomes from probes merely indicate that the model in question “has learned information relevant for the property [of interest]” <span class="citation" data-cites="belinkov2021probing">(<a href="#ref-belinkov2021probing" role="doc-biblioref">Belinkov 2021</a>)</span>. This is useful but not the same as demonstrating that the model has attained a true “understanding” of the world.</li>
+<li>I want to point out that linear probes were proposed in the context of monitoring models and diagnosing potential problems <span class="citation" data-cites="alain2018understanding">Alain and Bengio (<a href="#ref-alain2018understanding" role="doc-biblioref">2018</a>)</span>. Favorable outcomes from probes merely indicate that the model in question “has learned information relevant for the property [of interest]” <span class="citation" data-cites="belinkov2021probing">(<a href="#ref-belinkov2021probing" role="doc-biblioref">Belinkov 2021</a>)</span>. This is useful but not the same as demonstrating that the model has attained a true “understanding” of the world.</li>
 </ol>
 </div>
 </div>
@@ -406,7 +408,7 @@ Position
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Code
+<span class="screen-reader-only">Note</span>Code
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -418,7 +420,7 @@ Code
 <blockquote class="blockquote">
 <p>If we can expect even random projections to contain useful representations, then should we really be surprised that a large language model, trained on a diverse set of data, contains representations that are useful for a wide range of tasks? 🤔</p>
 </blockquote>
-<p>While the fit certainly is not perfect, the results do indicate that the random projection contains representations that are useful for the task at hand. Thus, this simple example illustrates that meaningful target representations should be recoverable from a sufficiently large latent space, given the <em>random</em> projection of a small number of highly correlated features. Similarly, <span class="citation" data-cites="alain2018understanding">Alain and Bengio (<a href="#ref-alain2018understanding" role="doc-biblioref">2016</a>)</span> observe that even before training a convolutional neural network on MNIST data, the layer-wise activations can already be used to perform binary classification. In fact, it is well-known that random projections can be used for prediction tasks <span class="citation" data-cites="dasgupta2013experiments">(<a href="#ref-dasgupta2013experiments" role="doc-biblioref">Dasgupta 2013</a>)</span>.</p>
+<p>While the fit certainly is not perfect, the results do indicate that the random projection contains representations that are useful for the task at hand. Thus, this simple example illustrates that meaningful target representations should be recoverable from a sufficiently large latent space, given the <em>random</em> projection of a small number of highly correlated features. Similarly, <span class="citation" data-cites="alain2018understanding">Alain and Bengio (<a href="#ref-alain2018understanding" role="doc-biblioref">2018</a>)</span> observe that even before training a convolutional neural network on MNIST data, the layer-wise activations can already be used to perform binary classification. In fact, it is well-known that random projections can be used for prediction tasks <span class="citation" data-cites="dasgupta2013experiments">(<a href="#ref-dasgupta2013experiments" role="doc-biblioref">Dasgupta 2013</a>)</span>.</p>
 <div id="fig-map" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -437,7 +439,7 @@ Figure&nbsp;1: Predicted coordinate values (out-of-sample) from a linear probe o
 <p><a href="#fig-gfc-2" class="quarto-xref">Figure&nbsp;2 (b)</a> shows the corresponding yield curve during the aftermath of the GFC on 20 April 2009. On that day the influential Time Magazine <a href="https://content.time.com/time/business/article/0,8599,1890560,00.html">reported</a> that the “Banking Crisis is Over”. The yield curve was steeply sloped with a positive spread between the 10-year and 3-month yields, indicative of the market’s expectation of a recovery. The overall level of the yield curve was still very low though, indicative of the fact that US economy had not fully recovered at that point.</p>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a>df <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"data/ust_yields.csv"</span>), DataFrame) <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a>df <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"data/ust_yields.csv"</span>), DataFrame) <span class="op">|&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>    x <span class="op">-&gt;</span> <span class="pp">@pivot_longer</span>(x, <span class="op">-</span><span class="dt">Date</span>) <span class="op">|&gt;</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a>    x <span class="op">-&gt;</span> <span class="pp">@mutate</span>(x, variable<span class="op">=</span><span class="fu">to_year</span>(variable)) <span class="op">|&gt;</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a>    x <span class="op">-&gt;</span> <span class="pp">@mutate</span>(x, year<span class="op">=</span><span class="bu">Dates</span>.<span class="fu">year</span>(<span class="dt">Date</span>)) <span class="op">|&gt;</span></span>
@@ -477,7 +479,7 @@ Figure&nbsp;1: Predicted coordinate values (out-of-sample) from a linear probe o
 <span id="cb1-38"><a href="#cb1-38"></a>    label<span class="op">=</span><span class="st">""</span>, color<span class="op">=:</span>blue, alpha<span class="op">=</span><span class="fl">0.5</span>,</span>
 <span id="cb1-39"><a href="#cb1-39"></a>    ylims<span class="op">=</span>(<span class="fl">0</span>,<span class="fl">6</span>)</span>
 <span id="cb1-40"><a href="#cb1-40"></a>)</span>
-<span id="cb1-41"><a href="#cb1-41"></a><span class="fu">display</span>(plt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-41"><a href="#cb1-41"></a><span class="fu">display</span>(plt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="fig-gfc" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
@@ -632,12 +634,12 @@ Figure&nbsp;2: Yield curve of US Treasury bonds.
 <div id="6" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># PCA:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># PCA:</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>df_wide <span class="op">=</span> <span class="pp">@select</span>(df, <span class="dt">Date</span>, variable, value) <span class="op">|&gt;</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a>    x <span class="op">-&gt;</span> <span class="pp">@pivot_wider</span>(x, names_from <span class="op">=</span> variable, values_from <span class="op">=</span> value) <span class="op">|&gt;</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a>    x <span class="op">-&gt;</span> <span class="fu">dropmissing</span>(x)</span>
 <span id="cb2-5"><a href="#cb2-5"></a>X <span class="op">=</span> <span class="pp">@select</span>(df_wide, <span class="op">-</span><span class="dt">Date</span>) <span class="op">|&gt;</span> <span class="dt">Matrix</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>U, Σ, V <span class="op">=</span> <span class="fu">svd</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-6"><a href="#cb2-6"></a>U, Σ, V <span class="op">=</span> <span class="fu">svd</span>(X)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div id="fig-pca" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -655,7 +657,7 @@ Figure&nbsp;3: Comparison of latent embeddings and observed data of the US Treas
 <div id="8" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a>n_vals <span class="op">=</span> <span class="fl">50</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a>n_vals <span class="op">=</span> <span class="fl">50</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>pc1_range <span class="op">=</span> <span class="fu">range</span>(<span class="fu">extrema</span>(U[<span class="op">:</span>,<span class="fl">1</span>])<span class="op">...</span>, length<span class="op">=</span>n_vals)</span>
 <span id="cb3-3"><a href="#cb3-3"></a>pc2_range <span class="op">=</span> <span class="fu">range</span>(<span class="fu">extrema</span>(U[<span class="op">:</span>,<span class="fl">2</span>])<span class="op">...</span>, length<span class="op">=</span>n_vals)</span>
 <span id="cb3-4"><a href="#cb3-4"></a>Z_1 <span class="op">=</span> [[pc1, <span class="fl">0</span>, <span class="fu">zeros</span>(<span class="fu">size</span>(U, <span class="fl">2</span>)<span class="op">-</span><span class="fl">2</span>)<span class="op">...</span>] for pc1 <span class="kw">in</span> pc1_range] <span class="op">|&gt;</span> x <span class="op">-&gt;</span> <span class="fu">reduce</span>(vcat, x<span class="op">'</span>)</span>
@@ -691,7 +693,7 @@ Figure&nbsp;3: Comparison of latent embeddings and observed data of the US Treas
 <span id="cb3-34"><a href="#cb3-34"></a>    )</span>
 <span id="cb3-35"><a href="#cb3-35"></a>    <span class="fu">plot</span>(p1, p2, layout<span class="op">=</span>(<span class="fl">1</span>,<span class="fl">2</span>), size<span class="op">=</span>(<span class="fl">1000</span>, <span class="fl">400</span>), left_margin<span class="op">=</span><span class="fl">5</span>mm, bottom_margin<span class="op">=</span><span class="fl">5</span>mm)</span>
 <span id="cb3-36"><a href="#cb3-36"></a><span class="cf">end</span></span>
-<span id="cb3-37"><a href="#cb3-37"></a><span class="fu">gif</span>(anim, <span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"results/figures/pc_anim.gif"</span>), fps<span class="op">=</span><span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-37"><a href="#cb3-37"></a><span class="fu">gif</span>(anim, <span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"results/figures/pc_anim.gif"</span>), fps<span class="op">=</span><span class="fl">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div id="fig-pca-anim" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -714,7 +716,7 @@ Figure&nbsp;4: Yield curve decomposition through PCA.
 <div id="cell-fig-dl-data" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a>df_gdp_full <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"data/gdp.csv"</span>), DataFrame) <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a>df_gdp_full <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="fu">joinpath</span>(BLOG_DIR, <span class="st">"data/gdp.csv"</span>), DataFrame) <span class="op">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>    x <span class="op">-&gt;</span> <span class="pp">@rename</span>(x, <span class="dt">Date</span><span class="op">=</span>DATE, gdp<span class="op">=</span>GDPC1) <span class="op">|&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>    x <span class="op">-&gt;</span> <span class="pp">@mutate</span>(x, gdp_l1<span class="op">=</span><span class="fu">lag</span>(gdp)) <span class="op">|&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a>    x <span class="op">-&gt;</span> <span class="pp">@mutate</span>(x, growth<span class="op">=</span>(gdp_l1<span class="op">-</span>gdp)<span class="op">/</span>gdp) <span class="op">|&gt;</span></span>
@@ -756,7 +758,7 @@ Figure&nbsp;4: Yield curve decomposition through PCA.
 <span id="cb4-40"><a href="#cb4-40"></a>    alpha<span class="op">=</span><span class="fl">0.5</span>,</span>
 <span id="cb4-41"><a href="#cb4-41"></a>    size<span class="op">=</span>(<span class="fl">800</span>,<span class="fl">400</span>)</span>
 <span id="cb4-42"><a href="#cb4-42"></a>)</span>
-<span id="cb4-43"><a href="#cb4-43"></a><span class="fu">plot</span>(p_gdp, p_yields, layout<span class="op">=</span>(<span class="fl">2</span>,<span class="fl">1</span>), size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">600</span>), left_margin<span class="op">=</span><span class="fl">5</span>mm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-43"><a href="#cb4-43"></a><span class="fu">plot</span>(p_gdp, p_yields, layout<span class="op">=</span>(<span class="fl">2</span>,<span class="fl">1</span>), size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">600</span>), left_margin<span class="op">=</span><span class="fl">5</span>mm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="fig-dl-data" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="1">
 <figure class="quarto-float quarto-float-fig figure">
@@ -851,7 +853,7 @@ Figure&nbsp;5: GDP growth and yield curve data.
 <div id="cell-fig-dl-model" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a>dl <span class="op">=</span> Flux.MLUtils.<span class="fu">DataLoader</span>((<span class="fu">permutedims</span>(X), <span class="fu">permutedims</span>(y)), batchsize<span class="op">=</span><span class="fl">24</span>, shuffle<span class="op">=</span><span class="cn">true</span>) </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a>dl <span class="op">=</span> Flux.MLUtils.<span class="fu">DataLoader</span>((<span class="fu">permutedims</span>(X), <span class="fu">permutedims</span>(y)), batchsize<span class="op">=</span><span class="fl">24</span>, shuffle<span class="op">=</span><span class="cn">true</span>) </span>
 <span id="cb5-2"><a href="#cb5-2"></a>input_dim <span class="op">=</span> <span class="fu">size</span>(X,<span class="fl">2</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a>n_pc <span class="op">=</span> <span class="fl">6</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a>n_hidden <span class="op">=</span> <span class="fl">32</span></span>
@@ -871,7 +873,7 @@ Figure&nbsp;5: GDP growth and yield curve data.
 <span id="cb5-18"><a href="#cb5-18"></a>    <span class="fu">Dense</span>(input_dim, <span class="fl">1</span>),</span>
 <span id="cb5-19"><a href="#cb5-19"></a>) </span>
 <span id="cb5-20"><a href="#cb5-20"></a>plt <span class="op">=</span> <span class="fu">plot</span>(model, <span class="fu">rand</span>(input_dim))</span>
-<span id="cb5-21"><a href="#cb5-21"></a><span class="fu">display</span>(plt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-21"><a href="#cb5-21"></a><span class="fu">display</span>(plt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>GKS: could not find font Sans.ttf</code></pre>
@@ -2218,7 +2220,7 @@ Figure&nbsp;6: Model architecture.
 </section>
 <section id="linear-probe" class="level4">
 <h4 class="anchored" data-anchor-id="linear-probe">Linear Probe</h4>
-<p>While the loss function applies most direct pressure on layers near the final output layer, any information useful for the downstream task first needs to pass through the bottleneck layer <span class="citation" data-cites="alain2018understanding">(<a href="#ref-alain2018understanding" role="doc-biblioref">Alain and Bengio 2016</a>)</span>. On a per-neuron basis, the pressure to distill useful representation is therefore likely maximized there. Consequently, the bottleneck layer activations seem like a natural place to start looking for compact, meaningful representations of distilled information. I compute and extract these activations <span class="math inline">\(A_t\)</span> for all time periods <span class="math inline">\(t=1,...,T\)</span>. Next, we use a linear probe to regress the observed yield curve factors on the latent embeddings. Let <span class="math inline">\(Y_t\)</span> denote the vector containing the two factors of interest in time <span class="math inline">\(t\)</span>: <span class="math inline">\(y_{t,l}\)</span> and <span class="math inline">\(y_{t,s}\)</span> for the level and spread, respectively. Formally, we are interested in the following regression model: <span class="math inline">\(p_{w}(Y_t|A_t)\)</span> where <span class="math inline">\(w\)</span> denotes the regression parameters. I use Ridge regression with <span class="math inline">\(\lambda\)</span> set to <span class="math inline">\(0.1\)</span>. Using the estimated regression parameters <span class="math inline">\(\hat{w}\)</span>, we then predict the yield curve factors from the latent embeddings: <span class="math inline">\(\hat{Y}_t=\hat{w}^{\prime}A_t\)</span>.</p>
+<p>While the loss function applies most direct pressure on layers near the final output layer, any information useful for the downstream task first needs to pass through the bottleneck layer <span class="citation" data-cites="alain2018understanding">(<a href="#ref-alain2018understanding" role="doc-biblioref">Alain and Bengio 2018</a>)</span>. On a per-neuron basis, the pressure to distill useful representation is therefore likely maximized there. Consequently, the bottleneck layer activations seem like a natural place to start looking for compact, meaningful representations of distilled information. I compute and extract these activations <span class="math inline">\(A_t\)</span> for all time periods <span class="math inline">\(t=1,...,T\)</span>. Next, we use a linear probe to regress the observed yield curve factors on the latent embeddings. Let <span class="math inline">\(Y_t\)</span> denote the vector containing the two factors of interest in time <span class="math inline">\(t\)</span>: <span class="math inline">\(y_{t,l}\)</span> and <span class="math inline">\(y_{t,s}\)</span> for the level and spread, respectively. Formally, we are interested in the following regression model: <span class="math inline">\(p_{w}(Y_t|A_t)\)</span> where <span class="math inline">\(w\)</span> denotes the regression parameters. I use Ridge regression with <span class="math inline">\(\lambda\)</span> set to <span class="math inline">\(0.1\)</span>. Using the estimated regression parameters <span class="math inline">\(\hat{w}\)</span>, we then predict the yield curve factors from the latent embeddings: <span class="math inline">\(\hat{Y}_t=\hat{w}^{\prime}A_t\)</span>.</p>
 <p>The in-sample predictions of the probe are shown in the right chart of <a href="#fig-dl-results" class="quarto-xref">Figure&nbsp;7</a>. Solid lines show the observed yield curve factors over time, while dashed lines show predicted values. We can observe that the latent embeddings predict the two yield curve factors reasonably well, in particular the spread.</p>
 <div id="fig-dl-results" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -2243,7 +2245,7 @@ Figure&nbsp;7: The left chart shows the actual GDP growth and fitted values from
 <p>To round up this section, we will jump back on the hype train and consider an example involving an LLM. In particular, we will closely follow the approach in <span class="citation" data-cites="gurnee2023language">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span> and apply it to a novel financial dataset: the <em>Trillion Dollar Words</em> dataset introduced by <span class="citation" data-cites="shah2023trillion">Shah, Paturi, and Chava (<a href="#ref-shah2023trillion" role="doc-biblioref">2023</a>)</span>. The dataset contains a curated selection of sentences formulated by central bankers of the US Federal Reserve and communicated to the public in speeches, meeting minutes and press conferences. The authors of the paper use this dataset to train LLMs to classify sentences as either ‘dovish’, ‘hawkish’ or ‘neutral’. To this end, they first manually annotate a subsample of the available data and then fine-tune various foundation models. Their model of choice, <em>FOMC-RoBERTa</em> (a fine-tuned version of RoBERTa <span class="citation" data-cites="liu2019roberta">(<a href="#ref-liu2019roberta" role="doc-biblioref">Liu et al. 2019</a>)</span>), achieves an <span class="math inline">\(F_1\)</span> score of around <span class="math inline">\(&gt;0.7\)</span> for the classification task. To illustrate the potential usefulness of the learned classifier, they use predicted labels for the entire dataset to compute an ad-hoc, count-based measure of ‘hawkishness’. They then go on to show that this measure correlates with key economic indicators in the expected direction: when inflationary pressures rise, the measured level of ‘hawkishness’ increases as central bankers need to raise interest rates to bring inflation back to target.</p>
 <section id="linear-probes" class="level4">
 <h4 class="anchored" data-anchor-id="linear-probes">Linear Probes</h4>
-<p>Instead of computing a measure based on predicted labels, we can use linear probes to assess if the fine-tuned model has learned associative patterns between central bank communications and key economic indicators. To this end, I have further pre-processed the data provided by <span class="citation" data-cites="shah2023trillion">Shah, Paturi, and Chava (<a href="#ref-shah2023trillion" role="doc-biblioref">2023</a>)</span> and used their proposed model to compute layer-wise embeddings for all available sentences. I have made these available and easily accessible through a small Julia package: <a href="https://github.com/pat-alt/TrillionDollarWords.jl">TrillionDollarWords.jl</a>. For each layer, I have then computed linear probes on two inflation indicators—the Consumer Price Index (CPI) and the Producer Price Index (PPI)—as well as US Treasury yields at different levels of maturity. To mitigate issues related to over-parameterization, I follow the recommendation in <span class="citation" data-cites="alain2018understanding">Alain and Bengio (<a href="#ref-alain2018understanding" role="doc-biblioref">2016</a>)</span> to first reduce the dimensionality of the embeddings each time. In particular, linear probes are restricted to the first 128 principal components of the embeddings of each layer.</p>
+<p>Instead of computing a measure based on predicted labels, we can use linear probes to assess if the fine-tuned model has learned associative patterns between central bank communications and key economic indicators. To this end, I have further pre-processed the data provided by <span class="citation" data-cites="shah2023trillion">Shah, Paturi, and Chava (<a href="#ref-shah2023trillion" role="doc-biblioref">2023</a>)</span> and used their proposed model to compute layer-wise embeddings for all available sentences. I have made these available and easily accessible through a small Julia package: <a href="https://github.com/pat-alt/TrillionDollarWords.jl">TrillionDollarWords.jl</a>. For each layer, I have then computed linear probes on two inflation indicators—the Consumer Price Index (CPI) and the Producer Price Index (PPI)—as well as US Treasury yields at different levels of maturity. To mitigate issues related to over-parameterization, I follow the recommendation in <span class="citation" data-cites="alain2018understanding">Alain and Bengio (<a href="#ref-alain2018understanding" role="doc-biblioref">2018</a>)</span> to first reduce the dimensionality of the embeddings each time. In particular, linear probes are restricted to the first 128 principal components of the embeddings of each layer.</p>
 <p><a href="#fig-fomc" class="quarto-xref">Figure&nbsp;8</a> shows the out-of-sample root mean squared error (RMSE) for the linear probe, plotted against <em>FOMC-RoBERTa</em>’s <span class="math inline">\(n\)</span>-th layer. The values correspond to averages across cross-validation folds where I have used an expanding window scheme. Consistent with related work <span class="citation" data-cites="alain2018understanding">Gurnee and Tegmark (<a href="#ref-gurnee2023language" role="doc-biblioref">2023</a>)</span>, we can observe that model performance tends to be higher for layers near the end of the transformer model. Curiously, for yields at longer maturities, we see that performance eventually deteriorates for the very final layers. This is not the case for the training data, so I would attribute this to overfitting. A detailed discussion of all our results including a benchmark of these probes against baseline autoregressive models can be found in the paper.</p>
 <div id="fig-fomc" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -2293,7 +2295,7 @@ Figure&nbsp;9: Probe predictions for sentences about inflation of prices (IP), d
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>Linear probes and related tools from mechanistic interpretability were proposed in the context of monitoring models and diagnosing potential problems <span class="citation" data-cites="alain2018understanding">Alain and Bengio (<a href="#ref-alain2018understanding" role="doc-biblioref">2016</a>)</span>. Favorable outcomes from probes merely indicate that the model “has learned information relevant for the property [of interest]” <span class="citation" data-cites="belinkov2021probing">Belinkov (<a href="#ref-belinkov2021probing" role="doc-biblioref">2021</a>)</span>. The examples shown here demonstrate that this is achievable even for small models, while these have certainly not developed an intrinsic “understanding” of the world. Thus, my co-authors and I argue that more conservative and rigorous tests for emerging capabilities of AI model are needed.</p>
+<p>Linear probes and related tools from mechanistic interpretability were proposed in the context of monitoring models and diagnosing potential problems <span class="citation" data-cites="alain2018understanding">Alain and Bengio (<a href="#ref-alain2018understanding" role="doc-biblioref">2018</a>)</span>. Favorable outcomes from probes merely indicate that the model “has learned information relevant for the property [of interest]” <span class="citation" data-cites="belinkov2021probing">Belinkov (<a href="#ref-belinkov2021probing" role="doc-biblioref">2021</a>)</span>. The examples shown here demonstrate that this is achievable even for small models, while these have certainly not developed an intrinsic “understanding” of the world. Thus, my co-authors and I argue that more conservative and rigorous tests for emerging capabilities of AI model are needed.</p>
 <p>I want to conclude this blog post just as we conclude in our paper:</p>
 <blockquote class="blockquote">
 <p>“We as academic researchers carry great responsibility for how the narrative will unfold, and what claims are believed. We call upon our colleagues to be explicitly mindful of this. As attractive as it may be to beat the state-of-the-art with a grander claim, let us return to the Mertonian norms, and thus safeguard our academic legitimacy in a world that only will be eager to run with made claims.”</p>
@@ -2316,7 +2318,7 @@ Figure&nbsp;9: Probe predictions for sentences about inflation of prices (IP), d
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-alain2018understanding" class="csl-entry" role="listitem">
-Alain, Guillaume, and Yoshua Bengio. 2016. <span>“<span class="nocase">Understanding intermediate layers using linear classifier probes</span>.”</span> <em>ArXiv</em> abs/1610.01644. <a href="https://api.semanticscholar.org/CorpusID:9794990">https://api.semanticscholar.org/CorpusID:9794990</a>.
+Alain, Guillaume, and Yoshua Bengio. 2018. <span>“Understanding Intermediate Layers Using Linear Classifier Probes.”</span> <a href="https://arxiv.org/abs/1610.01644">https://arxiv.org/abs/1610.01644</a>.
 </div>
 <div id="ref-altmeyer2024position" class="csl-entry" role="listitem">
 Altmeyer, Patrick, Andrew M Demetriou, Antony Bartlett, and Cynthia C. S. Liem. 2024. <span>“Position: Stop Making Unscientific AGI Performance Claims.”</span> In <em>International Conference on Machine Learning</em>, 1222–42. PMLR. <a href="https://proceedings.mlr.press/v235/altmeyer24a.html">https://proceedings.mlr.press/v235/altmeyer24a.html</a>.
@@ -2407,13 +2409,14 @@ AGI.”</span> February 7, 2024. <a href="https://www.patalt.org/blog/posts/spur
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -2808,7 +2811,7 @@ AGI.”</span> February 7, 2024. <a href="https://www.patalt.org/blog/posts/spur
   </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">---</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="an">title:</span><span class="co"> Spurious Sparks of AGI</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="an">subtitle:</span><span class="co"> On the Unsurprising Finding of Patterns in Latent Spaces</span></span>
 <span id="cb7-4"><a href="#cb7-4"></a><span class="an">author:</span><span class="co"> </span></span>
@@ -3212,7 +3215,7 @@ AGI.”</span> February 7, 2024. <a href="https://www.patalt.org/blog/posts/spur
 <span id="cb7-414"><a href="#cb7-414"></a>A huge thank you to my co-authors <span class="co">[</span><span class="ot">Andrew M. Demetriou</span><span class="co">](https://www.amdemetriou.com/)</span>, <span class="co">[</span><span class="ot">Antony Bartlett</span><span class="co">](https://codegonewild.com/)</span> and <span class="co">[</span><span class="ot">Cynthia C. S. Liem</span><span class="co">](https://www.cynthialiem.com/)</span> who are also my colleagues at TU Delft and (in the case of Cynthia) my supervisor. It's been a real pleasure working with you on this project.</span>
 <span id="cb7-415"><a href="#cb7-415"></a></span>
 <span id="cb7-416"><a href="#cb7-416"></a><span class="fu">## References</span></span>
-</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

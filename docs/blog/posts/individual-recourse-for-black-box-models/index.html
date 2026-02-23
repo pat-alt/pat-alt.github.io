@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -91,14 +91,15 @@ div.csl-indent {
 <link href="../../..//www/favicon.ico" rel="icon">
 <script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-5b84aa08c4b1afb5b57ff5167575c7ed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-c67d2184a1e990fa07c41f8bf1ddb47e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-7a7beb1cfbb781086111a8e8f7a805ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-e275d2373ec5967f8031784141c9f1af.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -151,7 +152,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -182,7 +183,8 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../../www/icon.png" alt="" class="navbar-logo">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo light-content">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">patalt</span>
@@ -443,7 +445,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#' Stochastic gradient descent</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#' Stochastic gradient descent</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="co">#'</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="co">#' @param X Feature matrix.</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="co">#' @param y Vector containing training labels.</span></span>
@@ -533,7 +535,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 <span id="cb1-88"><a href="#cb1-88"></a>}</span>
 <span id="cb1-89"><a href="#cb1-89"></a>predict <span class="ot">&lt;-</span> <span class="cf">function</span>(classifier, <span class="at">newdata=</span><span class="cn">NULL</span>, <span class="at">discrete=</span><span class="cn">TRUE</span>) {</span>
 <span id="cb1-90"><a href="#cb1-90"></a>  <span class="fu">UseMethod</span>(<span class="st">"predict"</span>)</span>
-<span id="cb1-91"><a href="#cb1-91"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-91"><a href="#cb1-91"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section>
@@ -562,7 +564,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#' REVISE algoritm - a simplified version</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#' REVISE algoritm - a simplified version</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="co">#'</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="co">#' @param classifier The fitted classifier.</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="co">#' @param x_star Attributes of individual seeking individual recourse.</span></span>
@@ -636,7 +638,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 <span id="cb2-72"><a href="#cb2-72"></a></span>
 <span id="cb2-73"><a href="#cb2-73"></a>revise <span class="ot">&lt;-</span> <span class="cf">function</span>(classifier,x_star,<span class="at">eta=</span><span class="dv">1</span>,<span class="at">lambda=</span><span class="fl">0.01</span>,<span class="at">n_iter=</span><span class="dv">1000</span>,<span class="at">save_steps=</span><span class="cn">FALSE</span>) {</span>
 <span id="cb2-74"><a href="#cb2-74"></a>  <span class="fu">UseMethod</span>(<span class="st">"revise"</span>)</span>
-<span id="cb2-75"><a href="#cb2-75"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-75"><a href="#cb2-75"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section>
@@ -646,7 +648,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>sim_data <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>,averages,<span class="at">noise=</span><span class="fl">0.1</span>) {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>sim_data <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>,averages,<span class="at">noise=</span><span class="fl">0.1</span>) {</span>
 <span id="cb3-2"><a href="#cb3-2"></a>  d <span class="ot">&lt;-</span> <span class="fu">ncol</span>(averages)</span>
 <span id="cb3-3"><a href="#cb3-3"></a>  y <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>(<span class="fu">rbinom</span>(n,<span class="dv">1</span>,<span class="fl">0.5</span>)<span class="sc">-</span><span class="fl">0.5</span>) <span class="co"># generate binary outcome: 1=dog, -1=cat</span></span>
 <span id="cb3-4"><a href="#cb3-4"></a>  X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(averages[(y<span class="sc">+</span><span class="dv">1</span>)<span class="sc">/</span><span class="dv">2</span><span class="sc">+</span><span class="dv">1</span>,]) <span class="co"># generate attributes conditional on y</span></span>
@@ -657,7 +659,7 @@ Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recours
 <span id="cb3-9"><a href="#cb3-9"></a>  X[dogs,] <span class="ot">&lt;-</span> X[dogs,] <span class="sc">+</span> </span>
 <span id="cb3-10"><a href="#cb3-10"></a>    <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="fu">sum</span>(dogs)<span class="sc">*</span>d),<span class="at">nrow=</span><span class="fu">sum</span>(dogs)) <span class="sc">%*%</span> <span class="fu">diag</span>(noise<span class="sc">*</span>averages[<span class="dv">2</span>,]) <span class="co"># add noise for y=1 (dogs)</span></span>
 <span id="cb3-11"><a href="#cb3-11"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">X=</span>X,<span class="at">y=</span>y))</span>
-<span id="cb3-12"><a href="#cb3-12"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-12"><a href="#cb3-12"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 
@@ -729,13 +731,14 @@ Models.”</span> April 27, 2021. <a href="https://www.patalt.org/blog/posts/ind
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1130,7 +1133,7 @@ Models.”</span> April 27, 2021. <a href="https://www.patalt.org/blog/posts/ind
   </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">---</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="an">title:</span><span class="co"> "Individual recourse for Black Box Models"</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="an">subtitle:</span><span class="co"> "Explained through a tale of 🐱's and 🐶's"</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="an">date:</span><span class="co"> "2021-04-27"</span></span>
@@ -1449,7 +1452,7 @@ Models.”</span> April 27, 2021. <a href="https://www.patalt.org/blog/posts/ind
 <span id="cb4-327"><a href="#cb4-327"></a>}</span>
 <span id="cb4-328"><a href="#cb4-328"></a><span class="in">```</span></span>
 <span id="cb4-329"><a href="#cb4-329"></a></span>
-</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

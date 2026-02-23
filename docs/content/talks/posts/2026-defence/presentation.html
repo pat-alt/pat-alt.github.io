@@ -7,14 +7,14 @@
 <script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <link href="../../../../site_libs/quarto-contrib/foldbox/foldbox.css" rel="stylesheet">
 <script src="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.31">
+  <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="Patrick Altmeyer">
   <meta name="author" content="Arie van Deursen">
@@ -39,7 +39,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../../../../site_libs/revealjs/dist/theme/quarto-1c15b08214cb76ff542b6c6a60bff319.css">
+  <link rel="stylesheet" href="../../../../site_libs/revealjs/dist/theme/quarto-74f258d95d6643ba1b3245cdedf93b72.css">
   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-BEEZ30787D"></script>
 
   <script type="text/javascript">
@@ -141,16 +141,16 @@
     }
   </style>
   <style>
+  .RQ {
+    --color1: #dff4fa;
+    --color2: #00a6d6;
+  }
   .Rec {
     --color1: #fff6e3;
     --color2: #ffb81c;
   }
   .TRQ {
     --color1: #80d2eb;
-    --color2: #00a6d6;
-  }
-  .RQ {
-    --color1: #dff4fa;
     --color2: #00a6d6;
   }
   </style>
@@ -601,13 +601,14 @@ Figure&nbsp;11: A model trained to use plausible explanations for predictions
           e.clearSelection();
         }
         const getTextToCopy = function(trigger) {
-            const codeEl = trigger.previousElementSibling.cloneNode(true);
-            for (const childEl of codeEl.children) {
-              if (isCodeAnnotation(childEl)) {
-                childEl.remove();
-              }
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
             }
-            return codeEl.innerText;
+          }
+          return codeEl.innerText;
         }
         const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
           text: getTextToCopy

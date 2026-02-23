@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../..//www/favicon.ico" rel="icon">
 <script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-5b84aa08c4b1afb5b57ff5167575c7ed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-c67d2184a1e990fa07c41f8bf1ddb47e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-7a7beb1cfbb781086111a8e8f7a805ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-e275d2373ec5967f8031784141c9f1af.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -133,7 +134,8 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../../www/icon.png" alt="" class="navbar-logo">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo light-content">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">patalt</span>
@@ -306,14 +308,14 @@ Julia and Quarto: a perfect match.
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Cross-referencing
+<span class="screen-reader-only">Tip</span>Cross-referencing
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>There is a standard recipe for generating cross-references in Quarto. The example below involves a section cross-reference.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a>If you are a Julia user that really couldn't care less about my previous experiences with R Markdown, this is a good time to skip straight ahead to @sec-match.</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a>If you are a Julia user that really couldn't care less about my previous experiences with R Markdown, this is a good time to skip straight ahead to @sec-match.</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">## Quarto and Julia - a perfect match {#sec-match}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">## Quarto and Julia - a perfect match {#sec-match}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>There is actually a comprehensive 8-step guide explaining how to achieve something similar in MS Word, but personally I wouldn’t go there. Anyway, take your pick:</p>
 <ol type="a">
 <li>🔴 <a href="https://support.microsoft.com/en-us/office/create-a-cross-reference-300b208c-e45a-487a-880b-a02767d9774b">Go there</a>.</li>
@@ -374,12 +376,12 @@ Just had my first go <a href="https://twitter.com/hashtag/quarto?src=hash&amp;re
 <li>If you choose to also do that, make sure that the <code>.qmd</code> document has access to a <code>Pkg.jl</code> environment that has <code>IJulia</code> added.</li>
 </ol>
 <p>Julia code cells can be added anywhere along with your plain text Markdown. They look like this:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1"></a><span class="in">```{julia}</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1"></a><span class="in">```{julia}</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">using</span> <span class="bu">Pkg</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"CounterfactualExplanations"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Contrary to Jupyter notebooks, executing this code cells will start a Julia REPL in VSCode. I find this very helpful, because it lets me fiddle with anything I have created inside the Quarto notebook without having to click into cells all the time. Quarto comes with great support for specifying <a href="https://quarto.org/docs/computations/julia.html">code executing options</a>. For example, for the code below I have specified <code>#| echo: true</code> in order for the code to be rendered. The code itself is the code I actually used to build the animation above (heavily borrowed from this <code>Javis.jl</code> <a href="https://juliaanimators.github.io/Javis.jl/stable/tutorials/tutorial_7/">tutorial</a>).</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#| echo: true</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#| echo: true</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="im">using</span> <span class="bu">Javis</span>, <span class="bu">Animations</span>, <span class="bu">Colors</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a></span>
 <span id="cb3-4"><a href="#cb3-4"></a>size <span class="op">=</span> <span class="fl">600</span></span>
@@ -471,13 +473,13 @@ Just had my first go <a href="https://twitter.com/hashtag/quarto?src=hash&amp;re
 <span id="cb3-90"><a href="#cb3-90"></a><span class="fu">render</span>(</span>
 <span id="cb3-91"><a href="#cb3-91"></a>    video;</span>
 <span id="cb3-92"><a href="#cb3-92"></a>    pathname <span class="op">=</span> <span class="fu">joinpath</span>(www_path, <span class="st">"intro.gif"</span>),</span>
-<span id="cb3-93"><a href="#cb3-93"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-93"><a href="#cb3-93"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="working-with-documenter.jl-and-quarto" class="level4">
 <h4 class="anchored" data-anchor-id="working-with-documenter.jl-and-quarto">Working with <code>Documenter.jl</code> and Quarto</h4>
 <p>An interesting application of Quarto in the Julia ecosystem is package documentation. This is of course best done using <code>Documenter.jl</code> and fortunately the two play nicely with each other, since both share a common ground (Markdown). Their interaction is perhaps best demonstrated through this Julia library I recently developed: <a href="https://github.com/juliatrustworthyai/CounterfactualExplanations.jl"><code>CounterfactualExplanatinos.jl</code></a>. On there you will find lot of Julia scripts <code>*.jl</code> under <code>src/</code> and <code>test/</code>, as well as many Markdown <code>.md</code> and Quarto documents <code>.qmd</code> under <code>docs</code>. I <em>wrote</em> the package documentation in the Quarto documents, <em>rendered</em> documents individually through <code>quarto render [doc].qmd</code> and then fed the resulting Markdown documents to <code>Documenter.jl</code> as always.</p>
 <p>Below is my standard YAML header for those Quarto documents:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> </span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="at">  </span><span class="fu">commonmark</span><span class="kw">:</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="at">    </span><span class="fu">variant</span><span class="kw">:</span><span class="at"> -raw_html</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="at">    </span><span class="fu">wrap</span><span class="kw">:</span><span class="at"> none</span></span>
@@ -490,7 +492,7 @@ Just had my first go <a href="https://twitter.com/hashtag/quarto?src=hash&amp;re
 <span id="cb4-11"><a href="#cb4-11"></a><span class="fu">engine</span><span class="kw">:</span><span class="at"> julia</span></span>
 <span id="cb4-12"><a href="#cb4-12"></a><span class="fu">execute</span><span class="kw">:</span><span class="at"> </span></span>
 <span id="cb4-13"><a href="#cb4-13"></a><span class="at">  </span><span class="fu">echo</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb4-14"><a href="#cb4-14"></a><span class="at">  </span><span class="fu">eval</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="at">  </span><span class="fu">eval</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You can see that it points to Bibtex file I host on another Github repository. This makes it very easy to generate citations and references for the rendered Markdown documents, that also show up in the docs (e.g.&nbsp;<a href="https://www.patalt.org/CounterfactualExplanations.jl/stable/cats_dogs/">here</a>). Unfortunately, cross-referencing only partially works, because it relies on auto-generated HTML and <code>Documenter.jl</code> expects this to be passed in blocks. Choosing <code>variant: -raw_html</code> is only a workaround as I have discussed <a href="https://github.com/JuliaDocs/Documenter.jl/issues/1778">here</a>. Ideally, <code>Documenter.jl</code> would just accept HTML documents rendered from Quarto, but currently only Markdown documents are accepted by <code>make_docs</code>. Still, if anything this workaround is a nice gimmick that extends the default <code>Documenter.jl</code> functionality, without any hassle involved. Hopefully, this can be improved in the future.</p>
 </section>
 <section id="using-quarto-for-juliacon-proceedings" class="level4">
@@ -569,13 +571,14 @@ Heaven? 🌤.”</span> April 7, 2022. <a href="https://www.patalt.org/blog/post
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -970,7 +973,7 @@ Heaven? 🌤.”</span> April 7, 2022. <a href="https://www.patalt.org/blog/post
   </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">---</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="an">title:</span><span class="co"> 'Julia and Quarto: a match made in heaven? 🌤'</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="an">subtitle:</span><span class="co"> A new way to publish science</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a><span class="an">date:</span><span class="co"> '2022-04-07'</span></span>
@@ -1217,7 +1220,7 @@ Heaven? 🌤.”</span> April 7, 2022. <a href="https://www.patalt.org/blog/post
 <span id="cb5-247"><a href="#cb5-247"></a><span class="fu">## Wrapping up 🎗</span></span>
 <span id="cb5-248"><a href="#cb5-248"></a></span>
 <span id="cb5-249"><a href="#cb5-249"></a>In this post I wanted to demonstrate that Quarto might just be the next revolution in scientific publishing. In particular, I hope I have managed to demonstrate its appeal to the Julia community, which I am proud to be part of now that I have managed to branch out of my old R bubble. Please let me hear your thoughts and comments below! </span>
-</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

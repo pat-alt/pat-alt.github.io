@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../..//www/favicon.ico" rel="icon">
 <script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-5b84aa08c4b1afb5b57ff5167575c7ed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-c67d2184a1e990fa07c41f8bf1ddb47e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-7a7beb1cfbb781086111a8e8f7a805ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-e275d2373ec5967f8031784141c9f1af.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -133,7 +134,8 @@ gtag('config', 'G-BEEZ30787D', { 'anonymize_ip': true});
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../../www/icon.png" alt="" class="navbar-logo">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo light-content">
+    <img src="../../../www/icon.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">patalt</span>
@@ -315,15 +317,15 @@ A TU Delft Theme for Quarto.
 <section id="setup" class="level3">
 <h3 class="anchored" data-anchor-id="setup">Setup</h3>
 <p>To get started with building the TU Delft Custom Format I followed the official <a href="https://quarto.org/docs/extensions/formats.html#quick-start">Quarto docs</a>. I first used the appropriate Quarto command, which initiates an interactive process in the command line:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">$</span> quarto create extension format:revealjs</span>
-<span id="cb1-2"><a href="#cb1-2"></a> <span class="ex">?</span> Extension Name › lexdoc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">$</span> quarto create extension format:revealjs</span>
+<span id="cb1-2"><a href="#cb1-2"></a> <span class="ex">?</span> Extension Name › lexdoc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Once done, the basic folder structure for my extension was set up and ready to be pushed to a remote Github repository for distribution: <a href="https://github.com/pat-alt/quarto-tudelft">https://github.com/pat-alt/quarto-tudelft</a>. Even though I had not yet added any custom formatting rules, anyone would now be able to use this empty extension for their work.</p>
 </section>
 <section id="adding-rules" class="level3">
 <h3 class="anchored" data-anchor-id="adding-rules">Adding Rules</h3>
 <p>To actually add some custom formatting rules to the extension I started working on the files contained in <code>_extensions/tudelft/</code>. Using my institution’s PowerPoint template as a reference, I previewed the <code>template.qmd</code> file and simply made appropriate adjustments to the <a href="https://github.com/pat-alt/quarto-tudelft/blob/main/_extensions/tudelft/custom.scss"><code>_extensions/tudelft/custom.scss</code></a> and <a href="https://github.com/pat-alt/quarto-tudelft/blob/main/_extensions/tudelft/_extension.yml"><code>_extensions/tudelft/_extension.yml</code></a> files until I was satisfied. To help me in that process, I took inspiration from various existing Revealjs extensions all listed in the <a href="https://github.com/mcanouil/awesome-quarto#presentations">awesome-quarto</a> repository.</p>
 <p>I am no expert in CSS (far from it!), so this was very much trial-and-error based, but I got there eventually. One feature I am particularly happy about is the custom transition slides: by default all slides at level 1, so slides that initiate a new section,</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu"># Transition Slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu"># Transition Slide</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>will be formatted in a standardized way. The relevant CSS rule can be found <a href="https://github.com/pat-alt/quarto-tudelft/blob/b324cee4a6860a5ed5385dc607330d49de052875/_extensions/tudelft/custom.scss#L96">here</a></p>
 </section>
 <section id="adding-assets" class="level3">
@@ -338,17 +340,17 @@ A TU Delft Theme for Quarto.
 <p>With the template built and distributed, how do you actually use it?</p>
 </blockquote>
 <p>This part is truly a walk in the park. As outlined in the <a href="https://github.com/pat-alt/quarto-tudelft">README</a> users can either work directly with the template,</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">quarto</span> use template pat-alt/quarto-tudelft</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">quarto</span> use template pat-alt/quarto-tudelft</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>or add the template to an existing Quarto project:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">quarto</span> add pat-alt/quarto-tudelft</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">quarto</span> add pat-alt/quarto-tudelft</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The first option will get you started with a working document straight away. For my paper presentation, I worked with the second option. At the time of writing, I am building and hosting all of my presentations in my website repository (the repo that also builds this very article you’re reading): <a href="https://github.com/pat-alt/pat-alt.github.io">https://github.com/pat-alt/pat-alt.github.io</a>.</p>
 <p>With the extension added to the project, I can now use it anywhere within that project by simply specifying,</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> tudelft-revealjs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> tudelft-revealjs</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>in the YAML header of my Quarto document where <code>tudelft-revealjs</code> is just the name of the custom format.</p>
 <p>It gets better … The extension can be extended further by providing yet another <a href="https://github.com/pat-alt/pat-alt.github.io/blob/b6207a616f6ef9c7ec09cf8ad3383db788b9148b/content/talks/posts/2023-ieee-satml/custom.scss#L1">custom style sheet</a>, as I have done for my paper presentation:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> </span></span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="at">  </span><span class="fu">tudelft-revealjs</span><span class="kw">:</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="at">    </span><span class="fu">theme</span><span class="kw">:</span><span class="at"> custom.scss</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="at">    </span><span class="fu">theme</span><span class="kw">:</span><span class="at"> custom.scss</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Check out the final presentation <a href="../../../content/talks/posts/2023-ieee-satml/presentation.html" target="_blank">here</a> or see the embedded version below:</p>
 <iframe src="https://www.patalt.org/content/talks/posts/2023-ieee-satml/presentation.html#/title-slide" width="100%" height="350">
 </iframe>
@@ -427,13 +429,14 @@ Customization Through Quarto Extensions.”</span> January 16, 2023. <a href="ht
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -828,7 +831,7 @@ Customization Through Quarto Extensions.”</span> January 16, 2023. <a href="ht
   </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">---</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="an">title:</span><span class="co"> 'Quarto on Steroids: Advanced Customization through Quarto Extensions'</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="an">subtitle:</span><span class="co"> Using and Contributing Quarto Extensions for Custom Formats.</span></span>
 <span id="cb7-4"><a href="#cb7-4"></a><span class="an">date:</span><span class="co"> '2023-01-16'</span></span>
@@ -938,7 +941,7 @@ Customization Through Quarto Extensions.”</span> January 16, 2023. <a href="ht
 <span id="cb7-108"><a href="#cb7-108"></a><span class="dt">&lt;</span><span class="kw">iframe</span><span class="ot"> src</span><span class="op">=</span><span class="st">"https://www.patalt.org/content/talks/posts/2023-ieee-satml/presentation.html#/title-slide"</span><span class="ot"> width</span><span class="op">=</span><span class="st">"100%"</span><span class="ot"> height</span><span class="op">=</span><span class="st">"350"</span><span class="dt">&gt;&lt;/</span><span class="kw">iframe</span><span class="dt">&gt;</span></span>
 <span id="cb7-109"><a href="#cb7-109"></a></span>
 <span id="cb7-110"><a href="#cb7-110"></a></span>
-<span id="cb7-111"><a href="#cb7-111"></a></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<span id="cb7-111"><a href="#cb7-111"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
