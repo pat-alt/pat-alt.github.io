@@ -22,7 +22,7 @@
   <meta name="author" content="Aleksander Buszydlik">
   <meta name="author" content="Arie van Deursen">
   <meta name="author" content="Cynthia C. S. Liem">
-  <meta name="dcterms.date" content="2026-03-13">
+  <meta name="dcterms.date" content="2026-03-23">
   <title>patalt – Counterfactual Training</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -165,13 +165,13 @@
     }
   </style>
   <style>
-  .TRQ {
-    --color1: #80d2eb;
-    --color2: #00a6d6;
-  }
   .Rec {
     --color1: #fff6e3;
     --color2: #ffb81c;
+  }
+  .TRQ {
+    --color1: #80d2eb;
+    --color2: #00a6d6;
   }
   .RQ {
     --color1: #dff4fa;
@@ -216,42 +216,28 @@ Cynthia C. S. Liem
 </div>
 </div>
 
-  <p class="date">March 13, 2026</p>
+  <p class="date">March 23, 2026</p>
 </section>
-<section>
-<section id="intro" class="title-slide slide level1 center">
-<h1>Intro</h1>
-
-</section>
-<section id="a-toy-problem" class="slide level2 nostretch">
-<h2>A Toy Problem</h2>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><a href="../../../../www/images/cat_pre.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Cats and dogs in two dimensions."><img data-src="../../../../www/images/cat_pre.png" style="width:50.0%" alt="Cats and dogs in two dimensions."></a></p>
-<figcaption>Cats and dogs in two dimensions.</figcaption>
-</figure>
-</div>
-</section>
-<section id="traversing-the-parameter-space" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Traversing the Parameter Space</h2>
-<p><span style="color: orange;"><em>Model Training</em></span></p>
+<section id="training-opaque-models" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Training Opaque Models</h2>
+<p><span style="color: orange;"><em>Tweaking Parameters</em></span></p>
 <div class="columns">
-<div class="column" style="width:50%;">
+<div class="column" style="width:75%;">
 <p><strong>Objective</strong>:</p>
 <p><span class="math display">\[
 \begin{aligned}
 \min_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} \}
 \end{aligned}
 \]</span></p>
-</div><div class="column" style="width:50%;">
+</div><div class="column" style="width:25%;">
 
 </div></div>
 </section>
-<section id="traversing-the-parameter-space-1" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Traversing the Parameter Space</h2>
-<p><span style="color: orange;"><em>Model Training</em></span></p>
+<section id="training-opaque-models-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Training Opaque Models</h2>
+<p><span style="color: orange;"><em>Tweaking Parameters</em></span></p>
 <div class="columns">
-<div class="column" style="width:50%;">
+<div class="column" style="width:75%;">
 <p><strong>Objective</strong>:</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -265,35 +251,35 @@ Cynthia C. S. Liem
 \textcolor{orange}{\theta^*}&amp;=\theta_T
 \end{aligned}
 \]</span></p>
-</div><div class="column" style="width:50%;">
+</div><div class="column" style="width:25%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="../../../../www/images/cat_fitted.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Fitted model. Contour shows predicted probability y=🐶."><img data-src="../../../../www/images/cat_fitted.png" style="width:65.0%" alt="Fitted model. Contour shows predicted probability y=🐶."></a></p>
+<p><a href="../../../../www/images/cat_fitted.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Fitted model. Contour shows predicted probability y=🐶."><img data-src="../../../../www/images/cat_fitted.png" style="width:100.0%" alt="Fitted model. Contour shows predicted probability y=🐶."></a></p>
 <figcaption>Fitted model. Contour shows predicted probability <span class="math inline">\(y=🐶\)</span>.</figcaption>
 </figure>
 </div>
 </div></div>
 </section>
-<section id="traversing-the-feature-space" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Traversing the Feature Space</h2>
-<p><span style="color: purple;"><em>Counterfactual Search</em></span></p>
+<section id="explaining-opaque-models" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Explaining Opaque Models</h2>
+<p><span style="color: purple;"><em>Tweaking Inputs</em></span></p>
 <div class="columns">
-<div class="column" style="width:50%;">
+<div class="column" style="width:75%;">
 <p><strong>Objective</strong>:</p>
 <p><span class="math display">\[
 \begin{aligned}
 \min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg} } \}
 \end{aligned}
 \]</span></p>
-</div><div class="column" style="width:50%;">
+</div><div class="column" style="width:25%;">
 
 </div></div>
 </section>
-<section id="traversing-the-feature-space-1" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Traversing the Feature Space</h2>
-<p><span style="color: purple;"><em>Counterfactual Search</em></span></p>
+<section id="explaining-opaque-models-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Explaining Opaque Models</h2>
+<p><span style="color: purple;"><em>Tweaking Inputs</em></span></p>
 <div class="columns">
-<div class="column" style="width:50%;">
+<div class="column" style="width:75%;">
 <p><strong>Objective</strong>:</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -307,14 +293,19 @@ Cynthia C. S. Liem
 \textcolor{purple}{\mathbf{x}^*}&amp;=\mathbf{x}_T
 \end{aligned}
 \]</span></p>
-</div><div class="column" style="width:50%;">
+</div><div class="column" style="width:25%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="../../../../www/images/cat.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Counterfactual explanation for what it takes to be a dog."><img data-src="../../../../www/images/cat.gif" style="width:85.0%" alt="Counterfactual explanation for what it takes to be a dog."></a></p>
+<p><a href="../../../../www/images/cat.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Counterfactual explanation for what it takes to be a dog."><img data-src="../../../../www/images/cat.gif" style="width:85.0%" alt="Counterfactual explanation for what it takes to be a dog."></a></p>
 <figcaption>Counterfactual explanation for what it takes to be a dog.</figcaption>
 </figure>
 </div>
 </div></div>
+</section>
+<section>
+<section id="explanation-or-adversarial-example" class="title-slide slide level1 center">
+<h1>Explanation or Adversarial Example?</h1>
+
 </section>
 <section id="plausibility-at-all-cost" class="slide level2">
 <h2>Plausibility at all cost?</h2>
@@ -325,148 +316,133 @@ Cynthia C. S. Liem
 <div id="fig-cf-example" class="quarto-float quarto-figure quarto-figure-center">
 <figure class="quarto-float quarto-float-fig">
 <div aria-describedby="fig-cf-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="../../../../www/images/mnist_motivation.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;1: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using Wachter [@wachter2017counterfactual], Schut [@schut2021generating] and REVISE [@joshi2019realistic]."><img data-src="../../../../www/images/mnist_motivation.png" style="width:75.0%"></a>
+<a href="../../../../www/images/mnist_motivation.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;1: Turning a 9 into a 7: Counterfactual explanations for an image classifier using different approaches [@altmeyer2024faithful]."><img data-src="../../../../www/images/mnist_motivation.png" style="width:75.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cf-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using <em>Wachter</em> <span class="citation" data-cites="wachter2017counterfactual">(<a href="#/references" role="doc-biblioref" onclick="">Wachter, Mittelstadt, and Russell 2017</a>)</span>, <em>Schut</em> <span class="citation" data-cites="schut2021generating">(<a href="#/references" role="doc-biblioref" onclick="">Schut et al. 2021</a>)</span> and <em>REVISE</em> <span class="citation" data-cites="joshi2019realistic">(<a href="#/references" role="doc-biblioref" onclick="">Joshi et al. 2019</a>)</span>.
+Figure&nbsp;1: Turning a 9 into a 7: Counterfactual explanations for an image classifier using different approaches <span class="citation" data-cites="altmeyer2024faithful">(<a href="#/references" role="doc-biblioref" onclick="">Altmeyer et al. 2024</a>)</span>.
 </figcaption>
 </figure>
 </div>
 </section>
 <section id="faithful-first-plausible-second" class="slide level2">
 <h2>Faithful First, Plausible Second</h2>
-<p>Counterfactuals as plausible as the model permits<sup>1</sup>.</p>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div id="fig-dens-true" class="quarto-float quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-dens-true-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="../../../../www/images/density_true.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;2: KDE for training data."><img data-src="../../../../www/images/density_true.png" style="width:70.0%"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dens-true-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: KDE for training data.
-</figcaption>
-</figure>
-</div>
-</div><div class="column" style="width:50%;">
-<div id="fig-dens-mod" class="quarto-float quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-dens-mod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="../../../../www/images/density_model.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;3: KDE for model posterior."><img data-src="../../../../www/images/density_model.png" style="width:70.0%"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dens-mod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: KDE for model posterior.
-</figcaption>
-</figure>
-</div>
-</div></div>
-<aside><ol class="aside-footnotes"><li id="fn1"><p><i class="fa-solid fa-scroll" aria-label="scroll"></i> <span class="citation" data-cites="altmeyer2023faithful">Altmeyer et al. (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span> @ AAAI 2024. <a href="../../../../blog/posts/eccco/index.html">[blog]</a></p></li></ol></aside></section>
-<section id="faithful-counterfactuals" class="slide level2">
-<h2>Faithful Counterfactuals</h2>
 <div class="columns">
 <div class="column" style="width:30%;">
 <div id="fig-mnist-eccco" class="quarto-float quarto-figure quarto-figure-center">
 <figure class="quarto-float quarto-float-fig">
 <div aria-describedby="fig-mnist-eccco-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="../../../../www/images/mnist_eccco.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;4: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d)."><img data-src="../../../../www/images/mnist_eccco.png" style="width:75.0%"></a>
+<a href="../../../../www/images/mnist_eccco.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;2: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d)."><img data-src="../../../../www/images/mnist_eccco.png" style="width:75.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mnist-eccco-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Turning a 9 into a 7. <em>ECCCo</em> applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).
+Figure&nbsp;2: Turning a 9 into a 7. <em>ECCCo</em> applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).
 </figcaption>
 </figure>
 </div>
 </div><div class="column" style="width:70%;">
-<p><i class="fa-solid fa-key" aria-label="key"></i> <strong>Insight</strong>: faithfulness facilitates</p>
+<p><i class="fa-solid fa-key" aria-label="key"></i> <strong>Insight</strong>: faithfulness facilitates<sup>1</sup></p>
 <ul>
-<li>model quality checks (<a href="#/fig-mnist-eccco" class="quarto-xref">Figure&nbsp;4</a>).</li>
-<li>state-of-the-art plausibility (<a href="#/fig-mnist-benchmark" class="quarto-xref">Figure&nbsp;5</a>).</li>
+<li>model quality checks (<a href="#/fig-mnist-eccco" class="quarto-xref">Figure&nbsp;2</a>).</li>
+<li>state-of-the-art plausibility (<a href="#/fig-mnist-benchmark" class="quarto-xref">Figure&nbsp;3</a>).</li>
 </ul>
 <div id="fig-mnist-benchmark" class="quarto-float quarto-figure quarto-figure-center">
 <figure class="quarto-float quarto-float-fig">
 <div aria-describedby="fig-mnist-benchmark-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="../../../../www/images/mnist_benchmark.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;5: Results for different generators (from 3 to 5)."><img data-src="../../../../www/images/mnist_benchmark.png" style="width:100.0%"></a>
+<a href="../../../../www/images/mnist_benchmark.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;3: Results for different generators (from 3 to 5)."><img data-src="../../../../www/images/mnist_benchmark.png" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mnist-benchmark-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Results for different generators (from 3 to 5).
+Figure&nbsp;3: Results for different generators (from 3 to 5).
 </figcaption>
 </figure>
 </div>
 </div></div>
-</section></section>
+<aside><ol class="aside-footnotes"><li id="fn1"><p><i class="fa-solid fa-scroll" aria-label="scroll"></i> <span class="citation" data-cites="altmeyer2024faithful">Altmeyer et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span> @ AAAI 2024. <a href="../../../../blog/posts/eccco/index.html">[blog]</a></p></li></ol></aside></section></section>
 <section>
-<section id="new-opportunities" class="title-slide slide level1 center">
-<h1>New Opportunities</h1>
+<section id="putting-it-all-together" class="title-slide slide level1 center">
+<h1>Putting it all together</h1>
 
 </section>
-<section id="counterfactual-training-method" class="slide level2">
-<h2>Counterfactual Training: Method</h2>
+<section id="counterfactual-training" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Counterfactual Training</h2>
+<p>First, <span style="color: purple;"><em>Tweaking Inputs</em></span><sup>1</sup></p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf{x}_{t+1} &amp;= \mathbf{x}_t - \nabla_{\textcolor{purple}{\theta}} \{  {ECCCo(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} })} \} \\
+\textcolor{purple}{\mathbf{x}^*}&amp;=\mathbf{x}_T
+\end{aligned}
+\]</span></p>
+<p>Then, <span style="color: orange;"><em>Tweaking Parameters</em></span></p>
+<p><span class="math display">\[
+\begin{aligned}
+\theta_{t+1} &amp;= \theta_t - \nabla_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} + \text{div}(\textcolor{purple}{\mathbf{x}^*},\mathbf{x}^+;y^+, \theta) \} \\
+\textcolor{orange}{\theta^*}&amp;=\theta_T
+\end{aligned}
+\]</span></p>
+<aside><ol class="aside-footnotes"><li id="fn2"><p>Generate faithful explanations using <em>ECCCo</em> objective <span class="citation" data-cites="altmeyer2024faithful">(<a href="#/references" role="doc-biblioref" onclick="">Altmeyer et al. 2024</a>)</span>.</p></li></ol></aside></section>
+<section id="counterfactual-training-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Counterfactual Training</h2>
+<ol type="1">
+<li class="fragment">Contrast faithful CE with data <span class="math inline">\(\rightarrow\)</span> <strong>Explainability</strong> <span class="math inline">\(\uparrow\)</span></li>
+<li class="fragment">Feature mutability constraints <span class="math inline">\(\rightarrow\)</span> <strong>Actionability</strong> <span class="math inline">\(\uparrow\)</span><span style="font-size: 0.8em;">(holds provably under certain assumptions)</span></li>
+<li class="fragment">Bonus: use nascent CE as AE <span class="math inline">\(\rightarrow\)</span> <strong>Robustness</strong> <span class="math inline">\(\uparrow\)</span></li>
+</ol>
+<div class="fragment">
 <div id="fig-ecml" class="quarto-float quarto-figure quarto-figure-center">
 <figure class="quarto-float quarto-float-fig">
 <div aria-describedby="fig-ecml-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="../../../../www/images/ct_poc.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;6: (a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, age immutable; (d) CT, age immutable."><img data-src="../../../../www/images/ct_poc.png" style="width:70.0%"></a>
+<a href="../../../../www/images/ct_poc.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;4: (a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, age immutable; (d) CT, age immutable."><img data-src="../../../../www/images/ct_poc.png" style="width:90.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ecml-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6: (a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, <em>age</em> immutable; (d) CT, <em>age</em> immutable.
+Figure&nbsp;4: (a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, <em>age</em> immutable; (d) CT, <em>age</em> immutable.
 </figcaption>
 </figure>
 </div>
-<div class="columns">
-<div class="column" style="width:75%;">
-<ol type="1">
-<li>Contrast faithful CE with data.</li>
-<li>Enforce actionability constraints.</li>
-<li>Bonus: use nascent CE as AE.</li>
-</ol>
-</div><div class="column" style="width:25%;">
-<div class="callout callout-tip no-icon callout-style-simple">
-<div class="callout-body">
-<div class="callout-content">
-<p><i class="fa-solid fa-key" aria-label="key"></i> <strong>Insight</strong>: We can hold models accountable for plausible explanations<sup>1</sup>.</p>
 </div>
-</div>
-</div>
-</div></div>
-<aside><ol class="aside-footnotes"><li id="fn2"><p><i class="fa-solid fa-scroll" aria-label="scroll"></i> <span class="citation" data-cites="altmeyer2025counterfactual">Altmeyer et al. (<a href="#/references" role="doc-biblioref" onclick="">2026</a>)</span> @SaTML ’26</p></li></ol></aside></section>
+</section>
 <section id="counterfactual-training-results" class="slide level2">
 <h2>Counterfactual Training: Results</h2>
-<ul>
-<li>Models trained with CT learn more plausible and (provably) actionable explanations.</li>
-<li>Predictive performance does not suffer, robust performance improves.</li>
-</ul>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="../../../../www/images/ct_mnist.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Plausibility: BL (top row) vs CT using the ECCCo generator (bottom row) counterfactuals for a randomly selected factual from class “0” (in blue). CT produces more plausible counterfactuals than BL."><img data-src="../../../../www/images/ct_mnist.png" style="width:70.0%" alt="Plausibility: BL (top row) vs CT using the ECCCo generator (bottom row) counterfactuals for a randomly selected factual from class “0” (in blue). CT produces more plausible counterfactuals than BL."></a></p>
-<figcaption><em>Plausibility</em>: BL (top row) vs CT using the <em>ECCCo</em> generator (bottom row) counterfactuals for a randomly selected factual from class “0” (in blue). CT produces more plausible counterfactuals than BL.</figcaption>
+<p><a href="../../../../www/images/ct_mnist.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Plausibility: Visual explanations (counterfactuals) for baseline (top row) vs CT (bottom)."><img data-src="../../../../www/images/ct_mnist.png" style="width:70.0%" alt="Plausibility: Visual explanations (counterfactuals) for baseline (top row) vs CT (bottom)."></a></p>
+<figcaption><strong>Plausibility</strong>: Visual explanations (counterfactuals) for baseline (top row) vs CT (bottom).</figcaption>
 </figure>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="../../../../www/images/mnist_ig.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Actionability: Sample visual explanations (integrated gradients) for the MNIST dataset. Mutability constraints are imposed on the five top and bottom rows of pixels. CT (bottom) is less sensitive to protected features."><img data-src="../../../../www/images/mnist_ig.png" style="width:70.0%" alt="Actionability: Sample visual explanations (integrated gradients) for the MNIST dataset. Mutability constraints are imposed on the five top and bottom rows of pixels. CT (bottom) is less sensitive to protected features."></a></p>
-<figcaption><em>Actionability</em>: Sample visual explanations (integrated gradients) for the <em>MNIST</em> dataset. Mutability constraints are imposed on the five top and bottom rows of pixels. CT (bottom) is less sensitive to protected features.</figcaption>
+<p><a href="../../../../www/images/mnist_ig.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Actionability: Visual explanations (integrated gradients) as before. Five top and bottom rows immutable."><img data-src="../../../../www/images/mnist_ig.png" style="width:60.0%" alt="Actionability: Visual explanations (integrated gradients) as before. Five top and bottom rows immutable."></a></p>
+<figcaption><strong>Actionability</strong>: Visual explanations (integrated gradients) as before. Five top and bottom rows immutable.</figcaption>
 </figure>
 </div>
 </div></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="../../../../www/images/ct_robustness.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Test accuracies on adversarially perturbed data with varying perturbation sizes."><img data-src="../../../../www/images/ct_robustness.png" style="width:70.0%" alt="Test accuracies on adversarially perturbed data with varying perturbation sizes."></a></p>
+<figcaption>Test accuracies on adversarially perturbed data with varying perturbation sizes.</figcaption>
+</figure>
+</div>
 </section>
+<section id="the-hard-numbers" class="slide level2">
+<h2>The Hard Numbers</h2>
+<p>Extensive experiments and ablation studies on nine datasets–synthetic, tabular and vision–generating millions of counterfactuals:<sup>1</sup></p>
+<ol type="1">
+<li><strong>Plausibility</strong> of CEs increases by up to 90%.</li>
+<li><strong>Actionability</strong>: cost of reaching valid counterfactuals with protected features decreases by 19% on average.</li>
+<li>Models’ adversarial <strong>robustness</strong> improves consistently.</li>
+</ol>
+<aside><ol class="aside-footnotes"><li id="fn3"><p>Facilitated by our <a href="https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl">CounterfactualExplanations.jl</a> <span class="citation" data-cites="altmeyer2023explaining">(<a href="#/references" role="doc-biblioref" onclick="">Altmeyer, Deursen, and Liem 2023</a>)</span> with multi-processing support and <span class="citation" data-cites="DHPC2022">(DHPC) (<a href="#/references" role="doc-biblioref" onclick="">2022</a>)</span>.</p></li></ol></aside></section>
 <section id="references" class="slide level2 scrollable smaller">
 <h2>References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-altmeyer2025counterfactual" class="csl-entry" role="listitem">
-Altmeyer, Patrick, Aleksander Buszydlik, Arie van Deursen, and Cynthia C. S. Liem. 2026. <span>“Counterfactual Training: Teaching Models Plausible and Actionable Explanations.”</span> In <em>2026 IEEE Conference on Secure and Trustworthy Machine Learning (SaTML)</em>. IEEE. <a href="https://upcoming">upcoming</a>.
+<div id="ref-altmeyer2023explaining" class="csl-entry" role="listitem">
+Altmeyer, Patrick, Arie van Deursen, and Cynthia C. S. Liem. 2023. <span>“<span class="nocase">Explaining Black-Box Models through Counterfactuals</span>.”</span> In <em>Proceedings of the JuliaCon Conferences</em>, 1:130. <a href="https://doi.org/10.21105/jcon.00130">https://doi.org/10.21105/jcon.00130</a>.
 </div>
-<div id="ref-altmeyer2023faithful" class="csl-entry" role="listitem">
-Altmeyer, Patrick, Mojtaba Farmanbar, Arie van Deursen, and Cynthia C. S. Liem. 2023. <span>“Faithful Model Explanations Through Energy-Constrained Conformal Counterfactuals.”</span> <a href="https://arxiv.org/abs/2312.10648">https://arxiv.org/abs/2312.10648</a>.
+<div id="ref-altmeyer2024faithful" class="csl-entry" role="listitem">
+Altmeyer, Patrick, Mojtaba Farmanbar, Arie van Deursen, and Cynthia C. S. Liem. 2024. <span>“<span class="nocase">Faithful Model Explanations through Energy-Constrained Conformal Counterfactuals</span>.”</span> In <em>Proceedings of the Thirty-Eighth AAAI Conference on Artificial Intelligence</em>, 38:10829–37. 10. <a href="https://doi.org/10.1609/aaai.v38i10.28956">https://doi.org/10.1609/aaai.v38i10.28956</a>.
 </div>
-<div id="ref-joshi2019realistic" class="csl-entry" role="listitem">
-Joshi, Shalmali, Oluwasanmi Koyejo, Warut Vijitbenjaronk, Been Kim, and Joydeep Ghosh. 2019. <span>“<span class="nocase">Towards Realistic Individual Recourse and Actionable Explanations in Black-Box Decision Making Systems</span>.”</span> <a href="https://arxiv.org/abs/1907.09615">https://arxiv.org/abs/1907.09615</a>.
-</div>
-<div id="ref-schut2021generating" class="csl-entry" role="listitem">
-Schut, Lisa, Oscar Key, Rory McGrath, Luca Costabello, Bogdan Sacaleanu, Yarin Gal, et al. 2021. <span>“Generating <span>Interpretable Counterfactual Explanations By Implicit Minimisation</span> of <span>Epistemic</span> and <span>Aleatoric Uncertainties</span>.”</span> In <em>International <span>Conference</span> on <span>Artificial Intelligence</span> and <span>Statistics</span></em>, 1756–64. <span>PMLR</span>.
-</div>
-<div id="ref-wachter2017counterfactual" class="csl-entry" role="listitem">
-Wachter, Sandra, Brent Mittelstadt, and Chris Russell. 2017. <span>“Counterfactual Explanations Without Opening the Black Box: <span>Automated</span> Decisions and the <span>GDPR</span>.”</span> <em>Harv. JL &amp; Tech.</em> 31: 841. <a href="https://doi.org/10.2139/ssrn.3063289">https://doi.org/10.2139/ssrn.3063289</a>.
+<div id="ref-DHPC2022" class="csl-entry" role="listitem">
+(DHPC), Delft High Performance Computing Centre. 2022. <span>“<span>D</span>elft<span>B</span>lue <span>S</span>upercomputer (<span>P</span>hase 1).”</span> <a href="https://www.tudelft.nl/dhpc/ark:/44463/DelftBluePhase1" class="uri">https://www.tudelft.nl/dhpc/ark:/44463/DelftBluePhase1</a>.
 </div>
 </div>
 

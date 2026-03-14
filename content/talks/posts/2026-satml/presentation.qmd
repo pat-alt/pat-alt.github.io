@@ -32,19 +32,12 @@ crossref:
 classoption: "notheorems"
 ---
 
+## Training Opaque Models {auto-animate=true}
 
-# Intro
-
-## A Toy Problem {.nostretch}
-
-![Cats and dogs in two dimensions.](/www/images/cat_pre.png){width="50%"}
-
-## Traversing the Parameter Space {auto-animate=true}
-
-[*Model Training*]{style="color: orange;"}
+[*Tweaking Parameters*]{style="color: orange;"}
 
 ::: {.columns}
-::: {.column width=50%}
+::: {.column width=75%}
 **Objective**:
 
 $$
@@ -53,18 +46,18 @@ $$
 \end{aligned} 
 $$ 
 :::
-::: {.column width=50%}
+::: {.column width=25%}
 
 :::
 :::
 
 
-## Traversing the Parameter Space {auto-animate=true}
+## Training Opaque Models {auto-animate=true}
 
-[*Model Training*]{style="color: orange;"}
+[*Tweaking Parameters*]{style="color: orange;"}
 
 ::: {.columns}
-::: {.column width=50%}
+::: {.column width=75%}
 **Objective**:
 
 $$
@@ -82,17 +75,17 @@ $$
 \end{aligned} 
 $$
 :::
-::: {.column width=50%}
-![Fitted model. Contour shows predicted probability $y=🐶$.](/www/images/cat_fitted.png){width="65%"}
+::: {.column width=25%}
+![Fitted model. Contour shows predicted probability $y=🐶$.](/www/images/cat_fitted.png){width="100%"}
 :::
 :::
 
-## Traversing the Feature Space {auto-animate=true}
+## Explaining Opaque Models {auto-animate=true}
 
-[*Counterfactual Search*]{style="color: purple;"}
+[*Tweaking Inputs*]{style="color: purple;"}
 
 ::: {.columns}
-::: {.column width=50%}
+::: {.column width=75%}
 
 **Objective**:
 
@@ -102,19 +95,19 @@ $$
 \end{aligned} 
 $$ 
 :::
-::: {.column width=50%}
+::: {.column width=25%}
 
 :::
 :::
 
 
-## Traversing the Feature Space {auto-animate=true}
+## Explaining Opaque Models {auto-animate=true}
 
-[*Counterfactual Search*]{style="color: purple;"}
+[*Tweaking Inputs*]{style="color: purple;"}
 
 
 ::: {.columns}
-::: {.column width=50%}
+::: {.column width=75%}
 
 **Objective**:
 
@@ -134,17 +127,19 @@ $$
 \end{aligned} 
 $$
 :::
-::: {.column width=50%}
+::: {.column width=25%}
 
 ::: {.content-visible when-format="html"}
 ![Counterfactual explanation for what it takes to be a dog.](/www/images/cat.gif){width="85%"}
 :::
 
 ::: {.content-visible when-format="pdf"}
-![Counterfactual explanation for what it takes to be a dog.](/www/images/cat.png){width="85%"}
+![Counterfactual explanation for what it takes to be a dog.](/www/images/cat.png){width="100%"}
 :::
 :::
 :::
+
+# Explanation or Adversarial Example?
 
 ## Plausibility at all cost?
 
@@ -152,29 +147,16 @@ All of these counterfactuals are valid explanations for the model's prediction.
 
 > Pick your poison ...
 
-![Turning a 9 into a 7: Counterfactual explanations for an image classifier produced using *Wachter* [@wachter2017counterfactual], *Schut* [@schut2021generating] and *REVISE* [@joshi2019realistic].](/www/images/mnist_motivation.png){#fig-cf-example width="75%"}
+![Turning a 9 into a 7: Counterfactual explanations for an image classifier using different approaches [@altmeyer2024faithful].](/www/images/mnist_motivation.png){#fig-cf-example width="75%"}
 
 ## Faithful First, Plausible Second
-
-Counterfactuals as plausible as the model permits^[{{< fa scroll >}} @altmeyer2023faithful \@ AAAI 2024. [[blog]](/blog/posts/eccco/index.qmd)].
-
-::: {.columns}
-::: {.column width="50%"}
-![KDE for training data.](/www/images/density_true.png){#fig-dens-true width=70%}
-:::
-::: {.column width="50%"}
-![KDE for model posterior.](/www/images/density_model.png){#fig-dens-mod width=70%}
-:::
-:::
-
-## Faithful Counterfactuals
 
 ::::{.columns}::::
 :::{.column width='30%'}
 ![Turning a 9 into a 7. *ECCCo* applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).](/www/images/mnist_eccco.png){#fig-mnist-eccco width="75%"}
 :::
 :::{.column width='70%'}
-{{< fa key >}} **Insight**: faithfulness facilitates
+{{< fa key >}} **Insight**: faithfulness facilitates^[{{< fa scroll >}} @altmeyer2024faithful \@ AAAI 2024. [[blog]](/blog/posts/eccco/index.qmd)]
 
 - model quality checks (@fig-mnist-eccco).
 - state-of-the-art plausibility (@fig-mnist-benchmark).
@@ -183,40 +165,61 @@ Counterfactuals as plausible as the model permits^[{{< fa scroll >}} @altmeyer20
 :::
 ::::
 
-# New Opportunities
+# Putting it all together
 
-## Counterfactual Training: Method
+## Counterfactual Training {auto-animate=true}
 
-![(a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, *age* immutable; (d) CT, *age* immutable.](/www/images/ct_poc.png){#fig-ecml width="70%"}
 
-::: {.columns}
-::: {.column width="75%"}
-1. Contrast faithful CE with data.
-2. Enforce actionability constraints.
-3. Bonus: use nascent CE as AE. 
-:::
-::: {.column width="25%"}
-::: {.callout-tip appearance="minimal"}
+First, [*Tweaking Inputs*]{style="color: purple;"}^[Generate faithful explanations using *ECCCo* objective [@altmeyer2024faithful].]
 
-{{< fa key >}} **Insight**: We can hold models accountable for plausible explanations^[{{< fa scroll >}} @altmeyer2025counterfactual \@SaTML '26].
+$$
+\begin{aligned}
+\mathbf{x}_{t+1} &= \mathbf{x}_t - \nabla_{\textcolor{purple}{\theta}} \{  {ECCCo(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} })} \} \\
+\textcolor{purple}{\mathbf{x}^*}&=\mathbf{x}_T
+\end{aligned} 
+$$
+
+Then, [*Tweaking Parameters*]{style="color: orange;"}
+
+$$
+\begin{aligned}
+\theta_{t+1} &= \theta_t - \nabla_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} + \text{div}(\textcolor{purple}{\mathbf{x}^*},\mathbf{x}^+;y^+, \theta) \} \\
+\textcolor{orange}{\theta^*}&=\theta_T
+\end{aligned} 
+$$
+
+## Counterfactual Training {auto-animate=true}
+
+:::{.incremental}
+1. Contrast faithful CE with data $\rightarrow$ **Explainability** $\uparrow$
+2. Feature mutability constraints $\rightarrow$ **Actionability** $\uparrow$[(holds provably under certain assumptions)]{style="font-size: 0.8em;"}
+3. Bonus: use nascent CE as AE $\rightarrow$ **Robustness** $\uparrow$
 :::
-:::
-:::
+
+. . .
+
+![(a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, *age* immutable; (d) CT, *age* immutable.](/www/images/ct_poc.png){#fig-ecml width="90%"}
 
 ## Counterfactual Training: Results
 
-- Models trained with CT learn more plausible and (provably) actionable explanations.
-- Predictive performance does not suffer, robust performance improves.
-
 ::: {.columns}
 ::: {.column width=50%}
-![*Plausibility*: BL (top row) vs CT using the *ECCCo* generator (bottom row) counterfactuals for a randomly selected factual from class "0" (in blue). CT produces more plausible counterfactuals than BL.](/www/images/ct_mnist.png){width=70%} 
+![**Plausibility**: Visual explanations (counterfactuals) for baseline (top row) vs CT (bottom).](/www/images/ct_mnist.png){width=70%} 
 :::
 ::: {.column width=50%}
-![*Actionability*: Sample visual explanations (integrated gradients) for the *MNIST* dataset. Mutability constraints are imposed on the five top and bottom rows of pixels. CT (bottom) is less sensitive to protected features.](/www/images/mnist_ig.png){width="70%"}
+![**Actionability**: Visual explanations (integrated gradients) as before. Five top and bottom rows immutable.](/www/images/mnist_ig.png){width="60%"}
 :::
 :::
 
+![Test accuracies on adversarially perturbed data with varying perturbation sizes.](/www/images/ct_robustness.png){width=70%}
+
+## The Hard Numbers
+
+Extensive experiments and ablation studies on nine datasets--synthetic, tabular and vision--generating millions of counterfactuals:^[Facilitated by our [CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) [@altmeyer2023explaining] with multi-processing support and @DHPC2022.]
+
+1. **Plausibility** of CEs increases by up to 90%.
+2. **Actionability**: cost of reaching valid counterfactuals with protected features decreases by 19% on average.
+3. Models’ adversarial **robustness** improves consistently.
 
 ## References {.scrollable .smaller}
 
