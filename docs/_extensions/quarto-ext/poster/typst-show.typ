@@ -22,9 +22,6 @@
   // Institution logo.
   $if(institution-logo)$ univ_logo: "$institution-logo$", $endif$
 
-  // QR Code.
-  $if(qrcode)$ qrcode: "$qrcode$", $endif$
-
   // Footer text.
   // For instance, Name of Conference, Date, Location.
   // or Course Name, Date, Instructor.
@@ -45,8 +42,6 @@
   // Tested on 36in x 24in, 48in x 36in, and 36in x 48in posters.
   // For 2-column posters, you may need to tweak these values.
   // See ./examples/example_2_column_18_24.typ for an example.
-
-  $if(tldr)$ tldr: "$tldr$", $endif$
 
   // Any keywords or index terms that you want to highlight at the beginning.
   $if(keywords)$ keywords: ($for(keywords)$"$it$"$sep$, $endfor$), $endif$
@@ -74,15 +69,6 @@
 
   // Footer's text font size (in pt).
   $if(footer-text-font-size)$ footer_text_font_size: [$footer-text-font-size$], $endif$
-
-  // Font size (in pt).
-  $if(font-size)$ font_size: $font-size$, $endif$
-
-  // Font family.
-  $if(mainfont)$ mainfont: "$mainfont$", $endif$
-
-  // Header 1 font size (in pt).
-  $if(h1-size)$ h1_size: $h1-size$, $endif$
 
   doc,
 )
