@@ -4113,14 +4113,14 @@
     "href": "content/talks/posts/2026-satml/presentation.html#explaining-opaque-models",
     "title": "Counterfactual Training",
     "section": "Explaining Opaque Models",
-    "text": "Explaining Opaque Models\nTweaking Inputs\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} }) + \\lambda \\text{reg} } \\}\n\\end{aligned}\n\\]"
+    "text": "Explaining Opaque Models\nTweaking Inputs\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} }) + \\lambda \\text{reg}(\\mathbf{x},\\cdot) } \\}\n\\end{aligned}\n\\]"
   },
   {
     "objectID": "content/talks/posts/2026-satml/presentation.html#explaining-opaque-models-1",
     "href": "content/talks/posts/2026-satml/presentation.html#explaining-opaque-models-1",
     "title": "Counterfactual Training",
     "section": "Explaining Opaque Models",
-    "text": "Explaining Opaque Models\nTweaking Inputs\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} }) + \\lambda \\text{reg} } \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\mathbf{x}_{t+1} &= \\mathbf{x}_t - \\nabla_{\\textcolor{purple}{\\theta}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\} \\\\\n\\textcolor{purple}{\\mathbf{x}^*}&=\\mathbf{x}_T\n\\end{aligned}\n\\]"
+    "text": "Explaining Opaque Models\nTweaking Inputs\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} }) + \\lambda \\text{reg}(\\mathbf{x},\\cdot)} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\mathbf{x}_{t+1} &= \\mathbf{x}_t - \\nabla_{\\textcolor{purple}{\\mathbf{x}}} \\{  \\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} }) \\\\&+ \\lambda \\text{reg}(\\mathbf{x},\\cdot) \\} \\\\\n\\textcolor{purple}{\\mathbf{x}^*}&=\\mathbf{x}_T\n\\end{aligned}\n\\]"
   },
   {
     "objectID": "content/talks/posts/2026-satml/presentation.html#plausibility-at-all-cost",

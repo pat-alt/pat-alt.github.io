@@ -99,7 +99,7 @@ $$
 
 $$
 \begin{aligned}
-\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg} } \}
+\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x},\cdot) } \}
 \end{aligned} 
 $$ 
 :::
@@ -121,7 +121,7 @@ $$
 
 $$
 \begin{aligned}
-\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg} } \}
+\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x},\cdot)} \}
 \end{aligned} 
 $$
 
@@ -130,7 +130,7 @@ $$
 
 $$
 \begin{aligned}
-\mathbf{x}_{t+1} &= \mathbf{x}_t - \nabla_{\textcolor{purple}{\theta}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} })} \} \\
+\mathbf{x}_{t+1} &= \mathbf{x}_t - \nabla_{\textcolor{purple}{\mathbf{x}}} \{  \text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) \\&+ \lambda \text{reg}(\mathbf{x},\cdot) \} \\
 \textcolor{purple}{\mathbf{x}^*}&=\mathbf{x}_T
 \end{aligned} 
 $$
