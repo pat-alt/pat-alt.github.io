@@ -108,7 +108,7 @@ $$
 
 $$
 \begin{aligned}
-\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x},\cdot) } \}
+\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x};\cdot) } \}
 \end{aligned} 
 $$ 
 :::
@@ -130,7 +130,7 @@ $$
 
 $$
 \begin{aligned}
-\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x},\cdot)} \}
+\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x};\cdot)} \}
 \end{aligned} 
 $$
 
@@ -139,7 +139,7 @@ $$
 
 $$
 \begin{aligned}
-\mathbf{x}_{t+1} &= \mathbf{x}_t - \nabla_{\textcolor{purple}{\mathbf{x}}} \{  \text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) \\&+ \lambda \text{reg}(\mathbf{x},\cdot) \} \\
+\mathbf{x}_{t+1} &= \mathbf{x}_t - \nabla_{\textcolor{purple}{\mathbf{x}}} \{  \text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) \\&+ \lambda \text{reg}(\mathbf{x};\cdot) \} \\
 \textcolor{purple}{\mathbf{x}^*}&=\mathbf{x}_T
 \end{aligned} 
 $$
@@ -200,7 +200,7 @@ Then, [*Tweaking Parameters*]{style="color: orange;"}
 
 $$
 \begin{aligned}
-\theta_{t+1} &= \theta_t - \nabla_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} + \text{div}(\textcolor{purple}{\mathbf{x}^*},\mathbf{x}^+;y^+, \theta) \} \\
+\theta_{t+1} &= \theta_t - \nabla_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} + \text{div}(\textcolor{purple}{\mathbf{x}^*},\mathbf{x}^+,y^+; \theta) \} \\
 \textcolor{orange}{\theta^*}&=\theta_T
 \end{aligned} 
 $$

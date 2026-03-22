@@ -263,7 +263,7 @@ Cynthia C. S. Liem
 <p><strong>Objective</strong>:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x},\cdot) } \}
+\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x};\cdot) } \}
 \end{aligned}
 \]</span></p>
 </div><div class="column" style="width:25%;">
@@ -278,13 +278,13 @@ Cynthia C. S. Liem
 <p><strong>Objective</strong>:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x},\cdot)} \}
+\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x};\cdot)} \}
 \end{aligned}
 \]</span></p>
 <p><strong>Solution</strong>:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\mathbf{x}_{t+1} &amp;= \mathbf{x}_t - \nabla_{\textcolor{purple}{\mathbf{x}}} \{  \text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) \\&amp;+ \lambda \text{reg}(\mathbf{x},\cdot) \} \\
+\mathbf{x}_{t+1} &amp;= \mathbf{x}_t - \nabla_{\textcolor{purple}{\mathbf{x}}} \{  \text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) \\&amp;+ \lambda \text{reg}(\mathbf{x};\cdot) \} \\
 \textcolor{purple}{\mathbf{x}^*}&amp;=\mathbf{x}_T
 \end{aligned}
 \]</span></p>
@@ -363,7 +363,7 @@ Figure&nbsp;3: Results for different generators (from 3 to 5).
 <p>Then, <span style="color: orange;"><em>Tweaking Parameters</em></span></p>
 <p><span class="math display">\[
 \begin{aligned}
-\theta_{t+1} &amp;= \theta_t - \nabla_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} + \text{div}(\textcolor{purple}{\mathbf{x}^*},\mathbf{x}^+;y^+, \theta) \} \\
+\theta_{t+1} &amp;= \theta_t - \nabla_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} + \text{div}(\textcolor{purple}{\mathbf{x}^*},\mathbf{x}^+,y^+; \theta) \} \\
 \textcolor{orange}{\theta^*}&amp;=\theta_T
 \end{aligned}
 \]</span></p>
