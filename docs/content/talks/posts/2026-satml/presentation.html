@@ -165,6 +165,10 @@
     }
   </style>
   <style>
+  .TRQ {
+    --color1: #80d2eb;
+    --color2: #00a6d6;
+  }
   .RQ {
     --color1: #dff4fa;
     --color2: #00a6d6;
@@ -172,10 +176,6 @@
   .Rec {
     --color1: #fff6e3;
     --color2: #ffb81c;
-  }
-  .TRQ {
-    --color1: #80d2eb;
-    --color2: #00a6d6;
   }
   </style>
 <meta property="og:title" content="Counterfactual Training – patalt">
@@ -263,7 +263,7 @@ Cynthia C. S. Liem
 <p><strong>Objective</strong>:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg} } \}
+\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x},\cdot) } \}
 \end{aligned}
 \]</span></p>
 </div><div class="column" style="width:25%;">
@@ -278,13 +278,13 @@ Cynthia C. S. Liem
 <p><strong>Objective</strong>:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg} } \}
+\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x},\cdot)} \}
 \end{aligned}
 \]</span></p>
 <p><strong>Solution</strong>:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\mathbf{x}_{t+1} &amp;= \mathbf{x}_t - \nabla_{\textcolor{purple}{\theta}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} })} \} \\
+\mathbf{x}_{t+1} &amp;= \mathbf{x}_t - \nabla_{\textcolor{purple}{\mathbf{x}}} \{  \text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) \\&amp;+ \lambda \text{reg}(\mathbf{x},\cdot) \} \\
 \textcolor{purple}{\mathbf{x}^*}&amp;=\mathbf{x}_T
 \end{aligned}
 \]</span></p>
