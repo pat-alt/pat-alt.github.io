@@ -1,0 +1,186 @@
+---
+title: "**SmartPolicy** Recommender System"
+subtitle: "AI Risks, Mitigation and Maintenance"
+author: 
+  - name: "Dr Patrick Altmeyer"
+institute: Delft University of Technology
+date: 2026-03-27
+format: 
+  ergo-presentation-revealjs:
+    scrollable: true
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    html-math-method: mathjax
+    auto-animate-easing: ease-in-out
+    auto-animate-unmatched: false
+    auto-animate-duration: 0.8
+---
+
+# Introduction
+
+## SmartPolicy {auto-animate=true}
+
+- **Goal**: recommender system (RS) for insurance policies
+  - why? more tailored customer experience
+- **How-to**: use granular data and expressive models to train RS
+  - *data* on demographics {{< fa person>}} , prior claims {{< fa file>}}, driving {{<fa car>}}, health {{< fa book-medical>}}, home {{< fa house>}}
+  - *models* likely to include opaque machine learning
+
+:::{.callout-tip}
+
+## ERGO context
+
+Pan-European insurer (Munich Re subsidiary), operating across EU, US, and Asia
+:::
+
+## SmartPolicy {auto-animate=true}
+- **How-to**: use granular data and powerful models to train RS
+  - all *data* sources likely to include sensitive data
+    - Applicable: [GDPR Art. 9](https://gdpr-info.eu/art-9-gdpr/) (special categories), [Art. 22](https://gdpr-info.eu/art-22-gdpr/) (automated decisions), [Art. 35](https://gdpr-info.eu/art-35-gdpr/) (Data Protection Impact Assessment)
+  - more powerful *models* likely not explainable
+    - Applicable: [EU AI Act](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689) (high-risk obligations), [GDPR Art. 22](https://gdpr-info.eu/art-22-gdpr/) (right to explanation)
+
+# Applicable Regulation
+
+## EU Regulation: AI Act
+
+- [Article 6](https://artificialintelligenceact.eu/article/6/) (High-Risk AI Systems^[High-risk compliance deadline: **2 August 2026**])
+  - "[...] AI system performs profiling of natural persons"
+  - "AI systems for risk assessment and pricing in life and health insurance"---[Annex III §5(c)](https://artificialintelligenceact.eu/annex/3/)
+  - all data sources (except {{< fa house >}}) directly affected
+- [Article 26](https://artificialintelligenceact.eu/article/26/) (obligations): risk management system, data governance, technical documentation, human oversight, conformity assessment, registration in EU database.
+- [Article 27](https://artificialintelligenceact.eu/article/27/): Fundamental Rights Impact Assessment (FRIA) for High-Risk AI Systems
+
+
+## EU Regulation: GDPR {auto-animate=true}
+
+| Article | Relevance to SmartPolicy |
+|---------|--------------------------|
+| [Art. 5](https://gdpr-info.eu/art-5-gdpr/) | **Data minimisation**: collect only what is strictly necessary |
+| [Art. 9](https://gdpr-info.eu/art-9-gdpr/) | **Special categories**: health, driving behaviour data require explicit consent or legal basis |
+| [Art. 22](https://gdpr-info.eu/art-22-gdpr/) | **Automated decisions**: right not to be subject to solely automated decisions with significant effects; special-category data further restricted |
+| [Art. 35](https://gdpr-info.eu/art-35-gdpr/) | **DPIA mandatory** when processing sensitive data at scale for profiling (definitely {{< fa book-medical >}}, {{< fa person >}}) |
+
+
+## Beyond EU: United States
+
+- **USA**: No unified federal AI-in-insurance law; oversight is state-driven and fragmented
+  - A **patchwork** of state rules creates compliance complexity for multi-state operations.
+- **Asia**: country-specific and complex; [China](https://cms.law/en/int/expert-guides/ai-regulation-scanner/china), for example, still lacks standalone, comprehensive statute.
+
+::: {.callout-tip}
+**Recommendation**: prioritise EU rollout first. The EU AI Act provides a clear, comprehensive framework.
+:::
+
+# AI-related Risks
+
+## Specific Risks: Data
+
+1. **Sensitive variables included directly**: {{< fa book-medical >}} data ([Art. 9](https://gdpr-info.eu/art-9-gdpr/) special category)
+2. **Proxies of sensitive variables**: {{< fa house >}} as proxy for ethnicity; {{< fa person >}} may encode gender, religion, disability
+3. **Historical bias**: past {{< fa file >}} data likely reflects structural under/over-reporting by vulnerable groups
+4. **Data minimisation violation** ([GDPR Art. 5](https://gdpr-info.eu/art-5-gdpr/)): temptation to use all available data for data-hungry models
+
+## Specific Risks: Models
+
+1. **Opacity**: most competitive RS are inherently black-box — violates [GDPR Art. 22](https://gdpr-info.eu/art-22-gdpr/) right to explanation and [EU AI Act](https://artificialintelligenceact.eu/high-level-summary/) transparency requirements.
+2. **Historical bias**: models are representations of training data.
+3. **Adversarial vulnerability**: e.g. fake claim histories {{< fa file >}}
+4. **Data drift → model drift**: insurance risk profiles shift over time (e.g. post-pandemic {{< fa book-medical >}}, EV adoption for {{< fa car >}}); models degrade silently without monitoring
+5. **Membership inference attacks**: genuine privacy risk for sensitive {{< fa book-medical >}}, {{< fa person >}}, {{< fa file >}}
+
+# Mitigation Strategies
+
+## Technical Mitigations: Opaque Models
+
+- **Start simple**: use interpretable models where feasible (e.g. collaborative filtering; GAMs instead of DL; ...)
+- **Post-hoc explainability and recourse**: e.g. counterfactual explanations *"what would change my recommendation?"*
+- **Fairness-aware training**: adversarial debiasing and mitigation ([Fairlearn](https://fairlearn.org/v0.13/user_guide/mitigation/adversarial.html), [Holistic AI](https://holisticai.readthedocs.io/en/latest/getting_started/bias/mitigation/inprocessing/bc_adversarial_debiasing_adversarial_debiasing.html)), [counterfactual training](https://arxiv.org/abs/2601.16205), ...
+- **Human-in-the-loop** for high-stakes outputs (e.g. refusal to recommend any policy)---required by [EU AI Act Art. 14](https://artificialintelligenceact.eu/article/14/)
+
+## Technical Mitigations: Robustness
+
+- **Uncertainty quantification**: Bayesian or ensemble methods; conformal prediction.
+- **Adversarial training**: train on perturbed inputs and/or use data augmentation techniques (e.g. counterfactuals)
+- **Drift detection**: monitor input/output distributions
+- **Regular retraining schedule**: define a model lifecycle policy
+
+## Technical Mitigations: Data
+
+- **Data minimisation** ([GDPR Art. 25](https://gdpr-info.eu/art-25-gdpr/)): define the minimal feature set for each insurance line before modelling
+- **Proxy audits**: test for and remove non-sensitive features correlated with sensitive features especially in {{< fa book-medical >}}, {{< fa person >}}, {{< fa file >}} (use e.g. [Fairlearn](https://fairlearn.org/v0.13/user_guide/mitigation/preprocessing.html))
+
+
+## Governance Mitigations: Data
+
+- **Data governance policy**: define data retention periods, deletion procedures, consent management
+- **Datasheets for Datasets** ([Gebru et al., 2021](https://dl.acm.org/doi/10.1145/3458723)): clear guidelines for documenting training data (see [FOSS implementation](https://github.com/bridge2ai/data-sheets-schema))
+- **Mandatory DPIA** before deployment ([GDPR Art. 35](https://gdpr-info.eu/art-35-gdpr/)): purpose, legal basis, risks, and controls; update at each major model revision (definitely {{< fa book-medical >}}, {{< fa person >}}, likely all)
+
+## Governance Mitigations: Models
+
+- **Model cards** ([Mitchell et al., 2019, arXiv:1810.03993](https://arxiv.org/abs/1810.03993): document model, intended use, limitations, training data, ...
+  - Markdown with YAML as already standard practice on [HuggingFace](https://huggingface.co/docs/hub/model-card-annotated)
+- **Version control**: model and data linked on HF; consider semantic versioning
+- **Internal red-teaming**: structured adversarial testing sessions and hackathons
+
+## Governance Mitigations: End-to-end
+
+End-to-end auditing framework as reference point:
+
+![**End-to-end algorithmic auditing** ([Raji et al., @ FA(Cc)T* ’20, arXiv:2001.00973](https://arxiv.org/abs/2001.00973)): structured audits at every stage of the development lifecycle (scoping → mapping → artefact collection → testing → reflection).](www/endtoend.png)
+
+## Governance Mitigations — Open Source Considerations
+
+- Selectively **open-sourcing code and models** can generate external scrutiny, bug reports, and reputational goodwill
+- Open-source *models* carry **inherent risks**: membership inference attacks become easier
+
+:::{.callout-tip}
+
+## FOSS Practices
+
+In the FOSS space, essentially all code is treated **packages** (facilitates usage, extensibility, ...)
+
+:::
+
+# Documentation
+
+## Key Documents^[Mandatory **DPIA** and **FRIA** ommitted from table.]
+
+| Document | Trigger |
+|---|---|---|
+| **Datasheets** ([Gebru et al., 2021](https://dl.acm.org/doi/10.1145/3458723)) |  Per training dataset |
+| **Model cards** ([Mitchell et al., 2019](https://arxiv.org/abs/1810.03993))  | Per model release |
+| **Technical documentation** ([EU AI Act Art. 11](https://artificialintelligenceact.eu/article/11/)) | commit; PR; release |
+
+## Notes on Technical Documentation
+
+- Treating all code as packages facilitates proper technical documentation standards.
+- Language-specific support is well-established (e.g. [Julia](https://www.taija.org/CounterfactualExplanations.jl/stable/)).
+- Rely on **Markdown** (README.md, CHANGELOG.md, ...) for version-controlled documentation.
+  - Easily ingested by [Quarto](https://quarto.org/) for publishing polished outputs
+  - Ideal for providing context to LLMs/agents.
+
+## Target Audience — Internal
+
+- **Data scientists and ML engineers**: model cards, datasheets, technical documentation, version-controlled code and experiment logs.
+- **Customer-facing staff**: must be able to explain any recommendation and handle contestation ([EU AI Act Art. 14](https://artificialintelligenceact.eu/article/14/), [GDPR Art. 22(3)](https://gdpr-info.eu/art-22-gdpr/))
+- **Compliance and legal**: DPIA, FRIA, ...
+- **Management**: use Quarto to go from Markdown to PDF, HTML, websites, presentations ([like this one!](https://github.com/pat-alt/quarto-ergo)), ...
+
+## Target Audience — External
+
+- **Regulators** (BaFin, national DPAs, EIOPA): technical documentation, DPIA, FRIA, conformity assessment records — subject to inspection under [EU AI Act Art. 74](https://artificialintelligenceact.eu/article/74/)
+- **Customers**: simplified explanation notices (why was this policy recommended?); right to contest automated decisions ([GDPR Art. 22](https://gdpr-info.eu/art-22-gdpr/)); privacy notice under [GDPR Art. 13](https://gdpr-info.eu/art-13-gdpr/)
+- **Open-source community** (if applicable): public model cards, fairness evaluation results, code documentation — supports external red-teaming and transparency signalling
+
+## Keeping Documentation Up-to-Date
+
+- If above is properly implemented, state of documentation will always be consistent with the state of:
+  1. Data (datasheets)
+  2. Models (model cards)
+  3. Code (technical docs)
+- Recommending HuggingFace for 1-2, GitHub/Gitlab for 3.
+
+# Questions?

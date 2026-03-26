@@ -1,0 +1,50 @@
+/*-- scss:defaults --*/
+
+// Colors
+$ergo-blue: #cbe7eb; 
+$ergo-red: #C00C26;
+$ergo-dark: #8c0339;
+$ergo-green: #B5DAC3;
+
+// Assign:
+$primary: $ergo-blue !default;
+$body-bg: #ffffff !default;
+$body-color: #000000 !default;
+$presentation-heading-color: $ergo-dark !default;
+// Code:
+$code-color: $ergo-green !default;
+$dark-bg-code-color: lighten($code-color, 15%) !default;
+$light-bg-code-color: darken($code-color, 15%) !default;
+$code-block-border-left: lighten($code-color, 15%) !default;
+$btn-code-copy-color: $ergo-dark !default;
+$btn-code-copy-color-active: lighten($btn-code-copy-color, 15%) !default;
+// Toc:
+$toc-color: $ergo-dark !default;
+$toc-active-border: $ergo-dark !default;
+$toc-inactive-border: lighten($toc-active-border, 15%) !default;
+// Callouts:
+$callout-color-note: $ergo-blue !default;
+$callout-color-tip: $ergo-green !default;
+$callout-color-caution: $ergo-dark !default;
+$callout-color-warning: lighten($callout-color-caution, 30%) !default;
+$callout-color-important: $ergo-red !default;
+
+/*-- scss:rules --*/
+hr {
+    color: $ergo-blue;
+}
+
+blockquote {
+    color: lighten($ergo-green, 15%);
+    border-left: .25rem solid $ergo-green;
+    background-color: lighten($ergo-green, 40%);
+    font-family: "Barlow";
+}
+
+.reveal {
+
+    .progress {
+        color: $ergo-red;
+    }
+
+}
