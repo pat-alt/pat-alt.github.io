@@ -104,11 +104,12 @@ Pan-European insurer (Munich Re subsidiary), operating across EU, US, and Asia
 - **Uncertainty quantification**: Bayesian or ensemble methods; conformal prediction.
 - **Adversarial training**: train on perturbed inputs and/or use data augmentation techniques (e.g. counterfactuals)
 - **Drift detection**: monitor input/output distributions
-- **Regular retraining schedule**: define a model lifecycle policy
 
 ## Technical Mitigations: Data
 
-- **Data minimisation** ([GDPR Art. 25](https://gdpr-info.eu/art-25-gdpr/)): define the minimal feature set for each insurance line before modelling
+- **Data minimisation** ([GDPR Art. 25](https://gdpr-info.eu/art-25-gdpr/)):
+  - small $p$: define the minimal feature set for each insurance line before modelling
+  - small $n$: (Bayesian) active learning -> sample high-uncertainty inputs
 - **Proxy audits**: test for and remove non-sensitive features correlated with sensitive features especially in {{< fa book-medical >}}, {{< fa person >}}, {{< fa file >}} (use e.g. [Fairlearn](https://fairlearn.org/v0.13/user_guide/mitigation/preprocessing.html))
 
 
@@ -124,6 +125,7 @@ Pan-European insurer (Munich Re subsidiary), operating across EU, US, and Asia
   - Markdown with YAML as already standard practice on [HuggingFace](https://huggingface.co/docs/hub/model-card-annotated)
 - **Version control**: model and data linked on HF; consider semantic versioning
 - **Internal red-teaming**: structured adversarial testing sessions and hackathons
+- **Regular retraining schedule**: define a model lifecycle policy
 
 ## Governance Mitigations: End-to-end
 

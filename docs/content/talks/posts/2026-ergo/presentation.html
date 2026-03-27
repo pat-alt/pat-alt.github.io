@@ -325,13 +325,16 @@ Dr Patrick Altmeyer
 <li><strong>Uncertainty quantification</strong>: Bayesian or ensemble methods; conformal prediction.</li>
 <li><strong>Adversarial training</strong>: train on perturbed inputs and/or use data augmentation techniques (e.g.&nbsp;counterfactuals)</li>
 <li><strong>Drift detection</strong>: monitor input/output distributions</li>
-<li><strong>Regular retraining schedule</strong>: define a model lifecycle policy</li>
 </ul>
 </section>
 <section id="technical-mitigations-data" class="slide level2">
 <h2>Technical Mitigations: Data</h2>
 <ul>
-<li><strong>Data minimisation</strong> (<a href="https://gdpr-info.eu/art-25-gdpr/">GDPR Art. 25</a>): define the minimal feature set for each insurance line before modelling</li>
+<li><strong>Data minimisation</strong> (<a href="https://gdpr-info.eu/art-25-gdpr/">GDPR Art. 25</a>):
+<ul>
+<li>small <span class="math inline">\(p\)</span>: define the minimal feature set for each insurance line before modelling</li>
+<li>small <span class="math inline">\(n\)</span>: (Bayesian) active learning -&gt; sample high-uncertainty inputs</li>
+</ul></li>
 <li><strong>Proxy audits</strong>: test for and remove non-sensitive features correlated with sensitive features especially in <i class="fa-solid fa-book-medical" aria-label="book-medical"></i>, <i class="fa-solid fa-person" aria-label="person"></i>, <i class="fa-solid fa-file" aria-label="file"></i> (use e.g.&nbsp;<a href="https://fairlearn.org/v0.13/user_guide/mitigation/preprocessing.html">Fairlearn</a>)</li>
 </ul>
 </section>
@@ -352,6 +355,7 @@ Dr Patrick Altmeyer
 </ul></li>
 <li><strong>Version control</strong>: model and data linked on HF; consider semantic versioning</li>
 <li><strong>Internal red-teaming</strong>: structured adversarial testing sessions and hackathons</li>
+<li><strong>Regular retraining schedule</strong>: define a model lifecycle policy</li>
 </ul>
 </section>
 <section id="governance-mitigations-end-to-end" class="slide level2">

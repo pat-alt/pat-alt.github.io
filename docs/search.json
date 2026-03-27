@@ -4057,14 +4057,14 @@
     "href": "content/talks/posts/2026-ergo/presentation.html#technical-mitigations-robustness",
     "title": "SmartPolicy Recommender System",
     "section": "Technical Mitigations: Robustness",
-    "text": "Technical Mitigations: Robustness\n\nUncertainty quantification: Bayesian or ensemble methods; conformal prediction.\nAdversarial training: train on perturbed inputs and/or use data augmentation techniques (e.g. counterfactuals)\nDrift detection: monitor input/output distributions\nRegular retraining schedule: define a model lifecycle policy"
+    "text": "Technical Mitigations: Robustness\n\nUncertainty quantification: Bayesian or ensemble methods; conformal prediction.\nAdversarial training: train on perturbed inputs and/or use data augmentation techniques (e.g. counterfactuals)\nDrift detection: monitor input/output distributions"
   },
   {
     "objectID": "content/talks/posts/2026-ergo/presentation.html#technical-mitigations-data",
     "href": "content/talks/posts/2026-ergo/presentation.html#technical-mitigations-data",
     "title": "SmartPolicy Recommender System",
     "section": "Technical Mitigations: Data",
-    "text": "Technical Mitigations: Data\n\nData minimisation (GDPR Art. 25): define the minimal feature set for each insurance line before modelling\nProxy audits: test for and remove non-sensitive features correlated with sensitive features especially in , ,  (use e.g. Fairlearn)"
+    "text": "Technical Mitigations: Data\n\nData minimisation (GDPR Art. 25):\n\nsmall \\(p\\): define the minimal feature set for each insurance line before modelling\nsmall \\(n\\): (Bayesian) active learning -&gt; sample high-uncertainty inputs\n\nProxy audits: test for and remove non-sensitive features correlated with sensitive features especially in , ,  (use e.g. Fairlearn)"
   },
   {
     "objectID": "content/talks/posts/2026-ergo/presentation.html#governance-mitigations-data",
@@ -4078,7 +4078,7 @@
     "href": "content/talks/posts/2026-ergo/presentation.html#governance-mitigations-models",
     "title": "SmartPolicy Recommender System",
     "section": "Governance Mitigations: Models",
-    "text": "Governance Mitigations: Models\n\nModel cards (Mitchell et al., 2019, arXiv:1810.03993: document model, intended use, limitations, training data, …\n\nMarkdown with YAML as already standard practice on HuggingFace\n\nVersion control: model and data linked on HF; consider semantic versioning\nInternal red-teaming: structured adversarial testing sessions and hackathons"
+    "text": "Governance Mitigations: Models\n\nModel cards (Mitchell et al., 2019, arXiv:1810.03993: document model, intended use, limitations, training data, …\n\nMarkdown with YAML as already standard practice on HuggingFace\n\nVersion control: model and data linked on HF; consider semantic versioning\nInternal red-teaming: structured adversarial testing sessions and hackathons\nRegular retraining schedule: define a model lifecycle policy"
   },
   {
     "objectID": "content/talks/posts/2026-ergo/presentation.html#governance-mitigations-end-to-end",
