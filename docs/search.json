@@ -553,6 +553,132 @@
     "text": "‘ok but agi bruh’\n\n\n\n\n\n\nFigure 12: My personal take on “AGI by 2027”. (Chapter 6)"
   },
   {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#background",
+    "href": "content/talks/posts/2026-aira/presentation.html#background",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Background",
+    "text": "Background\n\n\n\n Economist, then PhD CS\n\n\n How can we make opaque AI more trustworthy?\n\n\n Explainable AI, Adversarial ML, Probabilistic ML\n\n\n Core developer and maintainer of Taija (Trustworthy AI in Julia)\n\n\n\n\n\n\n\n\n\nScan for slides. Links to www.patalt.org."
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#agenda",
+    "href": "content/talks/posts/2026-aira/presentation.html#agenda",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Agenda",
+    "text": "Agenda\n\nIntro: counterfactual explanations (CE) and algorithmic recourse (AR)\nUnexpected Challenges: endogenous dynamics of AR\nParadigm Shift: explanations should be faithful first, plausible second\nNew Opportunities: teaching models plausible explanations through CE"
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#a-toy-problem",
+    "href": "content/talks/posts/2026-aira/presentation.html#a-toy-problem",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "A Toy Problem",
+    "text": "A Toy Problem\n\n\n\nCats and dogs in two dimensions."
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#traversing-the-parameter-space",
+    "href": "content/talks/posts/2026-aira/presentation.html#traversing-the-parameter-space",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Traversing the Parameter Space",
+    "text": "Traversing the Parameter Space\nModel Training\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\}\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#traversing-the-parameter-space-1",
+    "href": "content/talks/posts/2026-aira/presentation.html#traversing-the-parameter-space-1",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Traversing the Parameter Space",
+    "text": "Traversing the Parameter Space\nModel Training\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\theta_{t+1} &= \\theta_t - \\nabla_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\} \\\\\n\\textcolor{orange}{\\theta^*}&=\\theta_T\n\\end{aligned}\n\\]\n\n\n\n\nFitted model. Contour shows predicted probability \\(y=🐶\\)."
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#traversing-the-feature-space",
+    "href": "content/talks/posts/2026-aira/presentation.html#traversing-the-feature-space",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Traversing the Feature Space",
+    "text": "Traversing the Feature Space\nCounterfactual Search\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} }) + \\lambda \\text{reg} } \\}\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#traversing-the-feature-space-1",
+    "href": "content/talks/posts/2026-aira/presentation.html#traversing-the-feature-space-1",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Traversing the Feature Space",
+    "text": "Traversing the Feature Space\nCounterfactual Search\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} }) + \\lambda \\text{reg} } \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\mathbf{x}_{t+1} &= \\mathbf{x}_t - \\nabla_{\\textcolor{purple}{\\theta}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\} \\\\\n\\textcolor{purple}{\\mathbf{x}^*}&=\\mathbf{x}_T\n\\end{aligned}\n\\]\n\n\n\n\nCounterfactual explanation for what it takes to be a dog."
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#algorithmic-recourse",
+    "href": "content/talks/posts/2026-aira/presentation.html#algorithmic-recourse",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Algorithmic Recourse",
+    "text": "Algorithmic Recourse\n\n\nProvided CE is valid, plausible and actionable, it can be used to provide recourse to individuals negatively affected by models.\n\n“If your income had been x, then …”\n\n\n\n\n\n\n\n\nFigure 1: Counterfactuals for random samples from the Give Me Some Credit dataset (Kaggle 2011). Features ‘age’ and ‘income’ are shown."
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#hidden-cost-of-implausibility",
+    "href": "content/talks/posts/2026-aira/presentation.html#hidden-cost-of-implausibility",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Hidden Cost of Implausibility",
+    "text": "Hidden Cost of Implausibility\n\n\nAR can introduce costly dynamics1\n\n\n\nEndogenous Macrodynamics in Algorithmic Recourse.\n\n\n\n\n\n\n\n\n\nFigure 2: Illustration of external cost of individual recourse.\n\n\n\n\n Insight: Implausible Explanations Are Costly\n Altmeyer et al. (2023) @ SaTML 2023."
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#mitigation-strategies",
+    "href": "content/talks/posts/2026-aira/presentation.html#mitigation-strategies",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Mitigation Strategies",
+    "text": "Mitigation Strategies\nReframed Objective\n\\[\n\\begin{aligned}\n\\mathbf{s}^\\prime &= \\arg \\min_{\\mathbf{s}^\\prime \\in \\mathcal{S}} \\{ {\\text{yloss}(M(f(\\mathbf{s}^\\prime)),y^*)} \\\\ &+ \\lambda_1 {\\text{cost}(f(\\mathbf{s}^\\prime))} + \\lambda_2 {\\text{extcost}(f(\\mathbf{s}^\\prime))} \\}  \n\\end{aligned}\n\\]\n\n\n\nEven simple mitigation strategies can help.\nReducing hidden cost is (roughly) equivalent to ensuring plausibility.\n\n\n\n\n\nMitigation strategies to tackle hidden costs of AR."
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#plausibility-at-all-cost",
+    "href": "content/talks/posts/2026-aira/presentation.html#plausibility-at-all-cost",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Plausibility at all cost?",
+    "text": "Plausibility at all cost?\nAll of these counterfactuals are valid explanations for the model’s prediction.\n\nPick your poison …\n\n\n\n\n\n\n\nFigure 3: Turning a 9 into a 7: Counterfactual explanations for an image classifier using different approaches (Altmeyer, Farmanbar, et al. 2024)."
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#faithful-first-plausible-second",
+    "href": "content/talks/posts/2026-aira/presentation.html#faithful-first-plausible-second",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Faithful First, Plausible Second",
+    "text": "Faithful First, Plausible Second\n\n\n\n\n\n\n\n\nFigure 4: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\n Insight: faithfulness facilitates1\n\nmodel quality checks (Figure 4).\nstate-of-the-art plausibility (Figure 5).\n\n\n\n\n\n\n\nFigure 5: Results for different generators (from 3 to 5).\n\n\n\n\n Altmeyer, Farmanbar, et al. (2024) @ AAAI 2024. [blog]"
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#faithful-counterfactuals",
+    "href": "content/talks/posts/2026-aira/presentation.html#faithful-counterfactuals",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Faithful Counterfactuals",
+    "text": "Faithful Counterfactuals\n\n\n\n\n\n\n\n\nFigure 6: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\n Insight: faithfulness facilitates\n\nmodel quality checks (Figure 6).\nstate-of-the-art plausibility (Figure 7).\n\n\n\n\n\n\n\nFigure 7: Results for different generators (from 3 to 5)."
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#counterfactual-training-method",
+    "href": "content/talks/posts/2026-aira/presentation.html#counterfactual-training-method",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Counterfactual Training: Method",
+    "text": "Counterfactual Training: Method\n\n\n\n\n\n\nFigure 8: (a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, age immutable; (d) CT, age immutable.\n\n\n\n\n\n\nContrast faithful CE with data.\nEnforce actionability constraints.\nBonus: use nascent CE as AE.\n\n\n\n\n\n Insight: We can hold models accountable for plausible explanations1.\n\n\n\n\n Altmeyer et al. (2026) @SaTML ’26"
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#counterfactual-training-results",
+    "href": "content/talks/posts/2026-aira/presentation.html#counterfactual-training-results",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Counterfactual Training: Results",
+    "text": "Counterfactual Training: Results\n\n\n\n\n\nPlausibility: Visual explanations (counterfactuals) for baseline (top row) vs CT (bottom).\n\n\n\n\n\n\nActionability: Visual explanations (integrated gradients) as before. Five top and bottom rows immutable.\n\n\n\n\n\n\nTest accuracies on adversarially perturbed data with varying perturbation sizes."
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#spurious-sparks-of-agi",
+    "href": "content/talks/posts/2026-aira/presentation.html#spurious-sparks-of-agi",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Spurious Sparks of AGI",
+    "text": "Spurious Sparks of AGI\n\n\nWe challenge the idea that the finding of meaningful patterns in latent spaces of large models is indicative of AGI1.\n\n\n\n\n\n\n\nFigure 7: Inflation of prices or birds? It doesn’t matter!\n\n\n\n\n In Altmeyer, Demetriou, et al. (2024) @ ICML 2024"
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#taija",
+    "href": "content/talks/posts/2026-aira/presentation.html#taija",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Taija",
+    "text": "Taija\n\n\n\nModel Explainability (CounterfactualExplanations.jl)\nPredictive Uncertainty Quantification (ConformalPrediction.jl)\nEffortless Bayesian Deep Learning (LaplaceRedux.jl)\n… and more!\n\n\n\nWork presented @ JuliaCon 2022, 2023, 2024.\nGoogle Summer of Code and Julia Season of Contributions 2024.\nTotal of three software projects @ TU Delft.\n\n\n\nTrustworthy AI in Julia: github.com/JuliaTrustworthyAI"
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#references",
+    "href": "content/talks/posts/2026-aira/presentation.html#references",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "References",
+    "text": "References\n\n\n\n\nAltmeyer, Patrick, Giovan Angela, Aleksander Buszydlik, Karol Dobiczek, Arie van Deursen, and Cynthia C. S. Liem. 2023. “Endogenous Macrodynamics in Algorithmic Recourse.” In 2023 IEEE Conference on Secure and Trustworthy Machine Learning (SaTML), 418–31. IEEE. https://doi.org/10.1109/satml54575.2023.00036.\n\n\nAltmeyer, Patrick, Andrew M Demetriou, Antony Bartlett, and Cynthia C. S. Liem. 2024. “Position: Stop Making Unscientific AGI Performance Claims.” In International Conference on Machine Learning, 1222–42. PMLR. https://proceedings.mlr.press/v235/altmeyer24a.html.\n\n\nAltmeyer, Patrick, Arie van Deursen, and Cynthia C. S. Liem. 2023. “Explaining Black-Box Models through Counterfactuals.” In Proceedings of the JuliaCon Conferences, 1:130. https://doi.org/10.21105/jcon.00130.\n\n\nAltmeyer, Patrick, Mojtaba Farmanbar, Arie van Deursen, and Cynthia C. S. Liem. 2024. “Faithful Model Explanations through Energy-Constrained Conformal Counterfactuals.” In Proceedings of the Thirty-Eighth AAAI Conference on Artificial Intelligence, 38:10829–37. 10. https://doi.org/10.1609/aaai.v38i10.28956.\n\n\n(DHPC), Delft High Performance Computing Centre. 2022. “DelftBlue Supercomputer (Phase 1).” https://www.tudelft.nl/dhpc/ark:/44463/DelftBluePhase1.\n\n\nKaggle. 2011. “Give Me Some Credit, Improve on the State of the Art in Credit Scoring by Predicting the Probability That Somebody Will Experience Financial Distress in the Next Two Years.” https://www.kaggle.com/c/GiveMeSomeCredit; Kaggle. https://www.kaggle.com/c/GiveMeSomeCredit."
+  },
+  {
     "objectID": "content/talks/posts/2025-dscn/presentation.html#background",
     "href": "content/talks/posts/2025-dscn/presentation.html#background",
     "title": "Explaining Models or Modelling Explanations",
@@ -2832,7 +2958,7 @@
     "href": "content/talks/index.html",
     "title": "Talks",
     "section": "",
-    "text": "Below you can find slides and videos of some of my talks. For a slide deck providing a high-level overview of my research see also here.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Year - Oldest\n      \n      \n        Year - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\nTitle\n\n\n\nYear\n\n\n\nVenue\n\n\n\nDescription\n\n\n\n\n\n\n\n\nTU/e Research Seminar\n\n\n2026\n\n\nEindhoven, NL\n\n\nSlides for a research seminar I gave at TU Eindhoven.\n\n\n\n\n\n\nCounterfactual Training: Teaching Models Plausible and Actionable Explanations\n\n\n2026\n\n\nSaTML, TU Munich, Germany\n\n\nSlides and poster for our SaTML 2026 paper Counterfactual Training: Teaching Models Plausible and Actionable Explanations.\n\n\n\n\n\n\nCounterfactual Explanations and Algorithmic Recourse for Trustworthy AI\n\n\n2026\n\n\nHBK Europe, London, UK\n\n\nA summary of my Ph.D. research derived from my layman’s talk.\n\n\n\n\n\n\nPh.D. defence\n\n\n2026\n\n\nDelft, NL\n\n\nSlides for the layman talk of my Ph.D. defence.\n\n\n\n\n\n\nDSCNext Conference Europe 2025\n\n\n2025\n\n\nAmsterdam, NL\n\n\nSlides for my oral presentation at DSCNext 2025.\n\n\n\n\n\n\nVertraubare KI durch Counterfactual Explanations\n\n\n2024\n\n\nTÜV AI.Lab (online)\n\n\nEin Überblick über unsere Forschungsergebnisse zum Thema Vertraubare Künstliche Intelligenz.\n\n\n\n\n\n\nStop Making Unscientific AGI Performance Claims\n\n\n2024\n\n\nVienna, Austria\n\n\nOur position paper Stop Making Unscientific AGI Performance Claims has been accepted at ICML 2024.\n\n\n\n\n\n\nJuliaCon 2024\n\n\n2024\n\n\nEindhoven, The Netherlands\n\n\nVarious main and lightning talks on Taija, HPC, mechanistic interpretability and Quarto.\n\n\n\n\n\n\nTrustworthy AI in Julia\n\n\n2024\n\n\nThe Alan Turing Institute, London, UK\n\n\nSlides for my presentation at the Alan Turing Institute on Trustworthy AI in Julia.\n\n\n\n\n\n\nFaithful Model Explanations through Energy-Constrained Conformal Counterfactuals\n\n\n2024\n\n\nImperial College, London, UK\n\n\nIn May, 2024, I presented our AAAI 2024 paper at an XAI seminar at Imperial College London.\n\n\n\n\n\n\nAgainst Spurious Sparks − Dovelating Inflated AI Claims 🕊️\n\n\n2024\n\n\nECONDAT 2024, London, UK\n\n\nOur position paper Against Spurious Sparks − Dovelating Inflated AI Claims has been accepted at ICML 2024. In May 2024, I will talk about our work at the ECONDAT Conference 2024.\n\n\n\n\n\n\nFaithful Model Explanations through Energy-Constrained Conformal Counterfactuals\n\n\n2024\n\n\nAAAI 2024, Vancouver, Canada\n\n\nSlides and poster for our AAAI 2024 paper, Faithful Model Explanations through Energy-Constrained Conformal Counterfactuals.\n\n\n\n\n\n\nFaithful Model Explanations\n\n\n2023\n\n\nDe Nederlandsche Bank\n\n\nSlides for my presentation at the Dutch Central Bank, De Nederlandsche Bank.\n\n\n\n\n\n\nBetrouwbare Kunstmatige Intelligentie\n\n\n2023\n\n\nGoethe Instituut, Amsterdam\n\n\nMijn eerste presentatie in het Nederlands.\n\n\n\n\n\n\nJulia on HPC\n\n\n2023\n\n\nTU Delft\n\n\nSlides for a tutorial on using Julia on the DelftBlue supercomputer.\n\n\n\n\n\n\nFaithful Model Explanations\n\n\n2023\n\n\nVerbond van Verzekeraars\n\n\nSlides for my presentation at the Delft FinTech Lab Launch.\n\n\n\n\n\n\nPredictive Uncertainty Quantification in Machine Learning\n\n\n2023\n\n\nJuliaCon 2023, MIT, Cambridge, Massachusetts\n\n\nSlides for my presentation at JuliaCon 2023.\n\n\n\n\n\n\nEchos from the Black Box\n\n\n2023\n\n\nMondai House of AI, Delft\n\n\nSlides for my presentation at the Delft FinTech Lab Launch.\n\n\n\n\n\n\nTaija - Trustworthy AI in Julia\n\n\n2023\n\n\nNWO ICT.Open 2023\n\n\nSlides for my demo at the NWO ICT.Open in April, 2023.\n\n\n\n\n\n\nEndogenous Macrodynamics in Algorithmic Recourse\n\n\n2023\n\n\nFirst IEEE Conference on Secure and Trustworthy Machine Learning\n\n\nSlides for my presentation at the first IEEE SaTML conference in February, 2023.\n\n\n\n\n\n\nA year of using Quarto with Julia\n\n\n2022\n\n\nJulia Eindhoven Meetup\n\n\nSlides for my presentation at the Julia Eindhoven Meetup in November, 2022.\n\n\n\n\n\n\nExplaining Black-Box Models through Counterfactuals\n\n\n2022\n\n\nBank of England\n\n\nSlides for my presentation at the Bank of England in November 2022.\n\n\n\n\n\n\nJuliaCon 2022\n\n\n2022\n\n\nJuliaCon 2022 (online)\n\n\nI gave three different talks at JuliaCon 2022.\n\n\n\n\n\n\nNo matching items"
+    "text": "Below you can find slides and videos of some of my talks. For a slide deck providing a high-level overview of my research see also here.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Year - Oldest\n      \n      \n        Year - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\nTitle\n\n\n\nYear\n\n\n\nVenue\n\n\n\nDescription\n\n\n\n\n\n\n\n\nAIRA seminar\n\n\n2026\n\n\nGEIST Research Group, Poland\n\n\nSlides for my AIRA seminar.\n\n\n\n\n\n\nCounterfactual Training: Teaching Models Plausible and Actionable Explanations\n\n\n2026\n\n\nSaTML, TU Munich, Germany\n\n\nSlides and poster for our SaTML 2026 paper Counterfactual Training: Teaching Models Plausible and Actionable Explanations.\n\n\n\n\n\n\nCounterfactual Explanations and Algorithmic Recourse for Trustworthy AI\n\n\n2026\n\n\nHBK Europe, London, UK\n\n\nA summary of my Ph.D. research derived from my layman’s talk.\n\n\n\n\n\n\nPh.D. defence\n\n\n2026\n\n\nDelft, NL\n\n\nSlides for the layman talk of my Ph.D. defence.\n\n\n\n\n\n\nTU/e Research Seminar\n\n\n2026\n\n\nEindhoven, NL\n\n\nSlides for a research seminar I gave at TU Eindhoven.\n\n\n\n\n\n\nDSCNext Conference Europe 2025\n\n\n2025\n\n\nAmsterdam, NL\n\n\nSlides for my oral presentation at DSCNext 2025.\n\n\n\n\n\n\nVertraubare KI durch Counterfactual Explanations\n\n\n2024\n\n\nTÜV AI.Lab (online)\n\n\nEin Überblick über unsere Forschungsergebnisse zum Thema Vertraubare Künstliche Intelligenz.\n\n\n\n\n\n\nStop Making Unscientific AGI Performance Claims\n\n\n2024\n\n\nVienna, Austria\n\n\nOur position paper Stop Making Unscientific AGI Performance Claims has been accepted at ICML 2024.\n\n\n\n\n\n\nJuliaCon 2024\n\n\n2024\n\n\nEindhoven, The Netherlands\n\n\nVarious main and lightning talks on Taija, HPC, mechanistic interpretability and Quarto.\n\n\n\n\n\n\nTrustworthy AI in Julia\n\n\n2024\n\n\nThe Alan Turing Institute, London, UK\n\n\nSlides for my presentation at the Alan Turing Institute on Trustworthy AI in Julia.\n\n\n\n\n\n\nFaithful Model Explanations through Energy-Constrained Conformal Counterfactuals\n\n\n2024\n\n\nImperial College, London, UK\n\n\nIn May, 2024, I presented our AAAI 2024 paper at an XAI seminar at Imperial College London.\n\n\n\n\n\n\nAgainst Spurious Sparks − Dovelating Inflated AI Claims 🕊️\n\n\n2024\n\n\nECONDAT 2024, London, UK\n\n\nOur position paper Against Spurious Sparks − Dovelating Inflated AI Claims has been accepted at ICML 2024. In May 2024, I will talk about our work at the ECONDAT Conference 2024.\n\n\n\n\n\n\nFaithful Model Explanations through Energy-Constrained Conformal Counterfactuals\n\n\n2024\n\n\nAAAI 2024, Vancouver, Canada\n\n\nSlides and poster for our AAAI 2024 paper, Faithful Model Explanations through Energy-Constrained Conformal Counterfactuals.\n\n\n\n\n\n\nFaithful Model Explanations\n\n\n2023\n\n\nDe Nederlandsche Bank\n\n\nSlides for my presentation at the Dutch Central Bank, De Nederlandsche Bank.\n\n\n\n\n\n\nBetrouwbare Kunstmatige Intelligentie\n\n\n2023\n\n\nGoethe Instituut, Amsterdam\n\n\nMijn eerste presentatie in het Nederlands.\n\n\n\n\n\n\nJulia on HPC\n\n\n2023\n\n\nTU Delft\n\n\nSlides for a tutorial on using Julia on the DelftBlue supercomputer.\n\n\n\n\n\n\nFaithful Model Explanations\n\n\n2023\n\n\nVerbond van Verzekeraars\n\n\nSlides for my presentation at the Delft FinTech Lab Launch.\n\n\n\n\n\n\nPredictive Uncertainty Quantification in Machine Learning\n\n\n2023\n\n\nJuliaCon 2023, MIT, Cambridge, Massachusetts\n\n\nSlides for my presentation at JuliaCon 2023.\n\n\n\n\n\n\nEchos from the Black Box\n\n\n2023\n\n\nMondai House of AI, Delft\n\n\nSlides for my presentation at the Delft FinTech Lab Launch.\n\n\n\n\n\n\nTaija - Trustworthy AI in Julia\n\n\n2023\n\n\nNWO ICT.Open 2023\n\n\nSlides for my demo at the NWO ICT.Open in April, 2023.\n\n\n\n\n\n\nEndogenous Macrodynamics in Algorithmic Recourse\n\n\n2023\n\n\nFirst IEEE Conference on Secure and Trustworthy Machine Learning\n\n\nSlides for my presentation at the first IEEE SaTML conference in February, 2023.\n\n\n\n\n\n\nA year of using Quarto with Julia\n\n\n2022\n\n\nJulia Eindhoven Meetup\n\n\nSlides for my presentation at the Julia Eindhoven Meetup in November, 2022.\n\n\n\n\n\n\nExplaining Black-Box Models through Counterfactuals\n\n\n2022\n\n\nBank of England\n\n\nSlides for my presentation at the Bank of England in November 2022.\n\n\n\n\n\n\nJuliaCon 2022\n\n\n2022\n\n\nJuliaCon 2022 (online)\n\n\nI gave three different talks at JuliaCon 2022.\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "content/publications/posts/satml-2026/index.html",
@@ -4417,6 +4543,13 @@
     "text": "You can find the slides below or click here to open them in full screen.\nFor the PDF version of the slides use this link instead."
   },
   {
+    "objectID": "content/talks/posts/2026-aira/index.html",
+    "href": "content/talks/posts/2026-aira/index.html",
+    "title": "AIRA seminar",
+    "section": "",
+    "text": "You can find the slides below or click here to open them in full screen.\nFor the PDF version of the slides use this link instead."
+  },
+  {
     "objectID": "content/talks/posts/2026-defence/index.html",
     "href": "content/talks/posts/2026-defence/index.html",
     "title": "Ph.D. defence",
@@ -4464,5 +4597,61 @@
     "title": "News",
     "section": "",
     "text": "Ph.D. defence ceremony\n\n\n\n\n\n\n\nPh.D. defence ceremony\n\n\n\n\n\n\n\nTaija\n\n\n\n\n\nPrevoius\n\n\n\nNext\n\n\n\n\n\n\nNews\n\nI now offer research and consulting services: if you need advice and technical expertise in the areas of trustworthy AI, finance or economics, feel free to reach out.\nOfficially Dr. Altmeyer: I publicly defended my Ph.D. on February 25, 2026. Thank you to all of the attendees—colleagues, friends, family and committee members.\nMy final Ph.D. paper, Counterfactual Training: Teaching Models Plausible and Actionable Explanations, has been accepted for publication at IEEE SaTML 2026. [preprint]"
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#training-opaque-models",
+    "href": "content/talks/posts/2026-aira/presentation.html#training-opaque-models",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Training Opaque Models",
+    "text": "Training Opaque Models\nTweaking Parameters\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\}\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#training-opaque-models-1",
+    "href": "content/talks/posts/2026-aira/presentation.html#training-opaque-models-1",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Training Opaque Models",
+    "text": "Training Opaque Models\nTweaking Parameters\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\theta_{t+1} &= \\theta_t - \\nabla_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\} \\\\\n\\textcolor{orange}{\\theta^*}&=\\theta_T\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#explaining-opaque-models",
+    "href": "content/talks/posts/2026-aira/presentation.html#explaining-opaque-models",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Explaining Opaque Models",
+    "text": "Explaining Opaque Models\nTweaking Inputs\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} }) + \\lambda \\text{reg}(\\mathbf{x};\\cdot) } \\}\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#explaining-opaque-models-1",
+    "href": "content/talks/posts/2026-aira/presentation.html#explaining-opaque-models-1",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Explaining Opaque Models",
+    "text": "Explaining Opaque Models\nTweaking Inputs\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} }) + \\lambda \\text{reg}(\\mathbf{x};\\cdot)} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\mathbf{x}_{t+1} &= \\mathbf{x}_t - \\nabla_{\\textcolor{purple}{\\mathbf{x}}} \\{  \\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} }) \\\\&+ \\lambda \\text{reg}(\\mathbf{x};\\cdot) \\} \\\\\n\\textcolor{purple}{\\mathbf{x}^*}&=\\mathbf{x}_T\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#counterfactual-training",
+    "href": "content/talks/posts/2026-aira/presentation.html#counterfactual-training",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Counterfactual Training",
+    "text": "Counterfactual Training\nFirst, Tweaking Inputs1\n\\[\n\\begin{aligned}\n\\mathbf{x}_{t+1} &= \\mathbf{x}_t - \\nabla_{\\textcolor{purple}{\\mathbf{x}}} \\{  {ECCCo(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\} \\\\\n\\textcolor{purple}{\\mathbf{x}^*}&=\\mathbf{x}_T\n\\end{aligned}\n\\]\nThen, Tweaking Parameters\n\\[\n\\begin{aligned}\n\\theta_{t+1} &= \\theta_t - \\nabla_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} + \\text{div}(\\textcolor{purple}{\\mathbf{x}^*},\\mathbf{x}^+,y^+; \\theta) \\} \\\\\n\\textcolor{orange}{\\theta^*}&=\\theta_T\n\\end{aligned}\n\\]\nGenerate faithful explanations using ECCCo objective (Altmeyer, Farmanbar, et al. 2024)."
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#counterfactual-training-1",
+    "href": "content/talks/posts/2026-aira/presentation.html#counterfactual-training-1",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Counterfactual Training",
+    "text": "Counterfactual Training\n\nContrast faithful CE with data \\(\\rightarrow\\) Explainability \\(\\uparrow\\)\nFeature mutability constraints \\(\\rightarrow\\) Actionability \\(\\uparrow\\)(holds provably under certain assumptions)\nBonus: use nascent CE as AE \\(\\rightarrow\\) Robustness \\(\\uparrow\\)\n\n\n\n\n\n\n\n\nFigure 6: (a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, age immutable; (d) CT, age immutable."
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#the-hard-numbers",
+    "href": "content/talks/posts/2026-aira/presentation.html#the-hard-numbers",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "The Hard Numbers",
+    "text": "The Hard Numbers\nExtensive experiments and ablation studies on nine datasets–synthetic, tabular and vision–generating millions of counterfactuals:1\n\nPlausibility of CEs increases by up to 90%.\nActionability: cost of reaching valid counterfactuals with protected features decreases by 19% on average.\nModels’ adversarial robustness improves consistently.\n\nFacilitated by our CounterfactualExplanations.jl (Altmeyer, Deursen, and Liem 2023) with multi-processing support and (DHPC) (2022)."
+  },
+  {
+    "objectID": "content/talks/posts/2026-aira/presentation.html#check-it-out",
+    "href": "content/talks/posts/2026-aira/presentation.html#check-it-out",
+    "title": "Explaining Models or Modelling Explanations",
+    "section": "Check it out!",
+    "text": "Check it out!\n\n\n\n\n\n\nPreprint\n\n\n\n\n\n\n\nSoftware\n\n\n\n\n\n\n\nHomepage"
   }
 ]
