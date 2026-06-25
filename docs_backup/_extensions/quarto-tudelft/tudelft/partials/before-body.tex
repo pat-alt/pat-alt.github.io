@@ -1,0 +1,213 @@
+% Adapted with the help of Claude Sonnet 3.7
+% !TeX spellcheck = en_GB
+
+% Apply frontmatter styling (Roman numerals for the page numbers of the title pages and toc)
+\frontmatter
+
+\begin{titlepage}
+
+    $if(include-pre-title)$
+        \begin{center}
+
+            %% Extra whitespace at the top.
+            \vspace*{2\bigskipamount}
+
+            %% Print the title.
+            {\makeatletter
+                \titlestyle\bfseries\LARGE\@title
+                \makeatother}
+
+           ` %% Print the optional subtitle.
+            {\makeatletter
+                \ifx\@subtitle\undefined\else
+                    \bigskip
+                    \titlefont\titleshape\Large\@subtitle
+                \fi
+                \makeatother}
+
+        \end{center}
+
+        \cleardoublepage
+        \thispagestyle{empty}
+    $endif$
+
+    \begin{center}
+
+        %% The following lines repeat the previous page exactly.
+
+        \vspace*{2\bigskipamount}
+
+        %% Print the title.
+        {\makeatletter
+            \titlestyle\bfseries\LARGE\@title
+            \makeatother}
+
+        %% Print the optional subtitle.
+        {\makeatletter
+            \ifx\@subtitle\undefined\else
+                \bigskip
+                \titlefont\titleshape\Large\@subtitle
+            \fi
+            \makeatother}
+
+        %% Uncomment the following lines to insert a vertically centered picture into
+        %% the title page.
+        %\vfill
+        %\includegraphics{title}
+        \vfill
+
+        %% Apart from the names and dates, the following text is dictated by the
+        %% promotieregelement.
+
+        {\Large\titlefont\bfseries Dissertation}
+
+        \bigskip
+        \bigskip
+
+        for the purpose of obtaining the degree of doctor
+
+        at Delft University of Technology
+
+        by the authority of the Rector Magnificus, 
+
+        $if(rector)$$rector$$else$Prof.~dr.~ir.~H. Bijl$endif$,
+
+        chair of the Board for Doctorates
+
+        to be defended publicly on
+
+        $if(defense-date)$$defense-date$$else$[date= weekday (word) day (number), month (word) year (number)] at [hh:mm (number)] o'clock$endif$
+
+        \bigskip
+        \bigskip
+
+        by
+
+        \bigskip
+        \bigskip
+
+        $if(by-author)${\Large\titlefont\bfseries $for(by-author)$$it.name.given$ \MakeUppercase{$it.name.family$}$sep$ \and $endfor$}$endif$
+
+        \bigskip
+        \bigskip
+
+        $if(author-degree)$$author-degree$$else$[highest academic title, name university, country]$endif$
+
+        born in $if(author-birthplace)$$author-birthplace$$else$[town/city, country of birth]$endif$
+
+        %% Extra whitespace at the bottom.
+        \vspace*{2\bigskipamount}
+
+    \end{center}
+
+    \clearpage
+    \thispagestyle{empty}
+
+    %% The following line is dictated by the promotieregelement.
+    \noindent This dissertation has been approved by the promotors.
+
+    \bigskip
+    \noindent Composition of the doctoral committee:
+    %% List the committee members, starting with the Rector Magnificus and the
+    %% promotor(s) and ending with the reserve members.
+    \begin{tabbing}
+        \hspace{\tabcolsep}\=\hspace{0.33\textwidth}\=\hspace{0.66\textwidth}                   \\[-3\medskipamount]
+        \> Rector Magnificus,          \> chairperson\\
+$for(committee)$
+        \> $committee.title$$if(committee.name-too-long)$\\
+        \>$endif$       \> $committee.affiliation$$if(committee.role)$, \textit{$committee.role$}$endif$    \\
+$endfor$
+$if(independent-members)$
+        \>\textit{Independent members:}                                                        \\[\smallskipamount]
+$for(independent-members)$
+        \>$independent-members.title$$if(independent-members.name-too-long)$\\
+        \>$endif$       \> $independent-members.affiliation$$if(independent-members.role)$, $independent-members.role$$endif$                         \\
+$endfor$
+$endif$
+$if(other-members)$
+        \>\textit{Other members:}                                                               \\[\smallskipamount]
+$for(other-members)$
+        \>$other-members.title$ \> $other-members.affiliation$                         \\
+$endfor$
+$endif$
+    \end{tabbing}
+
+    %% Include the following disclaimer for committee members who have contributed
+    %% to this dissertation. Its formulation is again dictated by the
+    %% promotieregelement.
+$if(contributors)$
+    \medskip
+$for(contributors)$
+    \noindent $contributors.title$ of $contributors.affiliation$ has contributed greatly to the preparation of this dissertation.
+$endfor$
+$endif$
+
+$if(institute-message)$
+    \medskip
+    \noindent $institute-message$
+$endif$
+
+    %% Here you can include the logos of any institute that contributed financially
+    %% to this dissertation.
+    \vfill
+    \begin{center}
+$if(institute-logos)$
+$for(institute-logos)$
+        \includegraphics[height=0.75in]{$institute-logos.path$}$if(institute-logos.spacing)$\hspace{$institute-logos.spacing$}$else$\hspace{1cm}$endif$
+$endfor$
+$else$
+$if(institute-logo)$
+        \includegraphics[height=0.75in]{$institute-logo$}
+$endif$
+$endif$
+    \end{center}
+    \vfill
+
+    \noindent
+    \begin{tabular}{@{}p{0.2\textwidth}@{}p{0.8\textwidth}@{}}
+        \textit{Keywords:}    & $if(keywords)$$for(keywords)$$it$$sep$, $endfor$$else$\ldots$endif$ \\[\medskipamount]
+        \textit{Printed by:}   & $if(printed-by)$$printed-by$$else$ $endif$ \\[\medskipamount]
+        \textit{Cover by:} & $if(cover-by)$$cover-by$$else$ $endif$
+    \end{tabular}
+
+    \vspace{4\bigskipamount}
+
+$if(copyright-year)$
+    \noindent Copyright \textcopyright{} $if(copyright-year)$$copyright-year$$else$\the\year{}$endif$ by $if(author)$$author$$endif$
+$endif$
+
+$if(phd-series)$
+    \medskip
+    \noindent $phd-series$
+$endif$
+
+    \medskip
+    \noindent The author set this thesis using Quarto: \url{https://github.com/quarto-tudelft}.
+
+    \medskip
+    \noindent ISBN $if(isbn)$$isbn$$else$000-00-0000-000-0$endif$
+
+    \medskip
+    \noindent An electronic copy of this dissertation is available at\\
+    \url{$if(repository-url)$$repository-url$$else$https://repository.tudelft.nl/$endif$}.
+
+\end{titlepage}
+
+%% The (optional) dedication can be used to thank someone or display a
+%% significant quotation.
+$if(dedication)$
+\dedication{
+$if(dedication.text)$
+  \epigraph{$dedication.text$}{$dedication.author$}
+$else$
+  $for(dedication)$
+    \epigraph{$dedication.text$}{$dedication.author$}
+  $endfor$
+$endif$
+}
+$endif$
+
+{
+  \cleardoublepage%
+  \phantomsection%
+}
