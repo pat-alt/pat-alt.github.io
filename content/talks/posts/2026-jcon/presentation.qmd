@@ -1,0 +1,297 @@
+---
+title: "Counterfactual Training" 
+subtitle: Teaching Models Plausible and Actionable Explanations
+author: 
+  - name: Patrick Altmeyer
+    url: https://www.patalt.org/
+institute: Delft University of Technology
+date: 2026-03-23
+format: 
+  julia-revealjs:
+    slide-number: true
+    transition: slide
+    background-transition: fade
+    html-math-method: mathjax
+    auto-animate-easing: ease-in-out
+    auto-animate-unmatched: false
+    auto-animate-duration: 0.8
+revealjs-plugins:
+  - pointer
+crossref: 
+  prp-title: RQ
+  prp-prefix: RQ
+classoption: "notheorems"
+---
+
+# Research
+
+## Training Opaque Models {auto-animate=true}
+
+[*Tweaking Parameters*]{style="color: orange;"}
+
+::: {.columns}
+::: {.column width=75%}
+**Objective**:
+
+$$
+\begin{aligned}
+\min_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} \}
+\end{aligned} 
+$$ 
+:::
+::: {.column width=25%}
+
+:::
+:::
+
+
+## Training Opaque Models {auto-animate=true}
+
+[*Tweaking Parameters*]{style="color: orange;"}
+
+::: {.columns}
+::: {.column width=75%}
+**Objective**:
+
+$$
+\begin{aligned}
+\min_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} \}
+\end{aligned} 
+$$ 
+
+**Solution**:
+
+$$
+\begin{aligned}
+\theta_{t+1} &= \theta_t - \nabla_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} \} \\
+\textcolor{orange}{\theta^*}&=\theta_T
+\end{aligned} 
+$$
+:::
+::: {.column width=25%}
+
+::: {.content-visible when-format="html"}
+![](/www/images/training.gif){width="100%"}
+:::
+
+::: {.content-visible when-format="pdf"}
+![](/www/images/training.png){width="100%"}
+:::
+
+:::
+:::
+
+## Explaining Opaque Models {auto-animate=true}
+
+[*Tweaking Inputs*]{style="color: purple;"}
+
+::: {.columns}
+::: {.column width=75%}
+
+**Objective**:
+
+$$
+\begin{aligned}
+\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x};\cdot) } \}
+\end{aligned} 
+$$ 
+:::
+::: {.column width=25%}
+![](/www/images/training.png){width="100%"}
+:::
+:::
+
+
+## Explaining Opaque Models {auto-animate=true}
+
+[*Tweaking Inputs*]{style="color: purple;"}
+
+
+::: {.columns}
+::: {.column width=75%}
+
+**Objective**:
+
+$$
+\begin{aligned}
+\min_{\textcolor{purple}{\mathbf{x}}} \{  {\text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) + \lambda \text{reg}(\mathbf{x};\cdot)} \}
+\end{aligned} 
+$$
+
+
+**Solution**:
+
+$$
+\begin{aligned}
+\mathbf{x}_{t+1} &= \mathbf{x}_t - \nabla_{\textcolor{purple}{\mathbf{x}}} \{  \text{yloss}(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} }) \\&+ \lambda \text{reg}(\mathbf{x};\cdot) \} \\
+\textcolor{purple}{\mathbf{x}^*}&=\mathbf{x}_T
+\end{aligned} 
+$$
+:::
+::: {.column width=25%}
+
+::: {.content-visible when-format="html"}
+![](/www/images/counterfactual.gif){width="100%"}
+:::
+
+::: {.content-visible when-format="pdf"}
+![](/www/images/counterfactual.png){width="100%"}
+:::
+:::
+:::
+
+# Explanation or Adversarial Example?
+
+## Plausibility at all cost?
+
+All of these counterfactuals are valid explanations for the model's prediction. 
+
+> Pick your poison ...
+
+![Turning a 9 into a 7: Counterfactual explanations for an image classifier using different approaches [@altmeyer2024faithful].](/www/images/mnist_motivation.png){#fig-cf-example width="75%"}
+
+## Faithful First, Plausible Second
+
+::::{.columns}::::
+:::{.column width='30%'}
+![Turning a 9 into a 7. *ECCCo* applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).](/www/images/mnist_eccco.png){#fig-mnist-eccco width="75%"}
+:::
+:::{.column width='70%'}
+{{< fa key >}} **Insight**: faithfulness facilitates^[{{< fa scroll >}} @altmeyer2024faithful \@ AAAI 2024. [[blog]](/blog/posts/eccco/index.qmd)]
+
+- model quality checks (@fig-mnist-eccco).
+- state-of-the-art plausibility (@fig-mnist-benchmark).
+
+![Results for different generators (from 3 to 5).](/www/images/mnist_benchmark.png){#fig-mnist-benchmark width="100%"}
+:::
+::::
+
+# Putting it all together
+
+## Counterfactual Training {auto-animate=true}
+
+
+First, [*Tweaking Inputs*]{style="color: purple;"}^[Generate faithful explanations using *ECCCo* objective [@altmeyer2024faithful].]
+
+$$
+\begin{aligned}
+\mathbf{x}_{t+1} &= \mathbf{x}_t - \nabla_{\textcolor{purple}{\mathbf{x}}} \{  {ECCCo(M_{\textcolor{orange}{\theta^*}}(\mathbf{x}),\mathbf{y^{\textcolor{purple}{+}} })} \} \\
+\textcolor{purple}{\mathbf{x}^*}&=\mathbf{x}_T
+\end{aligned} 
+$$
+
+Then, [*Tweaking Parameters*]{style="color: orange;"}
+
+$$
+\begin{aligned}
+\theta_{t+1} &= \theta_t - \nabla_{\textcolor{orange}{\theta}} \{  {\text{yloss}(M_{\theta}(\mathbf{x}),\mathbf{y})} + \text{div}(\textcolor{purple}{\mathbf{x}^*},\mathbf{x}^+,y^+; \theta) \} \\
+\textcolor{orange}{\theta^*}&=\theta_T
+\end{aligned} 
+$$
+
+## Counterfactual Training {auto-animate=true}
+
+:::{.incremental}
+1. Contrast faithful CE with data $\rightarrow$ **Explainability** $\uparrow$
+2. Feature mutability constraints $\rightarrow$ **Actionability** $\uparrow$[(holds provably under certain assumptions)]{style="font-size: 0.8em;"}
+3. Bonus: use nascent CE as AE $\rightarrow$ **Robustness** $\uparrow$
+:::
+
+. . .
+
+![(a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, *age* immutable; (d) CT, *age* immutable.](/www/images/ct_poc.png){#fig-ecml width="90%"}
+
+## Counterfactual Training: Results
+
+::: {.columns}
+::: {.column width=50%}
+![**Plausibility**: Visual explanations (counterfactuals) for baseline (top row) vs CT (bottom).](/www/images/mnist_ce.png){width=70%} 
+:::
+::: {.column width=50%}
+![**Actionability**: Visual explanations (integrated gradients) as before. Five top and bottom rows immutable.](/www/images/mnist_ig.png){width="60%"}
+:::
+:::
+
+![Test accuracies on adversarially perturbed data with varying perturbation sizes.](/www/images/ct_robustness.png){width=70%}
+
+## The Hard Numbers
+
+Extensive experiments and ablation studies on nine datasets--synthetic, tabular and vision--generating millions of counterfactuals:
+
+1. **Plausibility** of CEs increases by up to 90%.
+2. **Actionability**: cost of reaching valid counterfactuals with protected features decreases by 19% on average.
+3. Models’ adversarial **robustness** improves consistently.
+
+# Package
+
+## Research Branch
+
+- **Defining feature**: many small models + many counterfactuals + different generators tested
+
+### Parallelize on CPUs
+
+```{.julia}
+for epoch in start:end
+  # 1. Generate counterfactuals in parallel across CPUs
+  counterfactual_dl = generate(...) # wrap results 
+  for (i, batch) in enumerate(train_set)
+    # 2. Unwrap and backprop
+  end
+end
+```
+
+## Research Branch
+
+- **Solution**: [CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) (JuliaCon 2022) + [TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl) (JuliaCon 2024) support multi-processing through MPI.jl on Delft's HPC (@DHPC2022).
+
+
+| Pros                                             | Cons                    |
+|--------------------------------------------------|------------------------|
+| ✅ Access to comprehensive CE.jl generator suite | ❌ Bottlenecked by CE.jl performance |
+| ✅ Viable alternative for GPU-poor              | ❌ Large models |
+| ✅ Generate CEs in parallel                      | ❌ Generate CEs on GPU |
+
+
+## GPU Branch
+
+![]()
+
+## GPU Branch
+
+- Adds new `NativeGenerator`: GPU-friendly re-implementation of CE.jl's `ECCoGenerator`.
+- Overloads `counterfactual_training` to (1) generate counterfactuals on GPU, (2) train model on GPU.
+
+## GPU Branch
+
+### Some Results
+
+
+
+## Contributions Welcome!
+
+### Performance-focued
+
+1. Improve performance of CE.jl
+2. Make CE.jl GPU-friendly
+
+### Research-focused
+
+3. Per-epoch vs. per-batch CE generation
+
+## Check it out!
+
+::: {layout-ncol=3}
+
+![Preprint](www/qr/paper.png)
+
+![Software](www/qr/taija.png)
+
+![Homepage](www/qr/home.png)
+
+:::
+
+## References {.scrollable .smaller}
+
+::: {#refs}
+:::
+
