@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -15,10 +15,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -97,10 +100,10 @@ div.csl-indent {
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-9fe32f1efd3852944c692557c35150af.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-99722ed381e55161af4af92c72cc4ead.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-a22e541bc2961f232db2c72777d3356c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-0669d511aa4c43eb9be99bb15ed50570.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -516,16 +519,16 @@ Altmeyer, Patrick. 2023. <span>“Stuck in the Past.”</span> November 25.
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {
@@ -877,127 +880,127 @@ Altmeyer, Patrick. 2023. <span>“Stuck in the Past.”</span> November 25.
   </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="an">title:</span><span class="co"> 'Stuck in the Past'</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="an">subtitle:</span><span class="co"> 'Why we should treat research like software and how Quarto can help'</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="an">date:</span><span class="co"> '2023-11-25'</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="an">categories:</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="co">  - scientific publishing</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="co">  - Quarto</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="co">  - Julia</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="an">description:</span><span class="co"> &gt;-</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="co">  An opinionated post on outdated publication and peer review practices, as well as modern solutions. It introduces a Quarto extension for JuliaCon Proceedings that I have been working on. </span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="an">bibliography:</span><span class="co"> https://raw.githubusercontent.com/pat-alt/bib/main/bib.bib</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="an">image:</span><span class="co"> www/intro.jpeg</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="an">engine:</span><span class="co"> julia</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="an">execute:</span></span>
-<span id="cb2-15"><a href="#cb2-15"></a><span class="co">    echo: false</span></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="co">    eval: false</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a><span class="co">---</span></span>
-<span id="cb2-18"><a href="#cb2-18"></a></span>
-<span id="cb2-21"><a href="#cb2-21"></a><span class="in">```{julia}</span></span>
-<span id="cb2-22"><a href="#cb2-22"></a>www_path <span class="op">=</span> <span class="st">"blog/posts/quarto-juliacon-proceedings/www"</span></span>
-<span id="cb2-23"><a href="#cb2-23"></a><span class="in">```</span></span>
-<span id="cb2-24"><a href="#cb2-24"></a></span>
-<span id="cb2-25"><a href="#cb2-25"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"intro-gif"</span><span class="dt">&gt;</span></span>
-<span id="cb2-26"><a href="#cb2-26"></a>  <span class="dt">&lt;</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
-<span id="cb2-27"><a href="#cb2-27"></a>    <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"www/intro.jpeg"</span><span class="dt">&gt;</span></span>
-<span id="cb2-28"><a href="#cb2-28"></a>    <span class="dt">&lt;</span><span class="kw">figcaption</span><span class="dt">&gt;</span>Photo by <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://unsplash.com/@svalenas?utm_content=creditCopyText</span><span class="er">&amp;</span><span class="st">utm_medium=referral</span><span class="er">&amp;</span><span class="st">utm_source=unsplash"</span><span class="dt">&gt;</span>Sergiu Vălenaș<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span> on <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://unsplash.com/photos/person-reading-book-_Drvb_c_72Y?utm_content=creditCopyText</span><span class="er">&amp;</span><span class="st">utm_medium=referral</span><span class="er">&amp;</span><span class="st">utm_source=unsplash"</span><span class="dt">&gt;</span>Unsplash<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span></span>
-<span id="cb2-29"><a href="#cb2-29"></a>  <span class="dt">&lt;/</span><span class="kw">figcaption</span><span class="dt">&gt;</span></span>
-<span id="cb2-30"><a href="#cb2-30"></a>  <span class="dt">&lt;/</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
-<span id="cb2-31"><a href="#cb2-31"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb2-32"><a href="#cb2-32"></a></span>
-<span id="cb2-33"><a href="#cb2-33"></a>I'm officially a third-year PhD student folks! One of my favorite aspects of being a PhD is freedom: the freedom to explore, the freedom to learn, the freedom to create, and, last but not least, the freedom to choose the tools I want to use along the way. On this blog, I have repeatedly advocated for <span class="co">[</span><span class="ot">Quarto</span><span class="co">](https://quarto.org)</span>, my preferred tool for scientific publishing: it is open-source, straightforward to use, backed by an incredibly strong and responsive development team, works well with Julia---see my previous posts <span class="co">[</span><span class="ot">here</span><span class="co">](../julia-and-quarto-a-match-made-in-heaven/index.qmd)</span> and <span class="co">[</span><span class="ot">here</span><span class="co">](../tips-and-tricks-for-using-quarto-with-julia/index.qmd)</span>---and is highly customizable---see my <span class="co">[</span><span class="ot">post</span><span class="co">](../quarto-extensions/index.qmd)</span> on extensions.</span>
-<span id="cb2-34"><a href="#cb2-34"></a></span>
-<span id="cb2-35"><a href="#cb2-35"></a>One of my least favorite aspects of being a PhD is the old-fashioned way of publishing scientific papers. Having to deal with clunky LaTeX templates when all I want to do is write up my research is the bane of my existence. It makes me dread the writing process because I know that every time I'm forced to peek inside the LaTeX compiler log, my eyes will bleed. It shouldn't be this way! I want to be able to look forward to writing. It should be the part where you finally get to reap the rewards for the hard work you put into your project. A creative process that allows you to communicate your findings in an engaging manner. Ideas should just be allowed to flow out freely, uninterrupted by frustration about formatting issues. </span>
-<span id="cb2-36"><a href="#cb2-36"></a></span>
-<span id="cb2-37"><a href="#cb2-37"></a>This frustration is amplified by the fact that I'm so painfully aware of the fact that there are better ways to do this. We have the technology to make the process of scientific publishing so much more enjoyable, efficient, engaging, accessible and reproducible. We also generally seem to agree that science can be much more effectively communicated through modern-day forms of media that involve animated or even interactive content. But for some reason, the academic community still insists on good old-fashioned PDFs as its gold standard for scientific publishing and communication, often enough locked behind paywalls. No wonder that the general public feels disconnected from academia. </span>
-<span id="cb2-38"><a href="#cb2-38"></a></span>
-<span id="cb2-39"><a href="#cb2-39"></a><span class="fu">## 📜 Legacy Systems</span></span>
-<span id="cb2-40"><a href="#cb2-40"></a></span>
-<span id="cb2-41"><a href="#cb2-41"></a>Scientists pride themselves in the fact that they are continuously pushing the boundaries of human knowledge, overturning old theories and replacing them with new ones. No idea is ever too good to be challenged. The better the idea, the more challenge it is likely going to attract. The scientific method, in its ideal form, is a transparent process of continuous refinement and creative destruction. And yet we treat our main scientific output, the research paper, as a static artifact: write it up, have it peer-reviewed, publish it, pad yourself on the back---your work is now set in stone, the stamp of approval has been obtained, move on to the next one! </span>
-<span id="cb2-42"><a href="#cb2-42"></a></span>
-<span id="cb2-43"><a href="#cb2-43"></a><span class="at">&gt; "Treating research outputs as static artifacts is fundamentally at odds with the dynamic nature of science."</span></span>
-<span id="cb2-44"><a href="#cb2-44"></a></span>
-<span id="cb2-45"><a href="#cb2-45"></a>I have a real issue with this approach and think that treating research outputs as static artifacts is fundamentally at odds with the dynamic nature of science. It incentivizes us to focus on quantity over quality. A static artifact creates the illusion of a finished product, which is not what science is about. It is about the process of discovery, not the end result. Even though we treat papers as if they were end results, they are really just interim results: the current version of knowledge. </span>
-<span id="cb2-46"><a href="#cb2-46"></a></span>
-<span id="cb2-47"><a href="#cb2-47"></a>Wait ... did I say *version*? Don't we have a well-established system for managing versions of digital knowledge artifacts? Yes, we do! It's called version control and it is the backbone of modern software development. It allows us to keep track of changes to a digital artifact over time, to collaborate with others on the same artifact, and to easily revert to previous versions if necessary. It is a powerful tool that has revolutionized the way we develop software.</span>
-<span id="cb2-48"><a href="#cb2-48"></a></span>
-<span id="cb2-49"><a href="#cb2-49"></a><span class="at">&gt; "Reward researchers for the quality of their total contributions to the scientific community, not for the number of first-author papers they publish."</span></span>
-<span id="cb2-50"><a href="#cb2-50"></a></span>
-<span id="cb2-51"><a href="#cb2-51"></a>If academia took the paradigm of continuous and transparent improvement seriously, it would treat research outputs like open-source software. It would use version control to keep track of changes to research outputs over time and create an environment that fosters open collaboration. It would not reward researchers for the number of first-author papers they publish but for the quality of their total contributions to the scientific community. Peer review would be a continuous process, not a one-off event. Peer review could come in many forms: from a simple comment on a GitHub issue to a full-blown pull request. </span>
-<span id="cb2-52"><a href="#cb2-52"></a></span>
-<span id="cb2-53"><a href="#cb2-53"></a>My dear colleagues and supervisors at TU Delft have recently published a <span class="co">[</span><span class="ot">position paper</span><span class="co">](https://ieeexplore.ieee.org/abstract/document/10173886)</span> that argues for exactly this approach <span class="co">[</span><span class="ot">@liem2023treat</span><span class="co">]</span>. It is a well-written and thought-provoking piece that I hope will inspire many to rethink the way we do science. Among the things @liem2023treat point out is that there are clear parallels between the state of free and open-source software (FOSS) today and the goals of the open science movement. The current state of FOSS is characterized by the following:</span>
-<span id="cb2-54"><a href="#cb2-54"></a></span>
-<span id="cb2-55"><a href="#cb2-55"></a><span class="at">&gt; "Where in terms of ownership, public open-source repositories may have an active team of maintainers and owners of an artifact, other people not in these groups are explicitly welcome to raise issues or feature requests if they see points for improvement, and implement and suggest contributions themselves, that the maintainers and owners may choose to incorporate." </span></span>
-<span id="cb2-56"><a href="#cb2-56"></a><span class="at">&gt; </span></span>
-<span id="cb2-57"><a href="#cb2-57"></a><span class="at">&gt; --- @liem2023treat</span></span>
-<span id="cb2-58"><a href="#cb2-58"></a></span>
-<span id="cb2-59"><a href="#cb2-59"></a>Which is exactly what we should be doing in science:</span>
-<span id="cb2-60"><a href="#cb2-60"></a></span>
-<span id="cb2-61"><a href="#cb2-61"></a><span class="at">&gt; "Similarly, in scientific insight, a core team may work on a particular project, but other researchers and interested parties may suggest changes or improvements that could be incorporated with visible provenance." </span></span>
-<span id="cb2-62"><a href="#cb2-62"></a><span class="at">&gt; </span></span>
-<span id="cb2-63"><a href="#cb2-63"></a><span class="at">&gt; --- @liem2023treat</span></span>
-<span id="cb2-64"><a href="#cb2-64"></a></span>
-<span id="cb2-65"><a href="#cb2-65"></a>To get to that point, it seems obvious that we need to stop treating static papers as our gold standard. We need to start treating our research outputs as what they really are: interim results of a continuous process of discovery. We need to start treating them like software.</span>
-<span id="cb2-66"><a href="#cb2-66"></a></span>
-<span id="cb2-67"><a href="#cb2-67"></a><span class="fu">## 🔆 Signs of a Brighter Future</span></span>
-<span id="cb2-68"><a href="#cb2-68"></a></span>
-<span id="cb2-69"><a href="#cb2-69"></a>This has been a bit of a rant so far and I'm not quite done yet. Some of you may be wondering what all the fuss is about. You may think that 'publishing through LaTeX and PDF is just what we do; it's a proven and reliable system; been there, done that; so why should we fix something that isn't broken?' You might personally prefer engaging with research that is printed out on paper and the LaTeX compiler log doesn't even scare you anymore. Perhaps all of this debate so far has simply been below your h-index. In that case, please don't feel like you have to stick around! But if you're still here reading this, then let me now show you some signs of a brave new world of scientific publishing that is already emerging.</span>
-<span id="cb2-70"><a href="#cb2-70"></a></span>
-<span id="cb2-71"><a href="#cb2-71"></a><span class="fu">### Quarto Journal Extensions</span></span>
-<span id="cb2-72"><a href="#cb2-72"></a></span>
-<span id="cb2-73"><a href="#cb2-73"></a><span class="co">[</span><span class="ot">Quarto journal extensions</span><span class="co">](https://quarto.org/docs/extensions/listing-journals.html)</span> are the first sign of a brighter future. They allow you to write your paper in Quarto and then render it to a PDF that complies with some journal's LaTeX template. This is a huge step forward because it allows you to focus on the content of your paper and not on the formatting. It also allows you to use the same document to render a PDF for submission to the journal and an HTML version for your website. This is a great way to make your work more accessible to the general public.</span>
-<span id="cb2-74"><a href="#cb2-74"></a></span>
-<span id="cb2-75"><a href="#cb2-75"></a>The current <span class="co">[</span><span class="ot">list</span><span class="co">](https://quarto.org/docs/extensions/listing-journals.html)</span> of available journal extensions is admittedly still short. But the list is growing, partially due to the immense efforts of the Quarto team, and partially due to the fact that it is relatively straightforward to create your own journal extension (another hat tip to the dev team). While not everyone has the time and resources to create their own journal extension for every venue they submit to, I encourage you to give it a try. The dev team is very responsive and will help you along the way. Future generations of researchers will thank you for it!</span>
-<span id="cb2-76"><a href="#cb2-76"></a></span>
-<span id="cb2-77"><a href="#cb2-77"></a><span class="fu">### Peer Review meets Version Control</span></span>
-<span id="cb2-78"><a href="#cb2-78"></a></span>
-<span id="cb2-79"><a href="#cb2-79"></a>Another sign of a brighter future is the emergence of publication processes that combine peer review with version control. The <span class="co">[</span><span class="ot">Journal of Open Source Software</span><span class="co">](https://joss.theoj.org/)</span> (JOSS) is a great example of this. JOSS is a free and open-access journal that publishes research software packages. It uses GitHub as its platform for peer review and version control. While I have personally never submitted to JOSS, I have submitted my work to <span class="co">[</span><span class="ot">JuliaCon Proceedings</span><span class="co">](https://proceedings.juliacon.org/)</span>, which follows a very similar process. This year, we published our first paper on <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)</span> <span class="co">[</span><span class="ot">@altmeyer2023explaining</span><span class="co">]</span>. The review process was refreshingly transparent and collaborative. I was able to engage with reviewers and editors directly on GitHub and paper revisions were automatically rerendered through a bot. Since most of us, especially in the computational sciences, are already using GitHub or GitLab for version control, this approach seems like a no-brainer to me and I am somewhat puzzled that it hasn't been adopted more widely yet.</span>
-<span id="cb2-80"><a href="#cb2-80"></a></span>
-<span id="cb2-81"><a href="#cb2-81"></a><span class="fu">## 🤗 Embracing Change</span></span>
-<span id="cb2-82"><a href="#cb2-82"></a></span>
-<span id="cb2-83"><a href="#cb2-83"></a>While the publication process for JuliaCon Proceedings is already ahead of the game, I think it can be improved even further. In particular, I think that it could benefit from embracing Quarto. The community as a whole has certainly heard of Quarto by now: in 2022, the CEO of <span class="co">[</span><span class="ot">posit</span><span class="co">](https://posit.co/)</span> himself, J.J. Allaire, gave a <span class="co">[</span><span class="ot">talk</span><span class="co">](https://www.youtube.com/watch?v=Y1uKNO32H_I)</span> at JuliaCon about Quarto; later that same year, yours truly gave a <span class="co">[</span><span class="ot">talk</span><span class="co">](../../../content/talks/posts/2022-julia-eindhoven/)</span> about using Quarto with Julia at Julia Eindhoven; other Julia developers like Ronny Bergmann have come up with clever <span class="co">[</span><span class="ot">ways</span><span class="co">](https://forem.julialang.org/kellertuer/render-quarto-tutorials-in-documenterjl-with-github-actions-3fo)</span> to combine Quarto with existing documentation tools like <span class="co">[</span><span class="ot">Documenter.jl</span><span class="co">](https://juliadocs.github.io/Documenter.jl/stable/)</span> through GitHub actions. To my mind, JuliaCon Proceedings is the perfect place to turn to next for Quarto adoption.</span>
-<span id="cb2-84"><a href="#cb2-84"></a></span>
-<span id="cb2-85"><a href="#cb2-85"></a><span class="fu">### Quarto for JuliaCon Proceedings: A Proposal</span></span>
-<span id="cb2-86"><a href="#cb2-86"></a></span>
-<span id="cb2-87"><a href="#cb2-87"></a>I have been working on just that: a Quarto journal extension for JuliaCon Proceedings that I would like to introduce in this blog post. The extension is called <span class="co">[</span><span class="ot">`quarto-juliacon-proceedings`</span><span class="co">](https://github.com/pat-alt/quarto-juliacon-proceedings)</span>. It is based on the existing <span class="co">[</span><span class="ot">JuliaCon Proceedings LaTeX template</span><span class="co">](https://github.com/JuliaCon/JuliaConSubmission.jl)</span> and will allow authors to write their JuliaCon Proceedings paper (and more!) in Quarto. </span>
-<span id="cb2-88"><a href="#cb2-88"></a></span>
-<span id="cb2-89"><a href="#cb2-89"></a>It is close to being finished but still needs some work.  The <span class="co">[</span><span class="ot">repo</span><span class="co">](https://github.com/pat-alt/quarto-juliacon-proceedings)</span> contains a Quarto version of our JuliaCon Proceedings paper *Explaining Black-Box Models through Counterfactuals* <span class="co">[</span><span class="ot">@altmeyer2023explaining</span><span class="co">]</span>. The rendered <span class="co">[</span><span class="ot">PDF</span><span class="co">](https://www.patalt.org/quarto-juliacon-proceedings/examples/CounterfactualExplanations.jl/paper.pdf)</span> serves as a comparison to the published <span class="co">[</span><span class="ot">version</span><span class="co">](https://juliacon.github.io/proceedings-papers/jcon.00130/10.21105.jcon.00130.pdf)</span> of the paper. The remaining differences in formatting need to be sorted out. If you notice any differences that we have not already listed, please open an issue. There is also an open <span class="co">[</span><span class="ot">issue</span><span class="co">](https://github.com/JuliaCon/JuliaConSubmission.jl/issues/36)</span> on <span class="in">`JuliaConSubmission.jl`</span> which you may use to share your thoughts on this proposal with the JuliaCon Proceedings team (or simply support this proposal by giving it a thumbs up).</span>
-<span id="cb2-90"><a href="#cb2-90"></a></span>
-<span id="cb2-91"><a href="#cb2-91"></a>::: {.callout-warning}</span>
-<span id="cb2-92"><a href="#cb2-92"></a></span>
-<span id="cb2-93"><a href="#cb2-93"></a>At the time of writing, this is a proof-of-concept for how we could use Quarto for JuliaCon proceedings. For current submissions, please follow the official instructions <span class="co">[</span><span class="ot">here</span><span class="co">](https://github.com/JuliaCon/JuliaConSubmission.jl)</span>. </span>
-<span id="cb2-94"><a href="#cb2-94"></a></span>
-<span id="cb2-95"><a href="#cb2-95"></a>:::</span>
-<span id="cb2-96"><a href="#cb2-96"></a></span>
-<span id="cb2-97"><a href="#cb2-97"></a>Provided we can eventually get this extension to be officially supported by the JuliaCon Proceedings team, I think it would be a great step forward for the Julia community. It would reduce the process of complying with the JuliaCon Proceedings LaTeX template to a single line of code:</span>
-<span id="cb2-98"><a href="#cb2-98"></a></span>
-<span id="cb2-99"><a href="#cb2-99"></a><span class="in">```</span></span>
-<span id="cb2-100"><a href="#cb2-100"></a><span class="in">quarto use template pat-alt/quarto-juliacon-proceedings</span></span>
-<span id="cb2-101"><a href="#cb2-101"></a><span class="in">```</span></span>
-<span id="cb2-102"><a href="#cb2-102"></a></span>
-<span id="cb2-103"><a href="#cb2-103"></a>Simply run this command and start writing your paper in Quarto. The extension will take care of the rest. </span>
-<span id="cb2-104"><a href="#cb2-104"></a></span>
-<span id="cb2-105"><a href="#cb2-105"></a>Beyond making life easier for authors, I think that this extension would also be a great opportunity for the JuliaCon Proceedings team to rethink the way we publish JuliaCon Proceedings papers. I'll finish this post by brainstorming some ideas for how we could improve the current process even further by embracing Quarto.</span>
-<span id="cb2-106"><a href="#cb2-106"></a></span>
-<span id="cb2-107"><a href="#cb2-107"></a><span class="fu">#### Continuous Peer Review</span></span>
-<span id="cb2-108"><a href="#cb2-108"></a></span>
-<span id="cb2-109"><a href="#cb2-109"></a>The current process is still very much based on the old-fashioned, print-based approach to scientific publishing. Once the paper is published, that's that. This approach is at odds with the way developers treat the software they write about in their papers. Software is continuously updated and improved and aspects discussed in a paper may become outdated over time. I could imagine a world where the JuliaCon Proceedings paper is automatically updated and tagged whenever a new version of the package is released, just like the documentation. Standard code review processes that involve the community as a whole would then act as a form of continuous peer review.</span>
-<span id="cb2-110"><a href="#cb2-110"></a></span>
-<span id="cb2-111"><a href="#cb2-111"></a><span class="fu">#### Dynamic and Interactive Content</span></span>
-<span id="cb2-112"><a href="#cb2-112"></a></span>
-<span id="cb2-113"><a href="#cb2-113"></a>Of course, Quarto adds a whole new dimension to the way we can communicate our work. Since the same Quarto document that is used to render the static PDF can also be used to generate HTML, we can now include animated and interactive content in our papers. Many developers already use thoughtful and illustrative animations in their package documentation. It seems like a lost opportunity to not feature these in the most condensed and public-facing output (the proceedings paper). Further down the road, I could even imagine a world where Quarto integrates seamlessly with <span class="co">[</span><span class="ot">Pluto.jl</span><span class="co">](https://github.com/fonsp/Pluto.jl)</span>---both Quarto documents and Pluto notebooks are essentially just code blended with Markdown---to allow for fully interactive versions of our papers.</span>
-<span id="cb2-114"><a href="#cb2-114"></a></span>
-<span id="cb2-115"><a href="#cb2-115"></a><span class="fu">#### Synergies between Docs and Papers</span></span>
-<span id="cb2-116"><a href="#cb2-116"></a></span>
-<span id="cb2-117"><a href="#cb2-117"></a>Finally, using Quarto for package documentation and JuliaCon Proceedings papers would allow us to create synergies between the two. Developers typically spend a lot of time carefully crafting their package documentation. Independent of whether or not they use Quarto to this end, the Markdown-based documentation files are already a great starting point for a JuliaCon Proceedings paper. Quarto makes it easier than LaTeX to recycle that content and turn it into a paper, since any Markdown file can be seamlessly converted to a Quarto document.</span>
-<span id="cb2-118"><a href="#cb2-118"></a></span>
-<span id="cb2-119"><a href="#cb2-119"></a><span class="fu">## 🌯 Wrap Up</span></span>
-<span id="cb2-120"><a href="#cb2-120"></a></span>
-<span id="cb2-121"><a href="#cb2-121"></a>I hope that this post has given you some food for thought. I am aware that some of the ideas I have presented here are quite radical and that it will take time for the academic community to embrace them. I am also aware that there are many other aspects of the scientific publishing process that need to be rethought. But the tools I highlight in this post are freely accessible to us. We just need to start using them.</span>
-<span id="cb2-122"><a href="#cb2-122"></a></span>
-<span id="cb2-123"><a href="#cb2-123"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="co">---</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a><span class="an">title:</span><span class="co"> 'Stuck in the Past'</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a><span class="an">subtitle:</span><span class="co"> 'Why we should treat research like software and how Quarto can help'</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a><span class="an">date:</span><span class="co"> '2023-11-25'</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-label="5"></a><span class="an">categories:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-label="6"></a><span class="co">  - scientific publishing</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-label="7"></a><span class="co">  - Quarto</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-label="8"></a><span class="co">  - Julia</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-label="9"></a><span class="an">description:</span><span class="co"> &gt;-</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-label="10"></a><span class="co">  An opinionated post on outdated publication and peer review practices, as well as modern solutions. It introduces a Quarto extension for JuliaCon Proceedings that I have been working on. </span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-label="11"></a><span class="an">bibliography:</span><span class="co"> https://raw.githubusercontent.com/pat-alt/bib/main/bib.bib</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-label="12"></a><span class="an">image:</span><span class="co"> www/intro.jpeg</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-label="13"></a><span class="an">engine:</span><span class="co"> julia</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-label="14"></a><span class="an">execute:</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-label="15"></a><span class="co">    echo: false</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-label="16"></a><span class="co">    eval: false</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-label="17"></a><span class="co">---</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-label="18"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-label="19"></a><span class="in">```{julia}</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-label="20"></a>www_path <span class="op">=</span> <span class="st">"blog/posts/quarto-juliacon-proceedings/www"</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-label="21"></a><span class="in">```</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-label="22"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-label="23"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"intro-gif"</span><span class="dt">&gt;</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-label="24"></a>  <span class="dt">&lt;</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-label="25"></a>    <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"www/intro.jpeg"</span><span class="dt">&gt;</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-label="26"></a>    <span class="dt">&lt;</span><span class="kw">figcaption</span><span class="dt">&gt;</span>Photo by <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://unsplash.com/@svalenas?utm_content=creditCopyText</span><span class="er">&amp;</span><span class="st">utm_medium=referral</span><span class="er">&amp;</span><span class="st">utm_source=unsplash"</span><span class="dt">&gt;</span>Sergiu Vălenaș<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span> on <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://unsplash.com/photos/person-reading-book-_Drvb_c_72Y?utm_content=creditCopyText</span><span class="er">&amp;</span><span class="st">utm_medium=referral</span><span class="er">&amp;</span><span class="st">utm_source=unsplash"</span><span class="dt">&gt;</span>Unsplash<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-label="27"></a>  <span class="dt">&lt;/</span><span class="kw">figcaption</span><span class="dt">&gt;</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-label="28"></a>  <span class="dt">&lt;/</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-label="29"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-label="30"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-label="31"></a>I'm officially a third-year PhD student folks! One of my favorite aspects of being a PhD is freedom: the freedom to explore, the freedom to learn, the freedom to create, and, last but not least, the freedom to choose the tools I want to use along the way. On this blog, I have repeatedly advocated for <span class="co">[</span><span class="ot">Quarto</span><span class="co">](https://quarto.org)</span>, my preferred tool for scientific publishing: it is open-source, straightforward to use, backed by an incredibly strong and responsive development team, works well with Julia---see my previous posts <span class="co">[</span><span class="ot">here</span><span class="co">](../julia-and-quarto-a-match-made-in-heaven/index.qmd)</span> and <span class="co">[</span><span class="ot">here</span><span class="co">](../tips-and-tricks-for-using-quarto-with-julia/index.qmd)</span>---and is highly customizable---see my <span class="co">[</span><span class="ot">post</span><span class="co">](../quarto-extensions/index.qmd)</span> on extensions.</span>
+<span id="cb2-34"><a href="#cb2-34" aria-label="32"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-label="33"></a>One of my least favorite aspects of being a PhD is the old-fashioned way of publishing scientific papers. Having to deal with clunky LaTeX templates when all I want to do is write up my research is the bane of my existence. It makes me dread the writing process because I know that every time I'm forced to peek inside the LaTeX compiler log, my eyes will bleed. It shouldn't be this way! I want to be able to look forward to writing. It should be the part where you finally get to reap the rewards for the hard work you put into your project. A creative process that allows you to communicate your findings in an engaging manner. Ideas should just be allowed to flow out freely, uninterrupted by frustration about formatting issues. </span>
+<span id="cb2-36"><a href="#cb2-36" aria-label="34"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-label="35"></a>This frustration is amplified by the fact that I'm so painfully aware of the fact that there are better ways to do this. We have the technology to make the process of scientific publishing so much more enjoyable, efficient, engaging, accessible and reproducible. We also generally seem to agree that science can be much more effectively communicated through modern-day forms of media that involve animated or even interactive content. But for some reason, the academic community still insists on good old-fashioned PDFs as its gold standard for scientific publishing and communication, often enough locked behind paywalls. No wonder that the general public feels disconnected from academia. </span>
+<span id="cb2-38"><a href="#cb2-38" aria-label="36"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-label="37"></a><span class="fu">## 📜 Legacy Systems</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-label="38"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-label="39"></a>Scientists pride themselves in the fact that they are continuously pushing the boundaries of human knowledge, overturning old theories and replacing them with new ones. No idea is ever too good to be challenged. The better the idea, the more challenge it is likely going to attract. The scientific method, in its ideal form, is a transparent process of continuous refinement and creative destruction. And yet we treat our main scientific output, the research paper, as a static artifact: write it up, have it peer-reviewed, publish it, pad yourself on the back---your work is now set in stone, the stamp of approval has been obtained, move on to the next one! </span>
+<span id="cb2-42"><a href="#cb2-42" aria-label="40"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-label="41"></a><span class="at">&gt; "Treating research outputs as static artifacts is fundamentally at odds with the dynamic nature of science."</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-label="42"></a></span>
+<span id="cb2-45"><a href="#cb2-45" aria-label="43"></a>I have a real issue with this approach and think that treating research outputs as static artifacts is fundamentally at odds with the dynamic nature of science. It incentivizes us to focus on quantity over quality. A static artifact creates the illusion of a finished product, which is not what science is about. It is about the process of discovery, not the end result. Even though we treat papers as if they were end results, they are really just interim results: the current version of knowledge. </span>
+<span id="cb2-46"><a href="#cb2-46" aria-label="44"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-label="45"></a>Wait ... did I say *version*? Don't we have a well-established system for managing versions of digital knowledge artifacts? Yes, we do! It's called version control and it is the backbone of modern software development. It allows us to keep track of changes to a digital artifact over time, to collaborate with others on the same artifact, and to easily revert to previous versions if necessary. It is a powerful tool that has revolutionized the way we develop software.</span>
+<span id="cb2-48"><a href="#cb2-48" aria-label="46"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-label="47"></a><span class="at">&gt; "Reward researchers for the quality of their total contributions to the scientific community, not for the number of first-author papers they publish."</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-label="48"></a></span>
+<span id="cb2-51"><a href="#cb2-51" aria-label="49"></a>If academia took the paradigm of continuous and transparent improvement seriously, it would treat research outputs like open-source software. It would use version control to keep track of changes to research outputs over time and create an environment that fosters open collaboration. It would not reward researchers for the number of first-author papers they publish but for the quality of their total contributions to the scientific community. Peer review would be a continuous process, not a one-off event. Peer review could come in many forms: from a simple comment on a GitHub issue to a full-blown pull request. </span>
+<span id="cb2-52"><a href="#cb2-52" aria-label="50"></a></span>
+<span id="cb2-53"><a href="#cb2-53" aria-label="51"></a>My dear colleagues and supervisors at TU Delft have recently published a <span class="co">[</span><span class="ot">position paper</span><span class="co">](https://ieeexplore.ieee.org/abstract/document/10173886)</span> that argues for exactly this approach <span class="co">[</span><span class="ot">@liem2023treat</span><span class="co">]</span>. It is a well-written and thought-provoking piece that I hope will inspire many to rethink the way we do science. Among the things @liem2023treat point out is that there are clear parallels between the state of free and open-source software (FOSS) today and the goals of the open science movement. The current state of FOSS is characterized by the following:</span>
+<span id="cb2-54"><a href="#cb2-54" aria-label="52"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-label="53"></a><span class="at">&gt; "Where in terms of ownership, public open-source repositories may have an active team of maintainers and owners of an artifact, other people not in these groups are explicitly welcome to raise issues or feature requests if they see points for improvement, and implement and suggest contributions themselves, that the maintainers and owners may choose to incorporate." </span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-label="54"></a><span class="at">&gt; </span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-label="55"></a><span class="at">&gt; --- @liem2023treat</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-label="56"></a></span>
+<span id="cb2-59"><a href="#cb2-59" aria-label="57"></a>Which is exactly what we should be doing in science:</span>
+<span id="cb2-60"><a href="#cb2-60" aria-label="58"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-label="59"></a><span class="at">&gt; "Similarly, in scientific insight, a core team may work on a particular project, but other researchers and interested parties may suggest changes or improvements that could be incorporated with visible provenance." </span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-label="60"></a><span class="at">&gt; </span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-label="61"></a><span class="at">&gt; --- @liem2023treat</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-label="62"></a></span>
+<span id="cb2-65"><a href="#cb2-65" aria-label="63"></a>To get to that point, it seems obvious that we need to stop treating static papers as our gold standard. We need to start treating our research outputs as what they really are: interim results of a continuous process of discovery. We need to start treating them like software.</span>
+<span id="cb2-66"><a href="#cb2-66" aria-label="64"></a></span>
+<span id="cb2-67"><a href="#cb2-67" aria-label="65"></a><span class="fu">## 🔆 Signs of a Brighter Future</span></span>
+<span id="cb2-68"><a href="#cb2-68" aria-label="66"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-label="67"></a>This has been a bit of a rant so far and I'm not quite done yet. Some of you may be wondering what all the fuss is about. You may think that 'publishing through LaTeX and PDF is just what we do; it's a proven and reliable system; been there, done that; so why should we fix something that isn't broken?' You might personally prefer engaging with research that is printed out on paper and the LaTeX compiler log doesn't even scare you anymore. Perhaps all of this debate so far has simply been below your h-index. In that case, please don't feel like you have to stick around! But if you're still here reading this, then let me now show you some signs of a brave new world of scientific publishing that is already emerging.</span>
+<span id="cb2-70"><a href="#cb2-70" aria-label="68"></a></span>
+<span id="cb2-71"><a href="#cb2-71" aria-label="69"></a><span class="fu">### Quarto Journal Extensions</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-label="70"></a></span>
+<span id="cb2-73"><a href="#cb2-73" aria-label="71"></a><span class="co">[</span><span class="ot">Quarto journal extensions</span><span class="co">](https://quarto.org/docs/extensions/listing-journals.html)</span> are the first sign of a brighter future. They allow you to write your paper in Quarto and then render it to a PDF that complies with some journal's LaTeX template. This is a huge step forward because it allows you to focus on the content of your paper and not on the formatting. It also allows you to use the same document to render a PDF for submission to the journal and an HTML version for your website. This is a great way to make your work more accessible to the general public.</span>
+<span id="cb2-74"><a href="#cb2-74" aria-label="72"></a></span>
+<span id="cb2-75"><a href="#cb2-75" aria-label="73"></a>The current <span class="co">[</span><span class="ot">list</span><span class="co">](https://quarto.org/docs/extensions/listing-journals.html)</span> of available journal extensions is admittedly still short. But the list is growing, partially due to the immense efforts of the Quarto team, and partially due to the fact that it is relatively straightforward to create your own journal extension (another hat tip to the dev team). While not everyone has the time and resources to create their own journal extension for every venue they submit to, I encourage you to give it a try. The dev team is very responsive and will help you along the way. Future generations of researchers will thank you for it!</span>
+<span id="cb2-76"><a href="#cb2-76" aria-label="74"></a></span>
+<span id="cb2-77"><a href="#cb2-77" aria-label="75"></a><span class="fu">### Peer Review meets Version Control</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-label="76"></a></span>
+<span id="cb2-79"><a href="#cb2-79" aria-label="77"></a>Another sign of a brighter future is the emergence of publication processes that combine peer review with version control. The <span class="co">[</span><span class="ot">Journal of Open Source Software</span><span class="co">](https://joss.theoj.org/)</span> (JOSS) is a great example of this. JOSS is a free and open-access journal that publishes research software packages. It uses GitHub as its platform for peer review and version control. While I have personally never submitted to JOSS, I have submitted my work to <span class="co">[</span><span class="ot">JuliaCon Proceedings</span><span class="co">](https://proceedings.juliacon.org/)</span>, which follows a very similar process. This year, we published our first paper on <span class="co">[</span><span class="ot">`CounterfactualExplanations.jl`</span><span class="co">](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl)</span> <span class="co">[</span><span class="ot">@altmeyer2023explaining</span><span class="co">]</span>. The review process was refreshingly transparent and collaborative. I was able to engage with reviewers and editors directly on GitHub and paper revisions were automatically rerendered through a bot. Since most of us, especially in the computational sciences, are already using GitHub or GitLab for version control, this approach seems like a no-brainer to me and I am somewhat puzzled that it hasn't been adopted more widely yet.</span>
+<span id="cb2-80"><a href="#cb2-80" aria-label="78"></a></span>
+<span id="cb2-81"><a href="#cb2-81" aria-label="79"></a><span class="fu">## 🤗 Embracing Change</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-label="80"></a></span>
+<span id="cb2-83"><a href="#cb2-83" aria-label="81"></a>While the publication process for JuliaCon Proceedings is already ahead of the game, I think it can be improved even further. In particular, I think that it could benefit from embracing Quarto. The community as a whole has certainly heard of Quarto by now: in 2022, the CEO of <span class="co">[</span><span class="ot">posit</span><span class="co">](https://posit.co/)</span> himself, J.J. Allaire, gave a <span class="co">[</span><span class="ot">talk</span><span class="co">](https://www.youtube.com/watch?v=Y1uKNO32H_I)</span> at JuliaCon about Quarto; later that same year, yours truly gave a <span class="co">[</span><span class="ot">talk</span><span class="co">](../../../content/talks/posts/2022-julia-eindhoven/)</span> about using Quarto with Julia at Julia Eindhoven; other Julia developers like Ronny Bergmann have come up with clever <span class="co">[</span><span class="ot">ways</span><span class="co">](https://forem.julialang.org/kellertuer/render-quarto-tutorials-in-documenterjl-with-github-actions-3fo)</span> to combine Quarto with existing documentation tools like <span class="co">[</span><span class="ot">Documenter.jl</span><span class="co">](https://juliadocs.github.io/Documenter.jl/stable/)</span> through GitHub actions. To my mind, JuliaCon Proceedings is the perfect place to turn to next for Quarto adoption.</span>
+<span id="cb2-84"><a href="#cb2-84" aria-label="82"></a></span>
+<span id="cb2-85"><a href="#cb2-85" aria-label="83"></a><span class="fu">### Quarto for JuliaCon Proceedings: A Proposal</span></span>
+<span id="cb2-86"><a href="#cb2-86" aria-label="84"></a></span>
+<span id="cb2-87"><a href="#cb2-87" aria-label="85"></a>I have been working on just that: a Quarto journal extension for JuliaCon Proceedings that I would like to introduce in this blog post. The extension is called <span class="co">[</span><span class="ot">`quarto-juliacon-proceedings`</span><span class="co">](https://github.com/pat-alt/quarto-juliacon-proceedings)</span>. It is based on the existing <span class="co">[</span><span class="ot">JuliaCon Proceedings LaTeX template</span><span class="co">](https://github.com/JuliaCon/JuliaConSubmission.jl)</span> and will allow authors to write their JuliaCon Proceedings paper (and more!) in Quarto. </span>
+<span id="cb2-88"><a href="#cb2-88" aria-label="86"></a></span>
+<span id="cb2-89"><a href="#cb2-89" aria-label="87"></a>It is close to being finished but still needs some work.  The <span class="co">[</span><span class="ot">repo</span><span class="co">](https://github.com/pat-alt/quarto-juliacon-proceedings)</span> contains a Quarto version of our JuliaCon Proceedings paper *Explaining Black-Box Models through Counterfactuals* <span class="co">[</span><span class="ot">@altmeyer2023explaining</span><span class="co">]</span>. The rendered <span class="co">[</span><span class="ot">PDF</span><span class="co">](https://www.patalt.org/quarto-juliacon-proceedings/examples/CounterfactualExplanations.jl/paper.pdf)</span> serves as a comparison to the published <span class="co">[</span><span class="ot">version</span><span class="co">](https://juliacon.github.io/proceedings-papers/jcon.00130/10.21105.jcon.00130.pdf)</span> of the paper. The remaining differences in formatting need to be sorted out. If you notice any differences that we have not already listed, please open an issue. There is also an open <span class="co">[</span><span class="ot">issue</span><span class="co">](https://github.com/JuliaCon/JuliaConSubmission.jl/issues/36)</span> on <span class="in">`JuliaConSubmission.jl`</span> which you may use to share your thoughts on this proposal with the JuliaCon Proceedings team (or simply support this proposal by giving it a thumbs up).</span>
+<span id="cb2-90"><a href="#cb2-90" aria-label="88"></a></span>
+<span id="cb2-91"><a href="#cb2-91" aria-label="89"></a>::: {.callout-warning}</span>
+<span id="cb2-92"><a href="#cb2-92" aria-label="90"></a></span>
+<span id="cb2-93"><a href="#cb2-93" aria-label="91"></a>At the time of writing, this is a proof-of-concept for how we could use Quarto for JuliaCon proceedings. For current submissions, please follow the official instructions <span class="co">[</span><span class="ot">here</span><span class="co">](https://github.com/JuliaCon/JuliaConSubmission.jl)</span>. </span>
+<span id="cb2-94"><a href="#cb2-94" aria-label="92"></a></span>
+<span id="cb2-95"><a href="#cb2-95" aria-label="93"></a>:::</span>
+<span id="cb2-96"><a href="#cb2-96" aria-label="94"></a></span>
+<span id="cb2-97"><a href="#cb2-97" aria-label="95"></a>Provided we can eventually get this extension to be officially supported by the JuliaCon Proceedings team, I think it would be a great step forward for the Julia community. It would reduce the process of complying with the JuliaCon Proceedings LaTeX template to a single line of code:</span>
+<span id="cb2-98"><a href="#cb2-98" aria-label="96"></a></span>
+<span id="cb2-99"><a href="#cb2-99" aria-label="97"></a><span class="in">```</span></span>
+<span id="cb2-100"><a href="#cb2-100" aria-label="98"></a><span class="in">quarto use template pat-alt/quarto-juliacon-proceedings</span></span>
+<span id="cb2-101"><a href="#cb2-101" aria-label="99"></a><span class="in">```</span></span>
+<span id="cb2-102"><a href="#cb2-102" aria-label="100"></a></span>
+<span id="cb2-103"><a href="#cb2-103" aria-label="101"></a>Simply run this command and start writing your paper in Quarto. The extension will take care of the rest. </span>
+<span id="cb2-104"><a href="#cb2-104" aria-label="102"></a></span>
+<span id="cb2-105"><a href="#cb2-105" aria-label="103"></a>Beyond making life easier for authors, I think that this extension would also be a great opportunity for the JuliaCon Proceedings team to rethink the way we publish JuliaCon Proceedings papers. I'll finish this post by brainstorming some ideas for how we could improve the current process even further by embracing Quarto.</span>
+<span id="cb2-106"><a href="#cb2-106" aria-label="104"></a></span>
+<span id="cb2-107"><a href="#cb2-107" aria-label="105"></a><span class="fu">#### Continuous Peer Review</span></span>
+<span id="cb2-108"><a href="#cb2-108" aria-label="106"></a></span>
+<span id="cb2-109"><a href="#cb2-109" aria-label="107"></a>The current process is still very much based on the old-fashioned, print-based approach to scientific publishing. Once the paper is published, that's that. This approach is at odds with the way developers treat the software they write about in their papers. Software is continuously updated and improved and aspects discussed in a paper may become outdated over time. I could imagine a world where the JuliaCon Proceedings paper is automatically updated and tagged whenever a new version of the package is released, just like the documentation. Standard code review processes that involve the community as a whole would then act as a form of continuous peer review.</span>
+<span id="cb2-110"><a href="#cb2-110" aria-label="108"></a></span>
+<span id="cb2-111"><a href="#cb2-111" aria-label="109"></a><span class="fu">#### Dynamic and Interactive Content</span></span>
+<span id="cb2-112"><a href="#cb2-112" aria-label="110"></a></span>
+<span id="cb2-113"><a href="#cb2-113" aria-label="111"></a>Of course, Quarto adds a whole new dimension to the way we can communicate our work. Since the same Quarto document that is used to render the static PDF can also be used to generate HTML, we can now include animated and interactive content in our papers. Many developers already use thoughtful and illustrative animations in their package documentation. It seems like a lost opportunity to not feature these in the most condensed and public-facing output (the proceedings paper). Further down the road, I could even imagine a world where Quarto integrates seamlessly with <span class="co">[</span><span class="ot">Pluto.jl</span><span class="co">](https://github.com/fonsp/Pluto.jl)</span>---both Quarto documents and Pluto notebooks are essentially just code blended with Markdown---to allow for fully interactive versions of our papers.</span>
+<span id="cb2-114"><a href="#cb2-114" aria-label="112"></a></span>
+<span id="cb2-115"><a href="#cb2-115" aria-label="113"></a><span class="fu">#### Synergies between Docs and Papers</span></span>
+<span id="cb2-116"><a href="#cb2-116" aria-label="114"></a></span>
+<span id="cb2-117"><a href="#cb2-117" aria-label="115"></a>Finally, using Quarto for package documentation and JuliaCon Proceedings papers would allow us to create synergies between the two. Developers typically spend a lot of time carefully crafting their package documentation. Independent of whether or not they use Quarto to this end, the Markdown-based documentation files are already a great starting point for a JuliaCon Proceedings paper. Quarto makes it easier than LaTeX to recycle that content and turn it into a paper, since any Markdown file can be seamlessly converted to a Quarto document.</span>
+<span id="cb2-118"><a href="#cb2-118" aria-label="116"></a></span>
+<span id="cb2-119"><a href="#cb2-119" aria-label="117"></a><span class="fu">## 🌯 Wrap Up</span></span>
+<span id="cb2-120"><a href="#cb2-120" aria-label="118"></a></span>
+<span id="cb2-121"><a href="#cb2-121" aria-label="119"></a>I hope that this post has given you some food for thought. I am aware that some of the ideas I have presented here are quite radical and that it will take time for the academic community to embrace them. I am also aware that there are many other aspects of the scientific publishing process that need to be rethought. But the tools I highlight in this post are freely accessible to us. We just need to start using them.</span>
+<span id="cb2-122"><a href="#cb2-122" aria-label="120"></a></span>
+<span id="cb2-123"><a href="#cb2-123" aria-label="121"></a></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

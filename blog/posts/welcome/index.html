@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -15,10 +15,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -78,10 +81,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-9fe32f1efd3852944c692557c35150af.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-99722ed381e55161af4af92c72cc4ead.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-a22e541bc2961f232db2c72777d3356c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-0669d511aa4c43eb9be99bb15ed50570.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -387,16 +390,16 @@ February 1. <a href="https://www.patalt.org/blog/posts/welcome/">https://www.pat
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {
@@ -748,31 +751,31 @@ February 1. <a href="https://www.patalt.org/blog/posts/welcome/">https://www.pat
   </script>
 <script src="https://utteranc.es/client.js" repo="pat-alt/pat-alt.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="an">title:</span><span class="co"> Welcome</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="an">author:</span><span class="co"> Patrick Altmeyer</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="an">date:</span><span class="co"> '2021-02-01'</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="an">description:</span><span class="co"> &gt;-</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="co">  The obligatory welcome post and a shout-out to Yihui Xie and the folks behind quarto.</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co">---</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a></span>
-<span id="cb1-9"><a href="#cb1-9"></a>Welcome to my blog! </span>
-<span id="cb1-10"><a href="#cb1-10"></a></span>
-<span id="cb1-11"><a href="#cb1-11"></a>Having worked with R Markdown and some of <span class="co">[</span><span class="ot">Yihui Xie</span><span class="co">](https://yihui.org/)</span>'s amazing packages for years, I have only now come across his <span class="co">[</span><span class="ot">blogdown</span><span class="co">](https://bookdown.org/yihui/blogdown/)</span> package. For a while I have been thinking about a good way to share some of my work and actually started collecting snippets in a <span class="co">[</span><span class="ot">Gitbook</span><span class="co">](https://pat-alt.github.io/fromScratch/)</span> through <span class="co">[</span><span class="ot">bookdown</span><span class="co">](https://bookdown.org/yihui/bookdown/)</span> quite some time ago. While the book is a work-in-progress that I aim to finish eventually, I will use this website to regularly share content related to my work, research and other things. </span>
-<span id="cb1-12"><a href="#cb1-12"></a></span>
-<span id="cb1-13"><a href="#cb1-13"></a>:::{.callout-note}</span>
-<span id="cb1-14"><a href="#cb1-14"></a></span>
-<span id="cb1-15"><a href="#cb1-15"></a>**Update on Feb 20, 2022**</span>
-<span id="cb1-16"><a href="#cb1-16"></a></span>
-<span id="cb1-17"><a href="#cb1-17"></a>I have recently migrated this blog and pretty much everything else I do to <span class="co">[</span><span class="ot">quarto</span><span class="co">](https://quarto.org/)</span>. </span>
-<span id="cb1-18"><a href="#cb1-18"></a></span>
-<span id="cb1-19"><a href="#cb1-19"></a><span class="at">&gt; Quarto® is an open-source scientific and technical publishing system built on Pandoc.</span></span>
-<span id="cb1-20"><a href="#cb1-20"></a></span>
-<span id="cb1-21"><a href="#cb1-21"></a>Based on my first few experiences I would go further and say that quarto is *the only* open-source scientific and technical publishing system you'll ever need. The project is supported by RStudio and (unsurprisingly) Yihui Xie is one of the contributors. Go check it out!</span>
-<span id="cb1-22"><a href="#cb1-22"></a>:::</span>
-<span id="cb1-23"><a href="#cb1-23"></a></span>
-<span id="cb1-24"><a href="#cb1-24"></a></span>
-<span id="cb1-25"><a href="#cb1-25"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a><span class="an">title:</span><span class="co"> Welcome</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a><span class="an">author:</span><span class="co"> Patrick Altmeyer</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a><span class="an">date:</span><span class="co"> '2021-02-01'</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a><span class="an">description:</span><span class="co"> &gt;-</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-label="6"></a><span class="co">  The obligatory welcome post and a shout-out to Yihui Xie and the folks behind quarto.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-label="7"></a><span class="co">---</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-label="8"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-label="9"></a>Welcome to my blog! </span>
+<span id="cb1-10"><a href="#cb1-10" aria-label="10"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-label="11"></a>Having worked with R Markdown and some of <span class="co">[</span><span class="ot">Yihui Xie</span><span class="co">](https://yihui.org/)</span>'s amazing packages for years, I have only now come across his <span class="co">[</span><span class="ot">blogdown</span><span class="co">](https://bookdown.org/yihui/blogdown/)</span> package. For a while I have been thinking about a good way to share some of my work and actually started collecting snippets in a <span class="co">[</span><span class="ot">Gitbook</span><span class="co">](https://pat-alt.github.io/fromScratch/)</span> through <span class="co">[</span><span class="ot">bookdown</span><span class="co">](https://bookdown.org/yihui/bookdown/)</span> quite some time ago. While the book is a work-in-progress that I aim to finish eventually, I will use this website to regularly share content related to my work, research and other things. </span>
+<span id="cb1-12"><a href="#cb1-12" aria-label="12"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-label="13"></a>:::{.callout-note}</span>
+<span id="cb1-14"><a href="#cb1-14" aria-label="14"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-label="15"></a>**Update on Feb 20, 2022**</span>
+<span id="cb1-16"><a href="#cb1-16" aria-label="16"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-label="17"></a>I have recently migrated this blog and pretty much everything else I do to <span class="co">[</span><span class="ot">quarto</span><span class="co">](https://quarto.org/)</span>. </span>
+<span id="cb1-18"><a href="#cb1-18" aria-label="18"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-label="19"></a><span class="at">&gt; Quarto® is an open-source scientific and technical publishing system built on Pandoc.</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-label="20"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-label="21"></a>Based on my first few experiences I would go further and say that quarto is *the only* open-source scientific and technical publishing system you'll ever need. The project is supported by RStudio and (unsurprisingly) Yihui Xie is one of the contributors. Go check it out!</span>
+<span id="cb1-22"><a href="#cb1-22" aria-label="22"></a>:::</span>
+<span id="cb1-23"><a href="#cb1-23" aria-label="23"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-label="24"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-label="25"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

@@ -70,6 +70,20 @@
     "text": "Poster\nYou can find the poster below or click here to open it in full screen."
   },
   {
+    "objectID": "content/talks/posts/2026-jcon/index.html",
+    "href": "content/talks/posts/2026-jcon/index.html",
+    "title": "CounterfactualTraining.jl: Teaching Models Plausible and Actionable Explanations",
+    "section": "",
+    "text": "You can find the slides below or click here to open them in full screen.\nFor more information about the paper see also here or the preprint of the paper itself."
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/index.html#slides",
+    "href": "content/talks/posts/2026-jcon/index.html#slides",
+    "title": "CounterfactualTraining.jl: Teaching Models Plausible and Actionable Explanations",
+    "section": "",
+    "text": "You can find the slides below or click here to open them in full screen.\nFor more information about the paper see also here or the preprint of the paper itself."
+  },
+  {
     "objectID": "content/talks/posts/2026-hbk/index.html",
     "href": "content/talks/posts/2026-hbk/index.html",
     "title": "Counterfactual Explanations and Algorithmic Recourse for Trustworthy AI",
@@ -340,7 +354,7 @@
     "href": "content/talks/posts/2023-ieee-satml/long_presentation.html#algorithmic-recourse",
     "title": "Endogenous Macrodynamics in Algorithmic Recourse",
     "section": "Algorithmic Recourse",
-    "text": "Algorithmic Recourse\n\nEven though […] interpretability is of great importance and should be pursued, explanations can, in principle, be offered without opening the “black box”. (Wachter et al. 2017)\n\n\n\nFramework\n. . .\nObjective originally proposed by Wachter et al. (2017) is as follows\n\\[\n\\min_{x^\\prime \\in \\mathcal{X}} \\text{cost}(x^\\prime) \\ \\ \\ \\mbox{s. t.} \\ \\ \\ M(x^\\prime) = y^*\n\\tag{1}\\]\nTypically this is approximated through regularization:\n\\[\nx^\\prime = \\arg \\min_{x^\\prime}  \\text{yloss}(M(x^\\prime),y^*) + \\lambda \\text{cost}(x^\\prime)\n\\tag{2}\\]\n\nIntuition\n. . .\n\n\n\n\n\n\nFigure 2: Counterfactuals for Give Me Some Credit dataset (Kaggle 2011)."
+    "text": "Algorithmic Recourse\n\nEven though […] interpretability is of great importance and should be pursued, explanations can, in principle, be offered without opening the “black box”. (Wachter et al. 2017)\n\n\n\nFramework\n\nObjective originally proposed by Wachter et al. (2017) is as follows\n\\[\n\\min_{x^\\prime \\in \\mathcal{X}} \\text{cost}(x^\\prime) \\ \\ \\ \\mbox{s. t.} \\ \\ \\ M(x^\\prime) = y^*\n\\tag{1}\\]\nTypically this is approximated through regularization:\n\\[\nx^\\prime = \\arg \\min_{x^\\prime}  \\text{yloss}(M(x^\\prime),y^*) + \\lambda \\text{cost}(x^\\prime)\n\\tag{2}\\]\n\n\nIntuition\n\n\n\n\n\n\n\nFigure 2: Counterfactuals for Give Me Some Credit dataset (Kaggle 2011)."
   },
   {
     "objectID": "content/talks/posts/2023-ieee-satml/long_presentation.html#method-general",
@@ -403,7 +417,7 @@
     "href": "content/talks/posts/2023-ieee-satml/long_presentation.html#limitations",
     "title": "Endogenous Macrodynamics in Algorithmic Recourse",
     "section": "Limitations",
-    "text": "Limitations\n\nPrivate vs. External Costs\n\nWe fall short of providing any definitive answers as to how to trade off private vs. external costs.\nProposed strategies are a good starting point, but they are ad-hoc.\n\n. . .\nExperimental Setup\n\nExperimental design is a vast over-simplification of potential real-world scenarios.\n\n. . .\nCausal Modelling\n\nHave focused on popular counterfactual generators that do not incorporate any causal knowledge.\nPerturbations therefore may involve changes to variables that affect the outcome predicted by the black-box model, but not the true, causal outcome.\nFuture work would likely benefit from including recent approaches to AR that incorporate causal knowledge such Karimi et al. (2021).\n\n. . .\nClassifiers\n\nWe have limited our analysis to differentiable linear and non-linear classifiers; empirical evidence suggests that other models such as boosted decision trees outperform DL on tabular data (Borisov et al. (2022), Grinsztajn et al. (2022))."
+    "text": "Limitations\n\nPrivate vs. External Costs\n\nWe fall short of providing any definitive answers as to how to trade off private vs. external costs.\nProposed strategies are a good starting point, but they are ad-hoc.\n\nExperimental Setup\n\nExperimental design is a vast over-simplification of potential real-world scenarios.\n\nCausal Modelling\n\nHave focused on popular counterfactual generators that do not incorporate any causal knowledge.\nPerturbations therefore may involve changes to variables that affect the outcome predicted by the black-box model, but not the true, causal outcome.\nFuture work would likely benefit from including recent approaches to AR that incorporate causal knowledge such Karimi et al. (2021).\n\nClassifiers\n\nWe have limited our analysis to differentiable linear and non-linear classifiers; empirical evidence suggests that other models such as boosted decision trees outperform DL on tabular data (Borisov et al. (2022), Grinsztajn et al. (2022))."
   },
   {
     "objectID": "content/talks/posts/2023-ieee-satml/long_presentation.html#more-resources",
@@ -907,14 +921,14 @@
     "href": "content/talks/posts/2022-julia-eindhoven/presentation.html#meeting-varying-requirements",
     "title": "A year of using Quarto with Julia",
     "section": "Meeting Varying Requirements",
-    "text": "Meeting Varying Requirements\n\nQuarto has fantastic support for traditional and modern scholarly writing.\n\n\n\nThe challenge …\n. . .\nSome people still prefer to read paper or work with MS Office. Most scientific journals, for example, still work with PDF and \\(\\LaTeX\\).\n\n\n\n\n\n\nFigure 2: Source: Giphy\n\n\n\n\n… and Quarto’s answer\n. . .\nEquations like Equation 1 (as well as Sections, Figures, Theorems, …) can be cross-referenced in a standardized way.\n$$\n\\begin{aligned}\nZ &= \\sum_{t=0}^T X_t, && X_t \\sim N(\\mu, \\sigma)\n\\end{aligned}\n$$ {#eq-bm}\n\\[\n\\begin{aligned}\nZ &= \\sum_{t=0}^T X_t, && X_t \\sim N(\\mu, \\sigma)\n\\end{aligned}\n\\tag{1}\\]"
+    "text": "Meeting Varying Requirements\n\nQuarto has fantastic support for traditional and modern scholarly writing.\n\n\n\nThe challenge …\n\nSome people still prefer to read paper or work with MS Office. Most scientific journals, for example, still work with PDF and \\(\\LaTeX\\).\n\n\n\n\n\n\nFigure 2: Source: Giphy\n\n\n\n\n\n… and Quarto’s answer\n\nEquations like Equation 1 (as well as Sections, Figures, Theorems, …) can be cross-referenced in a standardized way.\n$$\n\\begin{aligned}\nZ &= \\sum_{t=0}^T X_t, && X_t \\sim N(\\mu, \\sigma)\n\\end{aligned}\n$$ {#eq-bm}\n\\[\n\\begin{aligned}\nZ &= \\sum_{t=0}^T X_t, && X_t \\sim N(\\mu, \\sigma)\n\\end{aligned}\n\\tag{1}\\]"
   },
   {
     "objectID": "content/talks/posts/2022-julia-eindhoven/presentation.html#reproducible-and-dynamic-content",
     "href": "content/talks/posts/2022-julia-eindhoven/presentation.html#reproducible-and-dynamic-content",
     "title": "A year of using Quarto with Julia",
     "section": "Reproducible and Dynamic Content",
-    "text": "Reproducible and Dynamic Content\nQuarto allows us to cater to different requirements, while at the same time facilitating reproducibility by bridging the gap between computations and writing.\n\nThe world and the data that describes it is not static 📈. Why should scientific outputs be?\n\n\n\n\nFrom dynamic inputs …\n. . .\nThe code below depends on remote data that is continuously updated:\n\nusing MarketData\nsnp = yahoo(\"^GSPC\")\n\nusing Dates\nlast_trade_day = timestamp(snp[end])[1]\np_close = values(snp[end,:Close])[1]\nlast_trade_day_formatted = Dates.format(last_trade_day, \"U d, yyyy\")\n\nWe’d like any updates to the inputs to automatically affect our output (ideally, all the way through to the finished report or paper).\n\n… to dynamic outputs\n. . .\n\nMarkdown.parse(\"\"\"\nWhen the S&P 500 last traded, on $(last_trade_day_formatted), it closed at $(p_close). \n\"\"\")\n\nWhen the S&P 500 last traded, on June 14, 2024, it closed at 5431.600098."
+    "text": "Reproducible and Dynamic Content\nQuarto allows us to cater to different requirements, while at the same time facilitating reproducibility by bridging the gap between computations and writing.\n\nThe world and the data that describes it is not static 📈. Why should scientific outputs be?\n\n\n\n\nFrom dynamic inputs …\n\nThe code below depends on remote data that is continuously updated:\n\nusing MarketData\nsnp = yahoo(\"^GSPC\")\n\nusing Dates\nlast_trade_day = timestamp(snp[end])[1]\np_close = values(snp[end,:Close])[1]\nlast_trade_day_formatted = Dates.format(last_trade_day, \"U d, yyyy\")\n\nWe’d like any updates to the inputs to automatically affect our output (ideally, all the way through to the finished report or paper).\n\n\n… to dynamic outputs\n\n\nMarkdown.parse(\"\"\"\nWhen the S&P 500 last traded, on $(last_trade_day_formatted), it closed at $(p_close). \n\"\"\")\n\nWhen the S&P 500 last traded, on June 14, 2024, it closed at 5431.600098."
   },
   {
     "objectID": "content/talks/posts/2022-julia-eindhoven/presentation.html#in-this-section",
@@ -928,7 +942,7 @@
     "href": "content/talks/posts/2022-julia-eindhoven/presentation.html#vscode-quarto-and-julia",
     "title": "A year of using Quarto with Julia",
     "section": "VSCode, Quarto and Julia",
-    "text": "VSCode, Quarto and Julia\n\nTo get started, see here.\n\n\nSome tips to get started\n\n\n\nAdd IJulia to startup.jl\n\n\nIf you install a new Julia binary […], you must update the IJulia installation […] by running Pkg.build(\"IJulia\")\n— Source: IJulia docs\n\n\n\nUser snippets need to be explicitly enabled (see here)\n\n{\n  \"Two columns\": {\n    \"prefix\": \"cols\",\n    \"body\": [\n      \"::::{.columns}::::\",\n      \":::{.column width='$1%'}\",\n      \":::\",\n      \":::{.column width='$2%'}\",\n      \":::\",\n      \"::::\"\n    ]\n  }\n}\n\n. . .\nUsing .ipynb vs .qmd\n\nCan switch between Jupyter and .qmd with ease.\nWhen working with .qmd, code chunks connect to REPL.\nSet keep-ipynb: true to have interactive notebooks in repo."
+    "text": "VSCode, Quarto and Julia\n\nTo get started, see here.\n\n\nSome tips to get started\n\n\n\nAdd IJulia to startup.jl\n\n\nIf you install a new Julia binary […], you must update the IJulia installation […] by running Pkg.build(\"IJulia\")\n— Source: IJulia docs\n\n\n\nUser snippets need to be explicitly enabled (see here)\n\n{\n  \"Two columns\": {\n    \"prefix\": \"cols\",\n    \"body\": [\n      \"::::{.columns}::::\",\n      \":::{.column width='$1%'}\",\n      \":::\",\n      \":::{.column width='$2%'}\",\n      \":::\",\n      \"::::\"\n    ]\n  }\n}\n\nUsing .ipynb vs .qmd\n\nCan switch between Jupyter and .qmd with ease.\nWhen working with .qmd, code chunks connect to REPL.\nSet keep-ipynb: true to have interactive notebooks in repo."
   },
   {
     "objectID": "content/talks/posts/2022-julia-eindhoven/presentation.html#blogging-1",
@@ -1677,7 +1691,7 @@
     "href": "content/talks/index.html",
     "title": "Talks",
     "section": "",
-    "text": "Below you can find slides and videos of some of my talks. For a slide deck providing a high-level overview of my research see also here.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Year - Oldest\n      \n      \n        Year - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\nTitle\n\n\n\nYear\n\n\n\nVenue\n\n\n\nDescription\n\n\n\n\n\n\n\n\nAIRA seminar\n\n\n2026\n\n\nGEIST Research Group, Poland\n\n\nSlides for my AIRA seminar.\n\n\n\n\n\n\nCounterfactual Training: Teaching Models Plausible and Actionable Explanations\n\n\n2026\n\n\nSaTML, TU Munich, Germany\n\n\nSlides and poster for our SaTML 2026 paper Counterfactual Training: Teaching Models Plausible and Actionable Explanations.\n\n\n\n\n\n\nCounterfactual Explanations and Algorithmic Recourse for Trustworthy AI\n\n\n2026\n\n\nHBK Europe, London, UK\n\n\nA summary of my Ph.D. research derived from my layman’s talk.\n\n\n\n\n\n\nPh.D. defence\n\n\n2026\n\n\nDelft, NL\n\n\nSlides for the layman talk of my Ph.D. defence.\n\n\n\n\n\n\nTU/e Research Seminar\n\n\n2026\n\n\nEindhoven, NL\n\n\nSlides for a research seminar I gave at TU Eindhoven.\n\n\n\n\n\n\nDSCNext Conference Europe 2025\n\n\n2025\n\n\nAmsterdam, NL\n\n\nSlides for my oral presentation at DSCNext 2025.\n\n\n\n\n\n\nVertraubare KI durch Counterfactual Explanations\n\n\n2024\n\n\nTÜV AI.Lab (online)\n\n\nEin Überblick über unsere Forschungsergebnisse zum Thema Vertraubare Künstliche Intelligenz.\n\n\n\n\n\n\nStop Making Unscientific AGI Performance Claims\n\n\n2024\n\n\nVienna, Austria\n\n\nOur position paper Stop Making Unscientific AGI Performance Claims has been accepted at ICML 2024.\n\n\n\n\n\n\nJuliaCon 2024\n\n\n2024\n\n\nEindhoven, The Netherlands\n\n\nVarious main and lightning talks on Taija, HPC, mechanistic interpretability and Quarto.\n\n\n\n\n\n\nTrustworthy AI in Julia\n\n\n2024\n\n\nThe Alan Turing Institute, London, UK\n\n\nSlides for my presentation at the Alan Turing Institute on Trustworthy AI in Julia.\n\n\n\n\n\n\nFaithful Model Explanations through Energy-Constrained Conformal Counterfactuals\n\n\n2024\n\n\nImperial College, London, UK\n\n\nIn May, 2024, I presented our AAAI 2024 paper at an XAI seminar at Imperial College London.\n\n\n\n\n\n\nAgainst Spurious Sparks − Dovelating Inflated AI Claims 🕊️\n\n\n2024\n\n\nECONDAT 2024, London, UK\n\n\nOur position paper Against Spurious Sparks − Dovelating Inflated AI Claims has been accepted at ICML 2024. In May 2024, I will talk about our work at the ECONDAT Conference 2024.\n\n\n\n\n\n\nFaithful Model Explanations through Energy-Constrained Conformal Counterfactuals\n\n\n2024\n\n\nAAAI 2024, Vancouver, Canada\n\n\nSlides and poster for our AAAI 2024 paper, Faithful Model Explanations through Energy-Constrained Conformal Counterfactuals.\n\n\n\n\n\n\nFaithful Model Explanations\n\n\n2023\n\n\nDe Nederlandsche Bank\n\n\nSlides for my presentation at the Dutch Central Bank, De Nederlandsche Bank.\n\n\n\n\n\n\nBetrouwbare Kunstmatige Intelligentie\n\n\n2023\n\n\nGoethe Instituut, Amsterdam\n\n\nMijn eerste presentatie in het Nederlands.\n\n\n\n\n\n\nJulia on HPC\n\n\n2023\n\n\nTU Delft\n\n\nSlides for a tutorial on using Julia on the DelftBlue supercomputer.\n\n\n\n\n\n\nFaithful Model Explanations\n\n\n2023\n\n\nVerbond van Verzekeraars\n\n\nSlides for my presentation at the Delft FinTech Lab Launch.\n\n\n\n\n\n\nPredictive Uncertainty Quantification in Machine Learning\n\n\n2023\n\n\nJuliaCon 2023, MIT, Cambridge, Massachusetts\n\n\nSlides for my presentation at JuliaCon 2023.\n\n\n\n\n\n\nEchos from the Black Box\n\n\n2023\n\n\nMondai House of AI, Delft\n\n\nSlides for my presentation at the Delft FinTech Lab Launch.\n\n\n\n\n\n\nTaija - Trustworthy AI in Julia\n\n\n2023\n\n\nNWO ICT.Open 2023\n\n\nSlides for my demo at the NWO ICT.Open in April, 2023.\n\n\n\n\n\n\nEndogenous Macrodynamics in Algorithmic Recourse\n\n\n2023\n\n\nFirst IEEE Conference on Secure and Trustworthy Machine Learning\n\n\nSlides for my presentation at the first IEEE SaTML conference in February, 2023.\n\n\n\n\n\n\nA year of using Quarto with Julia\n\n\n2022\n\n\nJulia Eindhoven Meetup\n\n\nSlides for my presentation at the Julia Eindhoven Meetup in November, 2022.\n\n\n\n\n\n\nExplaining Black-Box Models through Counterfactuals\n\n\n2022\n\n\nBank of England\n\n\nSlides for my presentation at the Bank of England in November 2022.\n\n\n\n\n\n\nJuliaCon 2022\n\n\n2022\n\n\nJuliaCon 2022 (online)\n\n\nI gave three different talks at JuliaCon 2022.\n\n\n\n\n\n\nNo matching items"
+    "text": "Below you can find slides and videos of some of my talks. For a slide deck providing a high-level overview of my research see also here.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Year - Oldest\n      \n      \n        Year - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\nTitle\n\n\n\nYear\n\n\n\nVenue\n\n\n\nDescription\n\n\n\n\n\n\n\n\nCounterfactualTraining.jl: Teaching Models Plausible and Actionable Explanations\n\n\n2026\n\n\nMainz, Germany\n\n\n\n\n\n\n\n\n\nAIRA seminar\n\n\n2026\n\n\nGEIST Research Group, Poland\n\n\nSlides for my AIRA seminar.\n\n\n\n\n\n\nCounterfactual Training: Teaching Models Plausible and Actionable Explanations\n\n\n2026\n\n\nSaTML, TU Munich, Germany\n\n\nSlides and poster for our SaTML 2026 paper Counterfactual Training: Teaching Models Plausible and Actionable Explanations.\n\n\n\n\n\n\nCounterfactual Explanations and Algorithmic Recourse for Trustworthy AI\n\n\n2026\n\n\nHBK Europe, London, UK\n\n\nA summary of my Ph.D. research derived from my layman’s talk.\n\n\n\n\n\n\nPh.D. defence\n\n\n2026\n\n\nDelft, NL\n\n\nSlides for the layman talk of my Ph.D. defence.\n\n\n\n\n\n\nTU/e Research Seminar\n\n\n2026\n\n\nEindhoven, NL\n\n\nSlides for a research seminar I gave at TU Eindhoven.\n\n\n\n\n\n\nDSCNext Conference Europe 2025\n\n\n2025\n\n\nAmsterdam, NL\n\n\nSlides for my oral presentation at DSCNext 2025.\n\n\n\n\n\n\nVertraubare KI durch Counterfactual Explanations\n\n\n2024\n\n\nTÜV AI.Lab (online)\n\n\nEin Überblick über unsere Forschungsergebnisse zum Thema Vertraubare Künstliche Intelligenz.\n\n\n\n\n\n\nStop Making Unscientific AGI Performance Claims\n\n\n2024\n\n\nVienna, Austria\n\n\nOur position paper Stop Making Unscientific AGI Performance Claims has been accepted at ICML 2024.\n\n\n\n\n\n\nJuliaCon 2024\n\n\n2024\n\n\nEindhoven, The Netherlands\n\n\nVarious main and lightning talks on Taija, HPC, mechanistic interpretability and Quarto.\n\n\n\n\n\n\nTrustworthy AI in Julia\n\n\n2024\n\n\nThe Alan Turing Institute, London, UK\n\n\nSlides for my presentation at the Alan Turing Institute on Trustworthy AI in Julia.\n\n\n\n\n\n\nFaithful Model Explanations through Energy-Constrained Conformal Counterfactuals\n\n\n2024\n\n\nImperial College, London, UK\n\n\nIn May, 2024, I presented our AAAI 2024 paper at an XAI seminar at Imperial College London.\n\n\n\n\n\n\nAgainst Spurious Sparks − Dovelating Inflated AI Claims 🕊️\n\n\n2024\n\n\nECONDAT 2024, London, UK\n\n\nOur position paper Against Spurious Sparks − Dovelating Inflated AI Claims has been accepted at ICML 2024. In May 2024, I will talk about our work at the ECONDAT Conference 2024.\n\n\n\n\n\n\nFaithful Model Explanations through Energy-Constrained Conformal Counterfactuals\n\n\n2024\n\n\nAAAI 2024, Vancouver, Canada\n\n\nSlides and poster for our AAAI 2024 paper, Faithful Model Explanations through Energy-Constrained Conformal Counterfactuals.\n\n\n\n\n\n\nFaithful Model Explanations\n\n\n2023\n\n\nDe Nederlandsche Bank\n\n\nSlides for my presentation at the Dutch Central Bank, De Nederlandsche Bank.\n\n\n\n\n\n\nBetrouwbare Kunstmatige Intelligentie\n\n\n2023\n\n\nGoethe Instituut, Amsterdam\n\n\nMijn eerste presentatie in het Nederlands.\n\n\n\n\n\n\nJulia on HPC\n\n\n2023\n\n\nTU Delft\n\n\nSlides for a tutorial on using Julia on the DelftBlue supercomputer.\n\n\n\n\n\n\nFaithful Model Explanations\n\n\n2023\n\n\nVerbond van Verzekeraars\n\n\nSlides for my presentation at the Delft FinTech Lab Launch.\n\n\n\n\n\n\nPredictive Uncertainty Quantification in Machine Learning\n\n\n2023\n\n\nJuliaCon 2023, MIT, Cambridge, Massachusetts\n\n\nSlides for my presentation at JuliaCon 2023.\n\n\n\n\n\n\nEchos from the Black Box\n\n\n2023\n\n\nMondai House of AI, Delft\n\n\nSlides for my presentation at the Delft FinTech Lab Launch.\n\n\n\n\n\n\nTaija - Trustworthy AI in Julia\n\n\n2023\n\n\nNWO ICT.Open 2023\n\n\nSlides for my demo at the NWO ICT.Open in April, 2023.\n\n\n\n\n\n\nEndogenous Macrodynamics in Algorithmic Recourse\n\n\n2023\n\n\nFirst IEEE Conference on Secure and Trustworthy Machine Learning\n\n\nSlides for my presentation at the first IEEE SaTML conference in February, 2023.\n\n\n\n\n\n\nA year of using Quarto with Julia\n\n\n2022\n\n\nJulia Eindhoven Meetup\n\n\nSlides for my presentation at the Julia Eindhoven Meetup in November, 2022.\n\n\n\n\n\n\nExplaining Black-Box Models through Counterfactuals\n\n\n2022\n\n\nBank of England\n\n\nSlides for my presentation at the Bank of England in November 2022.\n\n\n\n\n\n\nJuliaCon 2022\n\n\n2022\n\n\nJuliaCon 2022 (online)\n\n\nI gave three different talks at JuliaCon 2022.\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "content/talks/posts/2022-boe/presentation.html#blurb",
@@ -1719,14 +1733,14 @@
     "href": "content/talks/posts/2022-boe/presentation.html#towards-trustworthy-ai-2",
     "title": "Explaining Machine Learning Models through Counterfactuals",
     "section": "Towards Trustworthy AI",
-    "text": "Towards Trustworthy AI\n\n\nGround Truthing\n\n\nProbabilistic Models\n\n\nCounterfactual Reasoning\n\n\nObjective\n. . .\n\n[…] deep neural networks are typically very underspecified by the available data, and […] parameters [therefore] correspond to a diverse variety of compelling explanations for the data. (Wilson 2020)\n\nIn this setting it is often crucial to treat models probabilistically!\n\\[\np(y|x,\\mathcal{D}_n) = \\int p(y|x,\\theta)p(\\theta|\\mathcal{D}_n)d\\theta\n\\tag{3}\\]"
+    "text": "Towards Trustworthy AI\n\n\nGround Truthing\n\n\nProbabilistic Models\n\n\nCounterfactual Reasoning\n\n\nObjective\n\n\n[…] deep neural networks are typically very underspecified by the available data, and […] parameters [therefore] correspond to a diverse variety of compelling explanations for the data. (Wilson 2020)\n\nIn this setting it is often crucial to treat models probabilistically!\n\\[\np(y|x,\\mathcal{D}_n) = \\int p(y|x,\\theta)p(\\theta|\\mathcal{D}_n)d\\theta\n\\tag{3}\\]"
   },
   {
     "objectID": "content/talks/posts/2022-boe/presentation.html#towards-trustworthy-ai-3",
     "href": "content/talks/posts/2022-boe/presentation.html#towards-trustworthy-ai-3",
     "title": "Explaining Machine Learning Models through Counterfactuals",
     "section": "Towards Trustworthy AI",
-    "text": "Towards Trustworthy AI\n\n\nGround Truthing\n\n\nProbabilistic Models\n\n\nCounterfactual Reasoning\n\n\n\nWe can now make predictions – great! But do we know how the predictions are actually being made?\n\n\nObjective\nWith the model trained for its task, we are interested in understanding how its predictions change in response to input changes.\n\\[\n\\nabla_x p(y|x,\\mathcal{D}_n;\\hat\\theta)\n\\tag{4}\\]\n\nCounterfactual reasoning (in this context) boils down to simple questions: what if \\(x\\) (factual) \\(\\Rightarrow\\) \\(x\\prime\\) (counterfactual)?\nBy strategically perturbing features and checking the model output, we can (begin to) understand how the model makes its decisions.\nCounterfactual Explanations always have full fidelity by construction (as opposed to surrogate explanations, for example).\n\n. . .\n\nImportant to realize that we are keeping \\(\\hat\\theta\\) constant!"
+    "text": "Towards Trustworthy AI\n\n\nGround Truthing\n\n\nProbabilistic Models\n\n\nCounterfactual Reasoning\n\n\n\nWe can now make predictions – great! But do we know how the predictions are actually being made?\n\n\nObjective\nWith the model trained for its task, we are interested in understanding how its predictions change in response to input changes.\n\\[\n\\nabla_x p(y|x,\\mathcal{D}_n;\\hat\\theta)\n\\tag{4}\\]\n\nCounterfactual reasoning (in this context) boils down to simple questions: what if \\(x\\) (factual) \\(\\Rightarrow\\) \\(x\\prime\\) (counterfactual)?\nBy strategically perturbing features and checking the model output, we can (begin to) understand how the model makes its decisions.\nCounterfactual Explanations always have full fidelity by construction (as opposed to surrogate explanations, for example).\n\n\n\nImportant to realize that we are keeping \\(\\hat\\theta\\) constant!"
   },
   {
     "objectID": "content/talks/posts/2022-boe/presentation.html#todays-talk",
@@ -1740,7 +1754,7 @@
     "href": "content/talks/posts/2022-boe/presentation.html#a-framework-for-counterfactual-explanations",
     "title": "Explaining Machine Learning Models through Counterfactuals",
     "section": "A Framework for Counterfactual Explanations",
-    "text": "A Framework for Counterfactual Explanations\n\nEven though […] interpretability is of great importance and should be pursued, explanations can, in principle, be offered without opening the “black box”. (Wachter et al. 2017)\n\n\n\nFramework\n. . .\nObjective originally proposed by Wachter et al. (2017) is as follows\n\\[\n\\min_{x\\prime \\in \\mathcal{X}} h(x\\prime) \\ \\ \\ \\mbox{s. t.} \\ \\ \\ M(x\\prime) = t\n\\tag{5}\\]\nwhere \\(h\\) relates to the complexity of the counterfactual and \\(M\\) denotes the classifier.\n. . .\nTypically this is approximated through regularization:\n\\[\nx\\prime = \\arg \\min_{x\\prime}  \\ell(M(x\\prime),t) + \\lambda h(x\\prime)\n\\tag{6}\\]\n\nIntuition\n. . .\n\n\n\n\n\n\nFigure 2: A cat performing gradient descent in the feature space à la Wachter et al. (2017)."
+    "text": "A Framework for Counterfactual Explanations\n\nEven though […] interpretability is of great importance and should be pursued, explanations can, in principle, be offered without opening the “black box”. (Wachter et al. 2017)\n\n\n\nFramework\n\nObjective originally proposed by Wachter et al. (2017) is as follows\n\\[\n\\min_{x\\prime \\in \\mathcal{X}} h(x\\prime) \\ \\ \\ \\mbox{s. t.} \\ \\ \\ M(x\\prime) = t\n\\tag{5}\\]\nwhere \\(h\\) relates to the complexity of the counterfactual and \\(M\\) denotes the classifier.\n\n\nTypically this is approximated through regularization:\n\\[\nx\\prime = \\arg \\min_{x\\prime}  \\ell(M(x\\prime),t) + \\lambda h(x\\prime)\n\\tag{6}\\]\n\n\nIntuition\n\n\n\n\n\n\n\nFigure 2: A cat performing gradient descent in the feature space à la Wachter et al. (2017)."
   },
   {
     "objectID": "content/talks/posts/2022-boe/presentation.html#counterfactuals-as-in-adversarial-examples",
@@ -1768,7 +1782,7 @@
     "href": "content/talks/posts/2022-boe/presentation.html#from-counterfactual-explanations-to-algorithmic-recourse",
     "title": "Explaining Machine Learning Models through Counterfactuals",
     "section": "From Counterfactual Explanations to Algorithmic Recourse",
-    "text": "From Counterfactual Explanations to Algorithmic Recourse\n\n\n\n“You cannot appeal to (algorithms). They do not listen. Nor do they bend.”\n— Cathy O’Neil in Weapons of Math Destruction, 2016\n\n\n\n\n\n\n\nFigure 4: Cathy O’Neil. Source: Cathy O’Neil a.k.a. mathbabe.\n\n\n\n\nAlgorithmic Recourse\n. . .\n\nO’Neil (2016) points to various real-world involving black-box models and affected individuals facing adverse outcomes.\n\n. . .\n\nThese individuals generally have no way to challenge their outcome.\n\n. . .\n\nCounterfactual Explanations that involve actionable and realistic feature perturbations can be used for the purpose of Algorithmic Recourse."
+    "text": "From Counterfactual Explanations to Algorithmic Recourse\n\n\n\n“You cannot appeal to (algorithms). They do not listen. Nor do they bend.”\n— Cathy O’Neil in Weapons of Math Destruction, 2016\n\n\n\n\n\n\n\nFigure 4: Cathy O’Neil. Source: Cathy O’Neil a.k.a. mathbabe.\n\n\n\n\nAlgorithmic Recourse\n\n\nO’Neil (2016) points to various real-world involving black-box models and affected individuals facing adverse outcomes.\n\n\n\n\nThese individuals generally have no way to challenge their outcome.\n\n\n\n\nCounterfactual Explanations that involve actionable and realistic feature perturbations can be used for the purpose of Algorithmic Recourse."
   },
   {
     "objectID": "content/talks/posts/2022-boe/presentation.html#counterfactualexplanations.jl",
@@ -1789,7 +1803,7 @@
     "href": "content/talks/posts/2022-boe/presentation.html#generic-generator",
     "title": "Explaining Machine Learning Models through Counterfactuals",
     "section": "Generic Generator",
-    "text": "Generic Generator\n\n\nCode\n. . .\nWe begin by instantiating the fitted model …\n. . .\n… then based on its prediction for \\(x\\) we choose the opposite label as our target …\n. . .\n… and finally generate the counterfactual.\n\nOutput\n. . .\n\n… et voilà!"
+    "text": "Generic Generator\n\n\nCode\n\nWe begin by instantiating the fitted model …\n\n\n… then based on its prediction for \\(x\\) we choose the opposite label as our target …\n\n\n… and finally generate the counterfactual.\n\n\nOutput\n\n\n… et voilà!"
   },
   {
     "objectID": "content/talks/posts/2022-boe/presentation.html#probabilistic-methods-for-counterfactual-explanations",
@@ -1803,21 +1817,21 @@
     "href": "content/talks/posts/2022-boe/presentation.html#greedy-generator",
     "title": "Explaining Machine Learning Models through Counterfactuals",
     "section": "Greedy Generator",
-    "text": "Greedy Generator\n\n\nCode\n. . .\nThis time we use a Bayesian classifier …\n. . .\n… and once again choose our target label as before …\n. . .\n… to then finally use greedy search to find a counterfactual.\n\nOutput\n. . .\n\nIn this case the Bayesian approach yields a similar outcome."
+    "text": "Greedy Generator\n\n\nCode\n\nThis time we use a Bayesian classifier …\n\n\n… and once again choose our target label as before …\n\n\n… to then finally use greedy search to find a counterfactual.\n\n\nOutput\n\n\nIn this case the Bayesian approach yields a similar outcome."
   },
   {
     "objectID": "content/talks/posts/2022-boe/presentation.html#latent-space-generator",
     "href": "content/talks/posts/2022-boe/presentation.html#latent-space-generator",
     "title": "Explaining Machine Learning Models through Counterfactuals",
     "section": "Latent Space Generator",
-    "text": "Latent Space Generator\n\n\nCode\n. . .\nUsing the same classifier as before we can either use the specific REVISEGenerator …\n. . .\n… or realize that that REVISE (Joshi et al. 2019) just boils down to generic search in a latent space:\n\nOutput\n. . .\n\nWe have essentially combined latent search with a probabilistic classifier (as in Antorán et al. (2020))."
+    "text": "Latent Space Generator\n\n\nCode\n\nUsing the same classifier as before we can either use the specific REVISEGenerator …\n\n\n… or realize that that REVISE (Joshi et al. 2019) just boils down to generic search in a latent space:\n\n\nOutput\n\n\nWe have essentially combined latent search with a probabilistic classifier (as in Antorán et al. (2020))."
   },
   {
     "objectID": "content/talks/posts/2022-boe/presentation.html#diverse-counterfactuals",
     "href": "content/talks/posts/2022-boe/presentation.html#diverse-counterfactuals",
     "title": "Explaining Machine Learning Models through Counterfactuals",
     "section": "Diverse Counterfactuals",
-    "text": "Diverse Counterfactuals\n\n\nCode\n. . .\nWe can use the DiCEGenerator to produce multiple diverse counterfactuals:\n\nOutput\n. . ."
+    "text": "Diverse Counterfactuals\n\n\nCode\n\nWe can use the DiCEGenerator to produce multiple diverse counterfactuals:\n\n\nOutput"
   },
   {
     "objectID": "content/talks/posts/2022-boe/presentation.html#a-real-world-example---credit-default",
@@ -1950,21 +1964,21 @@
     "href": "content/talks/posts/2022-juliacon/counterfactuals.html#towards-trustworthy-ai-2",
     "title": "Explaining Black-Box Models through Counterfactuals",
     "section": "Towards Trustworthy AI",
-    "text": "Towards Trustworthy AI\n\n\nGround Truthing\n\n\nProbabilistic Models\n\n\nCounterfactual Reasoning\n\n\nObjective\n. . .\n\n[…] deep neural networks are typically very underspecified by the available data, and […] parameters [therefore] correspond to a diverse variety of compelling explanations for the data. (Wilson 2020)\n\nIn this setting it is often crucial to treat models probabilistically!\n\\[\np(y|x,\\mathcal{D}_n) = \\int p(y|x,\\theta)p(\\theta|\\mathcal{D}_n)d\\theta\n\\tag{3}\\]\n. . .\n\nProbabilistic models covered briefly today. More in my other talk on Laplace Redux …"
+    "text": "Towards Trustworthy AI\n\n\nGround Truthing\n\n\nProbabilistic Models\n\n\nCounterfactual Reasoning\n\n\nObjective\n\n\n[…] deep neural networks are typically very underspecified by the available data, and […] parameters [therefore] correspond to a diverse variety of compelling explanations for the data. (Wilson 2020)\n\nIn this setting it is often crucial to treat models probabilistically!\n\\[\np(y|x,\\mathcal{D}_n) = \\int p(y|x,\\theta)p(\\theta|\\mathcal{D}_n)d\\theta\n\\tag{3}\\]\n\n\n\nProbabilistic models covered briefly today. More in my other talk on Laplace Redux …"
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/counterfactuals.html#towards-trustworthy-ai-3",
     "href": "content/talks/posts/2022-juliacon/counterfactuals.html#towards-trustworthy-ai-3",
     "title": "Explaining Black-Box Models through Counterfactuals",
     "section": "Towards Trustworthy AI",
-    "text": "Towards Trustworthy AI\n\n\nGround Truthing\n\n\nProbabilistic Models\n\n\nCounterfactual Reasoning\n\n\n\nWe can now make predictions – great! But do we know how the predictions are actually being made?\n\n\nObjective\nWith the model trained for its task, we are interested in understanding how its predictions change in response to input changes.\n\\[\n\\nabla_x p(y|x,\\mathcal{D}_n;\\hat\\theta)\n\\tag{4}\\]\n\nCounterfactual reasoning (in this context) boils down to simple questions: what if \\(x\\) (factual) \\(\\Rightarrow\\) \\(x\\prime\\) (counterfactual)?\nBy strategically perturbing features and checking the model output, we can (begin to) understand how the model makes its decisions.\nCounterfactual Explanations always have full fidelity by construction (as opposed to surrogate explanations, for example).\n\n. . .\n\nImportant to realize that we are keeping \\(\\hat\\theta\\) constant!"
+    "text": "Towards Trustworthy AI\n\n\nGround Truthing\n\n\nProbabilistic Models\n\n\nCounterfactual Reasoning\n\n\n\nWe can now make predictions – great! But do we know how the predictions are actually being made?\n\n\nObjective\nWith the model trained for its task, we are interested in understanding how its predictions change in response to input changes.\n\\[\n\\nabla_x p(y|x,\\mathcal{D}_n;\\hat\\theta)\n\\tag{4}\\]\n\nCounterfactual reasoning (in this context) boils down to simple questions: what if \\(x\\) (factual) \\(\\Rightarrow\\) \\(x\\prime\\) (counterfactual)?\nBy strategically perturbing features and checking the model output, we can (begin to) understand how the model makes its decisions.\nCounterfactual Explanations always have full fidelity by construction (as opposed to surrogate explanations, for example).\n\n\n\nImportant to realize that we are keeping \\(\\hat\\theta\\) constant!"
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/counterfactuals.html#a-framework-for-counterfactual-explanations",
     "href": "content/talks/posts/2022-juliacon/counterfactuals.html#a-framework-for-counterfactual-explanations",
     "title": "Explaining Black-Box Models through Counterfactuals",
     "section": "A Framework for Counterfactual Explanations",
-    "text": "A Framework for Counterfactual Explanations\n\nEven though […] interpretability is of great importance and should be pursued, explanations can, in principle, be offered without opening the “black box”. (Wachter et al. 2017)\n\n\n\nFramework\n. . .\nObjective originally proposed by Wachter et al. (2017) is as follows\n\\[\n\\min_{x\\prime \\in \\mathcal{X}} h(x\\prime) \\ \\ \\ \\mbox{s. t.} \\ \\ \\ M(x\\prime) = t\n\\tag{5}\\]\nwhere \\(h\\) relates to the complexity of the counterfactual and \\(M\\) denotes the classifier.\n. . .\nTypically this is approximated through regularization:\n\\[\nx\\prime = \\arg \\min_{x\\prime}  \\ell(M(x\\prime),t) + \\lambda h(x\\prime)\n\\tag{6}\\]\n\nIntuition\n. . .\n\n\n\n\n\n\nFigure 3: A cat performing gradient descent in the feature space à la Wachter et al. (2017)."
+    "text": "A Framework for Counterfactual Explanations\n\nEven though […] interpretability is of great importance and should be pursued, explanations can, in principle, be offered without opening the “black box”. (Wachter et al. 2017)\n\n\n\nFramework\n\nObjective originally proposed by Wachter et al. (2017) is as follows\n\\[\n\\min_{x\\prime \\in \\mathcal{X}} h(x\\prime) \\ \\ \\ \\mbox{s. t.} \\ \\ \\ M(x\\prime) = t\n\\tag{5}\\]\nwhere \\(h\\) relates to the complexity of the counterfactual and \\(M\\) denotes the classifier.\n\n\nTypically this is approximated through regularization:\n\\[\nx\\prime = \\arg \\min_{x\\prime}  \\ell(M(x\\prime),t) + \\lambda h(x\\prime)\n\\tag{6}\\]\n\n\nIntuition\n\n\n\n\n\n\n\nFigure 3: A cat performing gradient descent in the feature space à la Wachter et al. (2017)."
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/counterfactuals.html#counterfactuals-as-in-adversarial-examples",
@@ -2034,28 +2048,28 @@
     "href": "content/talks/posts/2022-juliacon/counterfactuals.html#generic-generator",
     "title": "Explaining Black-Box Models through Counterfactuals",
     "section": "Generic Generator",
-    "text": "Generic Generator\n\n\nCode\n. . .\nWe begin by instantiating the fitted model …\n\n# Model\nw = [1.0 1.0] # estimated coefficients\nb = 0 # estimated bias\nM = LogisticModel(w, [b])\n\n. . .\n… then based on its prediction for \\(x\\) we choose the opposite label as our target …\n\n# Select target class:\ny = round(probs(M, x)[1])\ntarget = ifelse(y==1.0,0.0,1.0) # opposite label as target\n\n. . .\n… and finally generate the counterfactual.\n\n# Counterfactual search:\ngenerator = GenericGenerator()\ncounterfactual = generate_counterfactual(\n  x, target, counterfactual_data, M, generator\n)\n\n\nOutput\n. . .\n\n… et voilà!\n\n\n\n\n\n\n\nFigure 10: Counterfactual path (left) and predicted probability (right) for GenericGenerator. The contour (left) shows the predicted probabilities of the classifier (Logistic Regression)."
+    "text": "Generic Generator\n\n\nCode\n\nWe begin by instantiating the fitted model …\n\n# Model\nw = [1.0 1.0] # estimated coefficients\nb = 0 # estimated bias\nM = LogisticModel(w, [b])\n\n\n\n… then based on its prediction for \\(x\\) we choose the opposite label as our target …\n\n# Select target class:\ny = round(probs(M, x)[1])\ntarget = ifelse(y==1.0,0.0,1.0) # opposite label as target\n\n\n\n… and finally generate the counterfactual.\n\n# Counterfactual search:\ngenerator = GenericGenerator()\ncounterfactual = generate_counterfactual(\n  x, target, counterfactual_data, M, generator\n)\n\n\n\nOutput\n\n\n… et voilà!\n\n\n\n\n\n\n\nFigure 10: Counterfactual path (left) and predicted probability (right) for GenericGenerator. The contour (left) shows the predicted probabilities of the classifier (Logistic Regression)."
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/counterfactuals.html#greedy-generator",
     "href": "content/talks/posts/2022-juliacon/counterfactuals.html#greedy-generator",
     "title": "Explaining Black-Box Models through Counterfactuals",
     "section": "Greedy Generator",
-    "text": "Greedy Generator\n\n\nCode\n. . .\nThis time we use a Bayesian classifier …\n\nusing LinearAlgebra\nΣ = Symmetric(reshape(randn(9),3,3).*0.01 + UniformScaling(1)) # MAP covariance matrix\nμ = hcat(b, w)\nM = BayesianLogisticModel(μ, Σ)\n\n. . .\n… and once again choose our target label as before …\n\n# Select target class:\ny = round(probs(M, x)[1])\ntarget = ifelse(y==1.0,0.0,1.0) # opposite label as target\n\n. . .\n… to then finally use greedy search to find a counterfactual.\n\n# Counterfactual search:\nparams = GreedyGeneratorParams(\n  δ = 0.5,\n  n = 10\n)\ngenerator = GreedyGenerator(;params=params)\ncounterfactual = generate_counterfactual(\n  x, target, counterfactual_data, M, generator\n)\n\n\nOutput\n. . .\n\nIn this case the Bayesian approach yields a similar outcome.\n\n\n\n\n\n\n\nFigure 11: Counterfactual path (left) and predicted probability (right) for GreedyGenerator. The contour (left) shows the predicted probabilities of the classifier (Bayesian Logistic Regression)."
+    "text": "Greedy Generator\n\n\nCode\n\nThis time we use a Bayesian classifier …\n\nusing LinearAlgebra\nΣ = Symmetric(reshape(randn(9),3,3).*0.01 + UniformScaling(1)) # MAP covariance matrix\nμ = hcat(b, w)\nM = BayesianLogisticModel(μ, Σ)\n\n\n\n… and once again choose our target label as before …\n\n# Select target class:\ny = round(probs(M, x)[1])\ntarget = ifelse(y==1.0,0.0,1.0) # opposite label as target\n\n\n\n… to then finally use greedy search to find a counterfactual.\n\n# Counterfactual search:\nparams = GreedyGeneratorParams(\n  δ = 0.5,\n  n = 10\n)\ngenerator = GreedyGenerator(;params=params)\ncounterfactual = generate_counterfactual(\n  x, target, counterfactual_data, M, generator\n)\n\n\n\nOutput\n\n\nIn this case the Bayesian approach yields a similar outcome.\n\n\n\n\n\n\n\nFigure 11: Counterfactual path (left) and predicted probability (right) for GreedyGenerator. The contour (left) shows the predicted probabilities of the classifier (Bayesian Logistic Regression)."
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/counterfactuals.html#revise-generator",
     "href": "content/talks/posts/2022-juliacon/counterfactuals.html#revise-generator",
     "title": "Explaining Black-Box Models through Counterfactuals",
     "section": "REVISE Generator",
-    "text": "REVISE Generator\n\n\nCode\nUsing the same classifier as before we can either use the specific REVISEGenerator …\n\n# Counterfactual search:\ngenerator = REVISEGenerator()\ncounterfactual = generate_counterfactual(\n  x, target, counterfactual_data, M, generator\n)\n\n. . .\n… or realize that that REVISE (Joshi et al. 2019) just boils down to generic search in a latent space:\n\n# Counterfactual search:\ngenerator = GenericGenerator()\ncounterfactual = generate_counterfactual(\n  x, target, counterfactual_data, M, generator,\n  latent_space=true\n)\n\n\nOutput\n. . .\n\nWe have essentially combined latent search with a probabilistic classifier (as in Antorán et al. (2020)).\n\n\n\n\n\n\n\nFigure 12: Counterfactual path (left) and predicted probability (right) for REVISEGenerator."
+    "text": "REVISE Generator\n\n\nCode\nUsing the same classifier as before we can either use the specific REVISEGenerator …\n\n# Counterfactual search:\ngenerator = REVISEGenerator()\ncounterfactual = generate_counterfactual(\n  x, target, counterfactual_data, M, generator\n)\n\n\n… or realize that that REVISE (Joshi et al. 2019) just boils down to generic search in a latent space:\n\n# Counterfactual search:\ngenerator = GenericGenerator()\ncounterfactual = generate_counterfactual(\n  x, target, counterfactual_data, M, generator,\n  latent_space=true\n)\n\n\n\nOutput\n\n\nWe have essentially combined latent search with a probabilistic classifier (as in Antorán et al. (2020)).\n\n\n\n\n\n\n\nFigure 12: Counterfactual path (left) and predicted probability (right) for REVISEGenerator."
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/counterfactuals.html#mnist---latent-space-search",
     "href": "content/talks/posts/2022-juliacon/counterfactuals.html#mnist---latent-space-search",
     "title": "Explaining Black-Box Models through Counterfactuals",
     "section": "MNIST - Latent Space Search",
-    "text": "MNIST - Latent Space Search\n\n\nGood VAE\n. . .\nLoading pre-trained classifiers and VAE …\n\nX, ys = mnist_data() \nmodel = mnist_model() # simple MLP\n\n. . .\n… instantiating model and attaching VAE.\n\nM = FluxModel(model, likelihood=:classification_multi)\ncounterfactual_data = CounterfactualData(X,ys)\nvae = mnist_vae()\ncounterfactual_data.generative_model = vae\n\n. . .\n\nThe results in Figure 13 look great!\n\n\n\n\n\n\n\nFigure 13: Turning a nine (9) into a four (4) using REVISE. It appears that the VAE is well-specified in this case.\n\n\n\n\nBad VAE\n. . .\n\nBut things can also go wrong …\n\nThe VAE used to generate the counterfactual in Figure 14 is not expressive enough.\n\n\n\n\n\n\nFigure 14: Turning a seven (7) into a nine (9) using REVISE with a weak VAE.\n\n\n\n. . .\n\nThe counterfactual in Figure 15 is also valid … what to do?\n\n\n\n\n\n\n\nFigure 15: Turning a seven (7) into a nine (9) using generic search."
+    "text": "MNIST - Latent Space Search\n\n\nGood VAE\n\nLoading pre-trained classifiers and VAE …\n\nX, ys = mnist_data() \nmodel = mnist_model() # simple MLP\n\n\n\n… instantiating model and attaching VAE.\n\nM = FluxModel(model, likelihood=:classification_multi)\ncounterfactual_data = CounterfactualData(X,ys)\nvae = mnist_vae()\ncounterfactual_data.generative_model = vae\n\n\n\n\nThe results in Figure 13 look great!\n\n\n\n\n\n\n\nFigure 13: Turning a nine (9) into a four (4) using REVISE. It appears that the VAE is well-specified in this case.\n\n\n\n\n\nBad VAE\n\n\nBut things can also go wrong …\n\nThe VAE used to generate the counterfactual in Figure 14 is not expressive enough.\n\n\n\n\n\n\nFigure 14: Turning a seven (7) into a nine (9) using REVISE with a weak VAE.\n\n\n\n\n\n\nThe counterfactual in Figure 15 is also valid … what to do?\n\n\n\n\n\n\n\nFigure 15: Turning a seven (7) into a nine (9) using generic search."
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/counterfactuals.html#custom-models---deep-ensemble",
@@ -2069,21 +2083,21 @@
     "href": "content/talks/posts/2022-juliacon/counterfactuals.html#custom-models---interoperability",
     "title": "Explaining Black-Box Models through Counterfactuals",
     "section": "Custom Models - Interoperability",
-    "text": "Custom Models - Interoperability\nAdding support for torch models was easy! Here’s how I implemented it for torch classifiers trained in R.\n\n\n\nSource code\n. . .\nStep 1: add composite type as subtype of AbstractFittedModel\n\nImplemented here.\n\nStep 2: dispatch logits and probs methods for new model type.\n\nImplemented here.\n\n. . .\nStep 3: add gradient access.\n\nImplemented here.\n\n\nUnchanged API\n. . .\n\nM = RTorchModel(model)\n# Select target class:\ny = round(probs(M, x)[1])\ntarget = ifelse(y==1.0,0.0,1.0) # opposite label as target\n# Define generator:\ngenerator = GenericGenerator()\n# Generate recourse:\ncounterfactual = generate_counterfactual(\n  x, target, counterfactual_data, M, generator\n)\n\n\n\n\n\n\n\nFigure 17: Counterfactual path (left) and predicted probability (right) for GenericGenerator and RTorchModel."
+    "text": "Custom Models - Interoperability\nAdding support for torch models was easy! Here’s how I implemented it for torch classifiers trained in R.\n\n\n\nSource code\n\nStep 1: add composite type as subtype of AbstractFittedModel\n\nImplemented here.\n\nStep 2: dispatch logits and probs methods for new model type.\n\nImplemented here.\n\n\n\nStep 3: add gradient access.\n\nImplemented here.\n\n\n\nUnchanged API\n\n\nM = RTorchModel(model)\n# Select target class:\ny = round(probs(M, x)[1])\ntarget = ifelse(y==1.0,0.0,1.0) # opposite label as target\n# Define generator:\ngenerator = GenericGenerator()\n# Generate recourse:\ncounterfactual = generate_counterfactual(\n  x, target, counterfactual_data, M, generator\n)\n\n\n\n\n\n\n\nFigure 17: Counterfactual path (left) and predicted probability (right) for GenericGenerator and RTorchModel."
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/counterfactuals.html#custom-generators",
     "href": "content/talks/posts/2022-juliacon/counterfactuals.html#custom-generators",
     "title": "Explaining Black-Box Models through Counterfactuals",
     "section": "Custom Generators",
-    "text": "Custom Generators\nIdea 💡: let’s implement a generic generator with dropout!\n\n\n\nDispatch\n. . .\nStep 1: create a subtype of AbstractGradientBasedGenerator (adhering to some basic rules).\n\n# Constructor:\nabstract type AbstractDropoutGenerator &lt;: AbstractGradientBasedGenerator end\nstruct DropoutGenerator &lt;: AbstractDropoutGenerator\n    loss::Symbol # loss function\n    complexity::Function # complexity function\n    mutability::Union{Nothing,Vector{Symbol}} # mutibility constraints \n    λ::AbstractFloat # strength of penalty\n    ϵ::AbstractFloat # step size\n    τ::AbstractFloat # tolerance for convergence\n    p_dropout::AbstractFloat # dropout rate\nend\n\n. . .\nStep 2: implement logic for generating perturbations.\n\nimport CounterfactualExplanations.Generators: generate_perturbations, ∇\nusing StatsBase\nfunction generate_perturbations(generator::AbstractDropoutGenerator, counterfactual_state::State)\n    𝐠ₜ = ∇(generator, counterfactual_state.M, counterfactual_state) # gradient\n    # Dropout:\n    set_to_zero = sample(1:length(𝐠ₜ),Int(round(generator.p_dropout*length(𝐠ₜ))),replace=false)\n    𝐠ₜ[set_to_zero] .= 0\n    Δx′ = - (generator.ϵ .* 𝐠ₜ) # gradient step\n    return Δx′\nend\n\n\nUnchanged API\n. . .\n\n# Instantiate:\nusing LinearAlgebra\ngenerator = DropoutGenerator(\n    :logitbinarycrossentropy,\n    norm,\n    nothing,\n    0.1,\n    0.1,\n    1e-5,\n    0.5\n)\ncounterfactual = generate_counterfactual(\n  x, target, counterfactual_data, M, generator\n)\n\n\n\n\n\n\n\nFigure 18: Counterfactual path (left) and predicted probability (right) for custom DropoutGenerator and RTorchModel."
+    "text": "Custom Generators\nIdea 💡: let’s implement a generic generator with dropout!\n\n\n\nDispatch\n\nStep 1: create a subtype of AbstractGradientBasedGenerator (adhering to some basic rules).\n\n# Constructor:\nabstract type AbstractDropoutGenerator &lt;: AbstractGradientBasedGenerator end\nstruct DropoutGenerator &lt;: AbstractDropoutGenerator\n    loss::Symbol # loss function\n    complexity::Function # complexity function\n    mutability::Union{Nothing,Vector{Symbol}} # mutibility constraints \n    λ::AbstractFloat # strength of penalty\n    ϵ::AbstractFloat # step size\n    τ::AbstractFloat # tolerance for convergence\n    p_dropout::AbstractFloat # dropout rate\nend\n\n\n\nStep 2: implement logic for generating perturbations.\n\nimport CounterfactualExplanations.Generators: generate_perturbations, ∇\nusing StatsBase\nfunction generate_perturbations(generator::AbstractDropoutGenerator, counterfactual_state::State)\n    𝐠ₜ = ∇(generator, counterfactual_state.M, counterfactual_state) # gradient\n    # Dropout:\n    set_to_zero = sample(1:length(𝐠ₜ),Int(round(generator.p_dropout*length(𝐠ₜ))),replace=false)\n    𝐠ₜ[set_to_zero] .= 0\n    Δx′ = - (generator.ϵ .* 𝐠ₜ) # gradient step\n    return Δx′\nend\n\n\n\nUnchanged API\n\n\n# Instantiate:\nusing LinearAlgebra\ngenerator = DropoutGenerator(\n    :logitbinarycrossentropy,\n    norm,\n    nothing,\n    0.1,\n    0.1,\n    1e-5,\n    0.5\n)\ncounterfactual = generate_counterfactual(\n  x, target, counterfactual_data, M, generator\n)\n\n\n\n\n\n\n\nFigure 18: Counterfactual path (left) and predicted probability (right) for custom DropoutGenerator and RTorchModel."
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/counterfactuals.html#juliacon-2022-and-beyond",
     "href": "content/talks/posts/2022-juliacon/counterfactuals.html#juliacon-2022-and-beyond",
     "title": "Explaining Black-Box Models through Counterfactuals",
     "section": "JuliaCon 2022 and beyond",
-    "text": "JuliaCon 2022 and beyond\n\n\n\nTo JuliaCon …\n\nDevelop package, register and submit to JuliaCon 2022.\n\n\nNative support for deep learning models (Flux, torch).\n\n\nAdd latent space search.\n\n\n… and beyond\n. . .\n\nAdd more generators:\n\nDiCE (Mothilal et al. 2020)\nROAR (Upadhyay et al. 2021)\nMINT (Karimi et al. 2021)\n\n\n. . .\n\nAdd support for more models:\n\nMLJ, GLM, …\nNon-differentiable\n\n\n. . .\n\nEnhance preprocessing functionality.\n\n. . .\n\nExtend functionality to regression problems.\n\n. . .\n\nUse Flux optimizers.\n\n. . .\n\n…\n\n\n\n\n\nPhoto by Ivan Diaz on Unsplash"
+    "text": "JuliaCon 2022 and beyond\n\n\n\nTo JuliaCon …\n\nDevelop package, register and submit to JuliaCon 2022.\n\n\nNative support for deep learning models (Flux, torch).\n\n\nAdd latent space search.\n\n\n… and beyond\n\n\nAdd more generators:\n\nDiCE (Mothilal et al. 2020)\nROAR (Upadhyay et al. 2021)\nMINT (Karimi et al. 2021)\n\n\n\n\n\nAdd support for more models:\n\nMLJ, GLM, …\nNon-differentiable\n\n\n\n\n\nEnhance preprocessing functionality.\n\n\n\n\nExtend functionality to regression problems.\n\n\n\n\nUse Flux optimizers.\n\n\n\n\n…\n\n\n\n\n\n\nPhoto by Ivan Diaz on Unsplash"
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/counterfactuals.html#more-resources",
@@ -2118,7 +2132,7 @@
     "href": "content/talks/posts/2022-juliacon/laplace.html#enter-bayesian-deep-learning",
     "title": "Effortless Bayesian Deep Learning through Laplace Redux",
     "section": "Enter: Bayesian Deep Learning 🔮",
-    "text": "Enter: Bayesian Deep Learning 🔮\n\nYes, we can!\n\n\n\nPopular approaches include …\n\n\nMCMC (see Turing)\n\n\nVariational Inference (Blundell et al. 2015)\n\n\nMonte Carlo Dropout (Gal and Ghahramani 2016)\n\n\nDeep Ensembles (Lakshminarayanan et al. 2017)\n\n\n\nLaplace Redux (Immer et al. (2020),Daxberger et al. (2021))\n\n. . .\n\n\n\n\n\n\nFigure 1: Pierre-Simon Laplace as chancellor of the Senate under the First French Empire. Source: Wikipedia\n\n\n\n\n\n\n\n\n\n\nFigure 2: Simulation of changing posteriour predictive distribution. Image by author."
+    "text": "Enter: Bayesian Deep Learning 🔮\n\nYes, we can!\n\n\n\nPopular approaches include …\n\n\nMCMC (see Turing)\n\n\nVariational Inference (Blundell et al. 2015)\n\n\nMonte Carlo Dropout (Gal and Ghahramani 2016)\n\n\nDeep Ensembles (Lakshminarayanan et al. 2017)\n\n\n\nLaplace Redux (Immer et al. (2020),Daxberger et al. (2021))\n\n\n\n\n\n\n\n\nFigure 1: Pierre-Simon Laplace as chancellor of the Senate under the First French Empire. Source: Wikipedia\n\n\n\n\n\n\n\n\n\n\n\nFigure 2: Simulation of changing posteriour predictive distribution. Image by author."
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/laplace.html#laplace-approximation",
@@ -2139,14 +2153,14 @@
     "href": "content/talks/posts/2022-juliacon/laplace.html#from-bayesian-logistic-regression",
     "title": "Effortless Bayesian Deep Learning through Laplace Redux",
     "section": "From Bayesian Logistic Regression …",
-    "text": "From Bayesian Logistic Regression …\n\n\nFrom maths …\n. . .\nWe assume a Gaussian prior for our weights … \\[\np(\\theta) \\sim \\mathcal{N} \\left( \\theta | \\mathbf{0}, \\lambda^{-1} \\mathbf{I} \\right)=\\mathcal{N} \\left( \\theta | \\mathbf{0}, \\mathbf{H}_0^{-1} \\right)\n\\tag{3}\\]\n. . .\n… which corresponds to logit binary crossentropy loss with weight decay:\n\\[\n\\ell(\\theta)= - \\sum_{n}^N [y_n \\log \\mu_n + (1-y_n)\\log (1-\\mu_n)] + \\\\ \\frac{1}{2} (\\theta-\\theta_0)^T\\mathbf{H}_0(\\theta-\\theta_0)\n\\tag{4}\\]\n. . .\nFor Logistic Regression we have the Hessian in closed form (p. 338 in Murphy (2022)):\n\\[\n\\nabla_{\\theta}\\nabla_{\\theta}^\\mathsf{T}\\ell(\\theta) = \\frac{1}{N} \\sum_{n}^N(\\mu_n(1-\\mu_n)\\mathbf{x}_n)\\mathbf{x}_n^\\mathsf{T} + \\mathbf{H}_0\n\\tag{5}\\]\n\n… to code\n. . .\n# Hessian:\nfunction ∇∇𝓁(θ,θ_0,H_0,X,y)\n    N = length(y)\n    μ = sigmoid(θ,X)\n    H = ∑(μ[n] * (1-μ[n]) * X[n,:] * X[n,:]' for n=1:N)\n    return H + H_0\nend\n\nGotta love Julia ❤️💜💚\n\n. . .\nLogistic Regression can be done in Flux …\n\nusing Flux\n# Initializing weights as zeros only for illustrative purposes:\nnn = Chain(Dense(zeros(1,2),zeros(1)))\n\n. . .\n… but now we autograd! Leveraged in LaplaceRedux.\n\nla = Laplace(nn, λ=λ)\nfit!(la, data)\n\n\n\n\n\n\n\nFigure 3: Posterior predictive distribution of Logistic regression in the 2D feature space using plugin estimator (left) and Laplace approximation (right). Image by author."
+    "text": "From Bayesian Logistic Regression …\n\n\nFrom maths …\n\nWe assume a Gaussian prior for our weights … \\[\np(\\theta) \\sim \\mathcal{N} \\left( \\theta | \\mathbf{0}, \\lambda^{-1} \\mathbf{I} \\right)=\\mathcal{N} \\left( \\theta | \\mathbf{0}, \\mathbf{H}_0^{-1} \\right)\n\\tag{3}\\]\n\n\n… which corresponds to logit binary crossentropy loss with weight decay:\n\\[\n\\ell(\\theta)= - \\sum_{n}^N [y_n \\log \\mu_n + (1-y_n)\\log (1-\\mu_n)] + \\\\ \\frac{1}{2} (\\theta-\\theta_0)^T\\mathbf{H}_0(\\theta-\\theta_0)\n\\tag{4}\\]\n\n\nFor Logistic Regression we have the Hessian in closed form (p. 338 in Murphy (2022)):\n\\[\n\\nabla_{\\theta}\\nabla_{\\theta}^\\mathsf{T}\\ell(\\theta) = \\frac{1}{N} \\sum_{n}^N(\\mu_n(1-\\mu_n)\\mathbf{x}_n)\\mathbf{x}_n^\\mathsf{T} + \\mathbf{H}_0\n\\tag{5}\\]\n\n\n… to code\n\n# Hessian:\nfunction ∇∇𝓁(θ,θ_0,H_0,X,y)\n    N = length(y)\n    μ = sigmoid(θ,X)\n    H = ∑(μ[n] * (1-μ[n]) * X[n,:] * X[n,:]' for n=1:N)\n    return H + H_0\nend\n\nGotta love Julia ❤️💜💚\n\n\n\nLogistic Regression can be done in Flux …\n\nusing Flux\n# Initializing weights as zeros only for illustrative purposes:\nnn = Chain(Dense(zeros(1,2),zeros(1)))\n\n\n\n… but now we autograd! Leveraged in LaplaceRedux.\n\nla = Laplace(nn, λ=λ)\nfit!(la, data)\n\n\n\n\n\n\n\nFigure 3: Posterior predictive distribution of Logistic regression in the 2D feature space using plugin estimator (left) and Laplace approximation (right). Image by author."
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/laplace.html#to-bayesian-neural-networks",
     "href": "content/talks/posts/2022-juliacon/laplace.html#to-bayesian-neural-networks",
     "title": "Effortless Bayesian Deep Learning through Laplace Redux",
     "section": "… to Bayesian Neural Networks",
-    "text": "… to Bayesian Neural Networks\n\n\nCode\n. . .\nAn actual MLP …\n\n# Build MLP:\nn_hidden = 32\nD = size(X)[1]\nnn = Chain(\n    Dense(\n      randn(n_hidden,D)./10,\n      zeros(n_hidden), σ\n    ),\n    Dense(\n      randn(1,n_hidden)./10,\n      zeros(1)\n    )\n)\n\n. . .\n… same API call:\n\nla = Laplace(\n  nn, λ=λ, \n  subset_of_weights=:last_layer\n)\nfit!(la, data)\n\n. . .\n\nResults\n. . .\n\n\n\n\n\n\nFigure 4: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right). Image by author."
+    "text": "… to Bayesian Neural Networks\n\n\nCode\n\nAn actual MLP …\n\n# Build MLP:\nn_hidden = 32\nD = size(X)[1]\nnn = Chain(\n    Dense(\n      randn(n_hidden,D)./10,\n      zeros(n_hidden), σ\n    ),\n    Dense(\n      randn(1,n_hidden)./10,\n      zeros(1)\n    )\n)\n\n\n\n… same API call:\n\nla = Laplace(\n  nn, λ=λ, \n  subset_of_weights=:last_layer\n)\nfit!(la, data)\n\n\n\nResults\n\n\n\n\n\n\n\nFigure 4: Posterior predictive distribution of MLP in the 2D feature space using plugin estimator (left) and Laplace approximation (right). Image by author."
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/laplace.html#a-quick-note-on-the-prior",
@@ -2160,14 +2174,14 @@
     "href": "content/talks/posts/2022-juliacon/laplace.html#a-crucial-detail-i-skipped",
     "title": "Effortless Bayesian Deep Learning through Laplace Redux",
     "section": "A crucial detail I skipped",
-    "text": "A crucial detail I skipped\n\nWe’re really been using linearized neural networks …\n\n\n\n\nMC fails\n\nCould do Monte Carlo for true BNN predictive, but this performs poorly when using approximations for the Hessian.\nInstead we rely on linear expansion of predictive around mode (Immer et al. 2020).\nIntuition: Hessian approximation involves linearization, then so should the predictive.\n\n. . .\n\nApplying the GNN approximation […] turns the underlying probabilistic model locally from a BNN into a GLM […] Because we have effectively done inference in the GGN-linearized model, we should instead predict using these modified features. — Immer et al. (2020)\n\n\n\n\n\n\n\n\nFigure 7: MC samples from the Laplace posterior (Lawrence 2001)."
+    "text": "A crucial detail I skipped\n\nWe’re really been using linearized neural networks …\n\n\n\n\nMC fails\n\nCould do Monte Carlo for true BNN predictive, but this performs poorly when using approximations for the Hessian.\nInstead we rely on linear expansion of predictive around mode (Immer et al. 2020).\nIntuition: Hessian approximation involves linearization, then so should the predictive.\n\n\n\nApplying the GNN approximation […] turns the underlying probabilistic model locally from a BNN into a GLM […] Because we have effectively done inference in the GGN-linearized model, we should instead predict using these modified features. — Immer et al. (2020)\n\n\n\n\n\n\n\n\n\nFigure 7: MC samples from the Laplace posterior (Lawrence 2001)."
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/laplace.html#juliacon-2022-and-beyond",
     "href": "content/talks/posts/2022-juliacon/laplace.html#juliacon-2022-and-beyond",
     "title": "Effortless Bayesian Deep Learning through Laplace Redux",
     "section": "JuliaCon 2022 and beyond",
-    "text": "JuliaCon 2022 and beyond\n\n\n\nTo JuliaCon …\n\nLearn about Laplace Redux by implementing it in Julia.\n\n\nTurn code into a small package.\n\n\nSubmit to JuliaCon 2022 and share the idea.\n\n\n… and beyond\n. . .\nPackage is bare-bones at this point and needs a lot of work.\n\nGoal: reach same level of maturity as Python counterpart. (Beautiful work btw!)\nProblem: limited capacity and fairly new to Julia.\nSolution: find contributors 🤗.\n\n\n\n\n\nPhoto by Ivan Diaz on Unsplash"
+    "text": "JuliaCon 2022 and beyond\n\n\n\nTo JuliaCon …\n\nLearn about Laplace Redux by implementing it in Julia.\n\n\nTurn code into a small package.\n\n\nSubmit to JuliaCon 2022 and share the idea.\n\n\n… and beyond\n\nPackage is bare-bones at this point and needs a lot of work.\n\nGoal: reach same level of maturity as Python counterpart. (Beautiful work btw!)\nProblem: limited capacity and fairly new to Julia.\nSolution: find contributors 🤗.\n\n\n\n\n\n\nPhoto by Ivan Diaz on Unsplash"
   },
   {
     "objectID": "content/talks/posts/2022-juliacon/laplace.html#specific-goals",
@@ -4401,6 +4415,132 @@
     "title": "Counterfactual Explanations and Algorithmic Recourse for Trustworthy AI",
     "section": "In all seriousness …",
     "text": "In all seriousness …\n\nEmergence broadly described as broad behaviour of complex systems that’s different from its constituent parts:\n\nExample 1: asset price bubbles in financial markets -&gt; locally predictable, rational behaviour, but also market failure\nExample 2: tornado -&gt; just dust and debris, but also a possible disaster\n\nDoes it matter?"
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#training-opaque-models",
+    "href": "content/talks/posts/2026-jcon/presentation.html#training-opaque-models",
+    "title": "Counterfactual Training",
+    "section": "Training Opaque Models",
+    "text": "Training Opaque Models\nTweaking Parameters\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\}\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#training-opaque-models-1",
+    "href": "content/talks/posts/2026-jcon/presentation.html#training-opaque-models-1",
+    "title": "Counterfactual Training",
+    "section": "Training Opaque Models",
+    "text": "Training Opaque Models\nTweaking Parameters ::: {.columns} ::: {.column width=75%} Objective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\theta_{t+1} &= \\theta_t - \\nabla_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} \\} \\\\\n\\textcolor{orange}{\\theta^*}&=\\theta_T\n\\end{aligned}\n\\] ::: ::: {.column width=25%}\n\n::: :::"
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#explaining-opaque-models",
+    "href": "content/talks/posts/2026-jcon/presentation.html#explaining-opaque-models",
+    "title": "Counterfactual Training",
+    "section": "Explaining Opaque Models",
+    "text": "Explaining Opaque Models\nTweaking Inputs–CounterfactualExplanations.jl\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} }) + \\lambda \\text{reg}(\\mathbf{x};\\cdot) } \\}\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#explaining-opaque-models-1",
+    "href": "content/talks/posts/2026-jcon/presentation.html#explaining-opaque-models-1",
+    "title": "Counterfactual Training",
+    "section": "Explaining Opaque Models",
+    "text": "Explaining Opaque Models\nTweaking Inputs–CounterfactualExplanations.jl\n\n\nObjective:\n\\[\n\\begin{aligned}\n\\min_{\\textcolor{purple}{\\mathbf{x}}} \\{  {\\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} }) + \\lambda \\text{reg}(\\mathbf{x};\\cdot)} \\}\n\\end{aligned}\n\\]\nSolution:\n\\[\n\\begin{aligned}\n\\mathbf{x}_{t+1} &= \\mathbf{x}_t - \\nabla_{\\textcolor{purple}{\\mathbf{x}}} \\{  \\text{yloss}(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} }) \\\\&+ \\lambda \\text{reg}(\\mathbf{x};\\cdot) \\} \\\\\n\\textcolor{purple}{\\mathbf{x}^*}&=\\mathbf{x}_T\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#plausibility-at-all-cost",
+    "href": "content/talks/posts/2026-jcon/presentation.html#plausibility-at-all-cost",
+    "title": "Counterfactual Training",
+    "section": "Plausibility at all cost?",
+    "text": "Plausibility at all cost?\nAll of these counterfactuals are valid explanations for the model’s prediction.\n\nPick your poison …\n\n\n\n\n\n\n\nFigure 1: Turning a 9 into a 7: Counterfactual explanations for an image classifier using different approaches (Altmeyer et al. 2024)."
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#faithful-first-plausible-second",
+    "href": "content/talks/posts/2026-jcon/presentation.html#faithful-first-plausible-second",
+    "title": "Counterfactual Training",
+    "section": "Faithful First, Plausible Second",
+    "text": "Faithful First, Plausible Second\n\n\n\n\n\n\n\n\nFigure 2: Turning a 9 into a 7. ECCCo applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).\n\n\n\n\n Insight: faithfulness facilitates1\n\nmodel quality checks (Figure 2).\nstate-of-the-art plausibility (Figure 3).\n\n\n\n\n\n\n\nFigure 3: Results for different generators (from 3 to 5).\n\n\n\n\n Altmeyer et al. (2024) @ AAAI 2024. [blog]; ECCoGenerator in CounterfactualExplanations.jl"
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#counterfactual-training",
+    "href": "content/talks/posts/2026-jcon/presentation.html#counterfactual-training",
+    "title": "Counterfactual Training",
+    "section": "Counterfactual Training",
+    "text": "Counterfactual Training\nFirst, Tweaking Inputs1\n\\[\n\\begin{aligned}\n\\mathbf{x}_{t+1} &= \\mathbf{x}_t - \\nabla_{\\textcolor{purple}{\\mathbf{x}}} \\{  {ECCCo(M_{\\textcolor{orange}{\\theta^*}}(\\mathbf{x}),\\mathbf{y^{\\textcolor{purple}{+}} })} \\} \\\\\n\\textcolor{purple}{\\mathbf{x}^*}&=\\mathbf{x}_T\n\\end{aligned}\n\\]\nThen, Tweaking Parameters\n\\[\n\\begin{aligned}\n\\theta_{t+1} &= \\theta_t - \\nabla_{\\textcolor{orange}{\\theta}} \\{  {\\text{yloss}(M_{\\theta}(\\mathbf{x}),\\mathbf{y})} + \\text{div}(\\textcolor{purple}{\\mathbf{x}^*},\\mathbf{x}^+,y^+; \\theta) \\} \\\\\n\\textcolor{orange}{\\theta^*}&=\\theta_T\n\\end{aligned}\n\\]\nGenerate faithful explanations using ECCCo objective (Altmeyer et al. 2024)."
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#counterfactual-training-1",
+    "href": "content/talks/posts/2026-jcon/presentation.html#counterfactual-training-1",
+    "title": "Counterfactual Training",
+    "section": "Counterfactual Training",
+    "text": "Counterfactual Training\n\nContrast faithful CE with data \\(\\rightarrow\\) Explainability \\(\\uparrow\\)\nFeature mutability constraints \\(\\rightarrow\\) Actionability \\(\\uparrow\\)(holds provably under certain assumptions)\nBonus: use nascent CE as AE \\(\\rightarrow\\) Robustness \\(\\uparrow\\)\n\n\n\n\n\n\n\n\nFigure 4: (a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, age immutable; (d) CT, age immutable. CE generated using ECCoGenerator."
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#counterfactual-training-results",
+    "href": "content/talks/posts/2026-jcon/presentation.html#counterfactual-training-results",
+    "title": "Counterfactual Training",
+    "section": "Counterfactual Training: Results",
+    "text": "Counterfactual Training: Results\n\n\n\n\n\nPlausibility: Visual explanations (counterfactuals) for baseline (top row) vs CT (bottom).\n\n\n\n\n\n\nActionability: Visual explanations (integrated gradients) as before. Five top and bottom rows immutable.\n\n\n\n\n\n\nTest accuracies on adversarially perturbed data with varying perturbation sizes."
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#main-api",
+    "href": "content/talks/posts/2026-jcon/presentation.html#main-api",
+    "title": "Counterfactual Training",
+    "section": "Main API",
+    "text": "Main API\n    \nCounterfactualTraining.jl can be used with deep learning models from the FluxML ecosystem.\nusing CounterfactualTraining\nusing CounterfactualExplanations\nusing Flux\n\nmodel, log = counterfactual_training(\n  obj,        # custom type\n  model,      # Flux.jl model\n  generator,  # CE.jl type\n  train_set,  # MLUtils.jl dataloader\n  opt_state,  # Optimisers.jl\n)"
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#research-branch",
+    "href": "content/talks/posts/2026-jcon/presentation.html#research-branch",
+    "title": "Counterfactual Training",
+    "section": "Research Branch",
+    "text": "Research Branch\n\nDefining feature: many small models + many counterfactuals + different generators tested\nSolution: CounterfactualExplanations.jl (JuliaCon 2022) + TaijaParallel.jl (JuliaCon 2024) support multi-processing through MPI.jl.\n\nParallel CPU loop\nfor epoch in start:end\n  # 1. Generate counterfactuals in parallel across CPUs\n  for (i, batch) in enumerate(train_set)\n    # 2. Unwrap and backprop\n  end\nend"
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#research-branch-1",
+    "href": "content/talks/posts/2026-jcon/presentation.html#research-branch-1",
+    "title": "Counterfactual Training",
+    "section": "Research Branch",
+    "text": "Research Branch\n\n\n\n\n\n\n\nPros\nCons\n\n\n\n\n✅ Access to comprehensive CE.jl generator suite\n❌ Bottlenecked by CE.jl performance\n\n\n✅ Viable alternative for GPU-poor\n❌ Large models\n\n\n✅ Generate CEs in parallel\n❌ Generate CEs on GPU"
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#gpu-branch",
+    "href": "content/talks/posts/2026-jcon/presentation.html#gpu-branch",
+    "title": "Counterfactual Training",
+    "section": "GPU Branch",
+    "text": "GPU Branch\n\n\n\n\n\n\n\n\n\n\n\n(a) In assembly.\n\n\n\n\n\n\n\n\n\n\n\n(b) In its full glory.\n\n\n\n\n\n\n\nFigure 5: Entering a brave new GPU-not-so-poor world with the Framework Desktop."
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#gpu-branch-1",
+    "href": "content/talks/posts/2026-jcon/presentation.html#gpu-branch-1",
+    "title": "Counterfactual Training",
+    "section": "GPU Branch",
+    "text": "GPU Branch\n\nAdds new NativeGenerator: GPU-friendly re-implementation of CE.jl’s ECCoGenerator.\nOverloads counterfactual_training to (1) generate counterfactuals on GPU, (2) train model on GPU.\n\ngenerator = NativeGenerator()\n\nmodel, log = counterfactual_training(\n  obj,        # custom type\n  model,      # Flux.jl model\n  generator,  # custom type \n  train_set,  # MLUtils.jl dataloader\n  opt_state,  # Optimisers.jl\n)"
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#gpu-branch-2",
+    "href": "content/talks/posts/2026-jcon/presentation.html#gpu-branch-2",
+    "title": "Counterfactual Training",
+    "section": "GPU Branch",
+    "text": "GPU Branch\nResNet for MNIST anyone? New branch supports large neural networks (even when you don’t need them).\n\n\n\n\n\n\nFigure 6: Per-epoch wall-clock time, training accuracy, and implausibility trajectory for the full and vanilla objectives. Complete tutorial available in the docs."
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#contributions-welcome",
+    "href": "content/talks/posts/2026-jcon/presentation.html#contributions-welcome",
+    "title": "Counterfactual Training",
+    "section": "Contributions Welcome!",
+    "text": "Contributions Welcome!\n\nTaija was my PhD project. Unfortunately, I am more constrained these days 😔\n\nPerformance-focused\n\nImprove performance of CE.jl #526 (CE.jl)\nMake CE.jl GPU-friendly #262 (CE.jl)\n\nResearch-focused\n\nPer-epoch vs. per-batch CE generation #107 (CT.jl)\nDoing related XAI research? #103 (CE.jl)"
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#check-it-out",
+    "href": "content/talks/posts/2026-jcon/presentation.html#check-it-out",
+    "title": "Counterfactual Training",
+    "section": "Check it out!",
+    "text": "Check it out!\n\n\n\n\n\n\nPreprint\n\n\n\n\n\n\n\nSoftware\n\n\n\n\n\n\n\nHomepage"
+  },
+  {
+    "objectID": "content/talks/posts/2026-jcon/presentation.html#references",
+    "href": "content/talks/posts/2026-jcon/presentation.html#references",
+    "title": "Counterfactual Training",
+    "section": "References",
+    "text": "References\n\n\nAltmeyer, Patrick, Mojtaba Farmanbar, Arie van Deursen, and Cynthia C. S. Liem. 2024. “Faithful Model Explanations through Energy-Constrained Conformal Counterfactuals.” Proceedings of the Thirty-Eighth AAAI Conference on Artificial Intelligence 38: 10829–37. https://doi.org/10.1609/aaai.v38i10.28956."
   },
   {
     "objectID": "content/talks/posts/2026-satml/presentation.html#training-opaque-models",
