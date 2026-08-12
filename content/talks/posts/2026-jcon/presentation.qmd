@@ -1,6 +1,6 @@
 ---
 title: "Counterfactual Training" 
-subtitle: Teaching Models Plausible and Actionable Explanations
+subtitle: Teaching Models Plausible and Actionable Explanations using [Taija](https://www.taija.org/)'s new package `CounterfactualTraining.jl`
 author: 
   - name: Patrick Altmeyer
     url: https://www.patalt.org/
@@ -15,6 +15,7 @@ format:
     auto-animate-easing: ease-in-out
     auto-animate-unmatched: false
     auto-animate-duration: 0.8
+    preview-links: true
 revealjs-plugins:
   - pointer
 crossref: 
@@ -23,7 +24,16 @@ crossref:
 classoption: "notheorems"
 ---
 
-# Research
+# Taija
+
+[Taija](https://www.taija.org/) hosts research software geared towards Trustworthy Artificial Intelligence in Julia. Developed during my PhD.
+
+- Model Explainability ([CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl))
+- Predictive Uncertainty Quantification ([ConformalPrediction.jl](https://github.com/JuliaTrustworthyAI/ConformalPrediction.jl), [LaplaceRedux.jl](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl))
+- Effortless Bayesian Deep Learning ([LaplaceRedux.jl](https://github.com/JuliaTrustworthyAI/LaplaceRedux.jl))
+- Hybrid Learning ([JointEnergyModels.jl](https://github.com/JuliaTrustworthyAI/JointEnergyModels.jl), [*CounterfactualTraining.jl*](https://github.com/JuliaTrustworthyAI/CounterfactualTraining.jl))
+
+# From Counterfactual Explanations to Counterfactual Training
 
 ## Training Opaque Models {auto-animate=true}
 
@@ -48,7 +58,6 @@ $$
 ## Training Opaque Models {auto-animate=true}
 
 [*Tweaking Parameters*]{style="color: orange;"}
-
 ::: {.columns}
 ::: {.column width=75%}
 **Objective**:
@@ -83,7 +92,8 @@ $$
 
 ## Explaining Opaque Models {auto-animate=true}
 
-[*Tweaking Inputs*]{style="color: purple;"}
+[*Tweaking Inputs*]{style="color: purple;"}--[CounterfactualExplanations.jl](https://www.taija.org/CounterfactualExplanations.jl/stable/#Enter:-Counterfactual-Explanations)
+
 
 ::: {.columns}
 ::: {.column width=75%}
@@ -104,7 +114,8 @@ $$
 
 ## Explaining Opaque Models {auto-animate=true}
 
-[*Tweaking Inputs*]{style="color: purple;"}
+[*Tweaking Inputs*]{style="color: purple;"}--[CounterfactualExplanations.jl](https://www.taija.org/CounterfactualExplanations.jl/stable/#Enter:-Counterfactual-Explanations)
+
 
 
 ::: {.columns}
@@ -157,7 +168,7 @@ All of these counterfactuals are valid explanations for the model's prediction.
 ![Turning a 9 into a 7. *ECCCo* applied to MLP (a), Ensemble (b), JEM (c), JEM Ensemble (d).](/www/images/mnist_eccco.png){#fig-mnist-eccco width="75%"}
 :::
 :::{.column width='70%'}
-{{< fa key >}} **Insight**: faithfulness facilitates^[{{< fa scroll >}} @altmeyer2024faithful \@ AAAI 2024. [[blog]](/blog/posts/eccco/index.qmd)]
+{{< fa key >}} **Insight**: faithfulness facilitates^[{{< fa scroll >}} @altmeyer2024faithful \@ AAAI 2024. [[blog]](/blog/posts/eccco/index.qmd); `ECCoGenerator` in [CounterfactualExplanations.jl](https://www.taija.org/CounterfactualExplanations.jl/stable/)]
 
 - model quality checks (@fig-mnist-eccco).
 - state-of-the-art plausibility (@fig-mnist-benchmark).
@@ -199,7 +210,7 @@ $$
 
 . . .
 
-![(a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, *age* immutable; (d) CT, *age* immutable.](/www/images/ct_poc.png){#fig-ecml width="90%"}
+![(a) conventional training, all mutable; (b) CT, all mutable; (c) conventional, *age* immutable; (d) CT, *age* immutable. CE generated using `ECCoGenerator`.](/www/images/ct_poc.png){#fig-ecml width="90%"}
 
 ## Counterfactual Training: Results
 
@@ -214,26 +225,42 @@ $$
 
 ![Test accuracies on adversarially perturbed data with varying perturbation sizes.](/www/images/ct_robustness.png){width=70%}
 
-## The Hard Numbers
+# The Julia package
 
-Extensive experiments and ablation studies on nine datasets--synthetic, tabular and vision--generating millions of counterfactuals:
+## Main API
 
-1. **Plausibility** of CEs increases by up to 90%.
-2. **Actionability**: cost of reaching valid counterfactuals with protected features decreases by 19% on average.
-3. Models’ adversarial **robustness** improves consistently.
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaTrustworthyAI.github.io/CounterfactualTraining.jl/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaTrustworthyAI.github.io/CounterfactualTraining.jl/dev/)
+[![Coverage](https://codecov.io/gh/JuliaTrustworthyAI/CounterfactualTraining.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaTrustworthyAI/CounterfactualTraining.jl)
+[![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
+[![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 
-# Package
+[CounterfactualTraining.jl](https://www.taija.org/CounterfactualTraining.jl/dev/) can be used with deep learning models from the [FluxML](https://fluxml.ai/Flux.jl/dev/) ecosystem.
+
+```{.julia}
+using CounterfactualTraining
+using CounterfactualExplanations
+using Flux
+
+model, log = counterfactual_training(
+  obj,        # custom type
+  model,      # Flux.jl model
+  generator,  # CE.jl type
+  train_set,  # MLUtils.jl dataloader
+  opt_state,  # Optimisers.jl
+)
+```
 
 ## Research Branch
 
 - **Defining feature**: many small models + many counterfactuals + different generators tested
+- **Solution**: [CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) (JuliaCon 2022) + [TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl) (JuliaCon 2024) support multi-processing through [MPI.jl](https://juliaparallel.org/MPI.jl/stable/).
 
-### Parallelize on CPUs
+#### Parallel CPU loop
 
 ```{.julia}
 for epoch in start:end
   # 1. Generate counterfactuals in parallel across CPUs
-  counterfactual_dl = generate(...) # wrap results 
   for (i, batch) in enumerate(train_set)
     # 2. Unwrap and backprop
   end
@@ -241,8 +268,6 @@ end
 ```
 
 ## Research Branch
-
-- **Solution**: [CounterfactualExplanations.jl](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl) (JuliaCon 2022) + [TaijaParallel.jl](https://github.com/JuliaTrustworthyAI/TaijaParallel.jl) (JuliaCon 2024) support multi-processing through MPI.jl on Delft's HPC (@DHPC2022).
 
 
 | Pros                                             | Cons                    |
@@ -254,29 +279,51 @@ end
 
 ## GPU Branch
 
-![]()
+::: {#fig-fd layout-ncol=2}
+
+![In assembly.](/www/images/fd1.jpg){#fig-fd1 width="55%"}
+
+![In its full glory.](/www/images/fd2.jpg){#fig-fd2 width="55%"}
+
+Entering a brave new GPU-not-so-poor world with the Framework Desktop.
+:::
 
 ## GPU Branch
 
 - Adds new `NativeGenerator`: GPU-friendly re-implementation of CE.jl's `ECCoGenerator`.
 - Overloads `counterfactual_training` to (1) generate counterfactuals on GPU, (2) train model on GPU.
 
+```{.julia}
+generator = NativeGenerator()
+
+model, log = counterfactual_training(
+  obj,        # custom type
+  model,      # Flux.jl model
+  generator,  # custom type 
+  train_set,  # MLUtils.jl dataloader
+  opt_state,  # Optimisers.jl
+)
+```
+
 ## GPU Branch
 
-### Some Results
+`ResNet` for MNIST anyone? New branch supports large neural networks (even when you don't need them).
 
-
+![Per-epoch wall-clock time, training accuracy, and implausibility trajectory for the full and vanilla objectives.  Complete tutorial available in the [docs](https://www.taija.org/CounterfactualTraining.jl/dev/gpu/).](/www/images/gpu.svg){#fig-gpu}
 
 ## Contributions Welcome!
 
-### Performance-focued
+> Taija was my PhD project. Unfortunately, I am more constrained these days 😔
 
-1. Improve performance of CE.jl
-2. Make CE.jl GPU-friendly
+#### Performance-focused
 
-### Research-focused
+1. Improve performance of CE.jl [#526](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/526) (CE.jl)
+2. Make CE.jl GPU-friendly [#262](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/262) (CE.jl)
 
-3. Per-epoch vs. per-batch CE generation
+#### Research-focused
+
+3. Per-epoch vs. per-batch CE generation [#107](https://github.com/JuliaTrustworthyAI/CounterfactualTraining.jl/issues/107) (CT.jl)
+4. Doing related XAI research? [#103](https://github.com/JuliaTrustworthyAI/CounterfactualExplanations.jl/issues/103) (CE.jl)
 
 ## Check it out!
 
