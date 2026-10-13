@@ -59,7 +59,7 @@ end
 local function resolve_doc_citations (doc)
   -- combine all bibliographies
   local meta = doc.meta
-  local bibconf = meta.bibliography
+  local bibconf = meta['cv-bibliography'] or meta.bibliography
   meta.bibliography = pandoc.MetaList{}
   if metatype(bibconf) == 'table' then
     for _, value in pairs(bibconf) do
@@ -113,7 +113,7 @@ end
 -- alphanumeric characters.
 local function create_topic_bibliography (div)
   local name = div.identifier:match('^refs[-_]?([-_%w]*)$')
-  local bibfile = name and (doc_meta.bibliography or {})[name]
+  local bibfile = name and (doc_meta['cv-bibliography'] or doc_meta.bibliography or {})[name]
   if not bibfile then
     return nil
   end
