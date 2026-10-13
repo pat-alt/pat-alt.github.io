@@ -47,12 +47,12 @@ jobs:
           git clone --depth 1 https://github.com/pat-alt/bib.git "$HOME/code/bib"
           "$HOME/code/bib/setup.sh"
           mkdir -p bib
-          papis export --query tags:peerreviewed   --batch --format bibtex --out bib/peer.bib
-          papis export --query tags:other          --batch --format bibtex --out bib/other.bib
-          papis export --query tags:preprint       --batch --format bibtex --out bib/pre.bib
-          papis export --query tags:sup-masters    --batch --format bibtex --out bib/sup_masters.bib
-          papis export --query tags:sup-bachelors  --batch --format bibtex --out bib/sup_bachelors.bib
-          papis export --query tags:software       --batch --format bibtex --out bib/soft.bib
+          papis export --all 'tags:peerreviewed'   --batch --format bibtex --out bib/peer.bib
+          papis export --all 'tags:other'          --batch --format bibtex --out bib/other.bib
+          papis export --all 'tags:preprint'       --batch --format bibtex --out bib/pre.bib
+          papis export --all 'tags:sup-masters'    --batch --format bibtex --out bib/sup_masters.bib
+          papis export --all 'tags:sup-bachelors'  --batch --format bibtex --out bib/sup_bachelors.bib
+          papis export --all 'tags:software'       --batch --format bibtex --out bib/soft.bib
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
